@@ -1,0 +1,13 @@
+{
+  "fortran.linter.compiler": "gfortran",
+  "fortran.linter.includePaths": [
+    "${workspaceFolder}/build/**"
+  ],
+  "fortran.fortls.directories": [
+    "${workspaceFolder}/build/**"
+  ],
+  "fortran.formatting.formatter": "findent",
+  "fortran.formatting.findentArgs": [
+    "-i2"
+  ]
+}
