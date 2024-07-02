@@ -1,11 +1,11 @@
 program main
-
-  use fortran_thing, only: say_hello
-
+  use fortran_thing
   implicit none
-
 
   call say_hello()
 
 
-end program main
+  call test_loop()
+
+
+end
