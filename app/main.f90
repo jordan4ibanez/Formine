@@ -1,11 +1,11 @@
 program main
-  use fortran_thing
+  use glfw
+
   implicit none
 
-  call say_hello()
+  call load_GLFW()
 
-
-  call test_loop()
+  
 
 
 end
