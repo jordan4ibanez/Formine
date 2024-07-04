@@ -13,7 +13,9 @@ program main
 
   ! Try to initialize the Window.
   if (glfw_create_window(400,400, "hi")) then
-    print*,"hi"
+    print *,"Created window successfully."
+  else
+    print *,"Failed to create window."
   end if
 
 
