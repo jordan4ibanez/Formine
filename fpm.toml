@@ -4,13 +4,24 @@ license = "GPLv3"
 author = "jordan4ibanez"
 maintainer = "jordan4ibanez"
 copyright = "Copyright 2024, jordan4ibanez"
+
 [build]
 auto-executables = true
 auto-tests = true
 auto-examples = true
 module-naming = false
+
+link = ["glfw"]
+
+[dependencies]
+stdlib = "*"
+
+# [library]
+# include-dir = ["/lib", "/usr/lib", "/usr/local/lib", "cool"]
+
 [install]
-library = false
+library = true
+
 [fortran]
 implicit-typing = false
 implicit-external = false

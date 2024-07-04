@@ -4,23 +4,20 @@ module glfw
 
   private
 
-  public :: load_GLFW
-  public :: addnums
+  public :: glfw_init
+
 
 
   interface
-    subroutine addnums(a, b) BIND(C)
+
+    logical(c_bool) function glfw_init() result(success) bind(C, name="glfwInit")
       use, intrinsic :: iso_c_binding
       implicit none
-      integer(c_int) :: a, b
-    end subroutine addnums
+    end function glfw_init
+
   end interface
 
 
-contains
 
-  subroutine load_GLFW
-
-  end subroutine load_GLFW
 
 end module glfw
