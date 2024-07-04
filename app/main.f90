@@ -22,9 +22,9 @@ program main
     return
   end if
 
-  call glfw_get_error()
+  ! call glfw_get_error()
 
-  ! call glfw_make_context_current()
+  call glfw_make_context_current()
 
 
   call glfw_get_error()
