@@ -7,6 +7,7 @@ module glfw
   type(c_ptr) :: window_pointer
 
   public :: glfw_init
+  public :: glfw_terminate
   public :: glfw_create_window
 
 
@@ -17,6 +18,13 @@ module glfw
       use, intrinsic :: iso_c_binding
       implicit none
     end function glfw_init
+
+    subroutine glfw_terminate() bind(c, name="glfwTerminate")
+      use, intrinsic :: iso_c_binding
+      implicit none
+    end subroutine glfw_terminate
+
+
 
     type(c_ptr) function internal_glfw_create_window(width, height, title, monitor, share) result(new_window_pointer) bind(c, name = "glfwCreateWindow")
       use, intrinsic :: iso_c_binding

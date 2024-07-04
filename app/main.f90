@@ -16,6 +16,8 @@ program main
     print *,"Created window successfully."
   else
     print *,"Failed to create window."
+    call glfw_terminate()
+    return
   end if
 
 
