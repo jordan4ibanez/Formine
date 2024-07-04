@@ -20,9 +20,12 @@ program main
     return
   end if
 
+  call glfw_make_context_current()
+
+  print *,glfw_window_should_close()
 
 
 
-
+  call glfw_terminate()
 
 end
