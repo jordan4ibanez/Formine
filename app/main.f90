@@ -29,15 +29,15 @@ program main
 
   call glfw_get_error()
 
-  ! do while (glfw_window_should_close() .eqv. .false.)
+  do while (glfw_window_should_close() .eqv. .false.)
 
-  !   call clear_color_buffer()
+    call clear_color_buffer()
 
-  !   call glfw_swap_buffers()
+    call glfw_swap_buffers()
 
-  !   call glfw_poll_events()
+    call glfw_poll_events()
 
-  ! end do
+  end do
 
   call glfw_destroy_window()
 
