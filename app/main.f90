@@ -4,15 +4,17 @@ program main
   implicit none
 
   ! Try to create a GLFW context.
-  if (glfw_init() .eqv. .true.) then
+  if (glfw_init()) then
     print *,"worked"
   else
     print *,"failed"
     return
   end if
 
+  ! call glfw_get_error()
+
   ! Try to initialize the Window.
-  if (glfw_create_window(400,400, "hi") .eqv. .true.) then
+  if (glfw_create_window(100,100, "hi")) then
     print *,"Created window successfully."
   else
     print *,"Failed to create window."
@@ -20,22 +22,22 @@ program main
     return
   end if
 
-  call glfw_make_context_current()
+  call glfw_get_error()
+
+  ! call glfw_make_context_current()
 
 
+  call glfw_get_error()
 
+  ! do while (glfw_window_should_close() .eqv. .false.)
 
-  do while (glfw_window_should_close() .eqv. .false.)
+  !   call clear_color_buffer()
 
-    call glfw_get_error()
+  !   call glfw_swap_buffers()
 
-    call clear_color_buffer()
+  !   call glfw_poll_events()
 
-    call glfw_swap_buffers()
-
-    call glfw_poll_events()
-
-  end do
+  ! end do
 
   call glfw_destroy_window()
 
