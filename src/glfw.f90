@@ -7,6 +7,10 @@ module glfw
   ! Module fields.
   type(c_ptr) :: window_pointer
 
+  type(c_ptr) :: c_string
+  character, pointer :: error_result_text(:)
+  integer(c_int) :: error_result
+
   ! What we want exposed.
   public :: test_things
 
@@ -80,11 +84,11 @@ module glfw
       type(c_ptr), optional :: current_window_pointer
     end subroutine internal_glfw_destroy_window
 
-    integer(c_int) function glfw_get_error(char_pointer) result(error_type) bind(c, name = "glfwDestroyWindow")
+    integer(c_int) function internal_glfw_get_error(char_pointer) result(error_type) bind(c, name = "glfwGetError")
       use, intrinsic :: iso_c_binding
       implicit none
-      type(c_ptr) :: char_pointer
-    end function glfw_get_error
+      type(c_ptr), optional :: char_pointer
+    end function internal_glfw_get_error
 
     ! TODO: OpenGL needs to be it's own module !
 
@@ -97,6 +101,18 @@ module glfw
   end interface
 
 contains
+
+  subroutine glfw_get_error
+    use, intrinsic :: iso_c_binding
+    implicit none
+    error_result = internal_glfw_get_error(c_string)
+
+    call c_f_pointer(c_string, error_result_text, [512])
+
+    print*,error_result
+    print*,error_result_text
+
+  end subroutine glfw_get_error
 
   ! So here I'm just kind of using glfw the way I want to use it.
 
