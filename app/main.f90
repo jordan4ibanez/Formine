@@ -1,5 +1,6 @@
 program main
   use glfw
+  use opengl
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -29,6 +30,10 @@ program main
   call glfw_get_error()
 
   do while(.not. glfw_window_should_close())
+
+    call clear_color_buffer()
+
+    call glfw_get_error()
 
     call glfw_swap_buffers()
 
