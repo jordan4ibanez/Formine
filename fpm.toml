@@ -17,7 +17,7 @@ link = ["glfw", "GL"]
 stdlib = "*"
 
 # [library]
-# include-dir = ["/lib", "/usr/lib", "/usr/local/lib", "cool"]
+# include-dir = ["/lib", "/usr/lib", "/usr/local/lib"]
 
 [install]
 library = true
