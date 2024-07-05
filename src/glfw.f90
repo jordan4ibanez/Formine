@@ -91,7 +91,7 @@ module glfw
 
 contains
 
-  ! So here I'm just kind of using glfw the way I want to use it.
+  ! Here I'm just kind of using glfw the way I want to use it.
 
   subroutine glfw_get_error
     use, intrinsic :: iso_c_binding

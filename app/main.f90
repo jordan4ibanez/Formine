@@ -31,17 +31,21 @@ program main
 
   do while(.not. glfw_window_should_close())
 
-    call clear_color_buffer()
+    call gl_clear_color(1.0, 0.0, 0.0)
 
-    call glfw_get_error()
+    ! call glfw_get_error()
+
+    call gl_clear_color_buffer()
+
+
 
     call glfw_swap_buffers()
 
-    call glfw_get_error()
+    ! call glfw_get_error()
 
     call glfw_poll_events()
 
-    call glfw_get_error()
+    ! call glfw_get_error()
 
 
   end do
