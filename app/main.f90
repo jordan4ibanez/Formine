@@ -1,8 +1,42 @@
+module ye
+  implicit none
+
+  private
+
+  logical :: up = .true.
+
+  public :: blah
+
+contains
+  subroutine blah(input)
+    implicit none
+    real :: input
+
+    if (up) then
+      input = input + 0.01
+      if (input >= 1.0) then
+        input = 1.0
+        up = .false.
+      end if
+    else
+      input = input - 0.01
+      if (input <= 0.0) then
+        input = 0.0
+        up = .true.
+      end if
+    end if
+  end subroutine
+end module ye
+
 program main
   use glfw
   use opengl
+  use ye
   use, intrinsic ::  iso_c_binding
   implicit none
+
+  real :: color = 0.0
+
 
   ! Try to create a GLFW context.
   if (glfw_init()) then
@@ -31,7 +65,11 @@ program main
 
   do while(.not. glfw_window_should_close())
 
-    call gl_clear_color(1.0, 0.0, 0.0)
+    call blah(color)
+
+    print*,color
+
+    call gl_clear_color(color, color, color)
 
     ! call glfw_get_error()
 
