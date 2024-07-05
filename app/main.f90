@@ -26,7 +26,8 @@ program main
 
   call glfw_make_context_current()
 
-
   call glfw_get_error()
+
+  
 
 end

@@ -60,11 +60,7 @@ module glfw
       type(c_ptr), optional :: new_window_pointer
     end subroutine internal_glfw_make_context_current
 
-    logical(c_bool) function internal_glfw_window_should_close(current_window_pointer) result(should_close) bind(c, name = "glfwWindowShouldClose")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      type(c_ptr), optional :: current_window_pointer
-    end function internal_glfw_window_should_close
+    
 
     subroutine internal_glfw_swap_buffers(current_window_pointer) bind(c, name = "glfwSwapBuffers")
       use, intrinsic :: iso_c_binding
@@ -132,11 +128,6 @@ contains
     implicit none
     call internal_glfw_make_context_current(window_pointer)
   end subroutine glfw_make_context_current
-
-  logical function glfw_window_should_close() result(should_close)
-    implicit none
-    should_close = internal_glfw_window_should_close(window_pointer) .eqv. .true.
-  end function glfw_window_should_close
 
   subroutine glfw_swap_buffers
     implicit none

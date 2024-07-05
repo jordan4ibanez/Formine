@@ -61,9 +61,17 @@ module glfw
       type(c_ptr) :: char_pointer
     end function internal_glfw_get_error
 
+    logical(c_bool) function internal_glfw_window_should_close(current_window_pointer) result(should_close) bind(c, name = "glfwWindowShouldClose")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      type(c_ptr), intent(in), value :: current_window_pointer
+    end function internal_glfw_window_should_close
+
   end interface
 
 contains
+
+  ! So here I'm just kind of using glfw the way I want to use it.
 
   subroutine glfw_get_error
     use, intrinsic :: iso_c_binding
@@ -81,8 +89,6 @@ contains
     end if
 
   end subroutine glfw_get_error
-
-  ! So here I'm just kind of using glfw the way I want to use it.
 
   logical function glfw_create_window(width, height, title) result(success)
     use, intrinsic :: iso_c_binding
@@ -105,6 +111,5 @@ contains
     implicit none
     call internal_glfw_make_context_current(c_window_pointer)
   end subroutine glfw_make_context_current
-
 
 end module glfw
