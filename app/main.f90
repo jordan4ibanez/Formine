@@ -18,7 +18,7 @@ program main
     print *,"Created window successfully."
   else
     print *,"Failed to create window."
-    call glfw_terminate()
+    ! call glfw_terminate()
     return
   end if
 
@@ -28,20 +28,5 @@ program main
 
 
   call glfw_get_error()
-
-  do while (glfw_window_should_close() .eqv. .false.)
-
-    call clear_color_buffer()
-
-    call glfw_swap_buffers()
-
-    call glfw_poll_events()
-
-  end do
-
-  call glfw_destroy_window()
-
-
-  call glfw_terminate()
 
 end
