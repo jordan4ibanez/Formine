@@ -38,7 +38,6 @@ module glfw
       implicit none
     end subroutine glfw_terminate
 
-
     function internal_glfw_create_window(width, height, title, monitor, share) result(new_window_pointer) bind(c, name = "glfwCreateWindow")
       use, intrinsic :: iso_c_binding
       implicit none
