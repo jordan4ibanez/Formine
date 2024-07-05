@@ -28,6 +28,27 @@ program main
 
   call glfw_get_error()
 
-  
+  do while(.not. glfw_window_should_close())
+
+    call glfw_swap_buffers()
+
+    call glfw_get_error()
+
+    call glfw_poll_events()
+
+    call glfw_get_error()
+
+
+  end do
+
+
+
+  call glfw_destroy_window()
+
+  call glfw_get_error()
+
+  call glfw_terminate()
+
+
 
 end

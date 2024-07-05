@@ -23,11 +23,13 @@ module glfw
   public :: glfw_create_window
   public :: glfw_make_context_current
   public :: glfw_get_error
+  public :: glfw_window_should_close
+  public :: glfw_swap_buffers
+  public :: glfw_poll_events
+  public :: glfw_destroy_window
 
   ! Here I'm binding to the C glfw shared library.
   interface
-
-
     logical(c_bool) function glfw_init() result(success) bind(c, name="glfwInit")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -41,8 +43,8 @@ module glfw
     function internal_glfw_create_window(width, height, title, monitor, share) result(new_window_pointer) bind(c, name = "glfwCreateWindow")
       use, intrinsic :: iso_c_binding
       implicit none
-      integer(c_int) :: width
-      integer(c_int) :: height
+      integer(c_int), intent(in) :: width
+      integer(c_int), intent(in) :: height
       character(kind = c_char) :: title
       type(c_ptr), intent(in), optional :: monitor
       type(c_ptr), intent(in), optional :: share
@@ -58,7 +60,7 @@ module glfw
     integer(c_int) function internal_glfw_get_error(char_pointer) result(error_type) bind(c, name = "glfwGetError")
       use, intrinsic :: iso_c_binding
       implicit none
-      type(c_ptr) :: char_pointer
+      type(c_ptr), intent(in) :: char_pointer
     end function internal_glfw_get_error
 
     logical(c_bool) function internal_glfw_window_should_close(current_window_pointer) result(should_close) bind(c, name = "glfwWindowShouldClose")
@@ -66,6 +68,24 @@ module glfw
       implicit none
       type(c_ptr), intent(in), value :: current_window_pointer
     end function internal_glfw_window_should_close
+
+    subroutine internal_glfw_swap_buffers(current_window_pointer) bind(c, name = "glfwSwapBuffers")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      type(c_ptr), intent(in), value :: current_window_pointer
+    end subroutine internal_glfw_swap_buffers
+
+    subroutine internal_glfw_poll_events(current_window_pointer) bind(c, name = "glfwPollEvents")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      type(c_ptr), intent(in), value :: current_window_pointer
+    end subroutine internal_glfw_poll_events
+
+    subroutine internal_glfw_destroy_window(current_window_pointer) bind(c, name = "glfwDestroyWindow")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      type(c_ptr), intent(in), value :: current_window_pointer
+    end subroutine internal_glfw_destroy_window
 
   end interface
 
@@ -99,17 +119,36 @@ contains
 
     c_window_pointer = internal_glfw_create_window(width, height, title, null(), null())
 
-    ! call c_f_pointer(c_window_pointer, window_pointer)
-
     print*,c_window_pointer
-    ! print *,window_pointer
+
     ! Then we check if the window pointer is null.
     success = c_associated(c_window_pointer)
-  end
+  end function glfw_create_window
 
   subroutine glfw_make_context_current
     implicit none
     call internal_glfw_make_context_current(c_window_pointer)
   end subroutine glfw_make_context_current
+
+  logical function glfw_window_should_close() result(should_close)
+    implicit none
+    should_close = internal_glfw_window_should_close(c_window_pointer) .eqv. .true.
+  end function glfw_window_should_close
+
+
+  subroutine glfw_swap_buffers
+    implicit none
+    call internal_glfw_swap_buffers(c_window_pointer)
+  end subroutine glfw_swap_buffers
+
+  subroutine glfw_poll_events
+    implicit none
+    call internal_glfw_poll_events(c_window_pointer)
+  end
+
+  subroutine glfw_destroy_window
+    implicit none
+    call internal_glfw_destroy_window(c_window_pointer)
+  end subroutine glfw_destroy_window
 
 end module glfw
