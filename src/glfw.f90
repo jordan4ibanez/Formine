@@ -5,9 +5,16 @@ module glfw
   private
 
   ! Module fields.
-  type(c_ptr) :: window_pointer
+  ! ** Fields for getting the window pointer out of C and into Fortran.
+  ! C side.
+  type(c_ptr) :: c_window_pointer
+  ! Fortran side.
+  integer(c_long), pointer :: window_pointer
 
+  !** Fields for getting the error string out of C and into Fortran.
+  ! C side.
   type(c_ptr) :: c_string
+  ! Fortran side.
   character, pointer :: error_result_text(:)
   integer(c_int) :: error_result
 
@@ -67,7 +74,7 @@ contains
 
     call c_f_pointer(c_string, error_result_text, [512])
 
-    print*,error_result
+    ! print*,error_result
     print*,error_result_text
 
   end subroutine glfw_get_error
@@ -80,15 +87,20 @@ contains
     integer(c_int) :: width
     integer(c_int) :: height
     character(kind = c_char) :: title
-    window_pointer = internal_glfw_create_window(width, height, title, null(), null())
-    print "('Window address: ', I0)",transfer(window_pointer, 0_c_long)
+
+    c_window_pointer = internal_glfw_create_window(width, height, title, null(), null())
+
+    call c_f_pointer(c_window_pointer, window_pointer)
+
+    print*,c_window_pointer
+    print *,window_pointer
     ! Then we check if the window pointer is null.
-    success = c_associated(window_pointer)
+    success = c_associated(c_window_pointer)
   end
 
   subroutine glfw_make_context_current
     implicit none
-    call internal_glfw_make_context_current(window_pointer)
+    call internal_glfw_make_context_current(c_window_pointer)
   end subroutine glfw_make_context_current
 
 
