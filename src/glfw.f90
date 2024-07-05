@@ -5,11 +5,9 @@ module glfw
   private
 
   ! Module fields.
-  ! ** Fields for getting the window pointer out of C and into Fortran.
+
   ! C side.
   type(c_ptr) :: c_window_pointer
-  ! Fortran side.
-  ! type(c_ptr), pointer :: window_pointer
 
   !** Fields for getting the error string out of C and into Fortran.
   ! C side.
