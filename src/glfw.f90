@@ -43,8 +43,8 @@ module glfw
     function internal_glfw_create_window(width, height, title, monitor, share) result(new_window_pointer) bind(c, name = "glfwCreateWindow")
       use, intrinsic :: iso_c_binding
       implicit none
-      integer(c_int), intent(in) :: width
-      integer(c_int), intent(in) :: height
+      integer(c_int), intent(in), value :: width
+      integer(c_int), intent(in), value :: height
       character(kind = c_char) :: title
       type(c_ptr), intent(in), optional :: monitor
       type(c_ptr), intent(in), optional :: share
