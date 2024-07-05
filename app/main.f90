@@ -11,7 +11,7 @@ program main
     return
   end if
 
-  ! call glfw_get_error()
+  call glfw_get_error()
 
   ! Try to initialize the Window.
   if (glfw_create_window(100,100, "hi")) then
@@ -22,7 +22,7 @@ program main
     return
   end if
 
-  ! call glfw_get_error()
+  call glfw_get_error()
 
   call glfw_make_context_current()
 
