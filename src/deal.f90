@@ -1,4 +1,4 @@
-module f_helpers
+module deal
   implicit none
 
   private
@@ -22,4 +22,4 @@ contains
 
   end subroutine deallocate_string
 
-end module f_helpers
+end module deal

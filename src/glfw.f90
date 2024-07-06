@@ -95,7 +95,7 @@ contains
 
   subroutine glfw_get_error
     use, intrinsic :: iso_c_binding
-    use :: f_helpers
+    use :: deal
     use :: f_string
     implicit none
 
@@ -170,7 +170,7 @@ contains
   subroutine error_callback(i, char_pointer)
     use, intrinsic :: iso_c_binding
     use f_string
-    use f_helpers
+    use deal
     implicit none
 
     integer(c_int), intent(in), value :: i
