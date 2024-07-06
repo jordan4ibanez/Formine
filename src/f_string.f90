@@ -78,6 +78,7 @@ contains
 
   end function string_from_c
 
+  ! Convert an integer into an allocated string.
   function int_to_string(i) result(output)
     implicit none
     integer :: i
@@ -85,14 +86,16 @@ contains
 
     ! If the number is any bigger than this, wat.
     allocate(character(128) :: output)
-    write(output, "(i128)") 128
-    write(output, "(a)") output
+    write(output, "(i128,bz)") i
 
-    print*,"len:", len(trim(output))
+    ! Now we shift the whole thing left and trim it to fit.
+    output = trim(adjustl(output))
 
-    print*,"-----"
-    print*,output
-    print*,"-----"
+    !? This is simply debug.
+    ! print*,"-----"
+    ! print*,output//"."
+    ! print*,"len: ", len(output)
+    ! print*,"-----"
 
   end function int_to_string
 
