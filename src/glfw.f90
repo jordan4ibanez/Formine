@@ -12,7 +12,7 @@ module glfw
   ! C side.
   type(c_ptr) :: c_string
   ! Fortran side.
-  character, pointer :: error_result_text(:)
+  character(c_char), pointer :: error_result_text(:)
   integer(c_int) :: error_result
 
   !** Fields for getting the error string out of C and into Fortran.
@@ -164,18 +164,32 @@ contains
   !** NOTE: C is passing Fortran data here!
   subroutine blah(i, char_pointer)
     use, intrinsic :: iso_c_binding
-    use raw_c
+    use f_string
+    use f_helpers
     implicit none
+
     integer(c_int), intent(in), value :: i
     type(c_ptr), intent(in), value :: char_pointer
+    character(:), allocatable :: error_text
+    character(:), allocatable :: error_value_string
 
-    call c_f_pointer(char_pointer, error_result_text, [512])
+    error_text = string_from_c(char_pointer, 512)
 
-    print*,c_strlen(char_pointer)
+    error_value_string = int_to_string(i)
 
-    if (associated(error_result_text)) then
-      print*,error_result_text
+    if (len(error_text) > 0 ) then
+      print*,"GLFW Error: ("//"1"//")"//error_text//"."
     end if
+
+    call deallocate_string(error_text)
+
+
+
+    ! print*,len(deallocate(error_result_text))
+    ! print*,error_result_text(1:1)
+    ! print*,char_pointer
+    ! print*,error_result_text
+    ! end if
   end subroutine blah
 
 
