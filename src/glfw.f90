@@ -40,6 +40,7 @@ module glfw
       integer(c_int), intent(in), value :: width
       integer(c_int), intent(in), value :: height
       character(kind = c_char), intent(in) :: title
+      character(kind = c_char), intent(in), optional :: title
       type(c_ptr), intent(in), optional :: monitor
       type(c_ptr), intent(in), optional :: share
       type(c_ptr) :: new_window_pointer
