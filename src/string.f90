@@ -31,6 +31,7 @@ contains
   end subroutine copy_string_pointer
 
   ! Use this to convert C strings stored in a (character, pointer) into Fortran strings.
+  !** This is allocatable, remember to deallocate.
   function string_from_c(c_string, size) result(fortran_string)
     use, intrinsic :: iso_c_binding
     implicit none
