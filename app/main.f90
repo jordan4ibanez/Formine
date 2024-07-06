@@ -46,7 +46,7 @@ program main
   !   return
   ! end if
 
-  ! call glfw_get_error()
+  call glfw_get_error()
 
   ! Try to initialize the Window.
   ! if (glfw_create_window(640,480, "hi")) then
@@ -74,7 +74,7 @@ program main
 
   !   call gl_clear_color(color, color, color)
 
-  !   ! call glfw_get_error()
+    ! call glfw_get_error()
 
   !   call gl_clear_color_buffer()
 
@@ -95,9 +95,9 @@ program main
 
   call glfw_destroy_window()
 
-  ! call glfw_get_error()
-
   call glfw_terminate()
+
+  call glfw_get_error()
 
 
 
