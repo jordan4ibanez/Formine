@@ -15,13 +15,13 @@ module opengl
   public :: GL_MAJOR_VERSION
   public :: GL_MINOR_VERSION
 
-  integer :: GL_VERSION = int(Z"1f02")
-  integer :: GL_MAJOR_VERSION = int(Z"821B")
-  integer :: GL_MINOR_VERSION = int(Z"821C")
+  integer :: GL_VERSION = int(z"1f02")
+  integer :: GL_MAJOR_VERSION = int(z"821B")
+  integer :: GL_MINOR_VERSION = int(z"821C")
 
-  integer :: GL_COLOR_BUFFER_BIT = int(Z"00004000")
-  integer :: GL_DEBUG_OUTPUT_SYNCHRONOUS = int(Z"8242")
-  integer :: GL_VERTEX_SHADER = int(Z"8B31")
+  integer :: GL_COLOR_BUFFER_BIT = int(z"00004000")
+  integer :: GL_DEBUG_OUTPUT_SYNCHRONOUS = int(z"8242")
+  integer :: GL_VERTEX_SHADER = int(z"8B31")
   integer :: GL_TRUE = 1
   integer :: GL_FALSE = 0
 
