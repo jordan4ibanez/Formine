@@ -161,11 +161,21 @@ contains
   end subroutine glfw_destroy_window
 
   !! BEGIN TEST
+  !** NOTE: C is passing Fortran data here!
   subroutine blah(i, char_pointer)
     use, intrinsic :: iso_c_binding
+    use raw_c
     implicit none
-    integer(c_int) :: i
-    type(c_ptr), target :: char_pointer
+    integer(c_int), intent(in), value :: i
+    type(c_ptr), intent(in), value :: char_pointer
+
+    call c_f_pointer(char_pointer, error_result_text, [512])
+
+    print*,c_strlen(char_pointer)
+
+    if (associated(error_result_text)) then
+      print*,error_result_text
+    end if
   end subroutine blah
 
 
