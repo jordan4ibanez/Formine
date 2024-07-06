@@ -36,8 +36,6 @@ module opengl
 
   interface
 
-
-
     subroutine internal_gl_clear(thing_to_clear) bind(c, name = "glClear")
       use, intrinsic :: iso_c_binding
       implicit none
