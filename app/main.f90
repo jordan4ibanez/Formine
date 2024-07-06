@@ -24,6 +24,9 @@ program main
 
   !! Need this flag to have OpenGL debugging available!
   call glfw_window_hint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE)
+  call glfw_window_hint(GLFW_CONTEXT_VERSION_MAJOR, 4)
+  call glfw_window_hint(GLFW_CONTEXT_VERSION_MINOR, 2)
+  call glfw_window_hint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE)
 
   ! Try to initialize the Window.
   if (glfw_create_window(640,480, "Fortran Game Engine")) then
