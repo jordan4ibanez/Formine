@@ -14,9 +14,9 @@ program main
 
   ! Try to create a GLFW context.
   if (glfw_init()) then
-    print *,"worked"
+    print *,"GLFW: Successfully initialized."
   else
-    print *,"failed"
+    print *,"GLFW: Failed to initialize."
     return
   end if
 
