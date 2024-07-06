@@ -1,7 +1,10 @@
+! Deal is short for deallocators. :D
 module deal
   implicit none
 
   private
+
+  logical :: debug_mode = .false.
 
   public :: deallocate_string
 
@@ -14,9 +17,11 @@ contains
     character(:), allocatable :: string
 
     if (allocated(string)) then
-      print*,"[Deallocating]: "//string
+      if (debug_mode) then
+        print*,"[Deallocating]: "//string
+      end if
       deallocate(string)
-    else
+    else if (debug_mode) then
       print*,"[Deallocating]: <String already deallocated>"
     end if
 
