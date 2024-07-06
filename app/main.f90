@@ -37,8 +37,8 @@ program main
   call glfw_make_context_current()
 
   !! This allows OpenGL debugging.
-  ! call gl_set_debug_message_callback()
-  ! call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
+  call gl_set_debug_message_callback()
+  call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
 
   !** BEGIN TESTING SHADER
   !! OpenGL is a state machine :D
