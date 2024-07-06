@@ -28,6 +28,8 @@ module opengl
   public :: gl_set_debug_message_callback
   public :: gl_create_program
   public :: gl_create_shader
+  public :: gl_shader_source
+  public :: gl_compile_shader
 
   ! Here I'm binding to the C shared library.
 
@@ -75,6 +77,22 @@ module opengl
       integer(c_int) :: shader_id
     end function internal_gl_create_shader
 
+    subroutine internal_gl_shader_source(shader_id, count, source_code, string_length) bind(c, name = "glShaderSource")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(c_int), intent(in), value :: shader_id
+      integer(c_int), intent(in), value :: count
+      character(kind = c_char), intent(in), value :: source_code
+      !? Less than 0 represents that the string is null terminated. So use that only.
+      integer(c_int), intent(in), value :: string_length
+    end subroutine internal_gl_shader_source
+
+    subroutine gl_compile_shader(shader_id) bind(c, name = "glCompileShader")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(c_int), intent(in), value :: shader_id
+    end subroutine gl_compile_shader
+
   end interface
 
 contains
@@ -107,7 +125,9 @@ contains
     type(c_ptr) :: message_pointer
     type(c_ptr) :: user_param_pointer
 
+    print*,"Uh oh"
     print*,"GL debug message function pointer working!"
+
   end subroutine debug_message_callback
   subroutine gl_set_debug_message_callback
     use, intrinsic :: iso_c_binding
@@ -141,6 +161,25 @@ contains
       error stop "OpenGL: Failed to create a shader."
     end if
   end function gl_create_shader
+
+  subroutine gl_shader_source(shader_id, source_code)
+    use string
+    use deal
+    implicit none
+    integer :: shader_id
+    character(len = *) :: source_code
+    character(len = :, kind = c_char), allocatable :: c_source_code
+
+    c_source_code = into_c_string(source_code)
+
+    call internal_gl_shader_source(shader_id, 0, c_source_code, -1)
+
+    !? OpenGL docs:
+    !? OpenGL copies the shader source code strings when glShaderSource is called,
+    !? so an application may free its copy of the source code strings immediately after the function returns.
+
+    call deallocate_string(c_source_code)
+  end subroutine gl_shader_source
 
 
 end module opengl
