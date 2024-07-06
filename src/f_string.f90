@@ -86,11 +86,13 @@ contains
     ! If the number is any bigger than this, wat.
     allocate(character(128) :: output)
     write(output, "(i128)") 128
-
+    write(output, "(a)") output
 
     print*,"len:", len(trim(output))
 
-    ! print*,output
+    print*,"-----"
+    print*,output
+    print*,"-----"
 
   end function int_to_string
 
