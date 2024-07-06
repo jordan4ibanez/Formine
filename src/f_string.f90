@@ -51,31 +51,34 @@ contains
     ! We must ensure that we are not converting a null pointer
     ! as this can lead to SERIOUS UB.
     if (.not. c_associated(c_string)) then
-      error stop "string_from_c: NULL POINTER IN C STRING"
-    end if
-
-    call c_f_pointer(c_string, fortran_raw_string, [size])
-
-    ! Get the size of the character pointer.
-    ! This is so we do not go out of bounds.
-    ! Manually cast this to 32 bit.
-    input_length = int(sizeof(fortran_raw_string))
-
-    ! Let's find the null terminator.
-    do i = 1, input_length
-      if (fortran_raw_string(i) == achar(0)) then
-        length = i - 1
-        exit
-      end if
-    end do
-
-    ! If the length is 0, we literally cannot do anything, so give up.
-    if (length > 0) then
-      call copy_string_pointer(length, fortran_raw_string, fortran_string)
-    else
+      !? So we will choose to return a blank string instead of halting.
+      !? This comment is left here as a backup and retroactive development documentation.
+      ! error stop "string_from_c: NULL POINTER IN C STRING"
       fortran_string = ""
-    end if
+    else
+      !? It seems that everything is okay, we will proceed.
+      call c_f_pointer(c_string, fortran_raw_string, [size])
 
+      ! Get the size of the character pointer.
+      ! This is so we do not go out of bounds.
+      ! Manually cast this to 32 bit.
+      input_length = int(sizeof(fortran_raw_string))
+
+      ! Let's find the null terminator.
+      do i = 1, input_length
+        if (fortran_raw_string(i) == achar(0)) then
+          length = i - 1
+          exit
+        end if
+      end do
+
+      ! If the length is 0, we literally cannot do anything, so give up.
+      if (length > 0) then
+        call copy_string_pointer(length, fortran_raw_string, fortran_string)
+      else
+        fortran_string = ""
+      end if
+    end if
   end function string_from_c
 
   ! Convert an integer into an allocated string.
