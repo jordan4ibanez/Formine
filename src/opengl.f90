@@ -11,9 +11,14 @@ module opengl
   public :: GL_VERTEX_SHADER
   public :: GL_TRUE
   public :: GL_FALSE
+  public :: GL_VERSION
+  public :: GL_MAJOR_VERSION
+  public :: GL_MINOR_VERSION
 
-  ! integer :: GL_VERSION = int(Z"1f02")
-  ! integer :: GL_NONE = 0
+  integer :: GL_VERSION = int(Z"1f02")
+  integer :: GL_MAJOR_VERSION = int(Z"821B")
+  integer :: GL_MINOR_VERSION = int(Z"821C")
+
   integer :: GL_COLOR_BUFFER_BIT = int(Z"00004000")
   integer :: GL_DEBUG_OUTPUT_SYNCHRONOUS = int(Z"8242")
   integer :: GL_VERTEX_SHADER = int(Z"8B31")
@@ -30,6 +35,8 @@ module opengl
   public :: gl_create_shader
   public :: gl_shader_source
   public :: gl_compile_shader
+  public :: gl_get_integer_v
+  public :: gl_get_version
 
   ! Here I'm binding to the C shared library.
 
@@ -56,10 +63,11 @@ module opengl
       integer(c_int) :: cap
     end subroutine gl_enable
 
-    subroutine internal_gl_debug_message_callback(callback) bind(c, name = "glDebugMessageCallback")
+    subroutine internal_gl_debug_message_callback(callback, user_param) bind(c, name = "glDebugMessageCallback")
       use, intrinsic :: iso_c_binding
       implicit none
-      type(c_ptr), intent(in), pointer :: callback
+      type(c_funptr), intent(in), optional :: callback
+      type(c_ptr), intent(in), optional :: user_param
     end subroutine internal_gl_debug_message_callback
 
     function internal_gl_create_program() result(program_id) bind(c, name = "glCreateProgram")
@@ -93,6 +101,13 @@ module opengl
       integer(c_int), intent(in), value :: shader_id
     end subroutine gl_compile_shader
 
+    subroutine gl_get_integer_v(pname, data) bind(c, name = "glGetIntegerv")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(c_int), intent(in), value :: pname
+      integer(c_int), intent(in), target :: data
+    end subroutine gl_get_integer_v
+
   end interface
 
 contains
@@ -115,24 +130,27 @@ contains
 
   !** NOTE: C is passing Fortran data here!
   !** NOTE: This function passed into C as a pointer!
-  subroutine debug_message_callback(type, id, severity, length, message_pointer, user_param_pointer)
+  subroutine debug_message_callback(source, type, id, severity, length, message_pointer, user_param_pointer)
     use, intrinsic :: iso_c_binding
     implicit none
-    integer :: type
-    integer :: id
-    integer :: severity
-    integer :: length
-    type(c_ptr) :: message_pointer
-    type(c_ptr) :: user_param_pointer
+    integer, intent(in), value :: source
+    integer, intent(in), value :: type
+    integer, intent(in), value :: id
+    integer, intent(in), value :: severity
+    integer, intent(in), value :: length
+    type(c_ptr), intent(in), value :: message_pointer
+    type(c_ptr), intent(in), value :: user_param_pointer
 
-    print*,"Uh oh"
-    print*,"GL debug message function pointer working!"
+    print*,source,type,id,severity,length,message_pointer,user_param_pointer
+
+    ! print*,"Uh oh"
+    ! print*,"GL debug message function pointer working!"
 
   end subroutine debug_message_callback
   subroutine gl_set_debug_message_callback
     use, intrinsic :: iso_c_binding
     implicit none
-    call internal_gl_debug_message_callback(c_funloc(debug_message_callback))
+    call internal_gl_debug_message_callback(c_funloc(debug_message_callback), null())
   end subroutine gl_set_debug_message_callback
 
   function gl_create_program() result(program_id)
@@ -180,6 +198,22 @@ contains
 
     call deallocate_string(c_source_code)
   end subroutine gl_shader_source
+
+
+  subroutine gl_get_version
+    use, intrinsic :: iso_c_binding
+    use string
+    implicit none
+    integer(c_int) :: major 
+    integer(c_int) :: minor 
+
+    ! We're passing a pointer right into C to mutate it.
+    call gl_get_integer_v(GL_MAJOR_VERSION, major)
+    call gl_get_integer_v(GL_MINOR_VERSION, minor)
+
+    print*,"[OpenGL] Version: "//int_to_string(major)//"."//int_to_string(minor)
+
+  end subroutine gl_get_version
 
 
 end module opengl
