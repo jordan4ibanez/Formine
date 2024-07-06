@@ -55,12 +55,12 @@ module opengl
       type(c_ptr), intent(in), value :: callback
     end subroutine internal_gl_debug_message_callback
 
-    function gl_create_program() result(program_id) bind(c, name = "glCreateProgram")
+    function internal_gl_create_program() result(program_id) bind(c, name = "glCreateProgram")
       use, intrinsic :: iso_c_binding
       implicit none
       !! This might cause problems, it's a uint.
       integer(c_int) :: program_id
-    end function gl_create_program
+    end function internal_gl_create_program
 
   end interface
 
@@ -102,6 +102,19 @@ contains
     call internal_gl_debug_message_callback(c_funloc(debug_message_callback))
   end subroutine gl_set_debug_message_callback
 
+  function gl_create_program() result(shader_id)
+    implicit none
+    integer :: shader_id
+
+    shader_id = internal_gl_create_program()
+
+    !? We literally must crash out if OpenGL fails to make a shader program.
+    !? We need a shader to draw things.
+    if (shader_id == 0) then
+      error stop "OpenGL: Failed to create a shader program."
+    end if
+
+  end function gl_create_program
 
 
 end module opengl
