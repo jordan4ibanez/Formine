@@ -100,6 +100,7 @@ contains
     use deal
     implicit none
     call internal_glfw_terminate()
+    call deallocate_string(window_title)
 
   end subroutine glfw_terminate
 
