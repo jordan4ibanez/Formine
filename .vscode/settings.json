@@ -9,5 +9,11 @@
   "fortran.formatting.formatter": "findent",
   "fortran.formatting.findentArgs": [
     "-i2"
-  ]
+  ],
+  // We don't want to see the mod files or the build directory because it clutters everything up.
+  "files.exclude": {
+    "**/.git": true,
+    "**/**.mod": true,
+    "build/": true
+  }
 }
