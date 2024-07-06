@@ -54,6 +54,12 @@ module opengl
       type(c_ptr), intent(in), value :: callback
     end subroutine internal_gl_debug_message_callback
 
+    function gl_create_program() result(program_id) bind(c, name = "glCreateProgram")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(c_int) :: program_id
+    end function gl_create_program
+
   end interface
 
 contains
