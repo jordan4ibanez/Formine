@@ -12,6 +12,12 @@ module glfw
   ! Fortran side.
   character(len = :, kind = c_char), allocatable :: window_title
 
+  public :: GLFW_CONTEXT_DEBUG
+  public :: GLFW_OPENGL_DEBUG_CONTEXT
+
+  integer :: GLFW_CONTEXT_DEBUG = int(Z"00022007")
+  integer :: GLFW_OPENGL_DEBUG_CONTEXT = int(Z"00022007")
+
   ! What we want exposed.
 
   public :: glfw_init
