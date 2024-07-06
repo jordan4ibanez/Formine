@@ -7,7 +7,7 @@ program main
   implicit none
 
   real :: color = 0.0
-  integer :: testing
+  integer :: shader_program_id
 
 
   call glfw_set_error_callback()
@@ -36,6 +36,8 @@ program main
   call glfw_make_context_current()
 
   !** BEGIN TESTING SHADER
+  shader_program_id = gl_create_program()
+  print*,shader_program_id
 
 
   !** END TESTING SHADER
