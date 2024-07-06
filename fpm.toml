@@ -1,9 +1,11 @@
 name = "fortran_thing"
-version = "0.1.0"
-license = "GPLv3"
+description = "A test of learning modern fortran through game dev."
+version = "0.1.1"
+license = "GPL-3.0-or-later"
 author = "jordan4ibanez"
 maintainer = "jordan4ibanez"
 copyright = "Copyright 2024, jordan4ibanez"
+categories = ["game", "engine", "glfw", "opengl"]
 
 [build]
 auto-executables = true
@@ -15,9 +17,6 @@ link = ["glfw", "GL"]
 
 [dependencies]
 stdlib = "*"
-
-# [library]
-# include-dir = ["/lib", "/usr/lib", "/usr/local/lib"]
 
 [install]
 library = true
