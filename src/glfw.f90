@@ -185,6 +185,8 @@ contains
     call deallocate_string(error_text)
     call deallocate_string(error_value_string)
 
+    !! char_pointer is on the stack. Calling c_free() on it will crash the program.
+
   end subroutine error_callback !! These are grouped together because they're basically one function.
   subroutine glfw_set_error_callback
     implicit none
