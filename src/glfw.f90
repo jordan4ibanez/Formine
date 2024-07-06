@@ -102,10 +102,10 @@ contains
 
     if (associated(error_result_text)) then
       print*,"GLFW error: ", error_result_text
-    else if (error_result == 0) then
-      print*,"no glfw error :)"
-    else
-      print*,error_result
+    ! else if (error_result == 0) then
+    !   print*,"no glfw error :)"
+    ! else
+    !   print*,error_result
     end if
 
   end subroutine glfw_get_error
