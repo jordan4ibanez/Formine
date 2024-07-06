@@ -20,6 +20,7 @@ program main
     return
   end if
 
+  call gl_set_debug_message_callback()
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
 
 
