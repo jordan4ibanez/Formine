@@ -10,10 +10,10 @@ module glfw
   type(c_ptr) :: c_window_pointer
 
   ! C side.
-  type(c_ptr) :: c_string
-  ! Fortran side.
-  character(c_char), pointer :: error_result_text(:)
-  integer(c_int) :: error_result
+  ! type(c_ptr) :: c_string
+  ! ! Fortran side.
+  ! character(c_char), pointer :: error_result_text(:)
+  ! integer(c_int) :: error_result
 
   !** Fields for getting the error string out of C and into Fortran.
 
@@ -103,7 +103,13 @@ contains
 
   subroutine glfw_get_error
     use, intrinsic :: iso_c_binding
+    use :: f_helpers
     implicit none
+    ! C side.
+    type(c_ptr) :: c_string
+    ! Fortran side.
+    integer :: error_result
+    character(c_char), pointer :: error_result_text(:)
 
     error_result = internal_glfw_get_error(c_string)
 
@@ -116,6 +122,8 @@ contains
       ! else
       !   print*,error_result
     end if
+
+    !! This is all stack memory. Deallocate and c_free will just crash here.
 
   end subroutine glfw_get_error
 
