@@ -9,6 +9,7 @@ program main
 
   real :: color = 0.0
   integer :: shader_program_id
+  integer :: shader_id
 
   call glfw_set_error_callback()
 
@@ -37,9 +38,12 @@ program main
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
 
   !** BEGIN TESTING SHADER
-  shader_program_id = gl_create_program()
-  print*,"Shader ID: "//int_to_string(shader_program_id)
 
+  shader_program_id = gl_create_program()
+  print*,"Shader Program ID: "//int_to_string(shader_program_id)
+
+  shader_id = gl_create_shader(GL_VERTEX_SHADER)
+  print*,"Shader ID: "//int_to_string(shader_id)
 
   !** END TESTING SHADER
 
