@@ -21,7 +21,7 @@ module opengl
   public :: gl_clear_color_buffer
   public :: gl_enable
   public :: gl_clear_color
-
+  public :: gl_set_debug_message_callback
 
   ! Here I'm binding to the C shared library.
 
@@ -71,8 +71,28 @@ contains
     real(c_float) :: g
     real(c_float) :: b
     call internal_gl_clear_color(r,g,b,1.0)
-
   end subroutine gl_clear_color
+
+
+  !** NOTE: C is passing Fortran data here!
+  !** NOTE: This function passed into C as a pointer!
+  subroutine boof(type, id, severity, length, message_pointer, user_param_pointer)
+    use, intrinsic :: iso_c_binding
+    implicit none
+    integer :: type
+    integer :: id
+    integer :: severity
+    integer :: length
+    type(c_ptr) :: message_pointer
+    type(c_ptr) :: user_param_pointer
+
+    print*,"GL function pointer working!"
+  end subroutine boof
+  subroutine gl_set_debug_message_callback
+    use, intrinsic :: iso_c_binding
+    implicit none
+    call internal_gl_debug_message_callback(c_funloc(boof))
+  end subroutine gl_set_debug_message_callback
 
 
 
