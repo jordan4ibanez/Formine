@@ -30,6 +30,7 @@ module glfw
   public :: glfw_poll_events
   public :: glfw_destroy_window
   public :: glfw_set_error_callback
+  public :: glfw_window_hint
 
   ! Here I'm binding to the C glfw shared library.
   interface
