@@ -117,7 +117,6 @@ contains
     implicit none
     call internal_glfw_terminate()
     call deallocate_string(window_title)
-
   end subroutine glfw_terminate
 
   subroutine glfw_get_error
@@ -147,7 +146,6 @@ contains
     call deallocate_string(error_result_text)
 
     !! Calling c_free() on c_string will just crash here because this is stack memory.
-
   end subroutine glfw_get_error
 
   logical function glfw_create_window(width, height, title) result(success)
@@ -176,7 +174,6 @@ contains
     should_close = internal_glfw_window_should_close(c_window_pointer) .eqv. .true.
   end function glfw_window_should_close
 
-
   subroutine glfw_swap_buffers
     implicit none
     call internal_glfw_swap_buffers(c_window_pointer)
@@ -192,7 +189,6 @@ contains
     call internal_glfw_destroy_window(c_window_pointer)
     print*,"[GLFW]: Window destroyed successfully."
   end subroutine glfw_destroy_window
-
 
   !** NOTE: C is passing Fortran data here!
   !** NOTE: This function passed into C as a pointer!
@@ -219,7 +215,6 @@ contains
     call deallocate_string(error_value_string)
 
     !! char_pointer is on the stack. Calling c_free() on it will crash the program.
-
   end subroutine error_callback !! These are grouped together because they're basically one function.
   subroutine glfw_set_error_callback
     implicit none
