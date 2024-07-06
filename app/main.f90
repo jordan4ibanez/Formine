@@ -20,6 +20,10 @@ program main
     return
   end if
 
+  call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
+
+
+
 
   ! Try to initialize the Window.
   if (glfw_create_window(640,480, "hi")) then
