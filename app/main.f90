@@ -25,6 +25,7 @@ program main
 
 
 
+
   ! Try to initialize the Window.
   if (glfw_create_window(640,480, "hi")) then
     print *,"GLFW: Window created successfully."
@@ -36,13 +37,13 @@ program main
 
   call glfw_make_context_current()
 
-  !! This is debugging for 
-  if (.false.) then
+  !! This is debugging for
+  if (.true.) then
     do while(.not. glfw_window_should_close())
 
       call blah(color)
 
-      call gl_clear_color(color, color, color)
+      call gl_clear_color(0.0, color, color)
 
       call glfw_get_error()
 
