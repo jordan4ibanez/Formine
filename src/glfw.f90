@@ -178,7 +178,7 @@ contains
     error_value_string = int_to_string(i)
 
     if (len(error_text) > 0 ) then
-      print*,"GLFW Error: ("//"1"//")"//error_text//"."
+      print*,"GLFW Error: ("//int_to_string(i)//") "//error_text//"."
     end if
 
     call deallocate_string(error_text)
