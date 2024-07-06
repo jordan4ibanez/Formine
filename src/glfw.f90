@@ -9,6 +9,12 @@ module glfw
   ! C side.
   type(c_ptr) :: c_window_pointer
 
+  ! C side.
+  type(c_ptr) :: c_string
+  ! Fortran side.
+  character, pointer :: error_result_text(:)
+  integer(c_int) :: error_result
+
   !** Fields for getting the error string out of C and into Fortran.
 
   ! What we want exposed.
@@ -98,11 +104,6 @@ contains
   subroutine glfw_get_error
     use, intrinsic :: iso_c_binding
     implicit none
-    ! C side.
-    type(c_ptr) :: c_string
-    ! Fortran side.
-    character, pointer :: error_result_text(:)
-    integer(c_int) :: error_result
 
     error_result = internal_glfw_get_error(c_string)
 
