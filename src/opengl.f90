@@ -48,6 +48,12 @@ module opengl
       integer(c_int) :: cap
     end subroutine gl_enable
 
+    subroutine internal_gl_debug_message_callback(callback) bind(c, name = "glDebugMessageCallback")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      type(c_ptr), intent(in), value :: callback
+    end subroutine internal_gl_debug_message_callback
+
   end interface
 
 contains
