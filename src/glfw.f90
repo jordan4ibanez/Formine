@@ -9,14 +9,6 @@ module glfw
   ! C side.
   type(c_ptr) :: c_window_pointer
 
-  ! C side.
-  ! type(c_ptr) :: c_string
-  ! ! Fortran side.
-  ! character(c_char), pointer :: error_result_text(:)
-  ! integer(c_int) :: error_result
-
-  !** Fields for getting the error string out of C and into Fortran.
-
   ! What we want exposed.
 
   public :: glfw_init
