@@ -22,6 +22,7 @@ module opengl
   public :: gl_enable
   public :: gl_clear_color
   public :: gl_set_debug_message_callback
+  public :: gl_create_program
 
   ! Here I'm binding to the C shared library.
 
@@ -57,6 +58,7 @@ module opengl
     function gl_create_program() result(program_id) bind(c, name = "glCreateProgram")
       use, intrinsic :: iso_c_binding
       implicit none
+      !! This might cause problems, it's a uint.
       integer(c_int) :: program_id
     end function gl_create_program
 
