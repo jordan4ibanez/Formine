@@ -24,9 +24,6 @@ program main
   call gl_set_debug_message_callback()
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
 
-  testing = gl_create_program()
-  print*,testing
-
   ! Try to initialize the Window.
   if (glfw_create_window(640,480, "Fortran Game Engine")) then
     print *,"GLFW: Window created successfully."
@@ -38,8 +35,13 @@ program main
 
   call glfw_make_context_current()
 
-  !! This is debugging for
-  if (.true.) then
+  !** BEGIN TESTING SHADER
+
+
+  !** END TESTING SHADER
+
+  !! This is debugging for functions!
+  if (.false.) then
     do while(.not. glfw_window_should_close())
 
       call blah(color)
