@@ -96,6 +96,13 @@ module glfw
       type(c_ptr), intent(in), value :: func
     end subroutine internal_glfw_set_error_callback
 
+    subroutine glfw_window_hint(hint, value) bind(c, name = "glfwWindowHint")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(c_int) :: hint
+      integer(c_int) :: value
+    end subroutine glfw_window_hint
+
   end interface
 
 contains
