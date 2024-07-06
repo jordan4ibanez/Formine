@@ -1,6 +1,6 @@
 name = "fortran_thing"
 description = "A test of learning modern fortran through game dev."
-version = "0.1.1"
+version = "0.1.2"
 license = "GPL-3.0-or-later"
 author = "jordan4ibanez"
 maintainer = "jordan4ibanez"
