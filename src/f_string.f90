@@ -23,7 +23,7 @@ contains
     allocate(character(len=length) :: output_string)
 
     ! Now copy over each character.
-    print*,length
+    ! print*,length
     do i = 1, length
       output_string(i:i) = input_pointer(i)
     end do
@@ -86,7 +86,7 @@ contains
 
     ! If the number is any bigger than this, wat.
     allocate(character(128) :: output)
-    write(output, "(i128,bz)") i
+    write(output, "(i128)") i
 
     ! Now we shift the whole thing left and trim it to fit.
     output = trim(adjustl(output))

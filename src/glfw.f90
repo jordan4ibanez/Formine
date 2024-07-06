@@ -160,9 +160,10 @@ contains
     call internal_glfw_destroy_window(c_window_pointer)
   end subroutine glfw_destroy_window
 
-  !! BEGIN TEST
+
   !** NOTE: C is passing Fortran data here!
-  subroutine blah(i, char_pointer)
+  !** NOTE: This is passed into C!
+  subroutine error_callback(i, char_pointer)
     use, intrinsic :: iso_c_binding
     use f_string
     use f_helpers
@@ -184,14 +185,11 @@ contains
     call deallocate_string(error_text)
     call deallocate_string(error_value_string)
 
-  end subroutine blah
-
-
+  end subroutine error_callback !! These are grouped together because they're basically one function.
   subroutine glfw_set_error_callback
     implicit none
 
-    call internal_glfw_set_error_callback(c_funloc(blah))
+    call internal_glfw_set_error_callback(c_funloc(error_callback))
   end subroutine glfw_set_error_callback
-  !! END TEST
 
 end module glfw
