@@ -6,29 +6,20 @@ module opengl
 
   ! C variables.
 
+  public :: GL_DEBUG_OUTPUT_SYNCHRONOUS
+  public :: GL_COLOR_BUFFER_BIT
+
   ! integer :: GL_VERSION = int(Z"1f02")
   ! integer :: GL_NONE = 0
   integer :: GL_COLOR_BUFFER_BIT = int(Z"00004000")
   ! integer :: GL_UNSIGNED_BYTE = int(Z"1401")
-  ! integer :: GL_EXTENSIONS = int(Z"1f03")
-  ! integer :: GL_NUM_EXTENSIONS = int(Z"821d")
-  ! integer :: GL_CONTEXT_FLAGS = int(Z"821e")
-  ! integer :: GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT = int(Z"00000001")
-  ! integer :: GL_CONTEXT_FLAG_DEBUG_BIT = int(Z"00000002")
-  ! integer :: GL_CONTEXT_PROFILE_MASK = int(Z"9126")
-  ! integer :: GL_CONTEXT_COMPATIBILITY_PROFILE_BIT = int(Z"00000002")
-  ! integer :: GL_CONTEXT_CORE_PROFILE_BIT = int(Z"00000001")
-  ! integer :: GL_RESET_NOTIFICATION_STRATEGY_ARB = int(Z"8256")
-  ! integer :: GL_LOSE_CONTEXT_ON_RESET_ARB = int(Z"8252")
-  ! integer :: GL_NO_RESET_NOTIFICATION_ARB = int(Z"8261")
-  ! integer :: GL_CONTEXT_RELEASE_BEHAVIOR = int(Z"82fb")
-  ! integer :: GL_CONTEXT_RELEASE_BEHAVIOR_FLUSH = int(Z"82fc")
-  ! integer :: GL_CONTEXT_FLAG_NO_ERROR_BIT_KHR = int(Z"00000008")
+  integer :: GL_DEBUG_OUTPUT_SYNCHRONOUS = int(Z"8242")
 
 
   ! What we want exposed.
 
   public :: gl_clear_color_buffer
+  public :: gl_enable
   public :: gl_clear_color
 
 
@@ -50,6 +41,12 @@ module opengl
       real(c_float), intent(in), value :: b
       real(c_float), intent(in), value :: a
     end subroutine internal_gl_clear_color
+
+    subroutine gl_enable(cap) bind(c, name = "glEnable")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(c_int) :: cap
+    end subroutine gl_enable
 
   end interface
 
