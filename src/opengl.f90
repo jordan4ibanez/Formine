@@ -132,19 +132,33 @@ contains
   !** NOTE: This function passed into C as a pointer!
   subroutine debug_message_callback(source, type, id, severity, length, message_pointer, user_param_pointer)
     use, intrinsic :: iso_c_binding
+    use string
+    use deal
     implicit none
+
     integer, intent(in), value :: source
     integer, intent(in), value :: type
     integer, intent(in), value :: id
     integer, intent(in), value :: severity
     integer, intent(in), value :: length
-    type(c_ptr), intent(in), optional :: message_pointer
-    type(c_ptr), intent(in), optional :: user_param_pointer
+    type(c_ptr), intent(in), value :: message_pointer
+    type(c_ptr), intent(in), value :: user_param_pointer
+    character(:), allocatable :: fortran_message
 
-    print*,source,type,id,severity,length,message_pointer,user_param_pointer
+    ! Shut the compiler up.
+    if (.false.) then
+      print*,source,type,id,severity,user_param_pointer
+    end if
 
-    ! print*,"Uh oh"
-    ! print*,"GL debug message function pointer working!"
+    if (c_associated(message_pointer)) then
+      fortran_message = string_from_c(message_pointer, length + 1)
+      if (len(fortran_message) > 0) then
+        !? Make this print nicely.
+        print*,"[OpenGL] Error: "//fortran_message//"."
+      end if
+    end if
+
+    call deallocate_string(fortran_message)
 
   end subroutine debug_message_callback
   subroutine gl_set_debug_message_callback
@@ -162,7 +176,7 @@ contains
     !? We literally must crash out if OpenGL fails to make a shader program.
     !? We need a shader program to draw things.
     if (program_id == 0) then
-      error stop "OpenGL: Failed to create a shader program."
+      error stop "[OpenGL] Error: Failed to create a shader program."
     end if
   end function gl_create_program
 
@@ -176,7 +190,7 @@ contains
     !? We literally must crash out if OpenGL fails to make a shader.
     !? We need a shader to draw things.
     if (shader_id == 0) then
-      error stop "OpenGL: Failed to create a shader."
+      error stop "[OpenGL] Error: Failed to create a shader."
     end if
   end function gl_create_shader
 
