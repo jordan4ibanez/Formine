@@ -46,8 +46,6 @@ program main
 
       call gl_clear_color(0.0, color, color)
 
-      call glfw_get_error()
-
       call gl_clear_color_buffer()
 
       call glfw_swap_buffers()
