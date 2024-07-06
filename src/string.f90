@@ -103,7 +103,6 @@ contains
 
     ! And plop a null terminator on the end.
     output(length + 1:length + 1) = achar(0)
-
   end function into_c_string
 
   ! Convert an integer into an allocated string.
