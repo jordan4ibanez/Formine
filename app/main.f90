@@ -7,6 +7,7 @@ program main
   implicit none
 
   real :: color = 0.0
+  integer :: testing
 
 
   call glfw_set_error_callback()
@@ -23,9 +24,8 @@ program main
   call gl_set_debug_message_callback()
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
 
-
-
-
+  testing = gl_create_program()
+  print*,testing
 
   ! Try to initialize the Window.
   if (glfw_create_window(640,480, "Fortran Game Engine")) then
