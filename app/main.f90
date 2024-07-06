@@ -2,13 +2,13 @@
 program main
   use glfw
   use opengl
+  use string
   use ye
   use, intrinsic ::  iso_c_binding
   implicit none
 
   real :: color = 0.0
   integer :: shader_program_id
-
 
   call glfw_set_error_callback()
 
@@ -21,9 +21,6 @@ program main
     return
   end if
 
-  call gl_set_debug_message_callback()
-  call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
-
   ! Try to initialize the Window.
   if (glfw_create_window(640,480, "Fortran Game Engine")) then
     print *,"GLFW: Window created successfully."
@@ -35,9 +32,13 @@ program main
 
   call glfw_make_context_current()
 
+  !! This allows OpenGL debugging.
+  call gl_set_debug_message_callback()
+  call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
+
   !** BEGIN TESTING SHADER
   shader_program_id = gl_create_program()
-  print*,shader_program_id
+  print*,"Shader ID: "//int_to_string(shader_program_id)
 
 
   !** END TESTING SHADER
