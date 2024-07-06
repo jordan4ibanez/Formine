@@ -96,7 +96,7 @@ contains
   subroutine glfw_get_error
     use, intrinsic :: iso_c_binding
     use :: deal
-    use :: f_string
+    use :: string
     implicit none
 
     ! C side.
@@ -169,7 +169,7 @@ contains
   !** NOTE: This function passed into C as a pointer!
   subroutine error_callback(i, char_pointer)
     use, intrinsic :: iso_c_binding
-    use f_string
+    use string
     use deal
     implicit none
 

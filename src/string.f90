@@ -1,4 +1,4 @@
-module f_string
+module string
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -101,4 +101,4 @@ contains
 
   end function int_to_string
 
-end module f_string
+end module string
