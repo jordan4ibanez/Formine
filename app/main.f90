@@ -36,22 +36,32 @@ program main
 
   call glfw_make_context_current()
 
+  call gl_get_version()
+
   !! This allows OpenGL debugging.
-  call gl_set_debug_message_callback()
+  print*,"TRY"
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
+  call gl_set_debug_message_callback()
+  print*,"SUCCEED!"
+
 
   !** BEGIN TESTING SHADER
   !! OpenGL is a state machine :D
 
+  print*,1
   shader_program_id = gl_create_program()
   print*,"Shader Program ID: "//int_to_string(shader_program_id)
 
+  print*,2
   shader_id = gl_create_shader(GL_VERTEX_SHADER)
   print*,"Shader ID: "//int_to_string(shader_id)
 
-  call gl_shader_source(shader_id, "hi")
+  print*,3
+  call gl_shader_source(shader_id, " ")
 
+  print*,4
   call gl_compile_shader(1)
+  print*,5
 
   !** END TESTING SHADER
 
@@ -73,9 +83,12 @@ program main
   end if
 
 
+  print*,6
   call glfw_destroy_window()
+  print*,7
 
   call glfw_terminate()
+  print*,8
 
 
 end
