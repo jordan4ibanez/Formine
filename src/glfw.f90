@@ -10,11 +10,6 @@ module glfw
   type(c_ptr) :: c_window_pointer
 
   !** Fields for getting the error string out of C and into Fortran.
-  ! C side.
-  type(c_ptr) :: c_string
-  ! Fortran side.
-  character, pointer :: error_result_text(:)
-  integer(c_int) :: error_result
 
   ! What we want exposed.
 
@@ -27,6 +22,7 @@ module glfw
   public :: glfw_swap_buffers
   public :: glfw_poll_events
   public :: glfw_destroy_window
+  public :: glfw_set_error_callback
 
   ! Here I'm binding to the C glfw shared library.
   interface
@@ -87,6 +83,12 @@ module glfw
       type(c_ptr), intent(in), value :: current_window_pointer
     end subroutine internal_glfw_destroy_window
 
+    subroutine internal_glfw_set_error_callback(func) bind(c, name = "glfwSetErrorCallback")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      type(c_ptr), intent(in), value :: func
+    end subroutine internal_glfw_set_error_callback
+
   end interface
 
 contains
@@ -96,16 +98,22 @@ contains
   subroutine glfw_get_error
     use, intrinsic :: iso_c_binding
     implicit none
+    ! C side.
+    type(c_ptr) :: c_string
+    ! Fortran side.
+    character, pointer :: error_result_text(:)
+    integer(c_int) :: error_result
+
     error_result = internal_glfw_get_error(c_string)
 
     call c_f_pointer(c_string, error_result_text, [512])
 
     if (associated(error_result_text)) then
       print*,"GLFW error: ", error_result_text
-    ! else if (error_result == 0) then
-    !   print*,"no glfw error :)"
-    ! else
-    !   print*,error_result
+      ! else if (error_result == 0) then
+      !   print*,"no glfw error :)"
+      ! else
+      !   print*,error_result
     end if
 
   end subroutine glfw_get_error
@@ -150,5 +158,21 @@ contains
     implicit none
     call internal_glfw_destroy_window(c_window_pointer)
   end subroutine glfw_destroy_window
+
+  !! BEGIN TEST
+  subroutine blah(i, char_pointer)
+    use, intrinsic :: iso_c_binding
+    implicit none
+    integer(c_int) :: i
+    type(c_ptr), target :: char_pointer
+  end subroutine blah
+
+
+  subroutine glfw_set_error_callback
+    implicit none
+
+    call internal_glfw_set_error_callback(c_funloc(blah))
+  end subroutine glfw_set_error_callback
+  !! END TEST
 
 end module glfw
