@@ -10,7 +10,7 @@ module glfw
   type(c_ptr) :: c_window_pointer
 
   ! Fortran side.
-  ! character(:,kind=c_char), allocatable :: window_title
+  character(len = :, kind = c_char), allocatable :: window_title
 
   ! What we want exposed.
 
@@ -139,17 +139,11 @@ contains
     implicit none
     integer(c_int) :: width
     integer(c_int) :: height
-    character(kind = c_char) :: title
-    character(:,kind=c_char), allocatable :: window_title
+    character(len = *,kind = c_char) :: title
 
-    allocate(character(3) :: window_title)
-    window_title(1:) = "h"
-    window_title(2:) = "i"
-    window_title(3:) = achar(0)
+    window_title = into_c_string(title)
 
     c_window_pointer = internal_glfw_create_window(width, height, window_title, null(), null())
-
-    ! print*,c_window_pointer
 
     ! Then we check if the window pointer is null.
     success = c_associated(c_window_pointer)
