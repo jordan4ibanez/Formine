@@ -8,13 +8,13 @@ module opengl
 
   public :: GL_DEBUG_OUTPUT_SYNCHRONOUS
   public :: GL_COLOR_BUFFER_BIT
+  public :: GL_VERTEX_SHADER
 
   ! integer :: GL_VERSION = int(Z"1f02")
   ! integer :: GL_NONE = 0
   integer :: GL_COLOR_BUFFER_BIT = int(Z"00004000")
-  ! integer :: GL_UNSIGNED_BYTE = int(Z"1401")
   integer :: GL_DEBUG_OUTPUT_SYNCHRONOUS = int(Z"8242")
-
+  integer :: GL_VERTEX_SHADER = int(Z"8B31")
 
   ! What we want exposed.
 
@@ -23,6 +23,7 @@ module opengl
   public :: gl_clear_color
   public :: gl_set_debug_message_callback
   public :: gl_create_program
+  public :: gl_create_shader
 
   ! Here I'm binding to the C shared library.
 
@@ -61,6 +62,14 @@ module opengl
       !! This might cause problems, it's a uint.
       integer(c_int) :: program_id
     end function internal_gl_create_program
+
+    function internal_gl_create_shader(shader_type) result(shader_id) bind(c, name = "glCreateShader")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      !! This might cause problems, it's a uint.
+      integer(c_int), intent(in), value :: shader_type
+      integer(c_int) :: shader_id
+    end function internal_gl_create_shader
 
   end interface
 
@@ -102,18 +111,32 @@ contains
     call internal_gl_debug_message_callback(c_funloc(debug_message_callback))
   end subroutine gl_set_debug_message_callback
 
-  function gl_create_program() result(shader_id)
+  function gl_create_program() result(program_id)
     implicit none
-    integer :: shader_id
+    integer :: program_id
 
-    shader_id = internal_gl_create_program()
+    program_id = internal_gl_create_program()
 
     !? We literally must crash out if OpenGL fails to make a shader program.
-    !? We need a shader to draw things.
-    if (shader_id == 0) then
+    !? We need a shader program to draw things.
+    if (program_id == 0) then
       error stop "OpenGL: Failed to create a shader program."
     end if
   end function gl_create_program
+
+  function gl_create_shader(shader_type) result(shader_id)
+    implicit none
+    integer :: shader_type
+    integer :: shader_id
+
+    shader_id = internal_gl_create_shader(shader_type)
+
+    !? We literally must crash out if OpenGL fails to make a shader.
+    !? We need a shader to draw things.
+    if (shader_id == 0) then
+      error stop "OpenGL: Failed to create a shader."
+    end if
+  end function gl_create_shader
 
 
 end module opengl
