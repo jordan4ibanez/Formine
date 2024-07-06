@@ -132,7 +132,7 @@ contains
 
     c_window_pointer = internal_glfw_create_window(width, height, title, null(), null())
 
-    print*,c_window_pointer
+    ! print*,c_window_pointer
 
     ! Then we check if the window pointer is null.
     success = c_associated(c_window_pointer)
@@ -162,6 +162,7 @@ contains
   subroutine glfw_destroy_window
     implicit none
     call internal_glfw_destroy_window(c_window_pointer)
+    print*,"GLFW: Window destroyed successfully."
   end subroutine glfw_destroy_window
 
 
