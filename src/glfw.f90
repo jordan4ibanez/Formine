@@ -96,7 +96,7 @@ module glfw
       implicit none
 
       type(c_funptr), intent(in), value :: func
-      
+
     end subroutine internal_glfw_set_error_callback
 
     subroutine glfw_window_hint(hint, value) bind(c, name = "glfwWindowHint")
@@ -137,7 +137,7 @@ contains
     error_result_text = string_from_c(c_string, 512)
 
     if (len(error_result_text) > 0) then
-      print*,"GLFW Gotten Error: "//error_result_text//"."
+      print*,"[GLFW] Gotten Error: "//error_result_text//"."
       ! else if (error_result == 0) then
       !   print*,"no glfw error :)"
       ! else
@@ -190,7 +190,7 @@ contains
   subroutine glfw_destroy_window
     implicit none
     call internal_glfw_destroy_window(c_window_pointer)
-    print*,"GLFW: Window destroyed successfully."
+    print*,"[GLFW]: Window destroyed successfully."
   end subroutine glfw_destroy_window
 
 
@@ -212,7 +212,7 @@ contains
 
     if (len(error_text) > 0) then
       !? We put a period at the end because I think that looks nice.
-      print*,"GLFW Error: ("//error_value_string//") "//error_text//"."
+      print*,"[GLFW] Error: ("//error_value_string//") "//error_text//"."
     end if
 
     call deallocate_string(error_text)
