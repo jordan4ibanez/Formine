@@ -13,7 +13,7 @@ module raw_c
       type(c_ptr), intent(in), value :: ptr
     end subroutine c_free
 
-    !! NOTE: This will corrupt the string !!
+    !! NOTE: This will corrupt the string, COPY FIRST !!
     integer(c_int) function c_strlen(ptr) result(length) bind(c, name = "strlen")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -21,4 +21,7 @@ module raw_c
     end function c_strlen
 
   end interface
+
+contains
+
 end module raw_c
