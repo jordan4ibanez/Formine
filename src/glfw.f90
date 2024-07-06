@@ -100,8 +100,8 @@ module glfw
     subroutine glfw_window_hint(hint, value) bind(c, name = "glfwWindowHint")
       use, intrinsic :: iso_c_binding
       implicit none
-      integer(c_int) :: hint
-      integer(c_int) :: value
+      integer(c_int), intent(in), value :: hint
+      integer(c_int), intent(in), value :: value
     end subroutine glfw_window_hint
 
   end interface
