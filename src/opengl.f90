@@ -138,8 +138,8 @@ contains
     integer, intent(in), value :: id
     integer, intent(in), value :: severity
     integer, intent(in), value :: length
-    type(c_ptr), intent(in), value :: message_pointer
-    type(c_ptr), intent(in), value :: user_param_pointer
+    type(c_ptr), intent(in), optional :: message_pointer
+    type(c_ptr), intent(in), optional :: user_param_pointer
 
     print*,source,type,id,severity,length,message_pointer,user_param_pointer
 
