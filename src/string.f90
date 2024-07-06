@@ -6,6 +6,7 @@ module string
 
   public :: string_from_c
   public :: int_to_string
+  public :: into_c_string
 
 contains
 
@@ -80,11 +81,37 @@ contains
     end if
   end function string_from_c
 
+  ! Convert a regular Fortran string into a null terminated C string.
+  !** Allocated, remember to deallocate!
+  function into_c_string(input) result(output)
+    implicit none
+    character(len = *, kind = c_char) :: input
+    character(len = :, kind = c_char), allocatable :: output
+    integer(8) :: length
+    integer(8) :: i
+
+    ! Get the length of the input.
+    length = len(input)
+
+    ! +1 for the null terminator at the end.
+    allocate(character(length + 1) :: output)
+
+    ! Now clone it in.
+    do i = 1,length
+      output(i:i) = input(i:i)
+    end do
+
+    ! And plop a null terminator on the end.
+    output(length + 1:length + 1) = achar(0)
+
+    print*,output
+  end function into_c_string
+
   ! Convert an integer into an allocated string.
   function int_to_string(i) result(output)
     implicit none
     integer :: i
-    character(:), allocatable :: output
+    character(:, kind = c_char), allocatable :: output
 
     ! If the number is any bigger than this, wat.
     allocate(character(128) :: output)
