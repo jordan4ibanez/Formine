@@ -27,7 +27,7 @@ program main
 
 
   ! Try to initialize the Window.
-  if (glfw_create_window(640,480, "hi")) then
+  if (glfw_create_window(640,480, "Fortran Game Engine")) then
     print *,"GLFW: Window created successfully."
   else
     print *,"GLFW: Failed to create window."
