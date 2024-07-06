@@ -174,22 +174,16 @@ contains
     character(:), allocatable :: error_value_string
 
     error_text = string_from_c(char_pointer, 512)
-
     error_value_string = int_to_string(i)
 
     if (len(error_text) > 0 ) then
-      print*,"GLFW Error: ("//int_to_string(i)//") "//error_text//"."
+      !? We put a period at the end because I think that looks nice.
+      print*,"GLFW Error: ("//error_value_string//") "//error_text//"."
     end if
 
     call deallocate_string(error_text)
+    call deallocate_string(error_value_string)
 
-
-
-    ! print*,len(deallocate(error_result_text))
-    ! print*,error_result_text(1:1)
-    ! print*,char_pointer
-    ! print*,error_result_text
-    ! end if
   end subroutine blah
 
 
