@@ -15,8 +15,8 @@ module glfw
   public :: GLFW_CONTEXT_DEBUG
   public :: GLFW_OPENGL_DEBUG_CONTEXT
 
-  integer :: GLFW_CONTEXT_DEBUG = int(Z"00022007")
-  integer :: GLFW_OPENGL_DEBUG_CONTEXT = int(Z"00022007")
+  integer :: GLFW_CONTEXT_DEBUG = int(Z"22007")
+  integer :: GLFW_OPENGL_DEBUG_CONTEXT = int(Z"22007")
 
   ! What we want exposed.
 

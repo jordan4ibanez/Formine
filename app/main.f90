@@ -22,6 +22,9 @@ program main
     return
   end if
 
+  !! Need this flag to have OpenGL debugging available!
+  call glfw_window_hint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE)
+
   ! Try to initialize the Window.
   if (glfw_create_window(640,480, "Fortran Game Engine")) then
     print *,"GLFW: Window created successfully."
@@ -34,8 +37,8 @@ program main
   call glfw_make_context_current()
 
   !! This allows OpenGL debugging.
-  call gl_set_debug_message_callback()
-  call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
+  ! call gl_set_debug_message_callback()
+  ! call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
 
   !** BEGIN TESTING SHADER
   !! OpenGL is a state machine :D

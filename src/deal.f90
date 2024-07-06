@@ -4,7 +4,7 @@ module deal
 
   private
 
-  logical :: debug_mode = .true.
+  logical :: debug_mode = .false.
 
   public :: deallocate_string
 
