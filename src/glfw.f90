@@ -9,6 +9,9 @@ module glfw
   ! C side.
   type(c_ptr) :: c_window_pointer
 
+  ! Fortran side.
+  ! character(:,kind=c_char), allocatable :: window_title
+
   ! What we want exposed.
 
   public :: glfw_init
@@ -29,17 +32,16 @@ module glfw
       implicit none
     end function glfw_init
 
-    subroutine glfw_terminate() bind(c, name="glfwTerminate")
+    subroutine internal_glfw_terminate() bind(c, name="glfwTerminate")
       use, intrinsic :: iso_c_binding
       implicit none
-    end subroutine glfw_terminate
+    end subroutine internal_glfw_terminate
 
     function internal_glfw_create_window(width, height, title, monitor, share) result(new_window_pointer) bind(c, name = "glfwCreateWindow")
       use, intrinsic :: iso_c_binding
       implicit none
       integer(c_int), intent(in), value :: width
       integer(c_int), intent(in), value :: height
-      character(kind = c_char), intent(in) :: title
       character(kind = c_char), intent(in), optional :: title
       type(c_ptr), intent(in), optional :: monitor
       type(c_ptr), intent(in), optional :: share
@@ -94,6 +96,13 @@ contains
 
   ! Here I'm just kind of using glfw the way I want to use it.
 
+  subroutine glfw_terminate
+    use deal
+    implicit none
+    call internal_glfw_terminate()
+
+  end subroutine glfw_terminate
+
   subroutine glfw_get_error
     use, intrinsic :: iso_c_binding
     use :: deal
@@ -126,12 +135,19 @@ contains
 
   logical function glfw_create_window(width, height, title) result(success)
     use, intrinsic :: iso_c_binding
+    use string
     implicit none
     integer(c_int) :: width
     integer(c_int) :: height
     character(kind = c_char) :: title
+    character(:,kind=c_char), allocatable :: window_title
 
-    c_window_pointer = internal_glfw_create_window(width, height, title, null(), null())
+    allocate(character(3) :: window_title)
+    window_title(1:) = "h"
+    window_title(2:) = "i"
+    window_title(3:) = achar(0)
+
+    c_window_pointer = internal_glfw_create_window(width, height, window_title, null(), null())
 
     ! print*,c_window_pointer
 
