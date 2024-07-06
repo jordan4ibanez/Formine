@@ -98,7 +98,7 @@ contains
     use :: f_helpers
     use :: f_string
     implicit none
-    
+
     ! C side.
     type(c_ptr) :: c_string
     ! Fortran side.
