@@ -9,12 +9,16 @@ module opengl
   public :: GL_DEBUG_OUTPUT_SYNCHRONOUS
   public :: GL_COLOR_BUFFER_BIT
   public :: GL_VERTEX_SHADER
+  public :: GL_TRUE
+  public :: GL_FALSE
 
   ! integer :: GL_VERSION = int(Z"1f02")
   ! integer :: GL_NONE = 0
   integer :: GL_COLOR_BUFFER_BIT = int(Z"00004000")
   integer :: GL_DEBUG_OUTPUT_SYNCHRONOUS = int(Z"8242")
   integer :: GL_VERTEX_SHADER = int(Z"8B31")
+  integer :: GL_TRUE = 1
+  integer :: GL_FALSE = 0
 
   ! What we want exposed.
 
