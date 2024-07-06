@@ -32,22 +32,24 @@ program main
 
   call glfw_make_context_current()
 
+  !! This is debugging for 
+  if (.false.) then
+    do while(.not. glfw_window_should_close())
 
-  do while(.not. glfw_window_should_close())
+      call blah(color)
 
-    call blah(color)
+      call gl_clear_color(color, color, color)
 
-    call gl_clear_color(color, color, color)
+      call glfw_get_error()
 
-    call glfw_get_error()
+      call gl_clear_color_buffer()
 
-    call gl_clear_color_buffer()
+      call glfw_swap_buffers()
 
-    call glfw_swap_buffers()
+      call glfw_poll_events()
 
-    call glfw_poll_events()
-
-  end do
+    end do
+  end if
 
 
   call glfw_destroy_window()
@@ -55,6 +57,6 @@ program main
   call glfw_terminate()
 
   call glfw_get_error()
-  
+
 
 end
