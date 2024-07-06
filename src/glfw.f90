@@ -101,7 +101,7 @@ contains
     call c_f_pointer(c_string, error_result_text, [512])
 
     if (associated(error_result_text)) then
-      print*,error_result_text
+      print*,"GLFW error: ", error_result_text
     else if (error_result == 0) then
       print*,"no glfw error :)"
     else
