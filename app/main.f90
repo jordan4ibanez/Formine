@@ -37,7 +37,9 @@ program main
 
   real :: color = 0.0
 
+
   call glfw_set_error_callback()
+
 
   ! Try to create a GLFW context.
   if (glfw_init()) then
@@ -46,7 +48,6 @@ program main
     print *,"failed"
     return
   end if
-
 
 
   ! Try to initialize the Window.
@@ -58,8 +59,8 @@ program main
     return
   end if
 
-
   call glfw_make_context_current()
+
 
   do while(.not. glfw_window_should_close())
 
@@ -77,10 +78,12 @@ program main
 
   end do
 
+
   call glfw_destroy_window()
 
   call glfw_terminate()
 
   call glfw_get_error()
+  
 
 end
