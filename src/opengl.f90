@@ -113,7 +113,6 @@ contains
     if (shader_id == 0) then
       error stop "OpenGL: Failed to create a shader program."
     end if
-
   end function gl_create_program
 
 
