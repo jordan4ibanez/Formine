@@ -177,7 +177,7 @@ contains
     error_text = string_from_c(char_pointer, 512)
     error_value_string = int_to_string(i)
 
-    if (len(error_text) > 0 ) then
+    if (len(error_text) > 0) then
       !? We put a period at the end because I think that looks nice.
       print*,"GLFW Error: ("//error_value_string//") "//error_text//"."
     end if
