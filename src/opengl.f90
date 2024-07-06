@@ -86,7 +86,7 @@ contains
     type(c_ptr) :: message_pointer
     type(c_ptr) :: user_param_pointer
 
-    print*,"GL function pointer working!"
+    print*,"GL debug message function pointer working!"
   end subroutine debug_message_callback
   subroutine gl_set_debug_message_callback
     use, intrinsic :: iso_c_binding
