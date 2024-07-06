@@ -204,8 +204,8 @@ contains
     use, intrinsic :: iso_c_binding
     use string
     implicit none
-    integer(c_int) :: major 
-    integer(c_int) :: minor 
+    integer(c_int) :: major
+    integer(c_int) :: minor
 
     ! We're passing a pointer right into C to mutate it.
     call gl_get_integer_v(GL_MAJOR_VERSION, major)
