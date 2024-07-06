@@ -96,26 +96,30 @@ contains
   subroutine glfw_get_error
     use, intrinsic :: iso_c_binding
     use :: f_helpers
+    use :: f_string
     implicit none
+    
     ! C side.
     type(c_ptr) :: c_string
     ! Fortran side.
     integer :: error_result
-    character(c_char), pointer :: error_result_text(:)
+    character(:), allocatable :: error_result_text
 
     error_result = internal_glfw_get_error(c_string)
 
-    call c_f_pointer(c_string, error_result_text, [512])
+    error_result_text = string_from_c(c_string, 512)
 
-    if (associated(error_result_text)) then
-      print*,"GLFW error: ", error_result_text
+    if (len(error_result_text) > 0) then
+      print*,"GLFW Gotten Error: "//error_result_text//"."
       ! else if (error_result == 0) then
       !   print*,"no glfw error :)"
       ! else
       !   print*,error_result
     end if
 
-    !! This is all stack memory. Deallocate and c_free will just crash here.
+    call deallocate_string(error_result_text)
+
+    !! Calling c_free() on c_string will just crash here because this is stack memory.
 
   end subroutine glfw_get_error
 
