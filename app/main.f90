@@ -59,9 +59,12 @@ program main
 
   ! call glfw_get_error()
 
+  call glfw_set_error_callback()
+
   call glfw_make_context_current()
 
   call glfw_get_error()
+
 
   ! do while(.not. glfw_window_should_close())
 
