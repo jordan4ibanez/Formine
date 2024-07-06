@@ -162,7 +162,7 @@ contains
 
 
   !** NOTE: C is passing Fortran data here!
-  !** NOTE: This is passed into C!
+  !** NOTE: This function passed into C as a pointer!
   subroutine error_callback(i, char_pointer)
     use, intrinsic :: iso_c_binding
     use f_string
