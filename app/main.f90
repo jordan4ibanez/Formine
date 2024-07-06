@@ -60,7 +60,5 @@ program main
 
   call glfw_terminate()
 
-  call glfw_get_error()
-
 
 end
