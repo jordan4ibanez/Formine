@@ -94,7 +94,9 @@ module glfw
     subroutine internal_glfw_set_error_callback(func) bind(c, name = "glfwSetErrorCallback")
       use, intrinsic :: iso_c_binding
       implicit none
+
       type(c_funptr), intent(in), value :: func
+      
     end subroutine internal_glfw_set_error_callback
 
     subroutine glfw_window_hint(hint, value) bind(c, name = "glfwWindowHint")

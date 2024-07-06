@@ -66,7 +66,7 @@ module opengl
     subroutine internal_gl_debug_message_callback(callback, user_param) bind(c, name = "glDebugMessageCallback")
       use, intrinsic :: iso_c_binding
       implicit none
-      type(c_funptr), intent(in), optional :: callback
+      type(c_funptr), intent(in), value :: callback
       type(c_ptr), intent(in), optional :: user_param
     end subroutine internal_gl_debug_message_callback
 
