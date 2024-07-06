@@ -76,7 +76,7 @@ contains
 
   !** NOTE: C is passing Fortran data here!
   !** NOTE: This function passed into C as a pointer!
-  subroutine boof(type, id, severity, length, message_pointer, user_param_pointer)
+  subroutine debug_message_callback(type, id, severity, length, message_pointer, user_param_pointer)
     use, intrinsic :: iso_c_binding
     implicit none
     integer :: type
@@ -87,11 +87,11 @@ contains
     type(c_ptr) :: user_param_pointer
 
     print*,"GL function pointer working!"
-  end subroutine boof
+  end subroutine debug_message_callback
   subroutine gl_set_debug_message_callback
     use, intrinsic :: iso_c_binding
     implicit none
-    call internal_gl_debug_message_callback(c_funloc(boof))
+    call internal_gl_debug_message_callback(c_funloc(debug_message_callback))
   end subroutine gl_set_debug_message_callback
 
 
