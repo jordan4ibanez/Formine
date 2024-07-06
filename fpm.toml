@@ -16,7 +16,7 @@ module-naming = false
 link = ["glfw", "GL"]
 
 [dependencies]
-stdlib = "*"
+# stdlib = "*"
 
 [install]
 library = true
