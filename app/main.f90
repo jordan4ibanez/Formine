@@ -52,33 +52,8 @@ program main
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
   call gl_set_debug_message_callback()
 
-
-  !** BEGIN TESTING SHADER
-  !! OpenGL is a state machine :D
-
-  !? Note: needs a negative check.
-
-  program_id = gl_create_program()
-  print*,"Shader Program ID: "//int_to_string(program_id)
-
-  ! Vertex shader
-  vertex_shader_id = gl_create_shader(GL_VERTEX_SHADER)
-  print*,"Vertex Shader ID: "//int_to_string(vertex_shader_id)
-  call gl_shader_source(vertex_shader_id, "./shaders/vertex.vert")
-  call gl_compile_shader(vertex_shader_id)
-
-  ! Fragment shader
-  fragment_shader_id = gl_create_shader(GL_FRAGMENT_SHADER)
-  print*,"Fragment Shader ID: "//int_to_string(fragment_shader_id)
-  call gl_shader_source(fragment_shader_id, "./shaders/fragment.frag")
-  call gl_compile_shader(fragment_shader_id)
-
-  ! Now we attach and link.
-  call gl_attach_shader(program_id, vertex_shader_id)
-  call gl_attach_shader(program_id, fragment_shader_id)
-  call gl_link_program(program_id)
-
-  !** END TESTING SHADER
+  ! This can fail.
+  call create_shader("main", "./shaders/vertex.vert", "./shaders/fragment.frag")
 
   !! This is debugging for functions!
   if (.false.) then
