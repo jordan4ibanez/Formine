@@ -25,18 +25,14 @@ contains
     character(len = *) :: vertex_code_location
     character(len = *) :: fragment_code_location
     logical :: success
-    type(shader_program), allocatable :: program(:)
-
-    allocate(array(1) :: program)
-
-
-
-
-
+    type(shader_program), allocatable :: program
 
     integer :: program_id
     integer :: vertex_shader_id
     integer :: fragment_shader_id
+
+    ! allocate(array(1) :: program)
+    allocate(program)
 
     !? Note: needs a 0 check.
 
