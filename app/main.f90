@@ -1,4 +1,3 @@
-
 program main
   use glfw
   use opengl
@@ -10,7 +9,7 @@ program main
 
   real :: color = 0.0
 
-  integer :: shader_program_id
+  integer :: program_id
   integer :: vertex_shader_id
   integer :: fragment_shader_id
 
@@ -59,8 +58,8 @@ program main
 
   !? Note: needs a negative check.
 
-  shader_program_id = gl_create_program()
-  print*,"Shader Program ID: "//int_to_string(shader_program_id)
+  program_id = gl_create_program()
+  print*,"Shader Program ID: "//int_to_string(program_id)
 
   ! Vertex shader
   vertex_shader_id = gl_create_shader(GL_VERTEX_SHADER)
@@ -73,6 +72,11 @@ program main
   print*,"Fragment Shader ID: "//int_to_string(fragment_shader_id)
   call gl_shader_source(fragment_shader_id, "./shaders/fragment.frag")
   call gl_compile_shader(fragment_shader_id)
+
+  ! Now we attach and link.
+  call gl_attach_shader(program_id, vertex_shader_id)
+  call gl_attach_shader(program_id, fragment_shader_id)
+  call gl_link_program(program_id)
 
   !** END TESTING SHADER
 
