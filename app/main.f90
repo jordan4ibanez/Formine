@@ -9,10 +9,6 @@ program main
 
   real :: color = 0.0
 
-  integer :: program_id
-  integer :: vertex_shader_id
-  integer :: fragment_shader_id
-
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
   !   return

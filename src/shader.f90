@@ -15,12 +15,16 @@ contains
   !! CAN FAIL. If something blows up or doesn't exist, this will halt the program. (required to render)
   function create_shader(shader_name, vertex_code_location, fragment_code_location) result(success)
     use opengl
+    use string
     implicit none
 
     character(len = *) :: shader_name
     character(len = *) :: vertex_code_location
     character(len = *) :: fragment_code_location
     logical :: success
+    integer :: program_id
+    integer :: vertex_shader_id
+    integer :: fragment_shader_id
 
     !? Note: needs a 0 check.
 
