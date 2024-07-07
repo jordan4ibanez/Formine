@@ -159,7 +159,7 @@ contains
       fortran_message = string_from_c(message_pointer, length + 1)
       if (len(fortran_message) > 0) then
         !? Make this print nicely.
-        print*,"[OpenGL] Error: "//fortran_message//"."
+        print*,"[OpenGL] Error: ("//int_to_string(source)//") "//fortran_message//"."
       end if
     end if
 
