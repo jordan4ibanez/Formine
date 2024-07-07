@@ -31,7 +31,6 @@ contains
     integer :: vertex_shader_id
     integer :: fragment_shader_id
 
-    ! allocate(array(1) :: program)
     allocate(program)
 
     !? Note: needs a 0 check.
