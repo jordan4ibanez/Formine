@@ -8,7 +8,7 @@ module files
   public :: file_reader
 
 
-  !** This is your basic file -> allocated string reader. I think it's pretty neat. :)
+  !** This is your basic (file -> allocated string) reader. I think it's pretty neat. :)
   type :: file_reader
 
     logical :: exists
