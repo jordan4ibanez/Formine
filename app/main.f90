@@ -10,7 +10,7 @@ program main
 
   real :: color = 0.0
   integer :: shader_program_id
-  integer :: shader_id
+  integer :: vertex_shader_id
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
@@ -58,12 +58,12 @@ program main
   shader_program_id = gl_create_program()
   print*,"Shader Program ID: "//int_to_string(shader_program_id)
 
-  shader_id = gl_create_shader(GL_VERTEX_SHADER)
-  print*,"Vertex Shader ID: "//int_to_string(shader_id)
+  vertex_shader_id = gl_create_shader(GL_VERTEX_SHADER)
+  print*,"Vertex Shader ID: "//int_to_string(vertex_shader_id)
 
-  call gl_shader_source(shader_id, "./shaders/vertex.vert")
+  call gl_shader_source(vertex_shader_id, "./shaders/vertex.vert")
 
-  call gl_compile_shader(shader_id)
+  call gl_compile_shader(vertex_shader_id)
 
   !** END TESTING SHADER
 
