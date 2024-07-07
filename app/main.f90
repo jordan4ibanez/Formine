@@ -2,7 +2,7 @@ program main
   use glfw
   use opengl
   use string
-  use ye
+  use shader
   use files
   use, intrinsic ::  iso_c_binding
   implicit none
@@ -84,7 +84,7 @@ program main
   if (.false.) then
     do while(.not. glfw_window_should_close())
 
-      call blah(color)
+      ! call blah(color)
 
       call gl_clear_color(0.0, color, color)
 
