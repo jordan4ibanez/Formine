@@ -8,6 +8,7 @@ module files
   public :: file_reader
 
 
+  !** This is your basic file -> allocated string reader. I think it's pretty neat. :)
   type :: file_reader
 
     logical :: exists
@@ -58,6 +59,7 @@ contains
   end subroutine file_reader_read_file
 
 
+  !** Clean up the allocated memory, if allocated.
   subroutine file_reader_deallocate(this)
     use deal
     implicit none
