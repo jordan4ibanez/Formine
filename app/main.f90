@@ -69,8 +69,8 @@ program main
   call gl_compile_shader(vertex_shader_id)
 
   ! Fragment shader
-  vertex_shader_id = gl_create_shader(GL_FRAGMENT_SHADER)
-  print*,"Vertex Shader ID: "//int_to_string(fragment_shader_id)
+  fragment_shader_id = gl_create_shader(GL_FRAGMENT_SHADER)
+  print*,"Fragment Shader ID: "//int_to_string(fragment_shader_id)
   call gl_shader_source(fragment_shader_id, "./shaders/fragment.frag")
   call gl_compile_shader(fragment_shader_id)
 
