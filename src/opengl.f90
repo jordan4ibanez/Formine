@@ -4,28 +4,33 @@ module opengl
 
   private
 
-  ! C variables.
+  ! OpenGL constants.
+
+  public :: GL_VERSION
+  public :: GL_MAJOR_VERSION
+  public :: GL_MINOR_VERSION
+  public :: GL_TRUE
+  public :: GL_FALSE
 
   public :: GL_DEBUG_OUTPUT_SYNCHRONOUS
   public :: GL_COLOR_BUFFER_BIT
   public :: GL_VERTEX_SHADER
-  public :: GL_TRUE
-  public :: GL_FALSE
-  public :: GL_VERSION
-  public :: GL_MAJOR_VERSION
-  public :: GL_MINOR_VERSION
+  public :: GL_FRAGMENT_SHADER
+
+  !
 
   integer :: GL_VERSION = int(z"1f02")
   integer :: GL_MAJOR_VERSION = int(z"821B")
   integer :: GL_MINOR_VERSION = int(z"821C")
+  integer :: GL_TRUE = 1
+  integer :: GL_FALSE = 0
 
   integer :: GL_COLOR_BUFFER_BIT = int(z"00004000")
   integer :: GL_DEBUG_OUTPUT_SYNCHRONOUS = int(z"8242")
   integer :: GL_VERTEX_SHADER = int(z"8B31")
-  integer :: GL_TRUE = 1
-  integer :: GL_FALSE = 0
+  integer :: GL_FRAGMENT_SHADER = int(z"8B30")
 
-  ! What we want exposed.
+  ! Functions we want exposed.
 
   public :: gl_clear_color_buffer
   public :: gl_enable
