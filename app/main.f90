@@ -9,8 +9,10 @@ program main
   implicit none
 
   real :: color = 0.0
+
   integer :: shader_program_id
   integer :: vertex_shader_id
+  integer :: fragment_shader_id
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
@@ -55,15 +57,22 @@ program main
   !** BEGIN TESTING SHADER
   !! OpenGL is a state machine :D
 
+  !? Note: needs a negative check.
+
   shader_program_id = gl_create_program()
   print*,"Shader Program ID: "//int_to_string(shader_program_id)
 
+  ! Vertex shader
   vertex_shader_id = gl_create_shader(GL_VERTEX_SHADER)
   print*,"Vertex Shader ID: "//int_to_string(vertex_shader_id)
-
   call gl_shader_source(vertex_shader_id, "./shaders/vertex.vert")
-
   call gl_compile_shader(vertex_shader_id)
+
+  ! Fragment shader
+  vertex_shader_id = gl_create_shader(GL_FRAGMENT_SHADER)
+  print*,"Vertex Shader ID: "//int_to_string(fragment_shader_id)
+  call gl_shader_source(fragment_shader_id, "./shaders/fragment.frag")
+  call gl_compile_shader(fragment_shader_id)
 
   !** END TESTING SHADER
 
