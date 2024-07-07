@@ -62,7 +62,7 @@ program main
 
   call gl_shader_source(shader_id, "./shaders/vertex.vert")
 
-  call gl_compile_shader(1)
+  call gl_compile_shader(shader_id)
 
   shader_program_id = gl_create_program()
   print*,"Shader Program ID: "//int_to_string(shader_program_id)
