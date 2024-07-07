@@ -4,6 +4,7 @@ program main
   use opengl
   use string
   use ye
+  use files
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -11,8 +12,21 @@ program main
   integer :: shader_program_id
   integer :: shader_id
 
-  call glfw_set_error_callback()
+  type(file_reader) :: reader
 
+  call reader%read_file("./shaders/fragment.frag")
+  if (reader%exists) then
+    print "(A)",reader%file_string
+  end if
+  call reader%deallocate()
+
+  !! BEGIN WARNING: This is only to be used for when developing libraries.
+  if (.true.) then
+    return
+  end if
+  !! END WARNING.
+
+  call glfw_set_error_callback()
 
   ! Try to create a GLFW context.
   if (glfw_init()) then
@@ -55,7 +69,7 @@ program main
   shader_id = gl_create_shader(GL_VERTEX_SHADER)
   print*,"Shader ID: "//int_to_string(shader_id)
 
-  call gl_shader_source(shader_id, " ")
+  call gl_shader_source(shader_id, "./shaders/fragment.frag")
 
   call gl_compile_shader(1)
 
