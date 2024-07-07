@@ -6,7 +6,10 @@ module shader
   public ::create_shader
 
   type shader_program
-
+    character(len=:), allocatable :: name
+    integer :: program_id
+    integer :: vertex_id
+    integer :: fragment_id
   end type shader_program
 
 contains
@@ -22,6 +25,15 @@ contains
     character(len = *) :: vertex_code_location
     character(len = *) :: fragment_code_location
     logical :: success
+    type(shader_program), allocatable :: program(:)
+
+    allocate(array(1) :: program)
+
+
+
+
+
+
     integer :: program_id
     integer :: vertex_shader_id
     integer :: fragment_shader_id
