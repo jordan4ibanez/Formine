@@ -12,13 +12,13 @@ program main
   integer :: shader_program_id
   integer :: shader_id
 
-  type(file_reader) :: reader
+  ! type(file_reader) :: reader
 
-  call reader%read_file("./shaders/fragment.frag")
-  if (reader%exists) then
-    print "(A)",reader%file_string
-  end if
-  call reader%deallocate()
+  ! call reader%read_file("./shaders/fragment.frag")
+  ! if (reader%exists) then
+  !   print "(A)",reader%file_string
+  ! end if
+  ! call reader%deallocate()
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   if (.true.) then
