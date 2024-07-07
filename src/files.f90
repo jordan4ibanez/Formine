@@ -56,6 +56,9 @@ contains
 
     end if
 
+    ! Now we must close it so there is not an IO leak.
+    close(file_io_identifier)
+
   end subroutine file_reader_read_file
 
 
