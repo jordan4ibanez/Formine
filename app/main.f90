@@ -58,7 +58,7 @@ program main
   
 
   shader_id = gl_create_shader(GL_VERTEX_SHADER)
-  print*,"Shader ID: "//int_to_string(shader_id)
+  print*,"Vertex Shader ID: "//int_to_string(shader_id)
 
   call gl_shader_source(shader_id, "./shaders/vertex.vert")
 
