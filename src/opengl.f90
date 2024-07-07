@@ -42,6 +42,8 @@ module opengl
   public :: gl_compile_shader
   public :: gl_get_integer_v
   public :: gl_get_version
+  public :: gl_attach_shader
+  public :: gl_link_program
 
   ! Here I'm binding to the C shared library.
 
@@ -112,6 +114,19 @@ module opengl
       integer(c_int), intent(in), value :: pname
       integer(c_int), intent(in), target :: data
     end subroutine gl_get_integer_v
+
+    subroutine gl_attach_shader(program, shader) bind(c, name = "glAttachShader")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(c_int), intent(in), value :: program
+      integer(c_int), intent(in), value :: shader
+    end subroutine gl_attach_shader
+
+    subroutine gl_link_program(program) bind(c, name = "glLinkProgram")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(c_int), intent(in), value :: program
+    end subroutine gl_link_program
 
   end interface
 
