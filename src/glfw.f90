@@ -142,11 +142,11 @@ contains
     error_result_text = string_from_c(c_string, 512)
 
     if (len(error_result_text) > 0) then
-      print*,"[GLFW] Gotten Error: "//error_result_text//"."
+      print"(A)","[GLFW] Gotten Error: "//error_result_text//"."
       ! else if (error_result == 0) then
-      !   print*,"no glfw error :)"
+      !   print"(A)","no glfw error :)"
       ! else
-      !   print*,error_result
+      !   print"(A)",error_result
     end if
 
     call deallocate_string(error_result_text)
@@ -193,7 +193,7 @@ contains
   subroutine glfw_destroy_window
     implicit none
     call internal_glfw_destroy_window(c_window_pointer)
-    print*,"[GLFW]: Window destroyed successfully."
+    print"(A)","[GLFW]: Window destroyed successfully."
   end subroutine glfw_destroy_window
 
   !** NOTE: C is passing Fortran data here!
@@ -214,7 +214,7 @@ contains
 
     if (len(error_text) > 0) then
       !? We put a period at the end because I think that looks nice.
-      print*,"[GLFW] Error: ("//error_value_string//") "//error_text//"."
+      print"(A)","[GLFW] Error: ("//error_value_string//") "//error_text//"."
     end if
 
     call deallocate_string(error_text)
