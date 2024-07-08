@@ -16,15 +16,18 @@ contains
 
   !** This is a simple way to check if a shader is null. (0)
   !? Makes the code easier to read.
-  function shader_creation_failed(input, blah) result(success)
+  !? This also is making it so the program that uses it can return the success and work logic on it at the same time.
+  function shader_creation_succeeded(input, success_mutation) result(success)
     implicit none
 
     integer, intent(in), value :: input
-    logical, intent(in) :: blah
+    ! We want to mutate both these variables.
+    logical :: success_mutation
     logical :: success
 
-    success = input == 0
-  end function shader_creation_failed
+    success = input /= 0
+    success_mutation = success
+  end function shader_creation_succeeded
 
   !** Create a named shader program from vertex and fragment code locations
   !! CAN FAIL. If something blows up or doesn't exist, this will halt the program. (required to render)
@@ -47,23 +50,33 @@ contains
     allocate(program)
 
     program_id = gl_create_program()
-    print"(A)","Shader Program ID: "//int_to_string(program_id)
-
-    success = shader_create_success(1,success)
-
-    if (.not. success) then
+    if (.not. shader_creation_succeeded(program_id, success)) then
+      print"(A)","[Shader] Error: Failed to create program for shader ["//shader_name//"]."
       return
+    else
+      print"(A)","[Shader]: Created program for shader ["//shader_name//"] successfully at ID ["//int_to_string(program_id)//"]."
     end if
 
     ! Vertex shader
     vertex_shader_id = gl_create_shader(GL_VERTEX_SHADER)
-    print"(A)","Vertex Shader ID: "//int_to_string(vertex_shader_id)
+    if (.not. shader_creation_succeeded(vertex_shader_id, success)) then
+      print"(A)","[Shader] Error: Failed to create vertex for shader ["//shader_name//"]."
+      return
+    else
+      print"(A)","[Shader]: Created vertex for shader ["//shader_name//"] successfully at ID ["//int_to_string(vertex_shader_id)//"]."
+    end if
     call gl_shader_source(vertex_shader_id, vertex_code_location)
     call gl_compile_shader(vertex_shader_id)
+    
 
     ! Fragment shader
     fragment_shader_id = gl_create_shader(GL_FRAGMENT_SHADER)
-    print"(A)","Fragment Shader ID: "//int_to_string(fragment_shader_id)
+    if (.not. shader_creation_succeeded(fragment_shader_id, success)) then
+      print"(A)","[Shader] Error: Failed to create fragment for shader ["//shader_name//"]."
+      return
+    else
+      print"(A)","[Shader]: Created fragment for shader ["//shader_name//"] successfully at ID ["//int_to_string(fragment_shader_id)//"]."
+    end if
     call gl_shader_source(fragment_shader_id, fragment_code_location)
     call gl_compile_shader(fragment_shader_id)
 
