@@ -8,6 +8,7 @@ program main
   implicit none
 
   real :: color = 0.0
+  logical :: shader_creation_success
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
@@ -49,7 +50,7 @@ program main
   call gl_set_debug_message_callback()
 
   ! This can fail.
-  call create_shader("main", "./shaders/vertex.vert", "./shaders/fragment.frag")
+  shader_creation_success = create_shader("main", "./shaders/vertex.vert", "./shaders/fragment.frag")
 
   !! This is debugging for functions!
   if (.false.) then
