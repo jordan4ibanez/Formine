@@ -45,6 +45,7 @@ module opengl
   public :: gl_attach_shader
   public :: gl_link_program
   public :: gl_get_error
+  public :: gl_clear_error_data
 
   ! Here I'm binding to the C shared library.
 
@@ -269,6 +270,19 @@ contains
     print"(A)","[OpenGL] Version: "//int_to_string(major)//"."//int_to_string(minor)
 
   end subroutine gl_get_version
+
+
+  !? This is to be used before attempting to call gl_get_error as OpenGL will always start off at error 1280.
+  subroutine gl_clear_error_data
+    implicit none
+
+    integer :: i = 0
+    integer :: error
+
+    do i = 1,3
+      error = gl_get_error()
+    end do
+  end subroutine gl_clear_error_data
 
 
 end module opengl
