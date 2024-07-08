@@ -14,14 +14,17 @@ module shader
 
 contains
 
-  function shader_result_check(input, current_state) result(success)
+  !** This is a simple way to check if a shader is null. (0)
+  !? Makes the code easier to read.
+  function shader_creation_failed(input, blah) result(success)
     implicit none
 
     integer, intent(in), value :: input
-    integer, intent(in), value :: current_state
+    logical, intent(in) :: blah
     logical :: success
 
-  end function shader_result_check
+    success = input == 0
+  end function shader_creation_failed
 
   !** Create a named shader program from vertex and fragment code locations
   !! CAN FAIL. If something blows up or doesn't exist, this will halt the program. (required to render)
@@ -35,17 +38,22 @@ contains
     character(len = *), intent(in) :: fragment_code_location
     logical :: success
     type(shader_program), allocatable :: program
-
     integer :: program_id
     integer :: vertex_shader_id
     integer :: fragment_shader_id
 
-    allocate(program)
+    success = .false.
 
-    !? Note: needs a 0 check.
+    allocate(program)
 
     program_id = gl_create_program()
     print"(A)","Shader Program ID: "//int_to_string(program_id)
+
+    success = shader_create_success(1,success)
+
+    if (.not. success) then
+      return
+    end if
 
     ! Vertex shader
     vertex_shader_id = gl_create_shader(GL_VERTEX_SHADER)
