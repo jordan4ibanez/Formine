@@ -61,6 +61,8 @@ contains
     integer :: vertex_shader_id
     integer :: fragment_shader_id
 
+    print"(A)","[Shader]: Begin creating shader ["//shader_name//"]."
+
     success = .false.
 
     allocate(program)
@@ -70,7 +72,7 @@ contains
       print"(A)","[Shader] Error: Failed to create program for shader ["//shader_name//"]."
       return
     else
-      print"(A)","[Shader]: Created program for shader ["//shader_name//"] successfully at ID ["//int_to_string(program_id)//"]."
+      print"(A)","[Shader]: Successfully created program for shader ["//shader_name//"] successfully at ID ["//int_to_string(program_id)//"]."
     end if
 
     ! Vertex shader
@@ -79,7 +81,7 @@ contains
       print"(A)","[Shader] Error: Failed to create vertex for shader ["//shader_name//"]."
       return
     else
-      print"(A)","[Shader]: Created vertex for shader ["//shader_name//"] successfully at ID ["//int_to_string(vertex_shader_id)//"]."
+      print"(A)","[Shader]: Successfully created vertex for shader ["//shader_name//"] successfully at ID ["//int_to_string(vertex_shader_id)//"]."
     end if
     call gl_shader_source(vertex_shader_id, vertex_code_location)
     call gl_compile_shader(vertex_shader_id)
@@ -87,7 +89,7 @@ contains
       print"(A)","[Shader] Error: Failed to compile vertex for shader ["//shader_name//"]."
       return
     else
-      print"(A)","[shader]: Compiled vertex for shader ["//shader_name//"]."
+      print"(A)","[shader]: Successfully compiled vertex for shader ["//shader_name//"]."
     end if
 
 
@@ -97,7 +99,7 @@ contains
       print"(A)","[Shader] Error: Failed to create fragment for shader ["//shader_name//"]."
       return
     else
-      print"(A)","[Shader]: Created fragment for shader ["//shader_name//"] successfully at ID ["//int_to_string(fragment_shader_id)//"]."
+      print"(A)","[Shader]: Successfully created fragment for shader ["//shader_name//"] successfully at ID ["//int_to_string(fragment_shader_id)//"]."
     end if
     call gl_shader_source(fragment_shader_id, fragment_code_location)
     call gl_compile_shader(fragment_shader_id)
@@ -105,15 +107,22 @@ contains
       print"(A)","[Shader] Error: Failed to compile fragment for shader ["//shader_name//"]."
       return
     else
-      print"(A)","[shader]: Compiled fragment for shader ["//shader_name//"]."
+      print"(A)","[shader]: Successfully compiled fragment for shader ["//shader_name//"]."
     end if
 
     ! Now we attach and link.
     call gl_attach_shader(program_id, vertex_shader_id)
     call gl_attach_shader(program_id, fragment_shader_id)
     call gl_link_program(program_id)
+    !? I'm counting attaching and linking as part of the compilation.
+    if (.not. shader_compilation_succeeded(success)) then
+      print"(A)","[Shader] Error: Failed to link shader ["//shader_name//"]."
+      return
+    else
+      print"(A)","[shader]: Successfully linked shader ["//shader_name//"]."
+    end if
 
-    print"(A)","[Shader]: Created shader ["//shader_name//"] successfully."
+    print"(A)","[Shader]: Shader ["//shader_name//"] created successfully."
 
   end function create_shader
 
