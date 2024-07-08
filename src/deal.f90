@@ -18,11 +18,11 @@ contains
 
     if (allocated(string)) then
       if (debug_mode) then
-        print*,"[Deallocating]: "//string
+        print"(A)","[Deallocating]: "//string
       end if
       deallocate(string)
     else if (debug_mode) then
-      print*,"[Deallocating]: <String already deallocated>"
+      print"(A)","[Deallocating]: <String already deallocated>"
     end if
 
   end subroutine deallocate_string
