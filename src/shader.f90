@@ -14,6 +14,15 @@ module shader
 
 contains
 
+  function shader_result_check(input, current_state) result(success)
+    implicit none
+
+    integer, intent(in), value :: input
+    integer, intent(in), value :: current_state
+    logical :: success
+
+  end function shader_result_check
+
   !** Create a named shader program from vertex and fragment code locations
   !! CAN FAIL. If something blows up or doesn't exist, this will halt the program. (required to render)
   function create_shader(shader_name, vertex_code_location, fragment_code_location) result(success)
@@ -21,9 +30,9 @@ contains
     use string
     implicit none
 
-    character(len = *) :: shader_name
-    character(len = *) :: vertex_code_location
-    character(len = *) :: fragment_code_location
+    character(len = *), intent(in) :: shader_name
+    character(len = *), intent(in) :: vertex_code_location
+    character(len = *), intent(in) :: fragment_code_location
     logical :: success
     type(shader_program), allocatable :: program
 
