@@ -52,7 +52,7 @@ contains
 
     else
 
-      print*,"[files] Error: file_location "//file_location//" does not exist."
+      print"(A)","[files] Error: file_location "//file_location//" does not exist."
 
     end if
 
