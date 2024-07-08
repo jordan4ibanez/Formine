@@ -49,7 +49,9 @@ program main
   call gl_set_debug_message_callback()
 
   ! This can fail.
-  call create_shader("main", "./shaders/vertex.vert", "./shaders/fragment.frag")
+  if (.not. create_shader("main", "./shaders/vertex.vert", "./shaders/fragment.frag")) then
+    return
+  end if
 
   !! This is debugging for functions!
   if (.false.) then
