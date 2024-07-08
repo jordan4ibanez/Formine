@@ -44,6 +44,7 @@ module opengl
   public :: gl_get_version
   public :: gl_attach_shader
   public :: gl_link_program
+  public :: gl_get_error
 
   ! Here I'm binding to the C shared library.
 
@@ -127,6 +128,12 @@ module opengl
       implicit none
       integer(c_int), intent(in), value :: program
     end subroutine gl_link_program
+
+    function gl_get_error() result(error_code) bind(c, name = "glGetError")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(c_int) :: error_code
+    end function gl_get_error
 
   end interface
 
