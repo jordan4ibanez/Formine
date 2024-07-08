@@ -16,7 +16,7 @@ contains
 
   !** Create a named shader program from vertex and fragment code locations
   !! CAN FAIL. If something blows up or doesn't exist, this will halt the program. (required to render)
-  subroutine create_shader(shader_name, vertex_code_location, fragment_code_location)
+  function create_shader(shader_name, vertex_code_location, fragment_code_location) result(success)
     use opengl
     use string
     implicit none
@@ -57,6 +57,6 @@ contains
 
     print"(A)","[Shader]: Created shader ["//shader_name//"] successfully."
 
-  end subroutine create_shader
+  end function create_shader
 
 end module shader
