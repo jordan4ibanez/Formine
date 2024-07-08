@@ -7,6 +7,7 @@ module string
   public :: string_from_c
   public :: int_to_string
   public :: into_c_string
+  public :: bool_to_string
 
 contains
 
@@ -107,6 +108,7 @@ contains
   end function into_c_string
 
   ! Convert an integer into an allocated string.
+  !** Allocatable will deallocate once the memory goes out of scope.
   function int_to_string(i) result(output)
     implicit none
     integer :: i
@@ -124,7 +126,27 @@ contains
     ! print"(A)",output//"."
     ! print"(A)","len: ", len(output)
     ! print"(A)","-----"
-
   end function int_to_string
+
+  ! Convert a logical into an allocated string.
+  !** Allocatable will deallocate once the memory goes out of scope.
+  function bool_to_string(bool) result(output)
+    implicit none
+
+    logical :: bool
+    character(len = :), allocatable :: output
+
+    allocate(character(5) :: output)
+
+    ! Simply write true or false into the string.
+    if (bool) then
+      write(output, "(A)") "true"
+    else
+      write(output, "(A)") "false"
+    end if
+
+    ! Now we shift the whole thing left and trim it to fit.
+    output = trim(adjustl(output))
+  end function bool_to_string
 
 end module string
