@@ -67,6 +67,7 @@ contains
 
     allocate(program)
 
+    ! Program.
     program_id = gl_create_program()
     if (.not. shader_creation_succeeded(program_id, success)) then
       print"(A)","[Shader] Error: Failed to create program for shader ["//shader_name//"]."
@@ -75,7 +76,7 @@ contains
       print"(A)","[Shader]: Successfully created program for shader ["//shader_name//"] successfully at ID ["//int_to_string(program_id)//"]."
     end if
 
-    ! Vertex shader
+    ! Vertex shader.
     vertex_shader_id = gl_create_shader(GL_VERTEX_SHADER)
     if (.not. shader_creation_succeeded(vertex_shader_id, success)) then
       print"(A)","[Shader] Error: Failed to create vertex for shader ["//shader_name//"]."
@@ -93,7 +94,7 @@ contains
     end if
 
 
-    ! Fragment shader
+    ! Fragment shader.
     fragment_shader_id = gl_create_shader(GL_FRAGMENT_SHADER)
     if (.not. shader_creation_succeeded(fragment_shader_id, success)) then
       print"(A)","[Shader] Error: Failed to create fragment for shader ["//shader_name//"]."
