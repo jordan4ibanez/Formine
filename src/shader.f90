@@ -46,7 +46,7 @@ contains
   end function shader_compilation_succeeded
 
   !** Create a named shader program from vertex and fragment code locations
-  !! CAN FAIL. If something blows up or doesn't exist, this will halt the program. (required to render)
+  !? Will return false if it fails, true if it succeeds.
   function create_shader(shader_name, vertex_code_location, fragment_code_location) result(success)
     use opengl
     use string
