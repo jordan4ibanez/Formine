@@ -48,7 +48,7 @@ program main
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
   call gl_set_debug_message_callback()
 
-  ! This can fail.
+  ! This can fail. We will gracefully exit when it does.
   if (.not. create_shader("main", "./shaders/vertex.vert", "./shaders/fragment.frag")) then
     return
   end if
