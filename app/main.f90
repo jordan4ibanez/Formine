@@ -19,9 +19,9 @@ program main
 
   ! Try to create a GLFW context.
   if (glfw_init()) then
-    print *,"[GLFW]: Successfully initialized."
+    print"(A)","[GLFW]: Successfully initialized."
   else
-    print *,"[GLFW] Error: Failed to initialize."
+    print"(A)","[GLFW] Error: Failed to initialize."
     return
   end if
 
@@ -33,9 +33,9 @@ program main
 
   ! Try to initialize the Window.
   if (glfw_create_window(640,480, "Fortran Game Engine")) then
-    print *,"[GLFW]: Window created successfully."
+    print"(A)","[GLFW]: Window created successfully."
   else
-    print *,"[GLFW] Error: Failed to create window."
+    print"(A)","[GLFW] Error: Failed to create window."
     call glfw_terminate()
     return
   end if
