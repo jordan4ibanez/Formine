@@ -24,7 +24,7 @@ contains
     allocate(character(len=length) :: output_string)
 
     ! Now copy over each character.
-    ! print*,length
+    ! print"(A)",length
     do i = 1, length
       output_string(i:i) = input_pointer(i)
     end do
@@ -120,10 +120,10 @@ contains
     output = trim(adjustl(output))
 
     !? This is simply debug.
-    ! print*,"-----"
-    ! print*,output//"."
-    ! print*,"len: ", len(output)
-    ! print*,"-----"
+    ! print"(A)","-----"
+    ! print"(A)",output//"."
+    ! print"(A)","len: ", len(output)
+    ! print"(A)","-----"
 
   end function int_to_string
 
