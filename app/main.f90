@@ -48,6 +48,9 @@ program main
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
   call gl_set_debug_message_callback()
 
+  !! This resets the gl_get_error integer back to 0.
+  call gl_clear_error_data()
+
   ! This can fail. We will gracefully exit when it does.
   if (.not. create_shader("main", "./shaders/vertex.vert", "./shaders/fragment.frag")) then
     return
