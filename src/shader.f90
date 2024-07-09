@@ -43,21 +43,18 @@ contains
     shader_compilation_succeeded = success
   end function shader_compilation_succeeded
 
-  logical function attempt_shader_compile(success, shader_name, shader_id, shader_type_name, shader_code_location)
+  logical function attempt_shader_compile(shader_name, shader_id, shader_type_name, shader_code_location)
     use string
     use opengl
     implicit none
 
     ! We want this to return and mutate at the same time.
-    logical, intent(inout) :: success
     character(len = *) :: shader_name
     integer, intent(in), value :: shader_id
     character(len = *), intent(in) :: shader_type_name
     character(len = *), intent(in) :: shader_code_location
 
-    success = .false.
-
-    if (.not. shader_creation_succeeded(shader_id, success)) then
+    if (.not. shader_creation_succeeded(shader_id, attempt_shader_compile)) then
       print"(A)","[Shader] Error: Failed to create "//shader_type_name//" for shader ["//shader_name//"]."
       return
     else
@@ -65,7 +62,7 @@ contains
     end if
     call gl_shader_source(shader_id, shader_code_location)
     call gl_compile_shader(shader_id)
-    if (.not. shader_compilation_succeeded(success)) then
+    if (.not. shader_compilation_succeeded(attempt_shader_compile)) then
       print"(A)","[Shader] Error: Failed to compile "//shader_type_name//" for shader ["//shader_name//"]."
       return
     else
@@ -106,13 +103,13 @@ contains
 
     ! Vertex shader compilation.
     vertex_shader_id = gl_create_shader(GL_VERTEX_SHADER)
-    if (.not. attempt_shader_compile(success, shader_name, vertex_shader_id, "vertex", vertex_code_location)) then
+    if (.not. attempt_shader_compile(shader_name, vertex_shader_id, "vertex", vertex_code_location)) then
       return
     end if
 
     ! Fragment shader compilation.
     fragment_shader_id = gl_create_shader(GL_FRAGMENT_SHADER)
-    if (.not. attempt_shader_compile(success, shader_name, fragment_shader_id, "fragment", fragment_code_location)) then
+    if (.not. attempt_shader_compile(shader_name, fragment_shader_id, "fragment", fragment_code_location)) then
       return
     end if
 
