@@ -112,7 +112,7 @@ contains
       print"(A)","[shader]: Successfully compiled fragment for shader ["//shader_name//"]."
     end if
 
-    ! ! Now we attach and link.
+    ! Attach and link.
     call gl_attach_shader(program_id, vertex_shader_id)
     call gl_attach_shader(program_id, fragment_shader_id)
     call gl_link_program(program_id)
@@ -124,15 +124,6 @@ contains
       return
     else
       print"(A)","[shader]: Successfully linked shader ["//shader_name//"]."
-    end if
-
-
-    if (gl_get_program_iv(program_id, GL_VALIDATE_STATUS) /= GL_TRUE) then
-      print"(A)","[Shader] Error: Failed to validate shader ["//shader_name//"]."
-      success = .false.
-      return
-    else
-      print"(A)","[shader]: Successfully validated shader ["//shader_name//"]."
     end if
 
     print"(A)","[Shader]: Shader ["//shader_name//"] created successfully."
