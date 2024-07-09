@@ -16,6 +16,7 @@ module opengl
   public :: GL_COLOR_BUFFER_BIT
   public :: GL_VERTEX_SHADER
   public :: GL_FRAGMENT_SHADER
+  public :: GL_COMPILE_STATUS
 
   !
 
@@ -29,6 +30,7 @@ module opengl
   integer :: GL_DEBUG_OUTPUT_SYNCHRONOUS = int(z"8242")
   integer :: GL_VERTEX_SHADER = int(z"8B31")
   integer :: GL_FRAGMENT_SHADER = int(z"8B30")
+  integer :: GL_COMPILE_STATUS = int(z"8B81")
 
   ! Functions we want exposed.
 
@@ -46,6 +48,8 @@ module opengl
   public :: gl_link_program
   public :: gl_get_error
   public :: gl_clear_error_data
+  public :: gl_get_shader_iv
+  public :: gl_get_shader_info_log
 
   ! Here I'm binding to the C shared library.
 
