@@ -103,9 +103,9 @@ module opengl
       implicit none
       integer(c_int), intent(in), value :: shader_id
       integer(c_int), intent(in), value :: count
-      character(kind = c_char), intent(in), value :: source_code
+      character(len=*), intent(in) :: source_code
       !? Less than 0 represents that the string is null terminated. So use that only.
-      integer(c_int), intent(in), value :: string_length
+      type(c_ptr), intent(in), optional :: string_length
     end subroutine internal_gl_shader_source
 
     subroutine gl_compile_shader(shader_id) bind(c, name = "glCompileShader")
