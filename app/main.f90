@@ -9,12 +9,11 @@ program main
   implicit none
 
   real :: color = 0.0
-  ! we'll just reuse the mob on the stack.
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
-  if (.true.) then
-    return
-  end if
+  ! if (.true.) then
+  !   return
+  ! end if
   !! END WARNING.
 
   call glfw_set_error_callback()
