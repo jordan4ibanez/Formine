@@ -55,6 +55,7 @@ module opengl
   public :: gl_get_shader_iv
   public :: gl_get_shader_info_log
   public :: gl_get_program_iv
+  public :: gl_validate_program
 
   ! Here I'm binding to the C shared library.
 
@@ -172,6 +173,13 @@ module opengl
       integer(c_int), intent(in), value :: pname
       integer(c_int), intent(in) :: params
     end subroutine internal_gl_get_program_iv
+
+    subroutine gl_validate_program(program_id) bind(c, name = "glValidateProgram")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int) :: program_id
+    end subroutine gl_validate_program
 
   end interface
 
