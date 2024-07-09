@@ -17,32 +17,30 @@ contains
   !** This is a simple way to check if a shader is null. (0)
   !? Makes the code easier to read.
   !? This also is making it so the program that uses it can return the success and work logic on it at the same time.
-  function shader_creation_succeeded(input, success_mutation) result(success)
+  logical function shader_creation_succeeded(input, success)
+    use string
     implicit none
 
     integer, intent(in), value :: input
-    ! We want to mutate both these variables.
-    logical :: success_mutation
+    ! We want to mutate and return this.
     logical :: success
 
     success = input /= 0
-    success_mutation = success
+    shader_creation_succeeded = success
   end function shader_creation_succeeded
 
   !** This is a simple variation of shader_creation_succeeded with gl_check_error as our helper.
   !? Same docs as in shader_creation_success minus the input.
-  function shader_compilation_succeeded(success_mutation) result(success)
+  logical function shader_compilation_succeeded(success)
     use opengl
-    use string
     implicit none
 
-    ! We want to mutate both these variables.
-    logical :: success_mutation
+    ! We want to mutate and return this.
     logical :: success
 
     !? 0 means OK in OpenGL.
     success = gl_get_error() == 0
-    success_mutation = success
+    shader_compilation_succeeded = success
   end function shader_compilation_succeeded
 
   logical function attempt_shader_compile(success, shader_name, shader_id, shader_type_name, shader_code_location)
