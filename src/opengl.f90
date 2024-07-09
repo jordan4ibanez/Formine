@@ -279,5 +279,21 @@ contains
     end do
   end subroutine gl_clear_error_data
 
+  subroutine gl_get_shader_info_log(shader)
+    use,intrinsic :: iso_c_binding
+    use string
+    implicit none
+
+    integer :: shader
+    ! integer :: max_length
+    integer :: length = -1
+    ! character(:), allocatable :: info_log
+    type(c_ptr) :: c_string
+
+    call internal_gl_get_shader_info_log(shader, 512, length, c_string)
+
+
+  end subroutine gl_get_shader_info_log
+
 
 end module opengl
