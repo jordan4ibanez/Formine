@@ -235,16 +235,11 @@ contains
     integer :: shader_id
     character(len = *) :: source_code_location
     type(file_reader) :: reader
-    character(len = :, kind = c_char), allocatable :: c_source_code
 
     call reader%read_file(source_code_location)
 
-    if (.not. reader%exists) then
-      error stop "[OpenGL] Error: Source code location for ["//source_code_location//"] does not exist."
-    end if
-
-    ! Transfer the source code string into a null terminated string.
-    c_source_code = into_c_string(reader%file_string)
+    ! Send the source code into the OpenGL state machine.
+    call internal_gl_shader_source(shader_id, 1, reader%file_string//achar(0), null())
 
     ! Now we can deallocate the reader.
     call reader%deallocate()
