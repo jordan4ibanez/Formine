@@ -45,6 +45,34 @@ contains
     success_mutation = success
   end function shader_compilation_succeeded
 
+  function attempt_shader_compile(shader_name, shader_id, shader_type_name, shader_code_location) result(success)
+    use string
+    use opengl
+    implicit none
+
+    character(len = *) :: shader_name
+    integer, intent(in), value :: shader_id
+    character(len = *), intent(in) :: shader_type_name
+    character(len = *), intent(in) :: shader_code_location
+    logical :: success
+    success = .false.
+
+    if (.not. shader_creation_succeeded(shader_id, success)) then
+      print"(A)","[Shader] Error: Failed to create "//shader_type_name//" for shader ["//shader_name//"]."
+      return
+    else
+      print"(A)","[Shader]: Successfully created "//shader_type_name//" for shader ["//shader_name//"] successfully at ID ["//int_to_string(shader_id)//"]."
+    end if
+    call gl_shader_source(shader_id, shader_code_location)
+    call gl_compile_shader(shader_id)
+    if (.not. shader_compilation_succeeded(success)) then
+      print"(A)","[Shader] Error: Failed to compile "//shader_type_name//" for shader ["//shader_name//"]."
+      return
+    else
+      print"(A)","[shader]: Successfully compiled "//shader_type_name//" for shader ["//shader_name//"]."
+    end if
+  end function attempt_shader_compile
+
   !** Create a named shader program from vertex and fragment code locations
   !? Will return false if it fails, true if it succeeds.
   function create_shader(shader_name, vertex_code_location, fragment_code_location) result(success)
@@ -78,38 +106,16 @@ contains
 
     ! Vertex shader.
     vertex_shader_id = gl_create_shader(GL_VERTEX_SHADER)
-    if (.not. shader_creation_succeeded(vertex_shader_id, success)) then
-      print"(A)","[Shader] Error: Failed to create vertex for shader ["//shader_name//"]."
+    if (.not. attempt_shader_compile(shader_name, vertex_shader_id, "vertex", vertex_code_location)) then
       return
-    else
-      print"(A)","[Shader]: Successfully created vertex for shader ["//shader_name//"] successfully at ID ["//int_to_string(vertex_shader_id)//"]."
     end if
-    call gl_shader_source(vertex_shader_id, vertex_code_location)
-    call gl_compile_shader(vertex_shader_id)
-    if (.not. shader_compilation_succeeded(success)) then
-      print"(A)","[Shader] Error: Failed to compile vertex for shader ["//shader_name//"]."
-      return
-    else
-      print"(A)","[shader]: Successfully compiled vertex for shader ["//shader_name//"]."
-    end if
-
 
     ! Fragment shader.
     fragment_shader_id = gl_create_shader(GL_FRAGMENT_SHADER)
-    if (.not. shader_creation_succeeded(fragment_shader_id, success)) then
-      print"(A)","[Shader] Error: Failed to create fragment for shader ["//shader_name//"]."
+    if (.not. attempt_shader_compile(shader_name, fragment_shader_id, "fragment", fragment_code_location)) then
       return
-    else
-      print"(A)","[Shader]: Successfully created fragment for shader ["//shader_name//"] successfully at ID ["//int_to_string(fragment_shader_id)//"]."
     end if
-    call gl_shader_source(fragment_shader_id, fragment_code_location)
-    call gl_compile_shader(fragment_shader_id)
-    if (.not. shader_compilation_succeeded(success)) then
-      print"(A)","[Shader] Error: Failed to compile fragment for shader ["//shader_name//"]."
-      return
-    else
-      print"(A)","[shader]: Successfully compiled fragment for shader ["//shader_name//"]."
-    end if
+
 
     ! Now we attach and link.
     call gl_attach_shader(program_id, vertex_shader_id)
