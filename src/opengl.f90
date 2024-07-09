@@ -140,14 +140,14 @@ module opengl
       integer(c_int) :: error_code
     end function gl_get_error
 
-    subroutine gl_get_shader_iv(shader, pname, params) bind(c, name = "glGetShaderiv")
+    subroutine internal_gl_get_shader_iv(shader, pname, params) bind(c, name = "glGetShaderiv")
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: shader
       integer(c_int), intent(in), value :: pname
       integer(c_int), intent(in) :: params
-    end subroutine gl_get_shader_iv
+    end subroutine internal_gl_get_shader_iv
 
     subroutine internal_gl_get_shader_info_log(shader, max_length, length, info_log) bind(c, name = "glGetShaderInfoLog")
       use, intrinsic :: iso_c_binding
@@ -313,6 +313,16 @@ contains
 
 
   end subroutine gl_get_shader_info_log
+
+  function gl_get_shader_iv(shader, pname) result(code)
+    implicit none
+
+    integer :: shader
+    integer :: pname
+    integer :: code
+    
+    call internal_gl_get_shader_iv(shader, pname, code)
+  end function gl_get_shader_iv
 
 
 end module opengl
