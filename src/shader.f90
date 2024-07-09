@@ -45,16 +45,18 @@ contains
     success_mutation = success
   end function shader_compilation_succeeded
 
-  function attempt_shader_compile(shader_name, shader_id, shader_type_name, shader_code_location) result(success)
+  logical function attempt_shader_compile(success, shader_name, shader_id, shader_type_name, shader_code_location)
     use string
     use opengl
     implicit none
 
+    ! We want this to return and mutate at the same time.
+    logical, intent(inout) :: success
     character(len = *) :: shader_name
     integer, intent(in), value :: shader_id
     character(len = *), intent(in) :: shader_type_name
     character(len = *), intent(in) :: shader_code_location
-    logical :: success
+
     success = .false.
 
     if (.not. shader_creation_succeeded(shader_id, success)) then
@@ -106,13 +108,13 @@ contains
 
     ! Vertex shader compilation.
     vertex_shader_id = gl_create_shader(GL_VERTEX_SHADER)
-    if (.not. attempt_shader_compile(shader_name, vertex_shader_id, "vertex", vertex_code_location)) then
+    if (.not. attempt_shader_compile(success, shader_name, vertex_shader_id, "vertex", vertex_code_location)) then
       return
     end if
 
     ! Fragment shader compilation.
     fragment_shader_id = gl_create_shader(GL_FRAGMENT_SHADER)
-    if (.not. attempt_shader_compile(shader_name, fragment_shader_id, "fragment", fragment_code_location)) then
+    if (.not. attempt_shader_compile(success, shader_name, fragment_shader_id, "fragment", fragment_code_location)) then
       return
     end if
 
