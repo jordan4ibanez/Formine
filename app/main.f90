@@ -1,18 +1,83 @@
+module factory
+  implicit none
+  private
+
+  public :: mob
+  public :: new_mob
+
+  type mob
+    integer :: id = 0
+    integer :: hp = 0
+  contains
+    procedure :: yell
+  end type mob
+
+contains
+
+  ! Construct a mobly mob. Count how many we have.
+  function new_mob() result(a_mob)
+    use, intrinsic :: iso_fortran_env
+    use string
+    implicit none
+
+    type(mob) :: a_mob
+    integer, save :: total_mobs = 0
+    real :: randomness = 0.0
+
+    ! Seed the random generator.
+    if (total_mobs == 0) then
+      call random_seed()
+    end if
+
+    call random_number(randomness)
+
+    ! 0 - 100.0
+    randomness = randomness * 100.0
+
+    ! Mob has random hp
+    a_mob%hp = floor(randomness)
+    a_mob%id = total_mobs
+
+    ! Tick up mob count.
+    total_mobs = total_mobs + 1
+  end
+
+  subroutine yell(this)
+    use string
+    implicit none
+
+    class(mob) :: this
+
+    print"(A)","HELLO, I AM MOB ["//int_to_string(this%id)//"] WITH HP ["//int_to_string(this%hp)//"]"
+  end subroutine yell
+
+end module factory
+
 program main
   use glfw
   use opengl
   use string
   use shader
   use files
+
+  use factory
   use, intrinsic ::  iso_c_binding
   implicit none
 
   real :: color = 0.0
+  ! we'll just reuse the mob on the stack.
+  type(mob) :: mobly
+  integer :: i
+
+  do i = 1,100
+    mobly = new_mob()
+    call mobly%yell()
+  end do
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
-  ! if (.true.) then
-  !   return
-  ! end if
+  if (.true.) then
+    return
+  end if
   !! END WARNING.
 
   call glfw_set_error_callback()
@@ -78,4 +143,4 @@ program main
 
   call glfw_terminate()
 
-end
+end program main
