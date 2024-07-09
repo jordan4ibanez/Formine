@@ -159,14 +159,14 @@ module opengl
       type(c_ptr), intent(in) :: info_log
     end subroutine internal_gl_get_shader_info_log
 
-    subroutine internal_get_program_iv(program, pname, params) bind(c, name = "getProgramiv")
+    subroutine internal_gl_get_program_iv(program, pname, params) bind(c, name = "glGetProgramiv")
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: program
       integer(c_int), intent(in), value :: pname
       integer(c_int), intent(in) :: params
-    end subroutine internal_get_program_iv
+    end subroutine internal_gl_get_program_iv
 
   end interface
 
@@ -320,7 +320,6 @@ contains
 
     call internal_gl_get_shader_info_log(shader, 512, length, c_string)
 
-
   end subroutine gl_get_shader_info_log
 
 
@@ -334,5 +333,16 @@ contains
     call internal_gl_get_shader_iv(shader, pname, code)
   end function gl_get_shader_iv
 
+
+  function gl_get_program_iv(program, pname) result(code)
+    implicit none
+
+    integer :: program
+    integer :: pname
+    integer :: code
+
+    call internal_gl_get_program_iv(program, pname, code)
+
+  end function gl_get_program_iv
 
 end module opengl
