@@ -90,7 +90,7 @@ contains
       print"(A)","[Shader] Error: Failed to compile vertex for shader ["//shader_name//"]."
       return
     else
-      print"(A)","[shader]: Successfully compiled vertex for shader ["//shader_name//"]."
+      print"(A)","[Shader]: Successfully compiled vertex for shader ["//shader_name//"]."
     end if
 
     ! ! Fragment shader compilation.
@@ -109,7 +109,7 @@ contains
       print"(A)","[Shader] Error: Failed to compile fragment for shader ["//shader_name//"]."
       return
     else
-      print"(A)","[shader]: Successfully compiled fragment for shader ["//shader_name//"]."
+      print"(A)","[Shader]: Successfully compiled fragment for shader ["//shader_name//"]."
     end if
 
     ! Attach and link.
@@ -123,7 +123,7 @@ contains
       success = .false.
       return
     else
-      print"(A)","[shader]: Successfully linked shader ["//shader_name//"]."
+      print"(A)","[Shader]: Successfully linked shader ["//shader_name//"]."
     end if
 
     ! Woooo!
