@@ -117,7 +117,7 @@ contains
     call gl_attach_shader(program_id, fragment_shader_id)
     call gl_link_program(program_id)
 
-    ! Now we check that this think linked.
+    ! Finally, we check that this think linked.
     if (gl_get_program_iv(program_id, GL_LINK_STATUS) /= GL_TRUE) then
       print"(A)","[Shader] Error: Failed to link shader ["//shader_name//"]."
       success = .false.
@@ -126,6 +126,7 @@ contains
       print"(A)","[shader]: Successfully linked shader ["//shader_name//"]."
     end if
 
+    ! Woooo!
     print"(A)","[Shader]: Shader ["//shader_name//"] created successfully."
 
   end function create_shader
