@@ -226,6 +226,7 @@ contains
     end if
   end function gl_create_shader
 
+
   subroutine gl_shader_source(shader_id, source_code_location)
     use string
     use deal
@@ -244,14 +245,9 @@ contains
     ! Now we can deallocate the reader.
     call reader%deallocate()
 
-    ! Send the source code into the OpenGL state machine.
-    call internal_gl_shader_source(shader_id, 0, c_source_code, -1)
-
     !? OpenGL docs:
     !? OpenGL copies the shader source code strings when glShaderSource is called,
     !? so an application may free its copy of the source code strings immediately after the function returns.
-
-    call deallocate_string(c_source_code)
   end subroutine gl_shader_source
 
 
