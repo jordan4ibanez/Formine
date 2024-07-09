@@ -103,7 +103,7 @@ module opengl
       implicit none
       integer(c_int), intent(in), value :: shader_id
       integer(c_int), intent(in), value :: count
-      character(len=*), intent(in) :: source_code
+      character(len=*, kind=c_char), intent(in) :: source_code
       !? Less than 0 represents that the string is null terminated. So use that only.
       type(c_ptr), intent(in), optional :: string_length
     end subroutine internal_gl_shader_source
