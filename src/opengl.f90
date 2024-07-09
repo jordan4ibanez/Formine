@@ -140,6 +140,14 @@ module opengl
       integer(c_int) :: error_code
     end function gl_get_error
 
+    subroutine gl_get_shader_iv(shader, pname, params) bind(c, name = "glGetShaderiv")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: shader
+      integer(c_int), intent(in), value :: pname
+      integer(c_int), intent(in) :: params
+    end subroutine gl_get_shader_iv
   end interface
 
 contains
