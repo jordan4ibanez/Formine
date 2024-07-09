@@ -22,7 +22,6 @@ contains
     implicit none
 
     integer, intent(in), value :: input
-    ! We want to mutate and return this.
     logical :: root_success
 
     root_success = input /= 0
@@ -35,7 +34,6 @@ contains
     use opengl
     implicit none
 
-    ! We want to mutate and return this.
     logical :: root_success
 
     !? 0 means OK in OpenGL.
@@ -48,7 +46,6 @@ contains
     use opengl
     implicit none
 
-    ! We want this to return and mutate at the same time.
     character(len = *) :: shader_name
     integer, intent(in), value :: shader_id
     character(len = *), intent(in) :: shader_type_name
@@ -72,7 +69,7 @@ contains
 
   !** Create a named shader program from vertex and fragment code locations
   !? Will return false if it fails, true if it succeeds.
-  function create_shader(shader_name, vertex_code_location, fragment_code_location) result(success)
+  logical function create_shader(shader_name, vertex_code_location, fragment_code_location) result(success)
     use opengl
     use string
     implicit none
@@ -80,7 +77,6 @@ contains
     character(len = *), intent(in) :: shader_name
     character(len = *), intent(in) :: vertex_code_location
     character(len = *), intent(in) :: fragment_code_location
-    logical :: success
     type(shader_program), allocatable :: program
     integer :: program_id
     integer :: vertex_shader_id
