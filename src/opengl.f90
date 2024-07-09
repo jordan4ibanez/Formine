@@ -148,6 +148,17 @@ module opengl
       integer(c_int), intent(in), value :: pname
       integer(c_int), intent(in) :: params
     end subroutine gl_get_shader_iv
+
+    subroutine internal_gl_get_shader_info_log(shader, max_length, length, info_log) bind(c, name = "glGetShaderInfoLog")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: shader
+      integer(c_int), intent(in), value :: max_length
+      integer(c_int), intent(in) :: length
+      type(c_ptr), intent(in) :: info_log
+    end subroutine internal_gl_get_shader_info_log
+
   end interface
 
 contains
