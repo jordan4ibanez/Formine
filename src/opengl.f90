@@ -17,6 +17,8 @@ module opengl
   public :: GL_VERTEX_SHADER
   public :: GL_FRAGMENT_SHADER
   public :: GL_COMPILE_STATUS
+  public :: GL_LINK_STATUS
+  public :: GL_VALIDATE_STATUS
 
   !
 
@@ -31,6 +33,8 @@ module opengl
   integer :: GL_VERTEX_SHADER = int(z"8B31")
   integer :: GL_FRAGMENT_SHADER = int(z"8B30")
   integer :: GL_COMPILE_STATUS = int(z"8B81")
+  integer :: GL_LINK_STATUS = int(z"8B82")
+  integer :: GL_VALIDATE_STATUS = int(z"8B83")
 
   ! Functions we want exposed.
 
@@ -50,6 +54,7 @@ module opengl
   public :: gl_clear_error_data
   public :: gl_get_shader_iv
   public :: gl_get_shader_info_log
+  public :: gl_get_program_iv
 
   ! Here I'm binding to the C shared library.
 
@@ -334,15 +339,15 @@ contains
   end function gl_get_shader_iv
 
 
-  function gl_get_program_iv(program, pname) result(code)
+  function gl_get_program_iv(program_id, pname) result(code)
+    use string
     implicit none
 
-    integer :: program
+    integer :: program_id
     integer :: pname
     integer :: code
 
-    call internal_gl_get_program_iv(program, pname, code)
-
+    call internal_gl_get_program_iv(program_id, pname, code)
   end function gl_get_program_iv
 
 end module opengl
