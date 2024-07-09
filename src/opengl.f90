@@ -159,6 +159,15 @@ module opengl
       type(c_ptr), intent(in) :: info_log
     end subroutine internal_gl_get_shader_info_log
 
+    subroutine internal_get_program_iv(program, pname, params) bind(c, name = "getProgramiv")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: program
+      integer(c_int), intent(in), value :: pname
+      integer(c_int), intent(in) :: params
+    end subroutine internal_get_program_iv
+
   end interface
 
 contains
@@ -314,13 +323,14 @@ contains
 
   end subroutine gl_get_shader_info_log
 
+
   function gl_get_shader_iv(shader, pname) result(code)
     implicit none
 
     integer :: shader
     integer :: pname
     integer :: code
-    
+
     call internal_gl_get_shader_iv(shader, pname, code)
   end function gl_get_shader_iv
 
