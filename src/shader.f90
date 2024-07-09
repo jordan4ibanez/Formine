@@ -17,33 +17,33 @@ contains
   !** This is a simple way to check if a shader is null. (0)
   !? Makes the code easier to read.
   !? This also is making it so the program that uses it can return the success and work logic on it at the same time.
-  logical function shader_creation_succeeded(input, success)
+  logical function shader_creation_succeeded(input, root_success) result(success)
     use string
     implicit none
 
     integer, intent(in), value :: input
     ! We want to mutate and return this.
-    logical :: success
+    logical :: root_success
 
-    success = input /= 0
-    shader_creation_succeeded = success
+    root_success = input /= 0
+    success = root_success
   end function shader_creation_succeeded
 
   !** This is a simple variation of shader_creation_succeeded with gl_check_error as our helper.
   !? Same docs as in shader_creation_success minus the input.
-  logical function shader_compilation_succeeded(success)
+  logical function shader_compilation_succeeded(root_success) result(success)
     use opengl
     implicit none
 
     ! We want to mutate and return this.
-    logical :: success
+    logical :: root_success
 
     !? 0 means OK in OpenGL.
-    success = gl_get_error() == 0
-    shader_compilation_succeeded = success
+    root_success = gl_get_error() == 0
+    success = root_success
   end function shader_compilation_succeeded
 
-  logical function attempt_shader_compile(shader_name, shader_id, shader_type_name, shader_code_location)
+  logical function attempt_shader_compile(shader_name, shader_id, shader_type_name, shader_code_location) result(success)
     use string
     use opengl
     implicit none
@@ -54,7 +54,7 @@ contains
     character(len = *), intent(in) :: shader_type_name
     character(len = *), intent(in) :: shader_code_location
 
-    if (.not. shader_creation_succeeded(shader_id, attempt_shader_compile)) then
+    if (.not. shader_creation_succeeded(shader_id, success)) then
       print"(A)","[Shader] Error: Failed to create "//shader_type_name//" for shader ["//shader_name//"]."
       return
     else
@@ -62,7 +62,7 @@ contains
     end if
     call gl_shader_source(shader_id, shader_code_location)
     call gl_compile_shader(shader_id)
-    if (.not. shader_compilation_succeeded(attempt_shader_compile)) then
+    if (.not. shader_compilation_succeeded(success)) then
       print"(A)","[Shader] Error: Failed to compile "//shader_type_name//" for shader ["//shader_name//"]."
       return
     else
