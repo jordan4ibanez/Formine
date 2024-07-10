@@ -10,7 +10,7 @@ module glfw
   type(c_ptr) :: c_window_pointer
 
   ! Fortran side.
-  character(len = :, kind = c_char), allocatable :: window_title
+  character(len = :), allocatable :: window_title
 
   public :: GLFW_CONTEXT_DEBUG
   public :: GLFW_OPENGL_DEBUG_CONTEXT
