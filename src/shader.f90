@@ -17,7 +17,7 @@ contains
   !** This is a simple way to check if a shader is null. (0)
   !? Makes the code easier to read.
   !? This also is making it so the program that uses it can return the success and work logic on it at the same time.
-  logical function shader_creation_succeeded(input, root_success) result(success)
+  logical function creation_succeeded(input, root_success) result(success)
     use string
     implicit none
 
@@ -26,7 +26,7 @@ contains
 
     root_success = input /= 0
     success = root_success
-  end function shader_creation_succeeded
+  end function creation_succeeded
 
   !** This is a simple variation of shader_creation_succeeded with gl_check_error as our helper.
   !? Same docs as in shader_creation_success minus the input.
@@ -67,7 +67,7 @@ contains
 
     ! Program creation.
     program_id = gl_create_program()
-    if (.not. shader_creation_succeeded(program_id, success)) then
+    if (.not. creation_succeeded(program_id, success)) then
       print"(A)","[Shader] Error: Failed to create program for shader ["//shader_name//"]."
       return
     else
@@ -76,7 +76,7 @@ contains
 
     ! Vertex shader compilation.
     vertex_shader_id = gl_create_shader(GL_VERTEX_SHADER)
-    if (.not. shader_creation_succeeded(vertex_shader_id, success)) then
+    if (.not. creation_succeeded(vertex_shader_id, success)) then
       print"(A)","[Shader] Error: Failed to create vertex for shader ["//shader_name//"]."
       return
     else
@@ -95,7 +95,7 @@ contains
 
     ! ! Fragment shader compilation.
     fragment_shader_id = gl_create_shader(GL_FRAGMENT_SHADER)
-    if (.not. shader_creation_succeeded(fragment_shader_id, success)) then
+    if (.not. creation_succeeded(fragment_shader_id, success)) then
       print"(A)","[Shader] Error: Failed to create fragment for shader ["//shader_name//"]."
       return
     else
