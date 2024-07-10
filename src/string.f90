@@ -89,22 +89,10 @@ contains
     implicit none
     character(len = *, kind = c_char) :: input
     character(len = :, kind = c_char), allocatable :: output
-    integer(8) :: length
-    integer(8) :: i
 
-    ! Get the length of the input.
-    length = len(input)
-
-    ! +1 for the null terminator at the end.
-    allocate(character(length + 1) :: output)
-
-    ! Now clone it in.
-    do i = 1,length
-      output(i:i) = input(i:i)
-    end do
-
-    ! And plop a null terminator on the end.
-    output(length + 1:length + 1) = achar(0)
+    ! Simply shove that string into the allocated string and null terminate it.
+    !? This seems to automatically allocate so don't allocate for no reason.
+    output = input//achar(0)
   end function into_c_string
 
   ! Convert an integer into an allocated string.
