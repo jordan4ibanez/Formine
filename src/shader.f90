@@ -33,7 +33,7 @@ contains
   !** This is a simple variation of shader_creation_succeeded with gl_check_error as our helper.
   !? Same docs as in shader_creation_success minus the input.
   logical function shader_compilation_succeeded(root_success, shader_id) result(success)
-    use opengl
+    use opengl, only: GL_TRUE, GL_COMPILE_STATUS, gl_get_shader_iv
     implicit none
 
     logical :: root_success
