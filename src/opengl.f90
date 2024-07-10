@@ -245,12 +245,6 @@ contains
     integer :: program_id
 
     program_id = internal_gl_create_program()
-
-    !? We literally must crash out if OpenGL fails to make a shader program.
-    !? We need a shader program to draw things.
-    if (program_id == 0) then
-      error stop "[OpenGL] Error: Failed to create a shader program."
-    end if
   end function gl_create_program
 
   function gl_create_shader(shader_type) result(shader_id)
@@ -259,12 +253,6 @@ contains
     integer :: shader_id
 
     shader_id = internal_gl_create_shader(shader_type)
-
-    !? We literally must crash out if OpenGL fails to make a shader.
-    !? We need a shader to draw things.
-    if (shader_id == 0) then
-      error stop "[OpenGL] Error: Failed to create a shader."
-    end if
   end function gl_create_shader
 
 
