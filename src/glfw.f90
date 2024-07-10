@@ -40,10 +40,10 @@ module glfw
 
   ! Here I'm binding to the C glfw shared library.
   interface
-    logical(c_bool) function glfw_init() result(success) bind(c, name="glfwInit")
+    logical(c_bool) function internal_glfw_init() result(success) bind(c, name="glfwInit")
       use, intrinsic :: iso_c_binding
       implicit none
-    end function glfw_init
+    end function internal_glfw_init
 
     subroutine internal_glfw_terminate() bind(c, name="glfwTerminate")
       use, intrinsic :: iso_c_binding
@@ -118,11 +118,24 @@ contains
 
   ! Here I'm just kind of using glfw the way I want to use it.
 
+  logical function glfw_init() result(success)
+    implicit none
+
+    success = internal_glfw_init()
+
+    if (success) then
+      print"(A)","[GLFW]: Successfully initialized."
+    else
+      print"(A)","[GLFW] Error: Failed to initialize."
+    end if
+  end function glfw_init
+
   subroutine glfw_terminate
     use deal
     implicit none
     call internal_glfw_terminate()
     call deallocate_string(window_title)
+    print"(A)","[GLFW]: Successfully terminated."
   end subroutine glfw_terminate
 
   subroutine glfw_get_error

@@ -19,10 +19,7 @@ program main
   call glfw_set_error_callback()
 
   ! Try to create a GLFW context.
-  if (glfw_init()) then
-    print"(A)","[GLFW]: Successfully initialized."
-  else
-    print"(A)","[GLFW] Error: Failed to initialize."
+  if (.not. glfw_init()) then
     return
   end if
 
