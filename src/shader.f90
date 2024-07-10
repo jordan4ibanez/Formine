@@ -19,7 +19,7 @@ contains
   !? This also is making it so the program that uses it can return the success and work logic on it at the same time.
   logical function creation_succeeded(input, root_success) result(success)
     use string
-    use opengl, only : GL_FALSE
+    use opengl
     implicit none
 
     integer, intent(in), value :: input
@@ -33,7 +33,7 @@ contains
   !** This is a simple variation of shader_creation_succeeded with gl_check_error as our helper.
   !? Same docs as in shader_creation_success minus the input.
   logical function shader_compilation_succeeded(root_success, shader_id) result(success)
-    use opengl, only: GL_TRUE, GL_COMPILE_STATUS, gl_get_shader_iv
+    use opengl
     implicit none
 
     logical :: root_success
