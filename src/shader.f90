@@ -19,12 +19,14 @@ contains
   !? This also is making it so the program that uses it can return the success and work logic on it at the same time.
   logical function creation_succeeded(input, root_success) result(success)
     use string
+    use opengl, only : GL_FALSE
     implicit none
 
     integer, intent(in), value :: input
     logical :: root_success
 
-    root_success = input /= 0
+    ! Check for 0. This means a failure.
+    root_success = input /= GL_FALSE
     success = root_success
   end function creation_succeeded
 
