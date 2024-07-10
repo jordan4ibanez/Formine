@@ -168,6 +168,15 @@ contains
 
     ! Then we check if the window pointer is null.
     success = c_associated(c_window_pointer)
+
+    ! Finally, output information on this and automatically terminate this if it fails.
+    if (success) then
+      print"(A)","[GLFW]: Window created successfully."
+    else
+      print"(A)","[GLFW] Error: Failed to create window."
+      call glfw_terminate()
+    end if
+
   end function glfw_create_window
 
   subroutine glfw_make_context_current

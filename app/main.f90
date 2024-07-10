@@ -33,11 +33,7 @@ program main
   call glfw_window_hint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE)
 
   ! Try to initialize the Window.
-  if (glfw_create_window(640,480, "Fortran Game Engine")) then
-    print"(A)","[GLFW]: Window created successfully."
-  else
-    print"(A)","[GLFW] Error: Failed to create window."
-    call glfw_terminate()
+  if (.not. glfw_create_window(640,480, "Fortran Game Engine")) then
     return
   end if
 
