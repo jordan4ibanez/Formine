@@ -348,6 +348,7 @@ contains
       error = gl_get_error()
     end do
   end subroutine gl_clear_error_data
+  
 
   subroutine gl_get_shader_info_log(shader)
     use,intrinsic :: iso_c_binding
@@ -385,5 +386,6 @@ contains
 
     call internal_gl_get_program_iv(program_id, pname, code)
   end function gl_get_program_iv
+
 
 end module opengl
