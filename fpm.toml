@@ -17,6 +17,7 @@ link = ["glfw", "GL"]
 
 [dependencies]
 # stdlib = "*"
+fhash = { git = "https://github.com/LKedward/fhash.git" }
 
 [install]
 library = true
