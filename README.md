@@ -9,3 +9,5 @@ Come join the Fortran Discord: https://discord.gg/tfn3M28ppP
 ```
 sudo dnf install gfortran openGL glfw-devel
 ```
+
+This is using gfortran, gfortran is very buggy. This might be using some bugs which only come with gfortran. Test it in ifort for me to see where it is wrong.
