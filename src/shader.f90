@@ -1,9 +1,17 @@
 module shader
+  use fhash, only: fhash_tbl_t, key => fhash_key
   implicit none
 
   private
 
+  type(fhash_tbl_t) :: shader_programs
+
   public ::create_shader
+
+  type shader_result
+    class(*), allocatable :: blah
+
+  end type shader_result
 
   type shader_program
     character(len=:), allocatable :: name
@@ -60,6 +68,7 @@ contains
     integer :: program_id
     integer :: vertex_shader_id
     integer :: fragment_shader_id
+    integer :: contains_thing
 
     print"(A)","[Shader]: Begin creating shader ["//shader_name//"]."
 
@@ -131,6 +140,35 @@ contains
     ! Woooo!
     print"(A)","[Shader]: Shader ["//shader_name//"] created successfully."
 
+    ! call shader_programs%get(key(shader_name), null(), stat = contains_thing)
+
+    print*,contains_thing
+
+    call shader_programs%set(key(shader_name), program)
+
+    ! call shader_programs%get(key(shader_name), program, stat = contains_thing)
+
+    print*,contains_thing
+
   end function create_shader
+
+  type(shader_program) function get_shader(shader_name) result(program)
+    implicit none
+
+    character(len = *) :: shader_name
+    type(shader_program), allocatable :: data
+    class(*), allocatable :: generic
+    integer :: status
+
+    call shader_programs%get_raw(key(shader_name), generic, stat = status)
+
+    select type(generic)
+      type is (shader_program)
+        data = generic
+      class default
+        print"(A)","Error, not the thing!"
+    end select
+
+  end function get_shader
 
 end module shader
