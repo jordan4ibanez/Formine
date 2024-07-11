@@ -2,16 +2,21 @@ module shader
   use fhash, only: fhash_tbl_t, key => fhash_key
   implicit none
 
+  
   private
+
 
   type(fhash_tbl_t) :: shader_programs
 
+
   public ::create_shader
+
 
   type shader_result
     class(shader_program), allocatable :: program
     logical :: exists
   end type shader_result
+
 
   type shader_program
     character(len=:), allocatable :: shader_name
@@ -20,7 +25,9 @@ module shader
     integer :: fragment_id
   end type shader_program
 
+
 contains
+
 
   !** This is a simple way to check if a shader is null. (0)
   !? Makes the code easier to read.
@@ -37,6 +44,7 @@ contains
     root_success = input /= GL_FALSE
     success = root_success
   end function creation_succeeded
+
 
   !** This is a simple variation of shader_creation_succeeded with gl_check_error as our helper.
   !? Same docs as in shader_creation_success minus the input.
@@ -145,6 +153,7 @@ contains
     call set_shader(name, shader)
   end function create_shader
 
+
   logical function shader_exists(shader_name) result(existence)
     use string
     implicit none
@@ -175,6 +184,7 @@ contains
       end select
     end if
   end function shader_exists
+
 
   subroutine set_shader(name, shader)
     implicit none
@@ -213,5 +223,6 @@ contains
       return
     end select
   end function get_shader
+
 
 end module shader
