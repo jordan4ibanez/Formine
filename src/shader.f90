@@ -206,6 +206,14 @@ contains
     end if
   end function shader_exists
 
+  subroutine set_shader(name, shader)
+    implicit none
+
+    character(len = *) :: name
+    type(shader_program), allocatable :: shader
+
+    call shader_programs%set(key(name), shader)
+  end subroutine set_shader
 
   type(shader_program) function get_shader(shader_name) result(program_result)
     implicit none
