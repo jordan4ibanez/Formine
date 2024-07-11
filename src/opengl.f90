@@ -66,11 +66,13 @@ module opengl
 
   interface
 
+
     subroutine internal_gl_clear(thing_to_clear) bind(c, name = "glClear")
       use, intrinsic :: iso_c_binding
       implicit none
       integer(c_int), intent(in), value :: thing_to_clear
     end subroutine internal_gl_clear
+
 
     subroutine internal_gl_clear_color(r,g,b,a) bind(c, name = "glClearColor")
       use, intrinsic :: iso_c_binding
@@ -81,11 +83,13 @@ module opengl
       real(c_float), intent(in), value :: a
     end subroutine internal_gl_clear_color
 
+
     subroutine gl_enable(cap) bind(c, name = "glEnable")
       use, intrinsic :: iso_c_binding
       implicit none
       integer(c_int) :: cap
     end subroutine gl_enable
+
 
     subroutine internal_gl_debug_message_callback(callback, user_param) bind(c, name = "glDebugMessageCallback")
       use, intrinsic :: iso_c_binding
@@ -94,12 +98,14 @@ module opengl
       type(c_ptr), intent(in), optional :: user_param
     end subroutine internal_gl_debug_message_callback
 
+
     function internal_gl_create_program() result(program_id) bind(c, name = "glCreateProgram")
       use, intrinsic :: iso_c_binding
       implicit none
       !! This might cause problems, it's a uint.
       integer(c_int) :: program_id
     end function internal_gl_create_program
+
 
     function internal_gl_create_shader(shader_type) result(shader_id) bind(c, name = "glCreateShader")
       use, intrinsic :: iso_c_binding
@@ -108,6 +114,7 @@ module opengl
       integer(c_int), intent(in), value :: shader_type
       integer(c_int) :: shader_id
     end function internal_gl_create_shader
+
 
     subroutine internal_gl_shader_source(shader_id, count, source_code, string_length) bind(c, name = "glShaderSource")
       use, intrinsic :: iso_c_binding
@@ -119,11 +126,13 @@ module opengl
       type(c_ptr), intent(in), optional :: string_length
     end subroutine internal_gl_shader_source
 
+
     subroutine gl_compile_shader(shader_id) bind(c, name = "glCompileShader")
       use, intrinsic :: iso_c_binding
       implicit none
       integer(c_int), intent(in), value :: shader_id
     end subroutine gl_compile_shader
+
 
     subroutine gl_get_integer_v(pname, data) bind(c, name = "glGetIntegerv")
       use, intrinsic :: iso_c_binding
@@ -132,6 +141,7 @@ module opengl
       integer(c_int), intent(in), target :: data
     end subroutine gl_get_integer_v
 
+
     subroutine gl_attach_shader(program, shader) bind(c, name = "glAttachShader")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -139,17 +149,20 @@ module opengl
       integer(c_int), intent(in), value :: shader
     end subroutine gl_attach_shader
 
+
     subroutine gl_link_program(program) bind(c, name = "glLinkProgram")
       use, intrinsic :: iso_c_binding
       implicit none
       integer(c_int), intent(in), value :: program
     end subroutine gl_link_program
 
+
     function gl_get_error() result(error_code) bind(c, name = "glGetError")
       use, intrinsic :: iso_c_binding
       implicit none
       integer(c_int) :: error_code
     end function gl_get_error
+
 
     subroutine internal_gl_get_shader_iv(shader, pname, params) bind(c, name = "glGetShaderiv")
       use, intrinsic :: iso_c_binding
@@ -159,6 +172,7 @@ module opengl
       integer(c_int), intent(in), value :: pname
       integer(c_int), intent(in) :: params
     end subroutine internal_gl_get_shader_iv
+
 
     subroutine internal_gl_get_shader_info_log(shader, max_length, length, info_log) bind(c, name = "glGetShaderInfoLog")
       use, intrinsic :: iso_c_binding
@@ -170,6 +184,7 @@ module opengl
       type(c_ptr), intent(in) :: info_log
     end subroutine internal_gl_get_shader_info_log
 
+
     subroutine internal_gl_get_program_iv(program, pname, params) bind(c, name = "glGetProgramiv")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -179,6 +194,7 @@ module opengl
       integer(c_int), intent(in) :: params
     end subroutine internal_gl_get_program_iv
 
+
     subroutine gl_validate_program(program_id) bind(c, name = "glValidateProgram")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -186,7 +202,9 @@ module opengl
       integer(c_int) :: program_id
     end subroutine gl_validate_program
 
+    
   end interface
+
 
 contains
 
@@ -196,6 +214,7 @@ contains
     implicit none
     call internal_gl_clear(GL_COLOR_BUFFER_BIT)
   end
+
 
   subroutine gl_clear_color(r,g,b)
     implicit none
@@ -245,13 +264,15 @@ contains
     end if
 
     call deallocate_string(fortran_message)
-
   end subroutine debug_message_callback
+
+
   subroutine gl_set_debug_message_callback
     use, intrinsic :: iso_c_binding
     implicit none
     call internal_gl_debug_message_callback(c_funloc(debug_message_callback), null())
   end subroutine gl_set_debug_message_callback
+
 
   function gl_create_program() result(program_id)
     implicit none
@@ -259,6 +280,7 @@ contains
 
     program_id = internal_gl_create_program()
   end function gl_create_program
+
 
   function gl_create_shader(shader_type) result(shader_id)
     implicit none
@@ -305,7 +327,6 @@ contains
     call gl_get_integer_v(GL_MINOR_VERSION, minor)
 
     print"(A)","[OpenGL] Version: "//int_to_string(major)//"."//int_to_string(minor)
-
   end subroutine gl_get_version
 
 
@@ -333,7 +354,6 @@ contains
     type(c_ptr) :: c_string
 
     call internal_gl_get_shader_info_log(shader, 512, length, c_string)
-
   end subroutine gl_get_shader_info_log
 
 
