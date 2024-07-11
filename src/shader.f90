@@ -2,7 +2,7 @@ module shader
   use fhash, only: fhash_tbl_t, key => fhash_key
   implicit none
 
-  
+
   private
 
 
@@ -73,9 +73,6 @@ contains
     character(len = *), intent(in) :: vertex_code_location
     character(len = *), intent(in) :: fragment_code_location
     type(shader_program), allocatable :: shader
-
-    logical :: contains_thing
-    type(shader_result) :: result
 
     allocate(shader)
 
