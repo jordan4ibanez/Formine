@@ -138,42 +138,11 @@ contains
       print"(A)","[Shader]: Successfully linked shader ["//shader%shader_name//"]."
     end if
 
-
     ! Woooo!
     print"(A)","[Shader]: Shader ["//shader%shader_name//"] created successfully."
 
-    ! call shader_programs%get(key(shader_name), null(), stat = contains_thing)
-
-    ! call shader_programs%allocate()
-
-    if (shader_exists(shader%shader_name)) then
-      print*,"WAT"
-    end if
-
+    ! Store it in the hash table for later use.
     call set_shader(name, shader)
-
-    ! This is a mutability test.
-    if (shader_exists(name)) then
-      result = get_shader(name)
-      if (result%exists) then
-        print*,result%program%program_id
-        print*,result%program%vertex_id
-        print*,result%program%fragment_id
-        result%program%fragment_id = -1
-        call set_shader(name, result%program)
-      end if
-    end if
-
-    if (shader_exists(name)) then
-      result = get_shader(name)
-      if (result%exists) then
-        print*,result%program%program_id
-        print*,result%program%vertex_id
-        print*,result%program%fragment_id
-      end if
-    end if
-
-
   end function create_shader
 
   logical function shader_exists(shader_name) result(existence)
