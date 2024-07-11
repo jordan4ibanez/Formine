@@ -6,7 +6,7 @@ module deal
   private
 
 
-  logical :: debug_mode = .false.
+  logical, parameter :: debug_mode = .false.
 
 
   public :: deallocate_string
@@ -30,6 +30,6 @@ contains
       print"(A)","[Deallocating]: <String already deallocated>"
     end if
   end subroutine deallocate_string
-  
+
 
 end module deal
