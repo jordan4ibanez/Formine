@@ -20,6 +20,8 @@ module opengl
   public :: GL_LINK_STATUS
   public :: GL_VALIDATE_STATUS
 
+  public :: GL_DEBUG_SEVERITY_NOTIFICATION
+
   !
 
   integer :: GL_VERSION = int(z"1f02")
@@ -35,6 +37,8 @@ module opengl
   integer :: GL_COMPILE_STATUS = int(z"8B81")
   integer :: GL_LINK_STATUS = int(z"8B82")
   integer :: GL_VALIDATE_STATUS = int(z"8B83")
+
+  integer, parameter :: GL_DEBUG_SEVERITY_NOTIFICATION = int(z"826B")
 
   ! Functions we want exposed.
 
@@ -226,6 +230,14 @@ contains
     if (c_associated(message_pointer)) then
       fortran_message = string_from_c(message_pointer, length + 1)
       if (len(fortran_message) > 0) then
+
+        select case (severity)
+         case (GL_DEBUG_SEVERITY_NOTIFICATION)
+            print*,"notification"
+         case default
+
+        end select
+
         !? Make this print nicely.
         print"(A)","[OpenGL] Error: ("//int_to_string(source)//") "//fortran_message//"."
       end if
