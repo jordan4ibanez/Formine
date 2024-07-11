@@ -2,11 +2,15 @@
 module deal
   implicit none
 
+
   private
+
 
   logical :: debug_mode = .false.
 
+
   public :: deallocate_string
+
 
 contains
 
@@ -14,6 +18,7 @@ contains
 
   subroutine deallocate_string(string)
     implicit none
+
     character(:), allocatable :: string
 
     if (allocated(string)) then
@@ -24,7 +29,7 @@ contains
     else if (debug_mode) then
       print"(A)","[Deallocating]: <String already deallocated>"
     end if
-
   end subroutine deallocate_string
+  
 
 end module deal
