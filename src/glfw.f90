@@ -155,6 +155,7 @@ contains
   subroutine glfw_terminate
     use deal
     implicit none
+
     call internal_glfw_terminate()
     call deallocate_string(window_title)
     print"(A)","[GLFW]: Successfully terminated."
@@ -195,6 +196,7 @@ contains
     use, intrinsic :: iso_c_binding
     use string
     implicit none
+    
     integer(c_int) :: width
     integer(c_int) :: height
     character(len = *,kind = c_char) :: title
@@ -286,5 +288,5 @@ contains
     call internal_glfw_set_error_callback(c_funloc(error_callback))
   end subroutine glfw_set_error_callback
 
-  
+
 end module glfw
