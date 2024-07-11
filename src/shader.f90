@@ -162,14 +162,14 @@ contains
     implicit none
 
     character(len = *) :: shader_name
-    integer :: stat = 0
+    integer :: status = 0
     class(*), allocatable :: generic
 
     ! First, attempt to get the shader program.
-    call shader_programs%get_raw(key(shader_name), generic, stat = stat)
+    call shader_programs%get_raw(key(shader_name), generic, stat = status)
 
     ! Next check if we have an error.
-    existence = stat == 0
+    existence = status == 0
 
     ! Finally, ensure that it's of type shader_program.
     if (existence) then
