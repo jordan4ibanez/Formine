@@ -9,7 +9,7 @@ module shader
   public ::create_shader
 
   type shader_result
-    class(shader_program), allocatable :: prog
+    class(shader_program), allocatable :: program
     logical :: exists
   end type shader_result
 
@@ -155,20 +155,20 @@ contains
     if (shader_exists(name)) then
       result = get_shader(name)
       if (result%exists) then
-        print*,result%prog%program_id
-        print*,result%prog%vertex_id
-        print*,result%prog%fragment_id
-        result%prog%fragment_id = -1
-        call set_shader(name, result%prog)
+        print*,result%program%program_id
+        print*,result%program%vertex_id
+        print*,result%program%fragment_id
+        result%program%fragment_id = -1
+        call set_shader(name, result%program)
       end if
     end if
 
     if (shader_exists(name)) then
       result = get_shader(name)
       if (result%exists) then
-        print*,result%prog%program_id
-        print*,result%prog%vertex_id
-        print*,result%prog%fragment_id
+        print*,result%program%program_id
+        print*,result%program%vertex_id
+        print*,result%program%fragment_id
       end if
     end if
 
@@ -237,7 +237,7 @@ contains
     select type(generic)
      type is (shader_program)
       program_result%exists = .true.
-      program_result%prog = generic
+      program_result%program = generic
      class default
       ! print"(A)","[Shader] Error: ["//shader_name//"] has the wrong type."
       return
