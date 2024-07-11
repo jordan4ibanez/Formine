@@ -163,10 +163,10 @@ contains
     call shader_programs%get_raw(key(shader_name), generic, stat = status)
 
     select type(generic)
-      type is (shader_program)
-        data = generic
-      class default
-        print"(A)","Error, not the thing!"
+     type is (shader_program)
+      data = generic
+     class default
+      print"(A)","[Shader] Error: ["//shader_name//"] does not exist."
     end select
 
   end function get_shader
