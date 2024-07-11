@@ -156,13 +156,14 @@ contains
     implicit none
 
     character(len = *) :: shader_name
-    integer :: status
+    integer :: stat = 0
     class(*), allocatable :: generic
 
-    call shader_programs%get_raw(key(shader_name), generic, stat = status)
+    call shader_programs%get_raw(key(shader_name), generic, stat = stat)
 
-    print*,status
-    existence = status /= 0
+    ! print"(i2)",stat
+
+    existence = stat /= 0
   end function shader_exists
 
   type(shader_program) function get_shader(shader_name) result(program_result)
