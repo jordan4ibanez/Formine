@@ -20,8 +20,6 @@ module opengl
   public :: GL_LINK_STATUS
   public :: GL_VALIDATE_STATUS
 
-  public :: GL_DEBUG_SEVERITY_NOTIFICATION
-
   !
 
   integer, parameter :: GL_VERSION = int(z"1f02")
@@ -39,6 +37,9 @@ module opengl
   integer, parameter :: GL_VALIDATE_STATUS = int(z"8B83")
 
   integer, parameter :: GL_DEBUG_SEVERITY_NOTIFICATION = int(z"826B")
+  integer, parameter :: GL_DEBUG_SEVERITY_LOW = int(z"9148")
+  integer, parameter :: GL_DEBUG_SEVERITY_MEDIUM = int(z"9147")
+  integer, parameter :: GL_DEBUG_SEVERITY_HIGH = int(z"9146")
 
   ! Functions we want exposed.
 
@@ -233,7 +234,7 @@ contains
 
         select case (severity)
          case (GL_DEBUG_SEVERITY_NOTIFICATION)
-            print*,"notification"
+          print*,"notification"
          case default
 
         end select
