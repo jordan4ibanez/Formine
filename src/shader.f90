@@ -215,28 +215,31 @@ contains
     call shader_programs%set(key(name), shader)
   end subroutine set_shader
 
-  type(shader_program) function get_shader(shader_name) result(program_result)
+
+  ! Get a shader from the hash table.
+  !** The shader is a clone. To update, set_shader().
+  type(shader_result) function get_shader(shader_name) result(program_result)
     implicit none
 
     character(len = *) :: shader_name
-    type(shader_program) :: data
     class(*), allocatable :: generic
     integer :: status
 
+    program_result%exists = .false.
+
     call shader_programs%get_raw(key(shader_name), generic, stat = status)
 
-    print*,"status: ",status
-
     if (status /= 0) then
-      print"(A)","[Shader] Error: ["//shader_name//"] does not exist."
+      ! print"(A)","[Shader] Error: ["//shader_name//"] does not exist."
       return
     end if
 
     select type(generic)
      type is (shader_program)
-      data = generic
+      program_result%exists = .true.
+      program_result%prog = generic
      class default
-      print"(A)","[Shader] Error: ["//shader_name//"] has the wrong type."
+      ! print"(A)","[Shader] Error: ["//shader_name//"] has the wrong type."
       return
     end select
   end function get_shader
