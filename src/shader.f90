@@ -187,6 +187,10 @@ contains
     ! Next check if we have an error.
     existence = status == 0
 
+    if (.not. existence) then
+      return
+    end if
+
     ! Finally, ensure that it's of type shader_program.
     if (existence) then
       select type(generic)
