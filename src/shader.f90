@@ -142,26 +142,36 @@ contains
 
     ! call shader_programs%get(key(shader_name), null(), stat = contains_thing)
 
-    call shader_programs%allocate()
+    ! call shader_programs%allocate()
 
-    print*,"this thing exist: ", shader_exists(shader_name)
+    contains_thing = shader_exists(shader%shader_name)
 
-    call shader_programs%set(key(shader_name), program)
+    print*,shader%shader_name
 
-    print*,"this thing exist: ", shader_exists(shader_name)
+    call shader_programs%set(key(name), shader%program_id)
+
+    contains_thing = shader_exists(name)
 
   end function create_shader
 
   logical function shader_exists(shader_name) result(existence)
+    use string
     implicit none
 
     character(len = *) :: shader_name
     integer :: stat = 0
     class(*), allocatable :: generic
+    type(shader_program), allocatable :: prog
 
     call shader_programs%get_raw(key(shader_name), generic, stat = stat)
 
-    ! print"(i2)",stat
+    select type(d => generic)
+     type is (shader_program)
+      prog = d
+      print*,"shader_program: "//int_to_string(prog%fragment_id)
+     class default
+      print*,"[Shader] Error: ["//shader_name//"] is not a shader program."
+    end select
 
     existence = stat /= 0
   end function shader_exists
@@ -175,6 +185,8 @@ contains
     integer :: status
 
     call shader_programs%get_raw(key(shader_name), generic, stat = status)
+
+    print*,"status: ",status
 
     if (status /= 0) then
       print"(A)","[Shader] Error: ["//shader_name//"] does not exist."
