@@ -161,21 +161,19 @@ contains
     character(len = *) :: shader_name
     integer :: stat = 0
     class(*), allocatable :: generic
-    type(shader_program), allocatable :: prog
 
     call shader_programs%get_raw(key(shader_name), generic, stat = stat)
 
     existence = stat == 0
 
-    print*,"status: ", stat
-
     if (existence) then
       select type(generic)
        type is (shader_program)
-        print*,"shader_program: "//int_to_string(generic%fragment_id)
-
+        existence = .true.
+        ! print*,"shader_program: "//int_to_string(generic%fragment_id)
        class default
-        print*,"[Shader] Error: ["//shader_name//"] is not a shader program."
+        existence = .false.
+        ! print*,"[Shader] Error: ["//shader_name//"] is not a shader program."
       end select
     end if
 
