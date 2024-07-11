@@ -134,7 +134,7 @@ module glfw
 
   end interface
 
-  
+
 contains
 
   ! Here I'm just kind of using glfw the way I want to use it.
@@ -151,6 +151,7 @@ contains
     end if
   end function glfw_init
 
+
   subroutine glfw_terminate
     use deal
     implicit none
@@ -158,6 +159,7 @@ contains
     call deallocate_string(window_title)
     print"(A)","[GLFW]: Successfully terminated."
   end subroutine glfw_terminate
+
 
   subroutine glfw_get_error
     use, intrinsic :: iso_c_binding
@@ -188,6 +190,7 @@ contains
     !! Calling c_free() on c_string will just crash here because this is stack memory.
   end subroutine glfw_get_error
 
+
   logical function glfw_create_window(width, height, title) result(success)
     use, intrinsic :: iso_c_binding
     use string
@@ -210,34 +213,44 @@ contains
       print"(A)","[GLFW] Error: Failed to create window."
       call glfw_terminate()
     end if
-
   end function glfw_create_window
+
 
   subroutine glfw_make_context_current
     implicit none
+
     call internal_glfw_make_context_current(c_window_pointer)
   end subroutine glfw_make_context_current
 
+
   logical function glfw_window_should_close() result(should_close)
     implicit none
+
     should_close = internal_glfw_window_should_close(c_window_pointer) .eqv. .true.
   end function glfw_window_should_close
 
+
   subroutine glfw_swap_buffers
     implicit none
+
     call internal_glfw_swap_buffers(c_window_pointer)
   end subroutine glfw_swap_buffers
 
+
   subroutine glfw_poll_events
     implicit none
+
     call internal_glfw_poll_events(c_window_pointer)
   end
 
+
   subroutine glfw_destroy_window
     implicit none
+
     call internal_glfw_destroy_window(c_window_pointer)
     print"(A)","[GLFW]: Window destroyed successfully."
   end subroutine glfw_destroy_window
+
 
   !** NOTE: C is passing Fortran data here!
   !** NOTE: This function passed into C as a pointer!
@@ -264,11 +277,14 @@ contains
     call deallocate_string(error_value_string)
 
     !! char_pointer is on the stack. Calling c_free() on it will crash the program.
-  end subroutine error_callback !! These are grouped together because they're basically one function.
+  end subroutine error_callback
+
+
   subroutine glfw_set_error_callback
     implicit none
 
     call internal_glfw_set_error_callback(c_funloc(error_callback))
   end subroutine glfw_set_error_callback
 
+  
 end module glfw
