@@ -2,19 +2,24 @@ module string
   use, intrinsic :: iso_c_binding
   implicit none
 
+
   private
+
 
   public :: string_from_c
   public :: int_to_string
   public :: into_c_string
   public :: bool_to_string
 
+
 contains
+
 
   ! Dump a raw Fortran string pointer into a string.
   subroutine copy_string_pointer(length, input_pointer, output_string)
     use, intrinsic :: iso_c_binding
     implicit none
+
     character(c_char), pointer :: input_pointer(:)
     character(:), allocatable :: output_string
     integer(4) :: i
@@ -31,11 +36,13 @@ contains
     end do
   end subroutine copy_string_pointer
 
+
   ! Use this to convert C strings stored in a (character, pointer) into Fortran strings.
   !** This is allocatable, remember to deallocate.
   function string_from_c(c_string, size) result(fortran_string)
     use, intrinsic :: iso_c_binding
     implicit none
+
     ! On the C side. The view is great.
     type(c_ptr), intent(in), value :: c_string
     ! On the Fortran side.
@@ -83,10 +90,12 @@ contains
     end if
   end function string_from_c
 
+
   ! Convert a regular Fortran string into a null terminated C string.
   !** Allocated, remember to deallocate!
   function into_c_string(input) result(output)
     implicit none
+
     character(len = *, kind = c_char) :: input
     character(len = :, kind = c_char), allocatable :: output
 
@@ -99,6 +108,7 @@ contains
   !** Allocatable will deallocate once the memory goes out of scope.
   function int_to_string(i) result(output)
     implicit none
+
     integer :: i
     character(:, kind = c_char), allocatable :: output
 
@@ -115,6 +125,7 @@ contains
     ! print"(A)","len: ", len(output)
     ! print"(A)","-----"
   end function int_to_string
+
 
   ! Convert a logical into an allocated string.
   !** Allocatable will deallocate once the memory goes out of scope.
@@ -136,5 +147,6 @@ contains
     ! Now we shift the whole thing left and trim it to fit.
     output = trim(adjustl(output))
   end function bool_to_string
+
 
 end module string
