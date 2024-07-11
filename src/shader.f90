@@ -154,6 +154,7 @@ contains
       print*,"GOOD"
     end if
 
+
   end function create_shader
 
   logical function shader_exists(shader_name) result(existence)
@@ -164,10 +165,13 @@ contains
     integer :: stat = 0
     class(*), allocatable :: generic
 
+    ! First, attempt to get the shader program.
     call shader_programs%get_raw(key(shader_name), generic, stat = stat)
 
+    ! Next check if we have an error.
     existence = stat == 0
 
+    ! Finally, ensure that it's of type shader_program.
     if (existence) then
       select type(generic)
        type is (shader_program)
@@ -178,8 +182,8 @@ contains
         ! print*,"[Shader] Error: ["//shader_name//"] is not a shader program."
       end select
     end if
-
   end function shader_exists
+
 
   type(shader_program) function get_shader(shader_name) result(program_result)
     implicit none
