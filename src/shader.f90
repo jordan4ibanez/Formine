@@ -142,15 +142,28 @@ contains
 
     ! call shader_programs%get(key(shader_name), null(), stat = contains_thing)
 
-    print*,contains_thing
+    call shader_programs%allocate()
+
+    print*,"this thing exist: ", shader_exists(shader_name)
 
     call shader_programs%set(key(shader_name), program)
 
-    ! call shader_programs%get(key(shader_name), program, stat = contains_thing)
-
-    print*,contains_thing
+    print*,"this thing exist: ", shader_exists(shader_name)
 
   end function create_shader
+
+  logical function shader_exists(shader_name) result(existence)
+    implicit none
+
+    character(len = *) :: shader_name
+    integer :: status
+    class(*), allocatable :: generic
+
+    call shader_programs%get_raw(key(shader_name), generic, stat = status)
+
+    print*,status
+    existence = status /= 0
+  end function shader_exists
 
   type(shader_program) function get_shader(shader_name) result(program_result)
     implicit none
