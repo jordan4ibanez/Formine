@@ -202,7 +202,7 @@ module opengl
       integer(c_int) :: program_id
     end subroutine gl_validate_program
 
-    
+
   end interface
 
 
@@ -241,6 +241,7 @@ contains
     type(c_ptr), intent(in), value :: message_pointer
     type(c_ptr), intent(in), value :: user_param_pointer
     character(:), allocatable :: fortran_message
+    character(len = :),allocatable :: severity_text
 
     ! Shut the compiler up.
     if (.false.) then
@@ -253,17 +254,23 @@ contains
 
         select case (severity)
          case (GL_DEBUG_SEVERITY_NOTIFICATION)
-          print*,"notification"
+          severity_text = "NOTIFICATION"
+         case (GL_DEBUG_SEVERITY_LOW)
+          severity_text = "LOW SEVERITY"
+         case (GL_DEBUG_SEVERITY_MEDIUM)
+          severity_text = "MEDIUM SEVERITY"
+         case (GL_DEBUG_SEVERITY_HIGH)
+          severity_text = "HIGH SEVERITY"
          case default
-
         end select
 
         !? Make this print nicely.
-        print"(A)","[OpenGL] Error: ("//int_to_string(source)//") "//fortran_message//"."
+        print"(A)","[OpenGL] Error: ("//severity_text//") ("//int_to_string(source)//") "//fortran_message//"."
       end if
     end if
 
     call deallocate_string(fortran_message)
+    call deallocate_string(severity_text)
   end subroutine debug_message_callback
 
 
