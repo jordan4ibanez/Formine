@@ -152,6 +152,7 @@ contains
 
     call set_shader(name, shader)
 
+    ! This is a mutability test.
     if (shader_exists(name)) then
       result = get_shader(name)
       if (result%exists) then
