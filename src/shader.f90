@@ -148,7 +148,7 @@ contains
 
     print*,shader%shader_name
 
-    call shader_programs%set(key(name), shader%program_id)
+    call shader_programs%set(key(name), shader)
 
     contains_thing = shader_exists(name)
 
@@ -165,15 +165,20 @@ contains
 
     call shader_programs%get_raw(key(shader_name), generic, stat = stat)
 
-    select type(d => generic)
-     type is (shader_program)
-      prog = d
-      print*,"shader_program: "//int_to_string(prog%fragment_id)
-     class default
-      print*,"[Shader] Error: ["//shader_name//"] is not a shader program."
-    end select
+    existence = stat == 0
 
-    existence = stat /= 0
+    print*,"status: ", stat
+
+    if (existence) then
+      select type(generic)
+       type is (shader_program)
+        print*,"shader_program: "//int_to_string(generic%fragment_id)
+
+       class default
+        print*,"[Shader] Error: ["//shader_name//"] is not a shader program."
+      end select
+    end if
+
   end function shader_exists
 
   type(shader_program) function get_shader(shader_name) result(program_result)
