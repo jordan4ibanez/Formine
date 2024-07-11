@@ -152,23 +152,28 @@ contains
 
   end function create_shader
 
-  type(shader_program) function get_shader(shader_name) result(program)
+  type(shader_program) function get_shader(shader_name) result(program_result)
     implicit none
 
     character(len = *) :: shader_name
-    type(shader_program), allocatable :: data
+    type(shader_program) :: data
     class(*), allocatable :: generic
     integer :: status
 
     call shader_programs%get_raw(key(shader_name), generic, stat = status)
 
+    if (status /= 0) then
+      print"(A)","[Shader] Error: ["//shader_name//"] does not exist."
+      return
+    end if
+
     select type(generic)
      type is (shader_program)
       data = generic
      class default
-      print"(A)","[Shader] Error: ["//shader_name//"] does not exist."
+      print"(A)","[Shader] Error: ["//shader_name//"] has the wrong type."
+      return
     end select
-
   end function get_shader
 
 end module shader
