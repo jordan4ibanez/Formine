@@ -148,10 +148,26 @@ contains
       print*,"WAT"
     end if
 
-    call shader_programs%set(key(name), shader)
+    call set_shader(name, shader)
 
     if (shader_exists(name)) then
-      print*,"GOOD"
+      result = get_shader(name)
+      if (result%exists) then
+        print*,result%prog%program_id
+        print*,result%prog%vertex_id
+        print*,result%prog%fragment_id
+        result%prog%fragment_id = -1
+        call set_shader(name, result%prog)
+      end if
+    end if
+
+    if (shader_exists(name)) then
+      result = get_shader(name)
+      if (result%exists) then
+        print*,result%prog%program_id
+        print*,result%prog%vertex_id
+        print*,result%prog%fragment_id
+      end if
     end if
 
 
