@@ -9,8 +9,8 @@ module shader
   public ::create_shader
 
   type shader_result
-    class(*), allocatable :: blah
-
+    class(shader_program), allocatable :: prog
+    logical :: exists
   end type shader_result
 
   type shader_program
@@ -144,13 +144,15 @@ contains
 
     ! call shader_programs%allocate()
 
-    contains_thing = shader_exists(shader%shader_name)
-
-    print*,shader%shader_name
+    if (shader_exists(shader%shader_name)) then
+      print*,"WAT"
+    end if
 
     call shader_programs%set(key(name), shader)
 
-    contains_thing = shader_exists(name)
+    if (shader_exists(name)) then
+      print*,"GOOD"
+    end if
 
   end function create_shader
 
