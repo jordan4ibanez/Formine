@@ -24,19 +24,19 @@ module opengl
 
   !
 
-  integer :: GL_VERSION = int(z"1f02")
-  integer :: GL_MAJOR_VERSION = int(z"821B")
-  integer :: GL_MINOR_VERSION = int(z"821C")
-  integer :: GL_TRUE = 1
-  integer :: GL_FALSE = 0
+  integer, parameter :: GL_VERSION = int(z"1f02")
+  integer, parameter :: GL_MAJOR_VERSION = int(z"821B")
+  integer, parameter :: GL_MINOR_VERSION = int(z"821C")
+  integer, parameter :: GL_TRUE = 1
+  integer, parameter :: GL_FALSE = 0
 
-  integer :: GL_COLOR_BUFFER_BIT = int(z"00004000")
-  integer :: GL_DEBUG_OUTPUT_SYNCHRONOUS = int(z"8242")
-  integer :: GL_VERTEX_SHADER = int(z"8B31")
-  integer :: GL_FRAGMENT_SHADER = int(z"8B30")
-  integer :: GL_COMPILE_STATUS = int(z"8B81")
-  integer :: GL_LINK_STATUS = int(z"8B82")
-  integer :: GL_VALIDATE_STATUS = int(z"8B83")
+  integer, parameter :: GL_COLOR_BUFFER_BIT = int(z"00004000")
+  integer, parameter :: GL_DEBUG_OUTPUT_SYNCHRONOUS = int(z"8242")
+  integer, parameter :: GL_VERTEX_SHADER = int(z"8B31")
+  integer, parameter :: GL_FRAGMENT_SHADER = int(z"8B30")
+  integer, parameter :: GL_COMPILE_STATUS = int(z"8B81")
+  integer, parameter :: GL_LINK_STATUS = int(z"8B82")
+  integer, parameter :: GL_VALIDATE_STATUS = int(z"8B83")
 
   integer, parameter :: GL_DEBUG_SEVERITY_NOTIFICATION = int(z"826B")
 
