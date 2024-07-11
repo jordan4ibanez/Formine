@@ -73,7 +73,7 @@ module glfw
 
       type(c_ptr), intent(in), value :: new_window_pointer
     end subroutine internal_glfw_make_context_current
-    
+
 
     integer(c_int) function internal_glfw_get_error(char_pointer) result(error_type) bind(c, name = "glfwGetError")
       use, intrinsic :: iso_c_binding
@@ -196,7 +196,7 @@ contains
     use, intrinsic :: iso_c_binding
     use string
     implicit none
-    
+
     integer(c_int) :: width
     integer(c_int) :: height
     character(len = *,kind = c_char) :: title
