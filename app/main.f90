@@ -14,7 +14,10 @@ program main
 
   test = new_orientation()
 
-  print*,test%get()
+  print"(A)",test%get_string()
+
+  ! This stops the program.
+  ! test = 5
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.

@@ -65,20 +65,28 @@ module orient_class
 
   type orientation
     private
+    ! Encapsulate this.
     integer :: value
 
   contains
-    ! Subroutine overload.
-    generic,public :: assignment(=) => assign_orientation,assign_integer
+    !** All these are public.
+    ! Subroutine overload. Can assign from type(orientation) or integer.
+    generic :: assignment(=) => assign_orientation,assign_integer
     procedure :: assign_orientation
     procedure :: assign_integer
+    ! Function overload. Can equal against type(orientation) or integer.
+    generic :: operator(+) => equal_orientation
+    procedure :: equal_orientation
     ! Getter
     procedure :: get
+    procedure :: get_string
   end type orientation
 
   public :: new_orientation
 
+
 contains
+
 
   ! Assign from another orientation.
   subroutine assign_orientation(this, other)
@@ -103,6 +111,7 @@ contains
   end subroutine assign_integer
 
 
+  ! Get raw value.
   integer function get(this) result(res)
     implicit none
 
@@ -111,6 +120,19 @@ contains
     res = this%value
   end function get
 
+
+  ! Get value as string.
+  function get_string(this) result(res)
+    implicit none
+
+    class(orientation), intent(inout) :: this
+    character(len = :), allocatable :: res
+
+    res = orientation_to_string(this%value)
+  end function get_string
+
+
+  ! Constructor.
   type(orientation) function new_orientation(optional_initial_value) result(new_instance)
     use orientation_enum
     implicit none
@@ -129,8 +151,6 @@ contains
     ! Now construct it.
     new_instance = orientation(value)
   end function new_orientation
-
-
 
 
 end module orient_class
