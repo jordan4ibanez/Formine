@@ -4,16 +4,21 @@ program main
   use string
   use shader
   use files
+  use orient_class
 
   use, intrinsic ::  iso_c_binding
   implicit none
 
   real :: color = 0.0
+  type(orientation) :: test
+
+  test = new_orientation()
+
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
-  ! if (.true.) then
-  !   return
-  ! end if
+  if (.true.) then
+    return
+  end if
   !! END WARNING.
 
   call glfw_set_error_callback()
