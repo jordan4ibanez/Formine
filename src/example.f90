@@ -75,7 +75,7 @@ module orient_class
     procedure :: assign_orientation
     procedure :: assign_integer
     ! Function overload. Can equal against type(orientation) or integer.
-    generic :: operator(+) => equal_orientation
+    generic :: operator(==) => equal_orientation
     procedure :: equal_orientation
     ! Getter
     procedure :: get
@@ -109,6 +109,28 @@ contains
     call check_orient(other)
     this%value = other
   end subroutine assign_integer
+
+
+  ! Test equality to another orientation.
+  logical function equal_orientation(this, other) result(res)
+    implicit none
+
+    class(orientation), intent(in) :: this
+    type(orientation), intent(in) :: other
+
+    res = this%value == other%value
+  end function equal_orientation
+
+  
+  ! Test equality to an integer.
+  logical function equal_integer(this, other) result(res)
+    implicit none
+
+    class(orientation), intent(in) :: this
+    integer, intent(in) :: other
+
+    res = this%value == other
+  end function equal_integer
 
 
   ! Get raw value.
