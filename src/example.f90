@@ -38,6 +38,9 @@ module orient_class
     ! Function overload. Can equal against type(orientation) or integer.
     generic :: operator(==) => equal_orientation
     procedure :: equal_orientation
+    ! Output formatter
+    generic :: write(formatted) => orientation_into_string
+    procedure :: orientation_into_string
     ! Getter
     procedure :: get
     procedure :: get_string
@@ -139,6 +142,19 @@ contains
   end function equal_integer
 
 
+  subroutine orientation_into_string(this, unit, iotype, v_list, iostat, iomsg)
+    implicit none
+
+    class(orientation), intent(in) :: this
+    integer, intent(in) :: unit         ! Internal unit to write to.
+    character(*), intent(in) :: iotype  ! LISTDIRECTED or DTxxx
+    integer, intent(in) :: v_list(:)    ! parameters from fmt spec.
+    integer, intent(out) :: iostat      ! non zero on error, etc.
+    character(*), intent(inout) :: iomsg  ! define if iostat non zero.
+
+  end subroutine orientation_into_string
+
+
   ! Get raw value.
   integer function get(this) result(res)
     implicit none
@@ -204,7 +220,7 @@ contains
 
     blah = new_orientation(ORIENT_UP)
 
-    ! print*,blah
+    print*,blah
 
     ! This stops the program.
     ! test = 5
