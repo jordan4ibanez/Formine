@@ -14,6 +14,8 @@ program main
 
   test = new_orientation()
 
+  print*,test%get()
+
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   if (.true.) then
