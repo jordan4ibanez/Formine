@@ -3,7 +3,9 @@
 module orient_class
   implicit none
 
+
   private
+
 
   public :: ORIENT_UP
   public :: ORIENT_RIGHT
@@ -16,7 +18,6 @@ module orient_class
   integer, parameter :: ORIENT_DOWN = 2
   integer, parameter :: ORIENT_LEFT = 3
   integer, parameter :: ORIENT_NONE = 13
-
 
 
   public :: orientation
