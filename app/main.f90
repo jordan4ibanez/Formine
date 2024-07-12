@@ -4,20 +4,13 @@ program main
   use string
   use shader
   use files
-  use orient_class
-
+  use test_my_garbage
   use, intrinsic ::  iso_c_binding
   implicit none
 
   real :: color = 0.0
-  type(orientation) :: test
 
-  test = new_orientation()
-
-  print"(A)",test%get_string()
-
-  ! This stops the program.
-  ! test = 5
+  call test_this_thing()
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.

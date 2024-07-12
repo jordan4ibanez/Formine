@@ -1,64 +1,23 @@
 ! This was translated from a C++ thing I wrote for kotek.
-module orientation_enum
-  implicit none
-
-  integer, parameter :: orient_up = 0
-  integer, parameter :: orient_right = 1
-  integer, parameter :: orient_down = 2
-  integer, parameter :: orient_left = 3
-  integer, parameter :: orient_none = 13
-
-  public :: check_orient
-
-contains
-
-  function orientation_to_string(input) result(output)
-    use string
-    implicit none
-
-    integer, intent(in) :: input
-    character(len=:), allocatable :: output
-
-    select case (input)
-     case (orient_up)
-      output = "UP"
-     case (orient_right)
-      output = "UP"
-     case (orient_down)
-      output = "UP"
-     case (orient_left)
-      output = "UP"
-     case (orient_none)
-      output = "UP"
-     case default
-      error stop "illegal argument: ["//int_to_string(input)//"]"
-    end select
-  end function orientation_to_string
-
-  subroutine check_orient(input)
-    use string
-    implicit none
-
-    integer, intent(in) :: input
-
-    select case(input)
-     case(orient_up)
-     case(orient_down)
-     case(orient_left)
-     case(orient_right)
-     case(orient_none)
-     case default
-      error stop "illegal argument: ["//int_to_string(input)//"]"
-    end select
-  end subroutine check_orient
-end module orientation_enum
-
-
+! I converted it into one module.
 module orient_class
-  use orientation_enum
   implicit none
 
   private
+
+  public :: ORIENT_UP
+  public :: ORIENT_RIGHT
+  public :: ORIENT_DOWN
+  public :: ORIENT_LEFT
+  public :: ORIENT_NONE
+
+  integer, parameter :: ORIENT_UP = 0
+  integer, parameter :: ORIENT_RIGHT = 1
+  integer, parameter :: ORIENT_DOWN = 2
+  integer, parameter :: ORIENT_LEFT = 3
+  integer, parameter :: ORIENT_NONE = 13
+
+
 
   public :: orientation
 
@@ -69,6 +28,7 @@ module orient_class
     integer :: value
 
   contains
+
     !** All these are public.
     ! Subroutine overload. Can assign from type(orientation) or integer.
     generic :: assignment(=) => assign_orientation,assign_integer
@@ -82,10 +42,55 @@ module orient_class
     procedure :: get_string
   end type orientation
 
+
   public :: new_orientation
 
 
 contains
+
+
+  ! Convert an orientation to a string.
+  function orientation_to_string(input) result(output)
+    use string
+    implicit none
+
+    integer, intent(in) :: input
+    character(len=:), allocatable :: output
+
+    select case (input)
+     case (ORIENT_UP)
+      output = "UP"
+     case (ORIENT_RIGHT)
+      output = "UP"
+     case (ORIENT_DOWN)
+      output = "UP"
+     case (ORIENT_LEFT)
+      output = "UP"
+     case (ORIENT_NONE)
+      output = "UP"
+     case default
+      error stop "illegal argument: ["//int_to_string(input)//"]"
+    end select
+  end function orientation_to_string
+
+
+! Subroutine to ensure correctness.
+  subroutine check_orient(input)
+    use string
+    implicit none
+
+    integer, intent(in) :: input
+
+    select case(input)
+     case(ORIENT_UP)
+     case(ORIENT_DOWN)
+     case(ORIENT_LEFT)
+     case(ORIENT_RIGHT)
+     case(ORIENT_NONE)
+     case default
+      error stop "illegal argument: ["//int_to_string(input)//"]"
+    end select
+  end subroutine check_orient
 
 
   ! Assign from another orientation.
@@ -121,7 +126,7 @@ contains
     res = this%value == other%value
   end function equal_orientation
 
-  
+
   ! Test equality to an integer.
   logical function equal_integer(this, other) result(res)
     implicit none
@@ -156,7 +161,6 @@ contains
 
   ! Constructor.
   type(orientation) function new_orientation(optional_initial_value) result(new_instance)
-    use orientation_enum
     implicit none
 
     integer, intent(in), optional :: optional_initial_value
@@ -167,7 +171,7 @@ contains
       call check_orient(optional_initial_value)
       value = optional_initial_value
     else
-      value = orient_none
+      value = ORIENT_NONE
     end if
 
     ! Now construct it.
@@ -176,3 +180,35 @@ contains
 
 
 end module orient_class
+
+module test_my_garbage
+  implicit none
+
+
+  private
+
+
+  public :: test_this_thing
+
+
+contains
+
+
+  ! We can finally test this thing.
+  subroutine test_this_thing
+    use orient_class
+    implicit none
+
+    type(orientation) :: blah
+
+    blah = new_orientation(ORIENT_UP)
+
+    ! print*,blah
+
+    ! This stops the program.
+    ! test = 5
+
+  end subroutine test_this_thing
+
+
+end module test_my_garbage
