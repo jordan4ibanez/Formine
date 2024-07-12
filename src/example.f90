@@ -36,8 +36,9 @@ module orient_class
     procedure :: assign_orientation
     procedure :: assign_integer
     ! Function overload. Can equal against type(orientation) or integer.
-    generic :: operator(==) => equal_orientation
+    generic :: operator(==) => equal_orientation,equal_orientation_integer
     procedure :: equal_orientation
+    procedure :: equal_orientation_integer
     ! Output formatter
     generic :: write(formatted) => orientation_into_string
     procedure :: orientation_into_string
@@ -132,6 +133,17 @@ contains
 
 
   ! Test equality to an integer.
+  logical function equal_orientation_integer(this, other) result(res)
+    implicit none
+
+    class(orientation), intent(in) :: this
+    integer, intent(in) :: other
+
+    res = this%value == other
+  end function equal_orientation_integer
+
+
+  ! Test equality to an integer.
   logical function equal_integer(this, other) result(res)
     implicit none
 
@@ -214,16 +226,29 @@ contains
   ! We can finally test this thing.
   subroutine test_this_thing
     use orient_class
+    use string
     implicit none
 
     type(orientation) :: blah
 
     blah = new_orientation(ORIENT_UP)
 
+    !! Fix this, does nothing for now.
     print*,blah
 
-    ! This stops the program.
+    ! This stops the program. !! <intentional>
     ! test = 5
+
+    ! True.
+    print"(A)", bool_to_string(blah == ORIENT_UP)
+
+    blah = ORIENT_DOWN
+
+    ! True.
+    print"(A)", bool_to_string(blah == ORIENT_DOWN)
+
+    ! False
+    print"(A)", bool_to_string(blah == ORIENT_UP)
 
   end subroutine test_this_thing
 
