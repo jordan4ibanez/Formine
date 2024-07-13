@@ -277,24 +277,21 @@ contains
         select case (severity)
          case (GL_DEBUG_SEVERITY_NOTIFICATION)
           severity_text = "NOTIFICATION"
-          text_color = to_rgb_string(255,255,0)
+          text_color = to_rgb_string(137,207,240)
          case (GL_DEBUG_SEVERITY_LOW)
           severity_text = "LOW SEVERITY ERROR"
           text_color = to_rgb_string(255,255,0)
          case (GL_DEBUG_SEVERITY_MEDIUM)
           severity_text = "MEDIUM SEVERITY ERROR"
-          text_color = to_rgb_string(255,255,0)
+          text_color = to_rgb_string(255,165,0)
          case (GL_DEBUG_SEVERITY_HIGH)
           severity_text = "HIGH SEVERITY ERROR"
-          text_color = to_rgb_string(255,255,0)
+          text_color = to_rgb_string(255,0,0)
          case default
         end select
 
-        print*,colorize_rgb("asfdasdf", 255,25,25)
-
         !? Make this print nicely.
-        print*,colorize_rgb_string("bleh", text_color)
-        ! print"(A)",char(27)//ansi_colorize_code//"[OpenGL] ("//severity_text//"): ("//int_to_string(source)//") "//fortran_message//"."//char(27)
+        print"(A)",colorize_rgb_string("[OpenGL] ("//severity_text//"): ("//int_to_string(source)//") "//fortran_message//".", text_color)
       end if
     end if
 
