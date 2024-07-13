@@ -276,16 +276,16 @@ contains
          case (GL_DEBUG_SEVERITY_NOTIFICATION)
           severity_text = "NOTIFICATION"
          case (GL_DEBUG_SEVERITY_LOW)
-          severity_text = "LOW SEVERITY"
+          severity_text = "LOW SEVERITY ERROR"
          case (GL_DEBUG_SEVERITY_MEDIUM)
-          severity_text = "MEDIUM SEVERITY"
+          severity_text = "MEDIUM SEVERITY ERROR"
          case (GL_DEBUG_SEVERITY_HIGH)
-          severity_text = "HIGH SEVERITY"
+          severity_text = "HIGH SEVERITY ERROR"
          case default
         end select
 
         !? Make this print nicely.
-        print"(A)","[OpenGL] Error: ("//severity_text//") ("//int_to_string(source)//") "//fortran_message//"."
+        print"(A)","[OpenGL] ("//severity_text//"): ("//int_to_string(source)//") "//fortran_message//"."
       end if
     end if
 
