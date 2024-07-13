@@ -211,7 +211,7 @@ module opengl
       implicit none
 
       integer(c_int), intent(in), value :: program_id
-      character(len=*, kind=c_char), intent(in) :: uniform_name
+      character(len = *, kind = c_char), intent(in) :: uniform_name
     end function gl_get_uniform_location
 
 
@@ -220,7 +220,7 @@ module opengl
       implicit none
 
       integer(c_int), intent(in), value :: program_id
-      character(len=*, kind=c_char), intent(in) :: uniform_name
+      character(len = *, kind = c_char), intent(in) :: uniform_name
     end function gl_get_attrib_location
 
 
