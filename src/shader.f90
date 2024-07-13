@@ -137,8 +137,8 @@ contains
     call gl_attach_shader(shader%program_id, shader%fragment_id)
     call gl_link_program(shader%program_id)
 
-    ! Finally, we check that this think linked.
-    if (gl_get_program_iv(shader%program_id, GL_LINK_STATUS) /= GL_TRUE) then
+    ! We check that this think linked.
+    if (gl_get_program_iv(shader%program_id, GL_LINK_STATUS) == GL_FALSE) then
       print"(A)","[Shader] Error: Failed to link shader ["//shader%shader_name//"]."
       success = .false.
       return
@@ -146,17 +146,31 @@ contains
       print"(A)","[Shader]: Successfully linked shader ["//shader%shader_name//"]."
     end if
 
+    ! Finally validate this whole thing.
+    call gl_validate_program(shader%program_id)
+    if (gl_get_program_iv(shader%program_id, GL_VALIDATE_STATUS) == GL_FALSE) then
+      print"(A)","[Shader] Error: Failed to validate shader ["//shader%shader_name//"]."
+      success = .false.
+      return
+    else
+      print"(A)","[Shader]: Successfully validated shader ["//shader%shader_name//"]."
+    end if
+
     ! Woooo!
     print"(A)","[Shader]: Shader ["//shader%shader_name//"] created successfully."
 
+    print*,gl_get_program_iv(shader%program_id, GL_VALIDATE_STATUS)
+
+    call gl_use_program(shader%program_id)
+
+    ! print*,shader%program_id
+
+    testing = gl_get_uniform_location(shader%program_id, "camera_matrix")
+
+    print*,"camera_matrix: ",int_to_string(testing)
+
     ! Store it in the hash table for later use.
     call set_shader(name, shader)
-
-    testing = gl_get_uniform_location(shader%program_id, into_c_string("cameraMatrix"))
-
-    print*,testing
-
-
   end function create_shader
 
 
