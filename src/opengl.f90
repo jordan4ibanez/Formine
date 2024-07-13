@@ -223,7 +223,6 @@ module opengl
     end function gl_get_attrib_location
 
 
-
   end interface
 
 
