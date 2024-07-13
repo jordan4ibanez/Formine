@@ -4,19 +4,16 @@ program main
   use string
   use shader
   use files
-  use test_my_garbage
   use, intrinsic ::  iso_c_binding
   implicit none
 
   real :: color = 0.0
 
-  call test_this_thing()
-
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
-  if (.true.) then
-    return
-  end if
+  ! if (.true.) then
+  !   return
+  ! end if
   !! END WARNING.
 
   call glfw_set_error_callback()

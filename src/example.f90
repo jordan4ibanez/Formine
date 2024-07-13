@@ -164,6 +164,10 @@ contains
     integer, intent(out) :: iostat      ! non zero on error, etc.
     character(*), intent(inout) :: iomsg  ! define if iostat non zero.
 
+    if (.false.) then
+      print*,iotype, v_list
+    end if
+
     write (unit,"(A i1 A)", iostat = iostat, iomsg = iomsg) "orientation(", this%value,")"
   end subroutine orientation_into_string
 
