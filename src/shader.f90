@@ -75,8 +75,6 @@ contains
     character(len = *), intent(in) :: fragment_code_location
     type(shader_program), allocatable :: shader
 
-    integer :: testing
-
     allocate(shader)
 
     shader%shader_name = name
@@ -158,16 +156,6 @@ contains
 
     ! Woooo!
     print"(A)","[Shader]: Shader ["//shader%shader_name//"] created successfully."
-
-    print*,gl_get_program_iv(shader%program_id, GL_VALIDATE_STATUS)
-
-    call gl_use_program(shader%program_id)
-
-    ! print*,shader%program_id
-
-    testing = gl_get_uniform_location(shader%program_id, "camera_matrix")
-
-    print*,"camera_matrix: ",int_to_string(testing)
 
     ! Store it in the hash table for later use.
     call set_shader(name, shader)
