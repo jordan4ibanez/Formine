@@ -202,7 +202,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int) :: program_id
+      integer(c_int), intent(in), value :: program_id
     end subroutine gl_validate_program
 
 
@@ -210,7 +210,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in) :: program_id
+      integer(c_int), intent(in), value :: program_id
       character(len=*, kind=c_char), intent(in) :: uniform_name
     end function gl_get_uniform_location
 
@@ -219,7 +219,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in) :: program_id
+      integer(c_int), intent(in), value :: program_id
       character(len=*, kind=c_char), intent(in) :: uniform_name
     end function gl_get_attrib_location
 
@@ -228,7 +228,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in) :: program_id
+      integer(c_int), intent(in), value :: program_id
     end subroutine gl_use_program
 
 
