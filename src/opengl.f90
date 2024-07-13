@@ -259,7 +259,6 @@ contains
   subroutine debug_message_callback(source, type, id, severity, length, message_pointer, user_param_pointer)
     use, intrinsic :: iso_c_binding
     use string
-    use deal
     use terminal
     implicit none
 
@@ -303,9 +302,6 @@ contains
         print"(A)",colorize_rgb_string("[OpenGL] ("//severity_text//"): ("//int_to_string(source)//") "//fortran_message//".", text_color)
       end if
     end if
-
-    call deallocate_string(fortran_message)
-    call deallocate_string(severity_text)
   end subroutine debug_message_callback
 
 
@@ -335,7 +331,6 @@ contains
 
   subroutine gl_shader_source(shader_id, source_code_location)
     use string
-    use deal
     use files
     implicit none
 
@@ -347,9 +342,6 @@ contains
 
     ! Send the source code into the OpenGL state machine.
     call internal_gl_shader_source(shader_id, 1, reader%file_string//achar(0), null())
-
-    ! Now we can deallocate the reader.
-    call reader%deallocate()
 
     !? OpenGL docs:
     !? OpenGL copies the shader source code strings when glShaderSource is called,
