@@ -63,6 +63,7 @@ module opengl
   public :: gl_validate_program
   public :: gl_get_uniform_location
   public :: gl_get_attrib_location
+  public :: gl_use_program
 
   ! Here I'm binding to the C shared library.
 
@@ -221,6 +222,14 @@ module opengl
       integer(c_int), intent(in) :: program_id
       character(len=*, kind=c_char), intent(in) :: uniform_name
     end function gl_get_attrib_location
+
+
+    subroutine gl_use_program(program_id) bind(c, name = "glUseProgram")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in) :: program_id
+    end subroutine gl_use_program
 
 
   end interface
