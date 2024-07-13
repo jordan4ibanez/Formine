@@ -251,6 +251,7 @@ contains
     use, intrinsic :: iso_c_binding
     use string
     use deal
+    use terminal
     implicit none
 
     integer, intent(in), value :: source
@@ -261,7 +262,7 @@ contains
     type(c_ptr), intent(in), value :: message_pointer
     type(c_ptr), intent(in), value :: user_param_pointer
     character(:), allocatable :: fortran_message
-    character(len = :),allocatable :: ansi_colorize_code
+    character(len = :),allocatable :: text_color
     character(len = :),allocatable :: severity_text
 
     ! Shut the compiler up.
@@ -276,21 +277,23 @@ contains
         select case (severity)
          case (GL_DEBUG_SEVERITY_NOTIFICATION)
           severity_text = "NOTIFICATION"
-          ansi_colorize_code = "[48;255;165;0m"
+          text_color = to_rgb_string(255,255,0)
          case (GL_DEBUG_SEVERITY_LOW)
           severity_text = "LOW SEVERITY ERROR"
-          ansi_colorize_code = "[48;255;165;0m"
+          text_color = to_rgb_string(255,255,0)
          case (GL_DEBUG_SEVERITY_MEDIUM)
           severity_text = "MEDIUM SEVERITY ERROR"
-          ansi_colorize_code = "[48;255;165;0m"
+          text_color = to_rgb_string(255,255,0)
          case (GL_DEBUG_SEVERITY_HIGH)
           severity_text = "HIGH SEVERITY ERROR"
-          ansi_colorize_code = "[48;255;165;0m"
+          text_color = to_rgb_string(255,255,0)
          case default
         end select
 
+        print*,colorize_rgb("asfdasdf", 255,25,25)
+
         !? Make this print nicely.
-        print*,achar(27)//"[95m testing."//achar(27)//"[0m"
+        print*,colorize_rgb_string("bleh", text_color)
         ! print"(A)",char(27)//ansi_colorize_code//"[OpenGL] ("//severity_text//"): ("//int_to_string(source)//") "//fortran_message//"."//char(27)
       end if
     end if
