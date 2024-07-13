@@ -18,7 +18,6 @@ module files
   contains
 
     procedure :: read_file => file_reader_read_file
-    procedure :: deallocate => file_reader_deallocate
 
   end type file_reader
 
@@ -60,17 +59,6 @@ contains
     ! Now we must close it so there is not an IO leak.
     close(file_io_identifier)
   end subroutine file_reader_read_file
-
-
-  !** Clean up the allocated memory, if allocated.
-  subroutine file_reader_deallocate(this)
-    use deal
-    implicit none
-
-    class(file_reader), intent(in) :: this
-
-    call deallocate_string(this%file_string)
-  end subroutine file_reader_deallocate
 
 
 end module files
