@@ -215,12 +215,12 @@ module opengl
     end function internal_gl_get_uniform_location
 
 
-    integer(c_int) function gl_get_attrib_location(program_id, uniform_name) bind(c, name = "glGetAttribLocation")
+    integer(c_int) function gl_get_attrib_location(program_id, attrib_name) bind(c, name = "glGetAttribLocation")
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: program_id
-      character(len = *, kind = c_char), intent(in) :: uniform_name
+      character(kind = c_char), intent(in), value :: attrib_name
     end function gl_get_attrib_location
 
 
