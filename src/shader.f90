@@ -50,6 +50,7 @@ contains
   !? Same docs as in shader_creation_success minus the input.
   logical function shader_compilation_succeeded(root_success, shader_id) result(success)
     use opengl
+    use string
     implicit none
 
     logical :: root_success
@@ -73,6 +74,8 @@ contains
     character(len = *), intent(in) :: vertex_code_location
     character(len = *), intent(in) :: fragment_code_location
     type(shader_program), allocatable :: shader
+
+    integer :: testing
 
     allocate(shader)
 
@@ -148,6 +151,12 @@ contains
 
     ! Store it in the hash table for later use.
     call set_shader(name, shader)
+
+    testing = gl_get_uniform_location(shader%program_id, into_c_string("cameraMatrix"))
+
+    print*,testing
+
+
   end function create_shader
 
 
