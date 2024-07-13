@@ -164,6 +164,7 @@ contains
     integer, intent(out) :: iostat      ! non zero on error, etc.
     character(*), intent(inout) :: iomsg  ! define if iostat non zero.
 
+    write (unit,"(A i1 A)", iostat = iostat, iomsg = iomsg) "orientation(", this%value,")"
   end subroutine orientation_into_string
 
 
@@ -234,7 +235,7 @@ contains
     blah = new_orientation(ORIENT_UP)
 
     !! Fix this, does nothing for now.
-    print*,blah
+    print*,"test:",blah
 
     ! This stops the program. !! <intentional>
     ! test = 5
