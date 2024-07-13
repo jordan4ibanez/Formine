@@ -261,6 +261,7 @@ contains
     type(c_ptr), intent(in), value :: message_pointer
     type(c_ptr), intent(in), value :: user_param_pointer
     character(:), allocatable :: fortran_message
+    character(len = :),allocatable :: ansi_colorize_code
     character(len = :),allocatable :: severity_text
 
     ! Shut the compiler up.
@@ -275,17 +276,22 @@ contains
         select case (severity)
          case (GL_DEBUG_SEVERITY_NOTIFICATION)
           severity_text = "NOTIFICATION"
+          ansi_colorize_code = "[48;255;165;0m"
          case (GL_DEBUG_SEVERITY_LOW)
           severity_text = "LOW SEVERITY ERROR"
+          ansi_colorize_code = "[48;255;165;0m"
          case (GL_DEBUG_SEVERITY_MEDIUM)
           severity_text = "MEDIUM SEVERITY ERROR"
+          ansi_colorize_code = "[48;255;165;0m"
          case (GL_DEBUG_SEVERITY_HIGH)
           severity_text = "HIGH SEVERITY ERROR"
+          ansi_colorize_code = "[48;255;165;0m"
          case default
         end select
 
         !? Make this print nicely.
-        print"(A)","[OpenGL] ("//severity_text//"): ("//int_to_string(source)//") "//fortran_message//"."
+        print*,achar(27)//"[95m testing."//achar(27)//"[0m"
+        ! print"(A)",char(27)//ansi_colorize_code//"[OpenGL] ("//severity_text//"): ("//int_to_string(source)//") "//fortran_message//"."//char(27)
       end if
     end if
 
