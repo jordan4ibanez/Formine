@@ -61,6 +61,8 @@ module opengl
   public :: gl_get_shader_info_log
   public :: gl_get_program_iv
   public :: gl_validate_program
+  public :: gl_get_uniform_location
+  public :: gl_get_attrib_location
 
   ! Here I'm binding to the C shared library.
 
@@ -201,6 +203,25 @@ module opengl
 
       integer(c_int) :: program_id
     end subroutine gl_validate_program
+
+
+    integer(c_int) function gl_get_uniform_location(program_id, uniform_name) bind(c, name = "glGetUniformLocation")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in) :: program_id
+      character(len=*, kind=c_char), intent(in) :: uniform_name
+    end function gl_get_uniform_location
+
+
+    integer(c_int) function gl_get_attrib_location(program_id, uniform_name) bind(c, name = "glGetAttribLocation")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in) :: program_id
+      character(len=*, kind=c_char), intent(in) :: uniform_name
+    end function gl_get_attrib_location
+
 
 
   end interface
@@ -348,7 +369,7 @@ contains
       error = gl_get_error()
     end do
   end subroutine gl_clear_error_data
-  
+
 
   subroutine gl_get_shader_info_log(shader)
     use,intrinsic :: iso_c_binding
