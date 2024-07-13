@@ -73,6 +73,10 @@ contains
       ! Manually cast this to 32 bit.
       input_length = int(sizeof(fortran_raw_string))
 
+      !! Force a null terminator to be applied.
+      !? This prevents strange behavior when C misbehaves.
+      fortran_raw_string(input_length) = achar(0)
+
       ! Let's find the null terminator.
       do i = 1, input_length
         if (fortran_raw_string(i) == achar(0)) then
