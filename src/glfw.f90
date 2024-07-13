@@ -153,18 +153,15 @@ contains
 
 
   subroutine glfw_terminate
-    use deal
     implicit none
 
     call internal_glfw_terminate()
-    call deallocate_string(window_title)
     print"(A)","[GLFW]: Successfully terminated."
   end subroutine glfw_terminate
 
 
   subroutine glfw_get_error
     use, intrinsic :: iso_c_binding
-    use :: deal
     use :: string
     implicit none
 
@@ -185,8 +182,6 @@ contains
       ! else
       !   print"(A)",error_result
     end if
-
-    call deallocate_string(error_result_text)
 
     !! Calling c_free() on c_string will just crash here because this is stack memory.
   end subroutine glfw_get_error
@@ -259,7 +254,6 @@ contains
   subroutine error_callback(i, char_pointer)
     use, intrinsic :: iso_c_binding
     use string
-    use deal
     implicit none
 
     integer(c_int), intent(in), value :: i
@@ -274,9 +268,6 @@ contains
       !? We put a period at the end because I think that looks nice.
       print"(A)","[GLFW] Error: ("//error_value_string//") "//error_text//"."
     end if
-
-    call deallocate_string(error_text)
-    call deallocate_string(error_value_string)
 
     !! char_pointer is on the stack. Calling c_free() on it will crash the program.
   end subroutine error_callback
