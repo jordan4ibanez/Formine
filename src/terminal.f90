@@ -9,7 +9,7 @@ module terminal
 
 contains
 
-
+  ! Internal subroutine to stop me from doing something stupid.
   subroutine rgb_check(i)
     use string
     implicit none
