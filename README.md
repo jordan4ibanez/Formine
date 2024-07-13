@@ -11,3 +11,8 @@ sudo dnf install gfortran openGL glfw-devel
 ```
 
 This is using gfortran, gfortran is very buggy. This might be using some bugs which only come with gfortran. Test it in ifort for me to see where it is wrong.
+
+# Notes:
+
+Allocatable - Will automatically deallocate once the variable goes out of scope.
+Pointer - Will NOT automatically deallocate.
