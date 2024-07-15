@@ -162,6 +162,7 @@ contains
   end function create_shader
 
 
+  !** Check if a shader exists in the database.
   logical function shader_exists(shader_name) result(existence)
     use string
     implicit none
@@ -194,6 +195,7 @@ contains
   end function shader_exists
 
 
+  !** Set or update a shader in the database.
   subroutine set_shader(name, shader)
     implicit none
 
@@ -204,7 +206,7 @@ contains
   end subroutine set_shader
 
 
-  ! Get a shader from the hash table.
+  !** Get a shader from the hash table.
   !** The shader is a clone. To update, set_shader().
   type(shader_result) function get_shader(shader_name) result(program_result)
     implicit none
