@@ -19,7 +19,7 @@ module shader
     integer :: vertex_id
     integer :: fragment_id
     !* Uniform data.
-    
+
   end type shader_program
 
 
@@ -186,16 +186,15 @@ contains
     end if
 
     ! Finally, ensure that it's of type shader_program.
-    if (existence) then
-      select type(generic)
-       type is (shader_program)
-        existence = .true.
-        ! print*,"shader_program: "//int_to_string(generic%fragment_id)
-       class default
-        existence = .false.
-        ! print*,"[Shader] Error: ["//shader_name//"] is not a shader program."
-      end select
-    end if
+
+    select type(generic)
+     type is (shader_program)
+      existence = .true.
+      ! print*,"shader_program: "//int_to_string(generic%fragment_id)
+     class default
+      existence = .false.
+      ! print*,"[Shader] Error: ["//shader_name//"] is not a shader program."
+    end select
   end function shader_exists
 
 
