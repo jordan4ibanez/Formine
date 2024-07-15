@@ -166,37 +166,6 @@ contains
   end function create_shader
 
 
-  !** Check if a shader exists in the database.
-  logical function shader_exists(shader_name) result(existence)
-    use string
-    implicit none
-
-    character(len = *) :: shader_name
-    integer :: status = 0
-    class(*), allocatable :: generic
-
-    ! First, attempt to get the shader program.
-    call shader_programs%get_raw(key(shader_name), generic, stat = status)
-
-    ! Next check if we have an error.
-    existence = status == 0
-
-    if (.not. existence) then
-      return
-    end if
-
-    ! Finally, ensure that it's of type shader_program.
-    select type(generic)
-     type is (shader_program)
-      existence = .true.
-      ! print*,"shader_program: "//int_to_string(generic%fragment_id)
-     class default
-      existence = .false.
-      ! print*,"[Shader] Error: ["//shader_name//"] is not a shader program."
-    end select
-  end function shader_exists
-
-
   !** Set or update a shader in the database.
   subroutine set_shader(name, shader)
     implicit none
@@ -235,6 +204,37 @@ contains
       return
     end select
   end function get_shader
+
+
+  !** Check if a shader exists in the database.
+  logical function shader_exists(shader_name) result(existence)
+    use string
+    implicit none
+
+    character(len = *) :: shader_name
+    integer :: status = 0
+    class(*), allocatable :: generic
+
+    ! First, attempt to get the shader program.
+    call shader_programs%get_raw(key(shader_name), generic, stat = status)
+
+    ! Next check if we have an error.
+    existence = status == 0
+
+    if (.not. existence) then
+      return
+    end if
+
+    ! Finally, ensure that it's of type shader_program.
+    select type(generic)
+     type is (shader_program)
+      existence = .true.
+      ! print*,"shader_program: "//int_to_string(generic%fragment_id)
+     class default
+      existence = .false.
+      ! print*,"[Shader] Error: ["//shader_name//"] is not a shader program."
+    end select
+  end function shader_exists
 
 
 end module shader
