@@ -161,6 +161,8 @@ contains
     ! Woooo!
     print"(A)","[Shader]: Shader ["//shader%shader_name//"] created successfully."
 
+    print*, gl_get_attrib_location(shader%program_id, into_c_string("color"))
+
     ! Store it in the hash table for later use.
     call set_shader(name, shader)
   end function create_shader
