@@ -50,6 +50,8 @@ program main
     return
   end if
 
+  
+
   !! This is debugging for functions!
   if (.false.) then
     do while(.not. glfw_window_should_close())

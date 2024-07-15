@@ -9,7 +9,8 @@ module shader
   type(fhash_tbl_t) :: shader_programs
 
 
-  public ::create_shader
+  public :: create_shader
+  public :: create_attribute_locations
 
 
   !** A shader object. This holds all required shader components to run a shader.
@@ -51,7 +52,12 @@ contains
 
 
   !** Create the database of attribute locations, inside the shader program.
-  subroutine create_attribute_locations()
+  subroutine create_attribute_locations(attribute_array)
+    implicit none
+
+    character(len = *) :: attribute_array(:)
+
+
 
   end subroutine create_attribute_locations
 
