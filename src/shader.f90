@@ -186,7 +186,6 @@ contains
     end if
 
     ! Finally, ensure that it's of type shader_program.
-
     select type(generic)
      type is (shader_program)
       existence = .true.
