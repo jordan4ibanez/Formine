@@ -50,6 +50,12 @@ contains
   end function creation_succeeded
 
 
+  !** Create the database of attribute locations, inside the shader program.
+  subroutine create_attribute_locations()
+
+  end subroutine create_attribute_locations
+
+
   !** This is a simple variation of shader_creation_succeeded with gl_check_error as our helper.
   !? Same docs as in shader_creation_success minus the input.
   logical function shader_compilation_succeeded(root_success, shader_id) result(success)
@@ -160,8 +166,6 @@ contains
 
     ! Woooo!
     print"(A)","[Shader]: Shader ["//shader%shader_name//"] created successfully."
-
-    print*, gl_get_attrib_location(shader%program_id, into_c_string("color"))
 
     ! Store it in the hash table for later use.
     call set_shader(name, shader)
