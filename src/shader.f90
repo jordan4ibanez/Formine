@@ -18,6 +18,8 @@ module shader
     integer :: program_id
     integer :: vertex_id
     integer :: fragment_id
+    !* Uniform data.
+    
   end type shader_program
 
 
