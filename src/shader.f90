@@ -212,28 +212,11 @@ contains
     implicit none
 
     character(len = *) :: shader_name
-    integer :: status = 0
-    class(*), allocatable :: generic
+    type(shader_result) :: poller
 
-    ! First, attempt to get the shader program.
-    call shader_programs%get_raw(key(shader_name), generic, stat = status)
-
-    ! Next check if we have an error.
-    existence = status == 0
-
-    if (.not. existence) then
-      return
-    end if
-
-    ! Finally, ensure that it's of type shader_program.
-    select type(generic)
-     type is (shader_program)
-      existence = .true.
-      ! print*,"shader_program: "//int_to_string(generic%fragment_id)
-     class default
-      existence = .false.
-      ! print*,"[Shader] Error: ["//shader_name//"] is not a shader program."
-    end select
+    ! All we must do is check the shader result and return the existence in the result.
+    poller = get_shader(shader_name)
+    existence = poller%exists
   end function shader_exists
 
 
