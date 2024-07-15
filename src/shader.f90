@@ -113,7 +113,7 @@ contains
       print"(A)","[Shader]: Successfully compiled vertex for shader ["//shader%shader_name//"]."
     end if
 
-    ! ! Fragment shader compilation.
+    ! Fragment shader compilation.
     shader%fragment_id = gl_create_shader(GL_FRAGMENT_SHADER)
     if (.not. creation_succeeded(shader%fragment_id, success)) then
       print"(A)","[Shader] Error: Failed to create fragment for shader ["//shader%shader_name//"]."
