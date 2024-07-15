@@ -12,12 +12,14 @@ module shader
   public ::create_shader
 
 
+  !** A simple result that tells you if a returning shader exists.
   type shader_result
     class(shader_program), allocatable :: program
     logical :: exists
   end type shader_result
 
 
+  !** A shader object. This holds all required shader components to run a shader.
   type shader_program
     character(len=:), allocatable :: shader_name
     integer :: program_id
