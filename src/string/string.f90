@@ -20,8 +20,8 @@ contains
 
 
   !** Convert an optional variable length string into an integral representation of a boolean.
-  !? E stands for exists.
-  integer function e(input) result(integer_representation)
+  !? Exi stands for exists.
+  integer function exi(input) result(integer_representation)
     implicit none
 
     character(len = *), intent(in), optional :: input
@@ -31,21 +31,73 @@ contains
     else
       integer_representation = 0
     end if
-  end function e
+  end function exi
 
 
-  subroutine heap_string_array(a,b)!c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z)
+  subroutine heap_string_array(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z)
+    implicit none
 
     character(len = *), intent(in), optional :: a
     character(len = *), intent(in), optional :: b
+    character(len = *), intent(in), optional :: c
+    character(len = *), intent(in), optional :: d
+    character(len = *), intent(in), optional :: e
+    character(len = *), intent(in), optional :: f
+    character(len = *), intent(in), optional :: g
+    character(len = *), intent(in), optional :: h
+    character(len = *), intent(in), optional :: i
+    character(len = *), intent(in), optional :: j
+    character(len = *), intent(in), optional :: k
+    character(len = *), intent(in), optional :: l
+    character(len = *), intent(in), optional :: m
+    character(len = *), intent(in), optional :: n
+    character(len = *), intent(in), optional :: o
+    character(len = *), intent(in), optional :: p
+    character(len = *), intent(in), optional :: q
+    character(len = *), intent(in), optional :: r
+    character(len = *), intent(in), optional :: s
+    character(len = *), intent(in), optional :: t
+    character(len = *), intent(in), optional :: u
+    character(len = *), intent(in), optional :: v
+    character(len = *), intent(in), optional :: w
+    character(len = *), intent(in), optional :: x
+    character(len = *), intent(in), optional :: y
+    character(len = *), intent(in), optional :: z
     !? Because we need to allocate with unknown width, we must allow this to live in the heap.
-    type(heap_string),dimension(:), allocatable :: test
-    type(heap_string) :: blah
+    !? This also basically points to other objects in the heap as well.
+    type(heap_string), dimension(:), allocatable :: heap_array
 
-    blah = heap_string("afdsfsad")
+    ! Now we only allocate how much we need.
+    allocate(heap_array( &
+      exi(a) + &
+      exi(b) + &
+      exi(c) + &
+      exi(d) + &
+      exi(e) + &
+      exi(f) + &
+      exi(g) + &
+      exi(h) + &
+      exi(i) + &
+      exi(j) + &
+      exi(k) + &
+      exi(l) + &
+      exi(m) + &
+      exi(n) + &
+      exi(o) + &
+      exi(p) + &
+      exi(q) + &
+      exi(r) + &
+      exi(s) + &
+      exi(t) + &
+      exi(u) + &
+      exi(v) + &
+      exi(w) + &
+      exi(x) + &
+      exi(y) + &
+      exi(z) &
+      ))
 
-    print*,blah%get()
-
+    print*,size(heap_array)
 
 
   end subroutine heap_string_array
