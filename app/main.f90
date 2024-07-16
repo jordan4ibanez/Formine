@@ -52,7 +52,7 @@ program main
 
   call create_attribute_locations([character(len=20) :: "hi", "there"])
 
-  call heap_string_array("hi")
+  call heap_string_array("hi", "there")
 
   !! This is debugging for functions!
   if (.false.) then
