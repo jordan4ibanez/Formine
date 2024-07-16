@@ -18,6 +18,7 @@ module string
 
 contains
 
+
   !** Convert an optional variable length string into an integral representation of a boolean.
   !? E stands for exists.
   integer function e(input) result(integer_representation)
@@ -32,6 +33,7 @@ contains
     end if
   end function e
 
+
   subroutine heap_string_array(a,b)!c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z)
 
     character(len = *), intent(in), optional :: a
@@ -43,8 +45,6 @@ contains
     blah = heap_string("afdsfsad")
 
     print*,blah%get()
-
-    print*,"hi"
 
 
 
