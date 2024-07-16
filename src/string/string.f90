@@ -11,7 +11,7 @@ module string
   public :: int_to_string
   public :: into_c_string
   public :: bool_to_string
-  public :: string_array
+  public :: heap_string_array
   !? Pass through the type.
   public :: heap_string
 
@@ -32,7 +32,7 @@ contains
     end if
   end function e
 
-  subroutine string_array(a,b)!c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z)
+  subroutine heap_string_array(a,b)!c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z)
 
     character(len = *), intent(in), optional :: a
     character(len = *), intent(in), optional :: b
@@ -48,7 +48,7 @@ contains
 
 
 
-  end subroutine string_array
+  end subroutine heap_string_array
 
 
   ! Dump a raw Fortran string pointer into a string.
