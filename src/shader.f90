@@ -53,10 +53,12 @@ contains
 
   !** Create the database of attribute locations, inside the shader program.
   subroutine create_attribute_locations(attribute_array)
+    use string
     implicit none
 
-    character(len = *), dimension(*) :: attribute_array
+    type(heap_string), dimension(:) :: attribute_array
 
+    print*,size(attribute_array)
 
 
   end subroutine create_attribute_locations
