@@ -113,12 +113,9 @@ contains
     call assign_heap_array(heap_array, 25, y)
     call assign_heap_array(heap_array, 26, z)
 
-
     do int = 1,size(heap_array)
       print*,heap_array(int)%get()
     end do
-
-
   end subroutine heap_string_array
 
 
