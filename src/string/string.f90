@@ -52,7 +52,7 @@ contains
   !** Create an array of dynamically sized strings.
   !** Can take upto 26 elements cause I ran out of letters.
   !! This is a substitute for not having varargs.
-  subroutine heap_string_array(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z)
+  function heap_string_array(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(heap_array)
     implicit none
 
     character(len = *), intent(in), optional :: a
@@ -84,7 +84,7 @@ contains
     !? Because we need to allocate with unknown width, we must allow this to live in the heap.
     !? This also basically points to other objects in the heap as well.
     type(heap_string), dimension(:), allocatable :: heap_array
-    integer :: int
+    ! integer :: int
 
     ! Now we only allocate how much we need.
     allocate(heap_array(exi(a)+exi(b)+exi(c)+exi(d)+exi(e)+exi(f)+exi(g)+exi(h)+exi(i)+exi(j)+exi(k)+exi(l)+exi(m)+exi(n)+exi(o)+exi(p)+exi(q)+exi(r)+exi(s)+exi(t)+exi(u)+exi(v)+exi(w)+exi(x)+exi(y)+exi(z)))
@@ -116,10 +116,10 @@ contains
     call assign_heap_array(heap_array, 25, y)
     call assign_heap_array(heap_array, 26, z)
 
-    do int = 1,size(heap_array)
-      print*,heap_array(int)%get()
-    end do
-  end subroutine heap_string_array
+    ! do int = 1,size(heap_array)
+    !   print*,heap_array(int)%get()
+    ! end do
+  end function heap_string_array
 
 
   ! Dump a raw Fortran string pointer into a string.
