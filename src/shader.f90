@@ -55,7 +55,7 @@ contains
   subroutine create_attribute_locations(attribute_array)
     implicit none
 
-    character(len = *) :: attribute_array(:)
+    character(len = *), dimension(*) :: attribute_array
 
 
 

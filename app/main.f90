@@ -50,7 +50,7 @@ program main
     return
   end if
 
-  
+  call create_attribute_locations([character(len=20) :: "hi", "there"])
 
   !! This is debugging for functions!
   if (.false.) then
