@@ -1,5 +1,6 @@
 module string
   use, intrinsic :: iso_c_binding
+  use :: h_string
   implicit none
 
 
@@ -10,9 +11,44 @@ module string
   public :: int_to_string
   public :: into_c_string
   public :: bool_to_string
+  public :: string_array
+  !? Pass through the type.
+  public :: heap_string
 
 
 contains
+
+  !** Convert an optional variable length string into an integral representation of a boolean.
+  !? E stands for exists.
+  integer function e(input) result(integer_representation)
+    implicit none
+
+    character(len = *), intent(in), optional :: input
+
+    if (present(input)) then
+      integer_representation = 1
+    else
+      integer_representation = 0
+    end if
+  end function e
+
+  subroutine string_array(a,b)!c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z)
+
+    character(len = *), intent(in), optional :: a
+    character(len = *), intent(in), optional :: b
+    !? Because we need to allocate with unknown width, we must allow this to live in the heap.
+    type(heap_string),dimension(:), allocatable :: test
+    type(heap_string) :: blah
+
+    blah = heap_string("afdsfsad")
+
+    print*,blah%get()
+
+    print*,"hi"
+
+
+
+  end subroutine string_array
 
 
   ! Dump a raw Fortran string pointer into a string.
