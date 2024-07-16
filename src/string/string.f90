@@ -34,6 +34,21 @@ contains
   end function exi
 
 
+  !** Helper function for heap_string_array
+  ! Basically a HUGE chain of if then statements simplified into call.
+  subroutine assign_heap_array(arr, slot, data)
+    implicit none
+
+    type(heap_string), dimension(:), intent(inout), allocatable :: arr
+    integer, intent(in) :: slot
+    character(len = *), intent(in), optional :: data
+
+    if (present(data)) then
+      arr(slot) = data
+    end if
+  end subroutine assign_heap_array
+
+
   subroutine heap_string_array(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z)
     implicit none
 
@@ -71,6 +86,8 @@ contains
     allocate(heap_array(exi(a)+exi(b)+exi(c)+exi(d)+exi(e)+exi(f)+exi(g)+exi(h)+exi(i)+exi(j)+exi(k)+exi(l)+exi(m)+exi(n)+exi(o)+exi(p)+exi(q)+exi(r)+exi(s)+exi(t)+exi(u)+exi(v)+exi(w)+exi(x)+exi(y)+exi(z)))
 
     print*,size(heap_array)
+
+    print*,heap_array(1)%get()
 
 
   end subroutine heap_string_array
