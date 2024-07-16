@@ -22,6 +22,8 @@ module h_string
     procedure :: get
     !? Append another string to it.
     procedure :: append
+    !? Prepend another string to it.
+    procedure :: prepend
   end type heap_string
 
 
@@ -90,6 +92,20 @@ contains
     worker = this%data//other
     this%data = worker
   end subroutine append
+
+
+  !** Prepend another string onto this string.
+  subroutine prepend(this, other)
+    implicit none
+
+    class(heap_string) :: this
+    character(len = *), intent(in) :: other
+    character(len = :), allocatable :: worker
+
+    ! Very simple operation. The ol' swap.
+    worker = other//this%data
+    this%data = worker
+  end subroutine prepend
 
 
 end module h_string
