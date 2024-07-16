@@ -34,6 +34,7 @@ module h_string
 
 contains
 
+
   !** heap_string constructor.
   function init(optional_string) result(new_str)
     implicit none
