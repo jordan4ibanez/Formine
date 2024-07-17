@@ -1,4 +1,6 @@
 default:
+#? Leaving this in for when polymorphic types are implemented.
+# --compiler flang-new 
 	@fpm run --flag -fuse-ld=mold
 
 # Use this if the vscode extension gives up.
