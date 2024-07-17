@@ -1,15 +1,21 @@
 module test_suite
   use string
+  use testament
   implicit none
 
   !! Not private.
 
 contains
 
-  subroutine test_1
+  subroutine assign_test
     implicit none
 
-  end subroutine test_1
+    type(heap_string) :: blah
+
+    blah = "hi this is a test"
+
+    call assert_str_equal(blah%get(), "hi this is a test")
+  end subroutine assign_test
 
 end module test_suite
 
@@ -18,6 +24,6 @@ program test_heap_string
   use test_suite
   implicit none
 
-  call test_1()
+  call assign_test()
 
 end program test_heap_string
