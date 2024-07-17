@@ -41,7 +41,6 @@ contains
     call assert_true(unit_1 == comparitor_1)
     call assert_false(unit_2 == comparitor_1)
     call assert_false(unit_1 == unit_2)
-
   end subroutine equality_test
 
 
@@ -58,6 +57,53 @@ contains
   end subroutine is_allocated_test
 
 
+  subroutine get_test()
+    implicit none
+
+    type(heap_string) :: unit_1
+
+    call assert_str_equal(unit_1%get(), "")
+
+    unit_1 = "test"
+
+    call assert_str_equal(unit_1%get(), "test")
+  end subroutine get_test
+
+
+  subroutine append_test()
+    implicit none
+
+    type(heap_string) :: unit_1
+
+    unit_1 = "hi"
+
+    call unit_1%append(" ")
+
+    call assert_str_equal(unit_1%get(), "hi ")
+
+    call unit_1%append("there")
+
+    call assert_str_equal(unit_1%get(), "hi there")
+  end subroutine append_test
+
+
+  subroutine prepend_test()
+    implicit none
+
+    type(heap_string) :: unit_1
+
+    unit_1 = "there"
+
+    call unit_1%prepend(" ")
+
+    call assert_str_equal(unit_1%get(), " there")
+
+    call unit_1%prepend("hi")
+
+    call assert_str_equal(unit_1%get(), "hi there")
+  end subroutine prepend_test
+
+
 end module test_suite
 
 
@@ -71,5 +117,9 @@ program test_heap_string
 
   call is_allocated_test()
 
+  call get_test()
 
+  call append_test()
+
+  call prepend_test()
 end program test_heap_string
