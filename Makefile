@@ -1,5 +1,5 @@
 default:
-	@fpm run
+	@fpm run --flag -fuse-ld=mold
 
 # Use this if the vscode extension gives up.
 clean:
