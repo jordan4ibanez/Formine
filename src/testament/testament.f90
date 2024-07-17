@@ -7,6 +7,7 @@ module testament
 
 contains
 
+
   subroutine assert_str_equal(a,b, error_message)
     implicit none
 
@@ -23,6 +24,7 @@ contains
     end if
   end subroutine assert_str_equal
 
+
   subroutine assert_str_not_equal(a,b, error_message)
     implicit none
 
@@ -32,6 +34,7 @@ contains
 
     if (a == b) then
       if (present(error_message)) then
+        ! Wow, I would have never guessed.
         error stop "[Testament] Expected <NOT>: "//a//" | Received: "//b//" | "//error_message
       else
         error stop "[Testament] Expected <NOT>: "//a//" | received: "//b
