@@ -63,6 +63,6 @@ contains
       error stop "[Testament] Expected: FALSE | Received: TRUE"
     end if
   end subroutine assert_false
-  
+
 
 end module testament

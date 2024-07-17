@@ -45,6 +45,19 @@ contains
   end subroutine equality_test
 
 
+  subroutine is_allocated_test()
+    implicit none
+
+    type(heap_string) :: unit_1
+
+    call assert_false(unit_1%is_allocated())
+
+    unit_1 = "hi"
+
+    call assert_true(unit_1%is_allocated())
+  end subroutine is_allocated_test
+
+
 end module test_suite
 
 
@@ -55,6 +68,8 @@ program test_heap_string
   call assign_test()
 
   call equality_test()
+
+  call is_allocated_test()
 
 
 end program test_heap_string
