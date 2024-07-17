@@ -64,6 +64,28 @@ contains
   end subroutine assign
 
 
+  !** Equality check with another heap string.
+  logical function equal_heap_string(this, other) result(res)
+    implicit none
+
+    class(heap_string), intent(in) :: this
+    type(heap_string), intent(in) :: other
+
+    res = this%data == other%data
+  end function equal_heap_string
+
+
+  !** Equality check with a raw string.
+  logical function equal_raw_string(this, other) result(res)
+    implicit none
+
+    class(heap_string), intent(in) :: this
+    character(len = *), intent(in) :: other
+
+    res = this%data == other
+  end function equal_raw_string
+
+
   !** Very simple check to see if the internal data is allocated.
   logical function is_allocated(this) result(res)
     implicit none
