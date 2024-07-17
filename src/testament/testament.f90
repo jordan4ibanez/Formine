@@ -15,7 +15,7 @@ contains
     character(len = *), intent(in) :: b
     character(len = *), intent(in), optional :: error_message
 
-    if (a /= b) then
+    if (a /= b .or. len(a) /= len(b)) then
       if (present(error_message)) then
         error stop "[Testament] Expected: "//a//" | Received: "//b//" | "//error_message
       else
@@ -32,7 +32,7 @@ contains
     character(len = *), intent(in) :: b
     character(len = *), intent(in), optional :: error_message
 
-    if (a == b) then
+    if (a == b .and. len(a) == len(b)) then
       if (present(error_message)) then
         ! Wow, I would have never guessed.
         error stop "[Testament] Expected <NOT>: "//a//" | Received: "//b//" | "//error_message
