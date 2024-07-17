@@ -53,32 +53,7 @@ contains
   function heap_string_array(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(heap_array)
     implicit none
 
-    character(len = *), intent(in), optional :: a
-    character(len = *), intent(in), optional :: b
-    character(len = *), intent(in), optional :: c
-    character(len = *), intent(in), optional :: d
-    character(len = *), intent(in), optional :: e
-    character(len = *), intent(in), optional :: f
-    character(len = *), intent(in), optional :: g
-    character(len = *), intent(in), optional :: h
-    character(len = *), intent(in), optional :: i
-    character(len = *), intent(in), optional :: j
-    character(len = *), intent(in), optional :: k
-    character(len = *), intent(in), optional :: l
-    character(len = *), intent(in), optional :: m
-    character(len = *), intent(in), optional :: n
-    character(len = *), intent(in), optional :: o
-    character(len = *), intent(in), optional :: p
-    character(len = *), intent(in), optional :: q
-    character(len = *), intent(in), optional :: r
-    character(len = *), intent(in), optional :: s
-    character(len = *), intent(in), optional :: t
-    character(len = *), intent(in), optional :: u
-    character(len = *), intent(in), optional :: v
-    character(len = *), intent(in), optional :: w
-    character(len = *), intent(in), optional :: x
-    character(len = *), intent(in), optional :: y
-    character(len = *), intent(in), optional :: z
+    character(len = *), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
     !? Because we need to allocate with unknown width, we must allow this to live in the heap.
     !? This also basically points to other objects in the heap as well.
     type(heap_string), dimension(:), allocatable :: heap_array

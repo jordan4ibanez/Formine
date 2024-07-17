@@ -60,6 +60,8 @@ contains
 
     print*,size(attribute_array)
 
+    
+
 
   end subroutine create_attribute_locations
 
