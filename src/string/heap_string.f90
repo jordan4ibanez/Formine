@@ -31,6 +31,8 @@ module h_string
     procedure :: append
     !? Prepend another string to it.
     procedure :: prepend
+    !? Trim all leading and trailing white space off the string.
+    procedure :: trim
   end type heap_string
 
 
@@ -157,6 +159,18 @@ contains
     worker = other//this%data
     this%data = worker
   end subroutine prepend
+
+
+  !** Trim leading and trailing white space off a string.
+  subroutine trim(this)
+    implicit none
+
+    class(heap_string), intent(inout) :: this
+    character(len = :), allocatable :: worker
+
+
+
+  end subroutine trim
 
 
 end module h_string
