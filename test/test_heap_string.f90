@@ -159,6 +159,35 @@ contains
   end subroutine cut_test
 
 
+  subroutine cut_all_test()
+    implicit none
+
+    type(heap_string) :: unit_1
+    type(heap_string) :: unit_2
+
+    ! This is insanely nonsensical on purpose.
+    unit_1 = "hi/bye_hi/flar!phi/hi%hi%hi%hi!hi>hi!byehi"
+
+    call unit_1%cut_all("hi")
+
+    call assert_str_equal(unit_1%get(), "/bye_/flar!p/%%%!>!bye")
+
+
+    ! This one is more simple.
+    unit_2 = "https://www.google.com"
+
+    call unit_2%cut_all("http://www.")
+
+    ! This should miss, it's HTTP not HTTPS.
+    call assert_str_not_equal(unit_2%get(), "google.com")
+
+    call unit_2%cut_all("https://www.")
+
+    ! This should hit, it's now stripping out HTTPS.
+    call assert_str_equal(unit_2%get(), "google.com")
+  end subroutine cut_all_test
+
+
 end module test_suite
 
 
@@ -181,4 +210,6 @@ program test_heap_string
   call strip_test()
 
   call cut_test()
+
+  call cut_all_test()
 end program test_heap_string
