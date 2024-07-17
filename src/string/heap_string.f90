@@ -33,9 +33,9 @@ module h_string
     procedure :: prepend
     !? Strip all leading and trailing white space off the string.
     procedure :: strip
-    !? Cut a substring out of a string.
+    !? Cut a substring out of a string. Searching from left to right.
     procedure :: cut
-    !? Cut a substring out of a string, but searching from the end, inward.
+    !? Cut a substring out of a string. Searching from right to left.
     procedure :: cut_last
     !? Cut ALL instances of a substring out of a string.
     procedure :: cut_all
