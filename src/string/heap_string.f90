@@ -156,11 +156,6 @@ contains
     this%data = other//this%data
   end subroutine prepend
 
-  subroutine blah()
-    implicit none
-
-  end
-
 
   !** Strip leading and trailing white space off a string.
   subroutine strip(this)
