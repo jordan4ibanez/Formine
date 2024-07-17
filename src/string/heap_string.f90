@@ -71,7 +71,7 @@ contains
     class(heap_string), intent(in) :: this
     type(heap_string), intent(in) :: other
 
-    res = this%data == other%data
+    res = this%data == other%data .and. len(this%data) == len(other%data)
   end function equal_heap_string
 
 
@@ -82,7 +82,7 @@ contains
     class(heap_string), intent(in) :: this
     character(len = *), intent(in) :: other
 
-    res = this%data == other
+    res = this%data == other .and. len(this%data) == len(other)
   end function equal_raw_string
 
 
