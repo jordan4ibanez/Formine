@@ -226,8 +226,8 @@ contains
     ! Then, we simply repeatedly cut until it's the same, that's about it.
     do while(.true.)
 
-      !? IF you want to see this happen in real time, turn this on. It's neat. :)
-      print*,old
+      !? If you want to see this happen in real time, turn this on. It's neat. :)
+      ! print*,old
 
       call this%cut(substring)
 
@@ -239,7 +239,6 @@ contains
       ! A change happened, save state and loop again.
       old = this%data
     end do
-
   end subroutine cut_all
 
 end module h_string
