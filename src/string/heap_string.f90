@@ -37,6 +37,8 @@ module h_string
     procedure :: cut
     !? Cut ALL instances of a substring out of a string.
     procedure :: cut_all
+    !? Check if a string contains a substring.
+    procedure :: contains
   end type heap_string
 
 
@@ -213,6 +215,7 @@ contains
   end subroutine cut
 
 
+  !** Cut all instances of a substring out of a string.
   subroutine cut_all(this, substring)
     implicit none
 
@@ -240,5 +243,18 @@ contains
       old = this%data
     end do
   end subroutine cut_all
+
+
+  !** Check if a string contains a substring.
+  logical function contains(this, substring) result(does_contain)
+    implicit none
+
+    class(heap_string), intent(inout) :: this
+    character(len = *), intent(in) :: substring
+
+    !? If the index is 0, this means it does not contain the substring.
+    !? So we invert the logic.
+    does_contain = index(this%data, substring) /= 0
+  end function contains
 
 end module h_string
