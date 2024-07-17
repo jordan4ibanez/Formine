@@ -35,6 +35,8 @@ module h_string
     procedure :: strip
     !? Cut a substring out of a string.
     procedure :: cut
+    !? Cut ALL instances of a substring out of a string.
+    procedure :: cut_all
   end type heap_string
 
 
@@ -210,5 +212,34 @@ contains
     this%data = this%data(inner_left:inner_right)//this%data(outer_left:outer_right)
   end subroutine cut
 
+
+  subroutine cut_all(this, substring)
+    implicit none
+
+    class(heap_string), intent(inout) :: this
+    character(len = *), intent(in) :: substring
+    character(len = :), allocatable :: old
+
+    ! Assign old to current as a base.
+    old = this%data
+
+    ! Then, we simply repeatedly cut until it's the same, that's about it.
+    do while(.true.)
+
+      !? IF you want to see this happen in real time, turn this on. It's neat. :)
+      print*,old
+
+      call this%cut(substring)
+
+      ! No more changes happened. Exit loop.
+      if (this == old) then
+        exit
+      end if
+
+      ! A change happened, save state and loop again.
+      old = this%data
+    end do
+
+  end subroutine cut_all
 
 end module h_string
