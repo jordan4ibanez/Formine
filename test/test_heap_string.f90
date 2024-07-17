@@ -11,13 +11,13 @@ contains
 
   end subroutine test_1
 
-
 end module test_suite
 
 
 program test_heap_string
+  use test_suite
   implicit none
 
-  print*,"hi there"
+  call test_1()
 
 end program test_heap_string
