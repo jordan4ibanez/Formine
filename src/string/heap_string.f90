@@ -135,7 +135,7 @@ contains
   subroutine append(this, other)
     implicit none
 
-    class(heap_string) :: this
+    class(heap_string), intent(inout) :: this
     character(len = *), intent(in) :: other
     character(len = :), allocatable :: worker
 
@@ -149,7 +149,7 @@ contains
   subroutine prepend(this, other)
     implicit none
 
-    class(heap_string) :: this
+    class(heap_string), intent(inout) :: this
     character(len = *), intent(in) :: other
     character(len = :), allocatable :: worker
 
