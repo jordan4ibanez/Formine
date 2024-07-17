@@ -5,8 +5,6 @@ Also this is hand coded while looking at the glfw source code and docs so you'll
 
 Come join the Fortran Discord: https://discord.gg/tfn3M28ppP
 
-Or, if you want to see a development mess: https://discord.gg/D95q7BHUE4 join mine
-
 ### Install dependencies on fedora:
 ```
 sudo dnf install gfortran openGL glfw-devel
