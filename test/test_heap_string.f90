@@ -121,13 +121,41 @@ contains
     implicit none
 
     type(heap_string) :: unit_1
+    type(heap_string) :: unit_2
+    type(heap_string) :: unit_3
+    type(heap_string) :: unit_4
 
-    unit_1 = "hello/there"
+
+    ! Middle.
+    unit_1 = "test/hello/there"
 
     call unit_1%cut("hello")
 
     call assert_str_equal(unit_1%get(), "test//there")
 
+
+    ! Inner.
+    unit_2 = "blorf=cool"
+
+    call unit_2%cut("blorf")
+
+    call assert_str_equal(unit_2%get(), "=cool")
+
+
+    ! Outer.
+    unit_3 = "shmecin!@#^Testing"
+
+    call unit_3%cut("@#^Testing")
+
+    call assert_str_equal(unit_3%get(), "shmecin!")
+
+
+    ! Entire.
+    unit_4 = "oh man"
+
+    call unit_4%cut("oh man")
+
+    call assert_str_equal(unit_4%get(), "")
   end subroutine cut_test
 
 
