@@ -159,6 +159,19 @@ contains
   end subroutine cut_test
 
 
+  subroutine cut_last_test()
+    implicit none
+
+    type(heap_string) :: unit_1
+
+    unit_1 = "hi there person, there is a thing!"
+
+    call unit_1%cut_last("there")
+
+    call assert_str_equal(unit_1%get(), "hi there person,  is a thing!")
+  end subroutine cut_last_test
+
+
   subroutine cut_all_test()
     implicit none
 
@@ -248,6 +261,8 @@ program test_heap_string
   call strip_test()
 
   call cut_test()
+
+  call cut_last_test()
 
   call cut_all_test()
 
