@@ -8,7 +8,7 @@ module testament
 contains
 
 
-  subroutine assert_str_equal(a,b, error_message)
+  subroutine assert_str_equal(b,a, error_message)
     implicit none
 
     character(len = *), intent(in) :: a
@@ -25,7 +25,7 @@ contains
   end subroutine assert_str_equal
 
 
-  subroutine assert_str_not_equal(a,b, error_message)
+  subroutine assert_str_not_equal(b,a, error_message)
     implicit none
 
     character(len = *), intent(in) :: a
