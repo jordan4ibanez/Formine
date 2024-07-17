@@ -104,6 +104,19 @@ contains
   end subroutine prepend_test
 
 
+  subroutine strip_test()
+    implicit none
+
+    type(heap_string) :: unit_1
+
+    unit_1 = "   test   "
+
+    call unit_1%strip()
+
+    call assert_str_equal(unit_1%get(), "test")
+  end subroutine strip_test
+
+
 end module test_suite
 
 
@@ -122,4 +135,6 @@ program test_heap_string
   call append_test()
 
   call prepend_test()
+
+  call strip_test()
 end program test_heap_string
