@@ -16,6 +16,10 @@ module h_string
     !? Assignment.
     generic :: assignment(=) => assign
     procedure :: assign
+    !? Equality check.
+    generic :: operator(==) => equal_heap_string, equal_raw_string
+    procedure :: equal_heap_string
+    procedure :: equal_raw_string
     !? Allocated check.
     procedure :: is_allocated
     !? Get internal data.
