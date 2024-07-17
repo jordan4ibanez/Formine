@@ -27,6 +27,7 @@ module h_string
   end type heap_string
 
 
+  !** heap_string constructor.
   interface heap_string
     module procedure :: init
   end interface heap_string
