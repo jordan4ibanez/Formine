@@ -19,7 +19,7 @@ contains
       if (present(error_message)) then
         error stop "[Testament] Expected: "//a//" | Received: "//b//" | "//error_message
       else
-        error stop "[Testament] Expected: "//a//" | received: "//b
+        error stop "[Testament] Expected: "//a//" | Received: "//b
       end if
     end if
   end subroutine assert_str_equal
@@ -37,10 +37,32 @@ contains
         ! Wow, I would have never guessed.
         error stop "[Testament] Expected <NOT>: "//a//" | Received: "//b//" | "//error_message
       else
-        error stop "[Testament] Expected <NOT>: "//a//" | received: "//b
+        error stop "[Testament] Expected <NOT>: "//a//" | Received: "//b
       end if
     end if
   end subroutine assert_str_not_equal
 
+
+  subroutine assert_true(input)
+    implicit none
+
+    logical, intent(in), value :: input
+
+    if (.not. input) then
+      error stop "[Testament] Expected: TRUE | Received: FALSE"
+    end if
+  end subroutine assert_true
+
+
+  subroutine assert_false(input)
+    implicit none
+
+    logical, intent(in), value :: input
+
+    if (input) then
+      error stop "[Testament] Expected: FALSE | Received: TRUE"
+    end if
+  end subroutine assert_false
+  
 
 end module testament
