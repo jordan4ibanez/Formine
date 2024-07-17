@@ -23,4 +23,21 @@ contains
     end if
   end subroutine assert_str_equal
 
+  subroutine assert_str_not_equal(a,b, error_message)
+    implicit none
+
+    character(len = *), intent(in) :: a
+    character(len = *), intent(in) :: b
+    character(len = *), intent(in), optional :: error_message
+
+    if (a == b) then
+      if (present(error_message)) then
+        error stop "[Testament] Expected <NOT>: "//a//" | Received: "//b//" | "//error_message
+      else
+        error stop "[Testament] Expected <NOT>: "//a//" | received: "//b
+      end if
+    end if
+  end subroutine assert_str_not_equal
+
+
 end module testament
