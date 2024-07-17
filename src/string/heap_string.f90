@@ -139,11 +139,9 @@ contains
 
     class(heap_string), intent(inout) :: this
     character(len = *), intent(in) :: other
-    character(len = :), allocatable :: worker
 
     ! Very simple operation. The ol' swap.
-    worker = this%data//other
-    this%data = worker
+    this%data = this%data//other
   end subroutine append
 
 
@@ -153,11 +151,9 @@ contains
 
     class(heap_string), intent(inout) :: this
     character(len = *), intent(in) :: other
-    character(len = :), allocatable :: worker
 
     ! Very simple operation. The ol' swap.
-    worker = other//this%data
-    this%data = worker
+    this%data = other//this%data
   end subroutine prepend
 
 
