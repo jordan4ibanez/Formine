@@ -20,6 +20,9 @@ module h_string
     generic :: operator(==) => equal_heap_string, equal_raw_string
     procedure :: equal_heap_string
     procedure :: equal_raw_string
+    !? Print formatting.
+    generic :: write(formatted) => write_formatted
+    procedure :: write_formatted
     !? Allocated check.
     procedure :: is_allocated
     !? Get internal data.
@@ -84,6 +87,26 @@ contains
 
     res = this%data == other .and. len(this%data) == len(other)
   end function equal_raw_string
+
+
+  !** Simply allows you to use a heap string like a regular string.
+  subroutine write_formatted(this, unit, iotype, v_list, iostat, iomsg)
+    implicit none
+
+    class(heap_string), intent(in) :: this
+    integer, intent(in) :: unit         ! Internal unit to write to.
+    character(*), intent(in) :: iotype  ! LISTDIRECTED or DTxxx
+    integer, intent(in) :: v_list(:)    ! parameters from fmt spec.
+    integer, intent(out) :: iostat      ! non zero on error, etc.
+    character(*), intent(inout) :: iomsg  ! define if iostat non zero.
+
+    if (.false.) then
+      print*,iotype, v_list
+    end if
+
+    write (unit,"(A)", iostat = iostat, iomsg = iomsg) this%data
+  end subroutine write_formatted
+
 
 
   !** Very simple check to see if the internal data is allocated.
