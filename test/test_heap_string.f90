@@ -5,9 +5,11 @@ module test_suite
 
   !! Not private.
 
+
 contains
 
-  subroutine assign_test
+
+  subroutine assign_test()
     implicit none
 
     type(heap_string) :: blah
@@ -17,6 +19,14 @@ contains
     call assert_str_equal(blah%get(), "hi this is a test")
   end subroutine assign_test
 
+
+  subroutine equality_test()
+    implicit none
+
+    
+  end subroutine equality_test
+
+
 end module test_suite
 
 
@@ -25,5 +35,8 @@ program test_heap_string
   implicit none
 
   call assign_test()
+
+  call equality_test()
+
 
 end program test_heap_string
