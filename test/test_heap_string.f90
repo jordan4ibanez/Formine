@@ -162,8 +162,11 @@ contains
   subroutine cut_all_test()
     implicit none
 
+    !? This is tested like this because it should behave exactly like looping the cut method.
+
     type(heap_string) :: unit_1
     type(heap_string) :: unit_2
+    type(heap_string) :: unit_3
 
     ! This is insanely nonsensical on purpose.
     unit_1 = "hi/bye_hi/flar!phi/hi%hi%hi%hi!hi>hi!byehi"
@@ -185,6 +188,17 @@ contains
 
     ! This should hit, it's now stripping out HTTPS.
     call assert_str_equal(unit_2%get(), "google.com")
+
+
+    ! This is more realistic. We want to remove a "file name" from the string to get the directory.
+    ! This can also go horribly wrong if for some reason the os allows extension folder names. :D
+    ! The only reason this exists in this test is to ensure that we aren't removing random stuff before
+    ! the target substring.
+    unit_3 = "/home/user/Desktop/my_data.obj"
+
+    call unit_3%cut_all("my_data.obj")
+
+    call assert_str_equal(unit_3%get(), "/home/user/Desktop/")
   end subroutine cut_all_test
 
 
