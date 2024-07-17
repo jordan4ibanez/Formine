@@ -52,7 +52,7 @@ contains
 
     call assert_false(unit_1%is_allocated())
 
-    unit_1 = "hi"
+    unit_1 = "allocation test"
 
     call assert_true(unit_1%is_allocated())
   end subroutine is_allocated_test
