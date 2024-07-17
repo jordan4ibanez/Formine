@@ -15,7 +15,6 @@ module string
   !? Pass through the type.
   public :: heap_string
 
-
 contains
 
 
@@ -48,10 +47,9 @@ contains
     end if
   end subroutine assign_heap_array
 
-
   !** Create an array of dynamically sized strings.
   !** Can take upto 26 elements cause I ran out of letters.
-  !! This is a substitute for not having varargs.
+  ! This is a substitute for not having varargs.
   function heap_string_array(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(heap_array)
     implicit none
 
