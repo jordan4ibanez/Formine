@@ -32,9 +32,16 @@ contains
 
     comparitor_1 = "testing"
 
+    ! Preliminary run up.
     call assert_str_equal(unit_1%get(), comparitor_1)
     call assert_str_not_equal(unit_2%get(), comparitor_1)
     call assert_str_not_equal(unit_1%get(), unit_2%get())
+
+    ! Now test the operator.
+    call assert_true(unit_1 == comparitor_1)
+    call assert_false(unit_2 == comparitor_1)
+    call assert_false(unit_1 == unit_2)
+
   end subroutine equality_test
 
 
