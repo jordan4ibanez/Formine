@@ -202,6 +202,30 @@ contains
   end subroutine cut_all_test
 
 
+  subroutine contains_test()
+    implicit none
+
+    type(heap_string) :: unit_1
+    type(heap_string) :: unit_2
+
+
+    unit_1 = "sarcastic"
+
+    call assert_true(unit_1%contains("cast"))
+
+    call assert_false(unit_1%contains("automobile"))
+
+
+    unit_2 = "https://www.google.com"
+
+    call assert_true(unit_2%contains("https://www."))
+
+    call assert_true(unit_2%contains(".com"))
+
+    call assert_false(unit_2%contains("http://www."))
+  end subroutine contains_test
+
+
 end module test_suite
 
 
@@ -226,4 +250,6 @@ program test_heap_string
   call cut_test()
 
   call cut_all_test()
+
+  call contains_test()
 end program test_heap_string
