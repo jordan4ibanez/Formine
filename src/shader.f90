@@ -274,15 +274,30 @@ contains
     existence = poller%exists
   end function shader_exists
 
-  integer function get_shader_attribute(shader_name, attribute) result(location)
+
+  !** Get the integral position of a shader attribute.
+  integer function get_shader_attribute(shader_name, attribute_name) result(location)
     implicit none
 
     character(len = *) :: shader_name
-    character(len = *) :: attribute
+    character(len = *) :: attribute_name
+    type(shader_result) :: result
+    integer :: status
 
+    result = get_shader(shader_name)
 
-    get_shader()
+    ! If the shader does not exist, bail out.
+    if (.not. result%exists) then
+      error stop "[Shader] Error: Shader ["//shader_name//"] does not exist. Cannot get attribute location of ["//attribute_name//"]."
+    end if
 
+    ! Now let's try to get it.
+    call result%program%attributes%get(key(attribute_name), location, stat=status)
+
+    ! Uh oh.
+    if (status /= 0) then
+      error stop "[Shader] Error: Shader ["//shader_name//"] does not contain attribute ["//attribute_name//"]."
+    end if
   end function get_shader_attribute
 
 
