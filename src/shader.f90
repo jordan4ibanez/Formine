@@ -57,21 +57,18 @@ contains
 
     character(len = *), intent(in) :: shader_name
     type(heap_string), dimension(:) :: attribute_array
-    type(shader_result) :: result
     type(shader_program), allocatable :: current_program
     character(len = :), allocatable :: temp_string
+    logical :: exists
     integer :: i
     integer :: location
 
-    result = get_shader(shader_name)
+    current_program = get_shader(shader_name, exists)
 
     ! If a non-existent shader is gotten, bail out.
-    if (.not. result%exists) then
+    if (.not. exists) then
       error stop "[Shader] Error: Shader ["//shader_name//"] does not exist. Cannot create attribute locations."
     end if
-
-    ! Set the current program so we don't have to keep indexing into the result.
-    current_program = result%program
 
     ! If we already created the attribute locations, bail out.
     if (current_program%attributes_created) then
@@ -256,16 +253,15 @@ contains
 
 
   !** Check if a shader exists in the database.
-  logical function shader_exists(shader_name) result(existence)
+  logical function shader_exists(shader_name) result(exists)
     use string
     implicit none
 
     character(len = *) :: shader_name
-    type(shader_result) :: poller
+    type(shader_program) :: poller
 
     ! All we must do is check the shader result and return the existence in the result.
-    poller = get_shader(shader_name)
-    existence = poller%exists
+    poller = get_shader(shader_name, exists)
   end function shader_exists
 
 
