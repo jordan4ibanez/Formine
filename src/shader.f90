@@ -95,17 +95,15 @@ contains
 
   !** This is a simple variation of shader_creation_succeeded with gl_check_error as our helper.
   !? Same docs as in shader_creation_success minus the input.
-  logical function shader_compilation_succeeded(root_success, shader_id) result(success)
+  logical function shader_compilation_succeeded(shader_id) result(success)
     use opengl
     use string
     implicit none
 
-    logical :: root_success
     integer :: shader_id
 
-    !? 0 means OK in OpenGL.
-    root_success = gl_get_shader_iv(shader_id, GL_COMPILE_STATUS) == GL_TRUE
-    success = root_success
+    !? 1 means OK in OpenGL.
+    success = gl_get_shader_iv(shader_id, GL_COMPILE_STATUS) == GL_TRUE
   end function shader_compilation_succeeded
 
 
