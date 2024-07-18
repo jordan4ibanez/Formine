@@ -50,7 +50,7 @@ program main
     return
   end if
 
-  call create_attribute_locations(heap_string_array("position", "color"))
+  call create_attribute_locations("main", heap_string_array("position", "color"))
 
   !! This is debugging for functions!
   if (.false.) then
