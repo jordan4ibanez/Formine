@@ -27,7 +27,7 @@ module shader
     type(fhash_tbl_t) :: uniforms
     logical :: uniforms_created = .false.
   end type shader_program
-  
+
 
 contains
 
@@ -227,14 +227,15 @@ contains
 
   !** Get a shader from the hash table.
   !** The shader is a clone. To update, set_shader().
-  type(shader_result) function get_shader(shader_name) result(program_result)
+  type(shader_program) function get_shader(shader_name, exists) result(gotten_program)
     implicit none
 
-    character(len = *) :: shader_name
+    character(len = *), intent(in) :: shader_name
     class(*), allocatable :: generic
+    logical, intent(inout) :: exists
     integer :: status
 
-    program_result%exists = .false.
+    exists = .false.
 
     call shader_programs%get_raw(key(shader_name), generic, stat = status)
 
@@ -245,8 +246,8 @@ contains
 
     select type(generic)
      type is (shader_program)
-      program_result%exists = .true.
-      program_result%program = generic
+      exists = .true.
+      gotten_program = generic
      class default
       ! print"(A)","[Shader] Error: ["//shader_name//"] has the wrong type."
       return
