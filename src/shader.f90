@@ -27,14 +27,7 @@ module shader
     type(fhash_tbl_t) :: uniforms
     logical :: uniforms_created = .false.
   end type shader_program
-
-
-  !** A simple result that tells you if a returning shader exists.
-  type shader_result
-    class(shader_program), allocatable :: program
-    logical :: exists
-  end type shader_result
-
+  
 
 contains
 
