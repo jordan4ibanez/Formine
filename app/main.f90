@@ -8,6 +8,7 @@ program main
   implicit none
 
   real :: color = 0.0
+  integer :: debugging
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
@@ -51,6 +52,15 @@ program main
   end if
 
   call create_attribute_locations("main", heap_string_array("position", "color"))
+
+  debugging = get_shader_attribute("main", "position")
+  print*,debugging
+  debugging = get_shader_attribute("main", "color")
+  print*,debugging
+
+  debugging = get_shader_attribute("main", "foof")
+  print*,debugging
+
 
   !! This is debugging for functions!
   if (.false.) then
