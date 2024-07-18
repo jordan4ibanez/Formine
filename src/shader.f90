@@ -11,6 +11,7 @@ module shader
 
   public :: create_shader
   public :: create_attribute_locations
+  public :: get_shader_attribute
 
 
   !** A shader object. This holds all required shader components to run a shader.
@@ -221,13 +222,13 @@ contains
 
 
   !** Set or update a shader in the database.
-  subroutine set_shader(name, shader)
+  subroutine set_shader(shader_name, shader)
     implicit none
 
-    character(len = *) :: name
+    character(len = *) :: shader_name
     type(shader_program), allocatable :: shader
 
-    call shader_programs%set(key(name), shader)
+    call shader_programs%set(key(shader_name), shader)
   end subroutine set_shader
 
 
@@ -272,6 +273,17 @@ contains
     poller = get_shader(shader_name)
     existence = poller%exists
   end function shader_exists
+
+  integer function get_shader_attribute(shader_name, attribute) result(location)
+    implicit none
+
+    character(len = *) :: shader_name
+    character(len = *) :: attribute
+
+
+    get_shader()
+
+  end function get_shader_attribute
 
 
 end module shader
