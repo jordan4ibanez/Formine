@@ -5,6 +5,7 @@ module raw_c
 
   public :: c_free
   public :: c_strlen
+  public :: print_f
 
 
   interface
@@ -27,10 +28,30 @@ module raw_c
     end function c_strlen
 
 
+    subroutine internal_print_f(input_string) bind(c, name = "printf")
+      use, intrinsic :: iso_c_binding
+      !! Wrap the function internal to make raw binding.
+      implicit none
+
+      ! Value because it is const char *
+      character(kind = c_char), intent(in) :: input_string
+    end subroutine internal_print_f
+
+
   end interface
 
 
 contains
+
+  subroutine print_f(input_string)
+    !! Use the STD C ISO printf function in fortran.
+    implicit none
+
+    character(len = *), intent(in) :: input_string
+
+    ! Null terminate the string with achar(0).
+    call internal_print_f(input_string//achar(0))
+  end subroutine print_f
 
 
 end module raw_c
