@@ -46,20 +46,12 @@ program main
   !! This resets the gl_get_error integer back to 0.
   call gl_clear_error_data()
 
-  ! This can fail. We will gracefully exit when it does.
-  if (.not. create_shader("main", "./shaders/vertex.vert", "./shaders/fragment.frag")) then
-    return
-  end if
 
+  ! Set up all shader components.
+  call create_shader("main", "./shaders/vertex.vert", "./shaders/fragment.frag")
+  
   call create_attribute_locations("main", heap_string_array("position", "color"))
 
-  debugging = get_shader_attribute("main", "position")
-  print*,debugging
-  debugging = get_shader_attribute("main", "color")
-  print*,debugging
-
-  debugging = get_shader_attribute("main", "foof")
-  print*,debugging
 
 
   !! This is debugging for functions!
