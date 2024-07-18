@@ -19,8 +19,12 @@ module shader
     integer :: program_id
     integer :: vertex_id
     integer :: fragment_id
-    !* Uniform data.
-
+    !* Attribute locations.
+    type(fhash_tbl_t) :: attributes
+    logical :: attributes_created = .false.
+    !* Uniform locations.
+    type(fhash_tbl_t) :: uniforms
+    logical :: uniforms_created = .false.
   end type shader_program
 
 
@@ -52,17 +56,51 @@ contains
 
 
   !** Create the database of attribute locations, inside the shader program.
-  subroutine create_attribute_locations(attribute_array)
+  subroutine create_attribute_locations(shader_name, attribute_array)
+    use opengl
     use string
     implicit none
 
+    character(len = *), intent(in) :: shader_name
     type(heap_string), dimension(:) :: attribute_array
+    type(shader_result) :: result
+    type(shader_program), allocatable :: current_program
+    character(len = :), allocatable :: temp_string
+    integer :: i
+    integer :: location
 
-    print*,size(attribute_array)
+    result = get_shader(shader_name)
 
-    
+    ! If a non-existent shader is gotten, bail out.
+    if (.not. result%exists) then
+      error stop "[Shader] Error: Shader ["//shader_name//"] does not exist. Cannot create attribute locations."
+    end if
+
+    ! Set the current program so we don't have to keep indexing into the result.
+    current_program = result%program
+
+    ! If we already created the attribute locations, bail out.
+    if (current_program%attributes_created) then
+      error stop "[Shader] Error: Tried to create attribute locations more than once in shader ["//shader_name//"]"
+    end if
+
+    ! Now attempt to get all the shader attribute locations.
+    do i = 1,size(attribute_array)
+
+      temp_string = attribute_array(i)%get()
+      location = gl_get_attrib_location(current_program%program_id, into_c_string(temp_string))
+
+      ! If location is -1 that's OpenGL saying it couldn't find it basically.
+      if (location < 0) then
+        error stop "[Shader] Error: Shader["//shader_name//"] uniform ["//temp_string//"] does not exist in the shader. Got: "//int_to_string(location)//"."
+      else
+        call current_program%attributes%set(key(temp_string), location)
+      end if
+    end do
 
 
+    ! Finally, overwrite the program data in the hash table.
+    call set_shader(shader_name, current_program)
   end subroutine create_attribute_locations
 
 
