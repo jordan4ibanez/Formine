@@ -35,17 +35,15 @@ contains
   !** This is a simple way to check if a shader is null. (0)
   !? Makes the code easier to read.
   !? This also is making it so the program that uses it can return the success and work logic on it at the same time.
-  logical function creation_succeeded(input, root_success) result(success)
+  logical function creation_succeeded(input) result(success)
     use string
     use opengl
     implicit none
 
     integer, intent(in), value :: input
-    logical :: root_success
 
     ! Check for 0. This means a failure.
-    root_success = input /= GL_FALSE
-    success = root_success
+    success = input /= GL_FALSE
   end function creation_succeeded
 
 
@@ -132,19 +130,17 @@ contains
 
     ! Program creation.
     shader%program_id = gl_create_program()
-    
-    if (.not. creation_succeeded(shader%program_id, success)) then
+
+    if (.not. creation_succeeded(shader%program_id)) then
       error stop "[Shader] Error: Failed to create program for shader ["//shader%shader_name//"]."
-      return
     else
       print"(A)","[Shader]: Successfully created program for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(shader%program_id)//"]."
     end if
 
     ! Vertex shader compilation.
     shader%vertex_id = gl_create_shader(GL_VERTEX_SHADER)
-    if (.not. creation_succeeded(shader%vertex_id, success)) then
-      print"(A)","[Shader] Error: Failed to create vertex for shader ["//shader%shader_name//"]."
-      return
+    if (.not. creation_succeeded(shader%vertex_id)) then
+      error stop "[Shader] Error: Failed to create vertex for shader ["//shader%shader_name//"]."
     else
       print"(A)","[Shader]: Successfully created vertex for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(shader%vertex_id)//"]."
     end if
