@@ -97,7 +97,6 @@ contains
   !? Same docs as in shader_creation_success minus the input.
   logical function shader_compilation_succeeded(shader_id) result(success)
     use opengl
-    use string
     implicit none
 
     integer :: shader_id
@@ -146,18 +145,16 @@ contains
     call gl_shader_source(shader%vertex_id, vertex_code_location)
     call gl_compile_shader(shader%vertex_id)
 
-    if (.not. shader_compilation_succeeded(success, shader%vertex_id)) then
-      print"(A)","[Shader] Error: Failed to compile vertex for shader ["//shader%shader_name//"]."
-      return
+    if (.not. shader_compilation_succeeded(shader%vertex_id)) then
+      error stop "[Shader] Error: Failed to compile vertex for shader ["//shader%shader_name//"]."
     else
       print"(A)","[Shader]: Successfully compiled vertex for shader ["//shader%shader_name//"]."
     end if
 
     ! Fragment shader compilation.
     shader%fragment_id = gl_create_shader(GL_FRAGMENT_SHADER)
-    if (.not. creation_succeeded(shader%fragment_id, success)) then
-      print"(A)","[Shader] Error: Failed to create fragment for shader ["//shader%shader_name//"]."
-      return
+    if (.not. creation_succeeded(shader%fragment_id)) then
+      error stop "[Shader] Error: Failed to create fragment for shader ["//shader%shader_name//"]."
     else
       print"(A)","[Shader]: Successfully created fragment for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(shader%fragment_id)//"]."
     end if
@@ -165,9 +162,8 @@ contains
     call gl_shader_source(shader%fragment_id, fragment_code_location)
     call gl_compile_shader(shader%fragment_id)
 
-    if (.not. shader_compilation_succeeded(success, shader%fragment_id)) then
-      print"(A)","[Shader] Error: Failed to compile fragment for shader ["//shader%shader_name//"]."
-      return
+    if (.not. shader_compilation_succeeded(shader%fragment_id)) then
+      error stop "[Shader] Error: Failed to compile fragment for shader ["//shader%shader_name//"]."
     else
       print"(A)","[Shader]: Successfully compiled fragment for shader ["//shader%shader_name//"]."
     end if
@@ -179,9 +175,7 @@ contains
 
     ! We check that this think linked.
     if (gl_get_program_iv(shader%program_id, GL_LINK_STATUS) == GL_FALSE) then
-      print"(A)","[Shader] Error: Failed to link shader ["//shader%shader_name//"]."
-      success = .false.
-      return
+      error stop "[Shader] Error: Failed to link shader ["//shader%shader_name//"]."
     else
       print"(A)","[Shader]: Successfully linked shader ["//shader%shader_name//"]."
     end if
@@ -189,9 +183,7 @@ contains
     ! Finally validate this whole thing.
     call gl_validate_program(shader%program_id)
     if (gl_get_program_iv(shader%program_id, GL_VALIDATE_STATUS) == GL_FALSE) then
-      print"(A)","[Shader] Error: Failed to validate shader ["//shader%shader_name//"]."
-      success = .false.
-      return
+      error stop "[Shader] Error: Failed to validate shader ["//shader%shader_name//"]."
     else
       print"(A)","[Shader]: Successfully validated shader ["//shader%shader_name//"]."
     end if
