@@ -42,7 +42,7 @@ contains
 
     integer, intent(in), value :: input
 
-    ! Check for 0. This means a failure.
+    !? 0 means a failure in this context.
     success = input /= GL_FALSE
   end function creation_succeeded
 
@@ -55,7 +55,7 @@ contains
 
     integer :: shader_id
 
-    !? 1 means OK in OpenGL.
+    !? 1 means OK in this context.
     success = gl_get_shader_iv(shader_id, GL_COMPILE_STATUS) == GL_TRUE
   end function shader_compilation_succeeded
 
