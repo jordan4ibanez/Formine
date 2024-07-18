@@ -113,7 +113,7 @@ contains
 
   !** Create a named shader program from vertex and fragment code locations
   !? Will return false if it fails, true if it succeeds.
-  logical function create_shader(name, vertex_code_location, fragment_code_location) result(success)
+  subroutine create_shader(name, vertex_code_location, fragment_code_location)
     use opengl
     use string
     use, intrinsic :: iso_c_binding
@@ -130,12 +130,11 @@ contains
 
     print"(A)","[Shader]: Begin creating shader ["//shader%shader_name//"]."
 
-    success = .false.
-
     ! Program creation.
     shader%program_id = gl_create_program()
+    
     if (.not. creation_succeeded(shader%program_id, success)) then
-      print"(A)","[Shader] Error: Failed to create program for shader ["//shader%shader_name//"]."
+      error stop "[Shader] Error: Failed to create program for shader ["//shader%shader_name//"]."
       return
     else
       print"(A)","[Shader]: Successfully created program for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(shader%program_id)//"]."
@@ -208,7 +207,7 @@ contains
 
     ! Store it in the hash table for later use.
     call set_shader(name, shader)
-  end function create_shader
+  end subroutine create_shader
 
 
   !** Set or update a shader in the database.
