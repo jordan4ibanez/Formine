@@ -1,5 +1,8 @@
 default:
-	@fpm run --flag -fuse-ld=mold
+	@fpm run
+
+release:
+	@fpm run --flag -fuse-ld=mold --flag -O3
 
 .PHONY: test
 test:
