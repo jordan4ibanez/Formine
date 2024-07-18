@@ -271,18 +271,19 @@ contains
 
     character(len = *) :: shader_name
     character(len = *) :: attribute_name
-    type(shader_result) :: result
+    type(shader_program) :: current_program
+    logical :: exists
     integer :: status
 
-    result = get_shader(shader_name)
+    current_program = get_shader(shader_name, exists)
 
     ! If the shader does not exist, bail out.
-    if (.not. result%exists) then
+    if (.not. exists) then
       error stop "[Shader] Error: Shader ["//shader_name//"] does not exist. Cannot get attribute location of ["//attribute_name//"]."
     end if
 
     ! Now let's try to get it.
-    call result%program%attributes%get(key(attribute_name), location, stat=status)
+    call current_program%attributes%get(key(attribute_name), location, stat=status)
 
     ! Uh oh.
     if (status /= 0) then
