@@ -231,7 +231,7 @@ module opengl
       integer(c_int), intent(in), value :: program_id
     end subroutine gl_use_program
 
-    
+
     subroutine internal_gl_gen_vertex_arrays(n, arrays) bind(c, name = "glGenVertexArrays")
       use,intrinsic :: iso_c_binding
       implicit none
@@ -446,5 +446,20 @@ contains
     location = internal_gl_get_attrib_location(program_id, into_c_string(uniform_name))
     ! print*,"attrib: ", uniform_name," | loc: ", location
   end function gl_get_attrib_location
+
+
+  !** Special note: I only use 1 at a time. So we're only going to use one at a time.
+  !** This is written "wrong" on purpose.
+  integer function gl_gen_vertex_arrays() result(location)
+    implicit none
+
+    integer(c_int), dimension(1) :: output
+
+    ! Grab it into the array.
+    call internal_gl_gen_vertex_arrays(1, output)
+
+    ! Then pass it to the output.
+    location = output(1)
+  end function gl_gen_vertex_arrays
 
 end module opengl
