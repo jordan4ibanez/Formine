@@ -4,6 +4,7 @@ program main
   use string
   use shader
   use files
+  use mesh
   use, intrinsic ::  iso_c_binding
   implicit none
 
