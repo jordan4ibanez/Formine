@@ -3,11 +3,11 @@ module mesh
 
   private
 
-  public :: debug_gl_array
+  public :: debug_create_mesh
 
 contains
 
-  subroutine debug_gl_array
+  subroutine debug_create_mesh
     use opengl
     implicit none
 
@@ -17,7 +17,7 @@ contains
 
     print*,testing
 
-  end subroutine debug_gl_array
+  end subroutine debug_create_mesh
 
 
 
