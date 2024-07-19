@@ -8,7 +8,6 @@ program main
   implicit none
 
   real :: color = 0.0
-  integer :: debugging
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
@@ -49,7 +48,7 @@ program main
 
   ! Set up all shader components.
   call create_shader("main", "./shaders/vertex.vert", "./shaders/fragment.frag")
-  
+
   call create_attribute_locations("main", heap_string_array("position", "color"))
 
 
