@@ -12,6 +12,7 @@ module shader
   public :: create_shader
   public :: create_attribute_locations
   public :: get_shader_attribute
+  public :: create_uniform_locations
 
 
   !** A shader object. This holds all required shader components to run a shader.
@@ -275,5 +276,76 @@ contains
     end if
   end function get_shader_attribute
 
+
+  !** Create the database of uniform locations, inside the shader program.
+  subroutine create_uniform_locations(shader_name, uniform_array)
+    use opengl
+    use string
+    implicit none
+
+    character(len = *), intent(in) :: shader_name
+    type(heap_string), dimension(:) :: uniform_array
+    type(shader_program), allocatable :: current_program
+    character(len = :), allocatable :: temp_string
+    logical :: exists
+    integer :: i
+    integer :: location
+
+    current_program = get_shader(shader_name, exists)
+
+    ! If a non-existent shader is gotten, bail out.
+    if (.not. exists) then
+      error stop "[Shader] Error: Shader ["//shader_name//"] does not exist. Cannot create uniform locations."
+    end if
+
+    ! If we already created the uniform locations, bail out.
+    if (current_program%uniforms_created) then
+      error stop "[Shader] Error: Tried to create uniform locations more than once in shader ["//shader_name//"]"
+    end if
+
+    ! Now attempt to get all the shader uniform locations.
+    do i = 1,size(uniform_array)
+
+      temp_string = uniform_array(i)%get()
+      location = gl_get_uniform_location(current_program%program_id, into_c_string(temp_string))
+
+      ! If location is -1 that's OpenGL saying it couldn't find it basically.
+      if (location < 0) then
+        error stop "[Shader] Error: Shader["//shader_name//"] uniform ["//temp_string//"] does not exist in the shader. Got: "//int_to_string(location)//"."
+      else
+        call current_program%uniforms%set(key(temp_string), location)
+      end if
+    end do
+
+    ! Finally, overwrite the program data in the hash table.
+    call set_shader(shader_name, current_program)
+  end subroutine create_uniform_locations
+
+
+  !** Get the integral position of a shader uniform.
+  integer function get_shader_uniform(shader_name, uniform_name) result(location)
+    implicit none
+
+    character(len = *) :: shader_name
+    character(len = *) :: uniform_name
+    type(shader_program) :: current_program
+    logical :: exists
+    integer :: status
+
+    current_program = get_shader(shader_name, exists)
+
+    ! If the shader does not exist, bail out.
+    if (.not. exists) then
+      error stop "[Shader] Error: Shader ["//shader_name//"] does not exist. Cannot get uniform location of ["//uniform_name//"]."
+    end if
+
+    ! Now let's try to get it.
+    call current_program%uniforms%get(key(uniform_name), location, stat=status)
+
+    ! Uh oh.
+    if (status /= 0) then
+      error stop "[Shader] Error: Shader ["//shader_name//"] does not contain uniform ["//uniform_name//"]."
+    end if
+  end function get_shader_uniform
 
 end module shader
