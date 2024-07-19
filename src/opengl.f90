@@ -231,6 +231,15 @@ module opengl
       integer(c_int), intent(in), value :: program_id
     end subroutine gl_use_program
 
+    
+    subroutine internal_gl_gen_vertex_arrays(n, arrays) bind(c, name = "glGenVertexArrays")
+      use,intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: n
+      integer(c_int), dimension(:) :: arrays
+    end subroutine internal_gl_gen_vertex_arrays
+
 
   end interface
 
