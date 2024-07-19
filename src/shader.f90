@@ -13,6 +13,7 @@ module shader
   public :: create_attribute_locations
   public :: get_shader_attribute
   public :: create_uniform_locations
+  public :: get_shader_uniform
 
 
   !** A shader object. This holds all required shader components to run a shader.
