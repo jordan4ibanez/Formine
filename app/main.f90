@@ -8,7 +8,6 @@ program main
   implicit none
 
   real :: color = 0.0
-  integer :: debugging
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
@@ -53,18 +52,6 @@ program main
   call shader_create_attribute_locations("main", heap_string_array("position", "color"))
 
   call shader_create_uniform_locations("main", heap_string_array("object_matrix", "camera_matrix"))
-
-
-  !! This is a test of making sure this doesn't explode during runtime
-  debugging = shader_get_attribute("main", "position")
-  print*,debugging
-  debugging = shader_get_attribute("main", "color")
-  print*,debugging
-
-  debugging = shader_get_uniform("main", "object_matrix")
-  print*,debugging
-  debugging = shader_get_uniform("main", "camera_matrix")
-  print*,debugging
 
 
   !! This is debugging for functions!
