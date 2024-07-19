@@ -11,12 +11,11 @@ contains
     use opengl
     implicit none
 
-    integer :: testing
+    integer :: vao
 
-    testing =  gl_gen_vertex_arrays()
+    vao =  gl_gen_vertex_arrays()
 
-    print*,testing
-
+    
   end subroutine debug_create_mesh
 
 
