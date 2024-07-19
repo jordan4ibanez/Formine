@@ -215,13 +215,13 @@ module opengl
     end function internal_gl_get_uniform_location
 
 
-    integer(c_int) function gl_get_attrib_location(program_id, attrib_name) bind(c, name = "glGetAttribLocation")
+    integer(c_int) function internal_gl_get_attrib_location(program_id, attrib_name) bind(c, name = "glGetAttribLocation")
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: program_id
       character(kind = c_char), intent(in), value :: attrib_name
-    end function gl_get_attrib_location
+    end function internal_gl_get_attrib_location
 
 
     subroutine gl_use_program(program_id) bind(c, name = "glUseProgram")
@@ -414,6 +414,7 @@ contains
     call internal_gl_get_program_iv(program_id, pname, code)
   end function gl_get_program_iv
 
+
   integer function gl_get_uniform_location(program_id, uniform_name) result(location)
     use string
     implicit none
@@ -422,7 +423,19 @@ contains
     character(len = *), intent(in) :: uniform_name
 
     location = internal_gl_get_uniform_location(program_id, into_c_string(uniform_name))
-    print*,"loc:",location
+    print*,"uniform: ", uniform_name," | loc: ", location
   end function gl_get_uniform_location
+
+
+  integer function gl_get_attrib_location(program_id, uniform_name) result(location)
+    use string
+    implicit none
+
+    integer, intent(in), value :: program_id
+    character(len = *), intent(in) :: uniform_name
+
+    location = internal_gl_get_attrib_location(program_id, into_c_string(uniform_name))
+    print*,"attrib: ", uniform_name," | loc: ", location
+  end function gl_get_attrib_location
 
 end module opengl
