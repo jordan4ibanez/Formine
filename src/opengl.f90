@@ -64,6 +64,7 @@ module opengl
   public :: gl_get_uniform_location
   public :: gl_get_attrib_location
   public :: gl_use_program
+  public :: gl_gen_vertex_arrays
 
   ! Here I'm binding to the C shared library.
 
@@ -237,7 +238,8 @@ module opengl
       implicit none
 
       integer(c_int), intent(in), value :: n
-      integer(c_int), dimension(:) :: arrays
+      !! This part is written wrong on purpose. I only want 1 not multiple.
+      integer(c_int) :: arrays
     end subroutine internal_gl_gen_vertex_arrays
 
 
@@ -453,13 +455,7 @@ contains
   integer function gl_gen_vertex_arrays() result(location)
     implicit none
 
-    integer(c_int), dimension(1) :: output
-
-    ! Grab it into the array.
-    call internal_gl_gen_vertex_arrays(1, output)
-
-    ! Then pass it to the output.
-    location = output(1)
+    call internal_gl_gen_vertex_arrays(1, location)
   end function gl_gen_vertex_arrays
 
 end module opengl
