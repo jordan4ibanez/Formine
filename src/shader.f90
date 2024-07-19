@@ -242,6 +242,7 @@ contains
       if (location < 0) then
         error stop "[Shader] Error: Shader["//shader_name//"] uniform ["//temp_string//"] does not exist in the shader. Got: "//int_to_string(location)//"."
       else
+        print"(A)","[Shader]: Shader ["//shader_name//"] attribute ["//temp_string//"] created at location ["//int_to_string(location)//"]."
         call current_program%attributes%set(key(temp_string), location)
       end if
     end do
@@ -314,6 +315,7 @@ contains
       if (location < 0) then
         error stop "[Shader] Error: Shader["//shader_name//"] uniform ["//temp_string//"] does not exist in the shader. Got: "//int_to_string(location)//"."
       else
+        print"(A)","[Shader]: Shader ["//shader_name//"] uniform ["//temp_string//"] created at location ["//int_to_string(location)//"]."
         call current_program%uniforms%set(key(temp_string), location)
       end if
     end do
@@ -348,5 +350,6 @@ contains
       error stop "[Shader] Error: Shader ["//shader_name//"] does not contain uniform ["//uniform_name//"]."
     end if
   end function shader_get_uniform
+
 
 end module shader

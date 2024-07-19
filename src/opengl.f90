@@ -423,7 +423,7 @@ contains
     character(len = *), intent(in) :: uniform_name
 
     location = internal_gl_get_uniform_location(program_id, into_c_string(uniform_name))
-    print*,"uniform: ", uniform_name," | loc: ", location
+    ! print*,"uniform: ", uniform_name," | loc: ", location
   end function gl_get_uniform_location
 
 
@@ -435,7 +435,7 @@ contains
     character(len = *), intent(in) :: uniform_name
 
     location = internal_gl_get_attrib_location(program_id, into_c_string(uniform_name))
-    print*,"attrib: ", uniform_name," | loc: ", location
+    ! print*,"attrib: ", uniform_name," | loc: ", location
   end function gl_get_attrib_location
 
 end module opengl
