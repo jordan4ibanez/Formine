@@ -9,11 +9,11 @@ module shader
   type(fhash_tbl_t) :: shader_programs
 
 
-  public :: create_shader
-  public :: create_attribute_locations
-  public :: get_shader_attribute
-  public :: create_uniform_locations
-  public :: get_shader_uniform
+  public :: shader_create
+  public :: shader_create_attribute_locations
+  public :: shader_get_attribute
+  public :: shader_create_uniform_locations
+  public :: shader_get_uniform
 
 
   !** A shader object. This holds all required shader components to run a shader.
@@ -64,7 +64,7 @@ contains
 
   !** Create a named shader program from vertex and fragment code locations
   !? Will return false if it fails, true if it succeeds.
-  subroutine create_shader(name, vertex_code_location, fragment_code_location)
+  subroutine shader_create(name, vertex_code_location, fragment_code_location)
     use opengl
     use string
     use, intrinsic :: iso_c_binding
@@ -149,7 +149,7 @@ contains
 
     ! Store it in the hash table for later use.
     call set_shader(name, shader)
-  end subroutine create_shader
+  end subroutine shader_create
 
 
   !** Set or update a shader in the database.
@@ -207,7 +207,7 @@ contains
 
 
   !** Create the database of attribute locations, inside the shader program.
-  subroutine create_attribute_locations(shader_name, attribute_array)
+  subroutine shader_create_attribute_locations(shader_name, attribute_array)
     use opengl
     use string
     implicit none
@@ -248,11 +248,11 @@ contains
 
     ! Finally, overwrite the program data in the hash table.
     call set_shader(shader_name, current_program)
-  end subroutine create_attribute_locations
+  end subroutine shader_create_attribute_locations
 
 
   !** Get the integral position of a shader attribute.
-  integer function get_shader_attribute(shader_name, attribute_name) result(location)
+  integer function shader_get_attribute(shader_name, attribute_name) result(location)
     implicit none
 
     character(len = *) :: shader_name
@@ -275,11 +275,11 @@ contains
     if (status /= 0) then
       error stop "[Shader] Error: Shader ["//shader_name//"] does not contain attribute ["//attribute_name//"]."
     end if
-  end function get_shader_attribute
+  end function shader_get_attribute
 
 
   !** Create the database of uniform locations, inside the shader program.
-  subroutine create_uniform_locations(shader_name, uniform_array)
+  subroutine shader_create_uniform_locations(shader_name, uniform_array)
     use opengl
     use string
     implicit none
@@ -320,11 +320,11 @@ contains
 
     ! Finally, overwrite the program data in the hash table.
     call set_shader(shader_name, current_program)
-  end subroutine create_uniform_locations
+  end subroutine shader_create_uniform_locations
 
 
   !** Get the integral position of a shader uniform.
-  integer function get_shader_uniform(shader_name, uniform_name) result(location)
+  integer function shader_get_uniform(shader_name, uniform_name) result(location)
     implicit none
 
     character(len = *) :: shader_name
@@ -347,6 +347,6 @@ contains
     if (status /= 0) then
       error stop "[Shader] Error: Shader ["//shader_name//"] does not contain uniform ["//uniform_name//"]."
     end if
-  end function get_shader_uniform
+  end function shader_get_uniform
 
 end module shader
