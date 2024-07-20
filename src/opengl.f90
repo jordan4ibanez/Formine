@@ -66,6 +66,7 @@ module opengl
   public :: gl_use_program
   public :: gl_gen_vertex_arrays
   public :: gl_bind_vertex_array
+  public :: gl_gen_buffers
 
   ! Here I'm binding to the C shared library.
 
@@ -250,6 +251,15 @@ module opengl
 
       integer(c_int), intent(in), value :: array
     end subroutine gl_bind_vertex_array
+
+
+    subroutine internal_gl_gen_buffers(n, buffers) bind(c, name = "glGenBuffers")
+      use, intrinsic :: iso_c_binding
+
+      integer(c_int), intent(in), value :: n
+      !! This part is written wrong on purpose. I only want 1 not multiple.
+      integer(c_int), intent(inout) :: buffers
+    end subroutine internal_gl_gen_buffers
 
 
   end interface
@@ -467,4 +477,14 @@ contains
     call internal_gl_gen_vertex_arrays(1, location)
   end function gl_gen_vertex_arrays
 
+
+  !** Special note: I only use 1 at a time. So we're only going to use one at a time.
+  !** This is written "wrong" on purpose.
+  integer function gl_gen_buffers() result(location)
+    implicit none
+
+    call internal_gl_gen_buffers(1, location)
+  end function gl_gen_buffers
+
+  
 end module opengl
