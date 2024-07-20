@@ -15,7 +15,11 @@ contains
 
     vao =  gl_gen_vertex_arrays()
 
-    
+    print*,"vao: ",vao
+
+    call gl_bind_vertex_array(vao)
+
+
   end subroutine debug_create_mesh
 
 
