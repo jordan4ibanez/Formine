@@ -20,6 +20,9 @@ module opengl
   public :: GL_LINK_STATUS
   public :: GL_VALIDATE_STATUS
 
+  public :: GL_STATIC_DRAW
+  public :: GL_ARRAY_BUFFER
+
   !
 
   integer, parameter :: GL_VERSION = int(z"1f02")
@@ -40,6 +43,9 @@ module opengl
   integer, parameter :: GL_DEBUG_SEVERITY_LOW = int(z"9148")
   integer, parameter :: GL_DEBUG_SEVERITY_MEDIUM = int(z"9147")
   integer, parameter :: GL_DEBUG_SEVERITY_HIGH = int(z"9146")
+
+  integer, parameter :: GL_STATIC_DRAW = int(z"88E4")
+  integer, parameter :: GL_ARRAY_BUFFER = int(z"8892")
 
   ! Functions we want exposed.
 
@@ -67,6 +73,7 @@ module opengl
   public :: gl_gen_vertex_arrays
   public :: gl_bind_vertex_array
   public :: gl_gen_buffers
+  public :: gl_bind_buffer
 
   ! Here I'm binding to the C shared library.
 
@@ -255,12 +262,21 @@ module opengl
 
     subroutine internal_gl_gen_buffers(n, buffers) bind(c, name = "glGenBuffers")
       use, intrinsic :: iso_c_binding
+      implicit none
 
       integer(c_int), intent(in), value :: n
       !! This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(inout) :: buffers
     end subroutine internal_gl_gen_buffers
 
+
+    subroutine gl_bind_buffer(target, buffer) bind(c, name = "glBindBuffer")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: target
+      integer(c_int), intent(in), value :: buffer
+    end subroutine gl_bind_buffer
 
   end interface
 
@@ -486,5 +502,5 @@ contains
     call internal_gl_gen_buffers(1, location)
   end function gl_gen_buffers
 
-  
+
 end module opengl
