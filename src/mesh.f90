@@ -12,12 +12,18 @@ contains
     implicit none
 
     integer :: vao
+    integer :: positions
 
-    vao =  gl_gen_vertex_arrays()
+    vao = gl_gen_vertex_arrays()
 
     print*,"vao: ",vao
 
     call gl_bind_vertex_array(vao)
+
+    positions = gl_gen_buffers()
+
+    print*,"positions:", positions
+
 
 
   end subroutine debug_create_mesh
