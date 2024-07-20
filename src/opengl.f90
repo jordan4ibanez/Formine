@@ -248,7 +248,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in) :: array
+      integer(c_int), intent(in), value :: array
     end subroutine gl_bind_vertex_array
 
 
