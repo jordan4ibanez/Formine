@@ -74,6 +74,7 @@ module opengl
   public :: gl_bind_vertex_array
   public :: gl_gen_buffers
   public :: gl_bind_buffer
+  public :: gl_buffer_float_array
 
   ! Here I'm binding to the C shared library.
 
@@ -277,6 +278,18 @@ module opengl
       integer(c_int), intent(in), value :: target
       integer(c_int), intent(in), value :: buffer
     end subroutine gl_bind_buffer
+
+
+    subroutine internal_gl_buffer_data(target, size, data, usage) bind(c, name ="glBufferData")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: target
+      integer(c_int), intent(in), value :: size
+      type(c_ptr), intent(in), value :: data
+      integer(c_int), intent(in), value :: usage
+    end subroutine internal_gl_buffer_data
+
 
   end interface
 
@@ -502,5 +515,18 @@ contains
     call internal_gl_gen_buffers(1, location)
   end function gl_gen_buffers
 
+
+  !** This is a custom command to allow gl_buffer_data to use specific types.
+  subroutine gl_buffer_float_array(f_array)
+    use constants
+    implicit none
+
+    real(kind = c_float), dimension(:) :: f_array
+
+    print*,f32_size
+
+
+
+  end subroutine gl_buffer_float_array
 
 end module opengl
