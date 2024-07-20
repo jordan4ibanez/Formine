@@ -65,6 +65,7 @@ module opengl
   public :: gl_get_attrib_location
   public :: gl_use_program
   public :: gl_gen_vertex_arrays
+  public :: gl_bind_vertex_array
 
   ! Here I'm binding to the C shared library.
 
@@ -239,8 +240,16 @@ module opengl
 
       integer(c_int), intent(in), value :: n
       !! This part is written wrong on purpose. I only want 1 not multiple.
-      integer(c_int) :: arrays
+      integer(c_int), intent(inout) :: arrays
     end subroutine internal_gl_gen_vertex_arrays
+
+
+    subroutine gl_bind_vertex_array(array) bind(c, name = "glBindVertexArray")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in) :: array
+    end subroutine gl_bind_vertex_array
 
 
   end interface
