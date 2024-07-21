@@ -35,6 +35,31 @@ contains
     call assert_true(f32_is_equal(unit_3%data(3), 10.0000001))
   end subroutine test_assign
 
+
+  subroutine test_equality()
+    implicit none
+
+    type(vec3f) :: unit_1
+    type(vec3f) :: unit_2
+    type(vec3f) :: unit_3
+
+    unit_1 = 1.000101
+
+    call assert_true(unit_1 == 1.000101)
+
+    unit_2 = [7.1256, 6.127423, 9.02412]
+
+    call assert_true(unit_2 == [7.1256, 6.127423, 9.02412])
+
+    ! That's right, you can literally construct a variable off a constructor.
+    unit_3 = vec3f(871.134, 7899.134, 87.91324)
+
+    ! And you can compare it to a constructed variable which pops off the stack immediately.
+    call assert_true(unit_3 == vec3f(871.134, 7899.13400, 87.913240))
+
+
+  end subroutine test_equality
+
 end module test_suite_vec3f
 
 
@@ -43,5 +68,7 @@ program test_vec3f
   implicit none
 
   call test_assign()
+
+  call test_equality()
 
 end program test_vec3f
