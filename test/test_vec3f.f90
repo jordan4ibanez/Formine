@@ -57,8 +57,42 @@ contains
     ! And you can compare it to a constructed variable which pops off the stack immediately.
     call assert_true(unit_3 == vec3f(871.134, 7899.13400, 87.913240))
 
-
   end subroutine test_equality
+
+
+  subroutine test_add()
+    implicit none
+
+    ! We're going to mix it up in this test.
+    ! Build upon the previous tests.
+
+    type(vec3f) :: unit_1
+    type(vec3f) :: unit_2
+    type(vec3f) :: unit_3
+
+    unit_1 = vec3f(0.0, 1.0, 2.0)
+
+    unit_1 = unit_1 + [3.0, 2.0, 1.0]
+
+    call assert_true(unit_1 == 3.0)
+
+
+    unit_2 = 5.0
+
+    unit_2 = unit_2 + vec3f(1.01234, 2.00070, 3.01000000)
+
+    !* Notice the floating point errors.
+    !* As long as it's doing the same thing on my machine, then we're A-OK.
+    call assert_true(unit_2 == [6.01234007, 7.0007, 8.01000023])
+
+    unit_3 = [9.0, 3.14, 5.5]
+
+    unit_3 = unit_3 + 1.0
+
+    !* Again, floating point smack dab in the middle.
+    call assert_true(unit_3 == vec3f(10.0, 4.14000034, 6.5))
+  end subroutine test_add
+
 
 end module test_suite_vec3f
 
@@ -71,4 +105,5 @@ program test_vec3f
 
   call test_equality()
 
+  call test_add()
 end program test_vec3f
