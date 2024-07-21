@@ -27,7 +27,7 @@ contains
     integer :: vbo_color
     integer :: vbo_indices
 
-    print"(A)",colorize_rgb("[Mesh] WARNING: SHADER MODULE NEEDS A STATE MACHINE!", 255,128,0)
+    ! print"(A)",colorize_rgb("[Mesh] WARNING: SHADER MODULE NEEDS A STATE MACHINE!", 255,128,0)
 
     ! Into vertex array object.
 
