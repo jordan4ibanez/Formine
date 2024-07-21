@@ -27,6 +27,10 @@ module vec3
     procedure :: add_scalar
     procedure :: add_array
     procedure :: add_vec3f
+    generic :: operator(-) => subtract_scalar, subtract_array, subtract_vec3f
+    procedure :: subtract_scalar
+    procedure :: subtract_array
+    procedure :: subtract_vec3f
   end type vec3f
 
 
