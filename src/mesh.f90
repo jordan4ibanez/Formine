@@ -5,11 +5,11 @@ module mesh
 
   private
 
-  public :: create_mesh
+  public :: create_mesh_3d
 
 contains
 
-  subroutine create_mesh
+  subroutine create_mesh_3d
     use shader
     use opengl
     use string
@@ -55,7 +55,7 @@ contains
     ! Now unbind vertex array object.
     call gl_bind_vertex_array(0)
 
-  end subroutine create_mesh
+  end subroutine create_mesh_3d
 
 
   integer function upload_positions(position_array) result(vbo_position)
