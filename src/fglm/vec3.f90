@@ -18,9 +18,10 @@ module vec3
     procedure :: assign_scalar
     procedure :: assign_array
     procedure :: assign_vec3f
-    ! generic :: operator(==) => equal_scalar, equal_array
-    ! procedure :: equal_scalar
-    ! procedure :: equal_array
+    generic :: operator(==) => equal_scalar, equal_array, equal_vec3f
+    procedure :: equal_scalar
+    procedure :: equal_array
+    procedure :: equal_vec3f
   end type vec3f
 
 
@@ -80,30 +81,37 @@ contains
   end subroutine assign_vec3f
 
 
-  ! logical function equal_scalar(this, i) result(equality)
-  !   implicit none
+  logical function equal_scalar(this, i) result(equality)
+    use float_compare
+    implicit none
 
-  !   class(vec3f), intent(in), value :: this
-  !   real, intent(in), value :: i
-  !   real, dimension(3) :: equalizer
-  !   logical :: test
+    class(vec3f), intent(in), value :: this
+    real, intent(in), value :: i
 
-  !   equalizer = [i,i,i]
-
-  !   test = (this%data(1) == i)
-  ! end function equal_scalar
+    equality = f32_is_equal(this%data(1), i) .and. f32_is_equal(this%data(2), i) .and. f32_is_equal(this%data(3), i)
+  end function equal_scalar
 
 
-  ! logical function equal_array(this, arr) result(equality)
-  !   implicit none
+  logical function equal_array(this, arr) result(equality)
+    use float_compare
+    implicit none
 
-  !   class(vec3f), intent(in), value :: this
-  !   real, dimension(3), intent(in) :: arr
-  !   real, dimension(3) :: equalizer
-  !   logical :: test
+    class(vec3f), intent(in), value :: this
+    real, dimension(3), intent(in) :: arr
 
-  ! end function equal_array
+    equality = f32_is_equal(this%data(1), arr(1)) .and. f32_is_equal(this%data(2), arr(2)) .and. f32_is_equal(this%data(3), arr(3))
+  end function equal_array
 
+
+  logical function equal_vec3f(this, other) result(equality)
+    use float_compare
+    implicit none
+
+    class(vec3f), intent(in), value :: this
+    type(vec3f), intent(in), value :: other
+
+    equality = f32_is_equal(this%data(1), other%data(1)) .and. f32_is_equal(this%data(2), other%data(2)) .and. f32_is_equal(this%data(3), other%data(3))
+  end function equal_vec3f
 
 
 end module vec3
