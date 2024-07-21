@@ -11,6 +11,7 @@ module opengl
   public :: GL_MINOR_VERSION
   public :: GL_TRUE
   public :: GL_FALSE
+  public :: GL_FLOAT
 
   public :: GL_DEBUG_OUTPUT_SYNCHRONOUS
   public :: GL_COLOR_BUFFER_BIT
@@ -30,6 +31,7 @@ module opengl
   integer, parameter :: GL_MINOR_VERSION = int(z"821C")
   integer, parameter :: GL_TRUE = 1
   integer, parameter :: GL_FALSE = 0
+  integer, parameter :: GL_FLOAT = int(z"1406")
 
   integer, parameter :: GL_COLOR_BUFFER_BIT = int(z"00004000")
   integer, parameter :: GL_DEBUG_OUTPUT_SYNCHRONOUS = int(z"8242")
@@ -75,6 +77,8 @@ module opengl
   public :: gl_gen_buffers
   public :: gl_bind_buffer
   public :: gl_buffer_float_array
+  public :: gl_enable_vertex_attrib_array
+  public :: gl_vertex_attrib_pointer
 
   ! Here I'm binding to the C shared library.
 
@@ -289,6 +293,27 @@ module opengl
       type(c_ptr), intent(in), value :: data
       integer(c_int), intent(in), value :: usage
     end subroutine internal_gl_buffer_data
+
+
+    subroutine gl_enable_vertex_attrib_array(index) bind(c, name = "glEnableVertexAttribArray")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: index
+    end subroutine gl_enable_vertex_attrib_array
+
+
+    subroutine internal_gl_vertex_attrib_pointer(index, size, type, normalized, stride, pointer) bind(c, name = "glVertexAttribPointer")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: index
+      integer(c_int), intent(in), value :: size
+      integer(c_int), intent(in), value :: type
+      logical(c_bool), intent(in), value :: normalized
+      integer(c_int), intent(in), value :: stride
+      type(c_ptr), intent(in), optional :: pointer
+    end subroutine internal_gl_vertex_attrib_pointer
 
 
   end interface
@@ -529,7 +554,26 @@ contains
     length_of_array = size(float_array)
     total_size = f32_size * length_of_array
 
+    !! Might be wrong.
     call internal_gl_buffer_data(GL_ARRAY_BUFFER, total_size, c_loc(float_array), GL_STATIC_DRAW)
   end subroutine gl_buffer_float_array
+
+
+  subroutine gl_vertex_attrib_pointer(index, size, type, normalized, stride)
+    use, intrinsic :: iso_c_binding
+    implicit none
+
+    integer, intent(in), value :: index
+    integer, intent(in), value :: size
+    integer, intent(in), value :: type
+    logical, intent(in), value :: normalized
+    integer, intent(in), value :: stride
+    logical(c_bool) :: final_normalized
+
+    ! Convert
+    final_normalized = normalized
+
+    call internal_gl_vertex_attrib_pointer(index, size, type, final_normalized, stride, null())
+  end subroutine gl_vertex_attrib_pointer
 
 end module opengl
