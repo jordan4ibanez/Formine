@@ -46,7 +46,7 @@ module h_string
 
   !** heap_string constructor.
   interface heap_string
-    module procedure :: init
+    module procedure :: constructor
   end interface heap_string
 
 
@@ -54,7 +54,7 @@ contains
 
 
   !** heap_string constructor.
-  function init(optional_string) result(new_str)
+  function constructor(optional_string) result(new_str)
     implicit none
 
     character(len = *), intent(in), optional :: optional_string
@@ -63,7 +63,7 @@ contains
     if (present(optional_string)) then
       new_str%data = optional_string
     end if
-  end function init
+  end function constructor
 
 
   !** Very simple assignment operator.
