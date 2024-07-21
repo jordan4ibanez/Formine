@@ -61,6 +61,8 @@ program main
   if (.true.) then
     do while(.not. glfw_window_should_close())
 
+      call gl_use_program(1)
+
       ! call blah(color)
 
       call gl_clear_color(1.0, 1.0, 1.0)
