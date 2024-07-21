@@ -31,12 +31,18 @@ module vec3
 
 
   interface vec3f
-    module procedure :: constructor_raw,constructor_array
+    module procedure :: constructor_scalar, constructor_raw, constructor_array
   end interface
 
 
 contains
 
+  type(vec3f) function constructor_scalar(i) result(new_vec3f)
+    implicit none
+    real, intent(in), value :: i
+
+    new_vec3f%data(1:3) = [i,i,i]
+  end function constructor_scalar
 
   type(vec3f) function constructor_raw(x,y,z) result(new_vec3f)
     implicit none
