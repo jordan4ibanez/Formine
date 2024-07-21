@@ -76,7 +76,6 @@ contains
 
     call assert_true(unit_1 == 3.0)
 
-
     unit_2 = 5.0
 
     unit_2 = unit_2 + vec3f(1.01234, 2.00070, 3.01000000)
