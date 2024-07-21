@@ -4,6 +4,8 @@ module vec3
 
   private
 
+  public :: vec3f
+
   ! Vec3f and Vec3d are transparent containers.
   ! You can use the methods, or you can use the raw data.
 
