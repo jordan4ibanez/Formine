@@ -1,4 +1,4 @@
-module test_suite
+module test_suite_string
   use string
   use testament
   implicit none
@@ -239,11 +239,11 @@ contains
   end subroutine contains_test
 
 
-end module test_suite
+end module test_suite_string
 
 
 program test_heap_string
-  use test_suite
+  use test_suite_string
   implicit none
 
   call assign_test()
