@@ -33,9 +33,6 @@ contains
     call assert_true(f32_is_equal(unit_3%data(2), 9.0001))
     ! One step out of precision check.
     call assert_true(f32_is_equal(unit_3%data(3), 10.0000001))
-
-
-
   end subroutine test_assign
 
 end module test_suite_vec3f
