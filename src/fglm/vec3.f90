@@ -4,6 +4,9 @@ module vec3
 
   private
 
+  ! Vec3f and Vec3d are transparent containers.
+  ! You can use the methods, or you can use the raw data.
+
   type vec3f
     real(c_float), dimension(3) :: data = [0.0, 0.0, 0.0]
   end type vec3f
