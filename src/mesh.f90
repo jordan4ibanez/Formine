@@ -39,15 +39,15 @@ contains
     ! Into position vertex buffer object.
 
     vbo_position = upload_positions([ &
-      0.0, 0.0, 0.0, &
-      10.0, 0.0, 0.0, &
-      10.0, 0.0, 10.0 &
+      0.0, 100.0, 0.0, &
+      100.0, 0.0, 0.0, &
+      100.0, 100.0, 0.0 &
       ])
 
     vbo_color = upload_colors([ &
-      1.0, 0.0, 0.0, &
-      0.0, 1.0, 0.0, &
-      0.0, 0.0, 1.0 &
+      0.0, 0.0, 0.0, &
+      0.0, 0.0, 0.0, &
+      0.0, 0.0, 0.0 &
       ])
 
     vbo_indices = upload_indices([0,1,2])
@@ -65,7 +65,6 @@ contains
     implicit none
 
     real(c_float), dimension(:), intent(in) :: position_array
-
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
@@ -88,7 +87,6 @@ contains
 
     ! Now unbind.
     call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
-
   end function upload_positions
 
 
@@ -144,7 +142,7 @@ contains
     ! Upload into state machine.
     call gl_buffer_indices_array(indices_array)
 
-    ! Now unbind.
+    !! Never call this, instant segfault.
     ! call gl_bind_buffer(GL_ELEMENT_ARRAY_BUFFER, 0)
 
   end function upload_indices
