@@ -2,9 +2,9 @@
 
 layout (location = 0) in vec3 position;
 // layout (location = 1) in vec2 textureCoordinate;
-layout (location = 1) in vec4 color;
+layout (location = 1) in vec3 color;
 
-out vec4 pixel_color;
+out vec3 pixel_color;
 
 uniform mat4 camera_matrix;
 uniform mat4 object_matrix;
