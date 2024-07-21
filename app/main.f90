@@ -58,7 +58,7 @@ program main
   call create_mesh()
 
   !! This is debugging for functions!
-  if (.false.) then
+  if (.true.) then
     do while(.not. glfw_window_should_close())
 
       ! call blah(color)
@@ -66,6 +66,13 @@ program main
       call gl_clear_color(0.0, color, color)
 
       call gl_clear_color_buffer()
+
+      !? DRAW TEST ?!
+
+      
+
+      !? END DRAW TEST ?!
+
 
       call glfw_swap_buffers()
 
