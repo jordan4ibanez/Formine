@@ -79,6 +79,7 @@ module opengl
   public :: gl_gen_buffers
   public :: gl_bind_buffer
   public :: gl_buffer_float_array
+  public :: gl_buffer_indices_array
   public :: gl_enable_vertex_attrib_array
   public :: gl_vertex_attrib_pointer
 
@@ -556,9 +557,27 @@ contains
     length_of_array = size(float_array)
     total_size = f32_size * length_of_array
 
-    !! Might be wrong.
+    !! FIXME: Might be wrong.
     call internal_gl_buffer_data(GL_ARRAY_BUFFER, total_size, c_loc(float_array), GL_STATIC_DRAW)
   end subroutine gl_buffer_float_array
+
+
+  !** This is a custom command to allow gl_buffer_data to use specific types.
+  subroutine gl_buffer_indices_array(indices_array)
+    use constants
+    use, intrinsic :: iso_c_binding
+    implicit none
+
+    integer(kind = c_int), dimension(:), target :: indices_array
+    integer(c_int) :: total_size
+    integer(c_int) :: length_of_array
+
+    length_of_array = size(indices_array)
+    total_size = i32_size * length_of_array
+
+    !! FIXME: Might be wrong.
+    call internal_gl_buffer_data(GL_ELEMENT_ARRAY_BUFFER, total_size, c_loc(indices_array), GL_STATIC_DRAW)
+  end subroutine gl_buffer_indices_array
 
 
   subroutine gl_vertex_attrib_pointer(index, size, type, normalized, stride)
