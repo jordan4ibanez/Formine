@@ -35,7 +35,7 @@ contains
 
     call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_positions)
 
-    call gl_buffer_float_array([1.2])
+    call gl_buffer_float_array([1.2, 1.5])
 
 
 

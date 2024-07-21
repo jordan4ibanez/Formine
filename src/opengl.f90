@@ -517,16 +517,19 @@ contains
 
 
   !** This is a custom command to allow gl_buffer_data to use specific types.
-  subroutine gl_buffer_float_array(f_array)
+  subroutine gl_buffer_float_array(float_array)
     use constants
+    use, intrinsic :: iso_c_binding
     implicit none
 
-    real(kind = c_float), dimension(:) :: f_array
+    real(kind = c_float), dimension(:), target :: float_array
+    integer(c_int) :: total_size
+    integer(c_int) :: length_of_array
 
-    print*,f32_size
+    length_of_array = size(float_array)
+    total_size = f32_size * length_of_array
 
-
-
+    call internal_gl_buffer_data(GL_ARRAY_BUFFER, total_size, c_loc(float_array), GL_STATIC_DRAW)
   end subroutine gl_buffer_float_array
 
 end module opengl
