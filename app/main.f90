@@ -52,9 +52,9 @@ program main
 
   ! call shader_create_uniform_locations("main", heap_string_array("camera_matrix","object_matrix"))
 
-  call gl_use_program(1)
+  call shader_start("main")
 
-  call create_mesh()
+  call create_mesh_3d()
 
   !! This is debugging for functions!
   if (.true.) then
