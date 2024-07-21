@@ -1,3 +1,4 @@
+!** This module kind of works like a state machine.
 module mesh
   implicit none
 
@@ -8,6 +9,7 @@ module mesh
 contains
 
   subroutine debug_create_mesh
+    use shader
     use opengl
     implicit none
     ! Notes:
@@ -35,9 +37,23 @@ contains
 
     call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_positions)
 
-    call gl_buffer_float_array([1.2, 1.5])
+    call gl_buffer_float_array([ &
+      0.0, 0.0, 0.0, &
+      10.0, 0.0, 0.0, &
+      10.0, 0.0, 10.0 &
+      ])
 
+    ! call gl_enable_vertex_attrib_array(vbo_positions)
 
+    ! Width = 3 because this is a vec3
+    ! false because this is not normalized
+    ! 0 stride
+    call gl_vertex_attrib_pointer(shader_get_attribute("main", "position"), 3, GL_FLOAT, .false., 0)
+
+    call gl_enable_vertex_attrib_array(shader_get_attribute("main", "position"))
+
+    ! Now unbind.
+    call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
 
   end subroutine debug_create_mesh
 
