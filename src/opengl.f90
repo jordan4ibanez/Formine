@@ -24,6 +24,8 @@ module opengl
   public :: GL_STATIC_DRAW
   public :: GL_ARRAY_BUFFER
   public :: GL_ELEMENT_ARRAY_BUFFER
+  public :: GL_TRIANGLES
+  public :: GL_UNSIGNED_INT
 
   !
 
@@ -50,6 +52,8 @@ module opengl
   integer, parameter :: GL_STATIC_DRAW = int(z"88E4")
   integer, parameter :: GL_ARRAY_BUFFER = int(z"8892")
   integer, parameter :: GL_ELEMENT_ARRAY_BUFFER = int(z"8893")
+  integer, parameter :: GL_TRIANGLES = int(z"0004")
+  integer, parameter :: GL_UNSIGNED_INT = int(z"1405")
 
   ! Functions we want exposed.
 
@@ -82,6 +86,7 @@ module opengl
   public :: gl_buffer_indices_array
   public :: gl_enable_vertex_attrib_array
   public :: gl_vertex_attrib_pointer
+  public :: gl_draw_elements
 
   ! Here I'm binding to the C shared library.
 
@@ -317,6 +322,17 @@ module opengl
       integer(c_int), intent(in), value :: stride
       type(c_ptr), intent(in), optional :: pointer
     end subroutine internal_gl_vertex_attrib_pointer
+
+
+    subroutine internal_gl_draw_elements(mode, count, type, indices) bind(c, name = "glDrawElements")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: mode
+      integer(c_int), intent(in), value :: count
+      integer(c_int), intent(in), value :: type
+      type(c_ptr), intent(in), optional :: indices
+    end subroutine internal_gl_draw_elements
 
 
   end interface
@@ -596,5 +612,16 @@ contains
 
     call internal_gl_vertex_attrib_pointer(index, size, type, final_normalized, stride, null())
   end subroutine gl_vertex_attrib_pointer
+
+
+  subroutine gl_draw_elements(mode, count, type)
+    implicit none
+
+    integer, intent(in), value :: mode
+    integer, intent(in), value :: count
+    integer, intent(in), value :: type
+
+    call internal_gl_draw_elements(mode, count, type, null())
+  end subroutine gl_draw_elements
 
 end module opengl
