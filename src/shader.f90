@@ -14,6 +14,7 @@ module shader
   public :: shader_get_attribute
   public :: shader_create_uniform_locations
   public :: shader_get_uniform
+  public :: shader_start
 
 
   !** A shader object. This holds all required shader components to run a shader.
@@ -350,6 +351,26 @@ contains
       error stop "[Shader] Error: Shader ["//shader_name//"] does not contain uniform ["//uniform_name//"]."
     end if
   end function shader_get_uniform
+
+
+  !** Start up a shader program.
+  subroutine shader_start(shader_name)
+    use opengl
+    implicit none
+
+    character(len = *), intent(in) :: shader_Name
+    type(shader_program) :: current_program
+    logical :: exists
+
+    current_program = get_shader(shader_name, exists)
+
+    ! If the shader does not exist, bail out.
+    if (.not. exists) then
+      error stop "[Shader] Error: Cannot start shader ["//shader_name//"], it does not exist."
+    end if
+
+    call gl_use_program(current_program%program_id)
+  end subroutine shader_start
 
 
 end module shader
