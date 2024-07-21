@@ -23,6 +23,7 @@ module opengl
 
   public :: GL_STATIC_DRAW
   public :: GL_ARRAY_BUFFER
+  public :: GL_ELEMENT_ARRAY_BUFFER
 
   !
 
@@ -48,6 +49,7 @@ module opengl
 
   integer, parameter :: GL_STATIC_DRAW = int(z"88E4")
   integer, parameter :: GL_ARRAY_BUFFER = int(z"8892")
+  integer, parameter :: GL_ELEMENT_ARRAY_BUFFER = int(z"8893")
 
   ! Functions we want exposed.
 
