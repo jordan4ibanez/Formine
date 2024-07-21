@@ -69,7 +69,11 @@ program main
 
       !? DRAW TEST ?!
 
-      
+      call gl_bind_vertex_array(1)
+
+      call gl_draw_elements(GL_TRIANGLES, 3, GL_UNSIGNED_INT)
+
+      call gl_bind_vertex_array(0)
 
       !? END DRAW TEST ?!
 
