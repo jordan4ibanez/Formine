@@ -1,6 +1,7 @@
 !** This module kind of works like a state machine.
 module mesh
   use string
+  use vec3
   implicit none
 
   private
@@ -91,6 +92,41 @@ contains
     ! Now unbind.
     call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
   end function upload_positions
+
+
+  integer function upload_positions_vec3f(position_array) result(vbo_position)
+    use, intrinsic :: iso_c_binding
+    use opengl
+    use shader
+    implicit none
+
+    type(vec3f), dimension(:), intent(in) :: position_array
+    integer :: position_vbo_position
+
+    position_vbo_position = shader_get_attribute("main", "position")
+
+    ! Create the VBO context.
+    vbo_position = gl_gen_buffers()
+
+    print"(A)","vbo position: ["//int_to_string(vbo_position)//"]"
+
+    ! Walk into the VBO context.
+    call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_position)
+
+    ! Pass this data into the OpenGL state machine.
+    call gl_buffer_vec3f_array(position_array)
+
+    ! Width = 3 because this is a vec3
+    ! false because this is not normalized
+    ! 0 stride
+    call gl_vertex_attrib_pointer(position_vbo_position, 3, GL_FLOAT, .false., 0)
+
+    ! Enable this new data.
+    call gl_enable_vertex_attrib_array(position_vbo_position)
+
+    ! Now unbind.
+    call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
+  end function upload_positions_vec3f
 
 
   integer function upload_colors(color_array) result(vbo_position)
