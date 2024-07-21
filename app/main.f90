@@ -54,6 +54,7 @@ program main
 
   ! call shader_create_uniform_locations("main", heap_string_array("camera_matrix","object_matrix"))
 
+  call gl_use_program(1)
 
   call create_mesh()
 
@@ -61,7 +62,7 @@ program main
   if (.true.) then
     do while(.not. glfw_window_should_close())
 
-      call gl_use_program(1)
+      
 
       ! call blah(color)
 
