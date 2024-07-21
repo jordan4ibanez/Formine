@@ -43,5 +43,4 @@ program test_float_compare
 
   call test_2()
 
-
 end program test_float_compare
