@@ -14,8 +14,6 @@ contains
     a = 0.00000010
     b = 0.00000010
 
-    print*,"test 1"
-
     call assert_true(f32_is_equal(a,b))
 
   end subroutine f32_test_1
@@ -28,8 +26,6 @@ contains
     a = 0.00000011
     b = 0.00000010
 
-    print*,"test 2"
-
     call assert_true(f32_is_equal(a,b))
 
   end subroutine f32_test_2
@@ -41,10 +37,9 @@ contains
     real(c_float) :: a, b
 
     ! This is the actual amount of precision you have.
+    ! [0.000_000] 6 points of precision
     a = 0.000001 ! <- here
     b = 0.0000001
-
-    print*,"test 3"
 
     call assert_false(f32_is_equal(a,b))
 
