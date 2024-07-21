@@ -63,7 +63,7 @@ program main
 
       ! call blah(color)
 
-      call gl_clear_color(0.0, color, color)
+      call gl_clear_color(1.0, 1.0, 1.0)
 
       call gl_clear_color_buffer()
 
