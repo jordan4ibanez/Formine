@@ -18,6 +18,9 @@ module vec3
     procedure :: assign_scalar
     procedure :: assign_array
     procedure :: assign_vec3f
+    ! generic :: operator(==) => equal_scalar, equal_array
+    ! procedure :: equal_scalar
+    ! procedure :: equal_array
   end type vec3f
 
 
@@ -77,6 +80,29 @@ contains
   end subroutine assign_vec3f
 
 
+  ! logical function equal_scalar(this, i) result(equality)
+  !   implicit none
+
+  !   class(vec3f), intent(in), value :: this
+  !   real, intent(in), value :: i
+  !   real, dimension(3) :: equalizer
+  !   logical :: test
+
+  !   equalizer = [i,i,i]
+
+  !   test = (this%data(1) == i)
+  ! end function equal_scalar
+
+
+  ! logical function equal_array(this, arr) result(equality)
+  !   implicit none
+
+  !   class(vec3f), intent(in), value :: this
+  !   real, dimension(3), intent(in) :: arr
+  !   real, dimension(3) :: equalizer
+  !   logical :: test
+
+  ! end function equal_array
 
 
 
