@@ -82,7 +82,9 @@ module opengl
   public :: gl_bind_vertex_array
   public :: gl_gen_buffers
   public :: gl_bind_buffer
+
   public :: gl_buffer_float_array
+  public :: gl_buffer_vec3f_array
   public :: gl_buffer_indices_array
   public :: gl_enable_vertex_attrib_array
   public :: gl_vertex_attrib_pointer
@@ -576,6 +578,25 @@ contains
     !! FIXME: Might be wrong.
     call internal_gl_buffer_data(GL_ARRAY_BUFFER, total_size, c_loc(float_array), GL_STATIC_DRAW)
   end subroutine gl_buffer_float_array
+
+
+  !** This is a custom command to allow gl_buffer_data to use specific types.
+  subroutine gl_buffer_vec3f_array(vec3f_array)
+    use constants
+    use, intrinsic :: iso_c_binding
+    use vec3
+    implicit none
+
+    type(vec3f), dimension(:), target :: vec3f_array
+    integer(c_int) :: total_size
+    integer(c_int) :: length_of_array
+
+    length_of_array = size(vec3f_array)
+    total_size = f32_size * length_of_array * 3
+
+    !! FIXME: Might be wrong.
+    call internal_gl_buffer_data(GL_ARRAY_BUFFER, total_size, c_loc(vec3f_array), GL_STATIC_DRAW)
+  end subroutine gl_buffer_vec3f_array
 
 
   !** This is a custom command to allow gl_buffer_data to use specific types.
