@@ -7,13 +7,6 @@ module vec3
     real, dimension(3) :: data = 0.0
   end type vec3f
 
-  
-
-
-
-
-
-
 contains
 
 end module vec3
