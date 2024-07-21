@@ -1,5 +1,6 @@
 !** This module kind of works like a state machine.
 module mesh
+  use string
   implicit none
 
   private
@@ -11,6 +12,8 @@ contains
   subroutine create_mesh
     use shader
     use opengl
+    use string
+    use terminal
     implicit none
     ! Notes:
     ! 1. break this up into functions.
@@ -21,42 +24,59 @@ contains
     integer :: vao
     integer :: vbo_positions
 
+    print"(A)",colorize_rgb("[Mesh] WARNING: SHADER MODULE NEEDS A STATE MACHINE!", 255,128,0)
+
     ! Into vertex array object.
 
     vao = gl_gen_vertex_arrays()
 
-    print*,"vao: ",vao
+    print"(A)","vao: ["//int_to_string(vao)//"]"
 
     call gl_bind_vertex_array(vao)
 
     ! Into position vertex buffer object.
 
-    vbo_positions = gl_gen_buffers()
-
-    print*,"positions:", vbo_positions
-
-    call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_positions)
-
-    call gl_buffer_float_array([ &
+    vbo_positions = upload_positions([ &
       0.0, 0.0, 0.0, &
       10.0, 0.0, 0.0, &
       10.0, 0.0, 10.0 &
       ])
 
-    ! call gl_enable_vertex_attrib_array(vbo_positions)
+  end subroutine create_mesh
+
+
+  integer function upload_positions(position_array) result(vbo_position)
+    use, intrinsic :: iso_c_binding
+    use opengl
+    use shader
+    implicit none
+
+    real(c_float), dimension(:), intent(in) :: position_array
+
+
+    ! Create the VBO context.
+    vbo_position = gl_gen_buffers()
+
+    print"(A)","position vbo: ["//int_to_string(vbo_position)//"]"
+
+    ! Walk into the VBO context.
+    call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_position)
+
+    ! Pass this data into the OpenGL state machine.
+    call gl_buffer_float_array(position_array)
 
     ! Width = 3 because this is a vec3
     ! false because this is not normalized
     ! 0 stride
     call gl_vertex_attrib_pointer(shader_get_attribute("main", "position"), 3, GL_FLOAT, .false., 0)
 
+    ! Enable this new data.
     call gl_enable_vertex_attrib_array(shader_get_attribute("main", "position"))
 
     ! Now unbind.
     call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
 
-  end subroutine create_mesh
-
+  end function upload_positions
 
 
 end module mesh
