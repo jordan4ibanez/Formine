@@ -52,7 +52,7 @@ program main
 
   call shader_create_attribute_locations("main", heap_string_array("position", "color"))
 
-  call shader_create_uniform_locations("main", heap_string_array("camera_matrix","object_matrix"))
+  ! call shader_create_uniform_locations("main", heap_string_array("camera_matrix","object_matrix"))
 
 
   call create_mesh()
