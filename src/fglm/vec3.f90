@@ -18,6 +18,7 @@ module vec3
     procedure :: assign_scalar
     procedure :: assign_array
     procedure :: assign_vec3f
+    !* Note: Float equality is very dumb.
     generic :: operator(==) => equal_scalar, equal_array, equal_vec3f
     procedure :: equal_scalar
     procedure :: equal_array
