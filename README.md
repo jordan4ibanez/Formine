@@ -28,6 +28,8 @@ This is using gfortran, gfortran is very buggy. This might be using some bugs wh
 Allocatable - Will automatically deallocate once the variable goes out of scope. Do not manually deallocate cause that's dumb.
 Pointer - Will NOT automatically deallocate.
 
+NEVER, set ``this`` to ``value`` in a method or IT WILL blow up!
+
 in C:
 
 ``const char *`` would be interopped as ``character(kind = c_char), intent(in)``
