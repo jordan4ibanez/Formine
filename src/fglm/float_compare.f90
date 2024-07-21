@@ -3,6 +3,10 @@ module float_compare
 
   private
 
+  !** Notes:
+  !** f32 has 6 points of precision comparison.
+  !** f64 has [test it]
+
   public :: f32_is_equal
   public :: f64_is_equal
 
