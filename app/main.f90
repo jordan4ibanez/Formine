@@ -55,7 +55,7 @@ program main
   call shader_create_uniform_locations("main", heap_string_array("camera_matrix","object_matrix"))
 
 
-  call debug_create_mesh()
+  call create_mesh()
 
   !! This is debugging for functions!
   if (.false.) then

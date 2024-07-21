@@ -4,11 +4,11 @@ module mesh
 
   private
 
-  public :: debug_create_mesh
+  public :: create_mesh
 
 contains
 
-  subroutine debug_create_mesh
+  subroutine create_mesh
     use shader
     use opengl
     implicit none
@@ -55,7 +55,7 @@ contains
     ! Now unbind.
     call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
 
-  end subroutine debug_create_mesh
+  end subroutine create_mesh
 
 
 
