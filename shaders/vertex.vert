@@ -11,7 +11,7 @@ uniform mat4 object_matrix;
 
 void main() {
   // camera_matrix * object_matrix *
-  gl_Position =  vec4(position, 0.0);
+  gl_Position = vec4(position, 1.0);
 
   pixel_color = color;
 }
