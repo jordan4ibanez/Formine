@@ -49,6 +49,9 @@ contains
       0.0, 0.0, 1.0 &
       ])
 
+    ! Now unbind vertex array object.
+    call gl_bind_vertex_array(0)
+
   end subroutine create_mesh
 
 
