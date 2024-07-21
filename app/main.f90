@@ -8,8 +8,6 @@ program main
   use, intrinsic ::  iso_c_binding
   implicit none
 
-  real :: color = 0.0
-
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
@@ -62,7 +60,7 @@ program main
   if (.true.) then
     do while(.not. glfw_window_should_close())
 
-      
+
 
       ! call blah(color)
 
