@@ -39,15 +39,15 @@ contains
     ! Into position vertex buffer object.
 
     vbo_position = upload_positions([ &
-      0.0, 100.0, 0.0, &
-      100.0, 0.0, 0.0, &
-      100.0, 100.0, 0.0 &
+      -0.5, -0.5, 0.0, &
+      0.5, -0.5, 0.0, &
+      0.0, 0.5, 0.0 &
       ])
 
     vbo_color = upload_colors([ &
-      0.0, 0.0, 0.0, &
-      0.0, 0.0, 0.0, &
-      0.0, 0.0, 0.0 &
+      1.0, 0.0, 0.0, &
+      0.0, 1.0, 0.0, &
+      0.0, 0.0, 1.0 &
       ])
 
     vbo_indices = upload_indices([0,1,2])
