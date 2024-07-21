@@ -23,6 +23,10 @@ module vec3
     procedure :: equal_scalar
     procedure :: equal_array
     procedure :: equal_vec3f
+    generic :: operator(+) => add_scalar, add_array, add_vec3f
+    procedure :: add_scalar
+    procedure :: add_array
+    procedure :: add_vec3f
   end type vec3f
 
 
@@ -113,6 +117,36 @@ contains
 
     equality = f32_is_equal(this%data(1), other%data(1)) .and. f32_is_equal(this%data(2), other%data(2)) .and. f32_is_equal(this%data(3), other%data(3))
   end function equal_vec3f
+
+
+  type(vec3f) function add_scalar(this, i) result(new_vec3f)
+    implicit none
+
+    class(vec3f), intent(in), value :: this
+    real, intent(in), value :: i
+
+    new_vec3f = this%data(1:3) + i
+  end function add_scalar
+
+
+  type(vec3f) function add_array(this, arr) result(new_vec3f)
+    implicit none
+
+    class(vec3f), intent(in), value :: this
+    real, dimension(3), intent(in) :: arr
+
+    new_vec3f = this%data(1:3) + arr
+  end function add_array
+
+
+  type(vec3f) function add_vec3f(this, other) result(new_vec3f)
+    implicit none
+
+    class(vec3f), intent(in), value :: this
+    type(vec3f), intent(in), value :: other
+
+    new_vec3f = this%data(1:3) + other%data(1:3)
+  end function add_vec3f
 
 
 end module vec3
