@@ -65,6 +65,9 @@ contains
     implicit none
 
     real(c_float), dimension(:), intent(in) :: position_array
+    integer :: position_vbo_position
+
+    position_vbo_position = shader_get_attribute("main", "position")
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
@@ -80,10 +83,10 @@ contains
     ! Width = 3 because this is a vec3
     ! false because this is not normalized
     ! 0 stride
-    call gl_vertex_attrib_pointer(shader_get_attribute("main", "position"), 3, GL_FLOAT, .false., 0)
+    call gl_vertex_attrib_pointer(position_vbo_position, 3, GL_FLOAT, .false., 0)
 
     ! Enable this new data.
-    call gl_enable_vertex_attrib_array(shader_get_attribute("main", "position"))
+    call gl_enable_vertex_attrib_array(position_vbo_position)
 
     ! Now unbind.
     call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
@@ -97,6 +100,9 @@ contains
     implicit none
 
     real(c_float), dimension(:), intent(in) :: color_array
+    integer :: color_vbo_position
+
+    color_vbo_position = shader_get_attribute("main", "color")
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
@@ -112,10 +118,10 @@ contains
     ! Width = 3 because this is a vec3
     ! false because this is not normalized
     ! 0 stride
-    call gl_vertex_attrib_pointer(shader_get_attribute("main", "color"), 3, GL_FLOAT, .false., 0)
+    call gl_vertex_attrib_pointer(color_vbo_position, 3, GL_FLOAT, .false., 0)
 
     ! Enable this new data.
-    call gl_enable_vertex_attrib_array(shader_get_attribute("main", "color"))
+    call gl_enable_vertex_attrib_array(color_vbo_position)
 
     ! Now unbind.
     call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
