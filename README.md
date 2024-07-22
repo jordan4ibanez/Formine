@@ -12,7 +12,7 @@ Here is what this thing currently looks like.
 
 ### Install dependencies on fedora:
 ```
-sudo dnf install gfortran openGL glfw-devel
+sudo dnf install gfortran mesa-libGL-devel glfw-devel
 ```
 
 This is using gfortran, gfortran is very buggy. This might be using some bugs which only come with gfortran. Test it in ifort for me to see where it is wrong.
