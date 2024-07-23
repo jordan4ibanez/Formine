@@ -1,4 +1,4 @@
-module vec3
+module vector_3
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -27,10 +27,10 @@ module vec3
     procedure :: add_scalar
     procedure :: add_array
     procedure :: add_vec3f
-    generic :: operator(-) => subtract_scalar, subtract_array, subtract_vec3f
-    procedure :: subtract_scalar
-    procedure :: subtract_array
-    procedure :: subtract_vec3f
+    ! generic :: operator(-) => subtract_scalar, subtract_array, subtract_vec3f
+    ! procedure :: subtract_scalar
+    ! procedure :: subtract_array
+    ! procedure :: subtract_vec3f
   end type vec3f
 
 
@@ -159,4 +159,4 @@ contains
   end function add_vec3f
 
 
-end module vec3
+end module vector_3
