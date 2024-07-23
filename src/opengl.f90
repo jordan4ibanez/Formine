@@ -584,7 +584,7 @@ contains
   subroutine gl_buffer_vec3f_array(vec3f_array)
     use constants
     use, intrinsic :: iso_c_binding
-    use vec3
+    use vector_3
     implicit none
 
     type(vec3f), dimension(:), target :: vec3f_array

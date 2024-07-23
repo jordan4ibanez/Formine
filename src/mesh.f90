@@ -1,7 +1,7 @@
 !** This module kind of works like a state machine.
 module mesh
   use string
-  use vec3
+  use vector_3
   implicit none
 
   private
