@@ -1,4 +1,4 @@
-module vector_3
+module vector_3f
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -159,4 +159,4 @@ contains
   end function add_vec3f
 
 
-end module vector_3
+end module vector_3f

@@ -1,5 +1,5 @@
 module test_suite_vec3f
-  use vector_3
+  use vector_3f
   use float_compare
   use testament
   implicit none
