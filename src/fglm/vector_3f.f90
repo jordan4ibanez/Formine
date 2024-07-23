@@ -66,7 +66,7 @@ contains
 
     real, dimension(3), intent(in) :: xyz_array
 
-    new_vec3f%data(1:3) = xyz_array
+    new_vec3f%data(1:3) = xyz_array(1:3)
   end function constructor_array
 
 
@@ -86,7 +86,7 @@ contains
     class(vec3f), intent(inout) :: this
     real, dimension(3), intent(in) :: arr
 
-    this%data(1:3) = arr
+    this%data(1:3) = arr(1:3)
   end subroutine assign_array
 
 
@@ -149,7 +149,7 @@ contains
     class(vec3f), intent(in) :: this
     real, dimension(3), intent(in) :: arr
 
-    new_vec3f = this%data(1:3) + arr
+    new_vec3f = this%data(1:3) + arr(1:3)
   end function add_array
 
 
@@ -179,7 +179,7 @@ contains
     class(vec3f), intent(in) :: this
     real, dimension(3), intent(in) :: arr
 
-    new_vec3f = this%data(1:3) - arr
+    new_vec3f = this%data(1:3) - arr(1:3)
   end function subtract_array
 
 
