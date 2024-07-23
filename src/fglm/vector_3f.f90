@@ -31,6 +31,10 @@ module vector_3f
     procedure :: subtract_scalar
     procedure :: subtract_array
     procedure :: subtract_vec3f
+    generic :: operator(*) => multiply_scalar, multiply_array, multiply_vec3f
+    procedure :: multiply_scalar
+    procedure :: multiply_array
+    procedure :: multiply_vec3f
   end type vec3f
 
 
@@ -188,5 +192,34 @@ contains
     new_vec3f = this%data(1:3) + other%data(1:3)
   end function subtract_vec3f
 
+
+  type(vec3f) function multiply_scalar(this, i) result(new_vec3f)
+    implicit none
+
+    class(vec3f), intent(in) :: this
+    real, intent(in), value :: i
+
+    new_vec3f = this%data(1:3) * i
+  end function multiply_scalar
+
+
+  type(vec3f) function multiply_array(this, arr) result(new_vec3f)
+    implicit none
+
+    class(vec3f), intent(in) :: this
+    real, dimension(3), intent(in) :: arr
+
+    new_vec3f = this%data(1:3) * arr(1:3)
+  end function multiply_array
+
+
+  type(vec3f) function multiply_vec3f(this, other) result(new_vec3f)
+    implicit none
+
+    class(vec3f), intent(in) :: this
+    type(vec3f), intent(in), value :: other
+
+    new_vec3f = this%data(1:3) * other%data(1:3)
+  end function multiply_vec3f
 
 end module vector_3f
