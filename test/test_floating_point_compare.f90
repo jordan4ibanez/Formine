@@ -1,6 +1,6 @@
 module test_suite_float
   use float_compare
-  use, intrinsic :: iso_c_binding
+  use, intrinsic :: iso_fortran_env, only: real32
   use testament
   implicit none
 
@@ -9,24 +9,24 @@ contains
   subroutine f32_test_1
     implicit none
 
-    real(c_float) :: a, b
+    real(real32) :: a, b
 
     a = 0.00000010
     b = 0.00000010
 
-    call assert_true(f32_is_equal(a,b))
+    call assert_true(r32_is_equal(a,b))
 
   end subroutine f32_test_1
 
   subroutine f32_test_2
     implicit none
 
-    real(c_float) :: a, b
+    real(real32) :: a, b
 
     a = 0.00000011
     b = 0.00000010
 
-    call assert_true(f32_is_equal(a,b))
+    call assert_true(r32_is_equal(a,b))
 
   end subroutine f32_test_2
 
@@ -34,14 +34,14 @@ contains
   subroutine f32_test_3
     implicit none
 
-    real(c_float) :: a, b
+    real(real32) :: a, b
 
     ! This is the actual amount of precision you have.
     ! [0.000_000] 6 points of precision
     a = 0.000001 ! <- here
     b = 0.0000001
 
-    call assert_false(f32_is_equal(a,b))
+    call assert_false(r32_is_equal(a,b))
 
   end subroutine f32_test_3
 
