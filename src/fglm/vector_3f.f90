@@ -14,10 +14,11 @@ module vector_3f
   type vec3f
     real(real32), dimension(3) :: data = [0.0, 0.0, 0.0]
   contains
-    generic :: assignment(=) => assign_scalar, assign_array, assign_vec3f
+    generic :: assignment(=) => assign_scalar, assign_array, assign_vec3f, assign_vec3d
     procedure :: assign_scalar
     procedure :: assign_array
     procedure :: assign_vec3f
+    procedure :: assign_vec3d
     !* Note: Float equality is very dumb.
     generic :: operator(==) => equal_scalar, equal_array, equal_vec3f
     procedure :: equal_scalar
@@ -103,7 +104,7 @@ contains
     this%data(1:3) = other%data(1:3)
   end subroutine assign_vec3f
 
-  subroutine assign_vec3(this, other)
+  subroutine assign_vec3d(this, other)
     use vector_3d
     implicit none
 
@@ -112,7 +113,7 @@ contains
 
     ! Explicit cast to shut up compiler.
     this%data(1:3) = real(other%data(1:3))
-  end subroutine assign_vec3
+  end subroutine assign_vec3d
 
 
   logical function equal_scalar(this, i) result(equality)
