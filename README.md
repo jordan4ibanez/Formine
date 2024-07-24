@@ -26,12 +26,12 @@ This is using gfortran, gfortran is very buggy. This might be using some bugs wh
 # Notes:
 
 ways to define 32 bit floats
-real(4) <- bad idea
+real(4)
 real(real32)
 real(c_float)
 
 ways to define 64 bit floats
-real(8) <- bad idea
+real(8)
 real(real64) 
 real(c_double)
 
