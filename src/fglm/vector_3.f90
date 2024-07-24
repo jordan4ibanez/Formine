@@ -12,7 +12,7 @@ module vector_3f
   !* They do not mix. Can't add vec3f to vec3, and so forth.
 
   type vec3
-    real(c_float), dimension(3) :: data = [0.0, 0.0, 0.0]
+    real, dimension(3) :: data = [0.0, 0.0, 0.0]
   contains
     generic :: assignment(=) => assign_scalar, assign_array, assign_vec3
     procedure :: assign_scalar
