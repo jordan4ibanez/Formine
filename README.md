@@ -42,7 +42,7 @@ going to need to replace the uint with logical(int32) https://www.ibm.com/docs/e
 Allocatable - Will automatically deallocate once the variable goes out of scope. Do not manually deallocate cause that's dumb.
 Pointer - Will NOT automatically deallocate.
 
-NEVER, set ``this`` to ``value`` in a method or IT WILL blow up!
+NEVER, set ``this`` to ``value`` in a type method or IT WILL blow up!
 
 in C:
 
