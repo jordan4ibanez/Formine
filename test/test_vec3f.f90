@@ -99,6 +99,34 @@ contains
     print*,"implement the multiply test"
 
   end subroutine test_multiply
+
+
+  subroutine test_divide()
+    implicit none
+
+    type(vec3f) :: unit_1
+    type(vec3f) :: unit_2
+    type(vec3f) :: unit_3
+
+    unit_1 = 5.0
+
+    unit_1 = unit_1 / 5.0
+
+    call assert_true(unit_1 == 1.0)
+
+    unit_2 = [1.0, 2.0, 3.0]
+
+    unit_2 = unit_2 / [2.0, 1.0, 6.0]
+
+    call assert_true(unit_2 == [0.5, 2.0, 0.5])
+
+    unit_3 = vec3f(3.0, 3.0, 3.0)
+
+    unit_3 = unit_3 / vec3f(2.0, 3.5, 4.0)
+
+    call assert_true(unit_3 == vec3f(1.50000000, 0.857142866, 0.750000000))
+  end subroutine test_divide
+
 end module test_suite_vec3f
 
 
@@ -111,4 +139,8 @@ program test_vec3f
   call test_equality()
 
   call test_add()
+
+  call test_multiply()
+
+  call test_divide()
 end program test_vec3f
