@@ -6,7 +6,7 @@ module vector_3f
 
   public :: vec3
 
-  ! vec3 and Vec3 are transparent containers.
+  ! vec3f and Vec3 are transparent containers.
   ! You can use the methods, or you can use the raw data.
   !
   !* They do not mix. Can't add vec3 to vec3, and so forth.
