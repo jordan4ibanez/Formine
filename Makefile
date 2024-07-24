@@ -6,7 +6,7 @@ release:
 
 .PHONY: test
 test:
-	@fpm test --flag -fuse-ld=mold
+	@fpm test
 	
 # Use this if the vscode extension gives up.
 clean:
