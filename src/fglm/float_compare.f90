@@ -11,8 +11,8 @@ module float_compare
   public :: r32_is_equal
   public :: r64_is_equal
 
-  real, parameter :: tolerence32 = epsilon(1.0)
-  real, parameter :: tolerence64 = epsilon(1.0d0)
+  real, parameter :: tolerence32 = epsilon(0.0)
+  real, parameter :: tolerence64 = epsilon(0.0d0)
 
 
 contains

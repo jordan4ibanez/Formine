@@ -1,6 +1,6 @@
 module test_suite_float
   use float_compare
-  use, intrinsic :: iso_fortran_env, only: real32
+  use, intrinsic :: iso_fortran_env, only: real32, real64
   use testament
   implicit none
 
@@ -11,6 +11,8 @@ contains
 
     real(real32) :: a, b
 
+    ! This is the actual amount of precision you have.
+    ! [0.000_000] 6 points of precision. (6.92 according to IBM)
     a = 0.00000010
     b = 0.00000010
 
@@ -23,6 +25,8 @@ contains
 
     real(real32) :: a, b
 
+    ! This is the actual amount of precision you have.
+    ! [0.000_000] 6 points of precision. (6.92 according to IBM)
     a = 0.00000011
     b = 0.00000010
 
