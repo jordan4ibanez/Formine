@@ -9,7 +9,7 @@ module vector_3f
   ! vec3f and Vec3 are transparent containers.
   ! You can use the methods, or you can use the raw data.
   !
-  !* They do not mix. Can't add vec3 to vec3, and so forth.
+  !* They do not mix. Can't add vec3f to vec3, and so forth.
 
   type vec3
     real(c_float), dimension(3) :: data = [0.0, 0.0, 0.0]
