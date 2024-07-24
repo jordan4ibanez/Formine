@@ -96,8 +96,28 @@ contains
   subroutine test_multiply()
     implicit none
 
-    print*,"implement the multiply test"
 
+    type(vec3f) :: unit_1
+    type(vec3f) :: unit_2
+    type(vec3f) :: unit_3
+
+    unit_1 = 5.0
+
+    unit_1 = unit_1 * 5.0
+
+    call assert_true(unit_1 == 25.0)
+
+    unit_2 = [1.0, 2.0, 3.0]
+
+    unit_2 = unit_2 * [2.0, 4.0, 6.0]
+
+    call assert_true(unit_2 == [2.0, 8.0, 18.0])
+
+    unit_3 = vec3f(3.0, 3.0, 3.0)
+
+    unit_3 = unit_3 * vec3f(2.0, 3.5, 4.0)
+
+    call assert_true(unit_3 == vec3f(6.0, 10.5, 12.0))
   end subroutine test_multiply
 
 
