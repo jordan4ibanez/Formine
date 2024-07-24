@@ -104,13 +104,14 @@ contains
   end subroutine assign_vec3f
 
   subroutine assign_vec3(this, other)
-    use vector_3
+    use vector_3d
     implicit none
 
     class(vec3f), intent(inout) :: this
     type(vec3d), intent(in), value :: other
 
-    this%data(1:3) = other%data(1:3)
+    ! Explicit cast to shut up compiler.
+    this%data(1:3) = real(other%data(1:3))
   end subroutine assign_vec3
 
 
