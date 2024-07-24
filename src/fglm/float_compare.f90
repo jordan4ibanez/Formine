@@ -11,7 +11,8 @@ module float_compare
   public :: r32_is_equal
   public :: r64_is_equal
 
-  real, parameter :: tolerence = epsilon(1.0d0)
+  real, parameter :: tolerence32 = epsilon(1.0)
+  real, parameter :: tolerence64 = epsilon(1.0d0)
 
 
 contains
@@ -22,7 +23,7 @@ contains
 
     real(real32), intent(in), value :: a,b
 
-    equality = abs(a - b) <= tolerence
+    equality = abs(a - b) <= tolerence32
   end function r32_is_equal
 
 
@@ -31,7 +32,7 @@ contains
 
     real(real64), intent(in), value :: a,b
 
-    equality = abs(a - b) <= tolerence
+    equality = abs(a - b) <= tolerence64
   end function r64_is_equal
 
 end module float_compare
