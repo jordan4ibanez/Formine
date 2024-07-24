@@ -25,6 +25,8 @@ This is using gfortran, gfortran is very buggy. This might be using some bugs wh
 
 # Notes:
 
+going to need to replace the int with logical(4) https://www.ibm.com/docs/en/xl-c-aix/13.1.2?topic=fortran-corresponding-data-types
+
 Allocatable - Will automatically deallocate once the variable goes out of scope. Do not manually deallocate cause that's dumb.
 Pointer - Will NOT automatically deallocate.
 
