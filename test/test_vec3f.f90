@@ -93,6 +93,12 @@ contains
   end subroutine test_add
 
 
+  subroutine test_multiply()
+    implicit none
+
+    print*,"implement the multiply test"
+
+  end subroutine test_multiply
 end module test_suite_vec3f
 
 
