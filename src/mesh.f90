@@ -27,6 +27,10 @@ contains
     integer :: vbo_color
     integer :: vbo_indices
 
+    if (.true.) then
+      error stop "implement the hash table of meshes."
+    end if
+
     ! print"(A)",colorize_rgb("[Mesh] WARNING: SHADER MODULE NEEDS A STATE MACHINE!", 255,128,0)
 
     ! Into vertex array object.
