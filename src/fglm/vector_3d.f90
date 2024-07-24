@@ -1,4 +1,4 @@
-module vector_3
+module vector_3d
   use :: iso_fortran_env, only: real64
   implicit none
 
@@ -43,7 +43,7 @@ module vector_3
 
 
   interface vec3d
-    module procedure :: constructor_scalar, constructor_raw, constructor_array
+    module procedure :: constructor_scalar, constructor_scalar_real32, constructor_raw, constructor_raw_real32, constructor_array
   end interface
 
 
@@ -56,6 +56,14 @@ contains
     new_vec3%data(1:3) = [i,i,i]
   end function constructor_scalar
 
+  type(vec3d) function constructor_scalar_real32(i) result(new_vec3)
+    use :: iso_fortran_env, only: real32
+    implicit none
+    real(real32), intent(in), value :: i
+
+    new_vec3%data(1:3) = [i,i,i]
+  end function constructor_scalar_real32
+
   type(vec3d) function constructor_raw(x,y,z) result(new_vec3)
     implicit none
 
@@ -63,6 +71,15 @@ contains
 
     new_vec3%data(1:3) = [x,y,z]
   end function constructor_raw
+
+  type(vec3d) function constructor_raw_real32(x,y,z) result(new_vec3)
+    use :: iso_fortran_env, only: real32
+    implicit none
+
+    real(real32), intent(in), value :: x,y,z
+
+    new_vec3%data(1:3) = [x,y,z]
+  end function constructor_raw_real32
 
 
   type(vec3d) function constructor_array(xyz_array) result(new_vec3)
@@ -258,4 +275,4 @@ contains
 
 
 
-end module vector_3
+end module vector_3d
