@@ -1,4 +1,4 @@
-module vector_3f
+module vector_3
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -258,4 +258,4 @@ contains
 
 
 
-end module vector_3f
+end module vector_3
