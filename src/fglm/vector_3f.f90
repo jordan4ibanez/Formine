@@ -1,5 +1,5 @@
 module vector_3f
-  use, intrinsic :: iso_c_binding
+  use,intrinsic :: iso_fortran_env
   implicit none
 
   private
@@ -12,7 +12,7 @@ module vector_3f
   !* They do not mix. Can't add vec3f to vec3, and so forth.
 
   type vec3f
-    real(c_float), dimension(3) :: data = [0.0, 0.0, 0.0]
+    real(real32), dimension(3) :: data = [0.0, 0.0, 0.0]
   contains
     generic :: assignment(=) => assign_scalar, assign_array, assign_vec3f
     procedure :: assign_scalar
@@ -111,7 +111,7 @@ contains
     class(vec3f), intent(in) :: this
     real, intent(in), value :: i
 
-    equality = f32_is_equal(this%data(1), i) .and. f32_is_equal(this%data(2), i) .and. f32_is_equal(this%data(3), i)
+    equality = r32_is_equal(this%data(1), i) .and. r32_is_equal(this%data(2), i) .and. r32_is_equal(this%data(3), i)
   end function equal_scalar
 
 
@@ -122,7 +122,7 @@ contains
     class(vec3f), intent(in) :: this
     real, dimension(3), intent(in) :: arr
 
-    equality = f32_is_equal(this%data(1), arr(1)) .and. f32_is_equal(this%data(2), arr(2)) .and. f32_is_equal(this%data(3), arr(3))
+    equality = r32_is_equal(this%data(1), arr(1)) .and. r32_is_equal(this%data(2), arr(2)) .and. r32_is_equal(this%data(3), arr(3))
   end function equal_array
 
 
@@ -133,7 +133,7 @@ contains
     class(vec3f), intent(in) :: this
     type(vec3f), intent(in), value :: other
 
-    equality = f32_is_equal(this%data(1), other%data(1)) .and. f32_is_equal(this%data(2), other%data(2)) .and. f32_is_equal(this%data(3), other%data(3))
+    equality = r32_is_equal(this%data(1), other%data(1)) .and. r32_is_equal(this%data(2), other%data(2)) .and. r32_is_equal(this%data(3), other%data(3))
   end function equal_vec3f
 
 
