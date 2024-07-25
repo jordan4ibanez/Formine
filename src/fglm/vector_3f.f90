@@ -269,5 +269,4 @@ contains
   end function divide_vec3f
 
 
-
 end module vector_3f
