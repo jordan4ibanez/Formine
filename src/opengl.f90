@@ -115,7 +115,7 @@ module opengl
     subroutine gl_enable(cap) bind(c, name = "glEnable")
       use, intrinsic :: iso_c_binding
       implicit none
-      integer(c_int) :: cap
+      integer(c_int), intent(in), value :: cap
     end subroutine gl_enable
 
 
