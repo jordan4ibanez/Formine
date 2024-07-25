@@ -43,10 +43,12 @@ module vector_3d
     procedure :: multiply_vec3d
     procedure :: multiply_scalar_f32
     procedure :: multiply_array_f32
-    generic :: operator(/) => divide_scalar_f64, divide_array_f64, divide_vec3d
+    generic :: operator(/) => divide_scalar_f64, divide_array_f64, divide_vec3d, divide_scalar_f32, divide_array_f32
     procedure :: divide_scalar_f64
     procedure :: divide_array_f64
     procedure :: divide_vec3d
+    procedure :: divide_scalar_f32
+    procedure :: divide_array_f32
   end type vec3d
 
 
@@ -358,6 +360,26 @@ contains
 
     new_vec3d = this%data(1:3) / other%data(1:3)
   end function divide_vec3d
+
+
+  type(vec3d) function divide_scalar_f32(this, i) result(new_vec3d)
+    implicit none
+
+    class(vec3d), intent(in) :: this
+    real(c_float), intent(in), value :: i
+
+    new_vec3d = this%data(1:3) / i
+  end function divide_scalar_f32
+
+
+  type(vec3d) function divide_array_f32(this, arr) result(new_vec3d)
+    implicit none
+
+    class(vec3d), intent(in) :: this
+    real(c_float), dimension(3), intent(in) :: arr
+
+    new_vec3d = this%data(1:3) / arr(1:3)
+  end function divide_array_f32
 
 
 
