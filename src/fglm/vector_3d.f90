@@ -10,6 +10,8 @@ module vector_3d
   ! You can use the methods, or you can use the raw data.
   !
   !* They do not mix. Can't add vec3f to vec3d, and so forth. This will cause weird problems that I don't feel like solving.
+  !
+  !? Implementation note: I added a whole bunch of f32 assignment and math because it's easier to write out 0.0 than it is 0.0d0.
 
   type vec3d
     real(c_double), dimension(3) :: data = [0.0, 0.0, 0.0]
