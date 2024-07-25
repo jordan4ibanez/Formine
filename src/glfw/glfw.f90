@@ -295,6 +295,7 @@ contains
 
   subroutine size_callback(window, width, height)
     use, intrinsic :: iso_c_binding
+    use :: string, only: int_to_string
     implicit none
 
     type(c_ptr), intent(in), optional :: window
@@ -304,7 +305,7 @@ contains
       print*,window
     end if
 
-    print*,"hi",width,height
+    print"(A)", "[Window] Resize: ["//int_to_string(width)//", "//int_to_string(height)//"]"
   end subroutine size_callback
 
 
