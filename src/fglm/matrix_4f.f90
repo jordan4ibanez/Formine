@@ -97,14 +97,14 @@ contains
 
 
   !* Translated from JOML.
-  subroutine perspective(this, fov_y, aspect_ratio, z_near, z_far)
+  subroutine perspective(this, fov_y_radians, aspect_ratio, z_near, z_far)
     use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
     implicit none
 
     class(mat4f), intent(inout) :: this
     ! Very poor accuracy, if you're copying this in the future, first of all: Hi, I hope you're doing well. Second of all: You should use c_double or real64.
     ! I'm just using this like this so I can upload it straight into the GPU. (I am very lazy)
-    real(c_float), intent(in), value :: fov_y, aspect_ratio, z_near, z_far
+    real(c_float), intent(in), value :: fov_y_radians, aspect_ratio, z_near, z_far
     real(c_float) :: height, epsil
     real(c_float), dimension(4) :: r, n
     logical :: far_infinite, near_infinite
@@ -113,7 +113,7 @@ contains
 
     mat = this%data
 
-    height = tan(fov_y * 0.5)
+    height = tan(fov_y_radians * 0.5)
     r(1) = 1.0 / (height * aspect_ratio)
     r(2) = 1.0 / height
 
