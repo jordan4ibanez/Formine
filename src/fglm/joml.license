@@ -23,3 +23,5 @@ SOFTWARE.
 
 since I translated parts of the program from joml java into fortran I am including this
 license to comply with the MIT license. :D
+It might be hard to recognize the code because I tried to optimize it for fortran.
+But I have noted where I have translated it!
