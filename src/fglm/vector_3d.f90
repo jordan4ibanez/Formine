@@ -20,7 +20,7 @@ module vector_3d
     procedure :: assign_vec3d
     procedure :: assign_scalar_f32
     procedure :: assign_array_f32
-    !* Note: Float equality is very dumb.
+    !* Note: Float equality is very dumb. There is no way to enforce f32 and f64 equality so we're not even going to try.
     generic :: operator(==) => equal_scalar_f64, equal_array_f64, equal_vec3d
     procedure :: equal_scalar_f64
     procedure :: equal_array_f64
