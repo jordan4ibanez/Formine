@@ -67,6 +67,7 @@ contains
 
   !* Assignment.
 
+
   subroutine assign_mat4f(this, other)
     implicit none
 
@@ -78,6 +79,7 @@ contains
 
 
   !* Methods.
+
 
   subroutine identity(this)
     implicit none
@@ -91,5 +93,61 @@ contains
       0.0, 0.0, 0.0, 1.0 &
       ]
   end subroutine identity
+
+
+  !* Translated from JOML.
+  subroutine perspective(this, fov_y, aspect_ratio, z_near, z_far)
+    use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+    implicit none
+
+    class(mat4f), intent(inout) :: this
+    ! Very poor accuracy, if you're copying this in the future, first of all: Hi, I hope you're doing well. Second of all: You should use c_double or real64.
+    ! I'm just using this like this so I can upload it straight into the GPU. (I am very lazy)
+    real(c_float), intent(in), value :: fov_y, aspect_ratio, z_near, z_far
+    real(c_float) :: height, epsil
+    real(c_float), dimension(4) :: r, n
+    logical :: far_infinite, near_infinite
+    ! Cache.
+    real(c_float), dimension(16) :: mat
+
+    mat = this%data
+
+    height = tan(fov_y * 0.5)
+    r(1) = 1.0 / (height * aspect_ratio)
+    r(2) = 1.0 / height
+
+    far_infinite = (z_far > 0.0) .and. (.not. ieee_is_finite(z_far))
+    near_infinite = (z_near > 0.0) .and. (.not. ieee_is_finite(z_near))
+
+    if (far_infinite) then
+      epsil = 1000000.0
+      r(3) = epsil - 1.0
+      r(4) = (epsil - 2.0) * z_near
+    else if (near_infinite) then
+      epsil = 1000000.0
+      r(3) = 1.0 - epsil
+      r(4) = (2.0 - epsil) * z_far
+    else
+      r(3) = (z_far + z_near) / (z_near - z_far)
+      r(4) = (z_far + z_far) * z_near / (z_near - z_far)
+    end if
+
+    ! 1  2  3  4
+    ! 5  6  7  8
+    ! 9  10 11 12
+    ! 13 14 15 16
+
+    n(1) = mat(9)  * r(3) - mat(13)
+    n(2) = mat(10) * r(3) - mat(14)
+    n(3) = mat(11) * r(3) - mat(15)
+    n(4) = mat(12) * r(3) - mat(16)
+
+    this%data(1:16) = [&
+      mat(1) * r(1), mat(2)  * r(1), mat(3)  * r(1), mat(4)  * r(1), &
+      mat(5) * r(2), mat(6)  * r(2), mat(7)  * r(2), mat(8)  * r(2), &
+      n(1),          n(2),           n(3),           n(4), &
+      mat(9) * r(4), mat(10) * r(4), mat(11) * r(4), mat(12) * r(4) &
+      ]
+  end subroutine perspective
 
 end module matrix_4f
