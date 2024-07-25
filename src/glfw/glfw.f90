@@ -39,6 +39,7 @@ module glfw
   public :: glfw_destroy_window
   public :: glfw_set_error_callback
   public :: glfw_window_hint
+  public :: glfw_set_window_size_callback
 
   ! Here I'm binding to the C glfw shared library.
   interface
@@ -290,6 +291,28 @@ contains
 
     call internal_glfw_set_error_callback(c_funloc(error_callback))
   end subroutine glfw_set_error_callback
+
+
+  subroutine size_callback(window, width, height)
+    use, intrinsic :: iso_c_binding
+    implicit none
+
+    type(c_ptr), intent(in), optional :: window
+    integer(c_int), intent(in), value :: width, height
+
+    if (.false.) then
+      print*,window
+    end if
+
+    print*,"hi",width,height
+  end subroutine size_callback
+
+
+  subroutine glfw_set_window_size_callback()
+    implicit none
+
+    call internal_glfw_set_window_size_callback(c_window_pointer, c_funloc(size_callback))
+  end subroutine glfw_set_window_size_callback
 
 
 end module glfw
