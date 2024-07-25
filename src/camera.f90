@@ -4,18 +4,24 @@ module camera
 
   private
 
+  public :: camera_update_matrix
+
   !? On the stack, for now. Uses 128 bytes.
   type(mat4f) :: camera_matrix
 
 contains
 
-  subroutine update_camera_matrix()
+  subroutine camera_update_matrix()
+    use :: glfw, only: glfw_get_aspect_ratio
+
     implicit none
 
     call camera_matrix%identity()
 
+    call camera_matrix%perspective(60.0, glfw_get_aspect_ratio(), 0.01, 100.0)
 
-  end subroutine update_camera_matrix
+
+  end subroutine camera_update_matrix
 
 
 end module camera
