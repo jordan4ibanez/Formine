@@ -6,7 +6,7 @@ module camera
 
   public :: camera_update_matrix
 
-  !? On the stack, for now. Uses 128 bytes.
+  !? On the stack, for now. Uses 64 bytes.
   type(mat4f) :: camera_matrix
 
 contains
