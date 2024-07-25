@@ -1,5 +1,5 @@
 module vector_3d
-  use :: iso_c_binding, only: c_double
+  use :: iso_c_binding, only: c_double, c_float
   implicit none
 
   private
@@ -14,10 +14,12 @@ module vector_3d
   type vec3d
     real(c_double), dimension(3) :: data = [0.0, 0.0, 0.0]
   contains
-    generic :: assignment(=) => assign_scalar_f64, assign_array_f64, assign_vec3d
+    generic :: assignment(=) => assign_scalar_f64, assign_array_f64, assign_vec3d, assign_scalar_f32, assign_array_f32
     procedure :: assign_scalar_f64
     procedure :: assign_array_f64
     procedure :: assign_vec3d
+    procedure :: assign_scalar_f32
+    procedure :: assign_array_f32
     !* Note: Float equality is very dumb.
     generic :: operator(==) => equal_scalar_f64, equal_array_f64, equal_vec3d
     procedure :: equal_scalar_f64
@@ -57,7 +59,6 @@ contains
   end function constructor_scalar
 
   type(vec3d) function constructor_scalar_f32(i) result(new_vec3d)
-    use, intrinsic :: iso_c_binding, only: c_float
     implicit none
     real(c_float), intent(in), value :: i
 
@@ -73,7 +74,6 @@ contains
   end function constructor_raw
 
   type(vec3d) function constructor_raw_f32(x,y,z) result(new_vec3d)
-    use, intrinsic :: iso_c_binding, only: c_float
     implicit none
 
     real(c_float), intent(in), value :: x,y,z
@@ -109,6 +109,26 @@ contains
 
     this%data(1:3) = arr(1:3)
   end subroutine assign_array_f64
+
+
+  subroutine assign_scalar_f32(this, i)
+    implicit none
+
+    class(vec3d), intent(inout) :: this
+    real(c_float), intent(in), value :: i
+
+    this%data(1:3) = [i, i, i]
+  end subroutine assign_scalar_f32
+
+
+  subroutine assign_array_f32(this, arr)
+    implicit none
+
+    class(vec3d), intent(inout) :: this
+    real(c_float), dimension(3), intent(in) :: arr
+
+    this%data(1:3) = arr(1:3)
+  end subroutine assign_array_f32
 
 
   subroutine assign_vec3d(this, other)
