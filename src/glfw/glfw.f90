@@ -40,6 +40,7 @@ module glfw
   public :: glfw_set_error_callback
   public :: glfw_window_hint
   public :: glfw_set_window_size_callback
+  public :: glfw_get_aspect_ratio
 
   ! Here I'm binding to the C glfw shared library.
   interface
@@ -324,7 +325,8 @@ contains
   real(c_float) function glfw_get_aspect_ratio() result(ratio)
     implicit none
 
-    ratio = window_width / window_height
+    ratio = real(window_width, kind = c_float) / real(window_height, kind = c_float)
   end function glfw_get_aspect_ratio
+
 
 end module glfw
