@@ -1,6 +1,6 @@
 module test_suite_float
   use float_compare
-  use, intrinsic :: iso_fortran_env, only: real32, real64
+  use, intrinsic :: iso_c_binding, only: c_float, c_double
   use testament
   implicit none
 
@@ -10,7 +10,7 @@ contains
   subroutine f32_test_1
     implicit none
 
-    real(real32) :: a, b
+    real(c_float) :: a, b
 
     ! This is the actual amount of precision you have.
     ! [0.000_000] 6 points of precision. (6.92 according to IBM)
@@ -24,7 +24,7 @@ contains
   subroutine f32_test_2
     implicit none
 
-    real(real32) :: a, b
+    real(c_float) :: a, b
 
     ! This is the actual amount of precision you have.
     ! [0.000_000] 6 points of precision. (6.92 according to IBM)
@@ -39,7 +39,7 @@ contains
   subroutine f32_test_3
     implicit none
 
-    real(real32) :: a, b
+    real(c_float) :: a, b
 
     ! This is the actual amount of precision you have.
     ! [0.000_000] 6 points of precision. (6.92 according to IBM)
@@ -55,7 +55,7 @@ contains
   subroutine f64_test_1
     implicit none
 
-    real(real64) :: a, b
+    real(c_double) :: a, b
 
     ! This is the actual ammount of precision you have.
     ! 15 points of precision (15.95 according to wikipedia)
@@ -69,7 +69,7 @@ contains
   subroutine f64_test_2
     implicit none
 
-    real(real64) :: a, b
+    real(c_double) :: a, b
 
     ! This is the actual ammount of precision you have.
     ! 15 points of precision (15.95 according to wikipedia)
@@ -83,7 +83,7 @@ contains
   subroutine f64_test_3
     implicit none
 
-    real(real64) :: a, b
+    real(c_double) :: a, b
 
     ! This is the actual ammount of precision you have.
     ! 15 points of precision (15.95 according to wikipedia)
