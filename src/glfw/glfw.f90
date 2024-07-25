@@ -218,6 +218,8 @@ contains
 
     ! Finally, output information on this and automatically terminate this if it fails.
     if (success) then
+      window_width = width
+      window_height = height
       print"(A)","[GLFW]: Window created successfully."
     else
       print"(A)","[GLFW] Error: Failed to create window."
