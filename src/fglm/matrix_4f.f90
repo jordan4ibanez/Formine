@@ -27,6 +27,7 @@ module matrix_4f
     procedure :: assign_mat4f
 
     procedure :: identity
+    procedure :: perspective
   end type mat4f
 
   interface mat4f
