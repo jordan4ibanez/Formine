@@ -20,7 +20,7 @@ contains
 
     call camera_matrix%perspective(60.0, glfw_get_aspect_ratio(), 0.1, 100.0)
 
-    print*,camera_matrix%data
+    ! print*,camera_matrix%data
 
   end subroutine camera_update_matrix
 
