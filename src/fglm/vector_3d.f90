@@ -14,80 +14,80 @@ module vector_3d
   type vec3d
     real(c_double), dimension(3) :: data = [0.0, 0.0, 0.0]
   contains
-    generic :: assignment(=) => assign_scalar, assign_array, assign_vec3f
+    generic :: assignment(=) => assign_scalar, assign_array, assign_vec3d
     procedure :: assign_scalar
     procedure :: assign_array
-    procedure :: assign_vec3f
+    procedure :: assign_vec3d
     !* Note: Float equality is very dumb.
-    generic :: operator(==) => equal_scalar, equal_array, equal_vec3f
+    generic :: operator(==) => equal_scalar, equal_array, equal_vec3d
     procedure :: equal_scalar
     procedure :: equal_array
-    procedure :: equal_vec3f
-    generic :: operator(+) => add_scalar, add_array, add_vec3f
+    procedure :: equal_vec3d
+    generic :: operator(+) => add_scalar, add_array, add_vec3d
     procedure :: add_scalar
     procedure :: add_array
-    procedure :: add_vec3f
-    generic :: operator(-) => subtract_scalar, subtract_array, subtract_vec3f
+    procedure :: add_vec3d
+    generic :: operator(-) => subtract_scalar, subtract_array, subtract_vec3d
     procedure :: subtract_scalar
     procedure :: subtract_array
-    procedure :: subtract_vec3f
-    generic :: operator(*) => multiply_scalar, multiply_array, multiply_vec3f
+    procedure :: subtract_vec3d
+    generic :: operator(*) => multiply_scalar, multiply_array, multiply_vec3d
     procedure :: multiply_scalar
     procedure :: multiply_array
-    procedure :: multiply_vec3f
-    generic :: operator(/) => divide_scalar, divide_array, divide_vec3f
+    procedure :: multiply_vec3d
+    generic :: operator(/) => divide_scalar, divide_array, divide_vec3d
     procedure :: divide_scalar
     procedure :: divide_array
-    procedure :: divide_vec3f
+    procedure :: divide_vec3d
   end type vec3d
 
 
   interface vec3d
-    module procedure :: constructor_scalar, constructor_scalar_real32, constructor_raw, constructor_raw_real32, constructor_array
+    module procedure :: constructor_scalar, constructor_scalar_f32, constructor_raw, constructor_raw_f32, constructor_array
   end interface
 
 
 contains
 
-  type(vec3d) function constructor_scalar(i) result(new_vec3)
+  type(vec3d) function constructor_scalar(i) result(new_vec3d)
     implicit none
     real(c_double), intent(in), value :: i
 
-    new_vec3%data(1:3) = [i,i,i]
+    new_vec3d%data(1:3) = [i,i,i]
   end function constructor_scalar
 
-  type(vec3d) function constructor_scalar_real32(i) result(new_vec3)
+  type(vec3d) function constructor_scalar_f32(i) result(new_vec3d)
     use :: iso_fortran_env, only: real32
     implicit none
     real(real32), intent(in), value :: i
 
-    new_vec3%data(1:3) = [i,i,i]
-  end function constructor_scalar_real32
+    new_vec3d%data(1:3) = [i,i,i]
+  end function constructor_scalar_f32
 
-  type(vec3d) function constructor_raw(x,y,z) result(new_vec3)
+  type(vec3d) function constructor_raw(x,y,z) result(new_vec3d)
     implicit none
 
     real(c_double), intent(in), value :: x,y,z
 
-    new_vec3%data(1:3) = [x,y,z]
+    new_vec3d%data(1:3) = [x,y,z]
   end function constructor_raw
 
-  type(vec3d) function constructor_raw_real32(x,y,z) result(new_vec3)
+  type(vec3d) function constructor_raw_f32(x,y,z) result(new_vec3d)
     use :: iso_fortran_env, only: real32
     implicit none
 
     real(real32), intent(in), value :: x,y,z
 
-    new_vec3%data(1:3) = [x,y,z]
-  end function constructor_raw_real32
+    new_vec3d%data(1:3) = [x,y,z]
+  end function constructor_raw_f32
 
 
-  type(vec3d) function constructor_array(xyz_array) result(new_vec3)
+  type(vec3d) function constructor_array(xyz_array) result(new_vec3d)
     implicit none
 
     real(c_double), dimension(3), intent(in) :: xyz_array
 
-    new_vec3%data(1:3) = xyz_array(1:3)
+    new_vec3d%data(1:3) = xyz_array(1:3)
   end function constructor_array
 
 
@@ -111,14 +111,14 @@ contains
   end subroutine assign_array
 
 
-  subroutine assign_vec3f(this, other)
+  subroutine assign_vec3d(this, other)
     implicit none
 
     class(vec3d), intent(inout) :: this
     type(vec3d), intent(in), value :: other
 
     this%data(1:3) = other%data(1:3)
-  end subroutine assign_vec3f
+  end subroutine assign_vec3d
 
 
   logical function equal_scalar(this, i) result(equality)
@@ -143,7 +143,7 @@ contains
   end function equal_array
 
 
-  logical function equal_vec3f(this, other) result(equality)
+  logical function equal_vec3d(this, other) result(equality)
     use float_compare
     implicit none
 
@@ -151,127 +151,127 @@ contains
     type(vec3d), intent(in), value :: other
 
     equality = f64_is_equal(this%data(1), other%data(1)) .and. f64_is_equal(this%data(2), other%data(2)) .and. f64_is_equal(this%data(3), other%data(3))
-  end function equal_vec3f
+  end function equal_vec3d
 
 
-  type(vec3d) function add_scalar(this, i) result(new_vec3)
+  type(vec3d) function add_scalar(this, i) result(new_vec3d)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), intent(in), value :: i
 
-    new_vec3 = this%data(1:3) + i
+    new_vec3d = this%data(1:3) + i
   end function add_scalar
 
 
-  type(vec3d) function add_array(this, arr) result(new_vec3)
+  type(vec3d) function add_array(this, arr) result(new_vec3d)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), dimension(3), intent(in) :: arr
 
-    new_vec3 = this%data(1:3) + arr(1:3)
+    new_vec3d = this%data(1:3) + arr(1:3)
   end function add_array
 
 
-  type(vec3d) function add_vec3f(this, other) result(new_vec3)
+  type(vec3d) function add_vec3d(this, other) result(new_vec3d)
     implicit none
 
     class(vec3d), intent(in) :: this
     type(vec3d), intent(in), value :: other
 
-    new_vec3 = this%data(1:3) + other%data(1:3)
-  end function add_vec3f
+    new_vec3d = this%data(1:3) + other%data(1:3)
+  end function add_vec3d
 
 
-  type(vec3d) function subtract_scalar(this, i) result(new_vec3)
+  type(vec3d) function subtract_scalar(this, i) result(new_vec3d)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), intent(in), value :: i
 
-    new_vec3 = this%data(1:3) - i
+    new_vec3d = this%data(1:3) - i
   end function subtract_scalar
 
 
-  type(vec3d) function subtract_array(this, arr) result(new_vec3)
+  type(vec3d) function subtract_array(this, arr) result(new_vec3d)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), dimension(3), intent(in) :: arr
 
-    new_vec3 = this%data(1:3) - arr(1:3)
+    new_vec3d = this%data(1:3) - arr(1:3)
   end function subtract_array
 
 
-  type(vec3d) function subtract_vec3f(this, other) result(new_vec3)
+  type(vec3d) function subtract_vec3d(this, other) result(new_vec3d)
     implicit none
 
     class(vec3d), intent(in) :: this
     type(vec3d), intent(in), value :: other
 
-    new_vec3 = this%data(1:3) + other%data(1:3)
-  end function subtract_vec3f
+    new_vec3d = this%data(1:3) + other%data(1:3)
+  end function subtract_vec3d
 
 
-  type(vec3d) function multiply_scalar(this, i) result(new_vec3)
+  type(vec3d) function multiply_scalar(this, i) result(new_vec3d)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), intent(in), value :: i
 
-    new_vec3 = this%data(1:3) * i
+    new_vec3d = this%data(1:3) * i
   end function multiply_scalar
 
 
-  type(vec3d) function multiply_array(this, arr) result(new_vec3)
+  type(vec3d) function multiply_array(this, arr) result(new_vec3d)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), dimension(3), intent(in) :: arr
 
-    new_vec3 = this%data(1:3) * arr(1:3)
+    new_vec3d = this%data(1:3) * arr(1:3)
   end function multiply_array
 
 
-  type(vec3d) function multiply_vec3f(this, other) result(new_vec3)
+  type(vec3d) function multiply_vec3d(this, other) result(new_vec3d)
     implicit none
 
     class(vec3d), intent(in) :: this
     type(vec3d), intent(in), value :: other
 
-    new_vec3 = this%data(1:3) * other%data(1:3)
-  end function multiply_vec3f
+    new_vec3d = this%data(1:3) * other%data(1:3)
+  end function multiply_vec3d
 
 
-  type(vec3d) function divide_scalar(this, i) result(new_vec3)
+  type(vec3d) function divide_scalar(this, i) result(new_vec3d)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), intent(in), value :: i
 
-    new_vec3 = this%data(1:3) / i
+    new_vec3d = this%data(1:3) / i
   end function divide_scalar
 
 
-  type(vec3d) function divide_array(this, arr) result(new_vec3)
+  type(vec3d) function divide_array(this, arr) result(new_vec3d)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), dimension(3), intent(in) :: arr
 
-    new_vec3 = this%data(1:3) / arr(1:3)
+    new_vec3d = this%data(1:3) / arr(1:3)
   end function divide_array
 
 
-  type(vec3d) function divide_vec3f(this, other) result(new_vec3)
+  type(vec3d) function divide_vec3d(this, other) result(new_vec3d)
     implicit none
 
     class(vec3d), intent(in) :: this
     type(vec3d), intent(in), value :: other
 
-    new_vec3 = this%data(1:3) / other%data(1:3)
-  end function divide_vec3f
+    new_vec3d = this%data(1:3) / other%data(1:3)
+  end function divide_vec3d
 
 
 
