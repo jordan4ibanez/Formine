@@ -15,6 +15,7 @@ contains
     use :: opengl
     use :: string
     use :: terminal
+    use :: terminal
     implicit none
     ! Notes:
     ! 1. break this up into functions.
@@ -28,7 +29,7 @@ contains
     integer :: vbo_indices
 
     if (.true.) then
-      error stop "implement the hash table of meshes."
+      print"(A)",colorize_rgb("[WARNING]: remember to implement the hash table of meshes.", 255, 0, 0)
     end if
 
     ! print"(A)",colorize_rgb("[Mesh] WARNING: SHADER MODULE NEEDS A STATE MACHINE!", 255,128,0)
