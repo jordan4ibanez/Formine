@@ -50,6 +50,7 @@ module vector_3f
 
 contains
 
+
   type(vec3f) function constructor_scalar(i) result(new_vec3f)
     implicit none
     real(c_float), intent(in), value :: i
@@ -57,6 +58,7 @@ contains
     new_vec3f%data(1:3) = [i,i,i]
   end function constructor_scalar
 
+  
   type(vec3f) function constructor_raw(x,y,z) result(new_vec3f)
     implicit none
 
