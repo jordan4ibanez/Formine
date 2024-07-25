@@ -1,4 +1,4 @@
-module math_stuff
+module math_helpers
   use, intrinsic :: iso_c_binding, only: c_float, c_double
   implicit none
 
@@ -22,4 +22,4 @@ contains
     res = input * (pi_64 / 180.0d0)
   end function to_radians_f64
 
-end module math_stuff
+end module math_helpers

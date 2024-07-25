@@ -17,7 +17,7 @@ contains
 
   subroutine camera_update_matrix()
     use :: glfw, only: glfw_get_aspect_ratio
-    use :: math_stuff, only: to_radians_f32
+    use :: math_helpers, only: to_radians_f32
 
     implicit none
 
