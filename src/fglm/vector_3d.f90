@@ -53,7 +53,7 @@ module vector_3d
 
 
   interface vec3d
-    module procedure :: constructor_scalar_f64, constructor_raw_f64, constructor_array_f64, constructor_scalar_f32, constructor_raw_f32
+    module procedure :: constructor_scalar_f64, constructor_raw_f64, constructor_array_f64, constructor_scalar_f32, constructor_raw_f32, constructor_array_f32
   end interface
 
 
@@ -101,6 +101,15 @@ contains
 
     new_vec3d%data(1:3) = xyz_array(1:3)
   end function constructor_array_f64
+
+
+  type(vec3d) function constructor_array_f32(xyz_array) result(new_vec3d)
+    implicit none
+
+    real(c_float), dimension(3), intent(in) :: xyz_array
+
+    new_vec3d%data(1:3) = xyz_array(1:3)
+  end function constructor_array_f32
 
 
   !* Assignment.
