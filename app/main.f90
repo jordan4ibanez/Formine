@@ -33,6 +33,8 @@ program main
     return
   end if
 
+  call glfw_set_window_size_callback()
+
   call glfw_make_context_current()
 
   call gl_get_version()
