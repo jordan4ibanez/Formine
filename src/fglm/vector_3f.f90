@@ -20,25 +20,25 @@ module vector_3f
     procedure :: assign_vec3f
     procedure :: assign_vec3d
     !* Note: Float equality is very dumb.
-    generic :: operator(==) => equal_scalar, equal_array, equal_vec3f
-    procedure :: equal_scalar
-    procedure :: equal_array
+    generic :: operator(==) => equal_scalar_f32, equal_array_f32, equal_vec3f
+    procedure :: equal_scalar_f32
+    procedure :: equal_array_f32
     procedure :: equal_vec3f
-    generic :: operator(+) => add_scalar, add_array, add_vec3f
-    procedure :: add_scalar
-    procedure :: add_array
+    generic :: operator(+) => add_scalar_f32, add_array_f32, add_vec3f
+    procedure :: add_scalar_f32
+    procedure :: add_array_f32
     procedure :: add_vec3f
-    generic :: operator(-) => subtract_scalar, subtract_array, subtract_vec3f
-    procedure :: subtract_scalar
-    procedure :: subtract_array
+    generic :: operator(-) => subtract_scalar_f32, subtract_array_f32, subtract_vec3f
+    procedure :: subtract_scalar_f32
+    procedure :: subtract_array_f32
     procedure :: subtract_vec3f
-    generic :: operator(*) => multiply_scalar, multiply_array, multiply_vec3f
-    procedure :: multiply_scalar
-    procedure :: multiply_array
+    generic :: operator(*) => multiply_scalar_f32, multiply_array_f32, multiply_vec3f
+    procedure :: multiply_scalar_f32
+    procedure :: multiply_array_f32
     procedure :: multiply_vec3f
-    generic :: operator(/) => divide_scalar, divide_array, divide_vec3f
-    procedure :: divide_scalar
-    procedure :: divide_array
+    generic :: operator(/) => divide_scalar_f32, divide_array_f32, divide_vec3f
+    procedure :: divide_scalar_f32
+    procedure :: divide_array_f32
     procedure :: divide_vec3f
   end type vec3f
 
@@ -118,7 +118,7 @@ contains
   end subroutine assign_vec3d
 
 
-  logical function equal_scalar(this, i) result(equality)
+  logical function equal_scalar_f32(this, i) result(equality)
     use float_compare
     implicit none
 
@@ -126,10 +126,10 @@ contains
     real(c_float), intent(in), value :: i
 
     equality = f32_is_equal(this%data(1), i) .and. f32_is_equal(this%data(2), i) .and. f32_is_equal(this%data(3), i)
-  end function equal_scalar
+  end function equal_scalar_f32
 
 
-  logical function equal_array(this, arr) result(equality)
+  logical function equal_array_f32(this, arr) result(equality)
     use float_compare
     implicit none
 
@@ -137,7 +137,7 @@ contains
     real(c_float), dimension(3), intent(in) :: arr
 
     equality = f32_is_equal(this%data(1), arr(1)) .and. f32_is_equal(this%data(2), arr(2)) .and. f32_is_equal(this%data(3), arr(3))
-  end function equal_array
+  end function equal_array_f32
 
 
   logical function equal_vec3f(this, other) result(equality)
@@ -151,24 +151,24 @@ contains
   end function equal_vec3f
 
 
-  type(vec3f) function add_scalar(this, i) result(new_vec3f)
+  type(vec3f) function add_scalar_f32(this, i) result(new_vec3f)
     implicit none
 
     class(vec3f), intent(in) :: this
     real(c_float), intent(in), value :: i
 
     new_vec3f = this%data(1:3) + i
-  end function add_scalar
+  end function add_scalar_f32
 
 
-  type(vec3f) function add_array(this, arr) result(new_vec3f)
+  type(vec3f) function add_array_f32(this, arr) result(new_vec3f)
     implicit none
 
     class(vec3f), intent(in) :: this
     real(c_float), dimension(3), intent(in) :: arr
 
     new_vec3f = this%data(1:3) + arr(1:3)
-  end function add_array
+  end function add_array_f32
 
 
   type(vec3f) function add_vec3f(this, other) result(new_vec3f)
@@ -181,24 +181,24 @@ contains
   end function add_vec3f
 
 
-  type(vec3f) function subtract_scalar(this, i) result(new_vec3f)
+  type(vec3f) function subtract_scalar_f32(this, i) result(new_vec3f)
     implicit none
 
     class(vec3f), intent(in) :: this
     real(c_float), intent(in), value :: i
 
     new_vec3f = this%data(1:3) - i
-  end function subtract_scalar
+  end function subtract_scalar_f32
 
 
-  type(vec3f) function subtract_array(this, arr) result(new_vec3f)
+  type(vec3f) function subtract_array_f32(this, arr) result(new_vec3f)
     implicit none
 
     class(vec3f), intent(in) :: this
     real(c_float), dimension(3), intent(in) :: arr
 
     new_vec3f = this%data(1:3) - arr(1:3)
-  end function subtract_array
+  end function subtract_array_f32
 
 
   type(vec3f) function subtract_vec3f(this, other) result(new_vec3f)
@@ -211,24 +211,24 @@ contains
   end function subtract_vec3f
 
 
-  type(vec3f) function multiply_scalar(this, i) result(new_vec3f)
+  type(vec3f) function multiply_scalar_f32(this, i) result(new_vec3f)
     implicit none
 
     class(vec3f), intent(in) :: this
     real(c_float), intent(in), value :: i
 
     new_vec3f = this%data(1:3) * i
-  end function multiply_scalar
+  end function multiply_scalar_f32
 
 
-  type(vec3f) function multiply_array(this, arr) result(new_vec3f)
+  type(vec3f) function multiply_array_f32(this, arr) result(new_vec3f)
     implicit none
 
     class(vec3f), intent(in) :: this
     real(c_float), dimension(3), intent(in) :: arr
 
     new_vec3f = this%data(1:3) * arr(1:3)
-  end function multiply_array
+  end function multiply_array_f32
 
 
   type(vec3f) function multiply_vec3f(this, other) result(new_vec3f)
@@ -241,24 +241,24 @@ contains
   end function multiply_vec3f
 
 
-  type(vec3f) function divide_scalar(this, i) result(new_vec3f)
+  type(vec3f) function divide_scalar_f32(this, i) result(new_vec3f)
     implicit none
 
     class(vec3f), intent(in) :: this
     real(c_float), intent(in), value :: i
 
     new_vec3f = this%data(1:3) / i
-  end function divide_scalar
+  end function divide_scalar_f32
 
 
-  type(vec3f) function divide_array(this, arr) result(new_vec3f)
+  type(vec3f) function divide_array_f32(this, arr) result(new_vec3f)
     implicit none
 
     class(vec3f), intent(in) :: this
     real(c_float), dimension(3), intent(in) :: arr
 
     new_vec3f = this%data(1:3) / arr(1:3)
-  end function divide_array
+  end function divide_array_f32
 
 
   type(vec3f) function divide_vec3f(this, other) result(new_vec3f)
