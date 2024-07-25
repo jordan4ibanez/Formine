@@ -306,6 +306,8 @@ contains
     end if
 
     print"(A)", "[Window] Resize: ["//int_to_string(width)//", "//int_to_string(height)//"]"
+    window_width = width
+    window_height = height
   end subroutine size_callback
 
 
