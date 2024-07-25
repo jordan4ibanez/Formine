@@ -5,6 +5,7 @@ program main
   use :: shader
   use :: files
   use :: mesh
+  use :: camera
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -65,6 +66,8 @@ program main
       ! call blah(color)
 
       call gl_clear_color(1.0, 1.0, 1.0)
+
+      call camera_update_matrix()
 
       call gl_clear_color_buffer()
 
