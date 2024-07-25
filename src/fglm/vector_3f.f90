@@ -104,6 +104,7 @@ contains
     this%data(1:3) = other%data(1:3)
   end subroutine assign_vec3f
 
+
   subroutine assign_vec3d(this, other)
     use vector_3d
     implicit none
