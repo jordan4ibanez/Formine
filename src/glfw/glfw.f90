@@ -134,6 +134,15 @@ module glfw
     end subroutine glfw_window_hint
 
 
+    subroutine internal_glfw_set_window_size_callback(window, callback) bind(c, name = "glfwSetWindowSizeCallback")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: window
+      type(c_funptr), intent(in), value :: callback
+      !! We will just ignore the pointer return cause I don't really care tbh.
+    end subroutine internal_glfw_set_window_size_callback
+
 
   end interface
 
