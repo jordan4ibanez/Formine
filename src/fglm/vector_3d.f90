@@ -172,7 +172,7 @@ contains
 
 
   logical function equal_scalar_f64(this, i) result(equality)
-    use float_compare
+    use :: float_compare
     implicit none
 
     class(vec3d), intent(in) :: this
@@ -183,7 +183,7 @@ contains
 
 
   logical function equal_array_f64(this, arr) result(equality)
-    use float_compare
+    use :: float_compare
     implicit none
 
     class(vec3d), intent(in) :: this
@@ -194,7 +194,7 @@ contains
 
 
   logical function equal_vec3d(this, other) result(equality)
-    use float_compare
+    use :: float_compare
     implicit none
 
     class(vec3d), intent(in) :: this

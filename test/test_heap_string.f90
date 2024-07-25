@@ -1,6 +1,6 @@
 module test_suite_string
-  use string
-  use testament
+  use :: string
+  use :: testament
   implicit none
 
   !! Not private.
@@ -243,7 +243,7 @@ end module test_suite_string
 
 
 program test_heap_string
-  use test_suite_string
+  use :: test_suite_string
   implicit none
 
   call assign_test()

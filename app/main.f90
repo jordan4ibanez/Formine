@@ -1,10 +1,10 @@
 program main
-  use glfw
-  use opengl
-  use string
-  use shader
-  use files
-  use mesh
+  use :: glfw
+  use :: opengl
+  use :: string
+  use :: shader
+  use :: files
+  use :: mesh
   use, intrinsic ::  iso_c_binding
   implicit none
 

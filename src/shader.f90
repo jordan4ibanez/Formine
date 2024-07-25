@@ -1,5 +1,5 @@
 module shader
-  use fhash, only: fhash_tbl_t, key => fhash_key
+  use :: fhash, only: fhash_tbl_t, key => fhash_key
   implicit none
 
 
@@ -39,8 +39,8 @@ contains
   !? Makes the code easier to read.
   !? This also is making it so the program that uses it can return the success and work logic on it at the same time.
   logical function creation_succeeded(input) result(success)
-    use string
-    use opengl
+    use :: string
+    use :: opengl
     implicit none
 
     integer, intent(in), value :: input
@@ -53,7 +53,7 @@ contains
   !** This is a simple variation of shader_creation_succeeded with gl_check_error as our helper.
   !? Same docs as in shader_creation_success minus the input.
   logical function shader_compilation_succeeded(shader_id) result(success)
-    use opengl
+    use :: opengl
     implicit none
 
     integer :: shader_id
@@ -66,8 +66,8 @@ contains
   !** Create a named shader program from vertex and fragment code locations
   !? Will return false if it fails, true if it succeeds.
   subroutine shader_create(name, vertex_code_location, fragment_code_location)
-    use opengl
-    use string
+    use :: opengl
+    use :: string
     use, intrinsic :: iso_c_binding
     implicit none
 
@@ -196,7 +196,7 @@ contains
 
   !** Check if a shader exists in the database.
   logical function shader_exists(shader_name) result(exists)
-    use string
+    use :: string
     implicit none
 
     character(len = *) :: shader_name
@@ -209,8 +209,8 @@ contains
 
   !** Create the database of attribute locations, inside the shader program.
   subroutine shader_create_attribute_locations(shader_name, attribute_array)
-    use opengl
-    use string
+    use :: opengl
+    use :: string
     implicit none
 
     character(len = *), intent(in) :: shader_name
@@ -282,8 +282,8 @@ contains
 
   !** Create the database of uniform locations, inside the shader program.
   subroutine shader_create_uniform_locations(shader_name, uniform_array)
-    use opengl
-    use string
+    use :: opengl
+    use :: string
     implicit none
 
     character(len = *), intent(in) :: shader_name
@@ -355,7 +355,7 @@ contains
 
   !** Start up a shader program.
   subroutine shader_start(shader_name)
-    use opengl
+    use :: opengl
     implicit none
 
     character(len = *), intent(in) :: shader_Name

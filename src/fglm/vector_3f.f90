@@ -106,7 +106,7 @@ contains
 
 
   subroutine assign_vec3d(this, other)
-    use vector_3d
+    use :: vector_3d
     implicit none
 
     class(vec3f), intent(inout) :: this
@@ -119,7 +119,7 @@ contains
 
 
   logical function equal_scalar_f32(this, i) result(equality)
-    use float_compare
+    use :: float_compare
     implicit none
 
     class(vec3f), intent(in) :: this
@@ -130,7 +130,7 @@ contains
 
 
   logical function equal_array_f32(this, arr) result(equality)
-    use float_compare
+    use :: float_compare
     implicit none
 
     class(vec3f), intent(in) :: this
@@ -141,7 +141,7 @@ contains
 
 
   logical function equal_vec3f(this, other) result(equality)
-    use float_compare
+    use :: float_compare
     implicit none
 
     class(vec3f), intent(in) :: this

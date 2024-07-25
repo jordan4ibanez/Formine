@@ -1,7 +1,7 @@
 module test_suite_vec3f
-  use vector_3f
-  use float_compare
-  use testament
+  use :: vector_3f
+  use :: float_compare
+  use :: testament
   implicit none
 
 contains
@@ -163,11 +163,18 @@ contains
     call assert_true(unit_3 == vec3f(1.50000000, 0.857142866, 0.750000000))
   end subroutine test_divide
 
+
+  subroutine vec3f_array_from_vec3d_array()
+    use :: vector_3d
+    implicit none
+
+  end subroutine vec3f_array_from_vec3d_array
+
 end module test_suite_vec3f
 
 
 program test_vec3f
-  use test_suite_vec3f
+  use :: test_suite_vec3f
   implicit none
 
   call test_assign()
@@ -181,4 +188,6 @@ program test_vec3f
   call test_multiply()
 
   call test_divide()
+
+  call vec3f_array_from_vec3d_array()
 end program test_vec3f

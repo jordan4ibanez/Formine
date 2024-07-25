@@ -1,7 +1,7 @@
 module test_suite_float
-  use float_compare
   use, intrinsic :: iso_c_binding, only: c_float, c_double
-  use testament
+  use :: float_compare
+  use :: testament
   implicit none
 
 contains
@@ -98,7 +98,7 @@ end module test_suite_float
 
 
 program test_float_compare
-  use test_suite_float
+  use :: test_suite_float
   implicit none
 
 

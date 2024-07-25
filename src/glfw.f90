@@ -189,7 +189,7 @@ contains
 
   logical function glfw_create_window(width, height, title) result(success)
     use, intrinsic :: iso_c_binding
-    use string
+    use :: string
     implicit none
 
     integer(c_int) :: width
@@ -253,7 +253,7 @@ contains
   !** NOTE: This function passed into C as a pointer!
   subroutine error_callback(i, char_pointer)
     use, intrinsic :: iso_c_binding
-    use string
+    use :: string
     implicit none
 
     integer(c_int), intent(in), value :: i

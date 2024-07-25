@@ -1,7 +1,7 @@
 !** This module kind of works like a state machine.
 module mesh
-  use string
-  use vector_3f
+  use :: string
+  use :: vector_3f
   implicit none
 
   private
@@ -11,10 +11,10 @@ module mesh
 contains
 
   subroutine create_mesh_3d
-    use shader
-    use opengl
-    use string
-    use terminal
+    use :: shader
+    use :: opengl
+    use :: string
+    use :: terminal
     implicit none
     ! Notes:
     ! 1. break this up into functions.
@@ -65,8 +65,8 @@ contains
 
   integer function upload_positions(position_array) result(vbo_position)
     use, intrinsic :: iso_c_binding
-    use opengl
-    use shader
+    use :: opengl
+    use :: shader
     implicit none
 
     real(c_float), dimension(:), intent(in) :: position_array

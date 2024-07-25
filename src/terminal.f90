@@ -11,7 +11,7 @@ contains
 
   ! Internal subroutine to stop me from doing something stupid.
   subroutine rgb_check(i)
-    use string
+    use :: string
     implicit none
 
     integer :: i
@@ -25,7 +25,7 @@ contains
   ! Convert rgb values into an ANSI rgb string.
   ! RGB value range: 0-255
   function to_rgb_string(r,g,b) result(rgb_string)
-    use string
+    use :: string
     implicit none
 
     integer, intent(in) :: r
@@ -45,7 +45,7 @@ contains
   ! Colorize a string which when output to ANSI terminals will print in color. Yay!
   ! RGB value range: 0-255
   function colorize_rgb(input_string, r,g,b) result(colorized_text)
-    use string
+    use :: string
     implicit none
 
     character(len = *), intent(in) :: input_string
