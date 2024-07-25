@@ -53,11 +53,15 @@ module vector_3d
 
 
   interface vec3d
-    module procedure :: constructor_scalar, constructor_scalar_f32, constructor_raw, constructor_raw_f32, constructor_array
+    module procedure :: constructor_scalar, constructor_raw, constructor_array, constructor_scalar_f32, constructor_raw_f32
   end interface
 
 
 contains
+
+
+  !* Constructor.
+
 
   type(vec3d) function constructor_scalar(i) result(new_vec3d)
     implicit none
@@ -99,6 +103,9 @@ contains
   end function constructor_array
 
 
+  !* Assignment.
+
+
   subroutine assign_scalar_f64(this, i)
     implicit none
 
@@ -117,6 +124,16 @@ contains
 
     this%data(1:3) = arr(1:3)
   end subroutine assign_array_f64
+
+
+  subroutine assign_vec3d(this, other)
+    implicit none
+
+    class(vec3d), intent(inout) :: this
+    type(vec3d), intent(in), value :: other
+
+    this%data(1:3) = other%data(1:3)
+  end subroutine assign_vec3d
 
 
   subroutine assign_scalar_f32(this, i)
@@ -139,14 +156,7 @@ contains
   end subroutine assign_array_f32
 
 
-  subroutine assign_vec3d(this, other)
-    implicit none
-
-    class(vec3d), intent(inout) :: this
-    type(vec3d), intent(in), value :: other
-
-    this%data(1:3) = other%data(1:3)
-  end subroutine assign_vec3d
+  !* Equality.
 
 
   logical function equal_scalar_f64(this, i) result(equality)
@@ -182,6 +192,9 @@ contains
   end function equal_vec3d
 
 
+  !* Addition
+
+
   type(vec3d) function add_scalar_f64(this, i) result(new_vec3d)
     implicit none
 
@@ -200,6 +213,16 @@ contains
 
     new_vec3d = this%data(1:3) + arr(1:3)
   end function add_array_f64
+
+
+  type(vec3d) function add_vec3d(this, other) result(new_vec3d)
+    implicit none
+
+    class(vec3d), intent(in) :: this
+    type(vec3d), intent(in), value :: other
+
+    new_vec3d = this%data(1:3) + other%data(1:3)
+  end function add_vec3d
 
 
   type(vec3d) function add_scalar_f32(this, i) result(new_vec3d)
@@ -222,14 +245,7 @@ contains
   end function add_array_f32
 
 
-  type(vec3d) function add_vec3d(this, other) result(new_vec3d)
-    implicit none
-
-    class(vec3d), intent(in) :: this
-    type(vec3d), intent(in), value :: other
-
-    new_vec3d = this%data(1:3) + other%data(1:3)
-  end function add_vec3d
+  !* Subtraction.
 
 
   type(vec3d) function subtract_scalar_f64(this, i) result(new_vec3d)
@@ -252,6 +268,16 @@ contains
   end function subtract_array_f64
 
 
+  type(vec3d) function subtract_vec3d(this, other) result(new_vec3d)
+    implicit none
+
+    class(vec3d), intent(in) :: this
+    type(vec3d), intent(in), value :: other
+
+    new_vec3d = this%data(1:3) + other%data(1:3)
+  end function subtract_vec3d
+
+
   type(vec3d) function subtract_scalar_f32(this, i) result(new_vec3d)
     implicit none
 
@@ -272,14 +298,7 @@ contains
   end function subtract_array_f32
 
 
-  type(vec3d) function subtract_vec3d(this, other) result(new_vec3d)
-    implicit none
-
-    class(vec3d), intent(in) :: this
-    type(vec3d), intent(in), value :: other
-
-    new_vec3d = this%data(1:3) + other%data(1:3)
-  end function subtract_vec3d
+  !* Multiplication.
 
 
   type(vec3d) function multiply_scalar_f64(this, i) result(new_vec3d)
@@ -302,6 +321,16 @@ contains
   end function multiply_array_f64
 
 
+  type(vec3d) function multiply_vec3d(this, other) result(new_vec3d)
+    implicit none
+
+    class(vec3d), intent(in) :: this
+    type(vec3d), intent(in), value :: other
+
+    new_vec3d = this%data(1:3) * other%data(1:3)
+  end function multiply_vec3d
+
+
   type(vec3d) function multiply_scalar_f32(this, i) result(new_vec3d)
     implicit none
 
@@ -322,14 +351,7 @@ contains
   end function multiply_array_f32
 
 
-  type(vec3d) function multiply_vec3d(this, other) result(new_vec3d)
-    implicit none
-
-    class(vec3d), intent(in) :: this
-    type(vec3d), intent(in), value :: other
-
-    new_vec3d = this%data(1:3) * other%data(1:3)
-  end function multiply_vec3d
+  !* Division.
 
 
   type(vec3d) function divide_scalar_f64(this, i) result(new_vec3d)
@@ -380,7 +402,6 @@ contains
 
     new_vec3d = this%data(1:3) / arr(1:3)
   end function divide_array_f32
-
 
 
 end module vector_3d
