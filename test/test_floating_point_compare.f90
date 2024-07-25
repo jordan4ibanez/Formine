@@ -17,7 +17,7 @@ contains
     a = 0.00000010
     b = 0.00000010
 
-    call assert_true(r32_is_equal(a,b))
+    call assert_true(f32_is_equal(a,b))
 
   end subroutine f32_test_1
 
@@ -31,7 +31,7 @@ contains
     a = 0.00000011 ! <- That extra 1 is lost.
     b = 0.00000010
 
-    call assert_true(r32_is_equal(a,b))
+    call assert_true(f32_is_equal(a,b))
 
   end subroutine f32_test_2
 
@@ -46,7 +46,7 @@ contains
     a = 0.000001
     b = 0.000002
 
-    call assert_false(r32_is_equal(a,b))
+    call assert_false(f32_is_equal(a,b))
 
   end subroutine f32_test_3
 
@@ -63,7 +63,7 @@ contains
     a = 0.000000000000001
     b = 0.000000000000001
 
-    call assert_true(r64_is_equal(a,b))
+    call assert_true(f64_is_equal(a,b))
   end subroutine f64_test_1
 
   subroutine f64_test_2
@@ -74,10 +74,10 @@ contains
     ! This is the actual ammount of precision you have.
     ! 15 points of precision (15.95 according to wikipedia)
     ! 0.000_000_000_000_000
-    a = 0.0000000000000010 
+    a = 0.0000000000000010
     b = 0.0000000000000011 ! <- that extra 1 is lost.
 
-    call assert_true(r64_is_equal(a,b))
+    call assert_true(f64_is_equal(a,b))
   end subroutine f64_test_2
 
   subroutine f64_test_3
@@ -88,10 +88,10 @@ contains
     ! This is the actual ammount of precision you have.
     ! 15 points of precision (15.95 according to wikipedia)
     ! 0.000_000_000_000_000
-    a = 0.000000000000001 
+    a = 0.000000000000001
     b = 0.000000000000002
 
-    call assert_false(r64_is_equal(a,b))
+    call assert_false(f64_is_equal(a,b))
   end subroutine f64_test_3
 
 end module test_suite_float

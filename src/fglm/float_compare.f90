@@ -1,5 +1,5 @@
 module float_compare
-  use, intrinsic :: iso_fortran_env, only: real32, real64
+  use, intrinsic :: iso_c_binding, only: c_float, c_double
   implicit none
 
   private
@@ -8,8 +8,8 @@ module float_compare
   !** f32 has 6 points of precision comparison.
   !** f64 has [test it]
 
-  public :: r32_is_equal
-  public :: r64_is_equal
+  public :: f32_is_equal
+  public :: f64_is_equal
 
   real, parameter :: tolerence32 = epsilon(0.0)
   real, parameter :: tolerence64 = epsilon(0.0d0)
@@ -18,21 +18,21 @@ module float_compare
 contains
 
 
-  logical function r32_is_equal(a, b) result(equality)
+  logical function f32_is_equal(a, b) result(equality)
     implicit none
 
-    real(real32), intent(in), value :: a,b
+    real(c_float), intent(in), value :: a,b
 
     equality = abs(a - b) <= tolerence32
-  end function r32_is_equal
+  end function f32_is_equal
 
 
-  logical function r64_is_equal(a, b) result(equality)
+  logical function f64_is_equal(a, b) result(equality)
     implicit none
 
-    real(real64), intent(in), value :: a,b
+    real(c_double), intent(in), value :: a,b
 
     equality = abs(a - b) <= tolerence64
-  end function r64_is_equal
+  end function f64_is_equal
 
 end module float_compare

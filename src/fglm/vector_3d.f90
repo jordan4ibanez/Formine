@@ -128,7 +128,7 @@ contains
     class(vec3d), intent(in) :: this
     real(real64), intent(in), value :: i
 
-    equality = r64_is_equal(this%data(1), i) .and. r64_is_equal(this%data(2), i) .and. r64_is_equal(this%data(3), i)
+    equality = f64_is_equal(this%data(1), i) .and. f64_is_equal(this%data(2), i) .and. f64_is_equal(this%data(3), i)
   end function equal_scalar
 
 
@@ -139,7 +139,7 @@ contains
     class(vec3d), intent(in) :: this
     real(real64), dimension(3), intent(in) :: arr
 
-    equality = r64_is_equal(this%data(1), arr(1)) .and. r64_is_equal(this%data(2), arr(2)) .and. r64_is_equal(this%data(3), arr(3))
+    equality = f64_is_equal(this%data(1), arr(1)) .and. f64_is_equal(this%data(2), arr(2)) .and. f64_is_equal(this%data(3), arr(3))
   end function equal_array
 
 
@@ -150,7 +150,7 @@ contains
     class(vec3d), intent(in) :: this
     type(vec3d), intent(in), value :: other
 
-    equality = r64_is_equal(this%data(1), other%data(1)) .and. r64_is_equal(this%data(2), other%data(2)) .and. r64_is_equal(this%data(3), other%data(3))
+    equality = f64_is_equal(this%data(1), other%data(1)) .and. f64_is_equal(this%data(2), other%data(2)) .and. f64_is_equal(this%data(3), other%data(3))
   end function equal_vec3
 
 
