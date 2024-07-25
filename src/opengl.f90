@@ -89,6 +89,7 @@ module opengl
   public :: gl_enable_vertex_attrib_array
   public :: gl_vertex_attrib_pointer
   public :: gl_draw_elements
+  public :: gl_uniform_mat4f
 
   ! Here I'm binding to the C shared library.
 
@@ -335,6 +336,17 @@ module opengl
       integer(c_int), intent(in), value :: type
       type(c_ptr), intent(in), optional :: indices
     end subroutine internal_gl_draw_elements
+
+
+    subroutine internal_gl_uniform_matrix_4_fv(location, count, transpose, value) bind(c, name = "glUniformMatrix4fv")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: location
+      integer(c_int), intent(in), value :: count
+      logical(c_bool), intent(in), value :: transpose
+      type(c_ptr), intent(in), value :: value
+    end subroutine internal_gl_uniform_matrix_4_fv
 
 
   end interface
@@ -645,5 +657,19 @@ contains
 
     call internal_gl_draw_elements(mode, count, type, null())
   end subroutine gl_draw_elements
+
+
+  subroutine gl_uniform_mat4f(location, value)
+    use :: matrix_4f
+    implicit none
+
+    integer, intent(in), value :: location
+    type(mat4f), intent(in), target :: value
+    logical(c_bool) :: transpose
+
+    transpose = .false.
+
+    call internal_gl_uniform_matrix_4_fv(location, 1, transpose, c_loc(value))
+  end subroutine gl_uniform_mat4f
 
 end module opengl
