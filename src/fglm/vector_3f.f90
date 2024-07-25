@@ -14,9 +14,9 @@ module vector_3f
   type vec3f
     real(c_float), dimension(3) :: data = [0.0, 0.0, 0.0]
   contains
-    generic :: assignment(=) => assign_scalar, assign_array, assign_vec3f, assign_vec3d
-    procedure :: assign_scalar
-    procedure :: assign_array
+    generic :: assignment(=) => assign_scalar_f32, assign_array_f32, assign_vec3f, assign_vec3d
+    procedure :: assign_scalar_f32
+    procedure :: assign_array_f32
     procedure :: assign_vec3f
     procedure :: assign_vec3d
     !* Note: Float equality is very dumb.
@@ -77,24 +77,24 @@ contains
   end function constructor_array
 
 
-  subroutine assign_scalar(this, i)
+  subroutine assign_scalar_f32(this, i)
     implicit none
 
     class(vec3f), intent(inout) :: this
     real(c_float), intent(in), value :: i
 
     this%data(1:3) = [i, i, i]
-  end subroutine assign_scalar
+  end subroutine assign_scalar_f32
 
 
-  subroutine assign_array(this, arr)
+  subroutine assign_array_f32(this, arr)
     implicit none
 
     class(vec3f), intent(inout) :: this
     real(c_float), dimension(3), intent(in) :: arr
 
     this%data(1:3) = arr(1:3)
-  end subroutine assign_array
+  end subroutine assign_array_f32
 
 
   subroutine assign_vec3f(this, other)
