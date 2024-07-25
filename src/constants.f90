@@ -10,13 +10,13 @@ module constants
 
   !** Integral
   ! 32 bits. 4 bytes.
-  integer(kind = c_int), parameter :: i32_size = sizeof(c_int)
+  integer(kind = c_int), parameter :: i32_size = sizeof(c_int32_t)
   ! 64 bits. 8 bytes.
   integer(kind = c_int), parameter :: i64_size = sizeof(c_int64_t)
 
   !** Unsigned Integral
   ! 32 bits. 4 bytes.
-  integer(kind = c_int), parameter :: u32_size = sizeof(c_int)
+  integer(kind = c_int), parameter :: u32_size = sizeof(c_int32_t)
   ! 64 bits. 8 bytes.
   integer(kind = c_int), parameter :: u64_size = sizeof(c_int64_t)
 
