@@ -90,6 +90,7 @@ module opengl
   public :: gl_vertex_attrib_pointer
   public :: gl_draw_elements
   public :: gl_uniform_mat4f
+  public :: gl_view_port
 
   ! Here I'm binding to the C shared library.
 
@@ -347,6 +348,17 @@ module opengl
       logical(c_bool), intent(in), value :: transpose
       type(c_ptr), intent(in), value :: value
     end subroutine internal_gl_uniform_matrix_4_fv
+
+
+    subroutine gl_view_port(x, y, width, height) bind(c, name = "glViewport")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: x
+      integer(c_int), intent(in), value :: y
+      integer(c_int), intent(in), value :: width
+      integer(c_int), intent(in), value :: height
+    end subroutine gl_view_port
 
 
   end interface
