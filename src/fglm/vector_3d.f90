@@ -31,10 +31,12 @@ module vector_3d
     procedure :: add_vec3d
     procedure :: add_scalar_f32
     procedure :: add_array_f32
-    generic :: operator(-) => subtract_scalar_f64, subtract_array_f64, subtract_vec3d
+    generic :: operator(-) => subtract_scalar_f64, subtract_array_f64, subtract_vec3d, subtract_scalar_f32, subtract_array_f32
     procedure :: subtract_scalar_f64
     procedure :: subtract_array_f64
     procedure :: subtract_vec3d
+    procedure :: subtract_scalar_f32
+    procedure :: subtract_array_f32
     generic :: operator(*) => multiply_scalar_f64, multiply_array_f64, multiply_vec3d
     procedure :: multiply_scalar_f64
     procedure :: multiply_array_f64
@@ -244,6 +246,26 @@ contains
 
     new_vec3d = this%data(1:3) - arr(1:3)
   end function subtract_array_f64
+
+
+  type(vec3d) function subtract_scalar_f32(this, i) result(new_vec3d)
+    implicit none
+
+    class(vec3d), intent(in) :: this
+    real(c_float), intent(in), value :: i
+
+    new_vec3d = this%data(1:3) - i
+  end function subtract_scalar_f32
+
+
+  type(vec3d) function subtract_array_f32(this, arr) result(new_vec3d)
+    implicit none
+
+    class(vec3d), intent(in) :: this
+    real(c_float), dimension(3), intent(in) :: arr
+
+    new_vec3d = this%data(1:3) - arr(1:3)
+  end function subtract_array_f32
 
 
   type(vec3d) function subtract_vec3d(this, other) result(new_vec3d)
