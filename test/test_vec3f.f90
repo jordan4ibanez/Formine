@@ -36,6 +36,22 @@ contains
   end subroutine test_assign
 
 
+  subroutine test_assign_from_vec3d()
+    use :: vector_3d
+    implicit none
+
+    type(vec3f) :: unit_1
+
+    unit_1 = 0.0
+
+    ! This causes random imprecision past 6 digits, but we do not care.
+    unit_1 = vec3d(0.5d0, 1.88d0, 5.019d0)
+
+    call assert_true(unit_1 == vec3f(0.5, 1.88, 5.019))
+
+  end subroutine
+
+
   subroutine test_equality()
     implicit none
 
@@ -155,6 +171,8 @@ program test_vec3f
   implicit none
 
   call test_assign()
+
+  call test_assign_from_vec3d()
 
   call test_equality()
 
