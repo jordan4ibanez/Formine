@@ -53,7 +53,7 @@ module vector_3d
 
 
   interface vec3d
-    module procedure :: constructor_scalar, constructor_raw, constructor_array, constructor_scalar_f32, constructor_raw_f32
+    module procedure :: constructor_scalar_f64, constructor_raw_f64, constructor_array_f64, constructor_scalar_f32, constructor_raw_f32
   end interface
 
 
@@ -63,12 +63,12 @@ contains
   !* Constructor.
 
 
-  type(vec3d) function constructor_scalar(i) result(new_vec3d)
+  type(vec3d) function constructor_scalar_f64(i) result(new_vec3d)
     implicit none
     real(c_double), intent(in), value :: i
 
     new_vec3d%data(1:3) = [i,i,i]
-  end function constructor_scalar
+  end function constructor_scalar_f64
 
   type(vec3d) function constructor_scalar_f32(i) result(new_vec3d)
     implicit none
@@ -77,13 +77,13 @@ contains
     new_vec3d%data(1:3) = [i,i,i]
   end function constructor_scalar_f32
 
-  type(vec3d) function constructor_raw(x,y,z) result(new_vec3d)
+  type(vec3d) function constructor_raw_f64(x,y,z) result(new_vec3d)
     implicit none
 
     real(c_double), intent(in), value :: x,y,z
 
     new_vec3d%data(1:3) = [x,y,z]
-  end function constructor_raw
+  end function constructor_raw_f64
 
   type(vec3d) function constructor_raw_f32(x,y,z) result(new_vec3d)
     implicit none
@@ -94,13 +94,13 @@ contains
   end function constructor_raw_f32
 
 
-  type(vec3d) function constructor_array(xyz_array) result(new_vec3d)
+  type(vec3d) function constructor_array_f64(xyz_array) result(new_vec3d)
     implicit none
 
     real(c_double), dimension(3), intent(in) :: xyz_array
 
     new_vec3d%data(1:3) = xyz_array(1:3)
-  end function constructor_array
+  end function constructor_array_f64
 
 
   !* Assignment.
