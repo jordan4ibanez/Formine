@@ -1,5 +1,5 @@
 module vector_3f
-  use,intrinsic :: iso_fortran_env
+  use,intrinsic :: iso_c_binding, only: c_float
   implicit none
 
   private
@@ -12,7 +12,7 @@ module vector_3f
   !* They do not mix. Can't add vec3f to vec3d, and so forth. This will cause weird problems that I don't feel like solving.
 
   type vec3f
-    real(real32), dimension(3) :: data = [0.0, 0.0, 0.0]
+    real(c_float), dimension(3) :: data = [0.0, 0.0, 0.0]
   contains
     generic :: assignment(=) => assign_scalar, assign_array, assign_vec3f, assign_vec3d
     procedure :: assign_scalar
@@ -52,7 +52,7 @@ contains
 
   type(vec3f) function constructor_scalar(i) result(new_vec3f)
     implicit none
-    real, intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     new_vec3f%data(1:3) = [i,i,i]
   end function constructor_scalar
@@ -60,7 +60,7 @@ contains
   type(vec3f) function constructor_raw(x,y,z) result(new_vec3f)
     implicit none
 
-    real, intent(in), value :: x,y,z
+    real(c_float), intent(in), value :: x,y,z
 
     new_vec3f%data(1:3) = [x,y,z]
   end function constructor_raw
@@ -69,7 +69,7 @@ contains
   type(vec3f) function constructor_array(xyz_array) result(new_vec3f)
     implicit none
 
-    real, dimension(3), intent(in) :: xyz_array
+    real(c_float), dimension(3), intent(in) :: xyz_array
 
     new_vec3f%data(1:3) = xyz_array(1:3)
   end function constructor_array
@@ -79,7 +79,7 @@ contains
     implicit none
 
     class(vec3f), intent(inout) :: this
-    real, intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     this%data(1:3) = [i, i, i]
   end subroutine assign_scalar
@@ -89,7 +89,7 @@ contains
     implicit none
 
     class(vec3f), intent(inout) :: this
-    real, dimension(3), intent(in) :: arr
+    real(c_float), dimension(3), intent(in) :: arr
 
     this%data(1:3) = arr(1:3)
   end subroutine assign_array
@@ -121,7 +121,7 @@ contains
     implicit none
 
     class(vec3f), intent(in) :: this
-    real, intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     equality = f32_is_equal(this%data(1), i) .and. f32_is_equal(this%data(2), i) .and. f32_is_equal(this%data(3), i)
   end function equal_scalar
@@ -132,7 +132,7 @@ contains
     implicit none
 
     class(vec3f), intent(in) :: this
-    real, dimension(3), intent(in) :: arr
+    real(c_float), dimension(3), intent(in) :: arr
 
     equality = f32_is_equal(this%data(1), arr(1)) .and. f32_is_equal(this%data(2), arr(2)) .and. f32_is_equal(this%data(3), arr(3))
   end function equal_array
@@ -153,7 +153,7 @@ contains
     implicit none
 
     class(vec3f), intent(in) :: this
-    real, intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     new_vec3f = this%data(1:3) + i
   end function add_scalar
@@ -163,7 +163,7 @@ contains
     implicit none
 
     class(vec3f), intent(in) :: this
-    real, dimension(3), intent(in) :: arr
+    real(c_float), dimension(3), intent(in) :: arr
 
     new_vec3f = this%data(1:3) + arr(1:3)
   end function add_array
@@ -183,7 +183,7 @@ contains
     implicit none
 
     class(vec3f), intent(in) :: this
-    real, intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     new_vec3f = this%data(1:3) - i
   end function subtract_scalar
@@ -193,7 +193,7 @@ contains
     implicit none
 
     class(vec3f), intent(in) :: this
-    real, dimension(3), intent(in) :: arr
+    real(c_float), dimension(3), intent(in) :: arr
 
     new_vec3f = this%data(1:3) - arr(1:3)
   end function subtract_array
@@ -213,7 +213,7 @@ contains
     implicit none
 
     class(vec3f), intent(in) :: this
-    real, intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     new_vec3f = this%data(1:3) * i
   end function multiply_scalar
@@ -223,7 +223,7 @@ contains
     implicit none
 
     class(vec3f), intent(in) :: this
-    real, dimension(3), intent(in) :: arr
+    real(c_float), dimension(3), intent(in) :: arr
 
     new_vec3f = this%data(1:3) * arr(1:3)
   end function multiply_array
@@ -243,7 +243,7 @@ contains
     implicit none
 
     class(vec3f), intent(in) :: this
-    real, intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     new_vec3f = this%data(1:3) / i
   end function divide_scalar
@@ -253,7 +253,7 @@ contains
     implicit none
 
     class(vec3f), intent(in) :: this
-    real, dimension(3), intent(in) :: arr
+    real(c_float), dimension(3), intent(in) :: arr
 
     new_vec3f = this%data(1:3) / arr(1:3)
   end function divide_array
