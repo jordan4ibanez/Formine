@@ -318,4 +318,11 @@ contains
   end subroutine glfw_set_window_size_callback
 
 
+  !* This is totally a glfw function, trust me bro.
+  real(c_float) function glfw_get_aspect_ratio() result(ratio)
+    implicit none
+
+    ratio = window_width / window_height
+  end function glfw_get_aspect_ratio
+
 end module glfw
