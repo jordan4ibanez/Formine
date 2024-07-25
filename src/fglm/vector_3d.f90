@@ -1,5 +1,5 @@
 module vector_3d
-  use :: iso_fortran_env, only: real64
+  use :: iso_c_binding, only: c_double
   implicit none
 
   private
@@ -12,7 +12,7 @@ module vector_3d
   !* They do not mix. Can't add vec3f to vec3d, and so forth. This will cause weird problems that I don't feel like solving.
 
   type vec3d
-    real(real64), dimension(3) :: data = [0.0, 0.0, 0.0]
+    real(c_double), dimension(3) :: data = [0.0, 0.0, 0.0]
   contains
     generic :: assignment(=) => assign_scalar, assign_array, assign_vec3
     procedure :: assign_scalar
@@ -51,7 +51,7 @@ contains
 
   type(vec3d) function constructor_scalar(i) result(new_vec3)
     implicit none
-    real(real64), intent(in), value :: i
+    real(c_double), intent(in), value :: i
 
     new_vec3%data(1:3) = [i,i,i]
   end function constructor_scalar
@@ -67,7 +67,7 @@ contains
   type(vec3d) function constructor_raw(x,y,z) result(new_vec3)
     implicit none
 
-    real(real64), intent(in), value :: x,y,z
+    real(c_double), intent(in), value :: x,y,z
 
     new_vec3%data(1:3) = [x,y,z]
   end function constructor_raw
@@ -85,7 +85,7 @@ contains
   type(vec3d) function constructor_array(xyz_array) result(new_vec3)
     implicit none
 
-    real(real64), dimension(3), intent(in) :: xyz_array
+    real(c_double), dimension(3), intent(in) :: xyz_array
 
     new_vec3%data(1:3) = xyz_array(1:3)
   end function constructor_array
@@ -95,7 +95,7 @@ contains
     implicit none
 
     class(vec3d), intent(inout) :: this
-    real(real64), intent(in), value :: i
+    real(c_double), intent(in), value :: i
 
     this%data(1:3) = [i, i, i]
   end subroutine assign_scalar
@@ -105,7 +105,7 @@ contains
     implicit none
 
     class(vec3d), intent(inout) :: this
-    real(real64), dimension(3), intent(in) :: arr
+    real(c_double), dimension(3), intent(in) :: arr
 
     this%data(1:3) = arr(1:3)
   end subroutine assign_array
@@ -126,7 +126,7 @@ contains
     implicit none
 
     class(vec3d), intent(in) :: this
-    real(real64), intent(in), value :: i
+    real(c_double), intent(in), value :: i
 
     equality = f64_is_equal(this%data(1), i) .and. f64_is_equal(this%data(2), i) .and. f64_is_equal(this%data(3), i)
   end function equal_scalar
@@ -137,7 +137,7 @@ contains
     implicit none
 
     class(vec3d), intent(in) :: this
-    real(real64), dimension(3), intent(in) :: arr
+    real(c_double), dimension(3), intent(in) :: arr
 
     equality = f64_is_equal(this%data(1), arr(1)) .and. f64_is_equal(this%data(2), arr(2)) .and. f64_is_equal(this%data(3), arr(3))
   end function equal_array
@@ -158,7 +158,7 @@ contains
     implicit none
 
     class(vec3d), intent(in) :: this
-    real(real64), intent(in), value :: i
+    real(c_double), intent(in), value :: i
 
     new_vec3 = this%data(1:3) + i
   end function add_scalar
@@ -168,7 +168,7 @@ contains
     implicit none
 
     class(vec3d), intent(in) :: this
-    real(real64), dimension(3), intent(in) :: arr
+    real(c_double), dimension(3), intent(in) :: arr
 
     new_vec3 = this%data(1:3) + arr(1:3)
   end function add_array
@@ -188,7 +188,7 @@ contains
     implicit none
 
     class(vec3d), intent(in) :: this
-    real(real64), intent(in), value :: i
+    real(c_double), intent(in), value :: i
 
     new_vec3 = this%data(1:3) - i
   end function subtract_scalar
@@ -198,7 +198,7 @@ contains
     implicit none
 
     class(vec3d), intent(in) :: this
-    real(real64), dimension(3), intent(in) :: arr
+    real(c_double), dimension(3), intent(in) :: arr
 
     new_vec3 = this%data(1:3) - arr(1:3)
   end function subtract_array
@@ -218,7 +218,7 @@ contains
     implicit none
 
     class(vec3d), intent(in) :: this
-    real(real64), intent(in), value :: i
+    real(c_double), intent(in), value :: i
 
     new_vec3 = this%data(1:3) * i
   end function multiply_scalar
@@ -228,7 +228,7 @@ contains
     implicit none
 
     class(vec3d), intent(in) :: this
-    real(real64), dimension(3), intent(in) :: arr
+    real(c_double), dimension(3), intent(in) :: arr
 
     new_vec3 = this%data(1:3) * arr(1:3)
   end function multiply_array
@@ -248,7 +248,7 @@ contains
     implicit none
 
     class(vec3d), intent(in) :: this
-    real(real64), intent(in), value :: i
+    real(c_double), intent(in), value :: i
 
     new_vec3 = this%data(1:3) / i
   end function divide_scalar
@@ -258,7 +258,7 @@ contains
     implicit none
 
     class(vec3d), intent(in) :: this
-    real(real64), dimension(3), intent(in) :: arr
+    real(c_double), dimension(3), intent(in) :: arr
 
     new_vec3 = this%data(1:3) / arr(1:3)
   end function divide_array
