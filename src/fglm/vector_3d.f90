@@ -57,9 +57,9 @@ contains
   end function constructor_scalar
 
   type(vec3d) function constructor_scalar_f32(i) result(new_vec3d)
-    use :: iso_fortran_env, only: real32
+    use, intrinsic :: iso_c_binding, only: c_float
     implicit none
-    real(real32), intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     new_vec3d%data(1:3) = [i,i,i]
   end function constructor_scalar_f32
@@ -73,10 +73,10 @@ contains
   end function constructor_raw
 
   type(vec3d) function constructor_raw_f32(x,y,z) result(new_vec3d)
-    use :: iso_fortran_env, only: real32
+    use, intrinsic :: iso_c_binding, only: c_float
     implicit none
 
-    real(real32), intent(in), value :: x,y,z
+    real(c_float), intent(in), value :: x,y,z
 
     new_vec3d%data(1:3) = [x,y,z]
   end function constructor_raw_f32
