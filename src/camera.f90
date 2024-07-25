@@ -15,7 +15,6 @@ contains
     call camera_matrix%identity()
 
 
-
   end subroutine update_camera_matrix
 
 
