@@ -112,7 +112,8 @@ contains
     type(vec3d), intent(in), value :: other
 
     ! Explicit cast to shut up compiler.
-    this%data(1:3) = real(other%data(1:3))
+    ! f64 -> f32
+    this%data(1:3) = real(other%data(1:3), kind=c_float)
   end subroutine assign_vec3d
 
 
