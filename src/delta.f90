@@ -5,6 +5,7 @@ module delta
 
   private
 
+  public :: delta_initialize
   public :: delta_tick
   public :: get_delta_f64
   public :: get_delta_f32
@@ -13,6 +14,17 @@ module delta
   real(c_double) :: delta_time = 0.0d0
 
 contains
+
+  !* This sets up the delta calculator so it doesn't blow up.
+  subroutine delta_initialize()
+    implicit none
+
+    integer(c_long) :: count
+
+    call system_clock(count)
+
+    old_delta_integral = count
+  end subroutine delta_initialize
 
   subroutine delta_tick()
     implicit none
