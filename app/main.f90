@@ -29,7 +29,7 @@ program main
   call glfw_window_hint(GLFW_CONTEXT_VERSION_MAJOR, 4)
   call glfw_window_hint(GLFW_CONTEXT_VERSION_MINOR, 2)
   call glfw_window_hint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE)
-  
+
 
   ! Try to initialize the Window.
   if (.not. glfw_create_window(640,480, "Fortran Game Engine")) then
@@ -41,6 +41,8 @@ program main
   call glfw_make_context_current()
 
   call gl_get_version()
+
+  call glfw_swap_interval(1)
 
   !! This allows OpenGL debugging.
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
