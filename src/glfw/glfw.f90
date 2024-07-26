@@ -41,6 +41,7 @@ module glfw
   public :: glfw_window_hint
   public :: glfw_set_window_size_callback
   public :: glfw_get_aspect_ratio
+  public :: glfw_swap_interval
 
   ! Here I'm binding to the C glfw shared library.
   interface
@@ -144,6 +145,14 @@ module glfw
       type(c_funptr), intent(in), value :: callback
       !! We will just ignore the pointer return cause I don't really care tbh.
     end subroutine internal_glfw_set_window_size_callback
+
+
+    subroutine glfw_swap_interval(interval) bind(c, name = "glfwSwapInterval")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: interval
+    end subroutine glfw_swap_interval
 
 
   end interface
