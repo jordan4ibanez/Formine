@@ -5,7 +5,7 @@ module delta
 
   private
 
-  public :: delta_think
+  public :: delta_tick
   public :: get_delta_f64
   public :: get_delta_f32
 
@@ -14,7 +14,7 @@ module delta
 
 contains
 
-  subroutine delta_think()
+  subroutine delta_tick()
     implicit none
 
     ! This only works on Windows, Linux, and POSIX platforms.
@@ -33,7 +33,7 @@ contains
 
     ! Finally, save it.
     old_delta_integral = new_delta_integral
-  end subroutine delta_think
+  end subroutine delta_tick
 
 
   real(c_double) function get_delta_f64() result(current_delta)
