@@ -29,7 +29,7 @@ contains
 
     ! print"(f00.30)",gotten_delta
 
-    print"(f0.5)",fov_degrees
+    ! print"(f0.5)",fov_degrees
 
     if (up) then
       fov_degrees = real(fov_degrees + gotten_delta * 100.0d0, kind = c_float)
