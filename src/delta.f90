@@ -34,7 +34,6 @@ contains
 
     delta_time = delta_time / real(count_rate, kind = c_double)
 
-    print"(f00.10)",delta_time
     ! Finally, save it.
     old_delta_integral = new_delta_integral
   end subroutine delta_tick
