@@ -6,6 +6,7 @@ program main
   use :: files
   use :: mesh
   use :: camera
+  use :: delta
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -62,6 +63,8 @@ program main
   !! This is debugging for functions!
   if (.true.) then
     do while(.not. glfw_window_should_close())
+
+      call delta_tick()
 
       ! call blah(color)
 
