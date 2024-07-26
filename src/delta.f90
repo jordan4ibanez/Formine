@@ -1,3 +1,4 @@
+!* Delta time module for doing engine things that involve time.
 module delta
   use, intrinsic :: iso_c_binding, only: c_long, c_double, c_float
   implicit none
