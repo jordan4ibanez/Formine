@@ -1,12 +1,13 @@
 module camera
   use :: matrix_4f
-  use, intrinsic :: iso_c_binding, only: c_float
+  use, intrinsic :: iso_c_binding, only: c_float, c_double
   implicit none
 
   private
 
   public :: camera_update_matrix
 
+  logical :: up = .true.
   real(c_float) :: fov_degrees = 72.0
 
   !? On the stack, for now. Uses 64 bytes.
@@ -17,9 +18,33 @@ contains
 
   subroutine camera_update_matrix()
     use :: glfw, only: glfw_get_aspect_ratio
+    use :: delta
     use :: math_helpers, only: to_radians_f32
 
     implicit none
+
+    real(c_double) :: gotten_delta
+
+    gotten_delta = get_delta_f64()
+
+    ! print"(f00.30)",gotten_delta
+
+    print"(f0.5)",fov_degrees
+
+    if (up) then
+      fov_degrees = real(fov_degrees + gotten_delta * 100.0d0, kind = c_float)
+
+      if (fov_degrees >= 120.0) then
+        fov_degrees = 120.0
+        up = .false.
+      end if
+    else
+      fov_degrees = real(fov_degrees - gotten_delta * 100.0d0, kind = c_float)
+      if (fov_degrees <= 40.0) then
+        fov_degrees = 40.0
+        up = .true.
+      end if
+    end if
 
     call camera_matrix%identity()
 
