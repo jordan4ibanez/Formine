@@ -21,16 +21,20 @@ contains
     ! If for whatever reason you're porting this, you might want to set this to:
     ! integer(c_float)
     ! But doing this will make it so after 24 days, it WILL wrap around!
+    ! You will also run into extreme precision problems on high refresh rate devices.
     integer(c_long) :: count, count_rate, count_max, new_delta_integral
 
     call system_clock(count, count_rate, count_max)
 
     ! Move the calculation into milliseconds
-    new_delta_integral = count / (count_rate / 1000)
+    new_delta_integral = count
 
     ! Now set it.
-    delta_time = real(new_delta_integral, kind = c_double) - real(old_delta_integral, kind = c_double)
+    delta_time = real(new_delta_integral - old_delta_integral, kind = c_double)
 
+    delta_time = delta_time / real(count_rate, kind = c_double)
+
+    print"(f00.10)",delta_time
     ! Finally, save it.
     old_delta_integral = new_delta_integral
   end subroutine delta_tick
