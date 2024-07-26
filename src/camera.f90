@@ -7,6 +7,10 @@ module camera
 
   public :: camera_update_matrix
 
+
+  real(c_float), parameter :: MIN_FOV = 50.0
+  real(c_float), parameter :: MAX_FOV = 120.0
+
   logical :: up = .true.
   real(c_float) :: fov_degrees = 72.0
 
@@ -34,14 +38,14 @@ contains
     if (up) then
       fov_degrees = real(fov_degrees + gotten_delta * 100.0d0, kind = c_float)
 
-      if (fov_degrees >= 120.0) then
-        fov_degrees = 120.0
+      if (fov_degrees >= MAX_FOV) then
+        fov_degrees = MAX_FOV
         up = .false.
       end if
     else
       fov_degrees = real(fov_degrees - gotten_delta * 100.0d0, kind = c_float)
-      if (fov_degrees <= 40.0) then
-        fov_degrees = 40.0
+      if (fov_degrees <= MIN_FOV) then
+        fov_degrees = MIN_FOV
         up = .true.
       end if
     end if
