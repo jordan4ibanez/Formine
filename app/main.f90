@@ -36,6 +36,8 @@ program main
     return
   end if
 
+  call delta_initialize()
+
   call glfw_set_window_size_callback()
 
   call glfw_make_context_current()
