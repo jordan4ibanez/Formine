@@ -18,6 +18,7 @@ sudo dnf install gfortran mesa-libGL-devel glfw-devel
 ```
 
 This is using gfortran, gfortran is very buggy. This might be using some bugs which only come with gfortran. Test it in ifort for me to see where it is wrong.
+Note: this uses fortran 14+, if you use this in 13.2 expect it to blow up trying to compile.
 
 # Ideas:
 - hash table of shader uniforms
