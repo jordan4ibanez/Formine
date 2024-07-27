@@ -26,4 +26,11 @@ module constants
   !? 64 bits. 8 bytes.
   real(c_double), parameter :: pi_64 = 3.141592653589793
 
+  !* Floating point.
+  !? 32 bits. 4 bytes.
+  real(c_float), parameter :: pi_times_2_f32 = pi_32 * 2.0
+  !? 64 bits. 8 bytes.
+  real(c_double), parameter :: pi_times_2_f64 = pi_64 * 2.0d0
+
+
 end module constants
