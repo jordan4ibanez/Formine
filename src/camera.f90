@@ -12,8 +12,8 @@ module camera
   real(c_float), parameter :: MIN_FOV = 50.0
   real(c_float), parameter :: MAX_FOV = 120.0
 
-  logical :: up = .true.
-  logical :: up_2 = .true.
+  ! logical :: up = .true.
+  ! logical :: up_2 = .true.
   logical :: up_3 = .true.
   real(c_float) :: fov_degrees = 72.0
 
