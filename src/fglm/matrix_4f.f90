@@ -186,10 +186,10 @@ contains
 
     print*,"fixme: use compacting operator (1:4) * r(1)"
     this%data(1:16) = [&
-      mat(1) * r(1), mat(2)  * r(1), mat(3)  * r(1), mat(4)  * r(1), &
-      mat(5) * r(2), mat(6)  * r(2), mat(7)  * r(2), mat(8)  * r(2), &
-      n(1),          n(2),           n(3),           n(4), &
-      mat(9) * r(4), mat(10) * r(4), mat(11) * r(4), mat(12) * r(4) &
+      mat(1:4) * r(1), &
+      mat(5:8) * r(2), &
+      n(1:4), &
+      mat(9:12) * r(4) &
       ]
   end subroutine perspective
 
