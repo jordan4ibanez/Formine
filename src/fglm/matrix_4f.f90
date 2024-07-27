@@ -179,9 +179,9 @@ contains
     end if
 
     this%data(1:16) = [&
-      mat(1:4) * r(1), &
-      mat(5:8) * r(2), &
-      mat(9:12)  * r(3) - mat(13:16), &
+      mat(1:4)  * r(1), &
+      mat(5:8)  * r(2), &
+      mat(9:12) * r(3) - mat(13:16), &
       mat(9:12) * r(4) &
       ]
   end subroutine perspective
