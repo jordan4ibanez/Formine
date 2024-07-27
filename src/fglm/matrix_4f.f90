@@ -199,7 +199,7 @@ contains
 
   !* Translated from JOML. This method was called "rotateXInternal"
   subroutine rotate_x(this, angle_radians)
-    use :: math_helpers, only: cos_from_sin_f32, fma_f32
+    use :: math_helpers, only: cos_from_sin_f32, fma_f32, fma_f32_array_4
     implicit none
 
     class(mat4f), intent(inout) :: this
@@ -228,17 +228,8 @@ contains
 
     this%data = [ &
       mat(1:4), &
-    ! We break this up, because it becomes unwieldly.
-      fma_f32(lm(1), cosine, lm(5) * sine), &
-      fma_f32(lm(2), cosine, lm(6) * sine), &
-      fma_f32(lm(3), cosine, lm(7) * sine), &
-      fma_f32(lm(4), cosine, lm(8) * sine), &
-
-      fma_f32(lm(1), -sine, lm(5) * cosine), &
-      fma_f32(lm(2), -sine, lm(6) * cosine), &
-      fma_f32(lm(3), -sine, lm(7) * cosine), &
-      fma_f32(lm(4), -sine, lm(8) * cosine), &
-
+      fma_f32_array_4(lm(1:4), spread(cosine, 1, 4), lm(5:8) * sine), &
+      fma_f32_array_4(lm(1:4), spread(-sine, 1, 4), lm(5:8) * cosine), &
       mat(13:16) &
       ]
 
