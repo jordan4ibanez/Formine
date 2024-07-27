@@ -187,11 +187,13 @@ contains
   !* Translated from JOML. This method was called "rotateXInternal"
   subroutine rotate_x(this, angle_radians)
     use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+    use :: math_helpers, only: cos_from_sin_f32, fma_f32
     implicit none
 
     class(mat4f), intent(inout) :: this
     real(c_float), intent(in), value :: angle_radians
-    real(c_float) :: x, y, z
+    real(c_float) :: x, y, z, sine, cosine
+    real(c_float), dimension(8) :: lm
     ! Cache.
     real(c_float), dimension(16) :: mat
 
@@ -229,9 +231,29 @@ contains
     y = mat(14)
     z = mat(15)
 
+    sine = sin(angle_radians)
 
+    cosine = cos_from_sin_f32(sine, angle_radians)
 
+    lm = [mat(5), mat(6), mat(7), mat(8), mat(9), mat(10), mat(11) ,mat(12)]
 
+    this%data = [ &
+      mat(1), mat(2), mat(3), mat(4), &
+    ! We break this up, because it becomes unwieldly.
+      fma_f32(lm(1), cosine, lm(5) * sine), &
+      fma_f32(lm(2), cosine, lm(6) * sine), &
+      fma_f32(lm(3), cosine, lm(7) * sine), &
+      fma_f32(lm(4), cosine, lm(8) * sine), &
+
+      fma_f32(lm(1), -sine, lm(5) * cosine), &
+      fma_f32(lm(2), -sine, lm(6) * cosine), &
+      fma_f32(lm(3), -sine, lm(7) * cosine), &
+      fma_f32(lm(4), -sine, lm(8) * cosine), &
+
+      mat(13), mat(14), mat(15), mat(16) &
+      ]
+
+    call this%set_translation(x, y, z)
   end subroutine rotate_x
 
 
