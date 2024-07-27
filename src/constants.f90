@@ -26,23 +26,23 @@ module constants
 
   !* Floating point.
   !? 32 bits. 4 bytes.
-  real(c_float), parameter :: PI_32 = 3.141592
+  real(c_float), parameter :: PI_F32 = 3.141592
   !? 64 bits. 8 bytes.
-  real(c_double), parameter :: PI_64 = 3.141592653589793
+  real(c_double), parameter :: PI_F64 = 3.141592653589793
 
 
   !* Floating point.
   !? 32 bits. 4 bytes.
-  real(c_float), parameter :: PI_TIMES_2_F32 = PI_32 * 2.0
+  real(c_float), parameter :: PI_TIMES_2_F32 = PI_F32 * 2.0
   !? 64 bits. 8 bytes.
-  real(c_double), parameter :: PI_TIMES_2_F64 = PI_64 * 2.0d0
+  real(c_double), parameter :: PI_TIMES_2_F64 = PI_F64 * 2.0d0
 
 
   !* Floating point.
   !? 32 bits. 4 bytes.
-  real(c_float), parameter :: PI_OVER_2_F32 = PI_32 * 0.5
+  real(c_float), parameter :: PI_OVER_2_F32 = PI_F32 * 0.5
   !? 64 bits. 8 bytes.
-  real(c_double), parameter :: PI_OVER_2_F64 = PI_64 * 0.5d0
+  real(c_double), parameter :: PI_OVER_2_F64 = PI_F64 * 0.5d0
 
 
 end module constants
