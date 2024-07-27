@@ -306,6 +306,8 @@ contains
   end subroutine rotate_z
 
 
+  !! INTERNAL ONLY
+
 
   !* Get the translation of a matrix. Never externally use this. Never expose this.
   function get_translation_array(this) result(xyz)
