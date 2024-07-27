@@ -37,20 +37,20 @@ contains
 
     ! print"(f0.5)",fov_degrees
 
-    if (up) then
-      fov_degrees = real(fov_degrees + gotten_delta * 100.0d0, kind = c_float)
+    ! if (up) then
+    !   fov_degrees = real(fov_degrees + gotten_delta * 100.0d0, kind = c_float)
 
-      if (fov_degrees >= MAX_FOV) then
-        fov_degrees = MAX_FOV
-        up = .false.
-      end if
-    else
-      fov_degrees = real(fov_degrees - gotten_delta * 100.0d0, kind = c_float)
-      if (fov_degrees <= MIN_FOV) then
-        fov_degrees = MIN_FOV
-        up = .true.
-      end if
-    end if
+    !   if (fov_degrees >= MAX_FOV) then
+    !     fov_degrees = MAX_FOV
+    !     up = .false.
+    !   end if
+    ! else
+    !   fov_degrees = real(fov_degrees - gotten_delta * 100.0d0, kind = c_float)
+    !   if (fov_degrees <= MIN_FOV) then
+    !     fov_degrees = MIN_FOV
+    !     up = .true.
+    !   end if
+    ! end if
 
     call camera_matrix%identity()
 
