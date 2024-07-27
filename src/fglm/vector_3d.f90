@@ -53,9 +53,9 @@ module vector_3d
     procedure :: divide_array_f32
 
     !* Getters
-    procedure :: x
-    procedure :: y
-    procedure :: z
+    procedure :: get_x
+    procedure :: get_y
+    procedure :: get_z
     !* Setters
     procedure :: set_x
     procedure :: set_y
@@ -430,31 +430,31 @@ contains
   !* Getters.
 
 
-  real(c_double) function x(this) result(val)
+  real(c_double) function get_x(this) result(val)
     implicit none
 
     class(vec3d), intent(in) :: this
 
     val = this%data(1)
-  end function x
+  end function get_x
 
 
-  real(c_double) function y(this) result(val)
+  real(c_double) function get_y(this) result(val)
     implicit none
 
     class(vec3d), intent(in) :: this
 
     val = this%data(2)
-  end function y
+  end function get_y
 
 
-  real(c_double) function z(this) result(val)
+  real(c_double) function get_z(this) result(val)
     implicit none
 
     class(vec3d), intent(in) :: this
 
     val = this%data(3)
-  end function z
+  end function get_z
 
 
   !* Setters.

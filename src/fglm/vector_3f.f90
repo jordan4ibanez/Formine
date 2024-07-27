@@ -42,9 +42,9 @@ module vector_3f
     procedure :: divide_vec3f
 
     !* Getters
-    procedure :: x
-    procedure :: y
-    procedure :: z
+    procedure :: get_x
+    procedure :: get_y
+    procedure :: get_z
     !* Setters
     procedure :: set_x
     procedure :: set_y
@@ -306,31 +306,31 @@ contains
   !* Getters.
 
 
-  real(c_float) function x(this) result(val)
+  real(c_float) function get_x(this) result(val)
     implicit none
 
     class(vec3f), intent(in) :: this
 
     val = this%data(1)
-  end function x
+  end function get_x
 
 
-  real(c_float) function y(this) result(val)
+  real(c_float) function get_y(this) result(val)
     implicit none
 
     class(vec3f), intent(in) :: this
 
     val = this%data(2)
-  end function y
+  end function get_y
 
 
-  real(c_float) function z(this) result(val)
+  real(c_float) function get_z(this) result(val)
     implicit none
 
     class(vec3f), intent(in) :: this
 
     val = this%data(3)
-  end function z
+  end function get_z
 
 
   !* Setters.
