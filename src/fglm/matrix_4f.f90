@@ -69,6 +69,7 @@ module matrix_4f
 
     !* Spacial methods.
     procedure :: translate
+    procedure :: translate_vec3f
     procedure :: rotate_x
     procedure :: rotate_y
     procedure :: rotate_z
@@ -213,6 +214,29 @@ contains
       fma_f32_array_4(mat(9:12), spread(z, 1, 4), mat(13:16)))) & ! Looking a bit like lisp at this point.
       ]
   end subroutine translate
+
+
+  !* Translated from JOML. Original name: "translateGeneric"
+  subroutine translate_vec3f(this, xyz)
+    use :: math_helpers, only: fma_f32_array_4
+    use :: vector_3f
+    implicit none
+
+    class(mat4f), intent(inout) :: this
+    type(vec3f), intent(in), value :: xyz
+    ! Cache.
+    real(c_float), dimension(16) :: mat
+
+    mat = this%data
+
+    this%data = [ &
+      mat(1:12), &
+    ! Note: This is one nested call lol.
+      fma_f32_array_4(mat(1:4),  spread(xyz%data(1), 1, 4), &
+      fma_f32_array_4(mat(5:8),  spread(xyz%data(2), 1, 4), &
+      fma_f32_array_4(mat(9:12), spread(xyz%data(3), 1, 4), mat(13:16)))) & ! Looking a bit like lisp at this point.
+      ]
+  end subroutine translate_vec3f
 
 
   !* Translated from JOML. This method was called "rotateXInternal"
