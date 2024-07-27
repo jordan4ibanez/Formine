@@ -62,12 +62,14 @@ module matrix_4f
     !* There is only assignment operator. Everything else is too dangerous to implement.
     generic :: assignment(=) => assign_mat4f
     procedure :: assign_mat4f
+
     !* General methods.
     procedure :: identity
     procedure :: perspective
 
     !* Spacial methods.
     procedure :: rotate_x
+    procedure :: rotate_y
 
     ! Set translation.
     procedure :: set_translation
@@ -242,6 +244,16 @@ contains
     call this%set_translation_array(translation)
   end subroutine rotate_x
 
+  subroutine rotate_y(this, angle_radians)
+    use :: math_helpers, only: cos_from_sin_f32, fma_f32
+    implicit none
+
+    class(mat4f), intent(inout) :: this
+    real(c_float), intent(in), value :: angle_radians
+
+    real(c_float) :: sine, cosine
+
+  end subroutine rotate_y
 
   subroutine set_translation(this, x,y,z)
     implicit none
