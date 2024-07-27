@@ -56,7 +56,10 @@ contains
 
     call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), 0.01, 100.0)
 
-    ! print*,camera_matrix%data
+    !* So the trick is, the camera actually never moves, but the world moves around it.
+    !* This maintains as much precision as possible where you can see it.
+
+
 
     call upload_camera_matrix_into_shader()
   end subroutine camera_update_matrix
