@@ -27,7 +27,12 @@ This is using gfortran, gfortran is very buggy. This might be using some bugs wh
 
 # Notes:
 
-ways to define 32 bit floats
+Implicit save: (Thanks to Verlio_H for notifying that this is a common pitfall)
+If you initialize a variable in a type, it just becomes the default.
+If you initialize a variable in a subroutine or a function, it implicitly gets the save attribute. This will maintain state across each call of the function.
+  With the default initializer being it's initial value.
+
+ways to define 32 bit floats:
 real(4)
 real(real32)
 real(c_float)
