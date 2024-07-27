@@ -21,7 +21,7 @@ contains
   ! Construct a mobly mob. Count how many we have.
   function new_mob() result(a_mob)
     use, intrinsic :: iso_fortran_env
-    use string
+    use :: string
     implicit none
 
     type(mob) :: a_mob
@@ -47,7 +47,7 @@ contains
   end
 
   subroutine yell(this)
-    use string
+    use :: string
     implicit none
 
     class(mob) :: this

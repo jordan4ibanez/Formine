@@ -101,8 +101,8 @@ contains
 
   integer function upload_positions_vec3f(position_array) result(vbo_position)
     use, intrinsic :: iso_c_binding
-    use opengl
-    use shader
+    use :: opengl
+    use :: shader
     implicit none
 
     type(vec3f), dimension(:), intent(in) :: position_array
@@ -136,8 +136,8 @@ contains
 
   integer function upload_colors(color_array) result(vbo_position)
     use, intrinsic :: iso_c_binding
-    use opengl
-    use shader
+    use :: opengl
+    use :: shader
     implicit none
 
     real(c_float), dimension(:), intent(in) :: color_array
@@ -172,8 +172,8 @@ contains
 
   integer function upload_indices(indices_array) result(vbo_position)
     use, intrinsic :: iso_c_binding
-    use opengl
-    use shader
+    use :: opengl
+    use :: shader
     implicit none
 
     integer(c_int), dimension(:), intent(in) :: indices_array
