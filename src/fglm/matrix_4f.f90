@@ -238,7 +238,7 @@ contains
 
   !* Translated from JOML. This method was originally called: "rotateYInternal"
   subroutine rotate_y(this, angle_radians)
-    use :: math_helpers, only: cos_from_sin_f32, fma_f32
+    use :: math_helpers, only: cos_from_sin_f32, fma_f32, fma_f32_array_4
     implicit none
 
     class(mat4f), intent(inout) :: this
@@ -293,11 +293,9 @@ contains
       ]
 
     this%data = [ &
-      mat(1:8), &
-      fma_f32(mat(1), sine, mat(9)  * cosine), &
-      fma_f32(mat(2), sine, mat(10) * cosine), &
-      fma_f32(mat(3), sine, mat(11) * cosine), &
-      fma_f32(mat(4), sine, mat(12) * cosine), &
+      nm(1:4), &
+      mat(5:8), &
+      fma_f32_array_4(mat(1:4), spread(sine, 1, 4), mat(9:12) * cosine), &
       mat(13:16) &
       ]
 
