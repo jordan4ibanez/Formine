@@ -245,7 +245,6 @@ contains
     real(c_float), intent(in), value :: angle_radians
     real(c_float), dimension(3) :: translation
     real(c_float) :: sine, cosine
-    real(c_float), dimension(4) :: nm
     ! Cache.
     real(c_float), dimension(16) :: mat
 
@@ -263,37 +262,8 @@ contains
 
     cosine = cos_from_sin_f32(sine, angle_radians)
 
-    !?-------------
-    !? | m00 | 1  |
-    !? | m01 | 2  |
-    !? | m02 | 3  |
-    !? | m03 | 4  |
-    !?-------------
-    !? | m10 | 5  |
-    !? | m11 | 6  |
-    !? | m12 | 7  |
-    !? | m13 | 8  |
-    !?-------------
-    !? | m20 | 9  |
-    !? | m21 | 10 |
-    !? | m22 | 11 |
-    !? | m23 | 12 |
-    !?-------------
-    !? | m30 | 13 |
-    !? | m31 | 14 |
-    !? | m32 | 15 |
-    !? | m33 | 16 |
-    !?-------------
-
-    nm = [&
-      fma_f32(mat(1), cosine, mat(9)  * (-sine)), &
-      fma_f32(mat(2), cosine, mat(10) * (-sine)), &
-      fma_f32(mat(3), cosine, mat(11) * (-sine)), &
-      fma_f32(mat(4), cosine, mat(12) * (-sine)) &
-      ]
-
     this%data = [ &
-      nm(1:4), &
+      fma_f32_array_4(mat(1:4), spread(cosine, 1, 4), mat(9:12) * (-sine)), &
       mat(5:8), &
       fma_f32_array_4(mat(1:4), spread(sine, 1, 4), mat(9:12) * cosine), &
       mat(13:16) &
