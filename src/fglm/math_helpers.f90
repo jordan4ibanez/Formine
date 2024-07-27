@@ -86,6 +86,17 @@ contains
   end function fma_f32
 
 
+  !* This is a hyper specific function which allows work on a 4 long array. This is commonly used in JOML from what I can see.
+  function fma_f32_array_4(a, b, c) result(res)
+    implicit none
+
+    real(c_float), dimension(4), intent(in) :: a, b, c
+    real(c_float), dimension(4) :: res
+
+    res = (a * b) + c
+  end function fma_f32_array_4
+
+
   !* This was translated from JOML. Original name: "fma"
   real(c_double) function fma_f64(a, b, c) result(res)
     implicit none
@@ -94,6 +105,17 @@ contains
 
     res = (a * b) + c
   end function fma_f64
+
+
+  !* This is a hyper specific function which allows work on a 4 long array. This is commonly used in JOML from what I can see.
+  function fma_f64_array_4(a, b, c) result(res)
+    implicit none
+
+    real(c_double), dimension(4), intent(in) :: a, b, c
+    real(c_double), dimension(4) :: res
+
+    res = (a * b) + c
+  end function fma_f64_array_4
 
 
 end module math_helpers
