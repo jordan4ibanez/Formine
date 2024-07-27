@@ -40,6 +40,15 @@ module vector_3f
     procedure :: divide_scalar_f32
     procedure :: divide_array_f32
     procedure :: divide_vec3f
+
+    !* Getters
+    procedure :: x
+    procedure :: y
+    procedure :: z
+    !* Setters
+    procedure :: set_x
+    procedure :: set_y
+    procedure :: set_z
   end type vec3f
 
 
@@ -58,7 +67,7 @@ contains
     new_vec3f%data(1:3) = [i,i,i]
   end function constructor_scalar
 
-  
+
   type(vec3f) function constructor_raw(x,y,z) result(new_vec3f)
     implicit none
 
