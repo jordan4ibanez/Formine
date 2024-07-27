@@ -191,13 +191,46 @@ contains
 
     class(mat4f), intent(inout) :: this
     real(c_float), intent(in), value :: angle_radians
+    real(c_float) :: x, y, z
+    ! Cache.
+    real(c_float), dimension(16) :: mat
 
     !* Implementation note:
     !* Unlike JOML we will assume that this matrix has already been translated.
     !* Worst case scenario: We are redundantly assigning 0.0 values.
     !* This keeps the implementation lean and simple.
 
-    
+    !?-------------
+    !? | m00 | 1  |
+    !? | m01 | 2  |
+    !? | m02 | 3  |
+    !? | m03 | 4  |
+    !?-------------
+    !? | m10 | 5  |
+    !? | m11 | 6  |
+    !? | m12 | 7  |
+    !? | m13 | 8  |
+    !?-------------
+    !? | m20 | 9  |
+    !? | m21 | 10 |
+    !? | m22 | 11 |
+    !? | m23 | 12 |
+    !?-------------
+    !? | m30 | 13 |
+    !? | m31 | 14 |
+    !? | m32 | 15 |
+    !? | m33 | 16 |
+    !?-------------
+
+    mat = this%data
+
+    ! Save translation.
+    x = mat(13)
+    y = mat(14)
+    z = mat(15)
+
+
+
 
   end subroutine rotate_x
 
