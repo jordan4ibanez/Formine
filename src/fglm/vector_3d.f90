@@ -63,6 +63,10 @@ module vector_3d
     procedure :: set_x
     procedure :: set_y
     procedure :: set_z
+    !* Raw access.
+    procedure :: x
+    procedure :: y
+    procedure :: z
   end type vec3d
 
 
@@ -491,6 +495,39 @@ contains
 
     this%data(3) = val
   end subroutine set_z
+
+
+  !* Raw access.
+
+
+  function x(this) result(x_pointer)
+    implicit none
+
+    class(vec3d), intent(in), target :: this
+    real(c_double), pointer :: x_pointer
+
+    x_pointer => this%data(1)
+  end function x
+
+
+  function y(this) result(y_pointer)
+    implicit none
+
+    class(vec3d), intent(in), target :: this
+    real(c_double), pointer :: y_pointer
+
+    y_pointer => this%data(2)
+  end function y
+
+
+  function z(this) result(z_pointer)
+    implicit none
+
+    class(vec3d), intent(in), target :: this
+    real(c_double), pointer :: z_pointer
+
+    z_pointer => this%data(3)
+  end function z
 
 
 end module vector_3d

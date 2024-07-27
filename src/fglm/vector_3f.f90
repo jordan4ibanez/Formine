@@ -14,6 +14,7 @@ module vector_3f
   !
   !* They do not mix. Can't add vec3f to vec3d, and so forth. This will cause weird problems that I don't feel like solving.
 
+  
   type vec3f
     real(c_float), dimension(3) :: data = [0.0, 0.0, 0.0]
   contains
