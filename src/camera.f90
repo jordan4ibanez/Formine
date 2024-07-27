@@ -20,6 +20,8 @@ module camera
   !? Position is not translation, translation is the inverse of position!
   type(vec3f) :: camera_position
 
+  real(c_float) :: debug_rotation
+
 contains
 
 
@@ -53,9 +55,26 @@ contains
     !   end if
     ! end if
 
+    if (up) then
+      debug_rotation = debug_rotation + real(gotten_delta)
+      if (debug_rotation > to_radians_f32(45.0)) then
+        debug_rotation = to_radians_f32(45.0)
+        up = .false.
+      end if
+    else
+      debug_rotation = debug_rotation - real(gotten_delta)
+      if (debug_rotation < to_radians_f32(-45.0)) then
+        debug_rotation = to_radians_f32(-45.0)
+        up = .true.
+      end if
+    end if
+    print"(f0.10)", debug_rotation
+
     call camera_matrix%identity()
 
     call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), 0.01, 100.0)
+
+    call camera_matrix%rotate_x(debug_rotation)
 
     !* So the trick is, the camera actually never moves, but the world moves around it.
     !* This maintains as much precision as possible where you can see it.
