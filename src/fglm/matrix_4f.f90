@@ -70,6 +70,7 @@ module matrix_4f
     !* Spacial methods.
     procedure :: rotate_x
     procedure :: rotate_y
+    procedure :: rotate_z
 
     !! Internal, only.
     procedure, private :: set_translation_array
@@ -264,6 +265,43 @@ contains
     ! Finally, restore the translation.
     call this%set_translation_array(translation)
   end subroutine rotate_y
+
+
+  !* Translated from JOML. Original names: ["rotateZInternal", rotateTowardsXY"]
+  subroutine rotate_z(this, angle_radians)
+    use :: math_helpers, only: cos_from_sin_f32, fma_f32, fma_f32_array_4
+    implicit none
+
+    class(mat4f), intent(inout) :: this
+    real(c_float), intent(in), value :: angle_radians
+    real(c_float), dimension(3) :: translation
+    real(c_float) :: sine, cosine
+    ! Cache.
+    real(c_float), dimension(16) :: mat
+
+    !* Implementation note:
+    !* Unlike JOML we will assume that this matrix has already been translated.
+    !* Worst case scenario: We are redundantly assigning 0.0 values.
+    !* This keeps the implementation lean and simple.
+
+    mat = this%data
+
+    ! Save translation.
+    translation = mat(13:15)
+
+    sine = sin(angle_radians)
+
+    cosine = cos_from_sin_f32(sine, angle_radians)
+
+    this%data = [ &
+      fma_f32_array_4(mat(1:4), spread(cosine, 1, 4), mat(5:8) * sine), &
+      fma_f32_array_4(mat(1:4), spread(-sine,  1, 4), mat(5:8) * cosine), &
+      mat(9:16) &
+      ]
+
+    ! Finally, restore the translation.
+    call this%set_translation_array(translation)
+  end subroutine rotate_z
 
 
   !* Translated from JOML. This was originally called: "setTranslation". Never use this. Never expose this.
