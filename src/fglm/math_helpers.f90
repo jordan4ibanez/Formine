@@ -76,4 +76,24 @@ contains
   end function cos_from_sin_f64
 
 
+  !* This was translated from JOML. Original name: "fma"
+  real(c_float) function fma_f32(a, b, c) result(res)
+    implicit none
+
+    real(c_float), intent(in), value :: a, b, c
+
+    res = (a * b) + c
+  end function fma_f32
+
+
+  !* This was translated from JOML. Original name: "fma"
+  real(c_double) function fma_f64(a, b, c) result(res)
+    implicit none
+
+    real(c_double), intent(in), value :: a, b, c
+
+    res = (a * b) + c
+  end function fma_f64
+
+
 end module math_helpers
