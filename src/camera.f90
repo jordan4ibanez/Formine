@@ -93,9 +93,9 @@ contains
     call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), 0.01, 100.0)
 
 
-    ! call camera_matrix%rotate_z(debug_rotation)
+    call camera_matrix%rotate_z(debug_rotation)
 
-    call camera_matrix%translate(camera_position%data(1), 0.0, -camera_position%data(1))
+    call camera_matrix%translate_vec3f(camera_position)
 
     !* So the trick is, the camera actually never moves, but the world moves around it.
     !* This maintains as much precision as possible where you can see it.
