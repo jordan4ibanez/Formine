@@ -1,4 +1,5 @@
 module test_suite_trancation
+  use testament
   implicit none
 
   !? I'm literally using a unit test as a testing environment instead of a unit test here.
@@ -13,12 +14,39 @@ contains
 
     real(c_float) :: x, y
 
+    ! I'm just going to reuse these variables because this is a testing environment.
+
     x = 0.9
-    y = anint(x)
+    y = int(x)
 
-    print*,y
+    call assert_true(y == 0)
+
+    x = 0.2
+    y = int(x)
+
+    call assert_true(y == 0)
+
+    x = 105.5
+    y = int(x)
+
+    call assert_true(y == 105)
 
 
+    x = -105.5
+    y = int(x)
+
+    call assert_true(y == -105)
+
+    x = -3.5
+    y = int(x)
+
+    call assert_true(y == -3)
+
+
+    x = -0.5
+    y = int(x)
+
+    call assert_true(y == 0)
   end subroutine mirror_java_tests
 
 end module test_suite_trancation
