@@ -193,6 +193,28 @@ contains
   !* Spacial methods.
 
 
+  !* Translated from JOML. Original name: "translateGeneric"
+  subroutine translate(this, x, y, z)
+    use :: math_helpers, only: fma_f32_array_4
+    implicit none
+
+    class(mat4f), intent(inout) :: this
+    real(c_float), intent(in), value :: x, y, z
+    ! Cache.
+    real(c_float), dimension(16) :: mat
+
+    mat = this%data
+
+    this%data = [ &
+      mat(1:12), &
+    ! Note: This is one nested call lol.
+      fma_f32_array_4(mat(1:4),  spread(x, 1, 4), &
+      fma_f32_array_4(mat(5:8),  spread(y, 1, 4), &
+      fma_f32_array_4(mat(9:12), spread(z, 1, 4), mat(13:16)))) & ! Looking a bit like lisp at this point.
+      ]
+  end subroutine translate
+
+
   !* Translated from JOML. This method was called "rotateXInternal"
   subroutine rotate_x(this, angle_radians)
     use :: math_helpers, only: cos_from_sin_f32, fma_f32, fma_f32_array_4

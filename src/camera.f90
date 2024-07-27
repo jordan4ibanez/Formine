@@ -42,42 +42,51 @@ contains
 
 
 
-    if (up) then
-      fov_degrees = fov_degrees + gotten_delta * 100.0
+    ! if (up) then
+    !   fov_degrees = fov_degrees + gotten_delta * 100.0
 
-      if (fov_degrees >= MAX_FOV) then
-        fov_degrees = MAX_FOV
-        up = .false.
-      end if
-    else
-      fov_degrees = fov_degrees - gotten_delta * 100.0
-      if (fov_degrees <= MIN_FOV) then
-        fov_degrees = MIN_FOV
-        up = .true.
-      end if
-    end if
+    !   if (fov_degrees >= MAX_FOV) then
+    !     fov_degrees = MAX_FOV
+    !     up = .false.
+    !   end if
+    ! else
+    !   fov_degrees = fov_degrees - gotten_delta * 100.0
+    !   if (fov_degrees <= MIN_FOV) then
+    !     fov_degrees = MIN_FOV
+    !     up = .true.
+    !   end if
+    ! end if
     ! print"(f0.5)",fov_degrees
 
-    if (up_2) then
-      debug_rotation = debug_rotation + gotten_delta
-      if (debug_rotation > to_radians_f32(45.0)) then
-        debug_rotation = to_radians_f32(45.0)
-        up_2 = .false.
-      end if
-    else
-      debug_rotation = debug_rotation - gotten_delta
-      if (debug_rotation < to_radians_f32(-45.0)) then
-        debug_rotation = to_radians_f32(-45.0)
-        up_2 = .true.
-      end if
-    end if
+    ! if (up_2) then
+    !   debug_rotation = debug_rotation + gotten_delta
+    !   if (debug_rotation >= to_radians_f32(45.0)) then
+    !     debug_rotation = to_radians_f32(45.0)
+    !     up_2 = .false.
+    !   end if
+    ! else
+    !   debug_rotation = debug_rotation - gotten_delta
+    !   if (debug_rotation <= to_radians_f32(-45.0)) then
+    !     debug_rotation = to_radians_f32(-45.0)
+    !     up_2 = .true.
+    !   end if
+    ! end if
     ! print"(f0.10)", debug_rotation
 
     if (up_3) then
-
+      camera_position%data(1) = camera_position%data(1) + gotten_delta
+      if (camera_position%data(1) >= 1.0) then
+        camera_position%data(1) = 1.0
+        up_3 = .false.
+      end if
     else
-
+      camera_position%data(1) = camera_position%data(1) - gotten_delta
+      if (camera_position%data(1) <= -1.0) then
+        camera_position%data(1) = -1.0
+        up_3 = .true.
+      end if
     end if
+    print"(f0.5)", camera_position%data(1)
 
     call camera_matrix%identity()
 
@@ -86,7 +95,7 @@ contains
 
     ! call camera_matrix%rotate_z(debug_rotation)
 
-    call camera_matrix%translate(0.0, 0.0, 0.0)
+    call camera_matrix%translate(camera_position%data(1), 0.0, -camera_position%data(1))
 
     !* So the trick is, the camera actually never moves, but the world moves around it.
     !* This maintains as much precision as possible where you can see it.
