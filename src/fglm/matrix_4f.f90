@@ -304,7 +304,7 @@ contains
   end subroutine rotate_z
 
 
-  !* Translated from JOML. This was originally called: "setTranslation". Never use this. Never expose this.
+  !* Translated from JOML. This was originally called: "setTranslation". Never externally use this. Never expose this.
   subroutine set_translation_array(this, xyz)
     implicit none
 
