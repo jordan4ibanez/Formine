@@ -303,4 +303,67 @@ contains
   end function divide_vec3f
 
 
+  !* Getters.
+
+
+  real(c_float) function x(this) result(val)
+    implicit none
+
+    class(vec3f), intent(in) :: this
+
+    val = this%data(1)
+  end function x
+
+
+  real(c_float) function y(this) result(val)
+    implicit none
+
+    class(vec3f), intent(in) :: this
+
+    val = this%data(2)
+  end function y
+
+
+  real(c_float) function z(this) result(val)
+    implicit none
+
+    class(vec3f), intent(in) :: this
+
+    val = this%data(3)
+  end function z
+
+
+  !* Setters.
+
+
+  subroutine set_x(this, val)
+    implicit none
+
+    class(vec3f), intent(inout) :: this
+    real(c_float), intent(in), value :: val
+
+    this%data(1) = val
+  end subroutine set_x
+
+
+  subroutine set_y(this, val)
+    implicit none
+
+    class(vec3f), intent(inout) :: this
+    real(c_float), intent(in), value :: val
+
+    this%data(2) = val
+  end subroutine set_y
+
+
+  subroutine set_z(this, val)
+    implicit none
+
+    class(vec3f), intent(inout) :: this
+    real(c_float), intent(in), value :: val
+
+    this%data(3) = val
+  end subroutine set_z
+
+
 end module vector_3f
