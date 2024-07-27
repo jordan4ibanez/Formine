@@ -13,6 +13,7 @@ module camera
   real(c_float), parameter :: MAX_FOV = 120.0
 
   logical :: up = .true.
+  logical :: up_2 = .true.
   real(c_float) :: fov_degrees = 72.0
 
   !? On the stack, for now. Uses 64 bytes. I don't feel like listing the rest of the sizes.
@@ -38,34 +39,35 @@ contains
 
     ! print"(f00.30)",gotten_delta
 
-    ! print"(f0.5)",fov_degrees
 
-    ! if (up) then
-    !   fov_degrees = real(fov_degrees + gotten_delta * 100.0d0, kind = c_float)
-
-    !   if (fov_degrees >= MAX_FOV) then
-    !     fov_degrees = MAX_FOV
-    !     up = .false.
-    !   end if
-    ! else
-    !   fov_degrees = real(fov_degrees - gotten_delta * 100.0d0, kind = c_float)
-    !   if (fov_degrees <= MIN_FOV) then
-    !     fov_degrees = MIN_FOV
-    !     up = .true.
-    !   end if
-    ! end if
 
     if (up) then
+      fov_degrees = real(fov_degrees + gotten_delta * 100.0d0, kind = c_float)
+
+      if (fov_degrees >= MAX_FOV) then
+        fov_degrees = MAX_FOV
+        up = .false.
+      end if
+    else
+      fov_degrees = real(fov_degrees - gotten_delta * 100.0d0, kind = c_float)
+      if (fov_degrees <= MIN_FOV) then
+        fov_degrees = MIN_FOV
+        up = .true.
+      end if
+    end if
+    ! print"(f0.5)",fov_degrees
+
+    if (up_2) then
       debug_rotation = debug_rotation + real(gotten_delta)
       if (debug_rotation > to_radians_f32(45.0)) then
         debug_rotation = to_radians_f32(45.0)
-        up = .false.
+        up_2 = .false.
       end if
     else
       debug_rotation = debug_rotation - real(gotten_delta)
       if (debug_rotation < to_radians_f32(-45.0)) then
         debug_rotation = to_radians_f32(-45.0)
-        up = .true.
+        up_2 = .true.
       end if
     end if
     ! print"(f0.10)", debug_rotation
@@ -74,7 +76,10 @@ contains
 
     call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), 0.01, 100.0)
 
-    call camera_matrix%rotate_y(debug_rotation)
+
+
+
+    call camera_matrix%rotate_z(debug_rotation)
 
     !* So the trick is, the camera actually never moves, but the world moves around it.
     !* This maintains as much precision as possible where you can see it.
