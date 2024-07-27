@@ -30,6 +30,7 @@ contains
     implicit none
 
     ! This only works on Windows, Linux, and POSIX platforms.
+    ! These platforms seem to implement the monotonic clock.
     ! If for whatever reason you're porting this, you might want to set this to:
     ! integer(c_float)
     ! But doing this will make it so after 24 days, it WILL wrap around!
