@@ -240,7 +240,7 @@ contains
 
     cosine = cos_from_sin_f32(sine, angle_radians)
 
-    lm = [mat(5), mat(6), mat(7), mat(8), mat(9), mat(10), mat(11) ,mat(12)]
+    lm = [mat(5:12)]
 
     this%data = [ &
       mat(1:4), &
