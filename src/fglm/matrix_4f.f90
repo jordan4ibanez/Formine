@@ -62,9 +62,13 @@ module matrix_4f
     !* There is only assignment operator. Everything else is too dangerous to implement.
     generic :: assignment(=) => assign_mat4f
     procedure :: assign_mat4f
-    !* Methods.
+    !* General methods.
     procedure :: identity
     procedure :: perspective
+
+    !* Spacial methods.
+    procedure :: rotate_x
+    procedure :: set_translation
   end type mat4f
 
   interface mat4f
@@ -116,7 +120,7 @@ contains
   end subroutine assign_mat4f
 
 
-  !* Methods.
+  !* General methods.
 
 
   subroutine identity(this)
@@ -183,6 +187,8 @@ contains
       ]
   end subroutine perspective
 
+
+  !* Spacial methods.
 
   !* Translated from JOML. This method was called "rotateXInternal"
   subroutine rotate_x(this, angle_radians)
