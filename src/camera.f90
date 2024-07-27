@@ -75,9 +75,9 @@ contains
 
     if (up_3) then
 
-      call camera_position%set_x(camera_position%get_x() + gotten_delta)
+      camera_position%x() = camera_position%x() + gotten_delta
 
-      if (camera_position%get_x() >= 1.0) then
+      if (camera_position%x() >= 1.0) then
         call camera_position%set_x(1.0)
         up_3 = .false.
       end if
