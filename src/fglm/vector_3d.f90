@@ -51,6 +51,15 @@ module vector_3d
     procedure :: divide_vec3d
     procedure :: divide_scalar_f32
     procedure :: divide_array_f32
+
+    !* Getters
+    procedure :: x
+    procedure :: y
+    procedure :: z
+    !* Setters
+    procedure :: set_x
+    procedure :: set_y
+    procedure :: set_z
   end type vec3d
 
 
@@ -416,6 +425,69 @@ contains
 
     new_vec3d = this%data(1:3) / arr(1:3)
   end function divide_array_f32
+
+
+  !* Getters.
+
+
+  real(c_double) function x(this) result(val)
+    implicit none
+
+    class(vec3d), intent(in) :: this
+
+    val = this%data(1)
+  end function x
+
+
+  real(c_double) function y(this) result(val)
+    implicit none
+
+    class(vec3d), intent(in) :: this
+
+    val = this%data(2)
+  end function y
+
+
+  real(c_double) function z(this) result(val)
+    implicit none
+
+    class(vec3d), intent(in) :: this
+
+    val = this%data(3)
+  end function z
+
+
+  !* Setters.
+
+
+  subroutine set_x(this, val)
+    implicit none
+
+    class(vec3d), intent(inout) :: this
+    real(c_double), intent(in), value :: val
+
+    this%data(1) = val
+  end subroutine set_x
+
+
+  subroutine set_y(this, val)
+    implicit none
+
+    class(vec3d), intent(inout) :: this
+    real(c_double), intent(in), value :: val
+
+    this%data(2) = val
+  end subroutine set_y
+
+
+  subroutine set_z(this, val)
+    implicit none
+
+    class(vec3d), intent(inout) :: this
+    real(c_double), intent(in), value :: val
+
+    this%data(3) = val
+  end subroutine set_z
 
 
 end module vector_3d
