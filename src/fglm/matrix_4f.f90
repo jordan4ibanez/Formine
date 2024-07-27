@@ -151,7 +151,7 @@ contains
     ! I'm just using this like this so I can upload it straight into the GPU. (I am very lazy)
     real(c_float), intent(in), value :: fov_y_radians, aspect_ratio, z_near, z_far
     real(c_float) :: height, epsil
-    real(c_float), dimension(4) :: r, n
+    real(c_float), dimension(4) :: r
     logical :: far_infinite, near_infinite
     ! Cache.
     real(c_float), dimension(16) :: mat
@@ -178,15 +178,10 @@ contains
       r(4) = (z_far + z_far) * z_near / (z_near - z_far)
     end if
 
-    n(1) = mat(9)  * r(3) - mat(13)
-    n(2) = mat(10) * r(3) - mat(14)
-    n(3) = mat(11) * r(3) - mat(15)
-    n(4) = mat(12) * r(3) - mat(16)
-
     this%data(1:16) = [&
       mat(1:4) * r(1), &
       mat(5:8) * r(2), &
-      n(1:4), &
+      mat(9:12)  * r(3) - mat(13:16), &
       mat(9:12) * r(4) &
       ]
   end subroutine perspective
