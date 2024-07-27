@@ -74,19 +74,22 @@ contains
     ! print"(f0.10)", debug_rotation
 
     if (up_3) then
-      camera_position%data(1) = camera_position%data(1) + gotten_delta
-      if (camera_position%data(1) >= 1.0) then
-        camera_position%data(1) = 1.0
+
+      call camera_position%set_x(camera_position%get_x() + gotten_delta)
+
+      if (camera_position%get_x() >= 1.0) then
+        call camera_position%set_x(1.0)
         up_3 = .false.
       end if
     else
-      camera_position%data(1) = camera_position%data(1) - gotten_delta
+      call camera_position%set_x(camera_position%get_x() - gotten_delta)
       if (camera_position%data(1) <= -1.0) then
         camera_position%data(1) = -1.0
         up_3 = .true.
       end if
     end if
-    print"(f0.5)", camera_position%data(1)
+
+    ! print"(f0.5)", camera_position%data(1)
 
     call camera_matrix%identity()
 
