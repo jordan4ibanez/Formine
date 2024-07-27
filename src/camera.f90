@@ -14,6 +14,7 @@ module camera
 
   logical :: up = .true.
   logical :: up_2 = .true.
+  logical :: up_3 = .true.
   real(c_float) :: fov_degrees = 72.0
 
   !? On the stack, for now. Uses 64 bytes. I don't feel like listing the rest of the sizes.
@@ -33,23 +34,23 @@ contains
 
     implicit none
 
-    real(c_double) :: gotten_delta
+    real(c_float) :: gotten_delta
 
-    gotten_delta = get_delta_f64()
+    gotten_delta = get_delta_f32()
 
     ! print"(f00.30)",gotten_delta
 
 
 
     if (up) then
-      fov_degrees = real(fov_degrees + gotten_delta * 100.0d0, kind = c_float)
+      fov_degrees = fov_degrees + gotten_delta * 100.0
 
       if (fov_degrees >= MAX_FOV) then
         fov_degrees = MAX_FOV
         up = .false.
       end if
     else
-      fov_degrees = real(fov_degrees - gotten_delta * 100.0d0, kind = c_float)
+      fov_degrees = fov_degrees - gotten_delta * 100.0
       if (fov_degrees <= MIN_FOV) then
         fov_degrees = MIN_FOV
         up = .true.
@@ -58,13 +59,13 @@ contains
     ! print"(f0.5)",fov_degrees
 
     if (up_2) then
-      debug_rotation = debug_rotation + real(gotten_delta)
+      debug_rotation = debug_rotation + gotten_delta
       if (debug_rotation > to_radians_f32(45.0)) then
         debug_rotation = to_radians_f32(45.0)
         up_2 = .false.
       end if
     else
-      debug_rotation = debug_rotation - real(gotten_delta)
+      debug_rotation = debug_rotation - gotten_delta
       if (debug_rotation < to_radians_f32(-45.0)) then
         debug_rotation = to_radians_f32(-45.0)
         up_2 = .true.
@@ -72,14 +73,20 @@ contains
     end if
     ! print"(f0.10)", debug_rotation
 
+    if (up_3) then
+
+    else
+
+    end if
+
     call camera_matrix%identity()
 
     call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), 0.01, 100.0)
 
 
+    ! call camera_matrix%rotate_z(debug_rotation)
 
-
-    call camera_matrix%rotate_z(debug_rotation)
+    call camera_matrix%translate(0.0, 0.0, 0.0)
 
     !* So the trick is, the camera actually never moves, but the world moves around it.
     !* This maintains as much precision as possible where you can see it.
