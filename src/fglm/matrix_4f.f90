@@ -234,27 +234,79 @@ contains
     call this%set_translation_array(translation)
   end subroutine rotate_x
 
+
+  !* Translated from JOML. This method was originally called: "rotateYInternal"
   subroutine rotate_y(this, angle_radians)
     use :: math_helpers, only: cos_from_sin_f32, fma_f32
     implicit none
 
     class(mat4f), intent(inout) :: this
     real(c_float), intent(in), value :: angle_radians
-
+    real(c_float), dimension(3) :: translation
     real(c_float) :: sine, cosine
+    real(c_float), dimension(4) :: nm
+    ! Cache.
+    real(c_float), dimension(16) :: mat
+
+    !* Implementation note:
+    !* Unlike JOML we will assume that this matrix has already been translated.
+    !* Worst case scenario: We are redundantly assigning 0.0 values.
+    !* This keeps the implementation lean and simple.
+
+    mat = this%data
+
+    ! Save translation.
+    translation = mat(13:15)
+
+    sine = sin(angle_radians)
+
+    cosine = cos_from_sin_f32(sine, angle_radians)
+
+    !?-------------
+    !? | m00 | 1  |
+    !? | m01 | 2  |
+    !? | m02 | 3  |
+    !? | m03 | 4  |
+    !?-------------
+    !? | m10 | 5  |
+    !? | m11 | 6  |
+    !? | m12 | 7  |
+    !? | m13 | 8  |
+    !?-------------
+    !? | m20 | 9  |
+    !? | m21 | 10 |
+    !? | m22 | 11 |
+    !? | m23 | 12 |
+    !?-------------
+    !? | m30 | 13 |
+    !? | m31 | 14 |
+    !? | m32 | 15 |
+    !? | m33 | 16 |
+    !?-------------
+
+    nm = [&
+      fma_f32(mat(1), cosine, mat(9)  * (-sine)), &
+      fma_f32(mat(2), cosine, mat(10) * (-sine)), &
+      fma_f32(mat(3), cosine, mat(11) * (-sine)), &
+      fma_f32(mat(4), cosine, mat(12) * (-sine)) &
+      ]
+
+    this%data = [ &
+      mat(1:8), &
+      fma_f32(mat(1), sine, mat(9)  * cosine), &
+      fma_f32(mat(2), sine, mat(10) * cosine), &
+      fma_f32(mat(3), sine, mat(11) * cosine), &
+      fma_f32(mat(4), sine, mat(12) * cosine), &
+      mat(13:16) &
+      ]
+
+
 
   end subroutine rotate_y
 
-  subroutine set_translation(this, x,y,z)
-    implicit none
-
-    class(mat4f), intent(inout) :: this
-    real(c_float), intent(in), value :: x,y,z
-
-    this%data(13:15) = [x, y, z]
-  end subroutine set_translation
 
 
+  !* Translated from JOML. This was originally called: "setTranslation"
   subroutine set_translation_array(this, xyz)
     implicit none
 
@@ -263,7 +315,6 @@ contains
 
     this%data(13:15) = xyz(1:3)
   end subroutine set_translation_array
-
 
 
 end module matrix_4f
