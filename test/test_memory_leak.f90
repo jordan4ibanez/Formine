@@ -35,9 +35,9 @@ contains
     integer :: gigabyte_count
 
     !? I was using this to see if direct pointer access would leak. It doesn't! :D
-    ! if (.true.) then
-    !   return
-    ! end if
+    if (.true.) then
+      return
+    end if
 
     gigabyte_count = 0
 
