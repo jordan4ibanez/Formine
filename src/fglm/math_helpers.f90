@@ -5,6 +5,7 @@ module math_helpers
 contains
 
 
+  !* Translate degrees to radians. With 32 bit precision.
   real(c_float) function to_radians_f32(input) result(res)
     use :: constants, only: pi_32
 
@@ -14,6 +15,7 @@ contains
   end function to_radians_f32
 
 
+  !* Translate degrees to radians. With 64 bit precision.
   real(c_double) function to_radians_f64(input) result(res)
     use :: constants, only: pi_64
 
