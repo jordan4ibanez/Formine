@@ -54,19 +54,6 @@ module vector_3d
     procedure :: divide_vec3d
     procedure :: divide_scalar_f32
     procedure :: divide_array_f32
-
-    !* Getters
-    procedure :: get_x
-    procedure :: get_y
-    procedure :: get_z
-    !* Setters
-    procedure :: set_x
-    procedure :: set_y
-    procedure :: set_z
-    !* Raw access.
-    procedure :: x
-    procedure :: y
-    procedure :: z
   end type vec3d
 
 
@@ -432,102 +419,6 @@ contains
 
     new_vec3d = this%data(1:3) / arr(1:3)
   end function divide_array_f32
-
-
-  !* Getters.
-
-
-  real(c_double) function get_x(this) result(val)
-    implicit none
-
-    class(vec3d), intent(in) :: this
-
-    val = this%data(1)
-  end function get_x
-
-
-  real(c_double) function get_y(this) result(val)
-    implicit none
-
-    class(vec3d), intent(in) :: this
-
-    val = this%data(2)
-  end function get_y
-
-
-  real(c_double) function get_z(this) result(val)
-    implicit none
-
-    class(vec3d), intent(in) :: this
-
-    val = this%data(3)
-  end function get_z
-
-
-  !* Setters.
-
-
-  subroutine set_x(this, val)
-    implicit none
-
-    class(vec3d), intent(inout) :: this
-    real(c_double), intent(in), value :: val
-
-    this%data(1) = val
-  end subroutine set_x
-
-
-  subroutine set_y(this, val)
-    implicit none
-
-    class(vec3d), intent(inout) :: this
-    real(c_double), intent(in), value :: val
-
-    this%data(2) = val
-  end subroutine set_y
-
-
-  subroutine set_z(this, val)
-    implicit none
-
-    class(vec3d), intent(inout) :: this
-    real(c_double), intent(in), value :: val
-
-    this%data(3) = val
-  end subroutine set_z
-
-
-  !* Raw access.
-
-
-  function x(this) result(x_pointer)
-    implicit none
-
-    class(vec3d), intent(in), target :: this
-    real(c_double), pointer :: x_pointer
-
-    x_pointer => this%data(1)
-  end function x
-
-
-  function y(this) result(y_pointer)
-    implicit none
-
-    class(vec3d), intent(in), target :: this
-    real(c_double), pointer :: y_pointer
-
-    y_pointer => this%data(2)
-  end function y
-
-
-  function z(this) result(z_pointer)
-    implicit none
-
-    class(vec3d), intent(in), target :: this
-    real(c_double), pointer :: z_pointer
-
-    z_pointer => this%data(3)
-  end function z
 
 
 end module vector_3d
