@@ -370,5 +370,14 @@ contains
   end subroutine set_z
 
 
+  subroutine set(this, x, y, z)
+    implicit none
+
+    class(vec3f), intent(inout) :: this
+    real(c_float), intent(in), value :: x, y, z
+
+    this%data(1:3) = [x, y, z]
+  end subroutine set
+
 
 end module vector_3f
