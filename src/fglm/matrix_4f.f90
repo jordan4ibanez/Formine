@@ -68,7 +68,10 @@ module matrix_4f
 
     !* Spacial methods.
     procedure :: rotate_x
+
+    ! Set translation.
     procedure :: set_translation
+    procedure :: set_translation_array
   end type mat4f
 
   interface mat4f
@@ -209,28 +212,6 @@ contains
     !* Worst case scenario: We are redundantly assigning 0.0 values.
     !* This keeps the implementation lean and simple.
 
-    !?-------------
-    !? | m00 | 1  |
-    !? | m01 | 2  |
-    !? | m02 | 3  |
-    !? | m03 | 4  |
-    !?-------------
-    !? | m10 | 5  |
-    !? | m11 | 6  |
-    !? | m12 | 7  |
-    !? | m13 | 8  |
-    !?-------------
-    !? | m20 | 9  |
-    !? | m21 | 10 |
-    !? | m22 | 11 |
-    !? | m23 | 12 |
-    !?-------------
-    !? | m30 | 13 |
-    !? | m31 | 14 |
-    !? | m32 | 15 |
-    !? | m33 | 16 |
-    !?-------------
-
     mat = this%data
 
     ! Save translation.
@@ -258,8 +239,27 @@ contains
       mat(13:16) &
       ]
 
-    call this%set_translation(x, y, z)
+    call this%set_translation_array(translation)
   end subroutine rotate_x
 
+
+  subroutine set_translation(this, x,y,z)
+    implicit none
+
+    class(mat4f), intent(inout) :: this
+    real(c_float), intent(in), value :: x,y,z
+
+    this%data(13:15) = [x, y, z]
+  end subroutine set_translation
+
+
+  subroutine set_translation_array(this, xyz)
+    implicit none
+
+    class(mat4f), intent(inout) :: this
+    real(c_float), dimension(3), intent(in) :: xyz
+
+    this%data(13:15) = xyz(1:3)
+  end subroutine set_translation_array
 
 end module matrix_4f
