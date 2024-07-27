@@ -68,5 +68,5 @@ contains
     current_delta = real(delta_time, kind = c_float)
   end function get_delta_f32
 
-  
+
 end module delta
