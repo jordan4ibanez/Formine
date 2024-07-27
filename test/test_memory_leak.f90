@@ -5,6 +5,26 @@ module test_suite_test_memory_leak
 
 contains
 
+  subroutine another_leak(input)
+    implicit none
+
+    real, pointer :: input
+
+    input = input + 1
+  end subroutine another_leak
+
+
+  ! This is the only way I can cause a memory leak.
+  subroutine brute_force_leak()
+    implicit none
+
+    real, pointer :: wat
+
+    allocate(wat)
+
+  end subroutine brute_force_leak
+
+
   subroutine test_leak()
     use, intrinsic :: iso_c_binding, only: c_long
     use :: string, only: int_to_string
@@ -28,7 +48,11 @@ contains
       unit_1%y() = unit_1%y() + 1
       unit_1%z() = unit_1%z() + 1
 
-      print*,unit_1%x()
+      ! print*,unit_1%x()
+
+      call another_leak(unit_1%x())
+
+      unit_1%x() = 1073741824
 
       !* This will notate how much memory would be leaking.
       if (modulo(i * 4 * 3, 1073741824) == 0) then
