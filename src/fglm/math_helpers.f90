@@ -28,4 +28,27 @@ contains
   end function to_radians_f64
 
 
+  !* This was translated from JOML. Original name: "cosFromSinInternal"
+  real(c_float) function cos_from_sin_f32(sin, angle) result(cosine)
+    use :: constants, only: PI_F32, PI_TIMES_2_F32, PI_OVER_2_F32
+    implicit none
+
+    real(c_float), intent(in), value :: sin, angle
+    real(c_float) :: a, b
+
+    cosine = sqrt(1.0 - (sin * sin))
+
+    a = angle + PI_OVER_2_F32
+
+    b = a - int(a / PI_TIMES_2_F32) * PI_TIMES_2_F32
+
+    if (b < 0.0) then
+      b = PI_TIMES_2_F32 + b
+    end if
+
+    if (b >= PI_F32) then
+      cosine = -cosine
+    end if
+  end function cos_from_sin_f32
+
 end module math_helpers
