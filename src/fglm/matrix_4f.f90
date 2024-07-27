@@ -73,6 +73,7 @@ module matrix_4f
     procedure :: rotate_z
 
     !! Internal, only.
+    procedure, private :: get_translation_array
     procedure, private :: set_translation_array
   end type mat4f
 
@@ -302,6 +303,18 @@ contains
     ! Finally, restore the translation.
     call this%set_translation_array(translation)
   end subroutine rotate_z
+
+
+
+  !* Get the translation of a matrix. Never externally use this. Never expose this.
+  function get_translation_array(this) result(xyz)
+    implicit none
+
+    class(mat4f), intent(inout) :: this
+    real(c_float), dimension(3) :: xyz
+
+    xyz = this%data(13:15)
+  end function get_translation_array
 
 
   !* Translated from JOML. This was originally called: "setTranslation". Never externally use this. Never expose this.
