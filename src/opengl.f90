@@ -598,7 +598,7 @@ contains
     integer(c_int) :: length_of_array
 
     length_of_array = size(float_array)
-    total_size = f32_size * length_of_array
+    total_size = F32_SIZE * length_of_array
 
     !! FIXME: Might be wrong.
     call internal_gl_buffer_data(GL_ARRAY_BUFFER, total_size, c_loc(float_array), GL_STATIC_DRAW)
@@ -617,7 +617,7 @@ contains
     integer(c_int) :: length_of_array
 
     length_of_array = size(vec3f_array)
-    total_size = f32_size * length_of_array * 3
+    total_size = F32_SIZE * length_of_array * 3
 
     !! FIXME: Might be wrong.
     call internal_gl_buffer_data(GL_ARRAY_BUFFER, total_size, c_loc(vec3f_array), GL_STATIC_DRAW)
@@ -635,7 +635,7 @@ contains
     integer(c_int) :: length_of_array
 
     length_of_array = size(indices_array)
-    total_size = i32_size * length_of_array
+    total_size = I32_SIZE * length_of_array
 
     !! FIXME: Might be wrong.
     call internal_gl_buffer_data(GL_ELEMENT_ARRAY_BUFFER, total_size, c_loc(indices_array), GL_STATIC_DRAW)
