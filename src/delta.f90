@@ -15,6 +15,7 @@ module delta
 
 contains
 
+
   !* This sets up the delta calculator so it doesn't blow up.
   subroutine delta_initialize()
     implicit none
@@ -25,6 +26,7 @@ contains
 
     old_delta_integral = count
   end subroutine delta_initialize
+
 
   subroutine delta_tick()
     implicit none
@@ -66,4 +68,5 @@ contains
     current_delta = real(delta_time, kind = c_float)
   end function get_delta_f32
 
+  
 end module delta
