@@ -15,6 +15,12 @@ module matrix_4f
 
   public :: mat4f
 
+  !? This is an identifier to translate from JOML to Fortran. 00 based vs 1 linear based
+  ! 1  2  3  4
+  ! 5  6  7  8
+  ! 9  10 11 12
+  ! 13 14 15 16
+
   type mat4f
     real(c_float), dimension(16) :: data = [ &
       1.0, 0.0, 0.0, 0.0, &
@@ -132,11 +138,6 @@ contains
       r(3) = (z_far + z_near) / (z_near - z_far)
       r(4) = (z_far + z_far) * z_near / (z_near - z_far)
     end if
-
-    ! 1  2  3  4
-    ! 5  6  7  8
-    ! 9  10 11 12
-    ! 13 14 15 16
 
     n(1) = mat(9)  * r(3) - mat(13)
     n(2) = mat(10) * r(3) - mat(14)
