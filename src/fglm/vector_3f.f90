@@ -16,7 +16,7 @@ module vector_3f
 
 
   type vec3f
-    real(c_float) :: x,y,z = 0.0
+    real(c_float) :: x, y, z = 0.0
   contains
     generic :: assignment(=) => assign_scalar_f32, assign_array_f32, assign_vec3f, assign_vec3d
     procedure :: assign_scalar_f32
@@ -130,7 +130,7 @@ contains
 
     ! Explicit cast to shut up compiler.
     ! f64 -> f32
-    this = real(other%data(1:3), kind=c_float)
+    this = real(other%as_array(), kind=c_float)
   end subroutine assign_vec3d
 
 
