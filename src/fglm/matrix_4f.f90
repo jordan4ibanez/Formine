@@ -4,14 +4,20 @@ module matrix_4f
 
   private
 
-  !
-  ! As you can see, mat4f differs greatly from vec3f because it's
-  ! only purpose is to do matrix math and shove that math into an
-  ! OpenGL uniform.
-  !
-  ! You can also probably see this differs greatly from regular fortran matrix
-  ! math because it's using a flat array as a backing structure.
-  !
+  !*
+  !* As you can see, mat4f differs greatly from vec3f because it's
+  !* only purpose is to do matrix math and shove that math into an
+  !* OpenGL uniform.
+  !*
+  !* You can also probably see this differs greatly from regular fortran matrix
+  !* math because it's using a flat array as a backing structure.
+  !*
+  !* This contains methods translated from JOML (Java) into Fortran.
+  !*
+  !* Please see joml.license for (MIT) licensing information.
+  !*
+  !* Why did I do this? I like JOML. That's about it!
+  !*
 
   public :: mat4f
 
@@ -154,7 +160,7 @@ contains
   end subroutine perspective
 
 
-  !* Translated from JOML.
+  !* Translated from JOML. This method was called "rotateXInternal"
   subroutine rotate_x(this, angle_radians)
     use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
     implicit none
