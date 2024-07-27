@@ -231,6 +231,7 @@ contains
       mat(13:16) &
       ]
 
+    ! Finally, restore the translation.
     call this%set_translation_array(translation)
   end subroutine rotate_x
 
