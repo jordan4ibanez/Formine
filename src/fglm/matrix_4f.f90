@@ -153,4 +153,22 @@ contains
       ]
   end subroutine perspective
 
+
+  !* Translated from JOML.
+  subroutine rotate_x(this, angle_radians)
+    use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+    implicit none
+
+    class(mat4f), intent(inout) :: this
+    real(c_float), intent(in), value :: angle_radians
+
+    !* Implementation note:
+    !* Unlike JOML we will assume that this matrix has already been translated.
+    !* Worst case scenario: We are redundantly assigning 0.0 values.
+    !* This keeps the implementation lean and simple.
+
+
+  end subroutine rotate_x
+
+
 end module matrix_4f
