@@ -52,10 +52,7 @@ module vector_3f
     procedure :: set_x
     procedure :: set_y
     procedure :: set_z
-    !* Raw access.
-    procedure :: x
-    procedure :: y
-    procedure :: z
+    procedure :: set
   end type vec3f
 
 
@@ -373,36 +370,5 @@ contains
   end subroutine set_z
 
 
-  !* Raw access.
-
-  function x(this) result(x_pointer)
-    implicit none
-
-    class(vec3f), intent(in), target :: this
-    real(c_float), pointer :: x_pointer
-
-    x_pointer => this%data(1)
-  end function x
-
-
-  function y(this) result(y_pointer)
-    implicit none
-
-    class(vec3f), intent(in), target :: this
-    real(c_float), pointer :: y_pointer
-
-    y_pointer => this%data(2)
-  end function y
-
-
-
-  function z(this) result(z_pointer)
-    implicit none
-
-    class(vec3f), intent(in), target :: this
-    real(c_float), pointer :: z_pointer
-
-    z_pointer => this%data(3)
-  end function z
 
 end module vector_3f
