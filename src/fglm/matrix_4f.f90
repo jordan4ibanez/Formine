@@ -227,7 +227,7 @@ contains
     this%data = [ &
       mat(1:4), &
       fma_f32_array_4(lm(1:4), spread(cosine, 1, 4), lm(5:8) * sine), &
-      fma_f32_array_4(lm(1:4), spread(-sine, 1, 4), lm(5:8) * cosine), &
+      fma_f32_array_4(lm(1:4), spread(-sine, 1, 4),  lm(5:8) * cosine), &
       mat(13:16) &
       ]
 
