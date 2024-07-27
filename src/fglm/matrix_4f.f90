@@ -68,6 +68,7 @@ module matrix_4f
     procedure :: perspective
 
     !* Spacial methods.
+    procedure :: translate
     procedure :: rotate_x
     procedure :: rotate_y
     procedure :: rotate_z
