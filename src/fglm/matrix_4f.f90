@@ -173,6 +173,7 @@ contains
     !* Worst case scenario: We are redundantly assigning 0.0 values.
     !* This keeps the implementation lean and simple.
 
+    
 
   end subroutine rotate_x
 
