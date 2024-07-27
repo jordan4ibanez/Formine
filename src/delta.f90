@@ -7,8 +7,8 @@ module delta
 
   public :: delta_initialize
   public :: delta_tick
-  public :: get_delta_f64
   public :: get_delta_f32
+  public :: get_delta_f64
 
   integer(c_long) :: old_delta_integral = 0
   real(c_double) :: delta_time = 0.0d0
@@ -54,19 +54,19 @@ contains
   end subroutine delta_tick
 
 
-  real(c_double) function get_delta_f64() result(current_delta)
-    implicit none
-
-    current_delta = delta_time
-  end function get_delta_f64
-
-
   real(c_float) function get_delta_f32() result(current_delta)
     implicit none
 
     ! Basically a precision chop.
     current_delta = real(delta_time, kind = c_float)
   end function get_delta_f32
+
+
+  real(c_double) function get_delta_f64() result(current_delta)
+    implicit none
+
+    current_delta = delta_time
+  end function get_delta_f64
 
 
 end module delta
