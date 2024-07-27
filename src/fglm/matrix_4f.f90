@@ -184,6 +184,7 @@ contains
     n(3) = mat(11) * r(3) - mat(15)
     n(4) = mat(12) * r(3) - mat(16)
 
+    print*,"fixme: use compacting operator (1:4) * r(1)"
     this%data(1:16) = [&
       mat(1) * r(1), mat(2)  * r(1), mat(3)  * r(1), mat(4)  * r(1), &
       mat(5) * r(2), mat(6)  * r(2), mat(7)  * r(2), mat(8)  * r(2), &
