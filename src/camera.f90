@@ -60,8 +60,6 @@ contains
     !* So the trick is, the camera actually never moves, but the world moves around it.
     !* This maintains as much precision as possible where you can see it.
 
-
-
     call upload_camera_matrix_into_shader()
   end subroutine camera_update_matrix
 
@@ -73,6 +71,7 @@ contains
 
     call gl_uniform_mat4f(shader_get_uniform("main", "camera_matrix"), camera_matrix)
 
+    !TODO: REMOVE THIS!
     call gl_uniform_mat4f(shader_get_uniform("main", "object_matrix"), mat4f())
   end subroutine upload_camera_matrix_into_shader
 
