@@ -10,7 +10,7 @@ contains
 
     unit_1 = mat4f()
 
-    print*,unit_1
+    ! print*,unit_1
 
   end subroutine basic_test
 
