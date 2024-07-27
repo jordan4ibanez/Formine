@@ -47,8 +47,7 @@ contains
     unit%x() = user_1 + 2
     unit%y() = user_2 + 2
 
-    print*, unit
-
+    ! note: allocatable does not seem to hang here. Freed!
   end subroutine test_allocated_leak
 
 
@@ -62,9 +61,9 @@ contains
     integer :: gigabyte_count
 
     !? I was using this to see if direct pointer access would leak. It doesn't! :D
-    ! if (.true.) then
-    !   return
-    ! end if
+    if (.true.) then
+      return
+    end if
 
     gigabyte_count = 0
 
