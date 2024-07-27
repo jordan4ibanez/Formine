@@ -17,6 +17,7 @@ module camera
 
   !? On the stack, for now. Uses 64 bytes. I don't feel like listing the rest of the sizes.
   type(mat4f) :: camera_matrix
+  !? Position is not translation, translation is the inverse of position!
   type(vec3f) :: camera_position
 
 contains
