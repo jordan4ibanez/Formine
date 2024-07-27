@@ -71,9 +71,8 @@ module matrix_4f
     procedure :: rotate_x
     procedure :: rotate_y
 
-    ! Set translation.
-    procedure :: set_translation
-    procedure :: set_translation_array
+    !! Internal, only.
+    procedure, private :: set_translation_array
   end type mat4f
 
   interface mat4f
