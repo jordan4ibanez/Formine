@@ -89,7 +89,7 @@ contains
     implicit none
     real(c_float), intent(in), value :: i
 
-    new_mat4f%data(1:16) = spread(i, 1, 16)
+    new_mat4f%data(1:16) = i
   end function constructor_scalar_f32
 
 
