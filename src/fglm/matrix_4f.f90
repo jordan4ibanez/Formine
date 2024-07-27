@@ -29,9 +29,10 @@ module matrix_4f
       0.0, 0.0, 0.0, 1.0 &
       ]
   contains
+    !* There is only assignment operator. Everything else is too dangerous to implement.
     generic :: assignment(=) => assign_mat4f
     procedure :: assign_mat4f
-
+    !* Methods.
     procedure :: identity
     procedure :: perspective
   end type mat4f
