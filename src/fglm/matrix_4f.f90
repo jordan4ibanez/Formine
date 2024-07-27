@@ -212,7 +212,7 @@ contains
     mat = this%data
 
     ! Save translation.
-    translation = mat(13:15)
+    translation = this%get_translation_array()
 
     sine = sin(angle_radians)
 
@@ -250,7 +250,7 @@ contains
     mat = this%data
 
     ! Save translation.
-    translation = mat(13:15)
+    translation = this%get_translation_array()
 
     sine = sin(angle_radians)
 
@@ -288,7 +288,7 @@ contains
     mat = this%data
 
     ! Save translation.
-    translation = mat(13:15)
+    translation = this%get_translation_array()
 
     sine = sin(angle_radians)
 
