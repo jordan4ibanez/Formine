@@ -1,5 +1,6 @@
 module camera
   use :: matrix_4f
+  use :: vector_3f
   use, intrinsic :: iso_c_binding, only: c_float, c_double
   implicit none
 
@@ -14,8 +15,9 @@ module camera
   logical :: up = .true.
   real(c_float) :: fov_degrees = 72.0
 
-  !? On the stack, for now. Uses 64 bytes.
+  !? On the stack, for now. Uses 64 bytes. I don't feel like listing the rest of the sizes.
   type(mat4f) :: camera_matrix
+  type(vec3f) :: camera_position
 
 contains
 
