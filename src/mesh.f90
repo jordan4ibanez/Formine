@@ -45,9 +45,9 @@ contains
     ! Into position vertex buffer object.
 
     vbo_position = upload_positions([ &
-      -0.5, -0.5, 0.0, &
-      0.5, -0.5, 0.0, &
-      0.0, 0.5, 0.0 &
+      -0.5, -0.5, -0.5, &
+      0.5, -0.5, -0.5, &
+      0.0, 0.5, -0.5 &
       ])
 
     vbo_color = upload_colors([ &
