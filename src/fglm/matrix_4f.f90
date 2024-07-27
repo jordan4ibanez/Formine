@@ -198,7 +198,8 @@ contains
 
     class(mat4f), intent(inout) :: this
     real(c_float), intent(in), value :: angle_radians
-    real(c_float) :: x, y, z, sine, cosine
+    real(c_float), dimension(3) :: translation
+    real(c_float) :: sine, cosine
     real(c_float), dimension(8) :: lm
     ! Cache.
     real(c_float), dimension(16) :: mat
@@ -233,9 +234,7 @@ contains
     mat = this%data
 
     ! Save translation.
-    x = mat(13)
-    y = mat(14)
-    z = mat(15)
+    translation = mat(13:15)
 
     sine = sin(angle_radians)
 
