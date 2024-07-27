@@ -2,9 +2,12 @@ module vector_3f
   use,intrinsic :: iso_c_binding, only: c_float
   implicit none
 
+
   private
 
+
   public :: vec3f
+
 
   ! Vec3f and Vec3d are transparent containers.
   ! You can use the methods, or you can use the raw data.
