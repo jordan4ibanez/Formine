@@ -60,6 +60,9 @@ module vector_3f
 contains
 
 
+  !* Constructors.
+
+
   type(vec3f) function constructor_scalar(i) result(new_vec3f)
     implicit none
     real(c_float), intent(in), value :: i
@@ -84,6 +87,9 @@ contains
 
     new_vec3f%data(1:3) = xyz_array(1:3)
   end function constructor_array
+
+
+  !* Assignment.
 
 
   subroutine assign_scalar_f32(this, i)
@@ -129,6 +135,9 @@ contains
   end subroutine assign_vec3d
 
 
+  !* Equality.
+
+
   logical function equal_scalar_f32(this, i) result(equality)
     use :: float_compare
     implicit none
@@ -162,6 +171,9 @@ contains
   end function equal_vec3f
 
 
+  !* Addition.
+
+
   type(vec3f) function add_scalar_f32(this, i) result(new_vec3f)
     implicit none
 
@@ -190,6 +202,9 @@ contains
 
     new_vec3f = this%data(1:3) + other%data(1:3)
   end function add_vec3f
+
+
+  !* Subtraction.
 
 
   type(vec3f) function subtract_scalar_f32(this, i) result(new_vec3f)
@@ -222,6 +237,9 @@ contains
   end function subtract_vec3f
 
 
+  !* Multiplication.
+
+
   type(vec3f) function multiply_scalar_f32(this, i) result(new_vec3f)
     implicit none
 
@@ -250,6 +268,9 @@ contains
 
     new_vec3f = this%data(1:3) * other%data(1:3)
   end function multiply_vec3f
+
+
+  !* Division.
 
 
   type(vec3f) function divide_scalar_f32(this, i) result(new_vec3f)
