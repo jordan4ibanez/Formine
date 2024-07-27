@@ -196,7 +196,6 @@ contains
 
   !* Translated from JOML. This method was called "rotateXInternal"
   subroutine rotate_x(this, angle_radians)
-    use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
     use :: math_helpers, only: cos_from_sin_f32, fma_f32
     implicit none
 
