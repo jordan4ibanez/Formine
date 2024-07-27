@@ -44,14 +44,18 @@ module vector_3f
     procedure :: divide_array_f32
     procedure :: divide_vec3f
 
-    !* Getters
+    !* Getters.
     procedure :: get_x
     procedure :: get_y
     procedure :: get_z
-    !* Setters
+    !* Setters.
     procedure :: set_x
     procedure :: set_y
     procedure :: set_z
+    !* Raw access.
+    procedure :: x
+    procedure :: y
+    procedure :: z
   end type vec3f
 
 
@@ -74,12 +78,12 @@ contains
   end function constructor_scalar
 
 
-  type(vec3f) function constructor_raw(x,y,z) result(new_vec3f)
+  type(vec3f) function constructor_raw(x1,y1,z1) result(new_vec3f)
     implicit none
 
-    real(c_float), intent(in), value :: x,y,z
+    real(c_float), intent(in), value :: x1,y1,z1
 
-    new_vec3f%data(1:3) = [x,y,z]
+    new_vec3f%data(1:3) = [x1,y1,z1]
   end function constructor_raw
 
 
@@ -368,5 +372,37 @@ contains
     this%data(3) = val
   end subroutine set_z
 
+
+  !* Raw access.
+
+  function x(this) result(x_pointer)
+    implicit none
+
+    class(vec3f), intent(in), target :: this
+    real(c_float), pointer :: x_pointer
+
+    x_pointer => this%data(1)
+  end function x
+
+
+  function y(this) result(y_pointer)
+    implicit none
+
+    class(vec3f), intent(in), target :: this
+    real(c_float), pointer :: y_pointer
+
+    y_pointer => this%data(2)
+  end function y
+
+
+
+  function z(this) result(z_pointer)
+    implicit none
+
+    class(vec3f), intent(in), target :: this
+    real(c_float), pointer :: z_pointer
+
+    z_pointer => this%data(3)
+  end function z
 
 end module vector_3f
