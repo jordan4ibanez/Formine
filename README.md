@@ -17,6 +17,17 @@ Here is what this thing currently looks like.
 sudo dnf install gfortran mesa-libGL-devel glfw-devel
 ```
 
+### Install dependencies on linux mint 22+/ubuntu 24.04+
+```
+sudo apt install gfortran-14 libglfw3-dev libgl-dev
+```
+Then I would create a symbolic link to gfortran-14 in your ``.local/bin/`` directory via:
+```
+ln -s /usr/bin/gfortran-14 .local/bin/gfortran
+```
+Or you can just change the Makefile to use gfortran-14, but that's annoying.
+
+### Compiler note:
 This is using gfortran, gfortran is very buggy. This might be using some bugs which only come with gfortran. Test it in ifort for me to see where it is wrong.
 Note: this uses fortran 14+, if you use this in 13.2 expect it to blow up trying to compile.
 
