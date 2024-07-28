@@ -50,7 +50,7 @@ module vector_3f
 
 
   interface vec3f
-    module procedure :: constructor_scalar, constructor_raw, constructor_array
+    module procedure :: constructor_scalar, constructor_raw, constructor_array, constructor_vec3d
   end interface
 
 
@@ -84,6 +84,17 @@ contains
 
     new_vec3f = xyz_array(1:3)
   end function constructor_array
+
+
+  !* Only use this for translating vec3d into vec3f on the stack.
+  type(vec3f) function constructor_vec3d(input_vec3d) result(new_vec3f)
+    use :: vector_3d
+    implicit none
+
+    type(vec3d), intent(in), value :: input_vec3d
+
+    new_vec3f = input_vec3d
+  end function constructor_vec3d
 
 
   !* Assignment.
@@ -130,7 +141,7 @@ contains
 
     ! Explicit cast to shut up compiler.
     ! f64 -> f32
-    this = real(other%as_array(), kind=c_float)
+    this = real(other%as_array(), kind = c_float)
   end subroutine assign_vec3d
 
 
