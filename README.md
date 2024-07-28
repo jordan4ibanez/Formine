@@ -11,11 +11,14 @@ Here is what this thing currently looks like.
 
 ![Current progress.](https://raw.githubusercontent.com/jordan4ibanez/fortran_thing/master/example.png)
 
+-----
 
 ### Install dependencies on fedora:
 ```
 sudo dnf install gfortran mesa-libGL-devel glfw-devel
 ```
+
+-----
 
 ### Install dependencies on linux mint 22+/ubuntu 24.04+
 ```
@@ -26,6 +29,8 @@ Then I would create a symbolic link to gfortran-14 in your ``.local/bin/`` direc
 ln -s /usr/bin/gfortran-14 .local/bin/gfortran
 ```
 Or you can just change the Makefile to use gfortran-14, but that's annoying.
+
+-----
 
 ### Compiler note:
 This is using gfortran, gfortran is very buggy. This might be using some bugs which only come with gfortran. Test it in ifort for me to see where it is wrong.
