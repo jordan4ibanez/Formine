@@ -14,7 +14,7 @@ module camera
   real(c_float), parameter :: MAX_FOV = 120.0
 
   ! logical :: up = .true.
-  ! logical :: up_2 = .true.
+  logical :: up_2 = .true.
   logical :: up_3 = .true.
 
   real(c_float) :: fov_degrees = 72.0
@@ -59,19 +59,19 @@ contains
     ! end if
     ! print"(f0.5)",fov_degrees
 
-    ! if (up_2) then
-    !   debug_rotation = debug_rotation + gotten_delta
-    !   if (debug_rotation >= to_radians_f32(45.0)) then
-    !     debug_rotation = to_radians_f32(45.0)
-    !     up_2 = .false.
-    !   end if
-    ! else
-    !   debug_rotation = debug_rotation - gotten_delta
-    !   if (debug_rotation <= to_radians_f32(-45.0)) then
-    !     debug_rotation = to_radians_f32(-45.0)
-    !     up_2 = .true.
-    !   end if
-    ! end if
+    if (up_2) then
+      camera_rotation%y = camera_rotation%y + gotten_delta
+      if (camera_rotation%y >= to_radians_f32(45.0)) then
+        camera_rotation%y = to_radians_f32(45.0)
+        up_2 = .false.
+      end if
+    else
+      camera_rotation%y = camera_rotation%y - gotten_delta
+      if (camera_rotation%y <= to_radians_f32(-45.0)) then
+        camera_rotation%y = to_radians_f32(-45.0)
+        up_2 = .true.
+      end if
+    end if
     ! print"(f0.10)", debug_rotation
 
     if (up_3) then
@@ -90,6 +90,8 @@ contains
       end if
     end if
 
+    camera_position%z = -1.0
+
     ! print"(f0.5)", camera_position%data(1)
 
     call camera_matrix%identity()
@@ -97,7 +99,8 @@ contains
     call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), 0.01, 100.0)
 
 
-    call camera_matrix%rotate_z(camera_rotation%z_f32())
+    call camera_matrix%rotate_x(camera_rotation%x_f32())
+    call camera_matrix%rotate_y(camera_rotation%y_f32())
 
     call camera_matrix%translate_vec3f(vec3f(camera_position))
 
