@@ -55,7 +55,13 @@ module vector_3d
     procedure :: divide_scalar_f32
     procedure :: divide_array_f32
 
+    !* General methods.
     procedure :: as_array
+
+    !* Precision choppers.
+    procedure :: x_f32
+    procedure :: y_f32
+    procedure :: z_f32
   end type vec3d
 
 
@@ -435,6 +441,33 @@ contains
 
     new_array = [this%x, this%y, this%z]
   end function
+
+
+  !* Precision choppers.
+
+
+  real(c_float) function x_f32(this) result(result_x_f32)
+
+    class(vec3d), intent(in) :: this
+
+    result_x_f32 = real(this%x, kind = c_float)
+  end function x_f32
+
+
+  real(c_float) function y_f32(this) result(result_y_f32)
+
+    class(vec3d), intent(in) :: this
+
+    result_y_f32 = real(this%y, kind = c_float)
+  end function y_f32
+
+
+  real(c_float) function z_f32(this) result(result_z_f32)
+
+    class(vec3d), intent(in) :: this
+
+    result_z_f32 = real(this%z, kind = c_float)
+  end function z_f32
 
 
 end module vector_3d

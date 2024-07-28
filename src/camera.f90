@@ -23,8 +23,7 @@ module camera
   type(mat4f) :: camera_matrix
   !? Position is not translation, translation is the inverse of position!
   type(vec3d) :: camera_position
-
-  real(c_float) :: debug_rotation
+  type(vec3d) :: camera_rotation
 
 contains
 
@@ -98,7 +97,7 @@ contains
     call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), 0.01, 100.0)
 
 
-    call camera_matrix%rotate_z(debug_rotation)
+    call camera_matrix%rotate_z(camera_rotation%z_f32())
 
     call camera_matrix%translate_vec3f(vec3f(camera_position))
 
