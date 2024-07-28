@@ -6,6 +6,26 @@ module math_helpers
 contains
 
 
+  !* Cast a double into a float explicitly
+  real(c_float) function into_f32(input_f64) result(output_f32)
+    implicit none
+
+    real(c_double), intent(in), value :: input_f64
+
+    output_f32 = real(input_f64, kind = c_float)
+  end function into_f32
+
+
+  !* Cast a float into a double explicitly
+  real(c_double) function into_f64(input_f32) result(output_f64)
+    implicit none
+
+    real(c_double), intent(in), value :: input_f32
+
+    output_f64 = real(input_f32, kind = c_double)
+  end function into_f64
+
+
   !* Translate degrees to radians. With 32 bit precision.
   real(c_float) function to_radians_f32(input) result(res)
     use :: constants, only: PI_F32
