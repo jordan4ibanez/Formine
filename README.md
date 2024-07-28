@@ -28,7 +28,9 @@ Then I would create a symbolic link to gfortran-14 in your ``.local/bin/`` direc
 ```
 ln -s /usr/bin/gfortran-14 .local/bin/gfortran
 ```
-Or you can just change the Makefile to use gfortran-14, but that's annoying.
+(You might have to add ``.local/bin`` into your ``PATH``)
+
+_Or_ you can just change the Makefile to use gfortran-14, but that's annoying.
 
 -----
 
