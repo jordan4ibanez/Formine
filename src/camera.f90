@@ -1,6 +1,7 @@
 module camera
   use :: matrix_4f
   use :: vector_3f
+  use :: vector_3d
   use, intrinsic :: iso_c_binding, only: c_float, c_double
   implicit none
 
@@ -15,12 +16,13 @@ module camera
   ! logical :: up = .true.
   ! logical :: up_2 = .true.
   logical :: up_3 = .true.
+
   real(c_float) :: fov_degrees = 72.0
 
   !? On the stack, for now. Uses 64 bytes. I don't feel like listing the rest of the sizes.
   type(mat4f) :: camera_matrix
   !? Position is not translation, translation is the inverse of position!
-  type(vec3f) :: camera_position
+  type(vec3d) :: camera_position
 
   real(c_float) :: debug_rotation
 
@@ -98,7 +100,7 @@ contains
 
     call camera_matrix%rotate_z(debug_rotation)
 
-    call camera_matrix%translate_vec3f(camera_position)
+    call camera_matrix%translate_vec3f(vec3f(camera_position))
 
     !* So the trick is, the camera actually never moves, but the world moves around it.
     !* This maintains as much precision as possible where you can see it.
