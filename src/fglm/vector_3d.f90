@@ -80,7 +80,7 @@ contains
     implicit none
     real(c_double), intent(in), value :: i
 
-    new_vec3d = [i,i,i]
+    new_vec3d = i
   end function constructor_scalar_f64
 
 
@@ -106,7 +106,7 @@ contains
     implicit none
     real(c_float), intent(in), value :: i
 
-    new_vec3d = [i,i,i]
+    new_vec3d = i
   end function constructor_scalar_f32
 
 
