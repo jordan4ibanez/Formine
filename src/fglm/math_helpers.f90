@@ -20,7 +20,7 @@ contains
   real(c_double) function into_f64(input_f32) result(output_f64)
     implicit none
 
-    real(c_double), intent(in), value :: input_f32
+    real(c_float), intent(in), value :: input_f32
 
     output_f64 = real(input_f32, kind = c_double)
   end function into_f64
