@@ -56,7 +56,7 @@ module vector_3d
     procedure :: divide_array_f32
 
     !* General methods.
-    ! procedure :: as_array
+    procedure :: as_array
 
     !* Precision choppers.
     procedure :: x_f32
