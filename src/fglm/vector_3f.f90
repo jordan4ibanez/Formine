@@ -45,7 +45,7 @@ module vector_3f
     procedure :: divide_array_f32
     procedure :: divide_vec3f
 
-    ! procedure :: as_array
+    procedure :: as_array
   end type vec3f
 
 
@@ -344,13 +344,13 @@ contains
   end function divide_vec3f
 
 
-  ! function as_array(this) result(new_array)
-  !   implicit none
+  function as_array(this) result(new_array)
+    implicit none
 
-  !   class(vec3f), intent(in) :: this
-  !   real(c_float), dimension(3) :: new_array
+    class(vec3f), intent(in) :: this
+    real(c_float), dimension(3) :: new_array
 
-  !   new_array = [this%x, this%y, this%z]
-  ! end function
+    new_array = [this%x, this%y, this%z]
+  end function
 
 end module vector_3f
