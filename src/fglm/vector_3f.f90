@@ -45,7 +45,7 @@ module vector_3f
     procedure :: divide_array_f32
     procedure :: divide_vec3f
 
-    procedure :: as_array
+    ! procedure :: as_array
   end type vec3f
 
 
@@ -64,7 +64,7 @@ contains
     implicit none
     real(c_float), intent(in), value :: i
 
-    new_vec3f = [i,i,i]
+    new_vec3f = i
   end function constructor_scalar
 
 
@@ -106,7 +106,9 @@ contains
     class(vec3f), intent(inout) :: this
     real(c_float), intent(in), value :: i
 
-    this = [i, i, i]
+    this%x = i
+    this%y = i
+    this%z = i
   end subroutine assign_scalar_f32
 
 
@@ -128,11 +130,14 @@ contains
     class(vec3f), intent(inout) :: this
     type(vec3f), intent(in), value :: other
 
-    this = other%as_array()
+    this%x = other%x
+    this%y = other%y
+    this%z = other%z
   end subroutine assign_vec3f
 
 
   subroutine assign_vec3d(this, other)
+    use :: math_helpers, only: into_f32
     use :: vector_3d
     implicit none
 
@@ -141,7 +146,9 @@ contains
 
     ! Explicit cast to shut up compiler.
     ! f64 -> f32
-    this = real(other%as_array(), kind = c_float)
+    this%x = into_f32(other%x)
+    this%y = into_f32(other%y)
+    this%z = into_f32(other%z)
   end subroutine assign_vec3d
 
 
@@ -190,7 +197,9 @@ contains
     class(vec3f), intent(in) :: this
     real(c_float), intent(in), value :: i
 
-    new_vec3f = this%as_array() + i
+    new_vec3f%x = this%x + i
+    new_vec3f%y = this%y + i
+    new_vec3f%z = this%z + i
   end function add_scalar_f32
 
 
@@ -200,7 +209,9 @@ contains
     class(vec3f), intent(in) :: this
     real(c_float), dimension(3), intent(in) :: arr
 
-    new_vec3f = this%as_array() + arr(1:3)
+    new_vec3f%x = this%x + arr(1)
+    new_vec3f%y = this%y + arr(2)
+    new_vec3f%z = this%z + arr(3)
   end function add_array_f32
 
 
@@ -210,7 +221,9 @@ contains
     class(vec3f), intent(in) :: this
     type(vec3f), intent(in), value :: other
 
-    new_vec3f = this%as_array() + other%as_array()
+    new_vec3f%x = this%x + other%x
+    new_vec3f%y = this%y + other%y
+    new_vec3f%z = this%z + other%z
   end function add_vec3f
 
 
@@ -223,7 +236,9 @@ contains
     class(vec3f), intent(in) :: this
     real(c_float), intent(in), value :: i
 
-    new_vec3f = this%as_array() - i
+    new_vec3f%x = this%x - i
+    new_vec3f%y = this%y - i
+    new_vec3f%z = this%z - i
   end function subtract_scalar_f32
 
 
@@ -233,7 +248,9 @@ contains
     class(vec3f), intent(in) :: this
     real(c_float), dimension(3), intent(in) :: arr
 
-    new_vec3f = this%as_array() - arr(1:3)
+    new_vec3f%x = this%x - arr(1)
+    new_vec3f%y = this%y - arr(2)
+    new_vec3f%z = this%z - arr(3)
   end function subtract_array_f32
 
 
@@ -243,7 +260,9 @@ contains
     class(vec3f), intent(in) :: this
     type(vec3f), intent(in), value :: other
 
-    new_vec3f = this%as_array() - other%as_array()
+    new_vec3f%x = this%x - other%x
+    new_vec3f%y = this%y - other%y
+    new_vec3f%z = this%z - other%z
   end function subtract_vec3f
 
 
@@ -256,7 +275,9 @@ contains
     class(vec3f), intent(in) :: this
     real(c_float), intent(in), value :: i
 
-    new_vec3f = this%as_array() * i
+    new_vec3f%x = this%x * i
+    new_vec3f%y = this%y * i
+    new_vec3f%z = this%z * i
   end function multiply_scalar_f32
 
 
@@ -266,7 +287,9 @@ contains
     class(vec3f), intent(in) :: this
     real(c_float), dimension(3), intent(in) :: arr
 
-    new_vec3f = this%as_array() * arr(1:3)
+    new_vec3f%x = this%x * arr(1)
+    new_vec3f%y = this%y * arr(2)
+    new_vec3f%z = this%z * arr(3)
   end function multiply_array_f32
 
 
@@ -276,7 +299,9 @@ contains
     class(vec3f), intent(in) :: this
     type(vec3f), intent(in), value :: other
 
-    new_vec3f = this%as_array() * other%as_array()
+    new_vec3f%x = this%x * other%x
+    new_vec3f%y = this%y * other%y
+    new_vec3f%z = this%z * other%z
   end function multiply_vec3f
 
 
@@ -289,7 +314,9 @@ contains
     class(vec3f), intent(in) :: this
     real(c_float), intent(in), value :: i
 
-    new_vec3f = this%as_array() / i
+    new_vec3f%x = this%x / i
+    new_vec3f%y = this%y / i
+    new_vec3f%z = this%z / i
   end function divide_scalar_f32
 
 
@@ -299,7 +326,9 @@ contains
     class(vec3f), intent(in) :: this
     real(c_float), dimension(3), intent(in) :: arr
 
-    new_vec3f = this%as_array() / arr(1:3)
+    new_vec3f%x = this%x / arr(1)
+    new_vec3f%y = this%y / arr(2)
+    new_vec3f%z = this%z / arr(3)
   end function divide_array_f32
 
 
@@ -309,17 +338,19 @@ contains
     class(vec3f), intent(in) :: this
     type(vec3f), intent(in), value :: other
 
-    new_vec3f = this%as_array() / other%as_array()
+    new_vec3f%x = this%x / other%x
+    new_vec3f%y = this%y / other%y
+    new_vec3f%z = this%z / other%z
   end function divide_vec3f
 
 
-  function as_array(this) result(new_array)
-    implicit none
+  ! function as_array(this) result(new_array)
+  !   implicit none
 
-    class(vec3f), intent(in) :: this
-    real(c_float), dimension(3) :: new_array
+  !   class(vec3f), intent(in) :: this
+  !   real(c_float), dimension(3) :: new_array
 
-    new_array = [this%x, this%y, this%z]
-  end function
+  !   new_array = [this%x, this%y, this%z]
+  ! end function
 
 end module vector_3f
