@@ -353,4 +353,5 @@ contains
     new_array = [this%x, this%y, this%z]
   end function
 
+
 end module vector_3f
