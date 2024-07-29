@@ -17,7 +17,7 @@ module vector_3d
   !? Implementation note: I added a whole bunch of f32 assignment and math because it's easier to write out 0.0 than it is 0.0d0.
 
   type vec3d
-    real(c_double):: x, y, z = 0.0
+    real(c_double):: x, y, z = 0.0d0
   contains
     generic :: assignment(=) => assign_scalar_f64, assign_array_f64, assign_vec3d, assign_scalar_f32, assign_array_f32
     procedure :: assign_scalar_f64
