@@ -15,7 +15,7 @@ module mesh
   public :: mesh_delete
 
 
-  logical, parameter :: debug_mode = .false.
+  logical, parameter :: debug_mode = .true.
   type(fhash_tbl_t) :: mesh_database
 
 
@@ -225,6 +225,8 @@ contains
     character(len = *), intent(in) :: mesh_name
     type(mesh_data), intent(in) :: new_mesh
 
+    call mesh_delete(mesh_name)
+
     if (debug_mode) then
       print"(A)", "[Mesh]: set mesh ["//mesh_name//"]"
     end if
@@ -266,7 +268,7 @@ contains
   !* Draw a mesh.
   subroutine mesh_draw(mesh_name)
     use :: terminal
-    use :: opengl, only: GL_TRIANGLES, GL_UNSIGNED_INT, gl_bind_vertex_array, gl_draw_elements
+    use :: opengl
     implicit none
 
     character(len = *), intent(in) :: mesh_name
@@ -290,11 +292,58 @@ contains
 
   !* Delete a mesh.
   subroutine mesh_delete(mesh_name)
+    use :: opengl
+    use :: shader
     implicit none
 
     character(len = *), intent(in) :: mesh_name
+    class(*), allocatable :: generic
+    integer :: status
+    type(mesh_data) :: gotten_mesh
 
     ! This wipes out the OpenGL memory as well or else there's going to be a massive memory leak.
+    ! This is written so it can be used for set_mesh to auto delete the old mesh.
+
+    call mesh_database%get_raw(key(mesh_name), generic, stat = status)
+
+    if (status /= 0) then
+      print"(A)", "[Mesh]: Mesh ["//mesh_name//"] does not exist. Cannot delete."
+      return
+    end if
+
+    select type(generic)
+     type is (mesh_data)
+      gotten_mesh = generic
+     class default
+      ! print"(A)","[Mesh] Error: ["//mesh_name//"] has the wrong type."
+      return
+    end select
+
+    call gl_bind_vertex_array(gotten_mesh%vao)
+
+    ! Positions.
+    call gl_disable_vertex_attrib_array(shader_get_attribute("main", "position"))
+    call gl_delete_buffers(gotten_mesh%vbo_position)
+
+    ! Colors
+    call gl_disable_vertex_attrib_array(shader_get_attribute("main", "color"))
+    call gl_delete_buffers(gotten_mesh%vbo_color)
+
+    ! Indices.
+    call gl_delete_buffers(gotten_mesh%vbo_indices)
+
+    ! Unbind.
+    call gl_bind_vertex_array(0)
+
+    ! Then delete.
+    call gl_delete_vertex_arrays(gotten_mesh%vao)
+
+    ! todo: Needs gl_is_buffer to double check.
+
+    call mesh_database%unset(key(mesh_name))
+    if (debug_mode) then
+      print"(A)", "[Mesh]: Mesh ["//mesh_name//"] has been deleted."
+    end if
   end subroutine mesh_delete
 
 
