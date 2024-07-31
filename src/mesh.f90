@@ -68,6 +68,8 @@ contains
 
     new_mesh%vbo_indices = upload_indices(indices)
 
+    new_mesh%indices_length = size(indices)
+
     ! Now unbind vertex array object.
     call gl_bind_vertex_array(0)
 
