@@ -14,21 +14,22 @@ module camera
   real(c_float), parameter :: MIN_FOV = 50.0
   real(c_float), parameter :: MAX_FOV = 120.0
 
-  ! logical :: up = .true.
-  logical :: up_2 = .true.
-  logical :: up_3 = .true.
-
   real(c_float) :: fov_degrees = 72.0
 
   !? On the stack, for now. Uses 64 bytes. I don't feel like listing the rest of the sizes.
   type(mat4f) :: camera_matrix
+
   !? Position is not translation, translation is the inverse of position!
   type(vec3d) :: camera_position
   type(vec3d) :: camera_rotation
 
   !? Object related components.
   type(mat4f) :: object_matrix
-  real(c_double) :: object_spin
+
+  !? Position is not translation, translation is the inverse of position!
+  type(vec3d) :: object_position
+  type(vec3d) :: object_rotation
+
 
 
 contains
