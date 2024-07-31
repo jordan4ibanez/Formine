@@ -26,7 +26,7 @@ module mesh
 contains
 
 
-  subroutine create_mesh_3d
+  subroutine create_mesh_3d()
     use :: shader
     use :: opengl
     use :: string
@@ -39,10 +39,7 @@ contains
     ! 3. make this handle mesh things.
     ! 4. improve, somehow.
 
-    integer :: vao
-    integer :: vbo_position
-    integer :: vbo_color
-    integer :: vbo_indices
+    type(mesh_data) :: new_mesh
 
     if (.true.) then
       print"(A)",colorize_rgb("[WARNING]: remember to implement the hash table of meshes.", 255, 0, 0)
@@ -52,27 +49,27 @@ contains
 
     ! Into vertex array object.
 
-    vao = gl_gen_vertex_arrays()
+    new_mesh%vao = gl_gen_vertex_arrays()
 
-    print"(A)","vao: ["//int_to_string(vao)//"]"
+    print"(A)","vao: ["//int_to_string(new_mesh%vao)//"]"
 
-    call gl_bind_vertex_array(vao)
+    call gl_bind_vertex_array(new_mesh%vao)
 
     ! Into position vertex buffer object.
 
-    vbo_position = upload_positions([ &
+    new_mesh%vbo_position = upload_positions([ &
       -0.5, -0.5, 0.0, &
       0.5, -0.5, 0.0, &
       0.0, 0.5, 0.0 &
       ])
 
-    vbo_color = upload_colors([ &
+    new_mesh%vbo_color = upload_colors([ &
       1.0, 0.0, 0.0, &
       0.0, 1.0, 0.0, &
       0.0, 0.0, 1.0 &
       ])
 
-    vbo_indices = upload_indices([0,1,2])
+    new_mesh%vbo_indices = upload_indices([0,1,2])
 
     ! Now unbind vertex array object.
     call gl_bind_vertex_array(0)
@@ -218,6 +215,8 @@ contains
     character(len = *), intent(in) :: mesh_name
     type(mesh_data), intent(in) :: new_mesh
 
+    print"(A)", "[Mesh]: set mesh ["//mesh_name//"]"
+
     call mesh_database%set(key(mesh_name), new_mesh)
   end subroutine set_mesh
 
@@ -250,8 +249,6 @@ contains
       return
     end select
   end function get_mesh
-
-
 
 
 end module mesh
