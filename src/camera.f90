@@ -30,6 +30,7 @@ module camera
   type(mat4f) :: object_matrix
   real(c_double) :: object_spin
 
+
 contains
 
 
