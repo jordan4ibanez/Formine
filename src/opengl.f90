@@ -95,6 +95,7 @@ module opengl
   public :: gl_uniform_mat4f
   public :: gl_view_port
   public :: gl_is_buffer
+  public :: gl_is_vertex_array
 
   ! Here I'm binding to the C shared library.
 
@@ -400,6 +401,15 @@ module opengl
       integer(c_int), intent(in), value :: buffer
       logical(c_bool) :: is_buffer
     end function gl_is_buffer
+
+
+    function gl_is_vertex_array(array) result(is_array) bind(c, name = "glIsVertexArray")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: array
+      logical(c_bool) :: is_array
+    end function gl_is_vertex_array
 
 
   end interface
