@@ -2,13 +2,29 @@
 module mesh
   use :: string
   use :: vector_3f
+  use :: fhash, only: fhash_tbl_t, key => fhash_key
   implicit none
+
 
   private
 
+
   public :: create_mesh_3d
 
+
+  type(fhash_tbl_t) :: meshes
+
+
+  type mesh_data
+    integer :: vao = 0
+    integer :: vbo_position = 0
+    integer :: vbo_color = 0
+    integer :: vbo_indices = 0
+  end type mesh_data
+
+
 contains
+
 
   subroutine create_mesh_3d
     use :: shader
