@@ -354,6 +354,7 @@ contains
   end subroutine rotate_z
 
 
+  !* Translated from JOML. Original name: "scaleGeneric"
   subroutine scale(this, x, y, z)
     implicit none
 
@@ -373,6 +374,7 @@ contains
   end subroutine scale
 
 
+  !* Translated from JOML. Original name: "scaleGeneric"
   subroutine scale_vec3f(this, vec)
     use :: vector_3f
     implicit none
