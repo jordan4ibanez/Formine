@@ -87,6 +87,7 @@ module opengl
   public :: gl_buffer_vec3f_array
   public :: gl_buffer_indices_array
   public :: gl_enable_vertex_attrib_array
+  public :: gl_disable_vertex_attrib_array
   public :: gl_vertex_attrib_pointer
   public :: gl_draw_elements
   public :: gl_uniform_mat4f
@@ -313,6 +314,14 @@ module opengl
 
       integer(c_int), intent(in), value :: index
     end subroutine gl_enable_vertex_attrib_array
+
+
+    subroutine gl_disable_vertex_attrib_array(index) bind(c, name = "glDisableVertexAttribArray")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: index
+    end subroutine gl_disable_vertex_attrib_array
 
 
     subroutine internal_gl_vertex_attrib_pointer(index, size, type, normalized, stride, pointer) bind(c, name = "glVertexAttribPointer")
