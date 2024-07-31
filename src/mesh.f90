@@ -11,6 +11,7 @@ module mesh
 
 
   public :: mesh_create_3d
+  public :: mesh_draw
 
 
   type(fhash_tbl_t) :: mesh_database
@@ -254,11 +255,26 @@ contains
 
   !* Draw a mesh.
   subroutine mesh_draw(mesh_name)
+    use :: terminal
+    use :: opengl, only: GL_TRIANGLES, GL_UNSIGNED_INT, gl_bind_vertex_array, gl_draw_elements
     implicit none
 
     character(len = *), intent(in) :: mesh_name
+    type(mesh_data) :: gotten_mesh
+    logical :: exists
 
+    gotten_mesh = get_mesh(mesh_name, exists)
 
+    if (.not. exists) then
+      print"(A)", colorize_rgb("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Will not draw.", 255, 0, 0)
+      return
+    end if
+
+    call gl_bind_vertex_array(gotten_mesh%vao)
+
+    call gl_draw_elements(GL_TRIANGLES, gotten_mesh%indices_length, GL_UNSIGNED_INT)
+
+    call gl_bind_vertex_array(0)
   end subroutine mesh_draw
 
 

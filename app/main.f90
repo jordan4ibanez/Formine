@@ -101,11 +101,8 @@ program main
 
       call camera_set_object_matrix_f32(0.0, 0.0, -1.0, 0.0, rotation, 0.0, 1.0, 1.0, 1.0)
 
-      call gl_bind_vertex_array(1)
+      call mesh_draw("debug1")
 
-      call gl_draw_elements(GL_TRIANGLES, 3, GL_UNSIGNED_INT)
-
-      call gl_bind_vertex_array(0)
 
       !? END DRAW TEST ?!
 
