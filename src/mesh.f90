@@ -234,6 +234,21 @@ contains
 
     exists = .false.
 
+    call mesh_database%get_raw(key(mesh_name), generic, stat = status)
+
+    if (status /= 0) then
+      ! print"(A)","[Mesh] Error: ["//mesh_name//"] does not exist."
+      return
+    end if
+
+    select type(generic)
+     type is (mesh_data)
+      exists = .true.
+      gotten_mesh = generic
+     class default
+      ! print"(A)","[Mesh] Error: ["//mesh_name//"] has the wrong type."
+      return
+    end select
   end function get_mesh
 
 
