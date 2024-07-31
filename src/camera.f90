@@ -9,6 +9,8 @@ module camera
   private
 
   public :: camera_update
+  public :: camera_set_position
+  public :: camera_set_position_vec3d
 
 
   real(c_float), parameter :: MIN_FOV = 50.0
@@ -22,17 +24,32 @@ module camera
   !? Position is not translation, translation is the inverse of position!
   type(vec3d) :: camera_position
   type(vec3d) :: camera_rotation
+  ! Camera is always at scale 1, 1, 1.
 
   !? Object related components.
   type(mat4f) :: object_matrix
 
-  !? Position is not translation, translation is the inverse of position!
-  type(vec3d) :: object_position
-  type(vec3d) :: object_rotation
-
-
-
 contains
+
+
+  subroutine camera_set_position(x, y, z)
+    implicit none
+
+    real(c_double), intent(in), value :: x, y, z
+
+    camera_position%x = x
+    camera_position%y = y
+    camera_position%z = z
+  end subroutine camera_set_position
+
+
+  subroutine camera_set_position_vec3d(new_position)
+    implicit none
+
+    type(vec3d), intent(in) :: new_position
+
+    camera_position = new_position
+  end subroutine camera_set_position_vec3d
 
 
   subroutine camera_update()
