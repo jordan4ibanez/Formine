@@ -21,8 +21,6 @@ module camera
 
   real(c_float) :: fov_degrees = 72.0
 
-  !? On the stack, for now. Uses 64 bytes. I don't feel like listing the rest of the sizes.
-  type(mat4f) :: camera_matrix
 
   !? Position is not translation, translation is the inverse of position!
   type(vec3d) :: camera_position
@@ -91,6 +89,8 @@ contains
 
     !* So the trick is, the camera actually never moves, but the world moves around it.
     !* This maintains as much precision as possible where you can see it.
+
+    type(mat4f) :: camera_matrix
 
     call camera_matrix%identity()
 
