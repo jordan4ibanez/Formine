@@ -157,8 +157,8 @@ contains
   subroutine set_shader(shader_name, shader)
     implicit none
 
-    character(len = *) :: shader_name
-    type(shader_program), allocatable :: shader
+    character(len = *), intent(in) :: shader_name
+    type(shader_program), intent(in) :: shader
 
     call shader_programs%set(key(shader_name), shader)
   end subroutine set_shader
