@@ -117,8 +117,6 @@ program main
   end if
 
 
-  call mesh_delete("debug")
-
   call glfw_destroy_window()
 
   ! GLFW shared library will rarely crash on termination if you run make too fast. :D
