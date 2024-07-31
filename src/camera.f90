@@ -82,7 +82,8 @@ contains
     use :: glfw, only: glfw_get_aspect_ratio
     use :: delta
     use :: math_helpers, only: to_radians_f32
-
+    use :: shader, only: shader_get_uniform
+    use :: opengl, only: gl_uniform_mat4f
     implicit none
 
     !* So the trick is, the camera actually never moves, but the world moves around it.
@@ -96,20 +97,12 @@ contains
     call camera_matrix%rotate_x(camera_rotation%x_f32())
     call camera_matrix%rotate_z(camera_rotation%z_f32())
 
-    call upload_camera_matrix_into_shader()
+    call gl_uniform_mat4f(shader_get_uniform("main", "camera_matrix"), camera_matrix)
   end subroutine camera_update
 
 
-  subroutine upload_camera_matrix_into_shader()
-    use :: opengl
-    use :: shader
-    implicit none
-
-    call gl_uniform_mat4f(shader_get_uniform("main", "camera_matrix"), camera_matrix)
-  end subroutine upload_camera_matrix_into_shader
-
-
   !* Internal only.
+
 
   subroutine wrap_camera_rotation()
     use :: constants, only: PI_TIMES_2_F64
