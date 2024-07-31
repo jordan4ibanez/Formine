@@ -211,4 +211,16 @@ contains
   end function upload_indices
 
 
+  subroutine set_mesh(mesh_name, new_mesh)
+    implicit none
+
+    character(len = *), intent(in) :: mesh_name
+    type(mesh_data), intent(in) :: new_mesh
+
+    call meshes%set(key(mesh_name), new_mesh)
+  end subroutine set_mesh
+
+
+
+
 end module mesh
