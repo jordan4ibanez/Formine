@@ -12,7 +12,7 @@ module mesh
   public :: create_mesh_3d
 
 
-  type(fhash_tbl_t) :: meshes
+  type(fhash_tbl_t) :: mesh_database
 
 
   type mesh_data
@@ -218,7 +218,7 @@ contains
     character(len = *), intent(in) :: mesh_name
     type(mesh_data), intent(in) :: new_mesh
 
-    call meshes%set(key(mesh_name), new_mesh)
+    call mesh_database%set(key(mesh_name), new_mesh)
   end subroutine set_mesh
 
 
