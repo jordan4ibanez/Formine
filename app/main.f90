@@ -10,6 +10,7 @@ program main
   use, intrinsic ::  iso_c_binding
   implicit none
 
+  real(c_float) :: rotation
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
@@ -65,23 +66,27 @@ program main
 
   call create_mesh_3d()
 
+  rotation = 0.0
+
   !! This is debugging for functions!
   if (.true.) then
     do while(.not. glfw_window_should_close())
 
       call delta_tick()
 
+      rotation = rotation + get_delta_f32() * 10.0
+
       ! call blah(color)
 
       call gl_clear_color(1.0, 1.0, 1.0)
-
-
 
       call camera_update()
 
       call gl_clear_color_buffer()
 
       !? DRAW TEST ?!
+
+      call camera_set_object_matrix_f32(0.0, 0.0, -1.0, 0.0, rotation, 0.0, 1.0, 1.0, 1.0)
 
       call gl_bind_vertex_array(1)
 
