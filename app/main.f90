@@ -77,7 +77,7 @@ program main
 
 
 
-      call camera_update_matrix()
+      call camera_update()
 
       call gl_clear_color_buffer()
 

@@ -8,7 +8,7 @@ module camera
 
   private
 
-  public :: camera_update_matrix
+  public :: camera_update
 
 
   real(c_float), parameter :: MIN_FOV = 50.0
@@ -35,13 +35,12 @@ module camera
 contains
 
 
-  subroutine camera_update_matrix()
+  subroutine camera_update()
     use :: glfw, only: glfw_get_aspect_ratio
     use :: delta
     use :: math_helpers, only: to_radians_f32
 
     implicit none
-
 
     !* So the trick is, the camera actually never moves, but the world moves around it.
     !* This maintains as much precision as possible where you can see it.
@@ -50,18 +49,12 @@ contains
 
     call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), 0.01, 100.0)
 
-
-    ! call camera_matrix%rotate_x(camera_rotation%x_f32())
-    ! call camera_matrix%rotate_y(camera_rotation%y_f32())
-
-    ! call camera_matrix%translate_vec3f(vec3f(camera_position))
-
-
-
-
+    call camera_matrix%rotate_x(camera_rotation%x_f32())
+    call camera_matrix%rotate_y(camera_rotation%y_f32())
+    call camera_matrix%rotate_z(camera_rotation%z_f32())
 
     call upload_camera_matrix_into_shader()
-  end subroutine camera_update_matrix
+  end subroutine camera_update
 
 
   subroutine upload_camera_matrix_into_shader()
