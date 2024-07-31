@@ -199,7 +199,7 @@ contains
     use :: string
     implicit none
 
-    character(len = *) :: shader_name
+    character(len = *), intent(in) :: shader_name
     type(shader_program) :: poller
 
     ! All we must do is check the shader result and return the existence in the result.
