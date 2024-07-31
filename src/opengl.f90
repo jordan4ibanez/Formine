@@ -94,6 +94,7 @@ module opengl
   public :: gl_draw_elements
   public :: gl_uniform_mat4f
   public :: gl_view_port
+  public :: gl_is_buffer
 
   ! Here I'm binding to the C shared library.
 
@@ -390,6 +391,13 @@ module opengl
       integer(c_int), intent(in), value :: width
       integer(c_int), intent(in), value :: height
     end subroutine gl_view_port
+
+    logical function gl_is_buffer(buffer) result(is_buffer) bind(c, name = "glIsBuffer")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: buffer
+    end function gl_is_buffer
 
 
   end interface
