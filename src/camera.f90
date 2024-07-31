@@ -41,64 +41,9 @@ contains
 
     implicit none
 
-    real(c_float) :: gotten_delta
 
-    gotten_delta = get_delta_f32()
-
-    ! print"(f00.30)",gotten_delta
-
-
-
-    ! if (up) then
-    !   fov_degrees = fov_degrees + gotten_delta * 100.0
-
-    !   if (fov_degrees >= MAX_FOV) then
-    !     fov_degrees = MAX_FOV
-    !     up = .false.
-    !   end if
-    ! else
-    !   fov_degrees = fov_degrees - gotten_delta * 100.0
-    !   if (fov_degrees <= MIN_FOV) then
-    !     fov_degrees = MIN_FOV
-    !     up = .true.
-    !   end if
-    ! end if
-    ! print"(f0.5)",fov_degrees
-
-    if (up_2) then
-      camera_rotation%y = camera_rotation%y + gotten_delta
-      if (camera_rotation%y >= to_radians_f32(45.0)) then
-        camera_rotation%y = to_radians_f32(45.0)
-        up_2 = .false.
-      end if
-    else
-      camera_rotation%y = camera_rotation%y - gotten_delta
-      if (camera_rotation%y <= to_radians_f32(-45.0)) then
-        camera_rotation%y = to_radians_f32(-45.0)
-        up_2 = .true.
-      end if
-    end if
-    ! print"(f0.10)", debug_rotation
-
-    if (up_3) then
-
-      camera_position%x = camera_position%x + gotten_delta
-
-      if (camera_position%x >= 1.0) then
-        camera_position%x = 1.0
-        up_3 = .false.
-      end if
-    else
-      camera_position%x =  camera_position%x - gotten_delta
-      if (camera_position%x <= -1.0) then
-        camera_position%x = -1.0
-        up_3 = .true.
-      end if
-    end if
-
-    camera_position%z = -1.0
-
-    ! print"(f0.5)", camera_position%data(1)
+    !* So the trick is, the camera actually never moves, but the world moves around it.
+    !* This maintains as much precision as possible where you can see it.
 
     call camera_matrix%identity()
 
@@ -110,18 +55,7 @@ contains
 
     ! call camera_matrix%translate_vec3f(vec3f(camera_position))
 
-    !* So the trick is, the camera actually never moves, but the world moves around it.
-    !* This maintains as much precision as possible where you can see it.
 
-
-    !! This hackjob is from the youtube video, remove it!
-    print"(A)", "REMEMBER TO REMOVE YOUTUBE VIDEO THING!"
-
-    object_spin = object_spin + gotten_delta * 1000.0
-    call object_matrix%identity()
-    call object_matrix%translate(into_f32(sin(object_spin / 100.0)), into_f32(cos(object_spin / 314)), -3.0)
-    call object_matrix%rotate_y(to_radians_f32(into_f32(object_spin)))
-    call object_matrix%rotate_x(to_radians_f32(into_f32(object_spin / 16.0)))
 
 
 
@@ -135,9 +69,6 @@ contains
     implicit none
 
     call gl_uniform_mat4f(shader_get_uniform("main", "camera_matrix"), camera_matrix)
-
-    !TODO: REMOVE THIS!
-    call gl_uniform_mat4f(shader_get_uniform("main", "object_matrix"), object_matrix)
   end subroutine upload_camera_matrix_into_shader
 
 
