@@ -6,11 +6,14 @@ module camera
   use, intrinsic :: iso_c_binding, only: c_float, c_double
   implicit none
 
+
   private
+
 
   public :: camera_update
   public :: camera_set_position
   public :: camera_set_position_vec3d
+  public :: camera_set_object_matrix
 
 
   real(c_float), parameter :: MIN_FOV = 50.0
@@ -100,12 +103,34 @@ contains
   end subroutine camera_update
 
 
-  subroutine camera_set_object_matrix()
-    use :: math_helpers, only: to_radians_f32
+  subroutine camera_set_object_matrix(position_x, position_y, position_z, rotation_x, rotation_y, rotation_z, scale_x, scale_y, scale_z)
+    use :: math_helpers, only: into_f32
     use :: shader, only: shader_get_uniform
     use :: opengl, only: gl_uniform_mat4f
     implicit none
 
+    real(c_double), intent(in), value :: position_x, position_y, position_z, rotation_x, rotation_y, rotation_z, scale_x, scale_y, scale_z
+    type(mat4f) :: object_matrix
+
+    call object_matrix%identity()
+
+    call object_matrix%translate( &
+      into_f32(position_x - camera_position%x), &
+      into_f32(position_y - camera_position%y), &
+      into_f32(position_z - camera_position%z) &
+      )
+
+    call object_matrix%rotate_y(into_f32(-rotation_y))
+    call object_matrix%rotate_x(into_f32(-rotation_x))
+    call object_matrix%rotate_z(into_f32(-rotation_z))
+
+    call object_matrix%scale(&
+      into_f32(scale_x), &
+      into_f32(scale_y), &
+      into_f32(scale_z) &
+      )
+
+    call gl_uniform_mat4f(shader_get_uniform("main", "object_matrix"), camera_matrix)
   end subroutine camera_set_object_matrix
 
 
