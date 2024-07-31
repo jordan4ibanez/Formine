@@ -170,8 +170,8 @@ contains
     implicit none
 
     character(len = *), intent(in) :: shader_name
-    class(*), allocatable :: generic
     logical, intent(inout) :: exists
+    class(*), allocatable :: generic
     integer :: status
 
     exists = .false.
