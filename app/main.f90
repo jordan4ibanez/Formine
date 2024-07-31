@@ -101,7 +101,7 @@ program main
 
       call camera_set_object_matrix_f32(0.0, 0.0, -1.0, 0.0, rotation, 0.0, 1.0, 1.0, 1.0)
 
-      call mesh_draw("debug1")
+      call mesh_draw("debug")
 
 
       !? END DRAW TEST ?!
