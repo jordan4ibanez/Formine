@@ -45,7 +45,7 @@ program main
 
   call gl_get_version()
 
-  call glfw_swap_interval(1)
+  call glfw_swap_interval(0)
 
   !! This allows OpenGL debugging.
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
@@ -64,20 +64,7 @@ program main
 
   call shader_start("main")
 
-  call mesh_create_3d( &
-    "debug", &
-    [ &
-    -0.5, -0.5, 0.0, &
-    0.5, -0.5, 0.0, &
-    0.0, 0.5, 0.0 &
-    ], &
-    [ &
-    1.0, 0.0, 0.0, &
-    0.0, 1.0, 0.0, &
-    0.0, 0.0, 1.0 &
-    ], &
-    [0,1,2] &
-    )
+
 
   rotation = 0.0
 
@@ -100,6 +87,21 @@ program main
       !? DRAW TEST ?!
 
       call camera_set_object_matrix_f32(0.0, 0.0, -1.0, 0.0, rotation, 0.0, 1.0, 1.0, 1.0)
+
+      call mesh_create_3d( &
+        "debug", &
+        [ &
+        -0.5, -0.5, 0.0, &
+        0.5, -0.5, 0.0, &
+        0.0, 0.5, 0.0 &
+        ], &
+        [ &
+        1.0, 0.0, 0.0, &
+        0.0, 1.0, 0.0, &
+        0.0, 0.0, 1.0 &
+        ], &
+        [0,1,2] &
+        )
 
       call mesh_draw("debug")
 
