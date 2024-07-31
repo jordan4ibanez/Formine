@@ -326,7 +326,7 @@ contains
     call gl_delete_buffers(gotten_mesh%vbo_position)
 
     if (gl_is_buffer(gotten_mesh%vbo_position)) then
-      error stop "[Mesh]: Failed to delete VBO [position]."
+      error stop "[Mesh]: Failed to delete VBO [position] for mesh ["//mesh_name//"]"
     end if
 
     ! Colors
@@ -334,13 +334,13 @@ contains
     call gl_delete_buffers(gotten_mesh%vbo_color)
 
     if (gl_is_buffer(gotten_mesh%vbo_color)) then
-      error stop "[Mesh]: Failed to delete VBO [color]."
+      error stop "[Mesh]: Failed to delete VBO [color] for mesh ["//mesh_name//"]"
     end if
 
     ! Indices.
     call gl_delete_buffers(gotten_mesh%vbo_indices)
     if (gl_is_buffer(gotten_mesh%vbo_indices)) then
-      error stop "[Mesh]: Failed to delete VBO [indices]."
+      error stop "[Mesh]: Failed to delete VBO [indices] for mesh ["//mesh_name//"]"
     end if
 
     ! Unbind.
