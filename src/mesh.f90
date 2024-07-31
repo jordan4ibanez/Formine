@@ -9,7 +9,7 @@ module mesh
   private
 
 
-  public :: create_mesh_3d
+  public :: mesh_create_3d
 
 
   type(fhash_tbl_t) :: mesh_database
@@ -26,7 +26,7 @@ module mesh
 contains
 
 
-  subroutine create_mesh_3d()
+  subroutine mesh_create_3d(mesh_name)
     use :: shader
     use :: opengl
     use :: string
@@ -39,6 +39,7 @@ contains
     ! 3. make this handle mesh things.
     ! 4. improve, somehow.
 
+    character(len = *), intent(in) :: mesh_name
     type(mesh_data) :: new_mesh
 
     if (.true.) then
@@ -74,7 +75,8 @@ contains
     ! Now unbind vertex array object.
     call gl_bind_vertex_array(0)
 
-  end subroutine create_mesh_3d
+    call set_mesh(mesh_name, new_mesh)
+  end subroutine mesh_create_3d
 
 
   integer function upload_positions(position_array) result(vbo_position)
@@ -249,6 +251,16 @@ contains
       return
     end select
   end function get_mesh
+
+
+  !* Draw a mesh.
+  subroutine mesh_draw(mesh_name)
+    implicit none
+
+    character(len = *), intent(in) :: mesh_name
+    
+    
+  end subroutine mesh_draw
 
 
 end module mesh

@@ -64,7 +64,7 @@ program main
 
   call shader_start("main")
 
-  call create_mesh_3d()
+  call mesh_create_3d("debug")
 
   rotation = 0.0
 
