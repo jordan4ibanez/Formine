@@ -79,6 +79,7 @@ module opengl
   public :: gl_get_attrib_location
   public :: gl_use_program
   public :: gl_gen_vertex_arrays
+  public :: gl_delete_vertex_arrays
   public :: gl_bind_vertex_array
   public :: gl_gen_buffers
   public :: gl_delete_buffers
@@ -271,6 +272,16 @@ module opengl
     end subroutine internal_gl_gen_vertex_arrays
 
 
+    subroutine internal_gl_delete_vertex_arrays(n, arrays) bind(c, name = "glDeleteVertexArrays")
+      use,intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: n
+      !! This part is written wrong on purpose. I only want 1 not multiple.
+      integer(c_int), intent(in) :: arrays
+    end subroutine internal_gl_delete_vertex_arrays
+
+
     subroutine gl_bind_vertex_array(array) bind(c, name = "glBindVertexArray")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -295,7 +306,7 @@ module opengl
 
       integer(c_int), intent(in), value :: n
       !! This part is written wrong on purpose. I only want 1 not multiple.
-      integer(c_int), intent(inout) :: buffers
+      integer(c_int), intent(in) :: buffers
     end subroutine internal_gl_delete_buffers
 
 
@@ -597,6 +608,16 @@ contains
     call internal_gl_gen_vertex_arrays(1, location)
   end function gl_gen_vertex_arrays
 
+  !** Special note: I only use 1 at a time. So we're only going to use one at a time.
+  !** This is written "wrong" on purpose.
+  subroutine gl_delete_vertex_arrays(location)
+    implicit none
+
+    integer(c_int), intent(in), value :: location
+
+    call internal_gl_delete_vertex_arrays(1, location)
+  end subroutine gl_delete_vertex_arrays
+
 
   !** Special note: I only use 1 at a time. So we're only going to use one at a time.
   !** This is written "wrong" on purpose.
@@ -609,11 +630,13 @@ contains
 
   !** Special note: I only use 1 at a time. So we're only going to use one at a time.
   !** This is written "wrong" on purpose.
-  integer function gl_delete_buffers() result(location)
+  subroutine gl_delete_buffers(location)
     implicit none
 
+    integer(c_int), intent(in), value :: location
+
     call internal_gl_delete_buffers(1, location)
-  end function gl_delete_buffers
+  end subroutine gl_delete_buffers
 
 
   !** This is a custom command to allow gl_buffer_data to use specific types.
