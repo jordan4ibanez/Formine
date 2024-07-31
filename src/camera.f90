@@ -132,7 +132,7 @@ contains
       into_f32(scale_z) &
       )
 
-    call gl_uniform_mat4f(shader_get_uniform("main", "object_matrix"), camera_matrix)
+    call gl_uniform_mat4f(shader_get_uniform("main", "object_matrix"), object_matrix)
   end subroutine camera_set_object_matrix
 
 
