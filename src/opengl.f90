@@ -392,11 +392,13 @@ module opengl
       integer(c_int), intent(in), value :: height
     end subroutine gl_view_port
 
-    logical function gl_is_buffer(buffer) result(is_buffer) bind(c, name = "glIsBuffer")
+
+    function gl_is_buffer(buffer) result(is_buffer) bind(c, name = "glIsBuffer")
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: buffer
+      logical(c_bool) :: is_buffer
     end function gl_is_buffer
 
 
