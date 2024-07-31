@@ -9,12 +9,13 @@ module mesh
 
   private
 
-  logical, parameter :: debug_mode = .false.
 
   public :: mesh_create_3d
   public :: mesh_draw
+  public :: mesh_delete
 
 
+  logical, parameter :: debug_mode = .false.
   type(fhash_tbl_t) :: mesh_database
 
 
