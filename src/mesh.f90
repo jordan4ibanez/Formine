@@ -348,6 +348,9 @@ contains
 
     ! Then delete.
     call gl_delete_vertex_arrays(gotten_mesh%vao)
+    if (gl_is_vertex_array(gotten_mesh%vao)) then
+      error stop "[Mesh]: Failed to delete VAO for mesh ["//mesh_name//"]"
+    end if
 
     ! todo: Needs gl_is_buffer to double check.
 
