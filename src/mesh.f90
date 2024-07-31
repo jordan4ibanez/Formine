@@ -15,7 +15,7 @@ module mesh
   public :: mesh_delete
 
 
-  logical, parameter :: debug_mode = .true.
+  logical, parameter :: debug_mode = .false.
   type(fhash_tbl_t) :: mesh_database
 
 
@@ -325,12 +325,23 @@ contains
     call gl_disable_vertex_attrib_array(shader_get_attribute("main", "position"))
     call gl_delete_buffers(gotten_mesh%vbo_position)
 
+    if (gl_is_buffer(gotten_mesh%vbo_position)) then
+      error stop "[Mesh]: Failed to delete VBO [position]."
+    end if
+
     ! Colors
     call gl_disable_vertex_attrib_array(shader_get_attribute("main", "color"))
     call gl_delete_buffers(gotten_mesh%vbo_color)
 
+    if (gl_is_buffer(gotten_mesh%vbo_color)) then
+      error stop "[Mesh]: Failed to delete VBO [color]."
+    end if
+
     ! Indices.
     call gl_delete_buffers(gotten_mesh%vbo_indices)
+    if (gl_is_buffer(gotten_mesh%vbo_indices)) then
+      error stop "[Mesh]: Failed to delete VBO [indices]."
+    end if
 
     ! Unbind.
     call gl_bind_vertex_array(0)
