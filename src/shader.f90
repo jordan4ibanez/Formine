@@ -14,7 +14,7 @@ module shader
   public :: shader_start
 
 
-  type(fhash_tbl_t) :: shader_programs
+  type(fhash_tbl_t) :: shader_database
 
 
   !** A shader object. This holds all required shader components to run a shader.
@@ -160,7 +160,7 @@ contains
     character(len = *), intent(in) :: shader_name
     type(shader_program), intent(in) :: shader
 
-    call shader_programs%set(key(shader_name), shader)
+    call shader_database%set(key(shader_name), shader)
   end subroutine set_shader
 
 
@@ -176,7 +176,7 @@ contains
 
     exists = .false.
 
-    call shader_programs%get_raw(key(shader_name), generic, stat = status)
+    call shader_database%get_raw(key(shader_name), generic, stat = status)
 
     if (status /= 0) then
       ! print"(A)","[Shader] Error: ["//shader_name//"] does not exist."
