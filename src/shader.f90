@@ -56,7 +56,7 @@ contains
     use :: opengl
     implicit none
 
-    integer :: shader_id
+    integer, intent(in), value :: shader_id
 
     !? 1 means OK in this context.
     success = gl_get_shader_iv(shader_id, GL_COMPILE_STATUS) == GL_TRUE
@@ -358,7 +358,7 @@ contains
     use :: opengl
     implicit none
 
-    character(len = *), intent(in) :: shader_Name
+    character(len = *), intent(in) :: shader_name
     type(shader_program) :: current_program
     logical :: exists
 
