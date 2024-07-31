@@ -46,10 +46,38 @@ contains
   subroutine camera_set_position_vec3d(new_position)
     implicit none
 
-    type(vec3d), intent(in) :: new_position
+    type(vec3d), intent(in), value :: new_position
 
     camera_position = new_position
   end subroutine camera_set_position_vec3d
+
+
+  subroutine camera_rotate(x, y, z)
+    implicit none
+
+    !* This automatically handles PI2 wrapping.
+
+    real(c_double), intent(in), value :: x, y, z
+
+    camera_position%x = camera_position%x + x
+    camera_position%y = camera_position%x + y
+    camera_position%z = camera_position%x + z
+
+    call wrap_camera_rotation()
+  end subroutine camera_rotate
+
+
+  subroutine camera_rotate_vec3d(vec)
+    implicit none
+
+    !* This automatically handles PI2 wrapping.
+
+    type(vec3d), intent(in), value :: vec
+
+    camera_position = camera_position + vec
+
+    call wrap_camera_rotation()
+  end subroutine camera_rotate_vec3d
 
 
   subroutine camera_update()
@@ -81,6 +109,24 @@ contains
 
     call gl_uniform_mat4f(shader_get_uniform("main", "camera_matrix"), camera_matrix)
   end subroutine upload_camera_matrix_into_shader
+
+
+  !* Internal only.
+
+  subroutine wrap_camera_rotation()
+    use :: constants, only: PI_TIMES_2_F64
+    implicit none
+
+    if (camera_position%x < 0.0d0 .or. camera_position%x > PI_TIMES_2_F64) then
+      camera_position%x = mod(camera_position%x, PI_TIMES_2_F64)
+    end if
+    if (camera_position%y < 0.0d0 .or. camera_position%y > PI_TIMES_2_F64) then
+      camera_position%y = mod(camera_position%y, PI_TIMES_2_F64)
+    end if
+    if (camera_position%z < 0.0d0 .or. camera_position%z > PI_TIMES_2_F64) then
+      camera_position%z = mod(camera_position%z, PI_TIMES_2_F64)
+    end if
+  end subroutine wrap_camera_rotation
 
 
 end module camera
