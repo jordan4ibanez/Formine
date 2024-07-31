@@ -6,15 +6,15 @@ module shader
   private
 
 
-  type(fhash_tbl_t) :: shader_programs
-
-
   public :: shader_create
   public :: shader_create_attribute_locations
   public :: shader_get_attribute
   public :: shader_create_uniform_locations
   public :: shader_get_uniform
   public :: shader_start
+
+
+  type(fhash_tbl_t) :: shader_programs
 
 
   !** A shader object. This holds all required shader components to run a shader.
