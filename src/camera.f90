@@ -81,6 +81,7 @@ contains
   end subroutine camera_rotate_vec3d
 
 
+  !* This creates the raw data of the camera matrix then uploads it into OpenGL.
   subroutine camera_update()
     use :: glfw, only: glfw_get_aspect_ratio
     use :: math_helpers, only: to_radians_f32
@@ -103,6 +104,7 @@ contains
   end subroutine camera_update
 
 
+  !* This creates the raw data of the object matrix then uploads it into OpenGL.
   subroutine camera_set_object_matrix(position_x, position_y, position_z, rotation_x, rotation_y, rotation_z, scale_x, scale_y, scale_z)
     use :: math_helpers, only: into_f32
     use :: shader, only: shader_get_uniform
