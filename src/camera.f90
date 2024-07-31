@@ -26,9 +26,6 @@ module camera
   type(vec3d) :: camera_rotation
   ! Camera is always at scale 1, 1, 1.
 
-  !? Object related components.
-  type(mat4f) :: object_matrix
-
 contains
 
 
