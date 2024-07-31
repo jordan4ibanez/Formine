@@ -211,6 +211,7 @@ contains
   end function upload_indices
 
 
+  !** Set or update a shader in the database.
   subroutine set_mesh(mesh_name, new_mesh)
     implicit none
 
@@ -219,6 +220,21 @@ contains
 
     call meshes%set(key(mesh_name), new_mesh)
   end subroutine set_mesh
+
+
+  !** Get a mesh from the hash table.
+  !** The mesh is a clone. To update, set_mesh().
+  type(mesh_data) function get_mesh(mesh_name, exists) result(gotten_mesh)
+    implicit none
+
+    character(len = *), intent(in) :: mesh_name
+    logical, intent(inout) :: exists
+    class(*), allocatable :: generic
+    integer :: status
+
+    exists = .false.
+
+  end function get_mesh
 
 
 
