@@ -74,6 +74,7 @@ module matrix_4f
     procedure :: rotate_y
     procedure :: rotate_z
     procedure :: scale
+    procedure :: scale_vec3f
 
     !! Internal, only.
     procedure, private :: get_translation_array
@@ -370,6 +371,26 @@ contains
       mat(13:16) &
       ]
   end subroutine scale
+
+
+  subroutine scale_vec3f(this, vec)
+    use :: vector_3f
+    implicit none
+
+    class(mat4f), intent(inout) :: this
+    type(vec3f), intent(in), value :: vec
+    ! Cache.
+    real(c_float), dimension(16) :: mat
+
+    mat = this%data
+
+    this%data = [ &
+      mat(1:4)  * vec%x, &
+      mat(5:8)  * vec%y, &
+      mat(9:12) * vec%z, &
+      mat(13:16) &
+      ]
+  end subroutine scale_vec3f
 
 
   !! INTERNAL ONLY
