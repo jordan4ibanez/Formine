@@ -81,6 +81,7 @@ module opengl
   public :: gl_gen_vertex_arrays
   public :: gl_bind_vertex_array
   public :: gl_gen_buffers
+  public :: gl_delete_buffers
   public :: gl_bind_buffer
 
   public :: gl_buffer_float_array
@@ -286,6 +287,16 @@ module opengl
       !! This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(inout) :: buffers
     end subroutine internal_gl_gen_buffers
+
+
+    subroutine internal_gl_delete_buffers(n, buffers) bind(c, name = "glDeleteBuffers")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: n
+      !! This part is written wrong on purpose. I only want 1 not multiple.
+      integer(c_int), intent(inout) :: buffers
+    end subroutine internal_gl_delete_buffers
 
 
     subroutine gl_bind_buffer(target, buffer) bind(c, name = "glBindBuffer")
@@ -594,6 +605,15 @@ contains
 
     call internal_gl_gen_buffers(1, location)
   end function gl_gen_buffers
+
+
+  !** Special note: I only use 1 at a time. So we're only going to use one at a time.
+  !** This is written "wrong" on purpose.
+  integer function gl_delete_buffers() result(location)
+    implicit none
+
+    call internal_gl_delete_buffers(1, location)
+  end function gl_delete_buffers
 
 
   !** This is a custom command to allow gl_buffer_data to use specific types.
