@@ -80,7 +80,6 @@ contains
 
   subroutine camera_update()
     use :: glfw, only: glfw_get_aspect_ratio
-    use :: delta
     use :: math_helpers, only: to_radians_f32
     use :: shader, only: shader_get_uniform
     use :: opengl, only: gl_uniform_mat4f
@@ -99,6 +98,15 @@ contains
 
     call gl_uniform_mat4f(shader_get_uniform("main", "camera_matrix"), camera_matrix)
   end subroutine camera_update
+
+
+  subroutine camera_set_object_matrix()
+    use :: math_helpers, only: to_radians_f32
+    use :: shader, only: shader_get_uniform
+    use :: opengl, only: gl_uniform_mat4f
+    implicit none
+
+  end subroutine camera_set_object_matrix
 
 
   !* Internal only.
