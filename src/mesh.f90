@@ -9,6 +9,7 @@ module mesh
 
   private
 
+  logical, parameter :: debug_mode = .false.
 
   public :: mesh_create_3d
   public :: mesh_draw
@@ -47,17 +48,15 @@ contains
     integer(c_int), dimension(:), intent(in) :: indices
     type(mesh_data) :: new_mesh
 
-    if (.true.) then
-      print"(A)",colorize_rgb("[WARNING]: remember to implement the hash table of meshes.", 255, 0, 0)
-    end if
-
     ! print"(A)",colorize_rgb("[Mesh] WARNING: SHADER MODULE NEEDS A STATE MACHINE!", 255,128,0)
 
     ! Into vertex array object.
 
     new_mesh%vao = gl_gen_vertex_arrays()
 
-    print"(A)","vao: ["//int_to_string(new_mesh%vao)//"]"
+    if (debug_mode) then
+      print"(A)","vao: ["//int_to_string(new_mesh%vao)//"]"
+    end if
 
     call gl_bind_vertex_array(new_mesh%vao)
 
@@ -93,7 +92,9 @@ contains
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
 
-    print"(A)","vbo position: ["//int_to_string(vbo_position)//"]"
+    if (debug_mode) then
+      print"(A)","vbo position: ["//int_to_string(vbo_position)//"]"
+    end if
 
     ! Walk into the VBO context.
     call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_position)
@@ -128,7 +129,9 @@ contains
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
 
-    print"(A)","vbo position: ["//int_to_string(vbo_position)//"]"
+    if (debug_mode) then
+      print"(A)","vbo position: ["//int_to_string(vbo_position)//"]"
+    end if
 
     ! Walk into the VBO context.
     call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_position)
@@ -163,7 +166,9 @@ contains
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
 
-    print"(A)","vbo color: ["//int_to_string(vbo_position)//"]"
+    if (debug_mode) then
+      print"(A)","vbo color: ["//int_to_string(vbo_position)//"]"
+    end if
 
     ! Walk into the VBO context.
     call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_position)
@@ -196,7 +201,9 @@ contains
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
 
-    print"(A)","vbo indices: ["//int_to_string(vbo_position)//"]"
+    if (debug_mode) then
+      print"(A)","vbo indices: ["//int_to_string(vbo_position)//"]"
+    end if
 
     ! Walk into the VBO context.
     call gl_bind_buffer(GL_ELEMENT_ARRAY_BUFFER, vbo_position)
@@ -217,7 +224,9 @@ contains
     character(len = *), intent(in) :: mesh_name
     type(mesh_data), intent(in) :: new_mesh
 
-    print"(A)", "[Mesh]: set mesh ["//mesh_name//"]"
+    if (debug_mode) then
+      print"(A)", "[Mesh]: set mesh ["//mesh_name//"]"
+    end if
 
     call mesh_database%set(key(mesh_name), new_mesh)
   end subroutine set_mesh
@@ -276,6 +285,16 @@ contains
 
     call gl_bind_vertex_array(0)
   end subroutine mesh_draw
+
+
+  !* Delete a mesh.
+  subroutine mesh_delete(mesh_name)
+    implicit none
+
+    character(len = *), intent(in) :: mesh_name
+
+    ! This wipes out the OpenGL memory as well or else there's going to be a massive memory leak.
+  end subroutine mesh_delete
 
 
 end module mesh
