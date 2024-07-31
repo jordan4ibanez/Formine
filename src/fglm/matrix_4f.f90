@@ -73,6 +73,7 @@ module matrix_4f
     procedure :: rotate_x
     procedure :: rotate_y
     procedure :: rotate_z
+    procedure :: scale
 
     !! Internal, only.
     procedure, private :: get_translation_array
@@ -350,6 +351,25 @@ contains
     ! Finally, restore the translation.
     call this%set_translation_array(translation)
   end subroutine rotate_z
+
+
+  subroutine scale(this, x, y, z)
+    implicit none
+
+    class(mat4f), intent(inout) :: this
+    real(c_float), intent(in), value :: x, y, z
+    ! Cache.
+    real(c_float), dimension(16) :: mat
+
+    mat = this%data
+
+    this%data = [ &
+      mat(1:4)  * x, &
+      mat(5:8)  * y, &
+      mat(9:12) * z, &
+      mat(13:16) &
+      ]
+  end subroutine scale
 
 
   !! INTERNAL ONLY
