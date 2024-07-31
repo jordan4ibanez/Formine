@@ -3,6 +3,7 @@ module mesh
   use :: string
   use :: vector_3f
   use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use, intrinsic :: iso_c_binding, only: c_float
   implicit none
 
 
@@ -20,13 +21,14 @@ module mesh
     integer :: vbo_position = 0
     integer :: vbo_color = 0
     integer :: vbo_indices = 0
+    integer :: indices_length = 0
   end type mesh_data
 
 
 contains
 
 
-  subroutine mesh_create_3d(mesh_name)
+  subroutine mesh_create_3d(mesh_name, positions, colors)
     use :: shader
     use :: opengl
     use :: string
@@ -40,6 +42,7 @@ contains
     ! 4. improve, somehow.
 
     character(len = *), intent(in) :: mesh_name
+    real(c_float), dimension(:), intent(in) :: positions, colors
     type(mesh_data) :: new_mesh
 
     if (.true.) then
@@ -58,17 +61,9 @@ contains
 
     ! Into position vertex buffer object.
 
-    new_mesh%vbo_position = upload_positions([ &
-      -0.5, -0.5, 0.0, &
-      0.5, -0.5, 0.0, &
-      0.0, 0.5, 0.0 &
-      ])
+    new_mesh%vbo_position = upload_positions(positions)
 
-    new_mesh%vbo_color = upload_colors([ &
-      1.0, 0.0, 0.0, &
-      0.0, 1.0, 0.0, &
-      0.0, 0.0, 1.0 &
-      ])
+    new_mesh%vbo_color = upload_colors(colors)
 
     new_mesh%vbo_indices = upload_indices([0,1,2])
 
@@ -258,8 +253,8 @@ contains
     implicit none
 
     character(len = *), intent(in) :: mesh_name
-    
-    
+
+
   end subroutine mesh_draw
 
 
