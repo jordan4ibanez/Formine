@@ -3,7 +3,7 @@ module mesh
   use :: string
   use :: vector_3f
   use :: fhash, only: fhash_tbl_t, key => fhash_key
-  use, intrinsic :: iso_c_binding, only: c_float
+  use, intrinsic :: iso_c_binding, only: c_float, c_int
   implicit none
 
 
@@ -28,7 +28,7 @@ module mesh
 contains
 
 
-  subroutine mesh_create_3d(mesh_name, positions, colors)
+  subroutine mesh_create_3d(mesh_name, positions, colors, indices)
     use :: shader
     use :: opengl
     use :: string
@@ -43,6 +43,7 @@ contains
 
     character(len = *), intent(in) :: mesh_name
     real(c_float), dimension(:), intent(in) :: positions, colors
+    integer(c_int), dimension(:), intent(in) :: indices
     type(mesh_data) :: new_mesh
 
     if (.true.) then
@@ -65,11 +66,12 @@ contains
 
     new_mesh%vbo_color = upload_colors(colors)
 
-    new_mesh%vbo_indices = upload_indices([0,1,2])
+    new_mesh%vbo_indices = upload_indices(indices)
 
     ! Now unbind vertex array object.
     call gl_bind_vertex_array(0)
 
+    ! Finally, upload into the database.
     call set_mesh(mesh_name, new_mesh)
   end subroutine mesh_create_3d
 
