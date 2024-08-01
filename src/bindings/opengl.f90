@@ -574,6 +574,7 @@ contains
 
   subroutine gl_clear_color_buffer
     implicit none
+
     call internal_gl_clear(GL_COLOR_BUFFER_BIT)
   end
 
@@ -594,9 +595,11 @@ contains
 
   subroutine gl_clear_color(r,g,b)
     implicit none
+
     real(c_float) :: r
     real(c_float) :: g
     real(c_float) :: b
+
     call internal_gl_clear_color(r,g,b,1.0)
   end subroutine gl_clear_color
 
@@ -655,12 +658,14 @@ contains
   subroutine gl_set_debug_message_callback
     use, intrinsic :: iso_c_binding
     implicit none
+
     call internal_gl_debug_message_callback(c_funloc(debug_message_callback), null())
   end subroutine gl_set_debug_message_callback
 
 
   function gl_create_program() result(program_id)
     implicit none
+
     integer :: program_id
 
     program_id = internal_gl_create_program()
@@ -669,6 +674,7 @@ contains
 
   function gl_create_shader(shader_type) result(shader_id)
     implicit none
+    
     integer :: shader_type
     integer :: shader_id
 
