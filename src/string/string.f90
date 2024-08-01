@@ -207,7 +207,7 @@ contains
 
     !? This is simply debug.
     ! print"(A)","-----"
-    ! print"(A)",output//"."
+    ! print"(A)","["//output//"]"
     ! print"(A)","len: ", len(output)
     ! print"(A)","-----"
   end function int_to_string
