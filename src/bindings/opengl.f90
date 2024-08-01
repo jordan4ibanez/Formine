@@ -96,6 +96,8 @@ module opengl
   public :: gl_is_buffer
   public :: gl_is_vertex_array
   public :: gl_gen_textures
+  public :: gl_bind_texture
+
 
   ! Here I'm binding to the C shared library.
 
@@ -420,6 +422,14 @@ module opengl
       !! This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(inout) :: textures
     end subroutine internal_gl_gen_textures
+
+
+    subroutine gl_bind_texture(target, texture) bind(c, name = "glBindTexture")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: target, texture
+    end subroutine gl_bind_texture
 
 
   end interface
