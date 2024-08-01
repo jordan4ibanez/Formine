@@ -495,6 +495,15 @@ module opengl
     end subroutine internal_gl_tex_image_2d
 
 
+    function gl_is_texture(texture) result(is_texture) bind(c, name = "glIsTexture")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: texture
+      logical(c_bool) :: is_texture
+    end function gl_is_texture
+
+
   end interface
 
 
