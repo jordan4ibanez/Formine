@@ -56,6 +56,17 @@ program main
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
   call gl_set_debug_message_callback()
 
+  !! This enabled depth testing.
+  call gl_depth_mask(.true.)
+  call gl_enable(GL_DEPTH_TEST)
+  call gl_depth_func(GL_LESS)
+
+  !! This enables backface culling.
+  call gl_enable(GL_CULL_FACE)
+
+  !! This synchronizes the camera's depth matrix with OpenGL.
+  call gl_depth_range_f(camera_get_z_near(), camera_get_z_far())
+
   !! This resets the gl_get_error integer back to 0.
   call gl_clear_error_data()
 
@@ -119,7 +130,7 @@ program main
 
       call delta_tick()
 
-      ! rotation = rotation + get_delta_f32() * 10.0
+      rotation = rotation + get_delta_f32() * 10.0
 
       ! call blah(color)
 
@@ -127,7 +138,7 @@ program main
 
       call camera_update()
 
-      call gl_clear_color_buffer()
+      call gl_clear_color_and_depth_buffer()
 
       !? DRAW TEST ?!
 
