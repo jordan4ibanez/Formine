@@ -21,6 +21,9 @@ contains
 
     file_name = into_c_string("./textures/rgba_test.png")
 
+    ! We always want 4 channels.
+    desired_channels = 4
+
     call stbi_load(file_name, x, y, channels, desired_channels)
 
     print*,x,y,channels,desired_channels
