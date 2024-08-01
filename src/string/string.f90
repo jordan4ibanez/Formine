@@ -228,10 +228,11 @@ contains
     output = trim(adjustl(output))
 
     !? This is simply debug.
-    print"(A)","-----"
-    print"(A)",output//"."
-    print"(A)","len: ", len(output)
-    print"(A)","-----"
+    ! print"(A)","-----"
+    ! print*,i
+    ! print"(A)","["//output//"]"
+    ! print"(A)","len: "//int_to_string(len(output))
+    ! print"(A)","-----"
   end function long_to_string
 
 
