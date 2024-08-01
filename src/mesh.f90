@@ -13,6 +13,7 @@ module mesh
   public :: mesh_create_3d
   public :: mesh_draw
   public :: mesh_delete
+  public :: mesh_exists
 
 
   logical, parameter :: debug_mode = .false.
@@ -224,8 +225,6 @@ contains
 
     character(len = *), intent(in) :: mesh_name
     type(mesh_data), intent(in) :: new_mesh
-
-    call internal_mesh_delete_for_replacement(mesh_name)
 
     if (debug_mode) then
       print"(A)", "[Mesh]: set mesh ["//mesh_name//"]"
