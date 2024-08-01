@@ -33,7 +33,7 @@ contains
     character(kind = c_char), intent(in) :: file_name
     integer(c_int), intent(inout) :: x, y, channels_in_file
     integer(c_int), intent(in), value :: desired_channels
-    type(c_ptr) :: raw_data
+    type(c_ptr) :: c_pointer
     integer :: array_length
     integer(1), dimension(:), pointer :: passed_data_pointer
     integer(1), dimension(:), allocatable :: raw_image_data
@@ -43,13 +43,13 @@ contains
     !! It is designed to be passed straight into C.
 
     ! Get the raw C data.
-    raw_data = internal_stbi_load(file_name, x, y, channels_in_file, desired_channels)
+    c_pointer = internal_stbi_load(file_name, x, y, channels_in_file, desired_channels)
 
     ! Calculate the length of the array.
     array_length = x * y * channels_in_file
 
     ! Pass it into fortran.
-    call c_f_pointer(raw_data, passed_data_pointer, shape = [array_length])
+    call c_f_pointer(c_pointer, passed_data_pointer, shape = [array_length])
 
     ! Initialize the raw image data with the raw pointer.
     raw_image_data = passed_data_pointer
@@ -58,10 +58,8 @@ contains
     ! output_data_int = c_uchar_to_int_array(intermidiate_data_byte)
     ! print*,output_data_int
 
-    ! Free the pointer. (Just in case.)
+    ! Free the Fortran pointer. (Just in case.)
     deallocate(passed_data_pointer)
-
-    
   end function stbi_load
 
 
