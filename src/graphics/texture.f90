@@ -72,7 +72,8 @@ contains
     call gl_generate_mipmap(GL_TEXTURE_2D)
 
     ! Finally, unbind. Done.
-    call gl_bind_texture(GL_TEXTURE_2D, 0)
+    ! call gl_bind_texture(GL_TEXTURE_2D, 0)
+    print*, "   [Texture]: Remember to unbind!"
   end subroutine texture_create
 
 
