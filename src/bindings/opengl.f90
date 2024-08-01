@@ -588,7 +588,7 @@ contains
   subroutine gl_clear_color_and_depth_buffer()
     implicit none
 
-    call internal_gl_clear(iand(GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT))
+    call internal_gl_clear(ior(GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT))
   end subroutine gl_clear_color_and_depth_buffer
 
 
