@@ -7,16 +7,20 @@ program main
   use :: mesh
   use :: camera
   use :: delta
+  use :: texture
   use, intrinsic ::  iso_c_binding
   implicit none
 
   real(c_float) :: rotation
   integer :: i
 
+  call test_stbi()
+
+
   !! BEGIN WARNING: This is only to be used for when developing libraries.
-  ! if (.true.) then
-  !   return
-  ! end if
+  if (.true.) then
+    return
+  end if
   !! END WARNING.
 
   call glfw_set_error_callback()
