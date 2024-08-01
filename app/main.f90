@@ -13,7 +13,7 @@ program main
   implicit none
 
   real(c_float) :: rotation
-  integer :: i
+  ! integer :: i
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
