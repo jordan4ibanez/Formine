@@ -355,7 +355,7 @@ contains
     ! Unbind.
     call gl_bind_vertex_array(0)
 
-    ! Then delete.
+    ! Then delete the VAO.
     call gl_delete_vertex_arrays(gotten_mesh%vao)
     if (gl_is_vertex_array(gotten_mesh%vao)) then
       error stop "[Mesh]: Failed to delete VAO for mesh ["//mesh_name//"]"
