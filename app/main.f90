@@ -65,7 +65,7 @@ program main
   ! Set up all shader components.
   call shader_create("main", "./shaders/vertex.vert", "./shaders/fragment.frag")
 
-  call shader_create_attribute_locations("main", heap_string_array("position", "color"))
+  call shader_create_attribute_locations("main", heap_string_array("position", "texture_coordinate", "color"))
 
   call shader_create_uniform_locations("main", heap_string_array("camera_matrix","object_matrix"))
 
