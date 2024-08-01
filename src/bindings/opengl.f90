@@ -84,7 +84,6 @@ module opengl
   public :: gl_gen_buffers
   public :: gl_delete_buffers
   public :: gl_bind_buffer
-
   public :: gl_buffer_float_array
   public :: gl_buffer_vec3f_array
   public :: gl_buffer_indices_array
@@ -96,6 +95,7 @@ module opengl
   public :: gl_view_port
   public :: gl_is_buffer
   public :: gl_is_vertex_array
+  public :: gl_gen_textures
 
   ! Here I'm binding to the C shared library.
 
@@ -410,6 +410,16 @@ module opengl
       integer(c_int), intent(in), value :: array
       logical(c_bool) :: is_array
     end function gl_is_vertex_array
+
+
+    subroutine internal_gl_gen_textures(n, textures) bind(c, name = "glGenTextures")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: n
+      !! This part is written wrong on purpose. I only want 1 not multiple.
+      integer(c_int), intent(inout) :: textures
+    end subroutine internal_gl_gen_textures
 
 
   end interface
@@ -755,5 +765,14 @@ contains
 
     call internal_gl_uniform_matrix_4_fv(location, 1, transpose, c_loc(value))
   end subroutine gl_uniform_mat4f
+
+
+  !** Special note: I only use 1 at a time. So we're only going to use one at a time.
+  !** This is written "wrong" on purpose.
+  integer function gl_gen_textures() result(location)
+    implicit none
+
+    call internal_gl_gen_textures(1, location)
+  end function gl_gen_textures
 
 end module opengl
