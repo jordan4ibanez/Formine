@@ -22,6 +22,14 @@ module stb_image
     end function internal_stbi_load
 
 
+    subroutine internal_stbi_image_free(retval_from_stbi_load) bind(c, name = "stbi_image_free")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: retval_from_stbi_load
+    end subroutine internal_stbi_image_free
+
+
   end interface
 
 contains
@@ -59,7 +67,10 @@ contains
     ! print*,output_data_int
 
     ! Free the Fortran pointer. (Just in case.)
-    deallocate(passed_data_pointer)
+    ! deallocate(passed_data_pointer)
+
+    ! Now we can finally free the C memory.
+    call internal_stbi_image_free(c_pointer)
   end function stbi_load
 
 
