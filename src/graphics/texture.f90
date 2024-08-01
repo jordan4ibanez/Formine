@@ -44,7 +44,7 @@ contains
 
     call gl_bind_texture(GL_TEXTURE_2D, texture_id)
 
-    ! print*,x,y,channels,desired_channels
+    
 
   end subroutine texture_create
 
