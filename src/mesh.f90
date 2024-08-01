@@ -298,7 +298,7 @@ contains
 
     ! We want this to be LOUD AND OBNOXIOUS! Helps with debugging.
     ! It also needs to delete the data in the database.
-    call internal_mesh_delete(mesh_name, .true., .true.)
+    call internal_mesh_delete(mesh_name, .true., .false.)
   end subroutine mesh_delete
 
 
