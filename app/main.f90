@@ -81,7 +81,7 @@ program main
   call shader_start("main")
 
 
-  call texture_create("./textures/rgba_test.png")
+  call texture_create("./textures/fortran_logo_512x512.png")
 
   call mesh_create_3d( &
     "debug", &
