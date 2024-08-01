@@ -26,7 +26,7 @@ module stb_image
 
 contains
 
-  subroutine stbi_load(file_name, x, y, channels_in_file, desired_channels)
+  function stbi_load(file_name, x, y, channels_in_file, desired_channels) result(raw_image_data)
     use :: math_helpers, only: c_uchar_to_int_array
     implicit none
 
@@ -36,29 +36,33 @@ contains
     type(c_ptr) :: raw_data
     integer :: array_length
     integer(1), dimension(:), pointer :: passed_data_pointer
-    integer(1), dimension(:), allocatable :: intermidiate_data_byte
-    integer(c_int), dimension(:), allocatable :: output_data_int
+    integer(1), dimension(:), allocatable :: raw_image_data
+    ! integer(c_int), dimension(:), allocatable :: output_data_int
 
+    !! WARNING: All data in the output is assumed to be overflowed, do not modify it.
+    !! It is designed to be passed straight into C.
+
+    ! Get the raw C data.
     raw_data = internal_stbi_load(file_name, x, y, channels_in_file, desired_channels)
 
+    ! Calculate the length of the array.
     array_length = x * y * channels_in_file
 
+    ! Pass it into fortran.
     call c_f_pointer(raw_data, passed_data_pointer, shape = [array_length])
 
-    print*,passed_data_pointer
+    ! Initialize the raw image data with the raw pointer.
+    raw_image_data = passed_data_pointer
 
-    allocate(intermidiate_data_byte(array_length))
+    !? Enable this if you want to read the raw data
+    ! output_data_int = c_uchar_to_int_array(intermidiate_data_byte)
+    ! print*,output_data_int
 
-    intermidiate_data_byte = passed_data_pointer
+    ! Free the pointer. (Just in case.)
+    deallocate(passed_data_pointer)
 
-    output_data_int = c_uchar_to_int_array(intermidiate_data_byte)
-
-    print*,output_data_int
-
-
-
-
-  end subroutine stbi_load
+    
+  end function stbi_load
 
 
 end module stb_image
