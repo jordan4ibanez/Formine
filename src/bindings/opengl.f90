@@ -515,6 +515,15 @@ module opengl
     end subroutine gl_generate_mipmap
 
 
+    subroutine internal_gl_delete_textures(n, textures) bind(c, name = "glDeleteTextures")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      !! This part is written wrong on purpose. I only want 1 not multiple.
+      integer(c_int), intent(in), value :: n, textures
+    end subroutine internal_gl_delete_textures
+
+
   end interface
 
 
@@ -879,5 +888,17 @@ contains
 
     call internal_gl_tex_image_2d(target, level, internal_format, width, height, border, format, type, c_loc(data))
   end subroutine gl_tex_image_2d
+
+
+  !** Special note: I only use 1 at a time. So we're only going to use one at a time.
+  !** This is written "wrong" on purpose.
+  subroutine gl_delete_textures(location)
+    use, intrinsic :: iso_c_binding
+    implicit none
+
+    integer(c_int), intent(in), value :: location
+
+    call internal_gl_delete_textures(location, 1)
+  end subroutine gl_delete_textures
 
 end module opengl
