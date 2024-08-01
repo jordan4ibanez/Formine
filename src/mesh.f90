@@ -291,12 +291,13 @@ contains
 
 
   !* Delete a mesh.
-  subroutine internal_mesh_delete(mesh_name)
+  subroutine internal_mesh_delete(mesh_name, report_get_failure, delete_from_database)
     use :: opengl
     use :: shader
     implicit none
 
     character(len = *), intent(in) :: mesh_name
+    logical, intent(in), value :: report_get_failure, delete_from_database
     class(*), allocatable :: generic
     integer :: status
     type(mesh_data) :: gotten_mesh
@@ -307,7 +308,9 @@ contains
     call mesh_database%get_raw(key(mesh_name), generic, stat = status)
 
     if (status /= 0) then
-      print"(A)", "[Mesh]: Mesh ["//mesh_name//"] does not exist. Cannot delete."
+      if (report_get_failure) then
+        print"(A)", "[Mesh]: Mesh ["//mesh_name//"] does not exist. Cannot delete."
+      end if
       return
     end if
 
@@ -352,7 +355,9 @@ contains
       error stop "[Mesh]: Failed to delete VAO for mesh ["//mesh_name//"]"
     end if
 
-    call mesh_database%unset(key(mesh_name))
+    if (delete_from_database) then
+      call mesh_database%unset(key(mesh_name))
+    end if
   end subroutine internal_mesh_delete
 
 
