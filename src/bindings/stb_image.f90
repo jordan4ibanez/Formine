@@ -71,6 +71,8 @@ contains
 
     ! Now we can finally free the C memory.
     call internal_stbi_image_free(c_pointer)
+
+    ! The image data is now handled by Fortran.
   end function stbi_load
 
 
