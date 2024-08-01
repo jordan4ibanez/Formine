@@ -478,7 +478,7 @@ module opengl
       implicit none
 
       integer(c_int), intent(in), value :: target, pname
-      integer(c_int), dimension(:) :: params
+      real(c_float), dimension(:) :: params
     end subroutine gl_tex_parameter_fv
 
 
