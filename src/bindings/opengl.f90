@@ -129,6 +129,7 @@ module opengl
   public :: gl_tex_image_2d
   public :: gl_is_texture
   public :: gl_generate_mipmap
+  public :: gl_delete_textures
 
 
   ! Here I'm binding to the C shared library.
