@@ -289,6 +289,18 @@ contains
     call gl_bind_vertex_array(0)
   end subroutine mesh_draw
 
+!* Delete a mesh.
+  subroutine mesh_delete(mesh_name)
+    implicit none
+
+    character(len = *), intent(in) :: mesh_name
+
+    ! We want this to be LOUD AND OBNOXIOUS! Helps with debugging.
+    ! It also needs to delete the data in the database.
+    call internal_mesh_delete(mesh_name, .true., .true.)
+  end subroutine mesh_delete
+
+
   !* Delete the old VAO if it exists, quietly.
   subroutine internal_mesh_delete_for_replacement(mesh_name)
     implicit none
