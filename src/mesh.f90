@@ -327,6 +327,9 @@ contains
     if (gl_is_buffer(gotten_mesh%vbo_position)) then
       error stop "[Mesh]: Failed to delete VBO [position] for mesh ["//mesh_name//"]"
     end if
+    ! if (debug_mode) then
+    !   print"(A)", "[Mesh]: Deleted VBO [position] at location["//int_to_string(gotten_mesh%vbo_position)//"]"
+    ! end if
 
     ! Colors
     call gl_disable_vertex_attrib_array(shader_get_attribute("main", "color"))
@@ -335,12 +338,19 @@ contains
     if (gl_is_buffer(gotten_mesh%vbo_color)) then
       error stop "[Mesh]: Failed to delete VBO [color] for mesh ["//mesh_name//"]"
     end if
+    ! if (debug_mode) then
+    !   print"(A)", "[Mesh]: Deleted VBO [color] at location["//int_to_string(gotten_mesh%vbo_color)//"]"
+    ! end if
 
     ! Indices.
     call gl_delete_buffers(gotten_mesh%vbo_indices)
+
     if (gl_is_buffer(gotten_mesh%vbo_indices)) then
       error stop "[Mesh]: Failed to delete VBO [indices] for mesh ["//mesh_name//"]"
     end if
+    ! if (debug_mode) then
+    !   print"(A)", "[Mesh]: Deleted VBO [indices] at location["//int_to_string(gotten_mesh%vbo_indices)//"]"
+    ! end if
 
     ! Unbind.
     call gl_bind_vertex_array(0)
