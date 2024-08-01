@@ -26,6 +26,7 @@ module opengl
   public :: GL_ELEMENT_ARRAY_BUFFER
   public :: GL_TRIANGLES
   public :: GL_UNSIGNED_INT
+  public :: GL_TEXTURE_2D
 
   !
 
@@ -54,6 +55,7 @@ module opengl
   integer, parameter :: GL_ELEMENT_ARRAY_BUFFER = int(z"8893")
   integer, parameter :: GL_TRIANGLES = int(z"0004")
   integer, parameter :: GL_UNSIGNED_INT = int(z"1405")
+  integer, parameter :: GL_TEXTURE_2D = int(z"0DE1")
 
   ! Functions we want exposed.
 
