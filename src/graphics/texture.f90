@@ -15,6 +15,7 @@ contains
     use :: string
     use :: opengl
     use :: iso_c_binding
+    use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_location
@@ -73,7 +74,7 @@ contains
 
     ! Finally, unbind. Done.
     ! call gl_bind_texture(GL_TEXTURE_2D, 0)
-    print*, "   [Texture]: Remember to unbind!"
+    print"(A)",colorize_rgb("[Texture]: Remember to unbind!", 229, 255, 122)
   end subroutine texture_create
 
 
