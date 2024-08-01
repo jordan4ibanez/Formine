@@ -40,6 +40,8 @@ module opengl
   public :: GL_RGBA
   public :: GL_UNSIGNED_BYTE
   public :: GL_DEPTH_TEST
+  public :: GL_LESS
+  public :: GL_CULL_FACE
 
   !
 
@@ -82,6 +84,8 @@ module opengl
   integer, parameter :: GL_RGBA = int(z"1908")
   integer, parameter :: GL_UNSIGNED_BYTE = int(z"1401")
   integer, parameter :: GL_DEPTH_TEST = int(z"0B71")
+  integer, parameter :: GL_LESS = int(z"0201")
+  integer, parameter :: GL_CULL_FACE = int(z"0B44")
 
 
   ! Functions we want exposed.
