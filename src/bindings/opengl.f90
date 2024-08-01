@@ -124,6 +124,8 @@ module opengl
   public :: gl_is_vertex_array
   public :: gl_gen_textures
   public :: gl_bind_texture
+  public :: gl_tex_parameter_i
+  public :: gl_tex_parameter_fv
 
 
   ! Here I'm binding to the C shared library.
@@ -465,6 +467,15 @@ module opengl
 
       integer(c_int), intent(in), value :: target, pname, param
     end subroutine gl_tex_parameter_i
+
+
+    subroutine gl_tex_parameter_fv(target, pname, params) bind(c, name = "glTexParameteri")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: target, pname
+      integer(c_int), dimension(:) :: params
+    end subroutine gl_tex_parameter_fv
 
 
   end interface
