@@ -18,15 +18,20 @@ contains
 
     integer :: x, y, channels, desired_channels
     character(len = :, kind = c_char), allocatable :: file_name
+    integer(1), dimension(:), allocatable :: image_data
 
     file_name = into_c_string("./textures/rgba_test.png")
 
     ! We always want 4 channels.
     desired_channels = 4
 
-    call stbi_load(file_name, x, y, channels, desired_channels)
+    image_data = stbi_load(file_name, x, y, channels, desired_channels)
 
-    print*,x,y,channels,desired_channels
+    if (x + y + channels == 0) then
+      error stop "[Texture] Error: Could not load texture. It does not exist."
+    end if
+
+    ! print*,x,y,channels,desired_channels
 
   end subroutine test_stbi
 
