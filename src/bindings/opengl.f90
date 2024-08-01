@@ -126,6 +126,8 @@ module opengl
   public :: gl_bind_texture
   public :: gl_tex_parameter_i
   public :: gl_tex_parameter_fv
+  public :: gl_tex_image_2d
+  public :: gl_is_texture
 
 
   ! Here I'm binding to the C shared library.
