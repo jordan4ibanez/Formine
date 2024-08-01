@@ -128,6 +128,7 @@ module opengl
   public :: gl_tex_parameter_fv
   public :: gl_tex_image_2d
   public :: gl_is_texture
+  public :: gl_generate_mipmap
 
 
   ! Here I'm binding to the C shared library.
@@ -504,6 +505,14 @@ module opengl
       integer(c_int), intent(in), value :: texture
       logical(c_bool) :: is_texture
     end function gl_is_texture
+
+
+    subroutine gl_generate_mipmap(target) bind(c, name = "glGenerateMipmap")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: target
+    end subroutine gl_generate_mipmap
 
 
   end interface
