@@ -138,4 +138,45 @@ contains
   end function fma_f64_array_4
 
 
+  !* This is a lazy way to convert a C uchar into a Fortran integer(c_int).
+  function c_uchar_to_int(input) result(output)
+    use, intrinsic :: iso_c_binding, only: c_int
+    implicit none
+
+    integer(1), intent(in), value :: input
+    integer(c_int) :: intermidiate
+    integer(c_int) :: output
+
+    intermidiate = input
+
+    ! I could bitshift it, but that would require work and thoughts.
+    if (intermidiate < 0) then
+      output = 127 + (129 - abs(intermidiate))
+    else
+      output = intermidiate
+    end if
+  end function c_uchar_to_int
+
+
+  !* This is a lazy way to convert a C uchar array into a Fortran integer(c_int) array.
+  function c_uchar_to_int_array(input_array) result(output_array)
+    use, intrinsic :: iso_c_binding, only: c_int
+    implicit none
+
+    integer(1), dimension(:), intent(in) :: input_array
+    integer(c_int), dimension(:), allocatable :: output_array
+    integer :: array_length
+    integer :: i
+
+    array_length = size(input_array)
+
+    allocate(output_array(array_length))
+
+    do i = 1,array_length
+      output_array(i) = c_uchar_to_int(input_array(i))
+    end do
+  end function c_uchar_to_int_array
+
+
+
 end module math_helpers
