@@ -848,4 +848,16 @@ contains
     call internal_gl_gen_textures(1, location)
   end function gl_gen_textures
 
+
+  !** This is so you can buffer texture data without jumping through hoops.
+  subroutine gl_tex_image_2d(target, level, internal_format, width, height, border, format, type, data)
+    use, intrinsic :: iso_c_binding
+    implicit none
+
+    integer(c_int), intent(in), value :: target, level, internal_format, width, height, border, format, type
+    integer(1), dimension(:), intent(in), target :: data
+
+    call internal_gl_tex_image_2d(target, level, internal_format, width, height, border, format, type, c_loc(data))
+  end subroutine gl_tex_image_2d
+
 end module opengl
