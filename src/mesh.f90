@@ -225,7 +225,7 @@ contains
     character(len = *), intent(in) :: mesh_name
     type(mesh_data), intent(in) :: new_mesh
 
-    call mesh_delete(mesh_name)
+    call internal_mesh_delete_for_replacement(mesh_name)
 
     if (debug_mode) then
       print"(A)", "[Mesh]: set mesh ["//mesh_name//"]"
@@ -379,6 +379,9 @@ contains
     end if
 
     if (delete_from_database) then
+      if (debug_mode) then
+        print"(A)", "[Mesh]: Deleted mesh ["//mesh_name//"]"
+      end if
       call mesh_database%unset(key(mesh_name))
     end if
   end subroutine internal_mesh_delete
