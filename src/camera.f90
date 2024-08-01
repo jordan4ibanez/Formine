@@ -22,6 +22,9 @@ module camera
 
   real(c_float) :: fov_degrees = 72.0
 
+  real(c_float) :: z_near = 0.01
+  real(c_float) :: z_far = 100.0
+
 
   !? Position is not translation, translation is the inverse of position!
   type(vec3d) :: camera_position
@@ -30,6 +33,20 @@ module camera
 
 
 contains
+
+
+  real(c_float) function camera_get_z_near() result(near)
+    implicit none
+
+    near = z_near
+  end function camera_get_z_near
+
+
+  real(c_float) function camera_get_z_far() result(far)
+    implicit none
+
+    far = z_far
+  end function camera_get_z_far
 
 
   subroutine camera_set_position(x, y, z)
@@ -95,7 +112,7 @@ contains
 
     call camera_matrix%identity()
 
-    call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), 0.01, 100.0)
+    call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), z_near, z_far)
 
     call camera_matrix%rotate_y(camera_rotation%y_f32())
     call camera_matrix%rotate_x(camera_rotation%x_f32())
