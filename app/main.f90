@@ -18,9 +18,9 @@ program main
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
-  if (.true.) then
-    return
-  end if
+  ! if (.true.) then
+  !   return
+  ! end if
   !! END WARNING.
 
   call glfw_set_error_callback()
@@ -106,7 +106,7 @@ program main
   rotation = 0.0
 
   !! This is debugging for functions!
-  if (.false.) then
+  if (.true.) then
     do while(.not. glfw_window_should_close())
 
       call delta_tick()
