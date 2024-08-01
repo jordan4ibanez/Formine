@@ -27,6 +27,8 @@ module opengl
   public :: GL_TRIANGLES
   public :: GL_UNSIGNED_INT
   public :: GL_TEXTURE_2D
+  public :: GL_TEXTURE_WRAP_S
+  public :: GL_TEXTURE_WRAP_T
 
   !
 
@@ -56,6 +58,8 @@ module opengl
   integer, parameter :: GL_TRIANGLES = int(z"0004")
   integer, parameter :: GL_UNSIGNED_INT = int(z"1405")
   integer, parameter :: GL_TEXTURE_2D = int(z"0DE1")
+  integer, parameter :: GL_TEXTURE_WRAP_S = int(z"2802")
+  integer, parameter :: GL_TEXTURE_WRAP_T = int(z"2803")
 
   ! Functions we want exposed.
 
