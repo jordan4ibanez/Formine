@@ -11,9 +11,7 @@ program main
   implicit none
 
   real(c_float) :: rotation
-  integer(c_int64_t) :: debugging
-
-  debugging = 0
+  integer :: i
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
@@ -67,12 +65,27 @@ program main
 
   call shader_start("main")
 
+  call mesh_create_3d( &
+    "debug", &
+    [ &
+    -0.5, -0.5, 0.0, &
+    0.5, -0.5, 0.0, &
+    0.0, 0.5, 0.0 &
+    ], &
+    [ &
+    1.0, 0.0, 0.0, &
+    0.0, 1.0, 0.0, &
+    0.0, 0.0, 1.0 &
+    ], &
+    [0,1,2] &
+    )
+
 
 
   rotation = 0.0
 
   !! This is debugging for functions!
-  if (.true.) then
+  if (.false.) then
     do while(.not. glfw_window_should_close())
 
       call delta_tick()
@@ -92,35 +105,7 @@ program main
       call camera_set_object_matrix_f32(0.0, 0.0, -1.0, 0.0, rotation, 0.0, 1.0, 1.0, 1.0)
 
 
-      ! if (debugging < 2) then
-      ! print"(A)", "Creating mesh: [debug"//long_to_string(debugging)//"]"
-      ! end if
-      call mesh_create_3d( &
-        "debug"//long_to_string(debugging), &
-        [ &
-        -0.5, -0.5, 0.0, &
-        0.5, -0.5, 0.0, &
-        0.0, 0.5, 0.0 &
-        ], &
-        [ &
-        1.0, 0.0, 0.0, &
-        0.0, 1.0, 0.0, &
-        0.0, 0.0, 1.0 &
-        ], &
-        [0,1,2] &
-        )
-
-      call mesh_draw("debug"//long_to_string(debugging))
-
-      call mesh_delete("debug"//long_to_string(debugging))
-      
-      if (mod(debugging, 10000) == 0) then
-        print*, debugging
-      end if
-
-      ! if (debugging < 2) then
-      debugging = debugging + 1
-      ! end if
+      call mesh_draw("debug")
 
       !? END DRAW TEST ?!
 
@@ -132,6 +117,7 @@ program main
     end do
   end if
 
+  call mesh_clear_database()
 
   call glfw_destroy_window()
 
