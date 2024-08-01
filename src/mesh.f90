@@ -292,35 +292,11 @@ contains
 
   !* Delete a mesh.
   subroutine mesh_delete(mesh_name)
-    implicit none
-
-    character(len = *), intent(in) :: mesh_name
-
-    ! We want this to be LOUD AND OBNOXIOUS! Helps with debugging.
-    ! It also needs to delete the data in the database.
-    call internal_mesh_delete(mesh_name, .true., .true.)
-  end subroutine mesh_delete
-
-
-  !* Delete the old VAO if it exists, quietly.
-  subroutine internal_mesh_delete_for_replacement(mesh_name)
-    implicit none
-
-    character(len = *), intent(in) :: mesh_name
-
-    ! We want this to be silent.
-    call internal_mesh_delete(mesh_name, .false., .false.)
-  end subroutine internal_mesh_delete_for_replacement
-
-
-  !* Internal interface for mesh deletion.
-  subroutine internal_mesh_delete(mesh_name, report_get_failure, delete_from_database)
     use :: opengl
     use :: shader
     implicit none
 
     character(len = *), intent(in) :: mesh_name
-    logical, intent(in), value :: report_get_failure, delete_from_database
     class(*), allocatable :: generic
     integer :: status
     type(mesh_data) :: gotten_mesh
@@ -331,9 +307,7 @@ contains
     call mesh_database%get_raw(key(mesh_name), generic, stat = status)
 
     if (status /= 0) then
-      if (report_get_failure) then
-        print"(A)", "[Mesh]: Mesh ["//mesh_name//"] does not exist. Cannot delete."
-      end if
+      print"(A)", "[Mesh]: Mesh ["//mesh_name//"] does not exist. Cannot delete."
       return
     end if
 
@@ -378,13 +352,12 @@ contains
       error stop "[Mesh]: Failed to delete VAO for mesh ["//mesh_name//"]"
     end if
 
-    if (delete_from_database) then
-      if (debug_mode) then
-        print"(A)", "[Mesh]: Deleted mesh ["//mesh_name//"]"
-      end if
-      call mesh_database%unset(key(mesh_name))
+
+    if (debug_mode) then
+      print"(A)", "[Mesh]: Deleted mesh ["//mesh_name//"]"
     end if
-  end subroutine internal_mesh_delete
+    call mesh_database%unset(key(mesh_name))
+  end subroutine mesh_delete
 
 
 end module mesh
