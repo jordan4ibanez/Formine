@@ -5,7 +5,10 @@ module stb_image
 
   private
 
+
+  public :: stbi_enable_vertical_flipping
   public :: stbi_load
+
 
   ! Here I'm binding to the C stb_image shared library.
   interface
@@ -30,9 +33,29 @@ module stb_image
     end subroutine internal_stbi_image_free
 
 
+    subroutine stbi_set_flip_vertically_on_load(flag_true_if_should_flip) bind(c, name = "stbi_set_flip_vertically_on_load")
+      use, intrinsic :: iso_c_binding
+
+      logical(c_bool), intent(in), value :: flag_true_if_should_flip
+    end subroutine stbi_set_flip_vertically_on_load
+
+
   end interface
 
+
 contains
+
+
+  subroutine stbi_enable_vertical_flipping()
+    implicit none
+
+    logical(c_bool) :: enable
+
+    enable = .true.
+
+    call stbi_set_flip_vertically_on_load(enable)
+  end subroutine stbi_enable_vertical_flipping
+
 
   function stbi_load(file_name, x, y, channels_in_file, desired_channels) result(raw_image_data)
     use :: math_helpers, only: c_uchar_to_int_array
