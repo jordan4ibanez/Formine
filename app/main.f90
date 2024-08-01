@@ -8,6 +8,7 @@ program main
   use :: camera
   use :: delta
   use :: texture
+  use :: stb_image, only: stbi_enable_vertical_flipping
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -20,6 +21,9 @@ program main
   !   return
   ! end if
   !! END WARNING.
+
+  ! First, we're just going to make sure that stbi_image is flipping properly.
+  call stbi_enable_vertical_flipping()
 
   call glfw_set_error_callback()
 
