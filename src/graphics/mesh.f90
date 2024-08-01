@@ -24,6 +24,7 @@ module mesh
   type mesh_data
     integer :: vao = 0
     integer :: vbo_position = 0
+    integer :: vbo_texture_coordinates = 0
     integer :: vbo_color = 0
     integer :: vbo_indices = 0
     integer :: indices_length = 0
@@ -33,7 +34,7 @@ module mesh
 contains
 
 
-  subroutine mesh_create_3d(mesh_name, positions, colors, indices)
+  subroutine mesh_create_3d(mesh_name, positions, texture_coordinates, colors, indices)
     use :: shader
     use :: opengl
     use :: string
@@ -47,7 +48,7 @@ contains
     ! 4. improve, somehow.
 
     character(len = *), intent(in) :: mesh_name
-    real(c_float), dimension(:), intent(in) :: positions, colors
+    real(c_float), dimension(:), intent(in) :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), intent(in) :: indices
     type(mesh_data) :: new_mesh
 
@@ -66,6 +67,8 @@ contains
     ! Into position vertex buffer object.
 
     new_mesh%vbo_position = upload_positions(positions)
+
+    new_mesh%vbo_texture_coordinates = upload_texture_coordinates(texture_coordinates)
 
     new_mesh%vbo_color = upload_colors(colors)
 
@@ -116,6 +119,43 @@ contains
     ! Now unbind.
     call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
   end function upload_positions
+
+
+  integer function upload_texture_coordinates(texture_coordinates_array) result(vbo_position)
+    use, intrinsic :: iso_c_binding
+    use :: opengl
+    use :: shader
+    implicit none
+
+    real(c_float), dimension(:), intent(in) :: texture_coordinates_array
+    integer :: texture_coordinates_vbo_position
+
+    texture_coordinates_vbo_position = shader_get_attribute("main", "texture_coordinates")
+
+    ! Create the VBO context.
+    vbo_position = gl_gen_buffers()
+
+    if (debug_mode) then
+      print"(A)","vbo texture coordinates: ["//int_to_string(vbo_position)//"]"
+    end if
+
+    ! Walk into the VBO context.
+    call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_position)
+
+    ! Pass this data into the OpenGL state machine.
+    call gl_buffer_float_array(texture_coordinates_array)
+
+    ! Width = 2 because this is a vec2
+    ! false because this is not normalized
+    ! 0 stride
+    call gl_vertex_attrib_pointer(texture_coordinates_vbo_position, 2, GL_FLOAT, .false., 0)
+
+    ! Enable this new data.
+    call gl_enable_vertex_attrib_array(texture_coordinates_vbo_position)
+
+    ! Now unbind.
+    call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
+  end function upload_texture_coordinates
 
 
   integer function upload_positions_vec3f(position_array) result(vbo_position)
@@ -330,6 +370,17 @@ contains
     end if
     ! if (debug_mode) then
     !   print"(A)", "[Mesh]: Deleted VBO [position] at location["//int_to_string(gotten_mesh%vbo_position)//"]"
+    ! end if
+
+    ! Texture coordinates.
+    call gl_disable_vertex_attrib_array(shader_get_attribute("main", "texture_coordinates"))
+    call gl_delete_buffers(gotten_mesh%vbo_texture_coordinates)
+
+    if (gl_is_buffer(gotten_mesh%vbo_texture_coordinates)) then
+      error stop "[Mesh]: Failed to delete VBO [texture_coordinates] for mesh ["//mesh_name//"]"
+    end if
+    ! if (debug_mode) then
+    !   print"(A)", "[Mesh]: Deleted VBO [texture_coordinates] at location["//int_to_string(gotten_mesh%vbo_texture_coordinates)//"]"
     ! end if
 
     ! Colors
