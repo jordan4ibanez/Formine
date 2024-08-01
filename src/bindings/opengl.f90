@@ -496,7 +496,7 @@ module opengl
       implicit none
 
       integer(c_int), intent(in), value :: target, level, internal_format, width, height, border, format, type
-      type(c_ptr), intent(in), optional :: data
+      type(c_ptr), intent(in), value :: data
     end subroutine internal_gl_tex_image_2d
 
 
