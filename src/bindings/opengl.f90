@@ -93,6 +93,7 @@ module opengl
   ! Functions we want exposed.
 
   public :: gl_clear_color_buffer
+  public :: gl_clear_depth_buffer
   public :: gl_enable
   public :: gl_clear_color
   public :: gl_set_debug_message_callback
@@ -566,12 +567,21 @@ module opengl
 
 contains
 
+
   ! Here I'm just kind of using OpenGL the way I want to use it.
+
 
   subroutine gl_clear_color_buffer
     implicit none
     call internal_gl_clear(GL_COLOR_BUFFER_BIT)
   end
+
+
+  subroutine gl_clear_depth_buffer
+    implicit none
+
+    call internal_gl_clear(GL_DEPTH_BUFFER_BIT)
+  end subroutine gl_clear_depth_buffer
 
 
   subroutine gl_clear_color(r,g,b)
