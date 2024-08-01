@@ -555,7 +555,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: near_val, far_val
+      real(c_float), intent(in), value :: near_val, far_val
     end subroutine gl_depth_range_f
 
 
