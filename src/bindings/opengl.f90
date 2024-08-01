@@ -39,6 +39,7 @@ module opengl
   public :: GL_UNPACK_ALIGNMENT
   public :: GL_RGBA
   public :: GL_UNSIGNED_BYTE
+  public :: GL_DEPTH_TEST
 
   !
 
@@ -80,6 +81,7 @@ module opengl
   integer, parameter :: GL_UNPACK_ALIGNMENT = int(z"0CF5")
   integer, parameter :: GL_RGBA = int(z"1908")
   integer, parameter :: GL_UNSIGNED_BYTE = int(z"1401")
+  integer, parameter :: GL_DEPTH_TEST = int(z"0B71")
 
 
   ! Functions we want exposed.
