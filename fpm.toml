@@ -13,7 +13,7 @@ auto-tests = true
 auto-examples = true
 module-naming = false
 
-link = ["glfw", "GL"]
+link = ["glfw", "GL", "stb"]
 
 [dependencies]
 # stdlib = "*"
