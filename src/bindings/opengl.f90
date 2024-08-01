@@ -885,6 +885,9 @@ contains
     use, intrinsic :: iso_c_binding
     implicit none
 
+    ! Implementation note: This is a hardwire for unsigned byte. If it's not working correctly in the future
+    ! there should be additional implementations created.
+
     integer(c_int), intent(in), value :: target, level, internal_format, width, height, border, format, type
     integer(1), dimension(:), intent(in), target :: data
 
