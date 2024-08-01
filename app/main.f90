@@ -11,6 +11,9 @@ program main
   implicit none
 
   real(c_float) :: rotation
+  integer(c_int64_t) :: debugging
+
+  debugging = 0
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
@@ -88,8 +91,12 @@ program main
 
       call camera_set_object_matrix_f32(0.0, 0.0, -1.0, 0.0, rotation, 0.0, 1.0, 1.0, 1.0)
 
+
+      ! if (debugging < 2) then
+      ! print"(A)", "Creating mesh: [debug"//long_to_string(debugging)//"]"
+      ! end if
       call mesh_create_3d( &
-        "debug", &
+        "debug"//long_to_string(debugging), &
         [ &
         -0.5, -0.5, 0.0, &
         0.5, -0.5, 0.0, &
@@ -103,8 +110,13 @@ program main
         [0,1,2] &
         )
 
-      call mesh_draw("debug")
+      call mesh_draw("debug"//long_to_string(debugging))
 
+      call mesh_delete("debug"//long_to_string(debugging))
+
+      ! if (debugging < 2) then
+      debugging = debugging + 1
+      ! end if
 
       !? END DRAW TEST ?!
 
