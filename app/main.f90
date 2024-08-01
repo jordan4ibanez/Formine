@@ -14,8 +14,6 @@ program main
   real(c_float) :: rotation
   integer :: i
 
-  call texture_create()
-
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
@@ -68,6 +66,9 @@ program main
   call shader_create_uniform_locations("main", heap_string_array("camera_matrix","object_matrix"))
 
   call shader_start("main")
+
+
+  call texture_create("./textures/rgba_test.png")
 
   call mesh_create_3d( &
     "debug", &
