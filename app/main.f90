@@ -22,8 +22,6 @@ program main
   ! end if
   !! END WARNING.
 
-  ! First, we're just going to make sure that stbi_image is flipping properly.
-  call stbi_enable_vertical_flipping()
 
   call glfw_set_error_callback()
 
@@ -121,7 +119,7 @@ program main
 
       call delta_tick()
 
-      rotation = rotation + get_delta_f32() * 10.0
+      ! rotation = rotation + get_delta_f32() * 10.0
 
       ! call blah(color)
 
