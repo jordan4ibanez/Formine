@@ -52,7 +52,7 @@ contains
 
     class(mob) :: this
 
-    print"(A)","HELLO, I AM MOB ["//i32_to_string(this%id)//"] WITH HP ["//i32_to_string(this%hp)//"]"
+    print"(A)","HELLO, I AM MOB ["//int_to_string(this%id)//"] WITH HP ["//int_to_string(this%hp)//"]"
   end subroutine yell
 
 end module factory

@@ -287,7 +287,7 @@ contains
     character(:), allocatable :: error_value_string
 
     error_text = string_from_c(char_pointer, 512)
-    error_value_string = i32_to_string(i)
+    error_value_string = int_to_string(i)
 
     if (len(error_text) > 0) then
       !? We put a period at the end because I think that looks nice.
@@ -307,7 +307,7 @@ contains
 
   subroutine size_callback(window, width, height)
     use, intrinsic :: iso_c_binding
-    use :: string, only: i32_to_string
+    use :: string, only: int_to_string
     use :: opengl, only: gl_view_port
     implicit none
 
@@ -318,7 +318,7 @@ contains
       print*,window
     end if
 
-    print"(A)", "[Window] Resize: ["//i32_to_string(width)//", "//i32_to_string(height)//"]"
+    print"(A)", "[Window] Resize: ["//int_to_string(width)//", "//int_to_string(height)//"]"
     window_width = width
     window_height = height
     call gl_view_port(0,0, width, height)

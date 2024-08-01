@@ -74,7 +74,7 @@ contains
      case (ORIENT_NONE)
       output = "UP"
      case default
-      error stop "illegal argument: ["//i32_to_string(input)//"]"
+      error stop "illegal argument: ["//int_to_string(input)//"]"
     end select
   end function orientation_to_string
 
@@ -93,7 +93,7 @@ contains
      case(ORIENT_RIGHT)
      case(ORIENT_NONE)
      case default
-      error stop "illegal argument: ["//i32_to_string(input)//"]"
+      error stop "illegal argument: ["//int_to_string(input)//"]"
     end select
   end subroutine check_orient
 

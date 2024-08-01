@@ -479,7 +479,7 @@ contains
         end select
 
         !? Make this print nicely.
-        print"(A)",colorize_rgb_string("[OpenGL] ("//severity_text//"): ("//i32_to_string(source)//") "//fortran_message//".", text_color)
+        print"(A)",colorize_rgb_string("[OpenGL] ("//severity_text//"): ("//int_to_string(source)//") "//fortran_message//".", text_color)
       end if
     end if
   end subroutine debug_message_callback
@@ -541,7 +541,7 @@ contains
     call gl_get_integer_v(GL_MAJOR_VERSION, major)
     call gl_get_integer_v(GL_MINOR_VERSION, minor)
 
-    print"(A)","[OpenGL] Version: "//i32_to_string(major)//"."//i32_to_string(minor)
+    print"(A)","[OpenGL] Version: "//int_to_string(major)//"."//int_to_string(minor)
   end subroutine gl_get_version
 
 

@@ -8,8 +8,8 @@ module string
 
 
   public :: string_from_c
-  public :: i32_to_string
-  public :: i64_to_string
+  public :: int_to_string
+  public :: long_to_string
   public :: into_c_string
   public :: bool_to_string
   public :: heap_string_array
@@ -192,7 +192,7 @@ contains
 
   ! Convert an integer into an allocated string.
   !** Allocatable will deallocate once the memory goes out of scope.
-  function i32_to_string(i) result(output)
+  function int_to_string(i) result(output)
     implicit none
 
     integer(c_int) :: i
@@ -210,11 +210,11 @@ contains
     ! print"(A)",output//"."
     ! print"(A)","len: ", len(output)
     ! print"(A)","-----"
-  end function i32_to_string
+  end function int_to_string
 
   ! Convert an integer into an allocated string.
   !** Allocatable will deallocate once the memory goes out of scope.
-  function i64_to_string(i) result(output)
+  function long_to_string(i) result(output)
     implicit none
 
     integer(c_long) :: i
@@ -232,7 +232,7 @@ contains
     ! print"(A)",output//"."
     ! print"(A)","len: ", len(output)
     ! print"(A)","-----"
-  end function i64_to_string
+  end function long_to_string
 
 
   ! Convert a logical into an allocated string.
