@@ -469,13 +469,21 @@ module opengl
     end subroutine gl_tex_parameter_i
 
 
-    subroutine gl_tex_parameter_fv(target, pname, params) bind(c, name = "glTexParameteri")
+    subroutine gl_tex_parameter_fv(target, pname, params) bind(c, name = "glTexParameterfv")
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: target, pname
       integer(c_int), dimension(:) :: params
     end subroutine gl_tex_parameter_fv
+
+
+    subroutine gl_pixel_store_i(pname, param) bind(c, name = "glPixelStorei")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: pname, param
+    end subroutine gl_pixel_store_i
 
 
   end interface
