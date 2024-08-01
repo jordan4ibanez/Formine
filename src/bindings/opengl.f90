@@ -94,6 +94,7 @@ module opengl
 
   public :: gl_clear_color_buffer
   public :: gl_clear_depth_buffer
+  public :: gl_clear_color_and_depth_buffer
   public :: gl_enable
   public :: gl_clear_color
   public :: gl_set_debug_message_callback
@@ -582,6 +583,13 @@ contains
 
     call internal_gl_clear(GL_DEPTH_BUFFER_BIT)
   end subroutine gl_clear_depth_buffer
+
+
+  subroutine gl_clear_color_and_depth_buffer()
+    implicit none
+
+    call internal_gl_clear(iand(GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT))
+  end subroutine gl_clear_color_and_depth_buffer
 
 
   subroutine gl_clear_color(r,g,b)
