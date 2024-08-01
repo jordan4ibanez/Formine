@@ -459,6 +459,14 @@ module opengl
     end subroutine gl_bind_texture
 
 
+    subroutine gl_tex_parameter_i(target, pname, param) bind(c, name = "glTexParameteri")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: target, pname, param
+    end subroutine gl_tex_parameter_i
+
+
   end interface
 
 
