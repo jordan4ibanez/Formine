@@ -15,7 +15,7 @@ module stb_image
       use, intrinsic :: iso_c_binding
       implicit none
 
-      character(kind = c_char), intent(in), value :: file_name
+      character(kind = c_char), intent(in) :: file_name
       integer(c_int), intent(inout) :: x, y, channels_in_file
       integer(c_int), intent(in), value :: desired_channels
       type(c_ptr) :: raw_data
@@ -29,13 +29,12 @@ contains
   subroutine stbi_load(file_name, x, y, channels_in_file, desired_channels)
     implicit none
 
-    character(kind = c_char), intent(in), value :: file_name
+    character(kind = c_char), intent(in) :: file_name
     integer(c_int), intent(inout) :: x, y, channels_in_file
     integer(c_int), intent(in), value :: desired_channels
     type(c_ptr) :: raw_data
 
     raw_data = internal_stbi_load(file_name, x, y, channels_in_file, desired_channels)
-    
   end subroutine stbi_load
 
 
