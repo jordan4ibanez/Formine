@@ -42,6 +42,7 @@ module opengl
   public :: GL_DEPTH_TEST
   public :: GL_LESS
   public :: GL_CULL_FACE
+  public :: GL_DEPTH_BUFFER_BIT
 
   !
 
@@ -86,6 +87,7 @@ module opengl
   integer, parameter :: GL_DEPTH_TEST = int(z"0B71")
   integer, parameter :: GL_LESS = int(z"0201")
   integer, parameter :: GL_CULL_FACE = int(z"0B44")
+  integer, parameter :: GL_DEPTH_BUFFER_BIT = int(z"00000100")
 
 
   ! Functions we want exposed.
