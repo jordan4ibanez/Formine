@@ -5,14 +5,15 @@ module texture
   private
 
 
-  public :: test_stbi
+  public :: texture_create
 
 
 contains
 
-  subroutine test_stbi()
+  subroutine texture_create()
     use :: stb_image
     use :: string
+    use :: opengl
     use :: iso_c_binding
     implicit none
 
@@ -33,7 +34,7 @@ contains
 
     ! print*,x,y,channels,desired_channels
 
-  end subroutine test_stbi
+  end subroutine texture_create
 
 
 
