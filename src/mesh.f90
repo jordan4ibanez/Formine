@@ -352,11 +352,11 @@ contains
       error stop "[Mesh]: Failed to delete VAO for mesh ["//mesh_name//"]"
     end if
 
-
+    ! Finally remove it from the database.
+    call mesh_database%unset(key(mesh_name))
     if (debug_mode) then
       print"(A)", "[Mesh]: Deleted mesh ["//mesh_name//"]"
     end if
-    call mesh_database%unset(key(mesh_name))
   end subroutine mesh_delete
 
 
