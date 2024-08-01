@@ -359,6 +359,7 @@ contains
   end subroutine mesh_delete
 
 
+  !* Check if a mesh exists.
   logical function mesh_exists(mesh_name) result(existence)
     implicit none
 
