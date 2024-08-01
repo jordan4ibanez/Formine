@@ -217,7 +217,7 @@ contains
   function long_to_string(i) result(output)
     implicit none
 
-    integer(c_long) :: i
+    integer(c_int64_t) :: i
     character(:, kind = c_char), allocatable :: output
 
     ! If the number is any bigger than this, wat.
@@ -228,10 +228,10 @@ contains
     output = trim(adjustl(output))
 
     !? This is simply debug.
-    ! print"(A)","-----"
-    ! print"(A)",output//"."
-    ! print"(A)","len: ", len(output)
-    ! print"(A)","-----"
+    print"(A)","-----"
+    print"(A)",output//"."
+    print"(A)","len: ", len(output)
+    print"(A)","-----"
   end function long_to_string
 
 

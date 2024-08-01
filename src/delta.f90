@@ -1,6 +1,6 @@
 !* Delta time module for doing engine things that involve time.
 module delta
-  use, intrinsic :: iso_c_binding, only: c_long, c_double, c_float
+  use, intrinsic :: iso_c_binding, only: c_int64_t, c_double, c_float
   implicit none
 
   private
@@ -10,7 +10,7 @@ module delta
   public :: get_delta_f32
   public :: get_delta_f64
 
-  integer(c_long) :: old_delta_integral = 0
+  integer(c_int64_t) :: old_delta_integral = 0
   real(c_double) :: delta_time = 0.0d0
 
 contains
@@ -20,7 +20,7 @@ contains
   subroutine delta_initialize()
     implicit none
 
-    integer(c_long) :: count
+    integer(c_int64_t) :: count
 
     call system_clock(count)
 
@@ -37,7 +37,7 @@ contains
     ! integer(c_float)
     ! But doing this will make it so after 24 days, it WILL wrap around!
     ! You will also run into extreme precision problems on high refresh rate devices.
-    integer(c_long) :: count, count_rate, count_max, new_delta_integral
+    integer(c_int64_t) :: count, count_rate, count_max, new_delta_integral
 
     call system_clock(count, count_rate, count_max)
 
