@@ -139,6 +139,7 @@ module opengl
   public :: gl_delete_textures
   public :: gl_depth_mask
   public :: gl_depth_func
+  public :: gl_depth_range_f
 
 
   ! Here I'm binding to the C shared library.
@@ -548,6 +549,14 @@ module opengl
 
       integer(c_int), intent(in), value :: func
     end subroutine gl_depth_func
+
+
+    subroutine gl_depth_range_f(near_val, far_val) bind(c, name = "glDepthRangef")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: near_val, far_val
+    end subroutine gl_depth_range_f
 
 
   end interface
