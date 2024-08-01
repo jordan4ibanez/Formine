@@ -9,6 +9,7 @@ module string
 
   public :: string_from_c
   public :: int_to_string
+  public :: long_to_string
   public :: into_c_string
   public :: bool_to_string
   public :: heap_string_array
@@ -194,7 +195,7 @@ contains
   function int_to_string(i) result(output)
     implicit none
 
-    integer :: i
+    integer(c_int) :: i
     character(:, kind = c_char), allocatable :: output
 
     ! If the number is any bigger than this, wat.
@@ -210,6 +211,28 @@ contains
     ! print"(A)","len: ", len(output)
     ! print"(A)","-----"
   end function int_to_string
+
+  ! Convert an integer into an allocated string.
+  !** Allocatable will deallocate once the memory goes out of scope.
+  function long_to_string(i) result(output)
+    implicit none
+
+    integer(c_long) :: i
+    character(:, kind = c_char), allocatable :: output
+
+    ! If the number is any bigger than this, wat.
+    allocate(character(128) :: output)
+    write(output, "(i128)") i
+
+    ! Now we shift the whole thing left and trim it to fit.
+    output = trim(adjustl(output))
+
+    !? This is simply debug.
+    ! print"(A)","-----"
+    ! print"(A)",output//"."
+    ! print"(A)","len: ", len(output)
+    ! print"(A)","-----"
+  end function long_to_string
 
 
   ! Convert a logical into an allocated string.
