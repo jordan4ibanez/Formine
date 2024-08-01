@@ -291,7 +291,7 @@ contains
 
 
   !* Delete a mesh.
-  subroutine mesh_delete(mesh_name)
+  subroutine internal_mesh_delete(mesh_name)
     use :: opengl
     use :: shader
     implicit none
@@ -352,13 +352,8 @@ contains
       error stop "[Mesh]: Failed to delete VAO for mesh ["//mesh_name//"]"
     end if
 
-    ! todo: Needs gl_is_buffer to double check.
-
     call mesh_database%unset(key(mesh_name))
-    if (debug_mode) then
-      print"(A)", "[Mesh]: Mesh ["//mesh_name//"] has been deleted."
-    end if
-  end subroutine mesh_delete
+  end subroutine internal_mesh_delete
 
 
 end module mesh
