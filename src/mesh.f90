@@ -290,7 +290,7 @@ contains
   end subroutine mesh_draw
 
 
-  !* Delete a mesh.
+  !* Internal interface for mesh deletion.
   subroutine internal_mesh_delete(mesh_name, report_get_failure, delete_from_database)
     use :: opengl
     use :: shader
