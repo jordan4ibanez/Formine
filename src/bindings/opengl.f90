@@ -131,6 +131,7 @@ module opengl
   public :: gl_is_texture
   public :: gl_generate_mipmap
   public :: gl_delete_textures
+  public :: gl_depth_mask
 
 
   ! Here I'm binding to the C shared library.
@@ -526,6 +527,13 @@ module opengl
     end subroutine internal_gl_delete_textures
 
 
+    subroutine internal_gl_depth_mask(flag) bind(c, name = "glDepthMask")
+      use, intrinsic :: iso_c_binding
+
+      logical(c_bool), intent(in), value :: flag
+    end subroutine internal_gl_depth_mask
+
+
   end interface
 
 
@@ -905,6 +913,18 @@ contains
 
     call internal_gl_delete_textures(location, 1)
   end subroutine gl_delete_textures
+
+  subroutine gl_depth_mask(flag)
+    use, intrinsic :: iso_c_binding
+    implicit none
+
+    logical, intent(in), value :: flag
+    logical(c_bool) :: c_flag
+
+    c_flag = flag
+
+    call internal_gl_depth_mask(c_flag)
+  end subroutine gl_depth_mask
 
 
 end module opengl
