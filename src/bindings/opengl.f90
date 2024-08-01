@@ -486,6 +486,15 @@ module opengl
     end subroutine gl_pixel_store_i
 
 
+    subroutine gl_tex_image_2d(target, level, internal_format, width, height, border, format, type, data) bind(c, name = "glTexImage2D")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: target, level, internal_format, width, height, border, format, type
+      type(c_ptr), intent(in), optional :: data
+    end subroutine gl_tex_image_2d
+
+
   end interface
 
 
