@@ -29,6 +29,16 @@ module opengl
   public :: GL_TEXTURE_2D
   public :: GL_TEXTURE_WRAP_S
   public :: GL_TEXTURE_WRAP_T
+  public :: GL_CLAMP_TO_BORDER
+  public :: GL_TEXTURE_BORDER_COLOR
+  public :: GL_NEAREST
+  public :: GL_NEAREST_MIPMAP_LINEAR
+  public :: GL_NEAREST_MIPMAP_NEAREST
+  public :: GL_TEXTURE_MIN_FILTER
+  public :: GL_TEXTURE_MAG_FILTER
+  public :: GL_UNPACK_ALIGNMENT
+  public :: GL_RGBA
+  public :: GL_UNSIGNED_BYTE
 
   !
 
@@ -60,6 +70,17 @@ module opengl
   integer, parameter :: GL_TEXTURE_2D = int(z"0DE1")
   integer, parameter :: GL_TEXTURE_WRAP_S = int(z"2802")
   integer, parameter :: GL_TEXTURE_WRAP_T = int(z"2803")
+  integer, parameter :: GL_CLAMP_TO_BORDER = int(z"812D")
+  integer, parameter :: GL_TEXTURE_BORDER_COLOR = int(z"1004")
+  integer, parameter :: GL_NEAREST = int(z"2600")
+  integer, parameter :: GL_NEAREST_MIPMAP_LINEAR = int(z"2702")
+  integer, parameter :: GL_NEAREST_MIPMAP_NEAREST = int(z"2700")
+  integer, parameter :: GL_TEXTURE_MIN_FILTER = int(z"2801")
+  integer, parameter :: GL_TEXTURE_MAG_FILTER = int(z"2800")
+  integer, parameter :: GL_UNPACK_ALIGNMENT = int(z"0CF5")
+  integer, parameter :: GL_RGBA = int(z"1908")
+  integer, parameter :: GL_UNSIGNED_BYTE = int(z"1401")
+
 
   ! Functions we want exposed.
 
