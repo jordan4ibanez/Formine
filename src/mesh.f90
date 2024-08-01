@@ -360,4 +360,16 @@ contains
   end subroutine mesh_delete
 
 
+  logical function mesh_exists(mesh_name) result(existence)
+    implicit none
+
+    character(len = *), intent(in) :: mesh_name
+    integer :: status
+
+    call mesh_database%check_key(key(mesh_name), stat = status)
+
+    existence = status == 0
+  end function mesh_exists
+
+
 end module mesh
