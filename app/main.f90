@@ -14,7 +14,7 @@ program main
   real(c_float) :: rotation
   integer :: i
 
-  call test_stbi()
+  call texture_create()
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
