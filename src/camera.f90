@@ -15,6 +15,8 @@ module camera
   public :: camera_set_position_vec3d
   public :: camera_set_object_matrix_f32
   public :: camera_set_object_matrix_f64
+  public :: camera_get_z_near
+  public :: camera_get_z_far
 
 
   real(c_float), parameter :: MIN_FOV = 50.0
