@@ -113,6 +113,10 @@ program main
       call mesh_draw("debug"//long_to_string(debugging))
 
       call mesh_delete("debug"//long_to_string(debugging))
+      
+      if (mod(debugging, 10000) == 0) then
+        print*, debugging
+      end if
 
       ! if (debugging < 2) then
       debugging = debugging + 1
