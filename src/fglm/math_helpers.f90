@@ -178,5 +178,4 @@ contains
   end function c_uchar_to_int_array
 
 
-
 end module math_helpers
