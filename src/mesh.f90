@@ -289,7 +289,8 @@ contains
     call gl_bind_vertex_array(0)
   end subroutine mesh_draw
 
-!* Delete a mesh.
+
+  !* Delete a mesh.
   subroutine mesh_delete(mesh_name)
     implicit none
 
