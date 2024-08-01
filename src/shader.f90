@@ -88,7 +88,7 @@ contains
     if (.not. creation_succeeded(shader%program_id)) then
       error stop "[Shader] Error: Failed to create program for shader ["//shader%shader_name//"]."
     else
-      print"(A)","[Shader]: Successfully created program for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(shader%program_id)//"]."
+      print"(A)","[Shader]: Successfully created program for shader ["//shader%shader_name//"] successfully at ID ["//i32_to_string(shader%program_id)//"]."
     end if
 
     ! Vertex shader compilation.
@@ -96,7 +96,7 @@ contains
     if (.not. creation_succeeded(shader%vertex_id)) then
       error stop "[Shader] Error: Failed to create vertex for shader ["//shader%shader_name//"]."
     else
-      print"(A)","[Shader]: Successfully created vertex for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(shader%vertex_id)//"]."
+      print"(A)","[Shader]: Successfully created vertex for shader ["//shader%shader_name//"] successfully at ID ["//i32_to_string(shader%vertex_id)//"]."
     end if
 
     call gl_shader_source(shader%vertex_id, vertex_code_location)
@@ -113,7 +113,7 @@ contains
     if (.not. creation_succeeded(shader%fragment_id)) then
       error stop "[Shader] Error: Failed to create fragment for shader ["//shader%shader_name//"]."
     else
-      print"(A)","[Shader]: Successfully created fragment for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(shader%fragment_id)//"]."
+      print"(A)","[Shader]: Successfully created fragment for shader ["//shader%shader_name//"] successfully at ID ["//i32_to_string(shader%fragment_id)//"]."
     end if
 
     call gl_shader_source(shader%fragment_id, fragment_code_location)
@@ -241,9 +241,9 @@ contains
 
       ! If location is -1 that's OpenGL saying it couldn't find it basically.
       if (location < 0) then
-        error stop "[Shader] Error: Shader["//shader_name//"] uniform ["//temp_string//"] does not exist in the shader. Got: "//int_to_string(location)//"."
+        error stop "[Shader] Error: Shader["//shader_name//"] uniform ["//temp_string//"] does not exist in the shader. Got: "//i32_to_string(location)//"."
       else
-        print"(A)","[Shader]: Shader ["//shader_name//"] attribute ["//temp_string//"] created at location ["//int_to_string(location)//"]."
+        print"(A)","[Shader]: Shader ["//shader_name//"] attribute ["//temp_string//"] created at location ["//i32_to_string(location)//"]."
         call current_program%attributes%set(key(temp_string), location)
       end if
     end do
@@ -314,9 +314,9 @@ contains
 
       ! If location is -1 that's OpenGL saying it couldn't find it basically.
       if (location < 0) then
-        error stop "[Shader] Error: Shader["//shader_name//"] uniform ["//temp_string//"] does not exist in the shader. Got: "//int_to_string(location)//"."
+        error stop "[Shader] Error: Shader["//shader_name//"] uniform ["//temp_string//"] does not exist in the shader. Got: "//i32_to_string(location)//"."
       else
-        print"(A)","[Shader]: Shader ["//shader_name//"] uniform ["//temp_string//"] created at location ["//int_to_string(location)//"]."
+        print"(A)","[Shader]: Shader ["//shader_name//"] uniform ["//temp_string//"] created at location ["//i32_to_string(location)//"]."
         call current_program%uniforms%set(key(temp_string), location)
       end if
     end do

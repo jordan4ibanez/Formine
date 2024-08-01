@@ -17,7 +17,7 @@ contains
     integer :: i
 
     if (i < 0 .or. i > 255) then
-      error stop "[Terminal] Error: RGB range check failed. Got: ["//int_to_string(i)//"] | Valid range: 0-255."
+      error stop "[Terminal] Error: RGB range check failed. Got: ["//i32_to_string(i)//"] | Valid range: 0-255."
     end if
   end subroutine rgb_check
 
@@ -38,7 +38,7 @@ contains
     call rgb_check(b)
 
     ! Simply concatenate the whole thing together.
-    rgb_string = int_to_string(r)//";"//int_to_string(g)//";"//int_to_string(b)
+    rgb_string = i32_to_string(r)//";"//i32_to_string(g)//";"//i32_to_string(b)
   end function to_rgb_string
 
 
@@ -62,7 +62,7 @@ contains
     ! This might break on REALLY old terminals.
     ! Use semicolons only.
     ! Reference: https://en.wikipedia.org/wiki/ANSI_escape_code#24-bit
-    colorized_text = achar(27)//"[38;2;"//int_to_string(r)//";"//int_to_string(g)//";"//int_to_string(b)//"m"//input_string//achar(27)//"[m"
+    colorized_text = achar(27)//"[38;2;"//i32_to_string(r)//";"//i32_to_string(g)//";"//i32_to_string(b)//"m"//input_string//achar(27)//"[m"
   end function colorize_rgb
 
 
