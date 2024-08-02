@@ -105,9 +105,8 @@ contains
 
     character(c_char), pointer :: input_pointer(:)
     character(:), allocatable :: output_string
-    integer(4) :: i
     ! Start off with the pointer width.
-    integer(4) :: length
+    integer(c_int) :: i, length
 
     ! Now allocate what is needed into the output string.
     allocate(character(len=length) :: output_string)
