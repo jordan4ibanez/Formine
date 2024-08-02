@@ -284,6 +284,7 @@ contains
   !** Get a mesh from the hash table.
   !** The mesh is a clone. To update, set_mesh().
   type(mesh_data) function get_mesh(mesh_name, exists) result(gotten_mesh)
+    use :: terminal
     implicit none
 
     character(len = *), intent(in) :: mesh_name
@@ -296,7 +297,7 @@ contains
     call mesh_database%get_raw(key(mesh_name), generic, stat = status)
 
     if (status /= 0) then
-      ! print"(A)","[Mesh] Error: ["//mesh_name//"] does not exist."
+      print"(A)",colorize_rgb("[Mesh] Error: ["//mesh_name//"] does not exist.", 255, 0, 0)
       return
     end if
 
@@ -305,7 +306,7 @@ contains
       exists = .true.
       gotten_mesh = generic
      class default
-      ! print"(A)","[Mesh] Error: ["//mesh_name//"] has the wrong type."
+      print"(A)",colorize_rgb("[Mesh] Error: ["//mesh_name//"] has the wrong type.", 255, 0, 0)
       return
     end select
   end function get_mesh
