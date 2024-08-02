@@ -170,6 +170,9 @@ contains
     if (gl_is_texture(texture_id)) then
       error stop "[Texture] Error: Attempt to delete texture ["//texture_name//"] has failed. Halting."
     end if
+
+    ! Finally, remove it from the database.
+    call texture_database%unset(key(texture_name))
   end subroutine texture_delete
 
 
