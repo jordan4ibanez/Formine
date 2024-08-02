@@ -134,8 +134,8 @@ contains
     integer :: size
     ! 4 BYTES, aka, 32 bit.
     ! If there is a string bigger than this, we have a problem.
-    integer(4) :: i
-    integer(4) :: input_length
+    integer(c_int) :: i, input_length, length
+
     ! Starts off as 0
     integer(4) :: length = 0
 
