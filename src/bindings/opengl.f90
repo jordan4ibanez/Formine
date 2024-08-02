@@ -154,6 +154,9 @@ module opengl
   public :: gl_depth_mask
   public :: gl_depth_func
   public :: gl_depth_range_f
+  public :: gl_blend_equation
+  public :: gl_blend_func
+  public :: gl_blend_func_separate
 
 
   ! Here I'm binding to the C shared library.
@@ -571,6 +574,31 @@ module opengl
 
       real(c_float), intent(in), value :: near_val, far_val
     end subroutine gl_depth_range_f
+
+
+    subroutine gl_blend_equation(mode) bind(c, name = "glBlendEquation")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: mode
+    end subroutine gl_blend_equation
+
+
+    subroutine gl_blend_func(s_factor, d_factor) bind(c, name = "glBlendFunc")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: s_factor, d_factor
+    end subroutine gl_blend_func
+
+
+    subroutine gl_blend_func_separate(src_rgb, dst_rgb, src_alpha, dst_alpha) bind(c, name = "glBlendFuncSeparate")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: src_rgb, dst_rgb, src_alpha, dst_alpha
+    end subroutine gl_blend_func_separate
+
 
 
   end interface
