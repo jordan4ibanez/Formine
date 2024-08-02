@@ -280,8 +280,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: shader
-      integer(c_int), intent(in), value :: max_length
+      integer(c_int), intent(in), value :: shader, max_length
       integer(c_int), intent(in) :: length
       type(c_ptr), intent(in) :: info_log
     end subroutine internal_gl_get_shader_info_log
@@ -291,8 +290,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: program
-      integer(c_int), intent(in), value :: pname
+      integer(c_int), intent(in), value :: program, pname
       integer(c_int), intent(in) :: params
     end subroutine internal_gl_get_program_iv
 
@@ -383,8 +381,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: target
-      integer(c_int), intent(in), value :: buffer
+      integer(c_int), intent(in), value :: target, buffer
     end subroutine gl_bind_buffer
 
 
