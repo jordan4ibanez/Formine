@@ -42,7 +42,7 @@ contains
     implicit none
 
     type(heap_string), dimension(:), intent(inout), allocatable :: arr
-    integer, intent(in) :: slot
+    integer, intent(in), value :: slot
     character(len = *), intent(in), optional :: data
 
     if (present(data)) then
