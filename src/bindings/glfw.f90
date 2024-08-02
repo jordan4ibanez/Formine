@@ -78,12 +78,9 @@ module glfw
     function internal_glfw_create_window(width, height, title, monitor, share) result(new_window_pointer) bind(c, name = "glfwCreateWindow")
       use, intrinsic :: iso_c_binding
       implicit none
-      integer(c_int), intent(in), value :: width
-      integer(c_int), intent(in), value :: height
+      integer(c_int), intent(in), value :: width, height
       character(kind = c_char), intent(in), optional :: title
-
-      type(c_ptr), intent(in), optional :: monitor
-      type(c_ptr), intent(in), optional :: share
+      type(c_ptr), intent(in), optional :: monitor, share
       type(c_ptr) :: new_window_pointer
     end function internal_glfw_create_window
 
@@ -148,8 +145,7 @@ module glfw
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: hint
-      integer(c_int), intent(in), value :: value
+      integer(c_int), intent(in), value :: hint, value
     end subroutine glfw_window_hint
 
 
@@ -221,7 +217,6 @@ contains
       ! else
       !   print"(A)",error_result
     end if
-
     !! Calling c_free() on c_string will just crash here because this is stack memory.
   end subroutine glfw_get_error
 
@@ -231,8 +226,7 @@ contains
     use :: string
     implicit none
 
-    integer(c_int) :: width
-    integer(c_int) :: height
+    integer(c_int) :: width, height
     character(len = *,kind = c_char) :: title
 
     window_title = into_c_string(title)
