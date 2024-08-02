@@ -95,7 +95,8 @@ contains
   end subroutine texture_create
 
 
-  subroutine texture_create_from_memory(texture_location)
+  !* Upload an array of unsigned bytes. 4 channels per element. RGBA.
+  subroutine texture_create_from_memory(texture_name, raw_data, width, height)
     use :: stb_image
     use :: string
     use :: opengl
@@ -103,23 +104,10 @@ contains
     use, intrinsic :: iso_c_binding
     implicit none
 
-    character(len = *, kind = c_char), intent(in) :: texture_location
-    integer :: x, y, channels, desired_channels
-    character(len = :, kind = c_char), allocatable :: c_file_location
-    integer(1), dimension(:), allocatable :: image_data
+    character(len = *, kind = c_char), intent(in) :: texture_name
+    integer(1), dimension(:), intent(in) :: raw_data
+    integer, intent(in), value :: width, height
     integer(c_int) :: texture_id
-    character(len = :, kind = c_char), allocatable :: file_name
-
-    c_file_location = into_c_string(texture_location)
-
-    ! We always want 4 channels.
-    desired_channels = 4
-
-    image_data = stbi_load(c_file_location, x, y, channels, desired_channels)
-
-    if (x + y + channels == 0) then
-      error stop "[Texture] Error: Could not load texture. It does not exist."
-    end if
 
     ! First we must generate the texture ID.
     texture_id = gl_gen_textures()
@@ -146,16 +134,13 @@ contains
     call gl_pixel_store_i(GL_UNPACK_ALIGNMENT, 1)
 
     ! And now, we upload it.
-    call gl_tex_image_2d(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data)
-
-    ! This is done by the file name, we don't care about the path.
-    file_name = get_file_name_from_string(texture_location)
+    call gl_tex_image_2d(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, raw_data)
 
     ! We ensure that this thing exists.
     if (.not. gl_is_texture(texture_id)) then
-      error stop "[Texture] Error: Failed to create texture ["//texture_location//"]. Does not exist."
+      error stop "[Texture] Error: Failed to create texture ["//texture_name//"]. Does not exist."
     else
-      print"(A)", "[Texture]: Created ["//file_name//"] at ID ["//int_to_string(texture_id)//"]"
+      print"(A)", "[Texture]: Created ["//texture_name//"] at ID ["//int_to_string(texture_id)//"]"
     end if
 
     ! Generate the mipmaps.
@@ -165,10 +150,11 @@ contains
     call gl_bind_texture(GL_TEXTURE_2D, 0)
 
     ! Now we can assign it into the database by the file name.
-    call set_texture(file_name, texture_id)
+    call set_texture(texture_name, texture_id)
   end subroutine texture_create_from_memory
 
 
+  !* Tell OpenGL to use a texture
   subroutine texture_use(texture_name)
     use :: opengl
     use :: terminal
