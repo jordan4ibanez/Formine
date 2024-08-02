@@ -635,9 +635,7 @@ contains
   subroutine gl_clear_color(r,g,b)
     implicit none
 
-    real(c_float) :: r
-    real(c_float) :: g
-    real(c_float) :: b
+    real(c_float), intent(in), value :: r, g, b
 
     call internal_gl_clear_color(r,g,b,1.0)
   end subroutine gl_clear_color
