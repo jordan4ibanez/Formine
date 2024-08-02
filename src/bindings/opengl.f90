@@ -43,6 +43,11 @@ module opengl
   public :: GL_LESS
   public :: GL_CULL_FACE
   public :: GL_DEPTH_BUFFER_BIT
+  public :: GL_BLEND
+  public :: GL_FUNC_ADD
+  public :: GL_SRC_ALPHA
+  public :: GL_ONE_MINUS_SRC_ALPHA
+  public :: GL_ONE
 
   !
 
@@ -88,6 +93,11 @@ module opengl
   integer, parameter :: GL_LESS = int(z"0201")
   integer, parameter :: GL_CULL_FACE = int(z"0B44")
   integer, parameter :: GL_DEPTH_BUFFER_BIT = int(z"00000100")
+  integer, parameter :: GL_BLEND = int(z"0BE2")
+  integer, parameter :: GL_FUNC_ADD = int(z"8006")
+  integer, parameter :: GL_SRC_ALPHA = int(z"0302")
+  integer, parameter :: GL_ONE_MINUS_SRC_ALPHA = int(z"0303")
+  integer, parameter :: GL_ONE = 1
 
 
   ! Functions we want exposed.
@@ -674,7 +684,7 @@ contains
 
   function gl_create_shader(shader_type) result(shader_id)
     implicit none
-    
+
     integer :: shader_type
     integer :: shader_id
 
