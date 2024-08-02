@@ -120,4 +120,24 @@ contains
   end function get_texture
 
 
+  subroutine texture_delete(texture_name)
+    use :: iso_c_binding
+    use :: opengl
+    use :: terminal
+    implicit none
+
+    character(len = *), intent(in) :: texture_name
+    integer(c_int) :: texture_id, status
+
+    call texture_database%get(key(texture_name), texture_id, stat = status)
+
+    if (status /= 0) then
+      print"(A)",colorize_rgb("[Texture]: Texture ["//texture_name//"] does not exist. Cannot delete.", 255, 0, 0)
+      return
+    end if
+
+    call gl_delete_textures(texture_id)
+  end subroutine texture_delete
+
+
 end module texture
