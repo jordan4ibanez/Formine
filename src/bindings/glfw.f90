@@ -302,7 +302,6 @@ contains
       !? We put a period at the end because I think that looks nice.
       print"(A)","[GLFW] Error: ("//error_value_string//") "//error_text//"."
     end if
-
     !! char_pointer is on the stack. Calling c_free() on it will crash the program.
   end subroutine error_callback
 
