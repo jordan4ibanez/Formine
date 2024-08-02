@@ -132,11 +132,21 @@ contains
     call texture_database%get(key(texture_name), texture_id, stat = status)
 
     if (status /= 0) then
-      print"(A)",colorize_rgb("[Texture]: Texture ["//texture_name//"] does not exist. Cannot delete.", 255, 0, 0)
+      print"(A)",colorize_rgb("[Texture] Error: Texture ["//texture_name//"] does not exist. Cannot delete.", 255, 0, 0)
       return
     end if
 
+    ! Make sure we don't accidentally cause a segmentation fault in the C code.
+    call gl_bind_texture(GL_TEXTURE_2D, 0)
+
+    ! Now delete it.
     call gl_delete_textures(texture_id)
+
+    ! And if we have made a severe mistake, stop everything.
+    ! This is a massive memory leak waiting to happen.
+    if (gl_is_texture(texture_id)) then
+      error stop "[Texture] Error: Attempt to delete texture ["//texture_name//"] has failed. Halting."
+    end if
   end subroutine texture_delete
 
 
