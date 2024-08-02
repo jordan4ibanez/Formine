@@ -591,7 +591,6 @@ module opengl
     end subroutine gl_blend_func_separate
 
 
-
   end interface
 
 
