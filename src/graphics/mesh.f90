@@ -341,6 +341,7 @@ contains
   subroutine mesh_delete(mesh_name)
     use :: opengl
     use :: shader
+    use :: terminal
     implicit none
 
     character(len = *), intent(in) :: mesh_name
@@ -354,7 +355,7 @@ contains
     call mesh_database%get_raw(key(mesh_name), generic, stat = status)
 
     if (status /= 0) then
-      print"(A)", "[Mesh]: Mesh ["//mesh_name//"] does not exist. Cannot delete."
+      print"(A)",colorize_rgb("[Mesh]: Mesh ["//mesh_name//"] does not exist. Cannot delete.", 255, 0, 0)
       return
     end if
 
@@ -362,7 +363,7 @@ contains
      type is (mesh_data)
       gotten_mesh = generic
      class default
-      ! print"(A)","[Mesh] Error: ["//mesh_name//"] has the wrong type."
+      print"(A)",colorize_rgb("[Mesh] Error: ["//mesh_name//"] has the wrong type.", 255, 0, 0)
       return
     end select
 
