@@ -267,6 +267,10 @@ contains
     character(len = *), intent(in) :: mesh_name
     type(mesh_data), intent(in) :: new_mesh
 
+    if (mesh_exists(mesh_name)) then
+      error stop "[Mesh] Error: Tried to overwrite mesh ["//mesh_name//"]. Please delete it before setting it."
+    end if
+
     if (debug_mode) then
       print"(A)", "[Mesh]: set mesh ["//mesh_name//"]"
     end if
