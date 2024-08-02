@@ -7,6 +7,9 @@ module texture
 
 
   public :: texture_create
+  public :: texture_use
+  public :: texture_delete
+  public :: texture_exists
 
 
   type(fhash_tbl_t) :: texture_database
@@ -89,6 +92,26 @@ contains
   end subroutine texture_create
 
 
+  subroutine texture_use(texture_name)
+    use :: opengl
+    use :: terminal
+    use, intrinsic :: iso_c_binding
+    implicit none
+
+    character(len = *), intent(in) :: texture_name
+    integer(c_int) :: texture_id, status
+
+    call texture_database%get(key(texture_name), texture_id, stat = status)
+
+    if (status /= 0) then
+      print"(A)", colorize_rgb("[Texture] Error: Texture ["//texture_name//"] does not exist. Cannot use.", 255, 0, 0)
+      return
+    end if
+
+    call gl_bind_texture(GL_TEXTURE_2D, texture_id)
+  end subroutine texture_use
+
+
   subroutine set_texture(texture_name, new_texture)
     use, intrinsic :: iso_c_binding
     implicit none
@@ -150,12 +173,17 @@ contains
   end subroutine texture_delete
 
 
-  subroutine texture_use(texture_name)
-    use :: opengl
-    use :: terminal
+  logical function texture_exists(texture_name) result(existence)
     use, intrinsic :: iso_c_binding
     implicit none
-  end subroutine texture_use
+
+    character(len = *), intent(in) :: texture_name
+    integer(c_int) :: status
+
+    call texture_database%check_key(key(texture_name), stat = status)
+
+    existence = status == 0
+  end function texture_exists
 
 
 end module texture
