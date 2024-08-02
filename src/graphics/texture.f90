@@ -20,16 +20,17 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: texture_location
     integer :: x, y, channels, desired_channels
-    character(len = :, kind = c_char), allocatable :: c_file_name
+    character(len = :, kind = c_char), allocatable :: c_file_location
     integer(1), dimension(:), allocatable :: image_data
     integer(c_int) :: texture_id
+    character(len = :, kind = c_char), allocatable :: file_name
 
-    c_file_name = into_c_string(texture_location)
+    c_file_location = into_c_string(texture_location)
 
     ! We always want 4 channels.
     desired_channels = 4
 
-    image_data = stbi_load(c_file_name, x, y, channels, desired_channels)
+    image_data = stbi_load(c_file_location, x, y, channels, desired_channels)
 
     if (x + y + channels == 0) then
       error stop "[Texture] Error: Could not load texture. It does not exist."
@@ -74,6 +75,10 @@ contains
 
     ! Finally, unbind. Done.
     call gl_bind_texture(GL_TEXTURE_2D, 0)
+
+    ! Now we can assign it into the database.
+    ! This is done by the file name, we don't care about the path.
+    file_name = get_file_name_from_string(texture_location)
   end subroutine texture_create
 
 
