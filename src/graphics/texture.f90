@@ -19,8 +19,8 @@ contains
     use :: stb_image
     use :: string
     use :: opengl
-    use :: iso_c_binding
     use :: terminal
+    use, intrinsic :: iso_c_binding
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_location
@@ -90,7 +90,7 @@ contains
 
 
   subroutine set_texture(texture_name, new_texture)
-    use :: iso_c_binding
+    use, intrinsic :: iso_c_binding
     implicit none
 
     character(len = *), intent(in) :: texture_name
@@ -105,7 +105,7 @@ contains
 
 
   function get_texture(texture_name) result(texture_id)
-    use :: iso_c_binding
+    use, intrinsic :: iso_c_binding
     use :: terminal
     implicit none
 
@@ -121,7 +121,7 @@ contains
 
 
   subroutine texture_delete(texture_name)
-    use :: iso_c_binding
+    use, intrinsic :: iso_c_binding
     use :: opengl
     use :: terminal
     implicit none
@@ -148,6 +148,14 @@ contains
       error stop "[Texture] Error: Attempt to delete texture ["//texture_name//"] has failed. Halting."
     end if
   end subroutine texture_delete
+
+
+  subroutine texture_use(texture_name)
+    use :: opengl
+    use :: terminal
+    use, intrinsic :: iso_c_binding
+    implicit none
+  end subroutine texture_use
 
 
 end module texture
