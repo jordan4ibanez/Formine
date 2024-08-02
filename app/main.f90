@@ -148,6 +148,9 @@ program main
     end do
   end if
 
+
+  call texture_clear_database()
+
   call mesh_clear_database()
 
   call glfw_destroy_window()
