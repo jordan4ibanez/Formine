@@ -137,7 +137,7 @@ contains
     integer(c_int) :: i, input_length, length
 
     ! Starts off as 0
-    integer(4) :: length = 0
+    length = 0
 
     ! We must ensure that we are not converting a null pointer
     ! as this can lead to SERIOUS UB.
