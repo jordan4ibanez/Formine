@@ -2,7 +2,9 @@ module opengl
   use, intrinsic :: iso_c_binding
   implicit none
 
+
   private
+
 
   ! OpenGL constants.
 
@@ -55,7 +57,6 @@ module opengl
   integer, parameter :: GL_TRUE = 1
   integer, parameter :: GL_FALSE = 0
   integer, parameter :: GL_FLOAT = int(z"1406")
-
   integer, parameter :: GL_COLOR_BUFFER_BIT = int(z"00004000")
   integer, parameter :: GL_DEBUG_OUTPUT_SYNCHRONOUS = int(z"8242")
   integer, parameter :: GL_VERTEX_SHADER = int(z"8B31")
@@ -63,12 +64,10 @@ module opengl
   integer, parameter :: GL_COMPILE_STATUS = int(z"8B81")
   integer, parameter :: GL_LINK_STATUS = int(z"8B82")
   integer, parameter :: GL_VALIDATE_STATUS = int(z"8B83")
-
   integer, parameter :: GL_DEBUG_SEVERITY_NOTIFICATION = int(z"826B")
   integer, parameter :: GL_DEBUG_SEVERITY_LOW = int(z"9148")
   integer, parameter :: GL_DEBUG_SEVERITY_MEDIUM = int(z"9147")
   integer, parameter :: GL_DEBUG_SEVERITY_HIGH = int(z"9146")
-
   integer, parameter :: GL_STATIC_DRAW = int(z"88E4")
   integer, parameter :: GL_ARRAY_BUFFER = int(z"8892")
   integer, parameter :: GL_ELEMENT_ARRAY_BUFFER = int(z"8893")
