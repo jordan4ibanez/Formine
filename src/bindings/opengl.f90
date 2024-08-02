@@ -647,16 +647,10 @@ contains
     use :: terminal
     implicit none
 
-    integer, intent(in), value :: source
-    integer, intent(in), value :: type
-    integer, intent(in), value :: id
-    integer, intent(in), value :: severity
-    integer, intent(in), value :: length
-    type(c_ptr), intent(in), value :: message_pointer
-    type(c_ptr), intent(in), value :: user_param_pointer
+    integer, intent(in), value :: source, type, id, severity, length
+    type(c_ptr), intent(in), value :: message_pointer, user_param_pointer
     character(:), allocatable :: fortran_message
-    character(len = :),allocatable :: text_color
-    character(len = :),allocatable :: severity_text
+    character(len = :), allocatable :: text_color, severity_text
 
     ! Shut the compiler up.
     if (.false.) then
