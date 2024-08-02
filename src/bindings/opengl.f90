@@ -914,14 +914,11 @@ contains
     use, intrinsic :: iso_c_binding
     implicit none
 
-    integer, intent(in), value :: index
-    integer, intent(in), value :: size
-    integer, intent(in), value :: type
+    integer, intent(in), value :: index, size, type, stride
     logical, intent(in), value :: normalized
-    integer, intent(in), value :: stride
     logical(c_bool) :: final_normalized
 
-    ! Convert
+    ! Convert.
     final_normalized = normalized
 
     call internal_gl_vertex_attrib_pointer(index, size, type, final_normalized, stride, null())
@@ -931,9 +928,7 @@ contains
   subroutine gl_draw_elements(mode, count, type)
     implicit none
 
-    integer, intent(in), value :: mode
-    integer, intent(in), value :: count
-    integer, intent(in), value :: type
+    integer, intent(in), value :: mode, count, type
 
     call internal_gl_draw_elements(mode, count, type, null())
   end subroutine gl_draw_elements
