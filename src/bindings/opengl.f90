@@ -704,8 +704,7 @@ contains
   function gl_create_shader(shader_type) result(shader_id)
     implicit none
 
-    integer :: shader_type
-    integer :: shader_id
+    integer :: shader_type, shader_id
 
     shader_id = internal_gl_create_shader(shader_type)
   end function gl_create_shader
@@ -731,13 +730,12 @@ contains
   end subroutine gl_shader_source
 
 
-  subroutine gl_get_version
+  subroutine gl_get_version()
     use, intrinsic :: iso_c_binding
     use :: string
     implicit none
 
-    integer(c_int) :: major
-    integer(c_int) :: minor
+    integer(c_int) :: major, minor
 
     ! We're passing a pointer right into C to mutate it.
     call gl_get_integer_v(GL_MAJOR_VERSION, major)
@@ -748,11 +746,10 @@ contains
 
 
   !? This is to be used before attempting to call gl_get_error as OpenGL will always start off at error 1280.
-  subroutine gl_clear_error_data
+  subroutine gl_clear_error_data()
     implicit none
 
-    integer :: i = 0
-    integer :: error
+    integer :: i, error
 
     do i = 1,3
       error = gl_get_error()
@@ -767,7 +764,7 @@ contains
 
     integer :: shader
     ! integer :: max_length
-    integer :: length = -1
+    integer :: length
     ! character(:), allocatable :: info_log
     type(c_ptr) :: c_string
 
@@ -868,8 +865,7 @@ contains
     implicit none
 
     real(kind = c_float), dimension(:), target :: float_array
-    integer(c_int) :: total_size
-    integer(c_int) :: length_of_array
+    integer(c_int) :: total_size, length_of_array
 
     length_of_array = size(float_array)
     total_size = F32_SIZE * length_of_array
@@ -887,8 +883,7 @@ contains
     implicit none
 
     type(vec3f), dimension(:), target :: vec3f_array
-    integer(c_int) :: total_size
-    integer(c_int) :: length_of_array
+    integer(c_int) :: total_size, length_of_array
 
     length_of_array = size(vec3f_array)
     total_size = F32_SIZE * length_of_array * 3
@@ -905,8 +900,7 @@ contains
     implicit none
 
     integer(kind = c_int), dimension(:), target :: indices_array
-    integer(c_int) :: total_size
-    integer(c_int) :: length_of_array
+    integer(c_int) :: total_size, length_of_array
 
     length_of_array = size(indices_array)
     total_size = I32_SIZE * length_of_array
