@@ -73,8 +73,7 @@ contains
     call gl_generate_mipmap(GL_TEXTURE_2D)
 
     ! Finally, unbind. Done.
-    ! call gl_bind_texture(GL_TEXTURE_2D, 0)
-    print"(A)",colorize_rgb("[Texture]: Remember to unbind!", 229, 255, 122)
+    call gl_bind_texture(GL_TEXTURE_2D, 0)
   end subroutine texture_create
 
 
