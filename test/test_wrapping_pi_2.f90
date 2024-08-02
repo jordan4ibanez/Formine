@@ -12,11 +12,11 @@ contains
 
     unit = PI_F64 * 3d0
 
-    print"(f0.15)", unit
+    ! print"(f0.15)", unit
 
     unit = mod(unit, PI_TIMES_2_F64)
 
-    print"(f0.15)", unit - PI_F64
+    ! print"(f0.15)", unit - PI_F64
 
   end subroutine begin_test
 
