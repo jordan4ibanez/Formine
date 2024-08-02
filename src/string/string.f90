@@ -128,7 +128,7 @@ contains
     ! On the C side. The view is great.
     type(c_ptr), intent(in), value :: c_string
     ! On the Fortran side.
-    character(c_char), pointer :: fortran_raw_string(:)
+    character(c_char), dimension(:), pointer :: fortran_raw_string
     character(:), allocatable :: fortran_string
 
     integer :: size
