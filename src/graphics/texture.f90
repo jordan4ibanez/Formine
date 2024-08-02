@@ -1,4 +1,5 @@
 module texture
+  use :: fhash, only: fhash_tbl_t, key => fhash_key
   implicit none
 
 
@@ -6,6 +7,10 @@ module texture
 
 
   public :: texture_create
+
+
+  type(fhash_tbl_t) :: texture_database
+  logical :: debug_mode = .true.
 
 
 contains
@@ -79,9 +84,40 @@ contains
     ! Finally, unbind. Done.
     call gl_bind_texture(GL_TEXTURE_2D, 0)
 
-    ! Now we can assign it into the database.
-    ! todo: the thing
+    ! Now we can assign it into the database by the file name.
+    call set_texture(file_name, texture_id)
   end subroutine texture_create
+
+
+  subroutine set_texture(texture_name, new_texture)
+    use :: iso_c_binding
+    implicit none
+
+    character(len = *), intent(in) :: texture_name
+    integer(c_int), intent(in) :: new_texture
+
+    if (debug_mode) then
+      print"(A)", "[Texture]: set texture ["//texture_name//"]"
+    end if
+
+    call texture_database%set(key(texture_name), new_texture)
+  end subroutine set_texture
+
+
+  function get_texture(texture_name) result(texture_id)
+    use :: iso_c_binding
+    use :: terminal
+    implicit none
+
+    character(len = *), intent(in) :: texture_name
+    integer(c_int) :: texture_id, status
+
+    call texture_database%get(key(texture_name), texture_id, stat = status)
+
+    if (status /= 0) then
+      print"(A)",colorize_rgb("[Texture] Error: ["//texture_name//"] does not exist.", 255, 0, 0)
+    end if
+  end function get_texture
 
 
 end module texture
