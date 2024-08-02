@@ -13,10 +13,6 @@ program main
   implicit none
 
   real(c_float) :: rotation
-  real(c_float) :: background_brightness
-  logical :: up
-
-  up = .true.
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
@@ -53,7 +49,7 @@ program main
 
   call gl_get_version()
 
-  call glfw_swap_interval(0)
+  call glfw_swap_interval(1)
 
   !! This allows OpenGL debugging.
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
@@ -65,7 +61,7 @@ program main
   call gl_depth_func(GL_LESS)
 
   !! This enables backface culling.
-  ! call gl_enable(GL_CULL_FACE)
+  call gl_enable(GL_CULL_FACE)
 
   !! This synchronizes the camera's depth matrix with OpenGL.
   call gl_depth_range_f(camera_get_z_near(), camera_get_z_far())
@@ -125,23 +121,9 @@ program main
 
       call delta_tick()
 
-      rotation = rotation + get_delta_f32() * 10.0
+      rotation = rotation + get_delta_f32() * 7.0
 
-      if (up) then
-        background_brightness = background_brightness + get_delta_f32()
-        if (background_brightness >= 1.0) then
-          background_brightness = 1.0
-          up = .false.
-        end if
-      else
-        background_brightness = background_brightness - get_delta_f32()
-        if (background_brightness <= 0.0) then
-          background_brightness = 0.0
-          up = .true.
-        end if
-      end if
-
-      call gl_clear_color_scalar(background_brightness)
+      call gl_clear_color_scalar(1.0)
 
       call camera_update()
 
@@ -149,12 +131,7 @@ program main
 
       !? DRAW TEST ?!
 
-      call camera_set_object_matrix_f32(-0.5, 0.0, -1.0, 0.0, -rotation, 0.0, 1.0, 1.0, 1.0)
-
-      call mesh_draw("debug")
-
-
-      call camera_set_object_matrix_f32(0.5, 0.0, -1.0, 0.0, rotation, 0.0, 1.0, 1.0, 1.0)
+      call camera_set_object_matrix_f32(0.0, 0.0, -1.0, 0.0, rotation, 0.0, 1.0, 1.0, 1.0)
 
       call mesh_draw("debug")
 
