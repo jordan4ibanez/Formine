@@ -109,7 +109,7 @@ contains
     integer(c_int) :: i, length
 
     ! Now allocate what is needed into the output string.
-    allocate(character(len=length) :: output_string)
+    allocate(character(len = length) :: output_string)
 
     ! Now copy over each character.
     ! print"(A)",length
