@@ -13,7 +13,7 @@ contains
 
     output = int(input, kind = 1)
 
-    print*,output
+    ! print*,output
 
   end subroutine test_it
 
