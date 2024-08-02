@@ -85,8 +85,6 @@ program main
 
   call shader_create_uniform_locations("main", heap_string_array("camera_matrix","object_matrix"))
 
-  call shader_start("main")
-
 
   call texture_create("./textures/fortran_logo_512x512.png")
 
@@ -125,9 +123,13 @@ program main
 
       call gl_clear_color_scalar(1.0)
 
+      ! Shader needs to start before the camera is updated.
+      call shader_start("main")
+
       call camera_update()
 
       call gl_clear_color_and_depth_buffer()
+
 
 
       !? DRAW TEST ?!
