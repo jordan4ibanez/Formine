@@ -165,6 +165,7 @@ module opengl
     subroutine internal_gl_clear(thing_to_clear) bind(c, name = "glClear")
       use, intrinsic :: iso_c_binding
       implicit none
+
       integer(c_int), intent(in), value :: thing_to_clear
     end subroutine internal_gl_clear
 
@@ -172,6 +173,7 @@ module opengl
     subroutine internal_gl_clear_color(r,g,b,a) bind(c, name = "glClearColor")
       use, intrinsic :: iso_c_binding
       implicit none
+
       real(c_float), intent(in), value :: r
       real(c_float), intent(in), value :: g
       real(c_float), intent(in), value :: b
@@ -182,6 +184,7 @@ module opengl
     subroutine gl_enable(cap) bind(c, name = "glEnable")
       use, intrinsic :: iso_c_binding
       implicit none
+
       integer(c_int), intent(in), value :: cap
     end subroutine gl_enable
 
