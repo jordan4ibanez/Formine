@@ -2,17 +2,26 @@ module glfw
   use, intrinsic :: iso_c_binding
   implicit none
 
+
   private
 
-  ! Module fields.
 
   ! C side.
+
+
   type(c_ptr) :: c_window_pointer
 
+
   ! Fortran side.
+
+
   character(len = :), allocatable :: window_title
   integer(c_int) :: window_width
   integer(c_int) :: window_height
+
+
+  ! Constants.
+
 
   public :: GLFW_CONTEXT_DEBUG
   public :: GLFW_OPENGL_DEBUG_CONTEXT
@@ -26,7 +35,9 @@ module glfw
   integer, parameter :: GLFW_CONTEXT_VERSION_MINOR = int(z"00022003")
   integer, parameter :: GLFW_OPENGL_FORWARD_COMPAT = int(z"00022006")
 
+
   ! What we want exposed.
+
 
   public :: glfw_init
   public :: glfw_terminate
@@ -43,7 +54,10 @@ module glfw
   public :: glfw_get_aspect_ratio
   public :: glfw_swap_interval
 
+
   ! Here I'm binding to the C glfw shared library.
+
+
   interface
 
 
