@@ -254,6 +254,7 @@ module opengl
     subroutine gl_link_program(program) bind(c, name = "glLinkProgram")
       use, intrinsic :: iso_c_binding
       implicit none
+
       integer(c_int), intent(in), value :: program
     end subroutine gl_link_program
 
@@ -261,6 +262,7 @@ module opengl
     function gl_get_error() result(error_code) bind(c, name = "glGetError")
       use, intrinsic :: iso_c_binding
       implicit none
+
       integer(c_int) :: error_code
     end function gl_get_error
 
@@ -269,8 +271,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: shader
-      integer(c_int), intent(in), value :: pname
+      integer(c_int), intent(in), value :: shader, pname
       integer(c_int), intent(in) :: params
     end subroutine internal_gl_get_shader_iv
 
