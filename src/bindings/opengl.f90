@@ -424,9 +424,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: mode
-      integer(c_int), intent(in), value :: count
-      integer(c_int), intent(in), value :: type
+      integer(c_int), intent(in), value :: mode, count, type
       type(c_ptr), intent(in), optional :: indices
     end subroutine internal_gl_draw_elements
 
@@ -435,8 +433,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: location
-      integer(c_int), intent(in), value :: count
+      integer(c_int), intent(in), value :: location, count
       logical(c_bool), intent(in), value :: transpose
       type(c_ptr), intent(in), value :: value
     end subroutine internal_gl_uniform_matrix_4_fv
@@ -446,10 +443,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: x
-      integer(c_int), intent(in), value :: y
-      integer(c_int), intent(in), value :: width
-      integer(c_int), intent(in), value :: height
+      integer(c_int), intent(in), value :: x, y, width, height
     end subroutine gl_view_port
 
 
