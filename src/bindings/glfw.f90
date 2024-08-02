@@ -284,8 +284,8 @@ contains
   end subroutine glfw_destroy_window
 
 
-  !** NOTE: C is passing Fortran data here!
-  !** NOTE: This function passed into C as a pointer!
+  !* NOTE: C is passing Fortran data here!
+  !* NOTE: This function passed into C as a pointer!
   subroutine error_callback(i, char_pointer)
     use, intrinsic :: iso_c_binding
     use :: string

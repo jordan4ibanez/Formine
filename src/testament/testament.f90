@@ -1,4 +1,4 @@
-!** Testament is a simple testing library I slapped together.
+!* Testament is a simple testing library I slapped together.
 !? Who's going to write the unit test for the unit test library?
 module testament
   implicit none

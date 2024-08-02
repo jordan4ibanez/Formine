@@ -1,4 +1,4 @@
-!** This module kind of works like a state machine.
+!* This module kind of works like a state machine.
 module mesh
   use :: string
   use :: vector_3f
@@ -260,7 +260,7 @@ contains
   end function upload_indices
 
 
-  !** Set or update a shader in the database.
+  !* Set or update a shader in the database.
   subroutine set_mesh(mesh_name, new_mesh)
     implicit none
 
@@ -281,8 +281,8 @@ contains
   end subroutine set_mesh
 
 
-  !** Get a mesh from the hash table.
-  !** The mesh is a clone. To update, set_mesh().
+  !* Get a mesh from the hash table.
+  !* The mesh is a clone. To update, set_mesh().
   type(mesh_data) function get_mesh(mesh_name, exists) result(gotten_mesh)
     use :: terminal
     implicit none

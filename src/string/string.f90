@@ -21,7 +21,7 @@ module string
 contains
 
 
-  !** Convert an optional variable length string into an integral representation of a boolean.
+  !* Convert an optional variable length string into an integral representation of a boolean.
   !? Exi stands for exists.
   integer function exi(input) result(integer_representation)
     implicit none
@@ -36,7 +36,7 @@ contains
   end function exi
 
 
-  !** Helper function for heap_string_array
+  !* Helper function for heap_string_array
   ! Basically a HUGE chain of if then statements simplified into call.
   subroutine assign_heap_array(arr, slot, data)
     implicit none
@@ -50,8 +50,8 @@ contains
     end if
   end subroutine assign_heap_array
 
-  !** Create an array of dynamically sized strings.
-  !** Can take upto 26 elements cause I ran out of letters.
+  !* Create an array of dynamically sized strings.
+  !* Can take upto 26 elements cause I ran out of letters.
   ! This is a substitute for not having varargs.
   function heap_string_array(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(heap_array)
     implicit none
@@ -120,7 +120,7 @@ contains
 
 
   ! Use this to convert C strings stored in a (character, pointer) into Fortran strings.
-  !** This is allocatable, remember to deallocate.
+  !* This is allocatable, remember to deallocate.
   function string_from_c(c_string, size) result(fortran_string)
     use, intrinsic :: iso_c_binding
     implicit none
@@ -178,7 +178,7 @@ contains
 
 
   ! Convert a regular Fortran string into a null terminated C string.
-  !** Allocated, remember to deallocate!
+  !* Allocated, remember to deallocate!
   function into_c_string(input) result(output)
     implicit none
 
@@ -192,7 +192,7 @@ contains
 
 
   ! Convert an integer into an allocated string.
-  !** Allocatable will deallocate once the memory goes out of scope.
+  !* Allocatable will deallocate once the memory goes out of scope.
   function int_to_string(i) result(output)
     implicit none
 
@@ -215,7 +215,7 @@ contains
 
 
   ! Convert an integer into an allocated string.
-  !** Allocatable will deallocate once the memory goes out of scope.
+  !* Allocatable will deallocate once the memory goes out of scope.
   function long_to_string(i) result(output)
     implicit none
 
@@ -239,7 +239,7 @@ contains
 
 
   ! Convert a logical into an allocated string.
-  !** Allocatable will deallocate once the memory goes out of scope.
+  !* Allocatable will deallocate once the memory goes out of scope.
   function bool_to_string(bool) result(output)
     implicit none
 

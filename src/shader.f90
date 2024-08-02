@@ -17,7 +17,7 @@ module shader
   type(fhash_tbl_t) :: shader_database
 
 
-  !** A shader object. This holds all required shader components to run a shader.
+  !* A shader object. This holds all required shader components to run a shader.
   type shader_program
     character(len=:), allocatable :: shader_name
     integer :: program_id
@@ -35,7 +35,7 @@ module shader
 contains
 
 
-  !** This is a simple way to check if a shader is null. (0)
+  !* This is a simple way to check if a shader is null. (0)
   !? Makes the code easier to read.
   !? This also is making it so the program that uses it can return the success and work logic on it at the same time.
   logical function creation_succeeded(input) result(success)
@@ -50,7 +50,7 @@ contains
   end function creation_succeeded
 
 
-  !** This is a simple variation of shader_creation_succeeded with gl_check_error as our helper.
+  !* This is a simple variation of shader_creation_succeeded with gl_check_error as our helper.
   !? Same docs as in shader_creation_success minus the input.
   logical function shader_compilation_succeeded(shader_id) result(success)
     use :: opengl
@@ -63,7 +63,7 @@ contains
   end function shader_compilation_succeeded
 
 
-  !** Create a named shader program from vertex and fragment code locations
+  !* Create a named shader program from vertex and fragment code locations
   !? Will return false if it fails, true if it succeeds.
   subroutine shader_create(name, vertex_code_location, fragment_code_location)
     use :: opengl
@@ -153,7 +153,7 @@ contains
   end subroutine shader_create
 
 
-  !** Set or update a shader in the database.
+  !* Set or update a shader in the database.
   subroutine set_shader(shader_name, shader)
     implicit none
 
@@ -164,8 +164,8 @@ contains
   end subroutine set_shader
 
 
-  !** Get a shader from the hash table.
-  !** The shader is a clone. To update, set_shader().
+  !* Get a shader from the hash table.
+  !* The shader is a clone. To update, set_shader().
   type(shader_program) function get_shader(shader_name, exists) result(gotten_program)
     implicit none
 
@@ -194,7 +194,7 @@ contains
   end function get_shader
 
 
-  !** Check if a shader exists in the database.
+  !* Check if a shader exists in the database.
   logical function shader_exists(shader_name) result(exists)
     use :: string
     implicit none
@@ -207,7 +207,7 @@ contains
   end function shader_exists
 
 
-  !** Create the database of attribute locations, inside the shader program.
+  !* Create the database of attribute locations, inside the shader program.
   subroutine shader_create_attribute_locations(shader_name, attribute_array)
     use :: opengl
     use :: string
@@ -253,7 +253,7 @@ contains
   end subroutine shader_create_attribute_locations
 
 
-  !** Get the integral position of a shader attribute.
+  !* Get the integral position of a shader attribute.
   integer function shader_get_attribute(shader_name, attribute_name) result(location)
     implicit none
 
@@ -280,7 +280,7 @@ contains
   end function shader_get_attribute
 
 
-  !** Create the database of uniform locations, inside the shader program.
+  !* Create the database of uniform locations, inside the shader program.
   subroutine shader_create_uniform_locations(shader_name, uniform_array)
     use :: opengl
     use :: string
@@ -326,7 +326,7 @@ contains
   end subroutine shader_create_uniform_locations
 
 
-  !** Get the integral position of a shader uniform.
+  !* Get the integral position of a shader uniform.
   integer function shader_get_uniform(shader_name, uniform_name) result(location)
     implicit none
 
@@ -353,7 +353,7 @@ contains
   end function shader_get_uniform
 
 
-  !** Start up a shader program.
+  !* Start up a shader program.
   subroutine shader_start(shader_name)
     use :: opengl
     implicit none

@@ -640,8 +640,8 @@ contains
   end subroutine gl_clear_color_scalar
 
 
-  !** NOTE: C is passing Fortran data here!
-  !** NOTE: This function passed into C as a pointer!
+  !* NOTE: C is passing Fortran data here!
+  !* NOTE: This function passed into C as a pointer!
   subroutine debug_message_callback(source, type, id, severity, length, message_pointer, user_param_pointer)
     use, intrinsic :: iso_c_binding
     use :: string
@@ -820,16 +820,16 @@ contains
   end function gl_get_attrib_location
 
 
-  !** Special note: I only use 1 at a time. So we're only going to use one at a time.
-  !** This is written "wrong" on purpose.
+  !* Special note: I only use 1 at a time. So we're only going to use one at a time.
+  !* This is written "wrong" on purpose.
   integer function gl_gen_vertex_arrays() result(location)
     implicit none
 
     call internal_gl_gen_vertex_arrays(1, location)
   end function gl_gen_vertex_arrays
 
-  !** Special note: I only use 1 at a time. So we're only going to use one at a time.
-  !** This is written "wrong" on purpose.
+  !* Special note: I only use 1 at a time. So we're only going to use one at a time.
+  !* This is written "wrong" on purpose.
   subroutine gl_delete_vertex_arrays(location)
     implicit none
 
@@ -839,8 +839,8 @@ contains
   end subroutine gl_delete_vertex_arrays
 
 
-  !** Special note: I only use 1 at a time. So we're only going to use one at a time.
-  !** This is written "wrong" on purpose.
+  !* Special note: I only use 1 at a time. So we're only going to use one at a time.
+  !* This is written "wrong" on purpose.
   integer function gl_gen_buffers() result(location)
     implicit none
 
@@ -848,8 +848,8 @@ contains
   end function gl_gen_buffers
 
 
-  !** Special note: I only use 1 at a time. So we're only going to use one at a time.
-  !** This is written "wrong" on purpose.
+  !* Special note: I only use 1 at a time. So we're only going to use one at a time.
+  !* This is written "wrong" on purpose.
   subroutine gl_delete_buffers(location)
     implicit none
 
@@ -859,7 +859,7 @@ contains
   end subroutine gl_delete_buffers
 
 
-  !** This is a custom command to allow gl_buffer_data to use specific types.
+  !* This is a custom command to allow gl_buffer_data to use specific types.
   subroutine gl_buffer_float_array(float_array)
     use :: constants
     use, intrinsic :: iso_c_binding
@@ -876,7 +876,7 @@ contains
   end subroutine gl_buffer_float_array
 
 
-  !** This is a custom command to allow gl_buffer_data to use specific types.
+  !* This is a custom command to allow gl_buffer_data to use specific types.
   subroutine gl_buffer_vec3f_array(vec3f_array)
     use, intrinsic :: iso_c_binding
     use :: constants
@@ -894,7 +894,7 @@ contains
   end subroutine gl_buffer_vec3f_array
 
 
-  !** This is a custom command to allow gl_buffer_data to use specific types.
+  !* This is a custom command to allow gl_buffer_data to use specific types.
   subroutine gl_buffer_indices_array(indices_array)
     use :: constants
     use, intrinsic :: iso_c_binding
@@ -949,8 +949,8 @@ contains
   end subroutine gl_uniform_mat4f
 
 
-  !** Special note: I only use 1 at a time. So we're only going to use one at a time.
-  !** This is written "wrong" on purpose.
+  !* Special note: I only use 1 at a time. So we're only going to use one at a time.
+  !* This is written "wrong" on purpose.
   integer function gl_gen_textures() result(location)
     implicit none
 
@@ -958,7 +958,7 @@ contains
   end function gl_gen_textures
 
 
-  !** This is so you can buffer texture data without jumping through hoops.
+  !* This is so you can buffer texture data without jumping through hoops.
   subroutine gl_tex_image_2d(target, level, internal_format, width, height, border, format, type, data)
     use, intrinsic :: iso_c_binding
     implicit none
@@ -973,8 +973,8 @@ contains
   end subroutine gl_tex_image_2d
 
 
-  !** Special note: I only use 1 at a time. So we're only going to use one at a time.
-  !** This is written "wrong" on purpose.
+  !* Special note: I only use 1 at a time. So we're only going to use one at a time.
+  !* This is written "wrong" on purpose.
   subroutine gl_delete_textures(location)
     use, intrinsic :: iso_c_binding
     implicit none

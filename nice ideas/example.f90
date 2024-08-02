@@ -30,7 +30,7 @@ module orient_class
 
   contains
 
-    !** All these are public.
+    !* All these are public.
     ! Subroutine overload. Can assign from type(orientation) or integer.
     generic :: assignment(=) => assign_orientation,assign_integer
     procedure :: assign_orientation

@@ -8,7 +8,7 @@ module h_string
   public :: heap_string
 
 
-  !** A heap string is a string on the heap. Amazing, I know.
+  !* A heap string is a string on the heap. Amazing, I know.
   type heap_string
     private
     character(len = :), allocatable :: data
@@ -47,7 +47,7 @@ module h_string
   end type heap_string
 
 
-  !** heap_string constructor.
+  !* heap_string constructor.
   interface heap_string
     module procedure :: constructor
   end interface heap_string
@@ -56,7 +56,7 @@ module h_string
 contains
 
 
-  !** heap_string constructor.
+  !* heap_string constructor.
   function constructor(optional_string) result(new_str)
     implicit none
 
@@ -69,7 +69,7 @@ contains
   end function constructor
 
 
-  !** Very simple assignment operator.
+  !* Very simple assignment operator.
   subroutine assign(this, new_data)
     implicit none
 
@@ -80,7 +80,7 @@ contains
   end subroutine assign
 
 
-  !** Equality check with another heap string.
+  !* Equality check with another heap string.
   logical function equal_heap_string(this, other) result(res)
     implicit none
 
@@ -91,7 +91,7 @@ contains
   end function equal_heap_string
 
 
-  !** Equality check with a raw string.
+  !* Equality check with a raw string.
   logical function equal_raw_string(this, other) result(res)
     implicit none
 
@@ -102,7 +102,7 @@ contains
   end function equal_raw_string
 
 
-  !** Simply allows you to use a heap string like a regular string.
+  !* Simply allows you to use a heap string like a regular string.
   subroutine write_formatted(this, unit, iotype, v_list, iostat, iomsg)
     implicit none
 
@@ -122,7 +122,7 @@ contains
 
 
 
-  !** Very simple check to see if the internal data is allocated.
+  !* Very simple check to see if the internal data is allocated.
   logical function is_allocated(this) result(res)
     implicit none
 
@@ -132,7 +132,7 @@ contains
   end function is_allocated
 
 
-  !** Get the internal data of the heap string.
+  !* Get the internal data of the heap string.
   !? Aka, what it is pointing to on the heap basically.
   function get(this) result(data)
     implicit none
@@ -144,7 +144,7 @@ contains
   end function get
 
 
-  !** Append another string onto this string.
+  !* Append another string onto this string.
   subroutine append(this, other)
     implicit none
 
@@ -156,7 +156,7 @@ contains
   end subroutine append
 
 
-  !** Prepend another string onto this string.
+  !* Prepend another string onto this string.
   subroutine prepend(this, other)
     implicit none
 
@@ -168,7 +168,7 @@ contains
   end subroutine prepend
 
 
-  !** Strip leading and trailing white space off a string.
+  !* Strip leading and trailing white space off a string.
   subroutine strip(this)
     implicit none
 
@@ -178,7 +178,7 @@ contains
   end subroutine strip
 
 
-  !** Cut a substring out of a string.
+  !* Cut a substring out of a string.
   subroutine cut(this, substring)
     implicit none
 
@@ -220,7 +220,7 @@ contains
   end subroutine cut
 
 
-  !** Cut a substring out of a string.
+  !* Cut a substring out of a string.
   subroutine cut_last(this, substring)
     implicit none
 
@@ -262,7 +262,7 @@ contains
   end subroutine cut_last
 
 
-  !** Cut all instances of a substring out of a string.
+  !* Cut all instances of a substring out of a string.
   subroutine cut_all(this, substring)
     implicit none
 
@@ -292,7 +292,7 @@ contains
   end subroutine cut_all
 
 
-  !** Check if a string contains a substring.
+  !* Check if a string contains a substring.
   logical function contains(this, substring) result(does_contain)
     implicit none
 

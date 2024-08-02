@@ -1,4 +1,4 @@
-!** To keep file io synchronous, only use this library to work with files.
+!* To keep file io synchronous, only use this library to work with files.
 module files
   implicit none
 
@@ -9,7 +9,7 @@ module files
   public :: file_reader
 
 
-  !** This is your basic (file -> allocated string) reader. I think it's pretty neat. :)
+  !* This is your basic (file -> allocated string) reader. I think it's pretty neat. :)
   type :: file_reader
 
     logical :: exists
@@ -25,7 +25,7 @@ module files
 contains
 
 
-  !** Open a file, read it into a string, close the file, return the string.
+  !* Open a file, read it into a string, close the file, return the string.
   !! result%file_string is allocated, remember to call deallocate!
   subroutine file_reader_read_file(this, file_location)
     implicit none
