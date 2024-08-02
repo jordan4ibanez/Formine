@@ -13,6 +13,7 @@ module string
   public :: into_c_string
   public :: bool_to_string
   public :: heap_string_array
+  public :: get_file_name_from_string
   !? Pass through the type.
   public :: heap_string
 
@@ -257,5 +258,37 @@ contains
     output = trim(adjustl(output))
   end function bool_to_string
 
+
+  !* Get a file name string from a string that is a path.
+  function get_file_name_from_string(input_string) result(resulting_name_of_file)
+    use, intrinsic :: iso_c_binding, only: c_char
+    implicit none
+
+    character(len = *), intent(in) :: input_string
+    character(len = :, kind = c_char), allocatable :: resulting_name_of_file
+    integer :: i
+    integer :: length_of_string
+
+    i = index(input_string, "/", back = .true.)
+
+    ! This probably isn't a path.
+    if (i == 0) then
+      print"(A)", achar(27)//"[38;2;255;128;0m[String] Warning: Could not extract file name from directory."//achar(27)//"[m"
+      resulting_name_of_file = ""
+      return
+    end if
+
+    length_of_string = len(input_string)
+
+    ! This is a folder.
+    if (i == length_of_string) then
+      print"(A)", achar(27)//"[38;2;255;128;0m[String] Warning: Tried to get file name of folder."//achar(27)//"[m"
+      resulting_name_of_file = ""
+      return
+    end if
+
+    ! So this is a file. Let's now get it
+    resulting_name_of_file = input_string(i + 1:length_of_string)
+  end function get_file_name_from_string
 
 end module string
