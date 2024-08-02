@@ -389,10 +389,8 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: target
-      integer(c_int), intent(in), value :: size
+      integer(c_int), intent(in), value :: target, size, usage
       type(c_ptr), intent(in), value :: data
-      integer(c_int), intent(in), value :: usage
     end subroutine internal_gl_buffer_data
 
 
@@ -416,11 +414,8 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: index
-      integer(c_int), intent(in), value :: size
-      integer(c_int), intent(in), value :: type
+      integer(c_int), intent(in), value :: index, size, type, stride
       logical(c_bool), intent(in), value :: normalized
-      integer(c_int), intent(in), value :: stride
       type(c_ptr), intent(in), optional :: pointer
     end subroutine internal_gl_vertex_attrib_pointer
 
