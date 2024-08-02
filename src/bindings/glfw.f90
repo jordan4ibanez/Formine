@@ -50,12 +50,14 @@ module glfw
     logical(c_bool) function internal_glfw_init() result(success) bind(c, name="glfwInit")
       use, intrinsic :: iso_c_binding
       implicit none
+
     end function internal_glfw_init
 
 
     subroutine internal_glfw_terminate() bind(c, name="glfwTerminate")
       use, intrinsic :: iso_c_binding
       implicit none
+
     end subroutine internal_glfw_terminate
 
 
