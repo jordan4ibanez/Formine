@@ -538,8 +538,9 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
+      integer(c_int), intent(in), value :: n
       !! This part is written wrong on purpose. I only want 1 not multiple.
-      integer(c_int), intent(in), value :: n, textures
+      integer(c_int), intent(in) :: textures
     end subroutine internal_gl_delete_textures
 
 
