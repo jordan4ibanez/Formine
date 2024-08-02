@@ -63,11 +63,14 @@ contains
     ! And now, we upload it.
     call gl_tex_image_2d(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data)
 
+    ! This is done by the file name, we don't care about the path.
+    file_name = get_file_name_from_string(texture_location)
+
     ! We ensure that this thing exists.
     if (.not. gl_is_texture(texture_id)) then
       error stop "[Texture] Error: Failed to create texture ["//texture_location//"]. Does not exist."
     else
-      print"(A)", "[Texture]: Created ["//texture_location//"] at ID ["//int_to_string(texture_id)//"]"
+      print"(A)", "[Texture]: Created ["//file_name//"] at ID ["//int_to_string(texture_id)//"]"
     end if
 
     ! Generate the mipmaps.
@@ -77,11 +80,8 @@ contains
     call gl_bind_texture(GL_TEXTURE_2D, 0)
 
     ! Now we can assign it into the database.
-    ! This is done by the file name, we don't care about the path.
-    file_name = get_file_name_from_string(texture_location)
+    ! todo: the thing
   end subroutine texture_create
-
-
 
 
 end module texture
