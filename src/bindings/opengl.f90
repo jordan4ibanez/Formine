@@ -107,6 +107,7 @@ module opengl
   public :: gl_clear_color_and_depth_buffer
   public :: gl_enable
   public :: gl_clear_color
+  public :: gl_clear_color_scalar
   public :: gl_set_debug_message_callback
   public :: gl_create_program
   public :: gl_create_shader
@@ -640,6 +641,15 @@ contains
 
     call internal_gl_clear_color(r,g,b,1.0)
   end subroutine gl_clear_color
+
+
+  subroutine gl_clear_color_scalar(i)
+    implicit none
+
+    real(c_float), intent(in), value :: i
+
+    call internal_gl_clear_color(i, i, i, 1.0)
+  end subroutine gl_clear_color_scalar
 
 
   !** NOTE: C is passing Fortran data here!
