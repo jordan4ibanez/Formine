@@ -293,8 +293,7 @@ contains
 
     integer(c_int), intent(in), value :: i
     type(c_ptr), intent(in), value :: char_pointer
-    character(:), allocatable :: error_text
-    character(:), allocatable :: error_value_string
+    character(len = :), allocatable :: error_text, error_value_string
 
     error_text = string_from_c(char_pointer, 512)
     error_value_string = int_to_string(i)
