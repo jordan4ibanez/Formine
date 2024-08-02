@@ -355,7 +355,7 @@ contains
     call mesh_database%get_raw(key(mesh_name), generic, stat = status)
 
     if (status /= 0) then
-      print"(A)",colorize_rgb("[Mesh]: Mesh ["//mesh_name//"] does not exist. Cannot delete.", 255, 0, 0)
+      print"(A)",colorize_rgb("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot delete.", 255, 0, 0)
       return
     end if
 
