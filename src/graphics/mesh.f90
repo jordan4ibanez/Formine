@@ -325,7 +325,7 @@ contains
     gotten_mesh = get_mesh(mesh_name, exists)
 
     if (.not. exists) then
-      print"(A)", colorize_rgb("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Will not draw.", 255, 0, 0)
+      print"(A)", colorize_rgb("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot draw.", 255, 0, 0)
       return
     end if
 
