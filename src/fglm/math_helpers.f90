@@ -178,4 +178,37 @@ contains
   end function c_uchar_to_int_array
 
 
+  !* This simply makes the fact that we're casting into a uchar from integer(c_int) EXTREMELY explicit to our intent.
+  function int_to_c_uchar(input) result(output)
+    use, intrinsic :: iso_c_binding
+    implicit none
+
+    integer(c_int), intent(in), value :: input
+    integer(1) :: output
+
+    ! This will automatically roll over.
+    output = int(input, kind = 1)
+  end function int_to_c_uchar
+
+
+  !* This simply makes the fact that we're casting into a uchar array from an integer(c_int) array EXTREMELY explicit to our intent.
+  function int_to_c_uchar_array(input_array) result(output_array)
+    use, intrinsic :: iso_c_binding, only: c_int
+    implicit none
+
+    integer(c_int), dimension(:), intent(in) :: input_array
+    integer(1), dimension(:), allocatable :: output_array
+    integer :: array_length
+    integer :: i
+
+    array_length = size(input_array)
+
+    allocate(output_array(array_length))
+
+    do i = 1,array_length
+      output_array(i) = int_to_c_uchar(input_array(i))
+    end do
+  end function int_to_c_uchar_array
+
+
 end module math_helpers
