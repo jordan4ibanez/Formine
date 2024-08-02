@@ -67,6 +67,14 @@ program main
   !! This synchronizes the camera's depth matrix with OpenGL.
   call gl_depth_range_f(camera_get_z_near(), camera_get_z_far())
 
+  !! This enables alpha blending.
+  call gl_enable(GL_BLEND)
+  call gl_blend_equation(GL_FUNC_ADD)
+  call gl_blend_func(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+  !? I don't know what the difference is between gl_blend_func and gl_blend_func_separate so disable this until someone tells me.
+  ! call gl_blend_func_separate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+
+
   !! This resets the gl_get_error integer back to 0.
   call gl_clear_error_data()
 
