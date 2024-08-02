@@ -174,10 +174,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      real(c_float), intent(in), value :: r
-      real(c_float), intent(in), value :: g
-      real(c_float), intent(in), value :: b
-      real(c_float), intent(in), value :: a
+      real(c_float), intent(in), value :: r, g, b, a
     end subroutine internal_gl_clear_color
 
 
