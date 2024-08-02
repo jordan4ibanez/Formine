@@ -175,7 +175,7 @@ contains
   end function glfw_init
 
 
-  subroutine glfw_terminate
+  subroutine glfw_terminate()
     implicit none
 
     call internal_glfw_terminate()
@@ -183,7 +183,7 @@ contains
   end subroutine glfw_terminate
 
 
-  subroutine glfw_get_error
+  subroutine glfw_get_error()
     use, intrinsic :: iso_c_binding
     use :: string
     implicit none
@@ -238,7 +238,7 @@ contains
   end function glfw_create_window
 
 
-  subroutine glfw_make_context_current
+  subroutine glfw_make_context_current()
     implicit none
 
     call internal_glfw_make_context_current(c_window_pointer)
@@ -252,21 +252,21 @@ contains
   end function glfw_window_should_close
 
 
-  subroutine glfw_swap_buffers
+  subroutine glfw_swap_buffers()
     implicit none
 
     call internal_glfw_swap_buffers(c_window_pointer)
   end subroutine glfw_swap_buffers
 
 
-  subroutine glfw_poll_events
+  subroutine glfw_poll_events()
     implicit none
 
     call internal_glfw_poll_events(c_window_pointer)
   end
 
 
-  subroutine glfw_destroy_window
+  subroutine glfw_destroy_window()
     implicit none
 
     call internal_glfw_destroy_window(c_window_pointer)
@@ -298,7 +298,7 @@ contains
   end subroutine error_callback
 
 
-  subroutine glfw_set_error_callback
+  subroutine glfw_set_error_callback()
     implicit none
 
     call internal_glfw_set_error_callback(c_funloc(error_callback))
