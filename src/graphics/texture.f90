@@ -121,6 +121,12 @@ contains
     character(len = *), intent(in) :: texture_name
     integer(c_int), intent(in) :: new_texture
 
+    ! This creates an enforcement where the texture must be deleted before it can be re-assigned.
+    ! This prevents a severe memory leak.
+    if (texture_exists(texture_name)) then
+      error stop "[Texture] Error: Tried to overwrite texture ["//texture_name//"]. Please delete it before setting it."
+    end if
+
     if (debug_mode) then
       print"(A)", "[Texture]: set texture ["//texture_name//"]"
     end if
