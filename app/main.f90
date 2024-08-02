@@ -8,17 +8,18 @@ program main
   use :: camera
   use :: delta
   use :: texture
-  use :: stb_image, only: stbi_enable_vertical_flipping
+  use :: font
   use, intrinsic ::  iso_c_binding
   implicit none
 
   real(c_float) :: rotation
 
+  call font_prototyping()
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
-  if (.true.) then
-    return
-  end if
+  ! if (.true.) then
+  !   return
+  ! end if
   !! END WARNING.
 
 
