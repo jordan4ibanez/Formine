@@ -114,25 +114,6 @@ program main
     [0,1,2, 2,3,0] &
     )
 
-  ! do i = 1,1000
-  !   call mesh_create_3d( &
-  !     "debug"//int_to_string(i), &
-  !     [ &
-  !     -0.5, -0.5, 0.0, &
-  !     0.5, -0.5, 0.0, &
-  !     0.0, 0.5, 0.0 &
-  !     ], &
-  !     [ &
-  !     1.0, 0.0, 0.0, &
-  !     0.0, 1.0, 0.0, &
-  !     0.0, 0.0, 1.0 &
-  !     ], &
-  !     [0,1,2] &
-  !     )
-  ! end do
-
-
-
   rotation = 0.0
 
   !! This is debugging for functions!
