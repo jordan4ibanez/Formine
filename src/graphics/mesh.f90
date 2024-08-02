@@ -269,9 +269,9 @@ contains
 
     ! This creates an enforcement where the mesh must be deleted before it can be re-assigned.
     ! If there is a severe memory leak, enable this.
-    ! if (mesh_exists(mesh_name)) then
-    !   error stop "[Mesh] Error: Tried to overwrite mesh ["//mesh_name//"]. Please delete it before setting it."
-    ! end if
+    if (mesh_exists(mesh_name)) then
+      error stop "[Mesh] Error: Tried to overwrite mesh ["//mesh_name//"]. Please delete it before setting it."
+    end if
 
     if (debug_mode) then
       print"(A)", "[Mesh]: set mesh ["//mesh_name//"]"
