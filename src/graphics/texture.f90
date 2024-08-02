@@ -21,6 +21,7 @@ module texture
 contains
 
 
+  !* Create a texture from a file location.
   subroutine texture_create(texture_location)
     use :: stb_image
     use :: string
@@ -175,6 +176,7 @@ contains
   end subroutine texture_use
 
 
+  !* Internal only. Set a texture in the database.
   subroutine set_texture(texture_name, new_texture)
     use, intrinsic :: iso_c_binding
     implicit none
@@ -196,6 +198,7 @@ contains
   end subroutine set_texture
 
 
+  !* Internal only. Get a texture from the database.
   function get_texture(texture_name) result(texture_id)
     use, intrinsic :: iso_c_binding
     use :: terminal
@@ -212,6 +215,7 @@ contains
   end function get_texture
 
 
+  !* Delete a texture. From OpenGL and the database.
   subroutine texture_delete(texture_name)
     use, intrinsic :: iso_c_binding
     use :: opengl
