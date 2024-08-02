@@ -600,14 +600,14 @@ contains
   ! Here I'm just kind of using OpenGL the way I want to use it.
 
 
-  subroutine gl_clear_color_buffer
+  subroutine gl_clear_color_buffer()
     implicit none
 
     call internal_gl_clear(GL_COLOR_BUFFER_BIT)
   end
 
 
-  subroutine gl_clear_depth_buffer
+  subroutine gl_clear_depth_buffer()
     implicit none
 
     call internal_gl_clear(GL_DEPTH_BUFFER_BIT)
@@ -684,7 +684,7 @@ contains
   end subroutine debug_message_callback
 
 
-  subroutine gl_set_debug_message_callback
+  subroutine gl_set_debug_message_callback()
     use, intrinsic :: iso_c_binding
     implicit none
 
@@ -982,6 +982,7 @@ contains
 
     call internal_gl_delete_textures(location, 1)
   end subroutine gl_delete_textures
+
 
   subroutine gl_depth_mask(flag)
     use, intrinsic :: iso_c_binding
