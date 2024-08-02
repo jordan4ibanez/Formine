@@ -247,8 +247,7 @@ module opengl
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: program
-      integer(c_int), intent(in), value :: shader
+      integer(c_int), intent(in), value :: program, shader
     end subroutine gl_attach_shader
 
 
