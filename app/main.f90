@@ -120,7 +120,7 @@ program main
 
       call delta_tick()
 
-      rotation = rotation + get_delta_f32() * 7.0
+      ! rotation = rotation + get_delta_f32() * 7.0
 
       call gl_clear_color_scalar(1.0)
 

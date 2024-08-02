@@ -16,8 +16,6 @@ contains
     use :: stb_image
     implicit none
 
-    
-
   end subroutine font_prototyping
 
 
