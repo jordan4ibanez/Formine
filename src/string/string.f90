@@ -190,6 +190,7 @@ contains
     output = input//achar(0)
   end function into_c_string
 
+
   ! Convert an integer into an allocated string.
   !** Allocatable will deallocate once the memory goes out of scope.
   function int_to_string(i) result(output)
@@ -211,6 +212,7 @@ contains
     ! print"(A)","len: ", len(output)
     ! print"(A)","-----"
   end function int_to_string
+
 
   ! Convert an integer into an allocated string.
   !** Allocatable will deallocate once the memory goes out of scope.
@@ -265,8 +267,7 @@ contains
 
     character(len = *), intent(in) :: input_string
     character(len = :, kind = c_char), allocatable :: resulting_name_of_file
-    integer :: i
-    integer :: length_of_string
+    integer :: i, length_of_string
 
     i = index(input_string, "/", back = .true.)
 
@@ -289,5 +290,6 @@ contains
     ! So this is a file. Let's now get it
     resulting_name_of_file = input_string(i + 1:length_of_string)
   end function get_file_name_from_string
+
 
 end module string
