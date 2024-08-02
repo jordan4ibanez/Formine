@@ -239,6 +239,34 @@ contains
   end subroutine contains_test
 
 
+  subroutine file_name_test()
+    implicit none
+
+    type(heap_string) :: blank
+    type(heap_string) :: wrong
+    type(heap_string) :: folder_path
+    type(heap_string) :: file_path
+
+    character(len = :), allocatable :: name_of_file
+
+    blank = ""
+    name_of_file = blank%get_file_name()
+    call assert_str_equal(name_of_file, "")
+
+    wrong = "hello, am a thing"
+    name_of_file = wrong%get_file_name()
+    call assert_str_equal(name_of_file, "")
+
+    folder_path = "/home/user/Desktop/flop/"
+    name_of_file = folder_path%get_file_name()
+    call assert_str_equal(name_of_file, "")
+
+    file_path = "/home/user/Desktop/flop/cool.png"
+    name_of_file = file_path%get_file_name()
+    call assert_str_equal(name_of_file, "cool.png")
+  end subroutine file_name_test
+
+
 end module test_suite_string
 
 
@@ -267,4 +295,6 @@ program test_heap_string
   call cut_all_test()
 
   call contains_test()
+
+  call file_name_test()
 end program test_heap_string
