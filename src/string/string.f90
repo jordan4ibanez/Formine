@@ -1,5 +1,6 @@
 module string
   use, intrinsic :: iso_c_binding
+  use :: h_string
   implicit none
 
 
@@ -13,6 +14,8 @@ module string
   public :: bool_to_string
   public :: heap_string_array
   public :: get_file_name_from_string
+  !? Pass through the type.
+  public :: heap_string
 
 
 contains
