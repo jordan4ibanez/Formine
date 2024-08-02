@@ -10,6 +10,7 @@ module texture
   public :: texture_use
   public :: texture_delete
   public :: texture_exists
+  public :: texture_clear_database
 
 
   type(fhash_tbl_t) :: texture_database
@@ -187,6 +188,47 @@ contains
 
     existence = status == 0
   end function texture_exists
+
+
+  !* Completely wipe out all existing textures. This might be slow.
+  subroutine texture_clear_database()
+    use :: fhash, only: fhash_iter_t, fhash_key_t
+    use :: string
+    use :: terminal
+    implicit none
+
+    type(heap_string), dimension(:), allocatable :: key_array
+    type(fhash_iter_t) :: iterator
+    class(fhash_key_t), allocatable :: generic_key
+    class(*), allocatable :: generic_placeholder
+    integer :: i
+    integer :: remaining_size
+
+    ! Start with a size of 0.
+    allocate(key_array(0))
+
+    ! Create the iterator.
+    iterator = fhash_iter_t(texture_database)
+
+    ! Now we will collect the keys from the iterator.
+    do while(iterator%next(generic_key, generic_placeholder))
+      ! Appending. Allocatable will clean up the old data.
+      key_array = [key_array, heap_string_array(generic_key%to_string())]
+    end do
+
+    do i = 1,size(key_array)
+      call texture_delete(key_array(i)%get())
+    end do
+
+    !* We will always check that the remaining size is 0. This will protect us from random issues.
+    call texture_database%stats(num_items = remaining_size)
+
+    if (remaining_size /= 0) then
+      print"(A)", colorize_rgb("[Texture] Error: Did not delete all textures! Expected size: [0] | Actual: ["//int_to_string(remaining_size)//"]", 255, 0, 0)
+    else
+      print"(A)", "[Texture]: Successfully cleared the texture database."
+    end if
+  end subroutine texture_clear_database
 
 
 end module texture
