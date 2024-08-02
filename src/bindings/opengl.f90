@@ -189,6 +189,7 @@ module opengl
     subroutine internal_gl_debug_message_callback(callback, user_param) bind(c, name = "glDebugMessageCallback")
       use, intrinsic :: iso_c_binding
       implicit none
+
       type(c_funptr), intent(in), value :: callback
       type(c_ptr), intent(in), optional :: user_param
     end subroutine internal_gl_debug_message_callback
@@ -197,6 +198,7 @@ module opengl
     function internal_gl_create_program() result(program_id) bind(c, name = "glCreateProgram")
       use, intrinsic :: iso_c_binding
       implicit none
+
       !! This might cause problems, it's a uint.
       integer(c_int) :: program_id
     end function internal_gl_create_program
@@ -205,6 +207,7 @@ module opengl
     function internal_gl_create_shader(shader_type) result(shader_id) bind(c, name = "glCreateShader")
       use, intrinsic :: iso_c_binding
       implicit none
+
       !! This might cause problems, it's a uint.
       integer(c_int), intent(in), value :: shader_type
       integer(c_int) :: shader_id
@@ -214,6 +217,7 @@ module opengl
     subroutine internal_gl_shader_source(shader_id, count, source_code, string_length) bind(c, name = "glShaderSource")
       use, intrinsic :: iso_c_binding
       implicit none
+
       integer(c_int), intent(in), value :: shader_id
       integer(c_int), intent(in), value :: count
       character(len=*, kind=c_char), intent(in) :: source_code
@@ -225,6 +229,7 @@ module opengl
     subroutine gl_compile_shader(shader_id) bind(c, name = "glCompileShader")
       use, intrinsic :: iso_c_binding
       implicit none
+
       integer(c_int), intent(in), value :: shader_id
     end subroutine gl_compile_shader
 
@@ -232,6 +237,7 @@ module opengl
     subroutine gl_get_integer_v(pname, data) bind(c, name = "glGetIntegerv")
       use, intrinsic :: iso_c_binding
       implicit none
+
       integer(c_int), intent(in), value :: pname
       integer(c_int), intent(in), target :: data
     end subroutine gl_get_integer_v
@@ -240,6 +246,7 @@ module opengl
     subroutine gl_attach_shader(program, shader) bind(c, name = "glAttachShader")
       use, intrinsic :: iso_c_binding
       implicit none
+
       integer(c_int), intent(in), value :: program
       integer(c_int), intent(in), value :: shader
     end subroutine gl_attach_shader
