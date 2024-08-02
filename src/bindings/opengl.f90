@@ -12,7 +12,6 @@ module opengl
   public :: GL_TRUE
   public :: GL_FALSE
   public :: GL_FLOAT
-
   public :: GL_DEBUG_OUTPUT_SYNCHRONOUS
   public :: GL_COLOR_BUFFER_BIT
   public :: GL_VERTEX_SHADER
@@ -20,7 +19,6 @@ module opengl
   public :: GL_COMPILE_STATUS
   public :: GL_LINK_STATUS
   public :: GL_VALIDATE_STATUS
-
   public :: GL_STATIC_DRAW
   public :: GL_ARRAY_BUFFER
   public :: GL_ELEMENT_ARRAY_BUFFER
