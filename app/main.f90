@@ -129,6 +129,7 @@ program main
 
       call gl_clear_color_and_depth_buffer()
 
+
       !? DRAW TEST ?!
 
       call camera_set_object_matrix_f32(0.0, 0.0, -1.0, 0.0, rotation, 0.0, 1.0, 1.0, 1.0)
