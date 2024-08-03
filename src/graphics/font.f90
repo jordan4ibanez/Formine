@@ -14,19 +14,19 @@ module font
 
 
   ! The size of each character in pixels.
-  integer :: character_width = 0 != 5
-  integer :: character_height = 0 != 7
+  integer :: character_width = 0
+  integer :: character_height = 0
 
   ! Spacing between each character in pixels.
-  integer :: spacing = 0 != 1
+  integer :: spacing = 0
 
   ! Slots are the total size of a character, including the border, in pixels.
-  integer :: slot_width = 0 ! = character_width + spacing ! 6
-  integer :: slot_height = 0 != character_height + spacing ! 8
+  integer :: slot_width = 0
+  integer :: slot_height = 0
 
   ! How many characters X and Y in total.
-  integer :: slots_horizontal = 0 != 9
-  integer :: slots_vertical = 0 != 9
+  integer :: slots_horizontal = 0
+  integer :: slots_vertical = 0
 
   type(fhash_tbl_t) :: character_database_integral
 
