@@ -9,10 +9,10 @@ module vector_2i
   public :: vec2i
 
 
-  ! vec2i and Vec3d are transparent containers.
+  ! vec2i and vec2d are transparent containers.
   ! You can use the methods, or you can use the raw data.
   !
-  !* They do not mix. Can't add vec2i to vec3d, and so forth. This will cause weird problems that I don't feel like solving.
+  !* They do not mix. Can't add vec2i to vec2d, and so forth. This will cause weird problems that I don't feel like solving.
 
 
   type vec2i
