@@ -289,7 +289,7 @@ contains
       ! print*,integral_image_data(position_to_index(pixel_x, pixel_y))
       ! print*,position_to_index(pixel_x, pixel_y)
 
-      pixel_color = get_color(position_to_index(54, 72), integral_image_data)
+      pixel_color = get_color(1, 1)
       print*,pixel_color
 
       ! Each pixel has 4 components, so we can simply multiply this number.
@@ -301,39 +301,55 @@ contains
     end do
     ! print*, integral_image_data
 
+  contains
+
+
+    !* We need to do such complex work we need this subroutine to have subroutines.
+
+
+    function get_color(x,y) result(color)
+      implicit none
+
+      integer(c_int), intent(in), value :: x, y
+      type(rgba) :: color
+
+      color = index_get_color(position_to_index(x,y))
+    end function get_color
+
+
+    !* Position (in pixels) to the index in the texture array.
+    function position_to_index(x, y) result(i)
+      implicit none
+
+      integer(c_int), intent(in), value :: x, y
+      integer(c_int) :: a, b
+      integer(c_int) :: i
+
+      ! Shift into 0 indexed, because math.
+      a = x - 1
+      b = y - 1
+
+      ! Times 4 because we have 4 individual channels we're hopping over.
+      ! Plus 1 because we're shifting back into 1 indexed.
+      i = (((b * font_texture_width) + a) * 4) + 1
+    end function position_to_index
+
+
+    !* Get the RGBA of an index.
+    function index_get_color(index) result(color)
+      implicit none
+
+      integer(c_int), intent(in), value :: index
+      type(rgba) :: color
+
+      color%r = integral_image_data(index)
+      color%g = integral_image_data(index + 1)
+      color%b = integral_image_data(index + 2)
+      color%a = integral_image_data(index + 3)
+    end function index_get_color
+
+
   end subroutine calculate_opengl_texture_coordinates
-
-
-  !* Position (in pixels) to the index in the texture array.
-  function position_to_index(x, y) result(i)
-    implicit none
-
-    integer(c_int), intent(in), value :: x, y
-    integer(c_int) :: a, b
-    integer(c_int) :: i
-
-    ! Shift into 0 indexed, because math.
-    a = x - 1
-    b = y - 1
-
-    ! Times 4 because we have 4 individual channels we're hopping over.
-    ! Plus 1 because we're shifting back into 1 indexed.
-    i = (((b * font_texture_width) + a) * 4) + 1
-  end function position_to_index
-
-
-  function get_color(index, integral_image_data) result(color)
-    implicit none
-
-    integer(c_int), intent(in), value :: index
-    integer(c_int), dimension(:) :: integral_image_data
-    type(rgba) :: color
-
-    color%r = integral_image_data(index)
-    color%g = integral_image_data(index + 1)
-    color%b = integral_image_data(index + 2)
-    color%a = integral_image_data(index + 3)
-  end function get_color
 
 
 end module font
