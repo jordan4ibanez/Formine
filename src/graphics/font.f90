@@ -49,6 +49,12 @@ contains
 
     print*,texture_cfg_location
 
+    print*, "reading font config"
+
+    call reader%read_file(texture_cfg_location)
+
+    print*,reader%file_string
+
 
 
 
