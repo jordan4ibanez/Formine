@@ -225,13 +225,40 @@ contains
 
   subroutine calculate_opengl_texture_coordinates(raw_image_data)
     use :: math_helpers
+    use, intrinsic :: iso_c_binding
+    use :: fhash, only: fhash_iter_t, fhash_key_t
+    use :: vector_2i
     implicit none
 
     integer(1), dimension(:), intent(in) :: raw_image_data
+    integer(c_int), dimension(:), allocatable :: integral_image_data
+    type(fhash_iter_t) :: iterator
+    class(fhash_key_t), allocatable :: generic_key
+    class(*), allocatable :: generic_data
+    type(vec2i) :: position
+
+    ! Shift this into a format we can use.
+    integral_image_data = c_uchar_to_int_array(raw_image_data)
+
+    ! Iterate integral character position.
+    iterator = fhash_iter_t(character_database_integral)
+    do while(iterator%next(generic_key, generic_data))
+      ! print*,generic_key%to_string()
+      ! Enforce that we are running with a vec2i.
+      select type(generic_data)
+       type is (vec2i)
+        position = generic_data
+       class default
+        error stop "[Font] Error: The wrong type got inserted for character ["//generic_key%to_string()//"]"
+      end select
+
+      print*,position
+
+
+    end do
+    ! print*, integral_image_data
 
   end subroutine calculate_opengl_texture_coordinates
-
-
 
 
 end module font
