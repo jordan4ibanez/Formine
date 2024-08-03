@@ -31,7 +31,7 @@ contains
     implicit none
 
     class(file_reader), intent(inout) :: this
-    character(len = *) :: file_location
+    character(len = *), intent(in) :: file_location
     integer :: file_io_identifier
     integer :: file_size
 
