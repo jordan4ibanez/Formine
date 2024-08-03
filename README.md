@@ -72,7 +72,11 @@ NEVER, set ``this`` to ``value`` in a type method or IT WILL blow up!
 
 in C:
 
+(For C bindings)
 ``const char *`` would be interopped as ``character(kind = c_char), intent(in)``
 
 ``const char **`` would be interopped as ``character(len = *, kind = c_char), intent(in)``
 
+Back to fortran:
+
+``character(len = :), allocatable`` is a dynamic length string in the heap.
