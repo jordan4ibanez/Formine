@@ -126,6 +126,22 @@ contains
           error stop "[Font] Error: Impossible SPACING value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
         end if
 
+      else if (temp_buffer_len >= 13 .and. temp_buffer(1:13) == "CHAR_WIDTH = ") then
+        ! Cut the buffer and read it into the integer.
+        temp_buffer = temp_buffer(13:len(temp_buffer))
+        read(temp_buffer, '(i4)') character_width
+        if (character_width == 0) then
+          error stop "[Font] Error: Impossible CHAR_WIDTH value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
+        end if
+
+      else if (temp_buffer_len >= 14 .and. temp_buffer(1:14) == "CHAR_HEIGHT = ") then
+        ! Cut the buffer and read it into the integer.
+        temp_buffer = temp_buffer(14:len(temp_buffer))
+        read(temp_buffer, '(i4)') character_height
+        if (character_height == 0) then
+          error stop "[Font] Error: Impossible CHAR_HEIGHT value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
+        end if
+
       else if (temp_buffer_len >= 7) then
         ! This is a real rigid way to do this.
         ! This is basically, it has to be formatted like:
