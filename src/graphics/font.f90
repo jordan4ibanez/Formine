@@ -13,6 +13,11 @@ module font
   public :: font_create
 
 
+  type opengl_character
+
+  end type opengl_character
+
+
   ! The size of each character in pixels.
   integer :: character_width = 0
   integer :: character_height = 0
@@ -244,6 +249,7 @@ contains
     iterator = fhash_iter_t(character_database_integral)
     do while(iterator%next(generic_key, generic_data))
       ! print*,generic_key%to_string()
+
       ! Enforce that we are running with a vec2i.
       select type(generic_data)
        type is (vec2i)
@@ -252,8 +258,9 @@ contains
         error stop "[Font] Error: The wrong type got inserted for character ["//generic_key%to_string()//"]"
       end select
 
+      ! So now that we have the position of the character in the texture, let's calculate some basic elements.
+      ! I could have made this an array for super speed, but I want to be able to understand it in the future.
       print*,position
-
 
     end do
     ! print*, integral_image_data
