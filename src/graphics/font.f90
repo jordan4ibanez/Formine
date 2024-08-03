@@ -73,6 +73,7 @@ contains
   subroutine process_font_configuration(font_config_location)
     use :: string
     use :: files
+    use :: vector_2i
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: font_config_location
@@ -81,6 +82,7 @@ contains
     character(len = :), allocatable :: temp_buffer
     character :: current_character
     character(len = :), allocatable :: x_str, y_str
+    type(vec2i) :: testing
 
     call reader%read_lines(font_config_location)
 
@@ -134,6 +136,7 @@ contains
           error stop "[Font] Error: Impossible Y value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
         end if
 
+        testing = [x_location, y_location]
 
 
       end if
