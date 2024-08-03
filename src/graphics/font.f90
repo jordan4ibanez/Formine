@@ -86,7 +86,7 @@ contains
     ! We always want 4 channels.
     desired_channels = 4
 
-    raw_image_data = stbi_load(font_texture_location, x, y, channels, desired_channels)
+    raw_image_data = stbi_load(c_file_location, x, y, channels, desired_channels)
 
     ! Let's check if the configuration file is correct.
     if (x /= font_texture_width) then
