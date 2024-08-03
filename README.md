@@ -61,9 +61,7 @@ real(8)
 real(real64) 
 real(c_double)
 
-(maybe should still use iso_c_bindings wordings when writing C wrappers though)
-
-going to need to replace the uint with logical(int32) https://www.ibm.com/docs/en/xl-c-aix/13.1.2?topic=fortran-corresponding-data-types
+(Just use C types so it's easier to understand)
 
 Allocatable - Will automatically deallocate once the variable goes out of scope. Do not manually deallocate cause that's dumb.
 Pointer - Will NOT automatically deallocate.
