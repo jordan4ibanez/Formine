@@ -81,10 +81,10 @@ contains
       ! Start off with nothing.
       allocate(this%lines(0))
 
+      ! This should literally be unable to get stuck in an infinite loop.
       do while(.true.)
-
+        
         found_newline_index = index(this%file_string, achar(10))
-
 
         if (found_newline_index == 0) then
           ! When we reached the end with no \n, we need specific handling of this.
