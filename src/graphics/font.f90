@@ -77,9 +77,18 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: texture_cfg_location
     type(file_reader) :: reader
+    integer :: i
 
     call reader%read_lines(texture_cfg_location)
 
+    ! If it doesn't exist, we need a font to render text so stop.
+    if (.not. reader%exists) then
+      error stop "[Font] Error: Cannot read the font config in location ["//texture_cfg_location//"]"
+    end if
+
+    do i = 1,1!reader%line_count
+      print*,i
+    end do
 
 
   end subroutine process_font_configuration
