@@ -44,6 +44,7 @@ module font
   integer :: font_texture_width = 0
   integer :: font_texture_height = 0
 
+  ! Todo: Move this into the subroutine, and pass it around.
   type(fhash_tbl_t) :: character_database_integral
 
 
