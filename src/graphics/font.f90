@@ -206,9 +206,9 @@ contains
       error stop "[Font] Error: SPACING was not set."
     end if
 
-    
-
-
+    ! Finally, set the slot sizes.
+    slot_width = character_width + spacing
+    slot_height = character_height + spacing
   end subroutine process_font_configuration
 
 
