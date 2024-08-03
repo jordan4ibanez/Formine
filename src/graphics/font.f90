@@ -258,6 +258,7 @@ contains
     type(vec2i) :: position
     integer :: pixel_x, pixel_y
     type(rgba) :: pixel_color
+    type(opengl_character) :: gpu_character
 
     ! Shift this into a format we can use.
     integral_image_data = c_uchar_to_int_array(raw_image_data)
@@ -289,14 +290,16 @@ contains
       ! print*,integral_image_data(position_to_index(pixel_x, pixel_y))
       ! print*,position_to_index(pixel_x, pixel_y)
 
+      !! Remember: to get the right side and bottom, you need to overshoot by 1 pixel !!
+
       pixel_color = get_color(1, 1)
       print*,pixel_color
 
-      ! Each pixel has 4 components, so we can simply multiply this number.
+      print*,font_texture_width
 
+      print*, pixel_position_to_opengl_position(55,73)
 
       exit
-
 
     end do
     ! print*, integral_image_data
@@ -325,7 +328,7 @@ contains
     end function pixel_position_to_opengl_position
 
 
-
+    !* This wraps a chain of functions to just get the data we need, which is RGBA of a pixel.
     function get_color(x,y) result(color)
       implicit none
 
