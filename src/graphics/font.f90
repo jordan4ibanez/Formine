@@ -99,7 +99,7 @@ contains
       error stop "[Font] Error: Cannot read the font config in location ["//font_config_location//"]"
     end if
 
-    do i = 1,5!reader%line_count
+    do i = 1,reader%line_count
       temp_buffer = reader%lines(i)%get()
 
       ! This is a real half assed way to do this but who cares?
