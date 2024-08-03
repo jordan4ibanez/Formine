@@ -83,7 +83,8 @@ contains
 
       ! This should literally be unable to get stuck in an infinite loop.
       do while(.true.)
-        
+
+        ! Sniff out that \n.
         found_newline_index = index(this%file_string, achar(10))
 
         if (found_newline_index == 0) then
