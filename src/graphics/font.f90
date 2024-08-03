@@ -25,6 +25,12 @@ module font
     type(vec2d) :: top_right
   end type opengl_character
 
+  ! This is an abstraction over the raw array components to allow me to actually
+  ! read what I'm doing during the subroutine that checks how wide characters are.
+  type rgba
+    integer(c_int) :: r, g, b, a = 0
+  end type rgba
+
 
   ! The size of each character in pixels.
   integer :: character_width = 0
