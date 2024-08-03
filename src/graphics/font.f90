@@ -256,6 +256,8 @@ contains
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     type(vec2i) :: position
+    integer :: pixel_x, pixel_y
+    type(rgba) :: pixel_color
 
     ! Shift this into a format we can use.
     integral_image_data = c_uchar_to_int_array(raw_image_data)
@@ -275,7 +277,26 @@ contains
 
       ! So now that we have the position of the character in the texture, let's calculate some basic elements.
       ! I could have made this an array for super speed, but I want to be able to understand it in the future.
-      print*,position
+      print*,generic_key%to_string()
+      ! print*,position
+
+      ! We put our initial brush position at the top left of the character.
+      pixel_x = (position%x) * slot_width
+      pixel_y = (position%y) * slot_height
+
+      ! print*,pixel_x, pixel_y
+
+      ! print*,integral_image_data(position_to_index(pixel_x, pixel_y))
+      ! print*,position_to_index(pixel_x, pixel_y)
+
+      pixel_color = get_color(position_to_index(54, 72), integral_image_data)
+      print*,pixel_color
+
+      ! Each pixel has 4 components, so we can simply multiply this number.
+
+
+      exit
+
 
     end do
     ! print*, integral_image_data
