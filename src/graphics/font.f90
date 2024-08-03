@@ -36,7 +36,7 @@ contains
     integer :: x, y, channels, desired_channels
     character(len = :, kind = c_char), allocatable :: c_file_location
     character(len = :), allocatable :: font_data_file_name
-    character(len = :), allocatable :: texture_cfg_location
+    character(len = :), allocatable :: font_config_location
 
     !* We will assume that the only difference in png and the cfg is the file extension.
 
@@ -44,13 +44,13 @@ contains
 
     ! print*,font_texture_location
 
-    texture_cfg_location = string_remove_file_extension(font_texture_location)//".cfg"
+    font_config_location = string_remove_file_extension(font_texture_location)//".cfg"
 
     ! print*,texture_cfg_location
 
     ! print*, "reading font config"
 
-    call process_font_configuration(texture_cfg_location)
+    call process_font_configuration(font_config_location)
 
     ! print*,reader%file_string
 
@@ -70,24 +70,74 @@ contains
   end subroutine font_create
 
 
-  subroutine process_font_configuration(texture_cfg_location)
+  subroutine process_font_configuration(font_config_location)
     use :: string
     use :: files
     implicit none
 
-    character(len = *, kind = c_char), intent(in) :: texture_cfg_location
+    character(len = *, kind = c_char), intent(in) :: font_config_location
     type(file_reader) :: reader
-    integer :: i
+    integer :: i, comma_location, x_location, y_location
+    character(len = :), allocatable :: temp_buffer
+    character :: current_character
+    character(len = :), allocatable :: x_str, y_str
 
-    call reader%read_lines(texture_cfg_location)
+    call reader%read_lines(font_config_location)
 
     ! If it doesn't exist, we need a font to render text so stop.
     if (.not. reader%exists) then
-      error stop "[Font] Error: Cannot read the font config in location ["//texture_cfg_location//"]"
+      error stop "[Font] Error: Cannot read the font config in location ["//font_config_location//"]"
     end if
 
-    do i = 1,1!reader%line_count
-      print*,i
+    do i = 1,5!reader%line_count
+      temp_buffer = reader%lines(i)%get()
+
+      ! This is a real half assed way to do this but who cares?
+
+      if (len(temp_buffer) == 0) then
+        continue
+      end if
+
+      ! This is a real rigid way to do this.
+      ! This is basically, it has to be formatted like:
+      ! [A = ]
+      ! Minus the brackets.
+      if (temp_buffer(1:1) /= " " .and. temp_buffer(2:4) == " = ") then
+        print*,temp_buffer
+        current_character = temp_buffer(1:1)
+        print*,current_character
+
+        ! Now we're going to cut the temp buffer.
+        temp_buffer = temp_buffer(5:len(temp_buffer))
+
+        print"(A)","["//temp_buffer//"]"
+
+        ! Now we're going to chop up the X and Y out of the line.
+        comma_location = index(temp_buffer, ",")
+
+        ! There is a formatting error.
+        if (comma_location == 0) then
+          error stop "[Font] Error: There is a missing comma on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
+        end if
+
+        ! Get the X into an integer.
+        x_str = temp_buffer(1:comma_location - 1)
+        read(x_str, '(i4)') x_location
+        if (x_location <= 0) then
+          error stop "[Font] Error: Impossible X value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
+        end if
+
+        ! Get the Y into an integer.
+        y_str = temp_buffer(comma_location + 1:len(temp_buffer))
+        read(y_str, '(i4)') y_location
+        if (y_location <= 0) then
+          error stop "[Font] Error: Impossible Y value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
+        end if
+
+
+
+      end if
+
     end do
 
 
