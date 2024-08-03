@@ -299,4 +299,20 @@ contains
     ! Plus 1 because we're shifting back into 1 indexed.
     i = (((b * font_texture_width) + a) * 4) + 1
   end function position_to_index
+
+
+  function get_color(index, integral_image_data) result(color)
+    implicit none
+
+    integer(c_int), intent(in), value :: index
+    integer(c_int), dimension(:) :: integral_image_data
+    type(rgba) :: color
+
+    color%r = integral_image_data(index)
+    color%g = integral_image_data(index + 1)
+    color%b = integral_image_data(index + 2)
+    color%a = integral_image_data(index + 3)
+  end function get_color
+
+
 end module font
