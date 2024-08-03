@@ -17,7 +17,7 @@ module files
     character(len = :), allocatable :: file_string
     ! By line components.
     type(heap_string), dimension(:), allocatable :: lines
-    integer :: total_lines = 0
+    integer :: line_count = 0
   contains
     procedure :: read_file => file_reader_read_file
     procedure :: read_lines => file_reader_read_file_into_lines
@@ -66,8 +66,8 @@ contains
     character(len = *), intent(in) :: file_location
     !! This is testing debugging
     character(len = :), allocatable :: temporary_container
-    integer :: i
     integer :: found_newline_index
+    integer :: length_of_buffer
 
     ! I can't figure out how to make the io operation read line by line so we're going to
     ! use the internal file_string component as a temp buffer.
@@ -81,25 +81,38 @@ contains
       ! Start off with nothing.
       allocate(this%lines(0))
 
-      !! Testing safety net.
-      do i = 1,10
+      do while(.true.)
 
         found_newline_index = index(this%file_string, achar(10))
 
-        ! If we reached the end, we're done.
+
         if (found_newline_index == 0) then
+          ! When we reached the end with no \n, we need specific handling of this.
+          ! Basically, just dump the final line in.
+
+          ! Tick up the number of lines.
+          this%line_count = this%line_count + 1
+
+          ! Dump it in.
+          this%lines = [this%lines, heap_string(this%file_string)]
+
+          ! And remove residual memory.
+          deallocate(this%file_string)
           exit
+        else
+          ! Tick up the number of lines.
+          this%line_count = this%line_count + 1
+          ! We're just going to continuously roll a bigger array with new elements.
+          temporary_container = this%file_string(1:found_newline_index - 1)
+          this%lines = [this%lines, heap_string(temporary_container)]
+          ! Find the new total length of the string buffer.
+          length_of_buffer = len(this%file_string)
+          ! Step it over the \n and cut out the beginning.
+          this%file_string = this%file_string(found_newline_index + 1:length_of_buffer)
         end if
-
-        ! We're just going to continuously roll a bigger array with new elements.
-        temporary_container = this%file_string(1:found_newline_index - 1)
-
-        this%lines = [this%lines, heap_string(temporary_container)]
-
-        print*,this%lines
-
       end do
     end if
+    print*,this%line_count
   end subroutine file_reader_read_file_into_lines
 
 end module files
