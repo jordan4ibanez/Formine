@@ -80,3 +80,8 @@ in C:
 Back to fortran:
 
 ``character(len = :), allocatable`` is a dynamic length string in the heap.
+
+BUT
+
+That's not the same as ``character, dimension(:), allocatable`` because the former is scalar (1 value, [aka not an array]) and this one is an array of characters.
+
