@@ -48,7 +48,7 @@ contains
     character(len = :, kind = c_char), allocatable :: c_file_location
     character(len = :), allocatable :: font_data_file_name
     character(len = :), allocatable :: font_config_location
-    integer(1), dimension(:), allocatable :: image_data
+    integer(1), dimension(:), allocatable :: raw_image_data
 
     ! print*,"    REMEMBER TO USE A SPARE SLOT FOR UNDEFINED CHARACTERS"
 
@@ -66,7 +66,7 @@ contains
     ! We always want 4 channels.
     desired_channels = 4
 
-    image_data = stbi_load(font_texture_location, x, y, channels, desired_channels)
+    raw_image_data = stbi_load(font_texture_location, x, y, channels, desired_channels)
 
     ! Let's check if the configuration file is correct.
     if (x /= font_texture_width) then
