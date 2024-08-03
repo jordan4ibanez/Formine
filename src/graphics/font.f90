@@ -163,8 +163,6 @@ contains
           ! Now we're going to cut the temp buffer.
           temp_buffer = temp_buffer(5:len(temp_buffer))
 
-          print"(A)","["//temp_buffer//"]"
-
           ! Now we're going to chop up the X and Y out of the line.
           comma_location = index(temp_buffer, ",")
 
