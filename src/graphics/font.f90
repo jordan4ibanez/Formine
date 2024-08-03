@@ -76,8 +76,7 @@ contains
     end if
 
     ! Now, we will bake in the OpenGL texture coordinates into the double floating point database.
-
-
+    call calculate_opengl_texture_coordinates(raw_image_data)
 
   end subroutine font_create
 
@@ -224,8 +223,11 @@ contains
   end subroutine process_font_configuration
 
 
-  subroutine calculate_opengl_texture_coordinates()
+  subroutine calculate_opengl_texture_coordinates(raw_image_data)
+    use :: math_helpers
     implicit none
+
+    integer(1), dimension(:), intent(in) :: raw_image_data
 
   end subroutine calculate_opengl_texture_coordinates
 
