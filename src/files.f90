@@ -1,5 +1,6 @@
 !* To keep file io synchronous, only use this library to work with files.
 module files
+  use :: string
   implicit none
 
 
@@ -11,14 +12,14 @@ module files
 
   !* This is your basic (file -> allocated string) reader. I think it's pretty neat. :)
   type :: file_reader
-
     logical :: exists
+    ! Straight shot component.
     character(len = :), allocatable :: file_string
-
+    ! By line components.
+    type(heap_string), dimension(:), allocatable :: lines
+    integer :: total_lines = 0
   contains
-
     procedure :: read_file => file_reader_read_file
-
   end type file_reader
 
 

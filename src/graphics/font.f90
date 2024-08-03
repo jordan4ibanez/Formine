@@ -51,7 +51,7 @@ contains
 
     print*, "reading font config"
 
-    call reader%read_file(texture_cfg_location)
+    ! call reader%read_file(texture_cfg_location)
 
     print*,reader%file_string
 
