@@ -43,7 +43,7 @@ contains
 
     font_data_file_name = get_file_name_from_string(font_texture_location)
 
-    print*,font_data_file_name
+    print*,font_texture_location
 
     texture_cfg_location = string_remove_file_extension(font_texture_location)//".cfg"
 

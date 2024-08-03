@@ -14,7 +14,7 @@ program main
 
   real(c_float) :: rotation
 
-  call font_prototyping("./textures/font.png")
+  call font_prototyping("./textures/font_forgotten.png")
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   if (.true.) then
