@@ -28,6 +28,9 @@ module font
   integer :: slots_horizontal = 0
   integer :: slots_vertical = 0
 
+  integer :: font_texture_width = 0
+  integer :: font_texture_height = 0
+
   type(fhash_tbl_t) :: character_database_integral
 
 
@@ -201,6 +204,10 @@ contains
     else if (slot_height <= 0) then
       error stop "[Font] Error: slot_height calculation error."
     end if
+
+    ! Now we need a base to ensure that our texture size is the same as our calculation
+    font_texture_width = slot_width * slots_horizontal
+    font_texture_height = slot_height * slots_vertical
   end subroutine process_font_configuration
 
 
