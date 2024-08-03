@@ -48,6 +48,7 @@ contains
     character(len = :, kind = c_char), allocatable :: c_file_location
     character(len = :), allocatable :: font_data_file_name
     character(len = :), allocatable :: font_config_location
+    integer(1), dimension(:), allocatable :: image_data
 
     ! print*,"    REMEMBER TO USE A SPARE SLOT FOR UNDEFINED CHARACTERS"
 
@@ -64,6 +65,18 @@ contains
 
     ! We always want 4 channels.
     desired_channels = 4
+
+    image_data = stbi_load(font_texture_location, x, y, channels, desired_channels)
+
+    ! Let's check if the configuration file is correct.
+    if (x /= font_texture_width) then
+      error stop "[Font] Error: Font sizing in configuration file is wrong on X axis. Expected: ["//int_to_string(font_texture_width)//"] | received: ["//int_to_string(x)//"]"
+    else if (y /= font_texture_height) then
+      error stop "[Font] Error: Font sizing in configuration file is wrong on Y axis. Expected: ["//int_to_string(font_texture_height)//"] | received: ["//int_to_string(y)//"]"
+    end if
+
+    ! Now, we will bake in the OpenGL texture coordinates into the double floating point database.
+
 
 
   end subroutine font_create
@@ -210,6 +223,11 @@ contains
     font_texture_height = slot_height * slots_vertical
   end subroutine process_font_configuration
 
+
+  subroutine calculate_opengl_texture_coordinates()
+    implicit none
+
+  end subroutine calculate_opengl_texture_coordinates
 
 
 
