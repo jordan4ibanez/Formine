@@ -26,7 +26,6 @@ contains
 
 
   !* Open a file, read it into a string, close the file, return the string.
-  !! result%file_string is allocated, remember to call deallocate!
   subroutine file_reader_read_file(this, file_location)
     implicit none
 

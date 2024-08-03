@@ -70,10 +70,6 @@ Pointer - Will NOT automatically deallocate.
 
 NEVER, set ``this`` to ``value`` in a type method or IT WILL blow up!
 
-Why is this forgotten?
-This is forgotten because I forgot why I started programming in the first place.
-For the joy of creation and to see the happiness it brings to all that use my software.
-
 in C:
 
 ``const char *`` would be interopped as ``character(kind = c_char), intent(in)``
