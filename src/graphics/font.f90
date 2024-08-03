@@ -283,4 +283,20 @@ contains
   end subroutine calculate_opengl_texture_coordinates
 
 
+  !* Position (in pixels) to the index in the texture array.
+  function position_to_index(x, y) result(i)
+    implicit none
+
+    integer(c_int), intent(in), value :: x, y
+    integer(c_int) :: a, b
+    integer(c_int) :: i
+
+    ! Shift into 0 indexed, because math.
+    a = x - 1
+    b = y - 1
+
+    ! Times 4 because we have 4 individual channels we're hopping over.
+    ! Plus 1 because we're shifting back into 1 indexed.
+    i = (((b * font_texture_width) + a) * 4) + 1
+  end function position_to_index
 end module font
