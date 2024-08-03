@@ -11,16 +11,16 @@ module font
 
   public :: font_create
 
-  integer, parameter :: character_width = 5
-  integer, parameter :: character_height = 7
-  integer, parameter :: spacing = 1
+  integer :: character_width != 5
+  integer :: character_height != 7
+  integer :: spacing != 1
 
   ! Slots are the total size of a character, including the border.
-  integer, parameter :: slot_width = character_width + spacing ! 6
-  integer, parameter :: slot_height = character_height + spacing ! 8
+  integer :: slot_width ! = character_width + spacing ! 6
+  integer :: slot_height != character_height + spacing ! 8
 
-  integer, parameter :: characters_horizontal = 9
-  integer, parameter :: characters_vertical = 9
+  integer :: slots_horizontal != 9
+  integer :: slots_vertical != 9
 
 
 contains
@@ -103,13 +103,28 @@ contains
 
       ! We want to avoid a buffer overflow.
       if (temp_buffer_len >= 19 .and. temp_buffer(1:19) == "SLOTS_HORIZONTAL = ") then
-        print*,"Horizontal"
+        ! Cut the buffer and read it into the integer.
+        temp_buffer = temp_buffer(19:len(temp_buffer))
+        read(temp_buffer, '(i4)') slots_horizontal
+        if (slots_horizontal == 0) then
+          error stop "[Font] Error: Impossible SLOTS_HORIZONTAL value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
+        end if
 
       else if (temp_buffer_len >= 17 .and. temp_buffer(1:17) == "SLOTS_VERTICAL = ") then
-        print*,"Vertical"
+        ! Cut the buffer and read it into the integer.
+        temp_buffer = temp_buffer(17:len(temp_buffer))
+        read(temp_buffer, '(i4)') slots_vertical
+        if (slots_vertical == 0) then
+          error stop "[Font] Error: Impossible SLOTS_VERTICAL value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
+        end if
 
       else if (temp_buffer_len >= 10 .and. temp_buffer(1:10) == "SPACING = ") then
-        print*,"Spacing"
+        ! Cut the buffer and read it into the integer.
+        temp_buffer = temp_buffer(10:len(temp_buffer))
+        read(temp_buffer, '(i4)') spacing
+        if (spacing == 0) then
+          error stop "[Font] Error: Impossible SPACING value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
+        end if
 
       else if (temp_buffer_len >= 7) then
         ! This is a real rigid way to do this.
@@ -117,9 +132,9 @@ contains
         ! [A = ]
         ! Minus the brackets.
         if (temp_buffer(1:1) /= " " .and. temp_buffer(2:4) == " = ") then
-          print*,temp_buffer
+          ! print*,temp_buffer
           current_character = temp_buffer(1:1)
-          print*,current_character
+          ! print*,current_character
 
           ! Now we're going to cut the temp buffer.
           temp_buffer = temp_buffer(5:len(temp_buffer))
