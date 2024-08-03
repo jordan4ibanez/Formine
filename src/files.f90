@@ -60,7 +60,9 @@ contains
   end subroutine file_reader_read_file
 
 
+  !* Read a file into an array of heap_strings.
   subroutine file_reader_read_file_into_lines(this, file_location)
+    implicit none
 
     class(file_reader), intent(inout) :: this
     character(len = *), intent(in) :: file_location
@@ -93,10 +95,8 @@ contains
 
           ! Tick up the number of lines.
           this%line_count = this%line_count + 1
-
           ! Dump it in.
           this%lines = [this%lines, heap_string(this%file_string)]
-
           ! And remove residual memory.
           deallocate(this%file_string)
           exit
@@ -105,6 +105,7 @@ contains
           this%line_count = this%line_count + 1
           ! We're just going to continuously roll a bigger array with new elements.
           temporary_container = this%file_string(1:found_newline_index - 1)
+          ! Append it.
           this%lines = [this%lines, heap_string(temporary_container)]
           ! Find the new total length of the string buffer.
           length_of_buffer = len(this%file_string)
