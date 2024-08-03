@@ -1,6 +1,7 @@
 module font
   use, intrinsic :: iso_c_binding
   use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use :: vector_2d
   implicit none
 
   !* I am a solo developer. I only use 1 font.
@@ -13,8 +14,15 @@ module font
   public :: font_create
 
 
+  ! This is a container which holds the points on the texture that make the character appear correctly.
   type opengl_character
-
+    ! We use this for constructing the quad to match the size of the texture mapping.
+    real(c_double) :: width
+    ! Counter clock-wise.
+    type(vec2d) :: top_left
+    type(vec2d) :: bottom_left
+    type(vec2d) :: bottom_right
+    type(vec2d) :: top_right
   end type opengl_character
 
 
