@@ -30,7 +30,7 @@ contains
   subroutine file_reader_read_file(this, file_location)
     implicit none
 
-    class(file_reader) :: this
+    class(file_reader), intent(inout) :: this
     character(len = *) :: file_location
     integer :: file_io_identifier
     integer :: file_size
