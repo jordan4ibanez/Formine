@@ -90,7 +90,6 @@ contains
     character(len = :), allocatable :: temp_buffer
     character :: current_character
     character(len = :), allocatable :: x_str, y_str
-    type(vec2i) :: testing
 
     call reader%read_lines(font_config_location)
 
@@ -105,7 +104,7 @@ contains
       ! This is a real half assed way to do this but who cares?
       temp_buffer_len = len(temp_buffer)
 
-      if (temp_buffer_len == 0) then
+      if (temp_buffer_len <= 0) then
         continue
       end if
 
@@ -114,7 +113,7 @@ contains
         ! Cut the buffer and read it into the integer.
         temp_buffer = temp_buffer(19:len(temp_buffer))
         read(temp_buffer, '(i4)') slots_horizontal
-        if (slots_horizontal == 0) then
+        if (slots_horizontal <= 0) then
           error stop "[Font] Error: Impossible SLOTS_HORIZONTAL value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
         end if
 
@@ -122,7 +121,7 @@ contains
         ! Cut the buffer and read it into the integer.
         temp_buffer = temp_buffer(17:len(temp_buffer))
         read(temp_buffer, '(i4)') slots_vertical
-        if (slots_vertical == 0) then
+        if (slots_vertical <= 0) then
           error stop "[Font] Error: Impossible SLOTS_VERTICAL value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
         end if
 
@@ -130,7 +129,7 @@ contains
         ! Cut the buffer and read it into the integer.
         temp_buffer = temp_buffer(10:len(temp_buffer))
         read(temp_buffer, '(i4)') spacing
-        if (spacing == 0) then
+        if (spacing <= 0) then
           error stop "[Font] Error: Impossible SPACING value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
         end if
 
@@ -138,7 +137,7 @@ contains
         ! Cut the buffer and read it into the integer.
         temp_buffer = temp_buffer(13:len(temp_buffer))
         read(temp_buffer, '(i4)') character_width
-        if (character_width == 0) then
+        if (character_width <= 0) then
           error stop "[Font] Error: Impossible CHAR_WIDTH value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
         end if
 
@@ -146,7 +145,7 @@ contains
         ! Cut the buffer and read it into the integer.
         temp_buffer = temp_buffer(14:len(temp_buffer))
         read(temp_buffer, '(i4)') character_height
-        if (character_height == 0) then
+        if (character_height <= 0) then
           error stop "[Font] Error: Impossible CHAR_HEIGHT value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
         end if
 
@@ -167,7 +166,7 @@ contains
           comma_location = index(temp_buffer, ",")
 
           ! There is a formatting error.
-          if (comma_location == 0) then
+          if (comma_location <= 0) then
             error stop "[Font] Error: There is a missing comma on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
           end if
 
@@ -192,21 +191,28 @@ contains
     end do
 
     ! Check everything to make sure nothing blew up.
-    if (slots_horizontal == 0) then
+    if (slots_horizontal <= 0) then
       error stop "[Font] Error: SLOTS_HORIZONTAL was not set."
-    else if (slots_vertical == 0) then
+    else if (slots_vertical <= 0) then
       error stop "[Font] Error: SLOTS_VERTICAL was not set."
-    else if (character_width == 0) then
+    else if (character_width <= 0) then
       error stop "[Font] Error: CHAR_WIDTH was not set."
-    else if (character_height == 0) then
+    else if (character_height <= 0) then
       error stop "[Font] Error: CHAR_HEIGHT was not set."
-    else if (spacing == 0) then
+    else if (spacing <= 0) then
       error stop "[Font] Error: SPACING was not set."
     end if
 
     ! Finally, set the slot sizes.
     slot_width = character_width + spacing
     slot_height = character_height + spacing
+
+    ! Check that as well because this subroutine is already huge.
+    if (slot_width <= 0) then
+      error stop "[Font] Error: slot_width calculation error."
+    else if (slot_height <= 0) then
+      error stop "[Font] Error: slot_height calculation error."
+    end if
   end subroutine process_font_configuration
 
 
