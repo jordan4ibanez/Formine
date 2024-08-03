@@ -43,17 +43,19 @@ contains
 
     font_data_file_name = get_file_name_from_string(font_texture_location)
 
-    print*,font_texture_location
+    ! print*,font_texture_location
 
     texture_cfg_location = string_remove_file_extension(font_texture_location)//".cfg"
 
-    print*,texture_cfg_location
+    ! print*,texture_cfg_location
 
-    print*, "reading font config"
+    ! print*, "reading font config"
 
     ! call reader%read_file(texture_cfg_location)
 
-    print*,reader%file_string
+    ! print*,reader%file_string
+
+    
 
 
 
