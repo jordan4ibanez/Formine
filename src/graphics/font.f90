@@ -46,35 +46,23 @@ contains
     character(len = :), allocatable :: font_data_file_name
     character(len = :), allocatable :: font_config_location
 
+    ! print*,"    REMEMBER TO USE A SPARE SLOT FOR UNDEFINED CHARACTERS"
+
     !* We will assume that the only difference in png and the cfg is the file extension.
 
     font_data_file_name = get_file_name_from_string(font_texture_location)
-
-    ! print*,font_texture_location
-
     font_config_location = string_remove_file_extension(font_texture_location)//".cfg"
 
-    ! print*,texture_cfg_location
-
-    ! print*, "reading font config"
-
+    ! This is quite a large and complex subroutine. It's getting all the data from the .cfg file.
     call process_font_configuration(font_config_location)
 
-    ! print*,reader%file_string
-
-
-
-
-
-
-
-
+    ! Now load up the font.
     c_file_location = into_c_string(font_texture_location)
 
     ! We always want 4 channels.
     desired_channels = 4
 
-    ! print*,"    REMEMBER TO USE A SPARE SLOT FOR UNDEFINED CHARACTERS"
+
   end subroutine font_create
 
 
