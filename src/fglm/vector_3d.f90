@@ -9,7 +9,7 @@ module vector_3d
   public :: vec3d
 
 
-  ! vec3f and Vec3d are transparent containers.
+  ! vec3f and vec3d are transparent containers.
   ! You can use the methods, or you can use the raw data.
   !
   !* They do not mix. Can't add vec3f to vec3d, and so forth. This will cause weird problems that I don't feel like solving.
