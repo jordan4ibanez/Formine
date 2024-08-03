@@ -78,7 +78,7 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: font_config_location
     type(file_reader) :: reader
-    integer :: i, comma_location, x_location, y_location
+    integer :: i, temp_buffer_len, comma_location, x_location, y_location
     character(len = :), allocatable :: temp_buffer
     character :: current_character
     character(len = :), allocatable :: x_str, y_str
@@ -95,50 +95,61 @@ contains
       temp_buffer = reader%lines(i)%get()
 
       ! This is a real half assed way to do this but who cares?
+      temp_buffer_len = len(temp_buffer)
 
-      if (len(temp_buffer) == 0) then
+      if (temp_buffer_len == 0) then
         continue
       end if
 
-      ! This is a real rigid way to do this.
-      ! This is basically, it has to be formatted like:
-      ! [A = ]
-      ! Minus the brackets.
-      if (temp_buffer(1:1) /= " " .and. temp_buffer(2:4) == " = ") then
-        print*,temp_buffer
-        current_character = temp_buffer(1:1)
-        print*,current_character
+      if (temp_buffer_len >= 16 .and. temp_buffer(1:16) == "SLOTS_HORIZONTAL") then
+        print*,"Horizontal"
 
-        ! Now we're going to cut the temp buffer.
-        temp_buffer = temp_buffer(5:len(temp_buffer))
+      else if (temp_buffer_len >= 14 .and. temp_buffer(1:14) == "SLOTS_VERTICAL") then
+        print*,"Vertical"
 
-        print"(A)","["//temp_buffer//"]"
+      else if (temp_buffer_len >= 7 .and. temp_buffer(1:7) == "SPACING") then
+        print*,"Spacing"
 
-        ! Now we're going to chop up the X and Y out of the line.
-        comma_location = index(temp_buffer, ",")
+      else
+        ! This is a real rigid way to do this.
+        ! This is basically, it has to be formatted like:
+        ! [A = ]
+        ! Minus the brackets.
+        if (temp_buffer(1:1) /= " " .and. temp_buffer(2:4) == " = ") then
+          print*,temp_buffer
+          current_character = temp_buffer(1:1)
+          print*,current_character
 
-        ! There is a formatting error.
-        if (comma_location == 0) then
-          error stop "[Font] Error: There is a missing comma on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
+          ! Now we're going to cut the temp buffer.
+          temp_buffer = temp_buffer(5:len(temp_buffer))
+
+          print"(A)","["//temp_buffer//"]"
+
+          ! Now we're going to chop up the X and Y out of the line.
+          comma_location = index(temp_buffer, ",")
+
+          ! There is a formatting error.
+          if (comma_location == 0) then
+            error stop "[Font] Error: There is a missing comma on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
+          end if
+
+          ! Get the X into an integer.
+          x_str = temp_buffer(1:comma_location - 1)
+          read(x_str, '(i4)') x_location
+          if (x_location <= 0) then
+            error stop "[Font] Error: Impossible X value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
+          end if
+
+          ! Get the Y into an integer.
+          y_str = temp_buffer(comma_location + 1:len(temp_buffer))
+          read(y_str, '(i4)') y_location
+          if (y_location <= 0) then
+            error stop "[Font] Error: Impossible Y value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
+          end if
+
+          testing = vec2i(x_location, y_location)
+
         end if
-
-        ! Get the X into an integer.
-        x_str = temp_buffer(1:comma_location - 1)
-        read(x_str, '(i4)') x_location
-        if (x_location <= 0) then
-          error stop "[Font] Error: Impossible X value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
-        end if
-
-        ! Get the Y into an integer.
-        y_str = temp_buffer(comma_location + 1:len(temp_buffer))
-        read(y_str, '(i4)') y_location
-        if (y_location <= 0) then
-          error stop "[Font] Error: Impossible Y value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
-        end if
-
-        testing = [x_location, y_location]
-
-
       end if
 
     end do
