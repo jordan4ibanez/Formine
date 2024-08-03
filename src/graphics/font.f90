@@ -101,16 +101,17 @@ contains
         continue
       end if
 
-      if (temp_buffer_len >= 16 .and. temp_buffer(1:16) == "SLOTS_HORIZONTAL") then
+      ! We want to avoid a buffer overflow.
+      if (temp_buffer_len >= 19 .and. temp_buffer(1:19) == "SLOTS_HORIZONTAL = ") then
         print*,"Horizontal"
 
-      else if (temp_buffer_len >= 14 .and. temp_buffer(1:14) == "SLOTS_VERTICAL") then
+      else if (temp_buffer_len >= 17 .and. temp_buffer(1:17) == "SLOTS_VERTICAL = ") then
         print*,"Vertical"
 
-      else if (temp_buffer_len >= 7 .and. temp_buffer(1:7) == "SPACING") then
+      else if (temp_buffer_len >= 10 .and. temp_buffer(1:10) == "SPACING = ") then
         print*,"Spacing"
 
-      else
+      else if (temp_buffer_len >= 7) then
         ! This is a real rigid way to do this.
         ! This is basically, it has to be formatted like:
         ! [A = ]
