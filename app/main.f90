@@ -17,9 +17,9 @@ program main
   call font_prototyping("./textures/font.png")
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
-  ! if (.true.) then
-  !   return
-  ! end if
+  if (.true.) then
+    return
+  end if
   !! END WARNING.
 
 
