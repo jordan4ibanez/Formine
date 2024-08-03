@@ -1,5 +1,6 @@
 module font
   use, intrinsic :: iso_c_binding
+  use :: fhash, only: fhash_tbl_t, key => fhash_key
   implicit none
 
   !* I am a solo developer. I only use 1 font.
@@ -11,16 +12,23 @@ module font
 
   public :: font_create
 
-  integer :: character_width != 5
-  integer :: character_height != 7
-  integer :: spacing != 1
 
-  ! Slots are the total size of a character, including the border.
-  integer :: slot_width ! = character_width + spacing ! 6
-  integer :: slot_height != character_height + spacing ! 8
+  ! The size of each character in pixels.
+  integer :: character_width = 0 != 5
+  integer :: character_height = 0 != 7
 
-  integer :: slots_horizontal != 9
-  integer :: slots_vertical != 9
+  ! Spacing between each character in pixels.
+  integer :: spacing = 0 != 1
+
+  ! Slots are the total size of a character, including the border, in pixels.
+  integer :: slot_width = 0 ! = character_width + spacing ! 6
+  integer :: slot_height = 0 != character_height + spacing ! 8
+
+  ! How many characters X and Y in total.
+  integer :: slots_horizontal = 0 != 9
+  integer :: slots_vertical = 0 != 9
+
+  type(fhash_tbl_t) :: character_database_integral
 
 
 contains
@@ -179,12 +187,26 @@ contains
             error stop "[Font] Error: Impossible Y value on line ["//int_to_string(i)//"] of font config ["//font_config_location//"]"
           end if
 
-          testing = vec2i(x_location, y_location)
-
+          ! Now finally, dump the integral position into the database.
+          call character_database_integral%set(key(current_character), vec2i(x_location, y_location))
         end if
       end if
-
     end do
+
+    ! Check everything to make sure nothing blew up.
+    if (slots_horizontal == 0) then
+      error stop "[Font] Error: SLOTS_HORIZONTAL was not set."
+    else if (slots_vertical == 0) then
+      error stop "[Font] Error: SLOTS_VERTICAL was not set."
+    else if (character_width == 0) then
+      error stop "[Font] Error: CHAR_WIDTH was not set."
+    else if (character_height == 0) then
+      error stop "[Font] Error: CHAR_HEIGHT was not set."
+    else if (spacing == 0) then
+      error stop "[Font] Error: SPACING was not set."
+    end if
+
+    
 
 
   end subroutine process_font_configuration
