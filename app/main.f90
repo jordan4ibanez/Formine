@@ -14,7 +14,7 @@ program main
 
   real(c_float) :: rotation
 
-  call font_prototyping()
+  call font_prototyping("./textures/font.png")
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
@@ -122,7 +122,7 @@ program main
 
       ! rotation = rotation + get_delta_f32() * 7.0
 
-      call gl_clear_color_scalar(1.0)
+      call gl_clear_color_scalar(0.0)
 
       ! Shader needs to start before the camera is updated.
       call shader_start("main")
