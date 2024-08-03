@@ -9,7 +9,7 @@ module font
   private
 
 
-  public :: font_prototyping
+  public :: font_create
 
   integer, parameter :: character_width = 5
   integer, parameter :: character_height = 7
@@ -26,7 +26,7 @@ module font
 contains
 
 
-  subroutine font_prototyping(font_texture_location)
+  subroutine font_create(font_texture_location)
     use :: stb_image
     use :: string
     use :: files
@@ -72,7 +72,10 @@ contains
 
 
 
-  end subroutine font_prototyping
+  end subroutine font_create
+
+
+
 
 
 end module font
