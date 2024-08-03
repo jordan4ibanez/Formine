@@ -259,6 +259,7 @@ contains
     integer :: pixel_x, pixel_y
     type(rgba) :: pixel_color
     type(opengl_character) :: gpu_character
+    type(vec2d) :: debugging
 
     ! Shift this into a format we can use.
     integral_image_data = c_uchar_to_int_array(raw_image_data)
@@ -282,8 +283,8 @@ contains
       ! print*,position
 
       ! We put our initial brush position at the top left of the character.
-      pixel_x = (position%x) * slot_width
-      pixel_y = (position%y) * slot_height
+      pixel_x = ((position%x - 1) * slot_width) + 1
+      pixel_y = ((position%y - 1) * slot_height) + 1
 
       ! print*,pixel_x, pixel_y
 
@@ -293,11 +294,15 @@ contains
       !! Remember: to get the right side and bottom, you need to overshoot by 1 pixel !!
 
       pixel_color = get_color(1, 1)
-      print*,pixel_color
 
-      print*,font_texture_width
+      print*,pixel_x, pixel_y
 
-      print*, pixel_position_to_opengl_position(55,73)
+      debugging = pixel_position_to_opengl_position(pixel_x, pixel_y)
+
+      ! gpu_character = calculate_opengl_texture_coordinates()
+      print*,debugging
+
+
 
       exit
 
