@@ -304,7 +304,26 @@ contains
   contains
 
 
-    !* We need to do such complex work we need this subroutine to have subroutines.
+    !* We need to do such complex work we need this subroutine to have functions.
+
+    function pixel_position_to_opengl_position(x,y) result(pos)
+      implicit none
+
+      integer(c_int), intent(in), value :: x, y
+      type(vec2d) :: pos
+      real(c_double) :: x_f64, y_f64, canvas_width_f64, canvas_height_f64
+
+      ! We want the top left of the pixel. Shift into 0 indexed.
+      x_f64 = real(x - 1, kind = c_double)
+      y_f64 = real(y - 1, kind = c_double)
+
+      canvas_width_f64 = real(font_texture_width, kind = c_double)
+      canvas_height_f64 = real(font_texture_height, kind = c_double)
+
+      ! A 0.0 - 1.0 range is the goal.
+      pos = vec2d(x_f64 / canvas_width_f64, y_f64 / canvas_height_f64)
+    end function pixel_position_to_opengl_position
+
 
 
     function get_color(x,y) result(color)
