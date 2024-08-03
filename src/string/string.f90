@@ -14,6 +14,7 @@ module string
   public :: bool_to_string
   public :: heap_string_array
   public :: get_file_name_from_string
+  public :: string_remove_file_extension
   !? Pass through the type.
   public :: heap_string
 
@@ -290,6 +291,26 @@ contains
     ! So this is a file. Let's now get it
     resulting_name_of_file = input_string(i + 1:length_of_string)
   end function get_file_name_from_string
+
+
+  !* Convert something like "test.png" into "test"
+  function string_remove_file_extension(input_file_name) result(file_name_without_extension)
+    implicit none
+
+    character(len = *), intent(in) :: input_file_name
+    character(len = :), allocatable :: file_name_without_extension
+    integer :: i
+
+    i = index(input_file_name, ".", back = .true.)
+
+    if (i == 0) then
+      print"(A)", achar(27)//"[38;2;255;128;0m[String] Warning: Tried to remove file extension off string that's not a file name."//achar(27)//"[m"
+      file_name_without_extension = ""
+      return
+    end if
+
+    file_name_without_extension = input_file_name(1:i - 1)
+  end function string_remove_file_extension
 
 
 end module string
