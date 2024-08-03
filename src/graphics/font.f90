@@ -37,7 +37,6 @@ contains
     character(len = :, kind = c_char), allocatable :: c_file_location
     character(len = :), allocatable :: font_data_file_name
     character(len = :), allocatable :: texture_cfg_location
-    type(file_reader) :: reader
 
     !* We will assume that the only difference in png and the cfg is the file extension.
 
@@ -51,7 +50,7 @@ contains
 
     ! print*, "reading font config"
 
-    call reader%read_lines(texture_cfg_location)
+    call process_font_configuration(texture_cfg_location)
 
     ! print*,reader%file_string
 
@@ -68,11 +67,22 @@ contains
     desired_channels = 4
 
     ! print*,"    REMEMBER TO USE A SPARE SLOT FOR UNDEFINED CHARACTERS"
-
-
-
-
   end subroutine font_create
+
+
+  subroutine process_font_configuration(texture_cfg_location)
+    use :: string
+    use :: files
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: texture_cfg_location
+    type(file_reader) :: reader
+
+    call reader%read_lines(texture_cfg_location)
+
+
+
+  end subroutine process_font_configuration
 
 
 

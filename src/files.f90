@@ -114,7 +114,6 @@ contains
         end if
       end do
     end if
-    print*,this%line_count
   end subroutine file_reader_read_file_into_lines
 
 end module files
