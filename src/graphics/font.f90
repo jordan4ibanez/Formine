@@ -255,7 +255,7 @@ contains
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     type(vec2i) :: position
-    integer :: pixel_x, pixel_y
+    integer :: pixel_x, pixel_y, current_character_width
     type(rgba) :: pixel_color
     type(opengl_character) :: gpu_character
     type(vec2d) :: debugging
@@ -267,6 +267,11 @@ contains
     iterator = fhash_iter_t(character_database_integral)
     do while(iterator%next(generic_key, generic_data))
       ! print*,generic_key%to_string()
+
+      !! Turn off this selection debug!
+      if (generic_key%to_string() /= "i") then
+        cycle
+      end if
 
       ! Enforce that we are running with a vec2i.
       select type(generic_data)
