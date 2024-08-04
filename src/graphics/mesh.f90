@@ -289,22 +289,22 @@ contains
 
     character(len = *), intent(in) :: mesh_name
     logical, intent(inout) :: exists
-    class(*), allocatable :: generic
+    class(*), allocatable :: generic_data
     integer :: status
 
     exists = .false.
 
-    call mesh_database%get_raw(key(mesh_name), generic, stat = status)
+    call mesh_database%get_raw(key(mesh_name), generic_data, stat = status)
 
     if (status /= 0) then
       print"(A)",colorize_rgb("[Mesh] Error: ["//mesh_name//"] does not exist.", 255, 0, 0)
       return
     end if
 
-    select type(generic)
+    select type(generic_data)
      type is (mesh_data)
       exists = .true.
-      gotten_mesh = generic
+      gotten_mesh = generic_data
      class default
       error stop colorize_rgb("[Mesh] Error: ["//mesh_name//"] has the wrong type.", 255, 0, 0)
     end select
