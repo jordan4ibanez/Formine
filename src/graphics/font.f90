@@ -127,7 +127,7 @@ contains
         positions(current_positions_offset + 11) = 0.0
 
 
-        current_scroll_right = current_scroll_right + actual_character_width
+        current_scroll_right = current_scroll_right + actual_character_width + (font_size * 0.1)
 
         ! Texture coordinates.
 
