@@ -109,6 +109,7 @@ contains
   end subroutine font_create
 
 
+  !* Very simple configuration file processing.
   subroutine process_font_configuration(font_config_location, character_database_integral)
     use :: string
     use :: files
@@ -253,6 +254,7 @@ contains
   end subroutine process_font_configuration
 
 
+  !* Automates converting the pixel positions into OpenGL texture mapping positions.
   subroutine calculate_opengl_texture_coordinates(raw_image_data, character_database_integral)
     use :: math_helpers
     use, intrinsic :: iso_c_binding
@@ -408,8 +410,6 @@ contains
       color%b = integral_image_data(index + 2)
       color%a = integral_image_data(index + 3)
     end function index_get_color
-
-
   end subroutine calculate_opengl_texture_coordinates
 
 
