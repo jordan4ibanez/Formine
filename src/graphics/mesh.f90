@@ -42,7 +42,7 @@ contains
     use :: terminal
     implicit none
     ! Notes:
-    ! 1. break this up into functions.
+
     ! 2. make a type for a mesh.
     ! 3. make this handle mesh things.
     ! 4. improve, somehow.
@@ -66,7 +66,7 @@ contains
 
     ! Into position vertex buffer object.
 
-    new_mesh%vbo_position = upload_positions(positions)
+    new_mesh%vbo_position = upload_positions(positions, 3)
 
     new_mesh%vbo_texture_coordinate = upload_texture_coordinate(texture_coordinate)
 
@@ -84,13 +84,14 @@ contains
   end subroutine mesh_create_3d
 
 
-  integer function upload_positions(position_array) result(vbo_position)
+  integer function upload_positions(position_array, vec_components) result(vbo_position)
     use, intrinsic :: iso_c_binding
     use :: opengl
     use :: shader
     implicit none
 
     real(c_float), dimension(:), intent(in) :: position_array
+    integer(c_int), intent(in), value :: vec_components
     integer :: position_vbo_position
 
     position_vbo_position = shader_get_attribute("main", "position")
@@ -108,10 +109,10 @@ contains
     ! Pass this data into the OpenGL state machine.
     call gl_buffer_float_array(position_array)
 
-    ! Width = 3 because this is a vec3
+    ! Width = vec_components because this is vecX
     ! false because this is not normalized
     ! 0 stride
-    call gl_vertex_attrib_pointer(position_vbo_position, 3, GL_FLOAT, .false., 0)
+    call gl_vertex_attrib_pointer(position_vbo_position, vec_components, GL_FLOAT, .false., 0)
 
     ! Enable this new data.
     call gl_enable_vertex_attrib_array(position_vbo_position)
