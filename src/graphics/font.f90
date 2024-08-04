@@ -316,6 +316,15 @@ contains
     !* We need to do such complex work we need this subroutine to have functions.
 
 
+    function new_opengl_character() result(new_char)
+      implicit none
+
+      type(opengl_character) :: new_char
+      new_char%width_pixels = 0
+      new_char%width_real = 0.0d0
+    end function new_opengl_character
+
+
     !* Convert the integral pixel width into double floating precision with range 0.0 - 1.0.
     function convert_pixel_width_to_real_width(input_width) result(real_width)
       implicit none
