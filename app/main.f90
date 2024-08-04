@@ -140,12 +140,12 @@ program main
 
       !? DRAW TEST ?!
 
-      call camera_set_object_matrix_f32(0.0, -0.5, -3.0, 0.0, rotation, 0.0, 0.5, 0.5, 0.5)
+      call camera_set_object_matrix_f32(0.0, -0.25, -3.0, 0.0, rotation, 0.0, 0.5, 0.5, 0.5)
 
       !! Was: call texture_use("fortran_logo_512x512.png")
       call texture_use("font")
 
-      call font_generate_text("hello", 1.0, "Hello, Fortran!", g = abs(cos(rotation / 2.0)), center = .true.)
+      call font_generate_text("hello", abs(cos(rotation * (-2.0))), "Hello, Fortran!", r = abs(cos(rotation / 2.0)), center = .true.)
 
       call mesh_draw("hello")
 
