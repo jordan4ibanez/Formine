@@ -34,7 +34,7 @@ module mesh
 contains
 
 
-  subroutine mesh_create_3d(mesh_name, positions, texture_coordinate, colors, indices)
+  subroutine mesh_create_3d(shader_name, mesh_name, positions, texture_coordinate, colors, indices)
     use :: shader
     use :: opengl
     use :: string
@@ -47,7 +47,7 @@ contains
     ! 3. make this handle mesh things.
     ! 4. improve, somehow.
 
-    character(len = *), intent(in) :: mesh_name
+    character(len = *), intent(in) :: shader_name, mesh_name
     real(c_float), dimension(:), intent(in) :: positions, texture_coordinate, colors
     integer(c_int), dimension(:), intent(in) :: indices
     type(mesh_data) :: new_mesh
@@ -66,7 +66,7 @@ contains
 
     ! Into position vertex buffer object.
 
-    new_mesh%vbo_position = upload_positions(positions, 3)
+    new_mesh%vbo_position = upload_positions(shader_name, positions, 3)
 
     new_mesh%vbo_texture_coordinate = upload_texture_coordinate(texture_coordinate)
 
@@ -84,17 +84,18 @@ contains
   end subroutine mesh_create_3d
 
 
-  integer function upload_positions(position_array, vec_components) result(vbo_position)
+  integer function upload_positions(shader_name, position_array, vec_components) result(vbo_position)
     use, intrinsic :: iso_c_binding
     use :: opengl
     use :: shader
     implicit none
 
+    character(len = *), intent(in) :: shader_name
     real(c_float), dimension(:), intent(in) :: position_array
     integer(c_int), intent(in), value :: vec_components
     integer :: position_vbo_position
 
-    position_vbo_position = shader_get_attribute("main", "position")
+    position_vbo_position = shader_get_attribute(shader_name, "position")
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
