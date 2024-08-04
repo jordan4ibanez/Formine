@@ -103,6 +103,7 @@ module opengl
   public :: gl_clear_depth_buffer
   public :: gl_clear_color_and_depth_buffer
   public :: gl_enable
+  public :: gl_disable
   public :: gl_clear_color
   public :: gl_clear_color_scalar
   public :: gl_set_debug_message_callback
@@ -184,6 +185,14 @@ module opengl
 
       integer(c_int), intent(in), value :: cap
     end subroutine gl_enable
+
+
+    subroutine gl_disable(cap) bind(c, name = "glDisable")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: cap
+    end subroutine gl_disable
 
 
     subroutine internal_gl_debug_message_callback(callback, user_param) bind(c, name = "glDebugMessageCallback")
