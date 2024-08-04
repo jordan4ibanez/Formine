@@ -256,9 +256,9 @@ contains
     class(*), allocatable :: generic_data
     type(vec2i) :: position
     integer :: pixel_x, pixel_y, current_character_width
-    type(rgba) :: pixel_color
     type(opengl_character) :: gpu_character
-    type(vec2d) :: debugging
+    real(c_double) :: debugging
+    ! type(vec2d) :: debugging
 
     ! Shift this into a format we can use.
     integral_image_data = c_uchar_to_int_array(raw_image_data)
@@ -290,6 +290,7 @@ contains
       pixel_x = ((position%x - 1) * slot_width) + 1
       pixel_y = ((position%y - 1) * slot_height) + 1
 
+      debugging = find_pixel_width(pixel_x, pixel_y)
       ! print*,pixel_x, pixel_y
 
       ! print*,integral_image_data(position_to_index(pixel_x, pixel_y))
@@ -297,14 +298,10 @@ contains
 
       !! Remember: to get the right side and bottom, you need to overshoot by 1 pixel !!
 
-      pixel_color = get_color(1, 1)
-
-      print*,pixel_x, pixel_y
-
-      debugging = pixel_position_to_opengl_position(pixel_x+character_width, pixel_y)
+      ! debugging = pixel_position_to_opengl_position(pixel_x+character_width, pixel_y)
 
       ! gpu_character = calculate_opengl_texture_coordinates()
-      print*,debugging
+      ! print*,debugging
 
 
 
@@ -318,6 +315,31 @@ contains
 
     !* We need to do such complex work we need this subroutine to have functions.
 
+
+    !* Find how wide a character is by scanning it.
+    function find_pixel_width(starting_x, starting_y) result(pixel_width)
+      implicit none
+
+      integer(c_int), intent(in), value :: starting_x, starting_y
+      integer(c_int) :: scan_x, scan_y
+      integer(c_int) :: pixel_width
+      type(rgba) :: pixel_color
+
+      ! Vertical scan, by row, right to left, until we hit something.
+      scanner: do scan_x = starting_x + character_width - 1, starting_x, - 1
+        do scan_y = starting_y + character_height - 1, starting_y, - 1
+          pixel_color = get_color(scan_x, scan_y)
+          if (pixel_color%r + pixel_color%g + pixel_color%b + pixel_color%a > 0) then
+            pixel_width = (scan_x - starting_x) + 1
+            exit scanner
+          end if
+        end do
+      end do scanner
+    end function find_pixel_width
+
+
+    !* Convert the pixel position into the OpenGL floating texture map position.
+    !* Pixel position is the top left of a pixel viewed in GIMP.
     function pixel_position_to_opengl_position(x,y) result(pos)
       implicit none
 
