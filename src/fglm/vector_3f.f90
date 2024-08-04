@@ -16,7 +16,9 @@ module vector_3f
 
 
   type vec3f
-    real(c_float) :: x, y, z = 0.0
+    real(c_float) :: x = 0.0
+    real(c_float) :: y = 0.0
+    real(c_float) :: z = 0.0
   contains
     generic :: assignment(=) => assign_scalar_f32, assign_array_f32, assign_vec3f, assign_vec3d
     procedure :: assign_scalar_f32
