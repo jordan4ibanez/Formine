@@ -68,7 +68,7 @@ contains
     real(c_float), intent(in), value :: font_size
     real(c_float), dimension(:), allocatable :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), allocatable :: indices
-    integer :: text_len, i, current_offset, current_indices_offset
+    integer :: text_len, i, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
     character :: current_character
     type(opengl_character) :: character_data
     logical :: exists
@@ -86,8 +86,8 @@ contains
     allocate(positions(text_len * offset))
     ! todo: use offset intead of 4 * 2
     allocate(texture_coordinates(text_len * 8))
-
     allocate(colors(text_len * offset))
+    allocate(indices(text_len * 6))
 
     do i = 1,text_len
 
@@ -98,55 +98,80 @@ contains
         cycle
       end if
 
-      character_data = get_character(text(i:i), exists)
+      character_data = get_character(current_character, exists)
 
       ! For now, we're just going to skip characters that don't exist.
       ! todo: use a special character that is a square box or something as a replacement.
       if (exists) then
-        current_offset = ((i - 1) * 8) + 1
+
+        print*,current_positions_offset
 
         ! Positions.
+        current_positions_offset = ((i - 1) * 12) + 1
         actual_character_width = real(character_data%width_real, kind = c_float) * font_size
 
-        positions = [&
-          current_scroll_right,   0.0,       0.0, &
-          current_scroll_right,   font_size, 0.0, &
-          actual_character_width, font_size, 0.0, &
-          actual_character_width, 0.0,       0.0 &
-          ]
+        positions(current_positions_offset    ) = current_scroll_right
+        positions(current_positions_offset + 1) = font_size
+        positions(current_positions_offset + 2) = 0.0
 
-        ! Texture coordinates.
-        texture_coordinates(current_offset    ) = character_data%top_left%x_f32()
-        texture_coordinates(current_offset + 1) = character_data%top_left%y_f32()
-        texture_coordinates(current_offset + 2) = character_data%bottom_left%x_f32()
-        texture_coordinates(current_offset + 3) = character_data%bottom_left%y_f32()
-        texture_coordinates(current_offset + 4) = character_data%bottom_right%x_f32()
-        texture_coordinates(current_offset + 5) = character_data%bottom_right%y_f32()
-        texture_coordinates(current_offset + 6) = character_data%top_right%x_f32()
-        texture_coordinates(current_offset + 7) = character_data%top_right%y_f32()
+        positions(current_positions_offset + 3) = current_scroll_right
+        positions(current_positions_offset + 4) = 0.0
+        positions(current_positions_offset + 5) = 0.0
+
+        positions(current_positions_offset + 6) = current_scroll_right + actual_character_width
+        positions(current_positions_offset + 7) = 0.0
+        positions(current_positions_offset + 8) = 0.0
+
+        positions(current_positions_offset + 9) = current_scroll_right + actual_character_width
+        positions(current_positions_offset + 10) = font_size
+        positions(current_positions_offset + 11) = 0.0
+
 
         current_scroll_right = current_scroll_right + actual_character_width
 
+        ! Texture coordinates.
+
+        current_texture_coordinates_offset = ((i - 1) * 8) + 1
+        texture_coordinates(current_texture_coordinates_offset    ) = character_data%top_left%x_f32()
+        texture_coordinates(current_texture_coordinates_offset + 1) = character_data%top_left%y_f32()
+        texture_coordinates(current_texture_coordinates_offset + 2) = character_data%bottom_left%x_f32()
+        texture_coordinates(current_texture_coordinates_offset + 3) = character_data%bottom_left%y_f32()
+        texture_coordinates(current_texture_coordinates_offset + 4) = character_data%bottom_right%x_f32()
+        texture_coordinates(current_texture_coordinates_offset + 5) = character_data%bottom_right%y_f32()
+        texture_coordinates(current_texture_coordinates_offset + 6) = character_data%top_right%x_f32()
+        texture_coordinates(current_texture_coordinates_offset + 7) = character_data%top_right%y_f32()
+
         ! Colors.
-        colors = [&
-          0.0, 0.0, 0.0, &
-          0.0, 0.0, 0.0, &
-          0.0, 0.0, 0.0, &
-          0.0, 0.0, 0.0 &
-          ]
+        current_colors_offset = ((i - 1) * 12) + 1
+        colors(current_colors_offset    ) = 0.0
+        colors(current_colors_offset + 1) = 0.0
+        colors(current_colors_offset + 2) = 0.0
+
+        colors(current_colors_offset + 3) = 0.0
+        colors(current_colors_offset + 4) = 0.0
+        colors(current_colors_offset + 5) = 0.0
+
+        colors(current_colors_offset + 6) = 0.0
+        colors(current_colors_offset + 7) = 0.0
+        colors(current_colors_offset + 8) = 0.0
+
+        colors(current_colors_offset + 9) = 0.0
+        colors(current_colors_offset + 10) = 0.0
+        colors(current_colors_offset + 11) = 0.0
 
         ! Indices.
-        current_indices_offset = (i - 1) * 4
-        indices = [ &
-          0 + current_indices_offset, &
-          1 + current_indices_offset, &
-          2 + current_indices_offset, &
-          2 + current_indices_offset, &
-          3 + current_indices_offset, &
-          0 + current_indices_offset &
-          ]
+        current_indices_offset = ((i - 1) * 6) + 1
+        current_indices_index = (i - 1) * 4
+
+        indices(current_indices_offset    ) = 0 + current_indices_index
+        indices(current_indices_offset + 1) = 1 + current_indices_index
+        indices(current_indices_offset + 2) = 2 + current_indices_index
+        indices(current_indices_offset + 3) = 2 + current_indices_index
+        indices(current_indices_offset + 4) = 3 + current_indices_index
+        indices(current_indices_offset + 5) = 0 + current_indices_index
       end if
     end do
+
 
     call mesh_create_3d(mesh_name, positions, texture_coordinates, colors, indices)
   end subroutine font_generate_text
