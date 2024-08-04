@@ -116,15 +116,18 @@ program main
 
   rotation = 0.0
 
+
+
   !! This is debugging for functions!
   if (.true.) then
     do while(.not. glfw_window_should_close())
 
       call delta_tick()
 
-      ! rotation = rotation + get_delta_f32() * 7.0
+      rotation = rotation + get_delta_f32() * 3.0
 
-      call gl_clear_color_scalar(0.0)
+
+      call gl_clear_color_scalar(1.0)
 
       ! Shader needs to start before the camera is updated.
       call shader_start("main")
@@ -137,12 +140,16 @@ program main
 
       !? DRAW TEST ?!
 
-      call camera_set_object_matrix_f32(0.0, 0.0, -1.0, 0.0, rotation, 0.0, 1.0, 1.0, 1.0)
+      call camera_set_object_matrix_f32(0.0, -0.5, -3.0, 0.0, rotation, 0.0, 0.5, 0.5, 0.5)
 
       !! Was: call texture_use("fortran_logo_512x512.png")
       call texture_use("font")
 
-      call mesh_draw("debug")
+      call font_generate_text("hello", 1.0, "Hello, Fortran!", g = abs(cos(rotation / 2.0)), center = .true.)
+
+      call mesh_draw("hello")
+
+      call mesh_delete("hello")
 
       !? END DRAW TEST ?!
 
