@@ -59,22 +59,95 @@ module font
 
 contains
 
+  ! Generate a text mesh.
   subroutine font_generate_text(mesh_name, font_size, text)
     use :: mesh
     implicit none
 
     character(len = *), intent(in) :: mesh_name, text
     real(c_float), intent(in), value :: font_size
-    real(c_float), dimension(:), allocatable :: positions
-    integer :: text_len, i
+    real(c_float), dimension(:), allocatable :: positions, texture_coordinates, colors
+    integer(c_int), dimension(:), allocatable :: indices
+    integer :: text_len, i, current_offset, current_indices_offset
+    character :: current_character
+    type(opengl_character) :: character_data
+    logical :: exists
+    real(c_float) :: current_scroll_right, actual_character_width
+    integer, parameter :: hack_job = 3
+    integer, parameter :: points = 4
+    integer, parameter :: offset = hack_job * points
+
+    current_scroll_right = 0.0
 
     text_len = len(text)
 
-    ! 4 quads per character. This can probably be optimized, somehow.
-    allocate(positions(text_len * 4))
+    ! todo: change this to 2 positions!
+    ! 4 quads per character. 3 positions per point. This can probably be optimized, somehow.
+    allocate(positions(text_len * offset))
+    ! todo: use offset intead of 4 * 2
+    allocate(texture_coordinates(text_len * 8))
+
+    allocate(colors(text_len * offset))
 
     do i = 1,text_len
-      print*,text(i:i)
+
+      current_character = text(i:i)
+
+      if (current_character == " ") then
+        current_scroll_right = current_scroll_right + font_size
+        cycle
+      end if
+
+      character_data = get_character(text(i:i), exists)
+
+      ! For now, we're just going to skip characters that don't exist.
+      ! todo: use a special character that is a square box or something as a replacement.
+      if (exists) then
+        current_offset = ((i - 1) * 8) + 1
+
+        ! Positions.
+        actual_character_width = real(character_data%width_real, kind = c_float) * font_size
+
+        positions = [&
+          current_scroll_right,   0.0,       0.0, &
+          current_scroll_right,   font_size, 0.0, &
+          actual_character_width, font_size, 0.0, &
+          actual_character_width, 0.0,       0.0 &
+          ]
+
+        ! Texture coordinates.
+        texture_coordinates(current_offset    ) = character_data%top_left%x_f32()
+        texture_coordinates(current_offset + 1) = character_data%top_left%y_f32()
+        texture_coordinates(current_offset + 2) = character_data%bottom_left%x_f32()
+        texture_coordinates(current_offset + 3) = character_data%bottom_left%y_f32()
+        texture_coordinates(current_offset + 4) = character_data%bottom_right%x_f32()
+        texture_coordinates(current_offset + 5) = character_data%bottom_right%y_f32()
+        texture_coordinates(current_offset + 6) = character_data%top_right%x_f32()
+        texture_coordinates(current_offset + 7) = character_data%top_right%y_f32()
+
+        current_scroll_right = current_scroll_right + actual_character_width
+
+        ! Colors.
+        colors = [&
+          1.0, 1.0, 1.0, &
+          1.0, 1.0, 1.0, &
+          1.0, 1.0, 1.0, &
+          1.0, 1.0, 1.0 &
+          ]
+
+        ! Indices.
+        current_indices_offset = (i - 1) * 4
+        indices = [ &
+          0 + current_indices_offset, &
+          1 + current_indices_offset, &
+          2 + current_indices_offset, &
+          2 + current_indices_offset, &
+          3 + current_indices_offset, &
+          0 + current_indices_offset &
+          ]
+
+        call mesh_create_3d(mesh_name, positions, texture_coordinates, colors, indices)
+      end if
     end do
   end subroutine font_generate_text
 
