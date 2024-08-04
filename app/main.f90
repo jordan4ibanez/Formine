@@ -14,10 +14,13 @@ program main
 
   real(c_float) :: rotation
 
+
+  call font_generate_text("hello", 1.0, "hello, world")
+
   !! BEGIN WARNING: This is only to be used for when developing libraries.
-  ! if (.true.) then
-  !   return
-  ! end if
+  if (.true.) then
+    return
+  end if
   !! END WARNING.
 
 

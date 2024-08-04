@@ -12,6 +12,7 @@ module font
 
 
   public :: font_create
+  public :: font_generate_text
 
 
   ! This is a container which holds the points on the texture that make the character appear correctly.
@@ -63,14 +64,18 @@ contains
     implicit none
 
     character(len = *), intent(in) :: mesh_name, text
-    integer(c_int), intent(in), value :: font_size
+    real(c_float), intent(in), value :: font_size
     real(c_float), dimension(:), allocatable :: positions
+    integer :: text_len, i
+
+    text_len = len(text)
 
     ! 4 quads per character. This can probably be optimized, somehow.
-    allocate(positions(len(text) * 4))
+    allocate(positions(text_len * 4))
 
-    
-
+    do i = 1,text_len
+      print*,text(i:i)
+    end do
   end subroutine font_generate_text
 
 
