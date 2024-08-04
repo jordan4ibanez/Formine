@@ -316,6 +316,17 @@ contains
     !* We need to do such complex work we need this subroutine to have functions.
 
 
+    !* Convert the integral pixel width into double floating precision with range 0.0 - 1.0.
+    function convert_pixel_width_to_real_width(input_width) result(real_width)
+      implicit none
+
+      integer(c_int), intent(in), value :: input_width
+      real(c_double) :: real_width
+
+      real_width = real(input_width, kind = c_double) / real(character_width, kind = c_double)
+    end function convert_pixel_width_to_real_width
+
+
     !* Find how wide a character is by scanning it.
     function find_pixel_width(starting_x, starting_y) result(pixel_width)
       implicit none
