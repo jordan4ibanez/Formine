@@ -17,7 +17,8 @@ module font
   ! This is a container which holds the points on the texture that make the character appear correctly.
   type opengl_character
     ! We use this for constructing the quad to match the size of the texture mapping.
-    real(c_double) :: width
+    integer(c_int) :: width_pixels = 0
+    real(c_double) :: width_real = 0.0d0
     ! Counter clock-wise.
     type(vec2d) :: top_left
     type(vec2d) :: bottom_left
@@ -53,6 +54,8 @@ module font
   ! Todo: Move this into the subroutine, and pass it around.
   type(fhash_tbl_t) :: character_database_integral
 
+
+  type(fhash_tbl_t) :: character_database
 
 contains
 
@@ -255,7 +258,7 @@ contains
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     type(vec2i) :: position
-    integer :: pixel_x, pixel_y, current_character_width
+    integer :: pixel_x, pixel_y
     type(opengl_character) :: gpu_character
     real(c_double) :: debugging
     ! type(vec2d) :: debugging
@@ -266,12 +269,6 @@ contains
     ! Iterate integral character position.
     iterator = fhash_iter_t(character_database_integral)
     do while(iterator%next(generic_key, generic_data))
-      ! print*,generic_key%to_string()
-
-      !! Turn off this selection debug!
-      if (generic_key%to_string() /= "i") then
-        cycle
-      end if
 
       ! Enforce that we are running with a vec2i.
       select type(generic_data)
@@ -283,46 +280,30 @@ contains
 
       ! So now that we have the position of the character in the texture, let's calculate some basic elements.
       ! I could have made this an array for super speed, but I want to be able to understand it in the future.
-      print*,generic_key%to_string()
-      ! print*,position
 
       ! We put our initial brush position at the top left of the character.
       pixel_x = ((position%x - 1) * slot_width) + 1
       pixel_y = ((position%y - 1) * slot_height) + 1
 
-      debugging = find_pixel_width(pixel_x, pixel_y)
-      ! print*,pixel_x, pixel_y
+      ! Assign the widths.
+      gpu_character%width_pixels = find_pixel_width(pixel_x, pixel_y)
+      gpu_character%width_real = convert_pixel_width_to_real_width(gpu_character%width_pixels)
 
-      ! print*,integral_image_data(position_to_index(pixel_x, pixel_y))
-      ! print*,position_to_index(pixel_x, pixel_y)
+      ! Now assign the quad texture positions.
+      gpu_character%top_left = pixel_position_to_opengl_position(pixel_x, pixel_y)
+      gpu_character%bottom_left = pixel_position_to_opengl_position(pixel_x, pixel_y + character_height)
+      gpu_character%bottom_right = pixel_position_to_opengl_position(pixel_x + gpu_character%width_pixels, pixel_y + character_height)
+      gpu_character%top_right = pixel_position_to_opengl_position(pixel_x, pixel_y + character_height)
 
-      !! Remember: to get the right side and bottom, you need to overshoot by 1 pixel !!
-
-      ! debugging = pixel_position_to_opengl_position(pixel_x+character_width, pixel_y)
-
-      ! gpu_character = calculate_opengl_texture_coordinates()
-      ! print*,debugging
-
-
-
-      exit
-
+      ! Finally, we can assign this character into the database.
+      call character_database%set(key(generic_key%to_string()), gpu_character)
     end do
-    ! print*, integral_image_data
+
 
   contains
 
 
     !* We need to do such complex work we need this subroutine to have functions.
-
-
-    function new_opengl_character() result(new_char)
-      implicit none
-
-      type(opengl_character) :: new_char
-      new_char%width_pixels = 0
-      new_char%width_real = 0.0d0
-    end function new_opengl_character
 
 
     !* Convert the integral pixel width into double floating precision with range 0.0 - 1.0.
