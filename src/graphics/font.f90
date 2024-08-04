@@ -60,13 +60,15 @@ module font
 contains
 
   ! Generate a text mesh.
-  subroutine font_generate_text(mesh_name, font_size, text, r,g,b)
+  subroutine font_generate_text(mesh_name, font_size, text, r,g,b, center)
     use :: mesh
     implicit none
 
     character(len = *), intent(in) :: mesh_name, text
     real(c_float), intent(in), value :: font_size
     real(c_float), intent(in), optional :: r,g,b
+    logical, intent(in), optional :: center
+    logical :: should_center
     real(c_float) :: red, green, blue
     real(c_float), dimension(:), allocatable :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), allocatable :: indices
@@ -74,7 +76,7 @@ contains
     character :: current_character
     type(opengl_character) :: character_data
     logical :: exists
-    real(c_float) :: current_scroll_right, actual_character_width
+    real(c_float) :: current_scroll_right, actual_character_width, centering_offset
     integer, parameter :: hack_job = 3
     integer, parameter :: points = 4
     integer, parameter :: offset = hack_job * points
@@ -95,6 +97,12 @@ contains
       blue = 0.0
     else
       blue = b
+    end if
+
+    if (.not. present(center)) then
+      should_center = .false.
+    else
+      should_center = center
     end if
 
 
@@ -191,6 +199,18 @@ contains
       end if
     end do
 
+    if (should_center) then
+      do i = 1,text_len
+        current_positions_offset = ((i - 1) * 12) + 1
+
+        centering_offset = (current_scroll_right - (font_size * 0.1)) * 0.5
+
+        positions(current_positions_offset    ) = positions(current_positions_offset    ) - centering_offset
+        positions(current_positions_offset + 3) = positions(current_positions_offset + 3) - centering_offset
+        positions(current_positions_offset + 6) = positions(current_positions_offset + 6) - centering_offset
+        positions(current_positions_offset + 9) = positions(current_positions_offset + 9) - centering_offset
+      end do
+    end if
 
     call mesh_create_3d(mesh_name, positions, texture_coordinates, colors, indices)
   end subroutine font_generate_text
