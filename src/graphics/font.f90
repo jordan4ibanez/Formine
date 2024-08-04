@@ -59,6 +59,34 @@ module font
 contains
 
 
+  !* Get a character's OpenGL data.
+  function get_character(char, exists) result(gl_char_information)
+    use :: terminal
+    implicit none
+
+    character, intent(in) :: char
+    logical, intent(inout) :: exists
+    type(opengl_character) :: gl_char_information
+    class(*), allocatable :: generic_data
+    integer :: status
+
+    exists = .false.
+
+    call character_database%get_raw(key(char), generic_data, stat = status)
+
+    ! We will have a special handler to use a generic character for characters that aren't registered.
+    if (status /= 0) then
+      return
+    end if
+
+    select type(generic_data)
+     type is (opengl_character)
+      gl_char_information = generic_data
+     class default
+      error stop colorize_rgb("[Font] Error: Character ["//char//"] has the wrong type.", 255, 0, 0)
+    end select
+  end function get_character
+
 
   !* Create a font from a png and a config.
   subroutine font_create(font_texture_location)
