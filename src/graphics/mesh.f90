@@ -306,8 +306,7 @@ contains
       exists = .true.
       gotten_mesh = generic
      class default
-      print"(A)",colorize_rgb("[Mesh] Error: ["//mesh_name//"] has the wrong type.", 255, 0, 0)
-      return
+      error stop colorize_rgb("[Mesh] Error: ["//mesh_name//"] has the wrong type.", 255, 0, 0)
     end select
   end function get_mesh
 
