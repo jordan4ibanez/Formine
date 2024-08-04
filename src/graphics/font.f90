@@ -424,7 +424,7 @@ contains
       gpu_character%top_left = pixel_position_to_opengl_position(pixel_x, pixel_y)
       gpu_character%bottom_left = pixel_position_to_opengl_position(pixel_x, pixel_y + character_height)
       gpu_character%bottom_right = pixel_position_to_opengl_position(pixel_x + gpu_character%width_pixels, pixel_y + character_height)
-      gpu_character%top_right = pixel_position_to_opengl_position(pixel_x, pixel_y + character_height)
+      gpu_character%top_right = pixel_position_to_opengl_position(pixel_x + gpu_character%width_pixels, pixel_y)
 
       ! Finally, we can assign this character into the database.
       call character_database%set(key(generic_key%to_string()), gpu_character)
