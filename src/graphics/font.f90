@@ -94,7 +94,7 @@ contains
       current_character = text(i:i)
 
       if (current_character == " ") then
-        current_scroll_right = current_scroll_right + font_size
+        current_scroll_right = current_scroll_right + (font_size * 0.75)
         cycle
       end if
 
