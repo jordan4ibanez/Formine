@@ -51,10 +51,6 @@ module font
   integer :: font_texture_width = 0
   integer :: font_texture_height = 0
 
-  ! Todo: Move this into the subroutine, and pass it around.
-  type(fhash_tbl_t) :: character_database_integral
-
-
   type(fhash_tbl_t) :: character_database
 
 contains
@@ -72,6 +68,7 @@ contains
     character(len = :), allocatable :: font_data_file_name
     character(len = :), allocatable :: font_config_location
     integer(1), dimension(:), allocatable :: raw_image_data
+    type(fhash_tbl_t) :: character_database_integral
 
     ! print*,"    REMEMBER TO USE A SPARE SLOT FOR UNDEFINED CHARACTERS"
 
@@ -81,7 +78,7 @@ contains
     font_config_location = string_remove_file_extension(font_texture_location)//".cfg"
 
     ! This is quite a large and complex subroutine. It's getting all the data from the .cfg file.
-    call process_font_configuration(font_config_location)
+    call process_font_configuration(font_config_location, character_database_integral)
 
     ! Now load up the font.
     c_file_location = into_c_string(font_texture_location)
@@ -99,22 +96,24 @@ contains
     end if
 
     ! Now, we will bake in the OpenGL texture coordinates into the double floating point database.
-    call calculate_opengl_texture_coordinates(raw_image_data)
+    call calculate_opengl_texture_coordinates(raw_image_data, character_database_integral)
   end subroutine font_create
 
 
-  subroutine process_font_configuration(font_config_location)
+  subroutine process_font_configuration(font_config_location, character_database_integral)
     use :: string
     use :: files
     use :: vector_2i
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: font_config_location
+    type(fhash_tbl_t), intent(inout) :: character_database_integral
     type(file_reader) :: reader
     integer :: i, temp_buffer_len, comma_location, x_location, y_location
     character(len = :), allocatable :: temp_buffer
     character :: current_character
     character(len = :), allocatable :: x_str, y_str
+
 
     call reader%read_lines(font_config_location)
 
@@ -245,7 +244,7 @@ contains
   end subroutine process_font_configuration
 
 
-  subroutine calculate_opengl_texture_coordinates(raw_image_data)
+  subroutine calculate_opengl_texture_coordinates(raw_image_data, character_database_integral)
     use :: math_helpers
     use, intrinsic :: iso_c_binding
     use :: fhash, only: fhash_iter_t, fhash_key_t
@@ -253,6 +252,7 @@ contains
     implicit none
 
     integer(1), dimension(:), intent(in) :: raw_image_data
+    type(fhash_tbl_t), intent(in) :: character_database_integral
     integer(c_int), dimension(:), allocatable :: integral_image_data
     type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
@@ -260,8 +260,6 @@ contains
     type(vec2i) :: position
     integer :: pixel_x, pixel_y
     type(opengl_character) :: gpu_character
-    real(c_double) :: debugging
-    ! type(vec2d) :: debugging
 
     ! Shift this into a format we can use.
     integral_image_data = c_uchar_to_int_array(raw_image_data)
