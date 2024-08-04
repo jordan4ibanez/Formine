@@ -60,6 +60,7 @@ contains
     use :: stb_image
     use :: string
     use :: files
+    use :: texture
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: font_texture_location
@@ -97,6 +98,9 @@ contains
 
     ! Now, we will bake in the OpenGL texture coordinates into the double floating point database.
     call calculate_opengl_texture_coordinates(raw_image_data, character_database_integral)
+
+    ! Then we can finally upload it into the texture database.
+    call texture_create_from_memory("font", raw_image_data, x, y)
   end subroutine font_create
 
 
