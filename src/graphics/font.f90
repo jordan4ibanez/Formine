@@ -58,6 +58,21 @@ module font
 
 contains
 
+  subroutine font_generate_text(mesh_name, font_size, text)
+    use :: mesh
+    implicit none
+
+    character(len = *), intent(in) :: mesh_name, text
+    integer(c_int), intent(in), value :: font_size
+    real(c_float), dimension(:), allocatable :: positions
+
+    ! 4 quads per character. This can probably be optimized, somehow.
+    allocate(positions(len(text) * 4))
+
+    
+
+  end subroutine font_generate_text
+
 
   !* Get a character's OpenGL data.
   function get_character(char, exists) result(gl_char_information)
