@@ -125,8 +125,6 @@ contains
       ! todo: use a special character that is a square box or something as a replacement.
       if (exists) then
 
-        print*,current_positions_offset
-
         ! Positions.
         current_positions_offset = ((i - 1) * 12) + 1
         actual_character_width = real(character_data%width_real, kind = c_float) * font_size
