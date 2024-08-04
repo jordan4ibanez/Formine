@@ -29,7 +29,10 @@ module font
   ! This is an abstraction over the raw array components to allow me to actually
   ! read what I'm doing during the subroutine that checks how wide characters are.
   type rgba
-    integer(c_int) :: r, g, b, a = 0
+    integer(c_int) :: r = 0
+    integer(c_int) :: g = 0
+    integer(c_int) :: b = 0
+    integer(c_int) :: a = 0
   end type rgba
 
 
@@ -56,6 +59,8 @@ module font
 contains
 
 
+
+  !* Create a font from a png and a config.
   subroutine font_create(font_texture_location)
     use :: stb_image
     use :: string
