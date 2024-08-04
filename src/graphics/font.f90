@@ -469,7 +469,8 @@ contains
       integer(c_int), intent(in), value :: input_width
       real(c_double) :: real_width
 
-      real_width = real(input_width, kind = c_double) / real(character_width, kind = c_double)
+      !! +1 and slot width cause I have no idea. It just looks more correct with it set like this.
+      real_width = real(input_width, kind = c_double) / real(slot_width + 1, kind = c_double)
     end function convert_pixel_width_to_real_width
 
 
