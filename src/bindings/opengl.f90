@@ -988,9 +988,9 @@ contains
     use, intrinsic :: iso_c_binding
     implicit none
 
-    integer(c_int), intent(in), value :: location
+    integer(c_int), intent(in) :: location
 
-    call internal_gl_delete_textures(location, 1)
+    call internal_gl_delete_textures(1, location)
   end subroutine gl_delete_textures
 
 
