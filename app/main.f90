@@ -60,7 +60,7 @@ program main
   call gl_depth_func(GL_LESS)
 
   !! This enables backface culling.
-  call gl_enable(GL_CULL_FACE)
+  ! call gl_enable(GL_CULL_FACE)
 
   !! This synchronizes the camera's depth matrix with OpenGL.
   call gl_depth_range_f(camera_get_z_near(), camera_get_z_far())
