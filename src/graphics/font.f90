@@ -127,7 +127,7 @@ contains
       temp_buffer_len = len(temp_buffer)
 
       if (temp_buffer_len <= 0) then
-        continue
+        cycle
       end if
 
       ! We want to avoid a buffer overflow.
