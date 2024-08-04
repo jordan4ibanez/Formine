@@ -14,12 +14,10 @@ program main
 
   real(c_float) :: rotation
 
-  call font_create("./fonts/font_forgotten.png")
-
   !! BEGIN WARNING: This is only to be used for when developing libraries.
-  if (.true.) then
-    return
-  end if
+  ! if (.true.) then
+  !   return
+  ! end if
   !! END WARNING.
 
 
@@ -86,9 +84,10 @@ program main
 
   call shader_create_uniform_locations("main", heap_string_array("camera_matrix","object_matrix"))
 
+  call font_create("./fonts/font_forgotten.png")
 
   !! Was: call texture_create("./textures/fortran_logo_512x512.png")
-  call texture_create("./fonts/font_forgotten.png")
+  ! call texture_create("./fonts/font_forgotten.png")
 
   !! Old texture coordinates:
 
@@ -141,7 +140,7 @@ program main
       call camera_set_object_matrix_f32(0.0, 0.0, -1.0, 0.0, rotation, 0.0, 1.0, 1.0, 1.0)
 
       !! Was: call texture_use("fortran_logo_512x512.png")
-      call texture_use("font_forgotten.png")
+      call texture_use("font")
 
       call mesh_draw("debug")
 
