@@ -60,12 +60,14 @@ module font
 contains
 
   ! Generate a text mesh.
-  subroutine font_generate_text(mesh_name, font_size, text)
+  subroutine font_generate_text(mesh_name, font_size, text, r,g,b)
     use :: mesh
     implicit none
 
     character(len = *), intent(in) :: mesh_name, text
     real(c_float), intent(in), value :: font_size
+    real(c_float), intent(in), optional :: r,g,b
+    real(c_float) :: red, green, blue
     real(c_float), dimension(:), allocatable :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), allocatable :: indices
     integer :: text_len, i, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
@@ -76,6 +78,25 @@ contains
     integer, parameter :: hack_job = 3
     integer, parameter :: points = 4
     integer, parameter :: offset = hack_job * points
+
+    if (.not. present(r)) then
+      red = 0.0
+    else
+      red = r
+    end if
+
+    if (.not. present(g)) then
+      green = 0.0
+    else
+      green = g
+    end if
+
+    if (.not. present(b)) then
+      blue = 0.0
+    else
+      blue = b
+    end if
+
 
     current_scroll_right = 0.0
 
@@ -143,21 +164,21 @@ contains
 
         ! Colors.
         current_colors_offset = ((i - 1) * 12) + 1
-        colors(current_colors_offset    ) = 0.0
-        colors(current_colors_offset + 1) = 0.0
-        colors(current_colors_offset + 2) = 0.0
+        colors(current_colors_offset    ) = red
+        colors(current_colors_offset + 1) = green
+        colors(current_colors_offset + 2) = blue
 
-        colors(current_colors_offset + 3) = 0.0
-        colors(current_colors_offset + 4) = 0.0
-        colors(current_colors_offset + 5) = 0.0
+        colors(current_colors_offset + 3) = red
+        colors(current_colors_offset + 4) = green
+        colors(current_colors_offset + 5) = blue
 
-        colors(current_colors_offset + 6) = 0.0
-        colors(current_colors_offset + 7) = 0.0
-        colors(current_colors_offset + 8) = 0.0
+        colors(current_colors_offset + 6) = red
+        colors(current_colors_offset + 7) = green
+        colors(current_colors_offset + 8) = blue
 
-        colors(current_colors_offset + 9) = 0.0
-        colors(current_colors_offset + 10) = 0.0
-        colors(current_colors_offset + 11) = 0.0
+        colors(current_colors_offset + 9) = red
+        colors(current_colors_offset + 10) = green
+        colors(current_colors_offset + 11) = blue
 
         ! Indices.
         current_indices_offset = ((i - 1) * 6) + 1
