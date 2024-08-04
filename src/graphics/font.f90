@@ -81,6 +81,7 @@ contains
 
     select type(generic_data)
      type is (opengl_character)
+      exists = .true.
       gl_char_information = generic_data
      class default
       error stop colorize_rgb("[Font] Error: Character ["//char//"] has the wrong type.", 255, 0, 0)
