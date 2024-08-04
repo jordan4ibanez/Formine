@@ -87,7 +87,8 @@ program main
   call shader_create_uniform_locations("main", heap_string_array("camera_matrix","object_matrix"))
 
 
-  call texture_create("./textures/fortran_logo_512x512.png")
+  !! Was: call texture_create("./textures/fortran_logo_512x512.png")
+  call texture_create("./fonts/font_forgotten.png")
 
   call mesh_create_3d( &
     "debug", &
@@ -137,7 +138,8 @@ program main
 
       call camera_set_object_matrix_f32(0.0, 0.0, -1.0, 0.0, rotation, 0.0, 1.0, 1.0, 1.0)
 
-      call texture_use("fortran_logo_512x512.png")
+      !! Was: call texture_use("fortran_logo_512x512.png")
+      call texture_use("font_forgotten.png")
 
       call mesh_draw("debug")
 

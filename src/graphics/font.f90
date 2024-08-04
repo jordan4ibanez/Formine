@@ -97,7 +97,6 @@ contains
 
     ! Now, we will bake in the OpenGL texture coordinates into the double floating point database.
     call calculate_opengl_texture_coordinates(raw_image_data)
-
   end subroutine font_create
 
 
@@ -297,7 +296,7 @@ contains
 
       print*,pixel_x, pixel_y
 
-      debugging = pixel_position_to_opengl_position(pixel_x, pixel_y)
+      debugging = pixel_position_to_opengl_position(pixel_x+character_width, pixel_y)
 
       ! gpu_character = calculate_opengl_texture_coordinates()
       print*,debugging
