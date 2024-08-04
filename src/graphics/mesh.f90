@@ -123,18 +123,17 @@ contains
   end function upload_positions
 
 
-
-
-  integer function upload_texture_coordinate(texture_coordinate_array) result(vbo_position)
+  integer function upload_texture_coordinate(shader_name, texture_coordinate_array) result(vbo_position)
     use, intrinsic :: iso_c_binding
     use :: opengl
     use :: shader
     implicit none
 
+    character(len = *), intent(in) :: shader_name
     real(c_float), dimension(:), intent(in) :: texture_coordinate_array
     integer :: texture_coordinate_vbo_position
 
-    texture_coordinate_vbo_position = shader_get_attribute("main", "texture_coordinate")
+    texture_coordinate_vbo_position = shader_get_attribute(shader_name, "texture_coordinate")
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
