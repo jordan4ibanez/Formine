@@ -86,7 +86,7 @@ program main
 
   call font_create("./fonts/font_forgotten.png")
 
-  !! Was: call texture_create("./textures/fortran_logo_512x512.png")
+  call texture_create("./textures/fortran_logo_512x512.png")
   ! call texture_create("./fonts/font_forgotten.png")
 
   !! Old texture coordinates:
@@ -140,9 +140,14 @@ program main
 
       !? DRAW TEST ?!
 
+      call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
+
+      call texture_use("fortran_logo_512x512.png")
+
+      call mesh_draw("debug")
+
       call camera_set_object_matrix_f32(0.0, -0.25, -3.0, 0.0, rotation, 0.0, 0.5, 0.5, 0.5)
 
-      !! Was: call texture_use("fortran_logo_512x512.png")
       call texture_use("font")
 
       call font_generate_text("hello", abs(cos(rotation * (-2.0))), "Hello, Fortran!", r = abs(cos(rotation / 2.0)), center = .true.)
