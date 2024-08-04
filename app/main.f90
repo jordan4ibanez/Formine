@@ -90,6 +90,11 @@ program main
   !! Was: call texture_create("./textures/fortran_logo_512x512.png")
   call texture_create("./fonts/font_forgotten.png")
 
+  !! Old texture coordinates:
+  !! 0.0, 0.0, &
+  !! 0.0, 1.0, &
+  !! 1.0, 1.0, &
+  !! 1.0, 0.0 &
   call mesh_create_3d( &
     "debug", &
     [ &
