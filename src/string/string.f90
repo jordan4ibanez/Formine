@@ -299,7 +299,7 @@ contains
 
     character(len = *), intent(in) :: input_file_name
     character(len = :), allocatable :: file_name_without_extension
-    integer :: i
+    integer(c_int) :: i
 
     i = index(input_file_name, ".", back = .true.)
 
@@ -311,6 +311,26 @@ contains
 
     file_name_without_extension = input_file_name(1:i - 1)
   end function string_remove_file_extension
+
+
+  !* Get the count of non space characters in a string.
+  !* So "a b c" is a count of 3.
+  function string_get_non_space_characters(input_string) result(character_count)
+    implicit none
+
+    character(len = *), intent(in) :: input_string
+    integer(c_int) :: character_count, i
+
+    character_count = 0
+
+    ! Yeah, we're literally just counting the non space characters.
+    do i = 1,len(input_string)
+      if (input_string(i:i) == " ") then
+        cycle
+      end if
+      character_count = character_count + 1
+    end do
+  end function string_get_non_space_characters
 
 
 end module string
