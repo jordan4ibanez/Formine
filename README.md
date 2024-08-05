@@ -19,6 +19,8 @@ When generating a string every frame:
 
 Focus on making this faster.
 
+also, side note: fhash will deallocate pointers for you.
+
 Possible causes:
 - need a custom implementation in the mesh library.
 - inefficiencies in the font mesh creation.
