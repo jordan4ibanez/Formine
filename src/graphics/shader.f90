@@ -264,32 +264,6 @@ contains
   end subroutine shader_create_attribute_locations
 
 
-  ! !* Get the integral position of a shader attribute.
-  ! integer function shader_get_attribute(shader_name, attribute_name) result(location)
-  !   implicit none
-
-  !   character(len = *) :: shader_name
-  !   character(len = *) :: attribute_name
-  !   type(shader_program), pointer :: current_program
-  !   logical :: exists
-  !   integer :: status
-
-  !   current_program => get_shader(shader_name, exists)
-
-  !   ! If the shader does not exist, bail out.
-  !   if (.not. exists) then
-  !     error stop "[Shader] Error: Shader ["//shader_name//"] does not exist. Cannot get attribute location of ["//attribute_name//"]."
-  !   end if
-
-  !   ! Now let's try to get it.
-  !   call current_program%attributes%get(key(attribute_name), location, stat=status)
-
-  !   ! Uh oh.
-  !   if (status /= 0) then
-  !     error stop "[Shader] Error: Shader ["//shader_name//"] does not contain attribute ["//attribute_name//"]."
-  !   end if
-  ! end function shader_get_attribute
-
 
   !* Create the database of uniform locations, inside the shader program.
   subroutine shader_create_uniform_locations(shader_name, uniform_array)
