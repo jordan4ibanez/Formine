@@ -292,17 +292,17 @@ contains
     implicit none
 
     character(len = *), intent(in) :: shader_name
-    type(shader_program), pointer :: current_program
+    type(shader_program), pointer :: current_program_pointer
     logical :: exists
 
-    current_program => get_shader(shader_name, exists)
+    current_program_pointer => get_shader(shader_name, exists)
 
     ! If the shader does not exist, bail out.
     if (.not. exists) then
       error stop "[Shader] Error: Cannot start shader ["//shader_name//"], it does not exist."
     end if
 
-    call gl_use_program(current_program%program_id)
+    call gl_use_program(current_program_pointer%program_id)
   end subroutine shader_start
 
 
