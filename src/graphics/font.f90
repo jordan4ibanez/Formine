@@ -12,6 +12,7 @@ module font
 
 
   public :: font_create
+  public :: font_generate_text_2d
   public :: font_generate_text_3d
 
 
@@ -60,7 +61,7 @@ module font
 contains
 
   ! Generate a text mesh.
-  subroutine font_generate_text_3d(mesh_name, font_size, text, r,g,b, center)
+  subroutine font_generate_text_internal(mesh_name, font_size, text, r,g,b, center)
     use :: mesh
     use :: string, only: string_get_non_space_characters
     implicit none
@@ -219,7 +220,7 @@ contains
     end if
 
     call mesh_create_3d(mesh_name, positions, texture_coordinates, colors, indices)
-  end subroutine font_generate_text_3d
+  end subroutine font_generate_text_internal
 
 
   !* Get a character's OpenGL data.
