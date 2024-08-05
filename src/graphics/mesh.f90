@@ -433,6 +433,7 @@ contains
       key_array = [key_array, heap_string_array(generic_key%to_string())]
     end do
 
+    ! Now clear the database out.
     do i = 1,size(key_array)
       call mesh_delete(key_array(i)%get())
     end do
