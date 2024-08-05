@@ -18,8 +18,6 @@ module shader
   type shader_program
     character(len=:), allocatable :: shader_name
     integer :: program_id
-    integer :: vertex_id
-    integer :: fragment_id
     !* Attribute locations.
     type(fhash_tbl_t) :: attributes
     logical :: attributes_created = .false.
@@ -73,6 +71,7 @@ contains
     character(len = *), intent(in) :: name
     character(len = *), intent(in) :: vertex_code_location
     character(len = *), intent(in) :: fragment_code_location
+    integer(c_int) :: vertex_id, fragment_id
     type(shader_program), pointer :: shader
 
     allocate(shader)
@@ -91,34 +90,34 @@ contains
     end if
 
     ! Vertex shader compilation.
-    shader%vertex_id = gl_create_shader(GL_VERTEX_SHADER)
-    if (.not. creation_succeeded(shader%vertex_id)) then
+    vertex_id = gl_create_shader(GL_VERTEX_SHADER)
+    if (.not. creation_succeeded(vertex_id)) then
       error stop "[Shader] Error: Failed to create vertex for shader ["//shader%shader_name//"]."
     else
-      print"(A)","[Shader]: Successfully created vertex for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(shader%vertex_id)//"]."
+      print"(A)","[Shader]: Successfully created vertex for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(vertex_id)//"]."
     end if
 
-    call gl_shader_source(shader%vertex_id, vertex_code_location)
-    call gl_compile_shader(shader%vertex_id)
+    call gl_shader_source(vertex_id, vertex_code_location)
+    call gl_compile_shader(vertex_id)
 
-    if (.not. shader_compilation_succeeded(shader%vertex_id)) then
+    if (.not. shader_compilation_succeeded(vertex_id)) then
       error stop "[Shader] Error: Failed to compile vertex for shader ["//shader%shader_name//"]."
     else
       print"(A)","[Shader]: Successfully compiled vertex for shader ["//shader%shader_name//"]."
     end if
 
     ! Fragment shader compilation.
-    shader%fragment_id = gl_create_shader(GL_FRAGMENT_SHADER)
-    if (.not. creation_succeeded(shader%fragment_id)) then
+    fragment_id = gl_create_shader(GL_FRAGMENT_SHADER)
+    if (.not. creation_succeeded(fragment_id)) then
       error stop "[Shader] Error: Failed to create fragment for shader ["//shader%shader_name//"]."
     else
-      print"(A)","[Shader]: Successfully created fragment for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(shader%fragment_id)//"]."
+      print"(A)","[Shader]: Successfully created fragment for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(fragment_id)//"]."
     end if
 
-    call gl_shader_source(shader%fragment_id, fragment_code_location)
-    call gl_compile_shader(shader%fragment_id)
+    call gl_shader_source(fragment_id, fragment_code_location)
+    call gl_compile_shader(fragment_id)
 
-    if (.not. shader_compilation_succeeded(shader%fragment_id)) then
+    if (.not. shader_compilation_succeeded(fragment_id)) then
       error stop "[Shader] Error: Failed to compile fragment for shader ["//shader%shader_name//"]."
     else
       print"(A)","[Shader]: Successfully compiled fragment for shader ["//shader%shader_name//"]."
