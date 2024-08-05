@@ -171,6 +171,8 @@ program main
 
   call mesh_clear_database()
 
+  call shader_clear_database()
+
   call glfw_destroy_window()
 
   ! GLFW shared library will rarely crash on termination if you run make too fast. :D
