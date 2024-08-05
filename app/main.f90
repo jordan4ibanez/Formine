@@ -117,7 +117,7 @@ program main
 
   rotation = 0.0
 
-  call font_generate_text("hello", abs(cos(rotation * (-2.0))), "Hello, Fortran!", r = abs(cos(rotation / 2.0)), center = .true.)
+  call font_generate_text("hello", abs(cos(rotation * (-2.0))), "Hel l o , F ortr  fdsf!", r = abs(cos(rotation / 2.0)), center = .true.)
 
 
   !! This is debugging for functions!
