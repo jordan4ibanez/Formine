@@ -390,6 +390,9 @@ contains
     ! Create the iterator.
     iterator = fhash_iter_t(shader_database)
 
+    ! Unbind from the currently used shader.
+    call gl_use_program(0)
+
     ! Now we will collect the keys from the iterator.
     do while(iterator%next(generic_key, generic_data))
       ! We will delete the programs as we go.
@@ -417,7 +420,7 @@ contains
     if (remaining_size /= 0) then
       print"(A)", colorize_rgb("[Shader] Error: Did not delete all shaders! Expected size: [0] | Actual: ["//int_to_string(remaining_size)//"]", 255, 0, 0)
     else
-      print"(A)", "[Mesh]: Successfully cleared the shader database."
+      print"(A)", "[Shader]: Successfully cleared the shader database."
     end if
 
   end subroutine shader_clear_database
