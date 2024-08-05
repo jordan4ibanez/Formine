@@ -109,6 +109,7 @@ contains
     real(c_float) :: current_scroll_right, actual_character_width, centering_offset
     integer :: offset
     integer, parameter :: points = 4
+    real(c_float), parameter :: space_width = 0.4
 
     offset = dimensions * points
     buffer_stride = points * dimensions
@@ -158,7 +159,7 @@ contains
       current_character = text(i:i)
 
       if (current_character == " ") then
-        current_scroll_right = current_scroll_right + (font_size * 0.75)
+        current_scroll_right = current_scroll_right + (font_size * space_width)
         cycle
       end if
 
@@ -205,7 +206,6 @@ contains
           positions(current_positions_offset + 6) = current_scroll_right + actual_character_width
           positions(current_positions_offset + 7) = font_size
         end if
-
 
         current_scroll_right = current_scroll_right + actual_character_width + (font_size * 0.1)
 
