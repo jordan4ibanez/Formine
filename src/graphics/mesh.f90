@@ -68,7 +68,7 @@ contains
 
     new_mesh%vbo_position = upload_positions(shader_name, positions, 3)
 
-    new_mesh%vbo_texture_coordinate = upload_texture_coordinate(texture_coordinate)
+    new_mesh%vbo_texture_coordinate = upload_texture_coordinate(shader_name, texture_coordinate)
 
     new_mesh%vbo_color = upload_colors(colors)
 
