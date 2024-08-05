@@ -124,8 +124,8 @@ contains
     end if
 
     ! Attach and link.
-    call gl_attach_shader(shader%program_id, shader%vertex_id)
-    call gl_attach_shader(shader%program_id, shader%fragment_id)
+    call gl_attach_shader(shader%program_id, vertex_id)
+    call gl_attach_shader(shader%program_id, fragment_id)
     call gl_link_program(shader%program_id)
 
     ! We check that this think linked.
@@ -134,6 +134,8 @@ contains
     else
       print"(A)","[Shader]: Successfully linked shader ["//shader%shader_name//"]."
     end if
+
+    ! Now remove the compiled shaders because they're already stored in the program.
 
     ! Finally validate this whole thing.
     call gl_validate_program(shader%program_id)
