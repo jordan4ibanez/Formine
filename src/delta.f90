@@ -15,6 +15,7 @@ module delta
 
   real(c_double) :: fps_delta_accumulator = 0.0d0
   integer(c_int) :: fps_accumulator = 0
+  integer(c_int) :: current_fps = 0
 
 contains
 
@@ -68,7 +69,8 @@ contains
     fps_accumulator = fps_accumulator + 1
 
     if (fps_delta_accumulator >= 1.0d0) then
-      print*,"fps: "//int_to_string(fps_accumulator)
+      current_fps = fps_accumulator
+      print*,"fps: "//int_to_string(current_fps)
       fps_accumulator = 0
       fps_delta_accumulator = fps_delta_accumulator - 1.0d0
     end if
@@ -89,5 +91,11 @@ contains
     current_delta = delta_time
   end function get_delta_f64
 
+
+  integer(c_int) function get_fps() result(fps)
+    implicit none
+
+    fps = current_fps
+  end function get_fps
 
 end module delta
