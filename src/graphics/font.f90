@@ -60,14 +60,42 @@ module font
 
 contains
 
-  ! Generate a text mesh.
-  subroutine font_generate_text_internal(mesh_name, font_size, text, r,g,b, center)
+
+  !* Generate a text mesh for rendering in 2 dimensional space.
+  subroutine font_generate_text_2d(mesh_name, font_size, text, r,g,b, center)
+    implicit none
+
+    character(len = *), intent(in) :: mesh_name, text
+    real(c_float), intent(in), value :: font_size
+    real(c_float), intent(in), optional :: r,g,b
+    logical, intent(in), optional :: center
+
+    call font_generate_text_internal(mesh_name, font_size, text, 2, r,g,b, center)
+  end subroutine font_generate_text_2d
+
+
+  !* Generate a text mesh for rendering in 3 dimensional space.
+  subroutine font_generate_text_3d(mesh_name, font_size, text, r,g,b, center)
+    implicit none
+
+    character(len = *), intent(in) :: mesh_name, text
+    real(c_float), intent(in), value :: font_size
+    real(c_float), intent(in), optional :: r,g,b
+    logical, intent(in), optional :: center
+
+    call font_generate_text_internal(mesh_name, font_size, text, 3, r,g,b, center)
+  end subroutine font_generate_text_3d
+
+
+  !* Internal generate a text mesh. (2d or 3d)
+  subroutine font_generate_text_internal(mesh_name, font_size, text, dimensions, r,g,b, center)
     use :: mesh
     use :: string, only: string_get_non_space_characters
     implicit none
 
     character(len = *), intent(in) :: mesh_name, text
     real(c_float), intent(in), value :: font_size
+    integer(c_int), intent(in), value :: dimensions
     real(c_float), intent(in), optional :: r,g,b
     logical, intent(in), optional :: center
     logical :: should_center
