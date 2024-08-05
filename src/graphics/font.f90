@@ -12,7 +12,7 @@ module font
 
 
   public :: font_create
-  public :: font_generate_text
+  public :: font_generate_text_3d
 
 
   ! This is a container which holds the points on the texture that make the character appear correctly.
@@ -60,7 +60,7 @@ module font
 contains
 
   ! Generate a text mesh.
-  subroutine font_generate_text(mesh_name, font_size, text, r,g,b, center)
+  subroutine font_generate_text_3d(mesh_name, font_size, text, r,g,b, center)
     use :: mesh
     use :: string, only: string_get_non_space_characters
     implicit none
@@ -219,7 +219,7 @@ contains
     end if
 
     call mesh_create_3d("main", mesh_name, positions, texture_coordinates, colors, indices)
-  end subroutine font_generate_text
+  end subroutine font_generate_text_3d
 
 
   !* Get a character's OpenGL data.

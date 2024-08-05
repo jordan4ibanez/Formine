@@ -153,7 +153,7 @@ program main
 
       call texture_use("font")
 
-      call font_generate_text("hello", 1.0, "Debugging is cool!", center = .true.)
+      call font_generate_text_3d("hello", 1.0, "Debugging is cool!", center = .true.)
 
       call mesh_draw("hello")
 
