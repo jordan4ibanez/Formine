@@ -92,6 +92,7 @@ program main
   !! Old texture coordinates:
 
   call mesh_create_3d( &
+    "main", &
     "debug", &
     [ &
     -0.5,  0.5, 0.0, &
