@@ -48,7 +48,7 @@ program main
 
   call gl_get_version()
 
-  call glfw_swap_interval(0)
+  call glfw_swap_interval(1)
 
   !! This allows OpenGL debugging.
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
