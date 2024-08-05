@@ -82,7 +82,7 @@ contains
     integer, parameter :: points = 4
     real(c_float), parameter :: space_width = 0.4
     integer, parameter :: dimensions = 2
-    integer, parameter :: offset = dimensions * points
+    integer, parameter :: stride = dimensions * points
 
     if (.not. present(r)) then
       red = 0.0
@@ -115,7 +115,7 @@ contains
 
     ! todo: change this to 2 positions!
     ! 4 quads per character. 3 positions per point. This can probably be optimized, somehow.
-    allocate(positions(allocation_len * offset))
+    allocate(positions(allocation_len * stride))
     ! todo: use offset intead of 4 * 2
     allocate(texture_coordinates(allocation_len * 8))
     allocate(colors(allocation_len * 12))
@@ -142,7 +142,7 @@ contains
       if (exists) then
 
         ! Positions.
-        current_positions_offset = ((buffer_index - 1) * position_buffer_stride) + 1
+        current_positions_offset = ((buffer_index - 1) * stride) + 1
         actual_character_width = real(character_data_pointer%width_real, kind = c_float) * font_size
 
         positions(current_positions_offset    ) = current_scroll_right
@@ -204,7 +204,7 @@ contains
 
     if (should_center) then
       do i = 1,allocation_len
-        current_positions_offset = ((i - 1) * position_buffer_stride) + 1
+        current_positions_offset = ((i - 1) * stride) + 1
 
         centering_offset = (current_scroll_right - (font_size * 0.1)) * 0.5
 
