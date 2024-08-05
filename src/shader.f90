@@ -73,7 +73,7 @@ contains
     character(len = *), intent(in) :: name
     character(len = *), intent(in) :: vertex_code_location
     character(len = *), intent(in) :: fragment_code_location
-    type(shader_program), allocatable :: shader
+    type(shader_program), pointer :: shader
 
     allocate(shader)
 
@@ -148,34 +148,24 @@ contains
     print"(A)","[Shader]: Shader ["//shader%shader_name//"] created successfully."
 
     ! Store it in the hash table for later use.
-    call set_shader(name, shader)
+    call shader_database%set_ptr(key(name), shader)
   end subroutine shader_create
-
-
-  !* Set or update a shader in the database.
-  subroutine set_shader(shader_name, shader)
-    implicit none
-
-    character(len = *), intent(in) :: shader_name
-    type(shader_program), intent(in) :: shader
-
-    call shader_database%set(key(shader_name), shader)
-  end subroutine set_shader
 
 
   !* Get a shader from the hash table.
   !* The shader is a clone. To update, set_shader().
-  type(shader_program) function get_shader(shader_name, exists) result(gotten_program)
+  function get_shader(shader_name, exists) result(gotten_program)
     implicit none
 
     character(len = *), intent(in) :: shader_name
     logical, intent(inout) :: exists
-    class(*), allocatable :: generic
+    class(*), pointer :: generic
     integer :: status
+    type(shader_program), pointer :: gotten_program
 
     exists = .false.
 
-    call shader_database%get_raw(key(shader_name), generic, stat = status)
+    call shader_database%get_raw_ptr(key(shader_name), generic, stat = status)
 
     if (status /= 0) then
       ! print"(A)","[Shader] Error: ["//shader_name//"] does not exist."
@@ -185,7 +175,7 @@ contains
     select type(generic)
      type is (shader_program)
       exists = .true.
-      gotten_program = generic
+      gotten_program => generic
      class default
       ! print"(A)","[Shader] Error: ["//shader_name//"] has the wrong type."
       return
@@ -199,10 +189,10 @@ contains
     implicit none
 
     character(len = *), intent(in) :: shader_name
-    type(shader_program) :: poller
+    type(shader_program), pointer :: poller
 
     ! All we must do is check the shader result and return the existence in the result.
-    poller = get_shader(shader_name, exists)
+    poller => get_shader(shader_name, exists)
   end function shader_exists
 
 
@@ -214,13 +204,13 @@ contains
 
     character(len = *), intent(in) :: shader_name
     type(heap_string), dimension(:) :: attribute_array
-    type(shader_program), allocatable :: current_program
+    type(shader_program), pointer :: current_program
     character(len = :), allocatable :: temp_string
     logical :: exists
     integer :: i
     integer :: location
 
-    current_program = get_shader(shader_name, exists)
+    current_program => get_shader(shader_name, exists)
 
     ! If a non-existent shader is gotten, bail out.
     if (.not. exists) then
@@ -246,9 +236,6 @@ contains
         call current_program%attributes%set(key(temp_string), location)
       end if
     end do
-
-    ! Finally, overwrite the program data in the hash table.
-    call set_shader(shader_name, current_program)
   end subroutine shader_create_attribute_locations
 
 
@@ -258,11 +245,11 @@ contains
 
     character(len = *) :: shader_name
     character(len = *) :: attribute_name
-    type(shader_program) :: current_program
+    type(shader_program), pointer :: current_program
     logical :: exists
     integer :: status
 
-    current_program = get_shader(shader_name, exists)
+    current_program => get_shader(shader_name, exists)
 
     ! If the shader does not exist, bail out.
     if (.not. exists) then
@@ -287,13 +274,13 @@ contains
 
     character(len = *), intent(in) :: shader_name
     type(heap_string), dimension(:) :: uniform_array
-    type(shader_program), allocatable :: current_program
+    type(shader_program), pointer :: current_program
     character(len = :), allocatable :: temp_string
     logical :: exists
     integer :: i
     integer :: location
 
-    current_program = get_shader(shader_name, exists)
+    current_program => get_shader(shader_name, exists)
 
     ! If a non-existent shader is gotten, bail out.
     if (.not. exists) then
@@ -319,9 +306,6 @@ contains
         call current_program%uniforms%set(key(temp_string), location)
       end if
     end do
-
-    ! Finally, overwrite the program data in the hash table.
-    call set_shader(shader_name, current_program)
   end subroutine shader_create_uniform_locations
 
 
@@ -331,11 +315,11 @@ contains
 
     character(len = *) :: shader_name
     character(len = *) :: uniform_name
-    type(shader_program) :: current_program
+    type(shader_program), pointer :: current_program
     logical :: exists
     integer :: status
 
-    current_program = get_shader(shader_name, exists)
+    current_program => get_shader(shader_name, exists)
 
     ! If the shader does not exist, bail out.
     if (.not. exists) then
@@ -358,10 +342,10 @@ contains
     implicit none
 
     character(len = *), intent(in) :: shader_name
-    type(shader_program) :: current_program
+    type(shader_program), pointer :: current_program
     logical :: exists
 
-    current_program = get_shader(shader_name, exists)
+    current_program => get_shader(shader_name, exists)
 
     ! If the shader does not exist, bail out.
     if (.not. exists) then
