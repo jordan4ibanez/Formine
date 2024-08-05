@@ -62,6 +62,7 @@ contains
   ! Generate a text mesh.
   subroutine font_generate_text(mesh_name, font_size, text, r,g,b, center)
     use :: mesh
+    use :: string, only: string_get_non_space_characters
     implicit none
 
     character(len = *), intent(in) :: mesh_name, text
@@ -72,7 +73,7 @@ contains
     real(c_float) :: red, green, blue
     real(c_float), dimension(:), allocatable :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), allocatable :: indices
-    integer :: text_len, i, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
+    integer :: text_len, allocation_len, i, buffer_index, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
     character :: current_character
     type(opengl_character) :: character_data
     logical :: exists
@@ -109,14 +110,18 @@ contains
     current_scroll_right = 0.0
 
     text_len = len(text)
+    allocation_len = string_get_non_space_characters(text)
 
     ! todo: change this to 2 positions!
     ! 4 quads per character. 3 positions per point. This can probably be optimized, somehow.
-    allocate(positions(text_len * offset))
+    allocate(positions(allocation_len * offset))
     ! todo: use offset intead of 4 * 2
-    allocate(texture_coordinates(text_len * 8))
-    allocate(colors(text_len * offset))
-    allocate(indices(text_len * 6))
+    allocate(texture_coordinates(allocation_len * 8))
+    allocate(colors(allocation_len * offset))
+    allocate(indices(allocation_len * 6))
+
+    ! With spaces, this desynchronizes. We must stop it from trying to reach outside the buffer.
+    buffer_index = 0
 
     do i = 1,text_len
 
@@ -127,6 +132,8 @@ contains
         cycle
       end if
 
+      buffer_index = buffer_index + 1
+
       character_data = get_character(current_character, exists)
 
       ! For now, we're just going to skip characters that don't exist.
@@ -134,7 +141,7 @@ contains
       if (exists) then
 
         ! Positions.
-        current_positions_offset = ((i - 1) * 12) + 1
+        current_positions_offset = ((buffer_index - 1) * 12) + 1
         actual_character_width = real(character_data%width_real, kind = c_float) * font_size
 
         positions(current_positions_offset    ) = current_scroll_right
@@ -158,7 +165,7 @@ contains
 
         ! Texture coordinates.
 
-        current_texture_coordinates_offset = ((i - 1) * 8) + 1
+        current_texture_coordinates_offset = ((buffer_index - 1) * 8) + 1
         texture_coordinates(current_texture_coordinates_offset    ) = character_data%top_left%x_f32()
         texture_coordinates(current_texture_coordinates_offset + 1) = character_data%top_left%y_f32()
         texture_coordinates(current_texture_coordinates_offset + 2) = character_data%bottom_left%x_f32()
@@ -169,7 +176,7 @@ contains
         texture_coordinates(current_texture_coordinates_offset + 7) = character_data%top_right%y_f32()
 
         ! Colors.
-        current_colors_offset = ((i - 1) * 12) + 1
+        current_colors_offset = ((buffer_index - 1) * 12) + 1
         colors(current_colors_offset    ) = red
         colors(current_colors_offset + 1) = green
         colors(current_colors_offset + 2) = blue
@@ -187,8 +194,8 @@ contains
         colors(current_colors_offset + 11) = blue
 
         ! Indices.
-        current_indices_offset = ((i - 1) * 6) + 1
-        current_indices_index = (i - 1) * 4
+        current_indices_offset = ((buffer_index - 1) * 6) + 1
+        current_indices_index = (buffer_index - 1) * 4
 
         indices(current_indices_offset    ) = 0 + current_indices_index
         indices(current_indices_offset + 1) = 1 + current_indices_index
@@ -200,7 +207,7 @@ contains
     end do
 
     if (should_center) then
-      do i = 1,text_len
+      do i = 1,allocation_len
         current_positions_offset = ((i - 1) * 12) + 1
 
         centering_offset = (current_scroll_right - (font_size * 0.1)) * 0.5
