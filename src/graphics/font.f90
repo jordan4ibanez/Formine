@@ -218,7 +218,7 @@ contains
       end do
     end if
 
-    call mesh_create_3d("main", mesh_name, positions, texture_coordinates, colors, indices)
+    call mesh_create_3d("3d", mesh_name, positions, texture_coordinates, colors, indices)
   end subroutine font_generate_text_3d
 
 

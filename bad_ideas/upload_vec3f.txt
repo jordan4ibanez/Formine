@@ -8,7 +8,7 @@
     type(vec3f), dimension(:), intent(in) :: position_array
     integer :: position_vbo_position
 
-    position_vbo_position = shader_get_attribute("main", "position")
+    position_vbo_position = shader_get_attribute("3d", "position")
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
