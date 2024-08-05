@@ -260,23 +260,23 @@ contains
 
     character(len = *), intent(in) :: mesh_name
     logical, intent(inout) :: exists
-    class(*), pointer :: generic_data
+    class(*), pointer :: generic_pointer
     integer :: status
     type(mesh_data), pointer :: gotten_mesh
 
     exists = .false.
 
-    call mesh_database%get_raw_ptr(key(mesh_name), generic_data, stat = status)
+    call mesh_database%get_raw_ptr(key(mesh_name), generic_pointer, stat = status)
 
     if (status /= 0) then
       print"(A)",colorize_rgb("[Mesh] Error: ["//mesh_name//"] does not exist.", 255, 0, 0)
       return
     end if
 
-    select type(generic_data)
+    select type(generic_pointer)
      type is (mesh_data)
       exists = .true.
-      gotten_mesh => generic_data
+      gotten_mesh => generic_pointer
      class default
       error stop colorize_rgb("[Mesh] Error: ["//mesh_name//"] has the wrong type.", 255, 0, 0)
     end select
