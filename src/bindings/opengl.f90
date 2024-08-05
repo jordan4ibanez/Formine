@@ -115,6 +115,7 @@ module opengl
   public :: gl_get_integer_v
   public :: gl_get_version
   public :: gl_attach_shader
+  public :: gl_detach_shader
   public :: gl_link_program
   public :: gl_get_error
   public :: gl_clear_error_data
@@ -268,6 +269,14 @@ module opengl
 
       integer(c_int), intent(in), value :: program, shader
     end subroutine gl_attach_shader
+
+
+    subroutine gl_detach_shader(program, shader) bind(c, name = "glDetachShader")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: program, shader
+    end subroutine gl_detach_shader
 
 
     subroutine gl_link_program(program) bind(c, name = "glLinkProgram")
