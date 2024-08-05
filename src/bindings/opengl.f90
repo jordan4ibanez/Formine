@@ -781,6 +781,11 @@ contains
 
     call reader%read_file(source_code_location)
 
+    ! If this source code file doesn't exist, give up.
+    if (.not. reader%exists) then
+      error stop "[OpenGL] Error: Shader source code file ["//source_code_location//"] does not exist."
+    end if
+
     ! Send the source code into the OpenGL state machine.
     call internal_gl_shader_source(shader_id, 1, reader%file_string//achar(0), null())
 
