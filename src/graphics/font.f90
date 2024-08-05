@@ -75,7 +75,7 @@ contains
     integer(c_int), dimension(:), allocatable :: indices
     integer :: text_len, allocation_len, i, buffer_index, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
     character :: current_character
-    type(opengl_character) :: character_data
+    type(opengl_character), pointer :: character_data_pointer
     logical :: exists
     real(c_float) :: current_scroll_right, actual_character_width, centering_offset
     integer, parameter :: hack_job = 3
@@ -134,7 +134,7 @@ contains
 
       buffer_index = buffer_index + 1
 
-      character_data = get_character(current_character, exists)
+      character_data_pointer => get_character(current_character, exists)
 
       ! For now, we're just going to skip characters that don't exist.
       ! todo: use a special character that is a square box or something as a replacement.
@@ -142,7 +142,7 @@ contains
 
         ! Positions.
         current_positions_offset = ((buffer_index - 1) * 12) + 1
-        actual_character_width = real(character_data%width_real, kind = c_float) * font_size
+        actual_character_width = real(character_data_pointer%width_real, kind = c_float) * font_size
 
         positions(current_positions_offset    ) = current_scroll_right
         positions(current_positions_offset + 1) = font_size
@@ -166,14 +166,14 @@ contains
         ! Texture coordinates.
 
         current_texture_coordinates_offset = ((buffer_index - 1) * 8) + 1
-        texture_coordinates(current_texture_coordinates_offset    ) = character_data%top_left%x_f32()
-        texture_coordinates(current_texture_coordinates_offset + 1) = character_data%top_left%y_f32()
-        texture_coordinates(current_texture_coordinates_offset + 2) = character_data%bottom_left%x_f32()
-        texture_coordinates(current_texture_coordinates_offset + 3) = character_data%bottom_left%y_f32()
-        texture_coordinates(current_texture_coordinates_offset + 4) = character_data%bottom_right%x_f32()
-        texture_coordinates(current_texture_coordinates_offset + 5) = character_data%bottom_right%y_f32()
-        texture_coordinates(current_texture_coordinates_offset + 6) = character_data%top_right%x_f32()
-        texture_coordinates(current_texture_coordinates_offset + 7) = character_data%top_right%y_f32()
+        texture_coordinates(current_texture_coordinates_offset    ) = character_data_pointer%top_left%x_f32()
+        texture_coordinates(current_texture_coordinates_offset + 1) = character_data_pointer%top_left%y_f32()
+        texture_coordinates(current_texture_coordinates_offset + 2) = character_data_pointer%bottom_left%x_f32()
+        texture_coordinates(current_texture_coordinates_offset + 3) = character_data_pointer%bottom_left%y_f32()
+        texture_coordinates(current_texture_coordinates_offset + 4) = character_data_pointer%bottom_right%x_f32()
+        texture_coordinates(current_texture_coordinates_offset + 5) = character_data_pointer%bottom_right%y_f32()
+        texture_coordinates(current_texture_coordinates_offset + 6) = character_data_pointer%top_right%x_f32()
+        texture_coordinates(current_texture_coordinates_offset + 7) = character_data_pointer%top_right%y_f32()
 
         ! Colors.
         current_colors_offset = ((buffer_index - 1) * 12) + 1
@@ -224,29 +224,29 @@ contains
 
 
   !* Get a character's OpenGL data.
-  function get_character(char, exists) result(gl_char_information)
+  function get_character(char, exists) result(gl_char_information_pointer)
     use :: terminal
     implicit none
 
     character, intent(in) :: char
     logical, intent(inout) :: exists
-    type(opengl_character) :: gl_char_information
-    class(*), allocatable :: generic_data
+    type(opengl_character), pointer :: gl_char_information_pointer
+    class(*), pointer :: generic_pointer
     integer :: status
 
     exists = .false.
 
-    call character_database%get_raw(key(char), generic_data, stat = status)
+    call character_database%get_raw_ptr(key(char), generic_pointer, stat = status)
 
     ! We will have a special handler to use a generic character for characters that aren't registered.
     if (status /= 0) then
       return
     end if
 
-    select type(generic_data)
+    select type(generic_pointer)
      type is (opengl_character)
       exists = .true.
-      gl_char_information = generic_data
+      gl_char_information_pointer => generic_pointer
      class default
       error stop colorize_rgb("[Font] Error: Character ["//char//"] has the wrong type.", 255, 0, 0)
     end select
@@ -463,7 +463,7 @@ contains
     class(*), allocatable :: generic_data
     type(vec2i) :: position
     integer :: pixel_x, pixel_y
-    type(opengl_character) :: gpu_character
+    type(opengl_character), pointer :: gpu_character
 
     ! Shift this into a format we can use.
     integral_image_data = c_uchar_to_int_array(raw_image_data)
@@ -482,6 +482,7 @@ contains
 
       ! So now that we have the position of the character in the texture, let's calculate some basic elements.
       ! I could have made this an array for super speed, but I want to be able to understand it in the future.
+      allocate(gpu_character)
 
       ! We put our initial brush position at the top left of the character.
       pixel_x = ((position%x - 1) * slot_width) + 1
@@ -498,7 +499,7 @@ contains
       gpu_character%top_right = pixel_position_to_opengl_position(pixel_x + gpu_character%width_pixels, pixel_y)
 
       ! Finally, we can assign this character into the database.
-      call character_database%set(key(generic_key%to_string()), gpu_character)
+      call character_database%set_ptr(key(generic_key%to_string()), gpu_character)
     end do
 
 
