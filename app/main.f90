@@ -116,7 +116,6 @@ program main
       !? DRAW TEST ?!
 
       call mesh_create_3d( &
-        "3d", &
         "debug", &
         [ &
         -0.5,  0.5, 0.0, &
