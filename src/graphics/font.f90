@@ -102,7 +102,7 @@ contains
     real(c_float) :: red, green, blue
     real(c_float), dimension(:), allocatable :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), allocatable :: indices
-    integer :: text_len, allocation_len, i, buffer_index, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
+    integer :: text_len, allocation_len, i, buffer_index, buffer_stride, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
     character :: current_character
     type(opengl_character), pointer :: character_data_pointer
     logical :: exists
@@ -111,6 +111,7 @@ contains
     integer, parameter :: points = 4
 
     offset = dimensions * points
+    buffer_stride = points * dimensions
 
     if (.not. present(r)) then
       red = 0.0
@@ -170,24 +171,40 @@ contains
       if (exists) then
 
         ! Positions.
-        current_positions_offset = ((buffer_index - 1) * 12) + 1
+        current_positions_offset = ((buffer_index - 1) * buffer_stride) + 1
         actual_character_width = real(character_data_pointer%width_real, kind = c_float) * font_size
 
-        positions(current_positions_offset    ) = current_scroll_right
-        positions(current_positions_offset + 1) = font_size
-        positions(current_positions_offset + 2) = 0.0
+        if (dimensions == 3) then
+          !? 3D.
+          positions(current_positions_offset    ) = current_scroll_right
+          positions(current_positions_offset + 1) = font_size
+          positions(current_positions_offset + 2) = 0.0
 
-        positions(current_positions_offset + 3) = current_scroll_right
-        positions(current_positions_offset + 4) = 0.0
-        positions(current_positions_offset + 5) = 0.0
+          positions(current_positions_offset + 3) = current_scroll_right
+          positions(current_positions_offset + 4) = 0.0
+          positions(current_positions_offset + 5) = 0.0
 
-        positions(current_positions_offset + 6) = current_scroll_right + actual_character_width
-        positions(current_positions_offset + 7) = 0.0
-        positions(current_positions_offset + 8) = 0.0
+          positions(current_positions_offset + 6) = current_scroll_right + actual_character_width
+          positions(current_positions_offset + 7) = 0.0
+          positions(current_positions_offset + 8) = 0.0
 
-        positions(current_positions_offset + 9) = current_scroll_right + actual_character_width
-        positions(current_positions_offset + 10) = font_size
-        positions(current_positions_offset + 11) = 0.0
+          positions(current_positions_offset + 9) = current_scroll_right + actual_character_width
+          positions(current_positions_offset + 10) = font_size
+          positions(current_positions_offset + 11) = 0.0
+        else
+          !? 2D.
+          positions(current_positions_offset    ) = current_scroll_right
+          positions(current_positions_offset + 1) = font_size
+
+          positions(current_positions_offset + 2) = current_scroll_right
+          positions(current_positions_offset + 3) = 0.0
+
+          positions(current_positions_offset + 4) = current_scroll_right + actual_character_width
+          positions(current_positions_offset + 5) = 0.0
+
+          positions(current_positions_offset + 6) = current_scroll_right + actual_character_width
+          positions(current_positions_offset + 7) = font_size
+        end if
 
 
         current_scroll_right = current_scroll_right + actual_character_width + (font_size * 0.1)
