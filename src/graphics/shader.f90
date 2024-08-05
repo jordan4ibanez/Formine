@@ -18,8 +18,6 @@ module shader
 
 
   public :: shader_create
-  public :: shader_create_attribute_locations
-  ! public :: shader_get_attribute
   public :: shader_create_uniform_locations
   public :: shader_get_uniform
   public :: shader_start
@@ -219,50 +217,6 @@ contains
     ! All we must do is check the shader result and return the existence in the result.
     poller => get_shader(shader_name, exists)
   end function shader_exists
-
-
-  !* Create the database of attribute locations, inside the shader program.
-  subroutine shader_create_attribute_locations(shader_name, attribute_array)
-    use :: opengl
-    use :: string
-    implicit none
-
-    character(len = *), intent(in) :: shader_name
-    type(heap_string), dimension(:) :: attribute_array
-    type(shader_program), pointer :: current_program
-    character(len = :), allocatable :: temp_string
-    logical :: exists
-    integer :: i
-    integer :: location
-
-    current_program => get_shader(shader_name, exists)
-
-    ! If a non-existent shader is gotten, bail out.
-    if (.not. exists) then
-      error stop "[Shader] Error: Shader ["//shader_name//"] does not exist. Cannot create attribute locations."
-    end if
-
-    ! If we already created the attribute locations, bail out.
-    if (current_program%attributes_created) then
-      error stop "[Shader] Error: Tried to create attribute locations more than once in shader ["//shader_name//"]"
-    end if
-
-    ! Now attempt to get all the shader attribute locations.
-    do i = 1,size(attribute_array)
-
-      temp_string = attribute_array(i)%get()
-      location = gl_get_attrib_location(current_program%program_id, into_c_string(temp_string))
-
-      ! If location is -1 that's OpenGL saying it couldn't find it basically.
-      if (location < 0) then
-        error stop "[Shader] Error: Shader["//shader_name//"] uniform ["//temp_string//"] does not exist in the shader. Got: "//int_to_string(location)//"."
-      else
-        print"(A)","[Shader]: Shader ["//shader_name//"] attribute ["//temp_string//"] created at location ["//int_to_string(location)//"]."
-        call current_program%attributes%set(key(temp_string), location)
-      end if
-    end do
-  end subroutine shader_create_attribute_locations
-
 
 
   !* Create the database of uniform locations, inside the shader program.
