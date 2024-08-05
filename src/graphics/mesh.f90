@@ -34,7 +34,7 @@ module mesh
 contains
 
 
-  subroutine mesh_create_3d(shader_name, mesh_name, positions, texture_coordinate, colors, indices)
+  subroutine mesh_create_3d(shader_name, mesh_name, positions, texture_coordinates, colors, indices)
     use :: shader
     use :: opengl
     use :: string
@@ -48,11 +48,15 @@ contains
     ! 4. improve, somehow.
 
     character(len = *), intent(in) :: shader_name, mesh_name
-    real(c_float), dimension(:), intent(in) :: positions, texture_coordinate, colors
+    real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), intent(in) :: indices
-    type(mesh_data) :: new_mesh
+    real(c_float), dimension(:), pointer :: positions_pointer, texture_coordinates_pointer, colors_pointer
+    type(mesh_data), pointer :: new_mesh
 
-    ! print"(A)",colorize_rgb("[Mesh] WARNING: SHADER MODULE NEEDS A STATE MACHINE!", 255,128,0)
+    allocate(new_mesh)
+
+    positions_pointer => positions
+    texture_coordinates_pointer => texture_coordinates
 
     ! Into vertex array object.
 
@@ -68,7 +72,7 @@ contains
 
     new_mesh%vbo_position = upload_positions(shader_name, positions, 3)
 
-    new_mesh%vbo_texture_coordinate = upload_texture_coordinate(shader_name, texture_coordinate)
+    new_mesh%vbo_texture_coordinate = upload_texture_coordinate(shader_name, texture_coordinates)
 
     new_mesh%vbo_color = upload_colors(colors)
 
@@ -231,7 +235,7 @@ contains
     implicit none
 
     character(len = *), intent(in) :: mesh_name
-    type(mesh_data), intent(in) :: new_mesh
+    type(mesh_data), intent(in), pointer :: new_mesh
 
     ! This creates an enforcement where the mesh must be deleted before it can be re-assigned.
     ! This prevents a severe memory leak.
