@@ -15,6 +15,7 @@ module string
   public :: heap_string_array
   public :: get_file_name_from_string
   public :: string_remove_file_extension
+  public :: string_get_non_space_characters
   !? Pass through the type.
   public :: heap_string
 
