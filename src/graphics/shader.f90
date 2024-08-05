@@ -1,9 +1,20 @@
 module shader
   use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use, intrinsic :: iso_c_binding, only: c_int
   implicit none
 
 
   private
+
+
+  public :: LAYOUT_POSITION
+  public :: LAYOUT_TEXTURE_COORDINATE
+  public :: LAYOUT_COLOR
+
+
+  integer(c_int), parameter :: LAYOUT_POSITION = 0
+  integer(c_int), parameter :: LAYOUT_TEXTURE_COORDINATE = 1
+  integer(c_int), parameter :: LAYOUT_COLOR = 2
 
 
   public :: shader_create
@@ -13,6 +24,7 @@ module shader
   public :: shader_get_uniform
   public :: shader_start
   public :: shader_clear_database
+
 
 
   !* A shader object. This holds all required shader components to run a shader.
