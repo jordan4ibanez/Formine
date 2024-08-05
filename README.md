@@ -32,6 +32,15 @@ Findings:
 
 7800-8050 fps
 
+EXTREME speedup!
+
+using raw pointers instead of the ``get`` and ``set`` yields:
+
+15100-16300 fps
+
+
+
+
 
 -----
 
