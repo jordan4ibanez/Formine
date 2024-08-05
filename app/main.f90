@@ -131,6 +131,7 @@ program main
 
       ! Shader needs to start before the camera is updated.
       call shader_start("main")
+      ! call gl_use_program(1)
 
       call camera_update()
 
