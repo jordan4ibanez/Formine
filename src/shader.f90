@@ -135,7 +135,19 @@ contains
       print"(A)","[Shader]: Successfully linked shader ["//shader%shader_name//"]."
     end if
 
-    ! Now remove the compiled shaders because they're already stored in the program.
+    ! Now remove the shaders objects because they're already compiled into the program.
+    ! We're also going to verify that they're deleted.
+    call gl_detach_shader(shader%program_id, vertex_id)
+    call gl_delete_shader(vertex_id)
+    if (gl_is_shader(vertex_id)) then
+      error stop "[Shader] Error: Failed to delete the vertex shader object."
+    end if
+
+    call gl_detach_shader(shader%program_id, fragment_id)
+    call gl_delete_shader(fragment_id)
+    if (gl_is_shader(fragment_id)) then
+      error stop "[Shader] Error: Failed to delete the fragment shader object."
+    end if
 
     ! Finally validate this whole thing.
     call gl_validate_program(shader%program_id)
