@@ -26,6 +26,12 @@ Possible causes:
 - uneccessary database suffling
 worst case: OpenGL is slow
 
+Findings:
+
+- Lookups in the shader database hardcoded to direct positions yields:
+
+7800-8050 fps
+
 
 -----
 
