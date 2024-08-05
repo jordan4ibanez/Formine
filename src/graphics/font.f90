@@ -107,9 +107,10 @@ contains
     type(opengl_character), pointer :: character_data_pointer
     logical :: exists
     real(c_float) :: current_scroll_right, actual_character_width, centering_offset
-    integer, parameter :: hack_job = 3
+    integer :: offset
     integer, parameter :: points = 4
-    integer, parameter :: offset = hack_job * points
+
+    offset = dimensions * points
 
     if (.not. present(r)) then
       red = 0.0
@@ -247,7 +248,11 @@ contains
       end do
     end if
 
-    call mesh_create_3d(mesh_name, positions, texture_coordinates, colors, indices)
+    if (dimensions == 3) then
+      call mesh_create_3d(mesh_name, positions, texture_coordinates, colors, indices)
+    else
+      print*,"we need create_mesh_2d!"
+    end if
   end subroutine font_generate_text_internal
 
 
