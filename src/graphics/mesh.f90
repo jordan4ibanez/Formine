@@ -67,11 +67,11 @@ contains
 
     ! Into position vertex buffer object.
 
-    new_mesh%vbo_position = upload_positions(shader_name, positions, 3)
+    new_mesh%vbo_position = upload_positions(positions, 3)
 
-    new_mesh%vbo_texture_coordinate = upload_texture_coordinate(shader_name, texture_coordinates)
+    new_mesh%vbo_texture_coordinate = upload_texture_coordinate(texture_coordinates)
 
-    new_mesh%vbo_color = upload_colors(shader_name, colors)
+    new_mesh%vbo_color = upload_colors(colors)
 
     new_mesh%vbo_indices = upload_indices(indices)
 
@@ -85,18 +85,17 @@ contains
   end subroutine mesh_create_3d
 
 
-  integer function upload_positions(shader_name, position_array_pointer, vec_components) result(vbo_position)
+  integer function upload_positions(position_array_pointer, vec_components) result(vbo_position)
     use, intrinsic :: iso_c_binding
     use :: opengl
     use :: shader
     implicit none
 
-    character(len = *), intent(in) :: shader_name
     real(c_float), dimension(:), intent(in), target :: position_array_pointer
     integer(c_int), intent(in), value :: vec_components
     integer :: position_vbo_position
 
-    position_vbo_position = shader_get_attribute(shader_name, "position")
+    position_vbo_position = LAYOUT_POSITION
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
@@ -124,17 +123,16 @@ contains
   end function upload_positions
 
 
-  integer function upload_texture_coordinate(shader_name, texture_coordinates_pointer) result(vbo_position)
+  integer function upload_texture_coordinate(texture_coordinates_pointer) result(vbo_position)
     use, intrinsic :: iso_c_binding
     use :: opengl
     use :: shader
     implicit none
 
-    character(len = *), intent(in) :: shader_name
     real(c_float), dimension(:), intent(in), target :: texture_coordinates_pointer
     integer :: texture_coordinate_vbo_position
 
-    texture_coordinate_vbo_position = shader_get_attribute(shader_name, "texture_coordinate")
+    texture_coordinate_vbo_position = LAYOUT_TEXTURE_COORDINATE
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
@@ -162,17 +160,16 @@ contains
   end function upload_texture_coordinate
 
 
-  integer function upload_colors(shader_name, colors_pointer) result(vbo_position)
+  integer function upload_colors(colors_pointer) result(vbo_position)
     use, intrinsic :: iso_c_binding
     use :: opengl
     use :: shader
     implicit none
 
-    character(len = *), intent(in) :: shader_name
     real(c_float), dimension(:), intent(in), target :: colors_pointer
     integer :: color_vbo_position
 
-    color_vbo_position = shader_get_attribute(shader_name, "color")
+    color_vbo_position = LAYOUT_COLOR
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
