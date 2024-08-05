@@ -109,6 +109,7 @@ module opengl
   public :: gl_set_debug_message_callback
   public :: gl_create_program
   public :: gl_create_shader
+  public :: gl_delete_shader
   public :: gl_shader_source
   public :: gl_compile_shader
   public :: gl_get_integer_v
@@ -221,6 +222,15 @@ module opengl
       integer(c_int), intent(in), value :: shader_type
       integer(c_int) :: shader_id
     end function internal_gl_create_shader
+
+
+    subroutine gl_delete_shader(shader) bind(c, name = "glDeleteShader")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      !! This might cause problems, it's a uint.
+      integer(c_int), intent(in), value :: shader
+    end subroutine gl_delete_shader
 
 
     subroutine internal_gl_shader_source(shader_id, count, source_code, string_length) bind(c, name = "glShaderSource")
