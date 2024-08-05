@@ -106,7 +106,6 @@ contains
       should_center = center
     end if
 
-
     current_scroll_right = 0.0
 
     text_len = len(text)
