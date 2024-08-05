@@ -1,6 +1,6 @@
 !* Delta time module for doing engine things that involve time.
 module delta
-  use, intrinsic :: iso_c_binding, only: c_int64_t, c_double, c_float
+  use, intrinsic :: iso_c_binding, only: c_int64_t, c_double, c_float, c_int
   implicit none
 
   private
@@ -12,6 +12,9 @@ module delta
 
   integer(c_int64_t) :: old_delta_integral = 0
   real(c_double) :: delta_time = 0.0d0
+
+  real(c_double) :: fps_delta_accumulator = 0.0d0
+  integer(c_int) :: fps_accumulator = 0
 
 contains
 
@@ -51,7 +54,25 @@ contains
 
     ! Finally, save it.
     old_delta_integral = new_delta_integral
+
+    ! Bolt on FPS calculation.
+    call fps_calculation()
   end subroutine delta_tick
+
+
+  subroutine fps_calculation()
+    use :: string, only: int_to_string
+    implicit none
+
+    fps_delta_accumulator = fps_delta_accumulator + delta_time
+    fps_accumulator = fps_accumulator + 1
+
+    if (fps_delta_accumulator >= 1.0d0) then
+      print*,"fps: "//int_to_string(fps_accumulator)
+      fps_accumulator = 0
+      fps_delta_accumulator = fps_delta_accumulator - 1.0d0
+    end if
+  end subroutine fps_calculation
 
 
   real(c_float) function get_delta_f32() result(current_delta)
