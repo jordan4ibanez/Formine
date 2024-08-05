@@ -382,7 +382,8 @@ contains
     type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
-    integer :: i, remaining_size
+    integer :: i, remaining_size, status
+    class(*), pointer :: generic_pointer
 
     ! Start with a size of 0.
     allocate(key_array(0))
@@ -411,6 +412,15 @@ contains
 
     ! Now clear the database out.
     do i = 1,size(key_array)
+
+      ! Since we are manually managing the memory, we must manually clean up what we have used.
+      call shader_database%get_raw_ptr(key(key_array(i)%get()), generic_pointer, stat = status)
+      if (status /= 0) then
+        print"(A)", colorize_rgb("[Shader] Error: Failed to deallocate shader program ["//key_array(i)%get()//"]", 255, 0, 0)
+      else
+        deallocate(generic_pointer)
+      end if
+
       call shader_database%unset(key(key_array(i)%get()))
     end do
 
