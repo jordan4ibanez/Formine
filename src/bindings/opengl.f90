@@ -108,6 +108,7 @@ module opengl
   public :: gl_clear_color_scalar
   public :: gl_set_debug_message_callback
   public :: gl_create_program
+  public :: gl_delete_program
   public :: gl_create_shader
   public :: gl_delete_shader
   public :: gl_shader_source
@@ -213,6 +214,15 @@ module opengl
       !! This might cause problems, it's a uint.
       integer(c_int) :: program_id
     end function internal_gl_create_program
+
+
+    subroutine gl_delete_program(program_id) bind(c, name = "glDeleteProgram")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      !! This might cause problems, it's a uint.
+      integer(c_int), intent(in), value :: program_id
+    end subroutine gl_delete_program
 
 
     function internal_gl_create_shader(shader_type) result(shader_id) bind(c, name = "glCreateShader")
