@@ -34,7 +34,7 @@ module mesh
 contains
 
 
-  subroutine mesh_create_3d(shader_name, mesh_name, positions, texture_coordinates, colors, indices)
+  subroutine mesh_create_3d(mesh_name, positions, texture_coordinates, colors, indices)
     use :: shader
     use :: opengl
     use :: string
@@ -47,7 +47,7 @@ contains
     ! 3. make this handle mesh things.
     ! 4. improve, somehow.
 
-    character(len = *), intent(in) :: shader_name, mesh_name
+    character(len = *), intent(in) :: mesh_name
     real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), intent(in), target :: indices
     type(mesh_data), pointer :: new_mesh
