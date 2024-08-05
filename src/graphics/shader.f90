@@ -28,9 +28,6 @@ module shader
   type shader_program
     character(len=:), allocatable :: shader_name
     integer :: program_id
-    !* Attribute locations.
-    type(fhash_tbl_t) :: attributes
-    logical :: attributes_created = .false.
     !* Uniform locations.
     type(fhash_tbl_t) :: uniforms
     logical :: uniforms_created = .false.
