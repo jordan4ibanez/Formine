@@ -14,9 +14,6 @@ module shader
   public :: shader_start
 
 
-  type(fhash_tbl_t) :: shader_database
-
-
   !* A shader object. This holds all required shader components to run a shader.
   type shader_program
     character(len=:), allocatable :: shader_name
@@ -30,6 +27,9 @@ module shader
     type(fhash_tbl_t) :: uniforms
     logical :: uniforms_created = .false.
   end type shader_program
+
+
+  type(fhash_tbl_t) :: shader_database
 
 
 contains
