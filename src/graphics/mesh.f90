@@ -77,7 +77,7 @@ contains
 
     new_mesh%vbo_texture_coordinate = upload_texture_coordinate(shader_name, texture_coordinates_pointer)
 
-    new_mesh%vbo_color = upload_colors(colors)
+    new_mesh%vbo_color = upload_colors(colors_pointer)
 
     new_mesh%vbo_indices = upload_indices(indices_pointer)
 
@@ -250,24 +250,25 @@ contains
       print"(A)", "[Mesh]: set mesh ["//mesh_name//"]"
     end if
 
-    call mesh_database%set(key(mesh_name), new_mesh)
+    call mesh_database%set_ptr(key(mesh_name), new_mesh)
   end subroutine set_mesh
 
 
   !* Get a mesh from the hash table.
   !* The mesh is a clone. To update, set_mesh().
-  type(mesh_data) function get_mesh(mesh_name, exists) result(gotten_mesh)
+  function get_mesh(mesh_name, exists) result(gotten_mesh)
     use :: terminal
     implicit none
 
     character(len = *), intent(in) :: mesh_name
     logical, intent(inout) :: exists
-    class(*), allocatable :: generic_data
+    class(*), pointer :: generic_data
     integer :: status
+    type(mesh_data), pointer :: gotten_mesh
 
     exists = .false.
 
-    call mesh_database%get_raw(key(mesh_name), generic_data, stat = status)
+    call mesh_database%get_raw_ptr(key(mesh_name), generic_data, stat = status)
 
     if (status /= 0) then
       print"(A)",colorize_rgb("[Mesh] Error: ["//mesh_name//"] does not exist.", 255, 0, 0)
@@ -277,7 +278,7 @@ contains
     select type(generic_data)
      type is (mesh_data)
       exists = .true.
-      gotten_mesh = generic_data
+      gotten_mesh => generic_data
      class default
       error stop colorize_rgb("[Mesh] Error: ["//mesh_name//"] has the wrong type.", 255, 0, 0)
     end select
@@ -317,14 +318,14 @@ contains
     implicit none
 
     character(len = *), intent(in) :: mesh_name
-    class(*), allocatable :: generic
+    class(*), pointer :: generic
     integer :: status
-    type(mesh_data) :: gotten_mesh
+    type(mesh_data), pointer :: gotten_mesh
 
     ! This wipes out the OpenGL memory as well or else there's going to be a massive memory leak.
     ! This is written so it can be used for set_mesh to auto delete the old mesh.
 
-    call mesh_database%get_raw(key(mesh_name), generic, stat = status)
+    call mesh_database%get_raw_ptr(key(mesh_name), generic, stat = status)
 
     if (status /= 0) then
       print"(A)",colorize_rgb("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot delete.", 255, 0, 0)
@@ -333,7 +334,7 @@ contains
 
     select type(generic)
      type is (mesh_data)
-      gotten_mesh = generic
+      gotten_mesh => generic
      class default
       print"(A)",colorize_rgb("[Mesh] Error: ["//mesh_name//"] has the wrong type.", 255, 0, 0)
       return
@@ -392,6 +393,9 @@ contains
     if (gl_is_vertex_array(gotten_mesh%vao)) then
       error stop "[Mesh]: Failed to delete VAO for mesh ["//mesh_name//"]"
     end if
+
+    ! We are working with manual memory management, we must manually deallocate it.
+    deallocate(gotten_mesh)
 
     ! Finally remove it from the database.
     call mesh_database%unset(key(mesh_name))
