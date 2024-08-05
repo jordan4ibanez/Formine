@@ -925,13 +925,9 @@ contains
     implicit none
 
     real(kind = c_float), dimension(:), target :: float_array
-    integer(c_int) :: total_size, length_of_array
-
-    length_of_array = size(float_array)
-    total_size = F32_SIZE * length_of_array
 
     !! FIXME: Might be wrong.
-    call internal_gl_buffer_data(GL_ARRAY_BUFFER, total_size, c_loc(float_array), GL_STATIC_DRAW)
+    call internal_gl_buffer_data(GL_ARRAY_BUFFER, F32_SIZE * size(float_array), c_loc(float_array), GL_STATIC_DRAW)
   end subroutine gl_buffer_float_array
 
 
@@ -943,13 +939,9 @@ contains
     implicit none
 
     type(vec3f), dimension(:), target :: vec3f_array
-    integer(c_int) :: total_size, length_of_array
-
-    length_of_array = size(vec3f_array)
-    total_size = F32_SIZE * length_of_array * 3
 
     !! FIXME: Might be wrong.
-    call internal_gl_buffer_data(GL_ARRAY_BUFFER, total_size, c_loc(vec3f_array), GL_STATIC_DRAW)
+    call internal_gl_buffer_data(GL_ARRAY_BUFFER, F32_SIZE * size(vec3f_array) * 3, c_loc(vec3f_array), GL_STATIC_DRAW)
   end subroutine gl_buffer_vec3f_array
 
 
