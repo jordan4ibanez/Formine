@@ -34,7 +34,32 @@ module mesh
 contains
 
 
+  !* Create a mesh for 2 dimensional space.
+  subroutine mesh_create_2d(mesh_name, positions, texture_coordinates, colors, indices)
+    implicit none
+
+    character(len = *), intent(in) :: mesh_name
+    real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
+    integer(c_int), dimension(:), intent(in), target :: indices
+
+    call mesh_create_internal(mesh_name, 2, positions, texture_coordinates, colors, indices)
+  end subroutine mesh_create_2d
+
+
+  !* Create a mesh for 3 dimensional space.
   subroutine mesh_create_3d(mesh_name, positions, texture_coordinates, colors, indices)
+    implicit none
+
+    character(len = *), intent(in) :: mesh_name
+    real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
+    integer(c_int), dimension(:), intent(in), target :: indices
+
+    call mesh_create_internal(mesh_name, 3, positions, texture_coordinates, colors, indices)
+  end subroutine mesh_create_3d
+
+
+  !* Internal component for creating a mesh.
+  subroutine mesh_create_internal(mesh_name, dimensions, positions, texture_coordinates, colors, indices)
     use :: shader
     use :: opengl
     use :: string
@@ -43,6 +68,7 @@ contains
     implicit none
 
     character(len = *), intent(in) :: mesh_name
+    integer(c_int), intent(in), value :: dimensions
     real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), intent(in), target :: indices
     type(mesh_data), pointer :: new_mesh
@@ -62,7 +88,7 @@ contains
 
     ! Into position vertex buffer object.
 
-    new_mesh%vbo_position = upload_positions(positions, 3)
+    new_mesh%vbo_position = upload_positions(positions, dimensions)
 
     new_mesh%vbo_texture_coordinate = upload_texture_coordinate(texture_coordinates)
 
@@ -77,7 +103,7 @@ contains
 
     ! Finally, upload into the database.
     call set_mesh(mesh_name, new_mesh)
-  end subroutine mesh_create_3d
+  end subroutine mesh_create_internal
 
 
   integer function upload_positions(position_array_pointer, vec_components) result(vbo_position)
