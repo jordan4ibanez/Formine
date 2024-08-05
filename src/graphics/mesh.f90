@@ -301,13 +301,13 @@ contains
 
 
   !* Delete a mesh.
-  subroutine mesh_delete(shader_name, mesh_name)
+  subroutine mesh_delete(mesh_name)
     use :: opengl
     use :: shader
     use :: terminal
     implicit none
 
-    character(len = *), intent(in) :: shader_name, mesh_name
+    character(len = *), intent(in) :: mesh_name
     class(*), pointer :: generic
     integer :: status
     type(mesh_data), pointer :: gotten_mesh
@@ -436,7 +436,7 @@ contains
 
     ! Now clear the database out.
     do i = 1,size(key_array)
-      call mesh_delete("3d", key_array(i)%get())
+      call mesh_delete(key_array(i)%get())
     end do
 
     !* We will always check that the remaining size is 0. This will protect us from random issues.
