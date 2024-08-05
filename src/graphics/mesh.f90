@@ -50,16 +50,10 @@ contains
     character(len = *), intent(in) :: shader_name, mesh_name
     real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), intent(in), target :: indices
-    real(c_float), dimension(:), pointer :: positions_pointer, texture_coordinates_pointer, colors_pointer
-    integer(c_int), dimension(:), pointer :: indices_pointer
     type(mesh_data), pointer :: new_mesh
 
     ! Set up our memory here. We are working with manual memory management.
     allocate(new_mesh)
-    positions_pointer => positions
-    texture_coordinates_pointer => texture_coordinates
-    colors_pointer => colors
-    indices_pointer => indices
 
     ! Into vertex array object.
 
@@ -73,13 +67,13 @@ contains
 
     ! Into position vertex buffer object.
 
-    new_mesh%vbo_position = upload_positions(shader_name, positions_pointer, 3)
+    new_mesh%vbo_position = upload_positions(shader_name, positions, 3)
 
-    new_mesh%vbo_texture_coordinate = upload_texture_coordinate(shader_name, texture_coordinates_pointer)
+    new_mesh%vbo_texture_coordinate = upload_texture_coordinate(shader_name, texture_coordinates)
 
-    new_mesh%vbo_color = upload_colors(colors_pointer)
+    new_mesh%vbo_color = upload_colors(colors)
 
-    new_mesh%vbo_indices = upload_indices(indices_pointer)
+    new_mesh%vbo_indices = upload_indices(indices)
 
     new_mesh%indices_length = size(indices)
 
@@ -98,7 +92,7 @@ contains
     implicit none
 
     character(len = *), intent(in) :: shader_name
-    real(c_float), dimension(:), intent(in), pointer :: position_array_pointer
+    real(c_float), dimension(:), intent(in), target :: position_array_pointer
     integer(c_int), intent(in), value :: vec_components
     integer :: position_vbo_position
 
@@ -137,7 +131,7 @@ contains
     implicit none
 
     character(len = *), intent(in) :: shader_name
-    real(c_float), dimension(:), intent(in), pointer :: texture_coordinates_pointer
+    real(c_float), dimension(:), intent(in), target :: texture_coordinates_pointer
     integer :: texture_coordinate_vbo_position
 
     texture_coordinate_vbo_position = shader_get_attribute(shader_name, "texture_coordinate")
@@ -174,7 +168,7 @@ contains
     use :: shader
     implicit none
 
-    real(c_float), dimension(:), intent(in), pointer :: colors_pointer
+    real(c_float), dimension(:), intent(in), target :: colors_pointer
     integer :: color_vbo_position
 
     color_vbo_position = shader_get_attribute("main", "color")
@@ -211,7 +205,7 @@ contains
     use :: shader
     implicit none
 
-    integer(c_int), dimension(:), intent(in), pointer :: indices_pointer
+    integer(c_int), dimension(:), intent(in), target :: indices_pointer
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
