@@ -333,7 +333,7 @@ contains
     call gl_bind_vertex_array(gotten_mesh%vao)
 
     ! Positions.
-    call gl_disable_vertex_attrib_array(shader_get_attribute(shader_name, "position"))
+    call gl_disable_vertex_attrib_array(LAYOUT_POSITION)
     call gl_delete_buffers(gotten_mesh%vbo_position)
 
     if (gl_is_buffer(gotten_mesh%vbo_position)) then
@@ -344,7 +344,7 @@ contains
     ! end if
 
     ! Texture coordinates.
-    call gl_disable_vertex_attrib_array(shader_get_attribute(shader_name, "texture_coordinate"))
+    call gl_disable_vertex_attrib_array(LAYOUT_TEXTURE_COORDINATE)
     call gl_delete_buffers(gotten_mesh%vbo_texture_coordinate)
 
     if (gl_is_buffer(gotten_mesh%vbo_texture_coordinate)) then
@@ -355,7 +355,7 @@ contains
     ! end if
 
     ! Colors
-    call gl_disable_vertex_attrib_array(shader_get_attribute(shader_name, "color"))
+    call gl_disable_vertex_attrib_array(LAYOUT_COLOR)
     call gl_delete_buffers(gotten_mesh%vbo_color)
 
     if (gl_is_buffer(gotten_mesh%vbo_color)) then
