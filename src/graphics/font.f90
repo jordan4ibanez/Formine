@@ -215,7 +215,6 @@ contains
       end do
     end if
 
-
     call mesh_create_2d(mesh_name, positions, texture_coordinates, colors, indices)
   end subroutine font_generate_text
 
