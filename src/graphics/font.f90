@@ -12,8 +12,7 @@ module font
 
 
   public :: font_create
-  public :: font_generate_text_2d
-  public :: font_generate_text_3d
+  public :: font_generate_text
 
 
   ! This is a container which holds the points on the texture that make the character appear correctly.
@@ -61,41 +60,14 @@ module font
 contains
 
 
-  !* Generate a text mesh for rendering in 2 dimensional space.
-  subroutine font_generate_text_2d(mesh_name, font_size, text, r,g,b, center)
-    implicit none
-
-    character(len = *), intent(in) :: mesh_name, text
-    real(c_float), intent(in), value :: font_size
-    real(c_float), intent(in), optional :: r,g,b
-    logical, intent(in), optional :: center
-
-    call font_generate_text_internal(mesh_name, font_size, text, 2, r,g,b, center)
-  end subroutine font_generate_text_2d
-
-
-  !* Generate a text mesh for rendering in 3 dimensional space.
-  subroutine font_generate_text_3d(mesh_name, font_size, text, r,g,b, center)
-    implicit none
-
-    character(len = *), intent(in) :: mesh_name, text
-    real(c_float), intent(in), value :: font_size
-    real(c_float), intent(in), optional :: r,g,b
-    logical, intent(in), optional :: center
-
-    call font_generate_text_internal(mesh_name, font_size, text, 3, r,g,b, center)
-  end subroutine font_generate_text_3d
-
-
-  !* Internal generate a text mesh. (2d or 3d)
-  subroutine font_generate_text_internal(mesh_name, font_size, text, dimensions, r,g,b, center)
+  !* Generate a text mesh. (2d or 3d)
+  subroutine font_generate_text(mesh_name, font_size, text, r,g,b, center)
     use :: mesh
     use :: string, only: string_get_non_space_characters
     implicit none
 
     character(len = *), intent(in) :: mesh_name, text
     real(c_float), intent(in), value :: font_size
-    integer(c_int), intent(in), value :: dimensions
     real(c_float), intent(in), optional :: r,g,b
     logical, intent(in), optional :: center
     logical :: should_center
@@ -110,9 +82,10 @@ contains
     integer :: offset
     integer, parameter :: points = 4
     real(c_float), parameter :: space_width = 0.4
+    ! integer, parameter :: dimensions = 2
 
-    offset = dimensions * points
-    position_buffer_stride = points * dimensions
+    offset = 2 * points
+    position_buffer_stride = points * 2
 
     if (.not. present(r)) then
       red = 0.0
@@ -175,37 +148,17 @@ contains
         current_positions_offset = ((buffer_index - 1) * position_buffer_stride) + 1
         actual_character_width = real(character_data_pointer%width_real, kind = c_float) * font_size
 
-        if (dimensions == 3) then
-          !? 3D.
-          positions(current_positions_offset    ) = current_scroll_right
-          positions(current_positions_offset + 1) = font_size
-          positions(current_positions_offset + 2) = 0.0
+        positions(current_positions_offset    ) = current_scroll_right
+        positions(current_positions_offset + 1) = font_size
 
-          positions(current_positions_offset + 3) = current_scroll_right
-          positions(current_positions_offset + 4) = 0.0
-          positions(current_positions_offset + 5) = 0.0
+        positions(current_positions_offset + 2) = current_scroll_right
+        positions(current_positions_offset + 3) = 0.0
 
-          positions(current_positions_offset + 6) = current_scroll_right + actual_character_width
-          positions(current_positions_offset + 7) = 0.0
-          positions(current_positions_offset + 8) = 0.0
+        positions(current_positions_offset + 4) = current_scroll_right + actual_character_width
+        positions(current_positions_offset + 5) = 0.0
 
-          positions(current_positions_offset + 9) = current_scroll_right + actual_character_width
-          positions(current_positions_offset + 10) = font_size
-          positions(current_positions_offset + 11) = 0.0
-        else
-          !? 2D.
-          positions(current_positions_offset    ) = current_scroll_right
-          positions(current_positions_offset + 1) = font_size
-
-          positions(current_positions_offset + 2) = current_scroll_right
-          positions(current_positions_offset + 3) = 0.0
-
-          positions(current_positions_offset + 4) = current_scroll_right + actual_character_width
-          positions(current_positions_offset + 5) = 0.0
-
-          positions(current_positions_offset + 6) = current_scroll_right + actual_character_width
-          positions(current_positions_offset + 7) = font_size
-        end if
+        positions(current_positions_offset + 6) = current_scroll_right + actual_character_width
+        positions(current_positions_offset + 7) = font_size
 
         current_scroll_right = current_scroll_right + actual_character_width + (font_size * 0.1)
 
@@ -258,26 +211,16 @@ contains
 
         centering_offset = (current_scroll_right - (font_size * 0.1)) * 0.5
 
-        if (dimensions == 3) then
-          positions(current_positions_offset    ) = positions(current_positions_offset    ) - centering_offset
-          positions(current_positions_offset + 3) = positions(current_positions_offset + 3) - centering_offset
-          positions(current_positions_offset + 6) = positions(current_positions_offset + 6) - centering_offset
-          positions(current_positions_offset + 9) = positions(current_positions_offset + 9) - centering_offset
-        else
-          positions(current_positions_offset    ) = positions(current_positions_offset    ) - centering_offset
-          positions(current_positions_offset + 2) = positions(current_positions_offset + 2) - centering_offset
-          positions(current_positions_offset + 4) = positions(current_positions_offset + 4) - centering_offset
-          positions(current_positions_offset + 6) = positions(current_positions_offset + 6) - centering_offset
-        end if
+        positions(current_positions_offset    ) = positions(current_positions_offset    ) - centering_offset
+        positions(current_positions_offset + 2) = positions(current_positions_offset + 2) - centering_offset
+        positions(current_positions_offset + 4) = positions(current_positions_offset + 4) - centering_offset
+        positions(current_positions_offset + 6) = positions(current_positions_offset + 6) - centering_offset
       end do
     end if
 
-    if (dimensions == 3) then
-      call mesh_create_3d(mesh_name, positions, texture_coordinates, colors, indices)
-    else
-      call mesh_create_2d(mesh_name, positions, texture_coordinates, colors, indices)
-    end if
-  end subroutine font_generate_text_internal
+
+    call mesh_create_2d(mesh_name, positions, texture_coordinates, colors, indices)
+  end subroutine font_generate_text
 
 
   !* Get a character's OpenGL data.
