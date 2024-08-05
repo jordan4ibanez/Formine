@@ -142,7 +142,7 @@ program main
 
       call mesh_draw("debug")
 
-      call camera_set_object_matrix_f32(0.0, -0.25, -3.0, 0.0, rotation, 0.0, 0.5, 0.5, 0.5)
+      call camera_set_object_matrix_f32(0.0, -0.25, -3.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.5)
 
       call texture_use("font")
 
