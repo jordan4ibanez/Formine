@@ -48,7 +48,7 @@ program main
 
   call gl_get_version()
 
-  call glfw_swap_interval(1)
+  call glfw_swap_interval(0)
 
   !! This allows OpenGL debugging.
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
@@ -117,6 +117,7 @@ program main
 
   rotation = 0.0
 
+  call font_generate_text("hello", abs(cos(rotation * (-2.0))), "Hello, Fortran!", r = abs(cos(rotation / 2.0)), center = .true.)
 
 
   !! This is debugging for functions!
@@ -137,25 +138,21 @@ program main
 
       call gl_clear_color_and_depth_buffer()
 
-
-
       !? DRAW TEST ?!
 
-      call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
+      ! call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
 
-      call texture_use("fortran_logo_512x512.png")
+      ! call texture_use("fortran_logo_512x512.png")
 
-      call mesh_draw("debug")
+      ! call mesh_draw("debug")
 
       call camera_set_object_matrix_f32(0.0, -0.25, -3.0, 0.0, rotation, 0.0, 0.5, 0.5, 0.5)
 
       call texture_use("font")
 
-      call font_generate_text("hello", abs(cos(rotation * (-2.0))), "Hello, Fortran!", r = abs(cos(rotation / 2.0)), center = .true.)
 
       call mesh_draw("hello")
 
-      call mesh_delete("hello")
 
       !? END DRAW TEST ?!
 
