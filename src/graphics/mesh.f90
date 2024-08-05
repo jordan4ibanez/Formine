@@ -41,11 +41,6 @@ contains
     use :: terminal
     use :: terminal
     implicit none
-    ! Notes:
-
-    ! 2. make a type for a mesh.
-    ! 3. make this handle mesh things.
-    ! 4. improve, somehow.
 
     character(len = *), intent(in) :: mesh_name
     real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
