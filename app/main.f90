@@ -149,7 +149,7 @@ program main
 
       call texture_use("font")
 
-      call font_generate_text("hello", 1.0, "Hello, Fortran!", r = abs(cos(rotation / 2.0)), center = .true.)
+      call font_generate_text("hello", 1.0, "Hello, Fortran!", center = .true.)
 
       call mesh_draw("hello")
 
