@@ -147,7 +147,7 @@ program main
 
       call mesh_draw("debug")
 
-      call mesh_delete("debug")
+      call mesh_delete("3d", "debug")
 
       call camera_set_object_matrix_f32(0.0, -0.25, -3.0, 0.0, rotation, 0.0, 0.5, 0.5, 0.5)
 
@@ -157,7 +157,7 @@ program main
 
       call mesh_draw("hello")
 
-      call mesh_delete("hello")
+      call mesh_delete("3d", "hello")
 
 
       !? END DRAW TEST ?!
