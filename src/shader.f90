@@ -39,7 +39,6 @@ contains
   !? Makes the code easier to read.
   !? This also is making it so the program that uses it can return the success and work logic on it at the same time.
   logical function creation_succeeded(input) result(success)
-    use :: string
     use :: opengl
     implicit none
 
