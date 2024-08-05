@@ -54,7 +54,7 @@ contains
     integer(c_int), dimension(:), pointer :: indices_pointer
     type(mesh_data), pointer :: new_mesh
 
-    ! Set up our memory here.
+    ! Set up our memory here. We are working with manual memory management.
     allocate(new_mesh)
     positions_pointer => positions
     texture_coordinates_pointer => texture_coordinates
@@ -202,7 +202,6 @@ contains
 
     ! Now unbind.
     call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
-
   end function upload_colors
 
 
@@ -229,7 +228,6 @@ contains
 
     !! Never call this, instant segfault.
     ! call gl_bind_buffer(GL_ELEMENT_ARRAY_BUFFER, 0)
-
   end function upload_indices
 
 
@@ -292,10 +290,10 @@ contains
     implicit none
 
     character(len = *), intent(in) :: mesh_name
-    type(mesh_data) :: gotten_mesh
+    type(mesh_data), pointer :: gotten_mesh
     logical :: exists
 
-    gotten_mesh = get_mesh(mesh_name, exists)
+    gotten_mesh => get_mesh(mesh_name, exists)
 
     if (.not. exists) then
       print"(A)", colorize_rgb("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot draw.", 255, 0, 0)
