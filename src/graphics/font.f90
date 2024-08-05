@@ -74,18 +74,15 @@ contains
     real(c_float) :: red, green, blue
     real(c_float), dimension(:), allocatable :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), allocatable :: indices
-    integer :: text_len, allocation_len, i, buffer_index, position_buffer_stride, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
+    integer :: text_len, allocation_len, i, buffer_index, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
     character :: current_character
     type(opengl_character), pointer :: character_data_pointer
     logical :: exists
     real(c_float) :: current_scroll_right, actual_character_width, centering_offset
-    integer :: offset
     integer, parameter :: points = 4
     real(c_float), parameter :: space_width = 0.4
-    ! integer, parameter :: dimensions = 2
-
-    offset = 2 * points
-    position_buffer_stride = points * 2
+    integer, parameter :: dimensions = 2
+    integer, parameter :: offset = dimensions * points
 
     if (.not. present(r)) then
       red = 0.0
