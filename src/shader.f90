@@ -12,6 +12,7 @@ module shader
   public :: shader_create_uniform_locations
   public :: shader_get_uniform
   public :: shader_start
+  public :: shader_clear_database
 
 
   !* A shader object. This holds all required shader components to run a shader.
@@ -368,5 +369,57 @@ contains
     call gl_use_program(current_program%program_id)
   end subroutine shader_start
 
+
+  !* Completely wipe out all existing shaders. This might be slow.
+  subroutine shader_clear_database()
+    use :: fhash, only: fhash_iter_t, fhash_key_t
+    use :: opengl
+    use :: string
+    use :: terminal
+    implicit none
+
+    type(heap_string), dimension(:), allocatable :: key_array
+    type(fhash_iter_t) :: iterator
+    class(fhash_key_t), allocatable :: generic_key
+    class(*), allocatable :: generic_data
+    integer :: i, remaining_size
+
+    ! Start with a size of 0.
+    allocate(key_array(0))
+
+    ! Create the iterator.
+    iterator = fhash_iter_t(shader_database)
+
+    ! Now we will collect the keys from the iterator.
+    do while(iterator%next(generic_key, generic_data))
+      ! We will delete the programs as we go.
+      select type(generic_data)
+       type is (shader_program)
+        call gl_delete_program(generic_data%program_id)
+        if (gl_is_program(generic_data%program_id)) then
+          error stop "[Shader] Error: Failed to delete program for shader ["//generic_key%to_string()//"]"
+        end if
+       class default
+        error stop "[Shader] Error: The wrong type was inserted for shader ["//generic_key%to_string()//"]"
+      end select
+      ! Appending. Allocatable will clean up the old data.
+      key_array = [key_array, heap_string_array(generic_key%to_string())]
+    end do
+
+    ! Now clear the database out.
+    do i = 1,size(key_array)
+      call shader_database%unset(key(key_array(i)%get()))
+    end do
+
+    !* We will always check that the remaining size is 0. This will protect us from random issues.
+    call shader_database%stats(num_items = remaining_size)
+
+    if (remaining_size /= 0) then
+      print"(A)", colorize_rgb("[Shader] Error: Did not delete all shaders! Expected size: [0] | Actual: ["//int_to_string(remaining_size)//"]", 255, 0, 0)
+    else
+      print"(A)", "[Mesh]: Successfully cleared the shader database."
+    end if
+
+  end subroutine shader_clear_database
 
 end module shader
