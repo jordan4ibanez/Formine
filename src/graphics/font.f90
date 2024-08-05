@@ -102,7 +102,7 @@ contains
     real(c_float) :: red, green, blue
     real(c_float), dimension(:), allocatable :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), allocatable :: indices
-    integer :: text_len, allocation_len, i, buffer_index, buffer_stride, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
+    integer :: text_len, allocation_len, i, buffer_index, position_buffer_stride, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
     character :: current_character
     type(opengl_character), pointer :: character_data_pointer
     logical :: exists
@@ -112,7 +112,7 @@ contains
     real(c_float), parameter :: space_width = 0.4
 
     offset = dimensions * points
-    buffer_stride = points * dimensions
+    position_buffer_stride = points * dimensions
 
     if (.not. present(r)) then
       red = 0.0
@@ -148,7 +148,7 @@ contains
     allocate(positions(allocation_len * offset))
     ! todo: use offset intead of 4 * 2
     allocate(texture_coordinates(allocation_len * 8))
-    allocate(colors(allocation_len * offset))
+    allocate(colors(allocation_len * 12))
     allocate(indices(allocation_len * 6))
 
     ! With spaces, this desynchronizes. We must stop it from trying to reach outside the buffer.
@@ -172,7 +172,7 @@ contains
       if (exists) then
 
         ! Positions.
-        current_positions_offset = ((buffer_index - 1) * buffer_stride) + 1
+        current_positions_offset = ((buffer_index - 1) * position_buffer_stride) + 1
         actual_character_width = real(character_data_pointer%width_real, kind = c_float) * font_size
 
         if (dimensions == 3) then
@@ -254,14 +254,21 @@ contains
 
     if (should_center) then
       do i = 1,allocation_len
-        current_positions_offset = ((i - 1) * 12) + 1
+        current_positions_offset = ((i - 1) * position_buffer_stride) + 1
 
         centering_offset = (current_scroll_right - (font_size * 0.1)) * 0.5
 
-        positions(current_positions_offset    ) = positions(current_positions_offset    ) - centering_offset
-        positions(current_positions_offset + 3) = positions(current_positions_offset + 3) - centering_offset
-        positions(current_positions_offset + 6) = positions(current_positions_offset + 6) - centering_offset
-        positions(current_positions_offset + 9) = positions(current_positions_offset + 9) - centering_offset
+        if (dimensions == 3) then
+          positions(current_positions_offset    ) = positions(current_positions_offset    ) - centering_offset
+          positions(current_positions_offset + 3) = positions(current_positions_offset + 3) - centering_offset
+          positions(current_positions_offset + 6) = positions(current_positions_offset + 6) - centering_offset
+          positions(current_positions_offset + 9) = positions(current_positions_offset + 9) - centering_offset
+        else
+          positions(current_positions_offset    ) = positions(current_positions_offset    ) - centering_offset
+          positions(current_positions_offset + 2) = positions(current_positions_offset + 2) - centering_offset
+          positions(current_positions_offset + 4) = positions(current_positions_offset + 4) - centering_offset
+          positions(current_positions_offset + 6) = positions(current_positions_offset + 6) - centering_offset
+        end if
       end do
     end if
 
