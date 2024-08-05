@@ -145,9 +145,9 @@ program main
 
       call texture_use("fortran_logo_512x512.png")
 
-      call mesh_draw("debug")
+      ! call mesh_draw("debug")
 
-      call mesh_delete("debug")
+      ! call mesh_delete("debug")
 
       ! call camera_set_object_matrix_f32(0.0, -0.25, -3.0, 0.0, rotation, 0.0, 0.5, 0.5, 0.5)
 
