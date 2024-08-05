@@ -113,6 +113,7 @@ module opengl
   public :: gl_delete_shader
   public :: gl_shader_source
   public :: gl_compile_shader
+  public :: gl_is_shader
   public :: gl_get_integer_v
   public :: gl_get_version
   public :: gl_attach_shader
@@ -262,6 +263,15 @@ module opengl
 
       integer(c_int), intent(in), value :: shader_id
     end subroutine gl_compile_shader
+
+
+    function gl_is_shader(shader_id) result(is_a_shader) bind(c, name = "glIsShader")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: shader_id
+      logical(c_bool) :: is_a_shader
+    end function gl_is_shader
 
 
     subroutine gl_get_integer_v(pname, data) bind(c, name = "glGetIntegerv")
