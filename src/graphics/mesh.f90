@@ -10,6 +10,7 @@ module mesh
   private
 
 
+  public :: mesh_create_2d
   public :: mesh_create_3d
   public :: mesh_draw
   public :: mesh_delete

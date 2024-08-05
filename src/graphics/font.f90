@@ -275,7 +275,7 @@ contains
     if (dimensions == 3) then
       call mesh_create_3d(mesh_name, positions, texture_coordinates, colors, indices)
     else
-      print*,"we need create_mesh_2d!"
+      call mesh_create_2d(mesh_name, positions, texture_coordinates, colors, indices)
     end if
   end subroutine font_generate_text_internal
 
