@@ -71,7 +71,7 @@ contains
 
     new_mesh%vbo_texture_coordinate = upload_texture_coordinate(shader_name, texture_coordinates)
 
-    new_mesh%vbo_color = upload_colors(colors)
+    new_mesh%vbo_color = upload_colors(shader_name, colors)
 
     new_mesh%vbo_indices = upload_indices(indices)
 
@@ -162,16 +162,17 @@ contains
   end function upload_texture_coordinate
 
 
-  integer function upload_colors(colors_pointer) result(vbo_position)
+  integer function upload_colors(shader_name, colors_pointer) result(vbo_position)
     use, intrinsic :: iso_c_binding
     use :: opengl
     use :: shader
     implicit none
 
+    character(len = *), intent(in) :: shader_name
     real(c_float), dimension(:), intent(in), target :: colors_pointer
     integer :: color_vbo_position
 
-    color_vbo_position = shader_get_attribute("main", "color")
+    color_vbo_position = shader_get_attribute(shader_name, "color")
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
@@ -303,13 +304,13 @@ contains
 
 
   !* Delete a mesh.
-  subroutine mesh_delete(mesh_name)
+  subroutine mesh_delete(shader_name, mesh_name)
     use :: opengl
     use :: shader
     use :: terminal
     implicit none
 
-    character(len = *), intent(in) :: mesh_name
+    character(len = *), intent(in) :: shader_name, mesh_name
     class(*), pointer :: generic
     integer :: status
     type(mesh_data), pointer :: gotten_mesh
@@ -335,7 +336,7 @@ contains
     call gl_bind_vertex_array(gotten_mesh%vao)
 
     ! Positions.
-    call gl_disable_vertex_attrib_array(shader_get_attribute("main", "position"))
+    call gl_disable_vertex_attrib_array(shader_get_attribute(shader_name, "position"))
     call gl_delete_buffers(gotten_mesh%vbo_position)
 
     if (gl_is_buffer(gotten_mesh%vbo_position)) then
@@ -346,7 +347,7 @@ contains
     ! end if
 
     ! Texture coordinates.
-    call gl_disable_vertex_attrib_array(shader_get_attribute("main", "texture_coordinate"))
+    call gl_disable_vertex_attrib_array(shader_get_attribute(shader_name, "texture_coordinate"))
     call gl_delete_buffers(gotten_mesh%vbo_texture_coordinate)
 
     if (gl_is_buffer(gotten_mesh%vbo_texture_coordinate)) then
@@ -357,7 +358,7 @@ contains
     ! end if
 
     ! Colors
-    call gl_disable_vertex_attrib_array(shader_get_attribute("main", "color"))
+    call gl_disable_vertex_attrib_array(shader_get_attribute(shader_name, "color"))
     call gl_delete_buffers(gotten_mesh%vbo_color)
 
     if (gl_is_buffer(gotten_mesh%vbo_color)) then
