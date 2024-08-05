@@ -2,7 +2,7 @@ default:
 	@fpm run
 
 release:
-	@fpm run --flag -fuse-ld=mold --flag -O3
+	@fpm run --flag -fuse-ld=mold --flag -O3 --flag -march=native --flag -mtune=native 
 
 .PHONY: test
 test:
