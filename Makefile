@@ -2,7 +2,7 @@ default:
 	@fpm run
 
 release:
-	@fpm run --flag -fuse-ld=mold --flag -O2
+	@fpm run --flag -fuse-ld=mold --flag -O3
 
 .PHONY: test
 test:
