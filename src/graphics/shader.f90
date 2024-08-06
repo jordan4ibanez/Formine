@@ -216,33 +216,6 @@ contains
   end function shader_exists
 
 
-  !* Get the integral position of a shader uniform.
-  integer function shader_get_uniform(shader_name, uniform_name) result(location)
-    implicit none
-
-    character(len = *) :: shader_name
-    character(len = *) :: uniform_name
-    type(shader_program), pointer :: current_program
-    logical :: exists
-    integer :: status
-
-    current_program => get_shader(shader_name, exists)
-
-    ! If the shader does not exist, bail out.
-    if (.not. exists) then
-      error stop "[Shader] Error: Shader ["//shader_name//"] does not exist. Cannot get uniform location of ["//uniform_name//"]."
-    end if
-
-    ! Now let's try to get it.
-    call current_program%uniforms%get(key(uniform_name), location, stat=status)
-
-    ! Uh oh.
-    if (status /= 0) then
-      error stop "[Shader] Error: Shader ["//shader_name//"] does not contain uniform ["//uniform_name//"]."
-    end if
-  end function shader_get_uniform
-
-
   !* Start up a shader program.
   subroutine shader_start(shader_name)
     use :: opengl
