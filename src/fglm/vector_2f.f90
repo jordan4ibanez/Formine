@@ -6,56 +6,53 @@ module vector_2f
   private
 
 
-  public :: vec2d
+  public :: vec2f
 
 
-  ! vec2f and vec2d are transparent containers.
+  ! vec2f and vec2f are transparent containers.
   ! You can use the methods, or you can use the raw data.
   !
-  !* They do not mix. Can't add vec2f to vec2d, and so forth. This will cause weird problems that I don't feel like solving.
+  !* They do not mix. Can't add vec2f to vec2f, and so forth. This will cause weird problems that I don't feel like solving.
   !
   !? Implementation note: I added a whole bunch of f32 assignment and math because it's easier to write out 0.0 than it is 0.0d0.
 
-  type vec2d
+  type vec2f
     real(c_float):: x = 0.0
     real(c_float):: y = 0.0
   contains
-    generic :: assignment(=) => assign_scalar_f64, assign_array_f64, assign_vec2d
+    generic :: assignment(=) => assign_scalar_f64, assign_array_f64, assign_vec2f
     procedure :: assign_scalar_f64
     procedure :: assign_array_f64
-    procedure :: assign_vec2d
+    procedure :: assign_vec2f
     !* Note: Float equality is very dumb. There is no way to enforce f32 and f64 equality so we're not even going to try.
-    generic :: operator(==) => equal_scalar_f64, equal_array_f64, equal_vec2d
+    generic :: operator(==) => equal_scalar_f64, equal_array_f64, equal_vec2f
     procedure :: equal_scalar_f64
     procedure :: equal_array_f64
-    procedure :: equal_vec2d
-    generic :: operator(+) => add_scalar_f64, add_array_f64, add_vec2d
+    procedure :: equal_vec2f
+    generic :: operator(+) => add_scalar_f64, add_array_f64, add_vec2f
     procedure :: add_scalar_f64
     procedure :: add_array_f64
-    procedure :: add_vec2d
-    generic :: operator(-) => subtract_scalar_f64, subtract_array_f64, subtract_vec2d
+    procedure :: add_vec2f
+    generic :: operator(-) => subtract_scalar_f64, subtract_array_f64, subtract_vec2f
     procedure :: subtract_scalar_f64
     procedure :: subtract_array_f64
-    procedure :: subtract_vec2d
-    generic :: operator(*) => multiply_scalar_f64, multiply_array_f64, multiply_vec2d
+    procedure :: subtract_vec2f
+    generic :: operator(*) => multiply_scalar_f64, multiply_array_f64, multiply_vec2f
     procedure :: multiply_scalar_f64
     procedure :: multiply_array_f64
-    procedure :: multiply_vec2d
-    generic :: operator(/) => divide_scalar_f64, divide_array_f64, divide_vec2d
+    procedure :: multiply_vec2f
+    generic :: operator(/) => divide_scalar_f64, divide_array_f64, divide_vec2f
     procedure :: divide_scalar_f64
     procedure :: divide_array_f64
-    procedure :: divide_vec2d
+    procedure :: divide_vec2f
 
     !* General methods.
     procedure :: as_array
 
-    !* Precision choppers.
-    procedure :: x_f32
-    procedure :: y_f32
-  end type vec2d
+  end type vec2f
 
 
-  interface vec2d
+  interface vec2f
     module procedure :: constructor_scalar_f64, constructor_raw_f64, constructor_array_f64, constructor_scalar_f32, constructor_raw_f32, constructor_array_f32
   end interface
 
@@ -66,29 +63,29 @@ contains
   !* Constructor.
 
 
-  type(vec2d) function constructor_scalar_f64(i) result(new_vec2d)
+  type(vec2f) function constructor_scalar_f64(i) result(new_vec2f)
     implicit none
     real(c_double), intent(in), value :: i
 
-    new_vec2d = i
+    new_vec2f = i
   end function constructor_scalar_f64
 
 
-  type(vec2d) function constructor_raw_f64(x,y,z) result(new_vec2d)
+  type(vec2f) function constructor_raw_f64(x,y,z) result(new_vec2f)
     implicit none
 
     real(c_double), intent(in), value :: x,y,z
 
-    new_vec2d = [x,y,z]
+    new_vec2f = [x,y,z]
   end function constructor_raw_f64
 
 
-  type(vec2d) function constructor_array_f64(xyz_array) result(new_vec2d)
+  type(vec2f) function constructor_array_f64(xyz_array) result(new_vec2f)
     implicit none
 
     real(c_double), dimension(2), intent(in) :: xyz_array
 
-    new_vec2d = xyz_array(1:2)
+    new_vec2f = xyz_array(1:2)
   end function constructor_array_f64
 
 
@@ -98,7 +95,7 @@ contains
   subroutine assign_scalar_f64(this, i)
     implicit none
 
-    class(vec2d), intent(inout) :: this
+    class(vec2f), intent(inout) :: this
     real(c_double), intent(in), value :: i
 
     this%x = i
@@ -109,7 +106,7 @@ contains
   subroutine assign_array_f64(this, arr)
     implicit none
 
-    class(vec2d), intent(inout) :: this
+    class(vec2f), intent(inout) :: this
     real(c_double), dimension(2), intent(in) :: arr
 
     this%x = arr(1)
@@ -117,15 +114,15 @@ contains
   end subroutine assign_array_f64
 
 
-  subroutine assign_vec2d(this, other)
+  subroutine assign_vec2f(this, other)
     implicit none
 
-    class(vec2d), intent(inout) :: this
-    type(vec2d), intent(in), value :: other
+    class(vec2f), intent(inout) :: this
+    type(vec2f), intent(in), value :: other
 
     this%x = other%x
     this%y = other%y
-  end subroutine assign_vec2d
+  end subroutine assign_vec2f
 
 
   !* Equality.
@@ -135,7 +132,7 @@ contains
     use :: float_compare
     implicit none
 
-    class(vec2d), intent(in) :: this
+    class(vec2f), intent(in) :: this
     real(c_double), intent(in), value :: i
 
     equality = f64_is_equal(this%x, i) .and. f64_is_equal(this%y, i)
@@ -146,172 +143,172 @@ contains
     use :: float_compare
     implicit none
 
-    class(vec2d), intent(in) :: this
+    class(vec2f), intent(in) :: this
     real(c_double), dimension(2), intent(in) :: arr
 
     equality = f64_is_equal(this%x, arr(1)) .and. f64_is_equal(this%y, arr(2))
   end function equal_array_f64
 
 
-  logical function equal_vec2d(this, other) result(equality)
+  logical function equal_vec2f(this, other) result(equality)
     use :: float_compare
     implicit none
 
-    class(vec2d), intent(in) :: this
-    type(vec2d), intent(in), value :: other
+    class(vec2f), intent(in) :: this
+    type(vec2f), intent(in), value :: other
 
     equality = f64_is_equal(this%x, other%x) .and. f64_is_equal(this%y, other%y)
-  end function equal_vec2d
+  end function equal_vec2f
 
 
   !* Addition
 
 
-  type(vec2d) function add_scalar_f64(this, i) result(new_vec2d)
+  type(vec2f) function add_scalar_f64(this, i) result(new_vec2f)
     implicit none
 
-    class(vec2d), intent(in) :: this
+    class(vec2f), intent(in) :: this
     real(c_double), intent(in), value :: i
 
-    new_vec2d%x = this%x + i
-    new_vec2d%y = this%y + i
+    new_vec2f%x = this%x + i
+    new_vec2f%y = this%y + i
   end function add_scalar_f64
 
 
-  type(vec2d) function add_array_f64(this, arr) result(new_vec2d)
+  type(vec2f) function add_array_f64(this, arr) result(new_vec2f)
     implicit none
 
-    class(vec2d), intent(in) :: this
+    class(vec2f), intent(in) :: this
     real(c_double), dimension(2), intent(in) :: arr
 
-    new_vec2d%x = this%x + arr(1)
-    new_vec2d%y = this%y + arr(2)
+    new_vec2f%x = this%x + arr(1)
+    new_vec2f%y = this%y + arr(2)
   end function add_array_f64
 
 
-  type(vec2d) function add_vec2d(this, other) result(new_vec2d)
+  type(vec2f) function add_vec2f(this, other) result(new_vec2f)
     implicit none
 
-    class(vec2d), intent(in) :: this
-    type(vec2d), intent(in), value :: other
+    class(vec2f), intent(in) :: this
+    type(vec2f), intent(in), value :: other
 
-    new_vec2d%x = this%x + other%x
-    new_vec2d%y = this%y + other%y
-  end function add_vec2d
+    new_vec2f%x = this%x + other%x
+    new_vec2f%y = this%y + other%y
+  end function add_vec2f
 
 
   !* Subtraction.
 
 
-  type(vec2d) function subtract_scalar_f64(this, i) result(new_vec2d)
+  type(vec2f) function subtract_scalar_f64(this, i) result(new_vec2f)
     implicit none
 
-    class(vec2d), intent(in) :: this
+    class(vec2f), intent(in) :: this
     real(c_double), intent(in), value :: i
 
-    new_vec2d%x = this%x - i
-    new_vec2d%y = this%y - i
+    new_vec2f%x = this%x - i
+    new_vec2f%y = this%y - i
   end function subtract_scalar_f64
 
 
-  type(vec2d) function subtract_array_f64(this, arr) result(new_vec2d)
+  type(vec2f) function subtract_array_f64(this, arr) result(new_vec2f)
     implicit none
 
-    class(vec2d), intent(in) :: this
+    class(vec2f), intent(in) :: this
     real(c_double), dimension(2), intent(in) :: arr
 
-    new_vec2d%x = this%x - arr(1)
-    new_vec2d%y = this%y - arr(2)
+    new_vec2f%x = this%x - arr(1)
+    new_vec2f%y = this%y - arr(2)
   end function subtract_array_f64
 
 
-  type(vec2d) function subtract_vec2d(this, other) result(new_vec2d)
+  type(vec2f) function subtract_vec2f(this, other) result(new_vec2f)
     implicit none
 
-    class(vec2d), intent(in) :: this
-    type(vec2d), intent(in), value :: other
+    class(vec2f), intent(in) :: this
+    type(vec2f), intent(in), value :: other
 
-    new_vec2d%x = this%x - other%x
-    new_vec2d%y = this%y - other%y
-  end function subtract_vec2d
+    new_vec2f%x = this%x - other%x
+    new_vec2f%y = this%y - other%y
+  end function subtract_vec2f
 
 
   !* Multiplication.
 
 
-  type(vec2d) function multiply_scalar_f64(this, i) result(new_vec2d)
+  type(vec2f) function multiply_scalar_f64(this, i) result(new_vec2f)
     implicit none
 
-    class(vec2d), intent(in) :: this
+    class(vec2f), intent(in) :: this
     real(c_double), intent(in), value :: i
 
-    new_vec2d%x = this%x * i
-    new_vec2d%y = this%y * i
+    new_vec2f%x = this%x * i
+    new_vec2f%y = this%y * i
   end function multiply_scalar_f64
 
 
-  type(vec2d) function multiply_array_f64(this, arr) result(new_vec2d)
+  type(vec2f) function multiply_array_f64(this, arr) result(new_vec2f)
     implicit none
 
-    class(vec2d), intent(in) :: this
+    class(vec2f), intent(in) :: this
     real(c_double), dimension(2), intent(in) :: arr
 
-    new_vec2d%x = this%x * arr(1)
-    new_vec2d%y = this%y * arr(2)
+    new_vec2f%x = this%x * arr(1)
+    new_vec2f%y = this%y * arr(2)
   end function multiply_array_f64
 
 
-  type(vec2d) function multiply_vec2d(this, other) result(new_vec2d)
+  type(vec2f) function multiply_vec2f(this, other) result(new_vec2f)
     implicit none
 
-    class(vec2d), intent(in) :: this
-    type(vec2d), intent(in), value :: other
+    class(vec2f), intent(in) :: this
+    type(vec2f), intent(in), value :: other
 
-    new_vec2d%x = this%x * other%x
-    new_vec2d%y = this%y * other%y
-  end function multiply_vec2d
+    new_vec2f%x = this%x * other%x
+    new_vec2f%y = this%y * other%y
+  end function multiply_vec2f
 
 
   !* Division.
 
 
-  type(vec2d) function divide_scalar_f64(this, i) result(new_vec2d)
+  type(vec2f) function divide_scalar_f64(this, i) result(new_vec2f)
     implicit none
 
-    class(vec2d), intent(in) :: this
+    class(vec2f), intent(in) :: this
     real(c_double), intent(in), value :: i
 
-    new_vec2d%x = this%x / i
-    new_vec2d%y = this%y / i
+    new_vec2f%x = this%x / i
+    new_vec2f%y = this%y / i
   end function divide_scalar_f64
 
 
-  type(vec2d) function divide_array_f64(this, arr) result(new_vec2d)
+  type(vec2f) function divide_array_f64(this, arr) result(new_vec2f)
     implicit none
 
-    class(vec2d), intent(in) :: this
+    class(vec2f), intent(in) :: this
     real(c_double), dimension(2), intent(in) :: arr
 
-    new_vec2d%x = this%x / arr(1)
-    new_vec2d%y = this%y / arr(2)
+    new_vec2f%x = this%x / arr(1)
+    new_vec2f%y = this%y / arr(2)
   end function divide_array_f64
 
 
-  type(vec2d) function divide_vec2d(this, other) result(new_vec2d)
+  type(vec2f) function divide_vec2f(this, other) result(new_vec2f)
     implicit none
 
-    class(vec2d), intent(in) :: this
-    type(vec2d), intent(in), value :: other
+    class(vec2f), intent(in) :: this
+    type(vec2f), intent(in), value :: other
 
-    new_vec2d%x = this%x / other%x
-    new_vec2d%y = this%y / other%y
-  end function divide_vec2d
+    new_vec2f%x = this%x / other%x
+    new_vec2f%y = this%y / other%y
+  end function divide_vec2f
 
 
   function as_array(this) result(new_array)
     implicit none
 
-    class(vec2d), intent(in) :: this
+    class(vec2f), intent(in) :: this
     real(c_double), dimension(2) :: new_array
 
     new_array = [this%x, this%y]
