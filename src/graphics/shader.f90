@@ -177,7 +177,7 @@ contains
     exists = status == 0
 
     if (status /= 0) then
-      print"(A)","[Shader] Error: ["//shader_name//"] does not exist."
+      ! print"(A)","[Shader] Error: ["//shader_name//"] does not exist."
       return
     end if
   end function get_shader
