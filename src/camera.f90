@@ -25,6 +25,9 @@ module camera
   real(c_float) :: z_near_3d = 0.01
   real(c_float) :: z_far_3d = 100.0
 
+  real(c_float) :: z_near_2d = -1.0
+  real(c_float) :: z_far_2d = 1.0
+
 
   !? Position is not translation, translation is the inverse of position!
   type(vec3d) :: camera_position
@@ -83,6 +86,7 @@ contains
 
 
   !* This creates the raw data of the camera matrix then uploads it into OpenGL.
+  !* This sets the camera into "3D mode"
   subroutine camera_update_3d()
     use :: glfw, only: glfw_get_aspect_ratio
     use :: math_helpers, only: to_radians_f32
@@ -108,6 +112,40 @@ contains
 
     call gl_uniform_mat4f(UNIFORM_CAMERA_MATRIX, camera_matrix)
   end subroutine camera_update_3d
+
+
+  !* This creates the raw data of the camera matrix then uploads it into OpenGL.
+  !* This sets the camera into "2D mode"
+  subroutine camera_update_2d()
+    use :: glfw
+    use :: math_helpers, only: to_radians_f32
+    use :: shader
+    use :: opengl, only: gl_uniform_mat4f, gl_depth_range_f
+    implicit none
+
+    type(mat4f) :: camera_matrix
+    real(c_float) :: width, height
+
+    !* So the trick is, the camera actually never moves, but the world moves around it.
+    !* This maintains as much precision as possible where you can see it.
+
+    width = glfw_get_window_width_f32()
+    height = glfw_get_window_height_f32()
+
+    call camera_matrix%identity()
+
+    !! This might be upside down!
+    call camera_matrix%set_ortho_2d(-width, width, height, -height)
+
+    call camera_matrix%rotate_y(camera_rotation%y_f32())
+    call camera_matrix%rotate_x(camera_rotation%x_f32())
+    call camera_matrix%rotate_z(camera_rotation%z_f32())
+
+    !* This synchronizes the camera's depth matrix with OpenGL.
+    call gl_depth_range_f(z_near_2d, z_far_2d)
+
+    call gl_uniform_mat4f(UNIFORM_CAMERA_MATRIX, camera_matrix)
+  end subroutine camera_update_2d
 
 
   !* This creates the raw data of the object matrix then uploads it into OpenGL.
