@@ -7,14 +7,17 @@ module shader
   private
 
 
-  public :: ATTRIBUTE_LAYOUT_POSITION
-  public :: ATTRIBUTE_LAYOUT_TEXTURE_COORDINATE
-  public :: ATTRIBUTE_LAYOUT_COLOR
+  public :: ATTRIBUTE_POSITION
+  public :: ATTRIBUTE_TEXTURE_COORDINATE
+  public :: ATTRIBUTE_COLOR
 
 
-  integer(c_int), parameter :: ATTRIBUTE_LAYOUT_POSITION = 0
-  integer(c_int), parameter :: ATTRIBUTE_LAYOUT_TEXTURE_COORDINATE = 1
-  integer(c_int), parameter :: ATTRIBUTE_LAYOUT_COLOR = 2
+  integer(c_int), parameter :: ATTRIBUTE_POSITION = 0
+  integer(c_int), parameter :: ATTRIBUTE_TEXTURE_COORDINATE = 1
+  integer(c_int), parameter :: ATTRIBUTE_COLOR = 2
+
+  integer(c_int), parameter :: UNIFORM_CAMERA_MATRIX = 0
+  integer(c_int), parameter :: UNIFORM_OBJECT_MATRIX = 1
 
 
   public :: shader_create
