@@ -80,8 +80,6 @@ program main
   ! Set up all shader components.
   call shader_create("main", "./shaders/vertex.vert", "./shaders/fragment.frag")
 
-  call shader_create_uniform_locations("main", heap_string_array("camera_matrix", "object_matrix"))
-
   call font_create("./fonts/font_forgotten.png")
 
   call texture_create("./textures/fortran_logo_512x512.png")
