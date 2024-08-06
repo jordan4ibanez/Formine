@@ -15,6 +15,10 @@ program main
 
   real(c_float) :: rotation
   type(vec2f) :: text_size
+  integer(c_int) :: new_fps, old_fps
+
+  new_fps = 0
+  old_fps = -1
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
@@ -156,13 +160,19 @@ program main
 
       ! Process first text.
 
-      call font_generate_text("hello", 50.0, "FPS: "//int_to_string(get_fps()), center = .false., size = text_size)
+      new_fps = get_fps()
 
-      call camera_set_object_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - text_size%y) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+      if (new_fps /= old_fps) then
 
-      call mesh_draw("hello")
+        call mesh_delete("fps_counter")
 
-      call mesh_delete("hello")
+        call font_generate_text("fps_counter", 50.0, "FPS: "//int_to_string(get_fps()), center = .false., size = text_size)
+
+        call camera_set_object_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - text_size%y) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+
+      end if
+
+      call mesh_draw("fps_counter")
 
       ! Process second text.
 
