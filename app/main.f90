@@ -137,7 +137,14 @@ program main
 
       call mesh_draw("debug")
 
-      call camera_set_object_matrix_f32(0.0, -0.25, -3.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.5)
+
+      !* Move into "2D mode"
+
+      call gl_clear_depth_buffer()
+
+      call camera_update_2d()
+
+      call camera_set_object_matrix_f32(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.5)
 
       call texture_use("font")
 
