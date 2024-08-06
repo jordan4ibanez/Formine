@@ -66,6 +66,7 @@ module matrix_4f
     !* General methods.
     procedure :: identity
     procedure :: perspective
+    procedure :: set_ortho_2d
 
     !* Spacial methods.
     procedure :: translate
@@ -147,7 +148,7 @@ contains
   end subroutine identity
 
 
-  !* Translated from JOML.
+  !* Translated from JOML. Original method: "perspective"
   subroutine perspective(this, fov_y_radians, aspect_ratio, z_near, z_far)
     use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
     implicit none
@@ -191,6 +192,27 @@ contains
       mat(9:12) * r(4) &
       ]
   end subroutine perspective
+
+
+  !* Translated from JOML. Original method: "setOrtho2D"
+  subroutine set_ortho_2d(this, left, right, bottom, top)
+    implicit none
+
+    class(mat4f), intent(inout) :: this
+    real(c_float), intent(in), value :: left, right, bottom, top
+    ! Cache.
+    real(c_float), dimension(16) :: mat
+
+    mat = this%data
+
+    mat(1) = 2.0 / (right - left)
+    mat(6) = 2.0 / (top - bottom)
+    mat(11) = -1.0
+    mat(13) = (right + left) / (left - right)
+    mat(14) = (top + bottom) / (bottom - top)
+
+    this%data = mat
+  end subroutine set_ortho_2d
 
 
   !* Spacial methods.
