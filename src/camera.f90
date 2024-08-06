@@ -135,8 +135,7 @@ contains
 
     call camera_matrix%identity()
 
-    !! This might be upside down!
-    call camera_matrix%set_ortho_2d(-width, width, height, -height)
+    call camera_matrix%set_ortho_2d(-width, width, -height, height)
 
     call camera_matrix%rotate_y(camera_rotation%y_f32())
     call camera_matrix%rotate_x(camera_rotation%x_f32())
