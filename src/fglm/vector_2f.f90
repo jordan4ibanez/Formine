@@ -53,7 +53,7 @@ module vector_2f
 
 
   interface vec2f
-    module procedure :: constructor_scalar_f64, constructor_raw_f64, constructor_array_f64, constructor_scalar_f32, constructor_raw_f32, constructor_array_f32
+    module procedure :: constructor_scalar_f64, constructor_raw_f64, constructor_array_f64
   end interface
 
 
@@ -65,7 +65,7 @@ contains
 
   type(vec2f) function constructor_scalar_f64(i) result(new_vec2f)
     implicit none
-    real(c_double), intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     new_vec2f = i
   end function constructor_scalar_f64
@@ -74,7 +74,7 @@ contains
   type(vec2f) function constructor_raw_f64(x,y,z) result(new_vec2f)
     implicit none
 
-    real(c_double), intent(in), value :: x,y,z
+    real(c_float), intent(in), value :: x,y,z
 
     new_vec2f = [x,y,z]
   end function constructor_raw_f64
@@ -83,7 +83,7 @@ contains
   type(vec2f) function constructor_array_f64(xyz_array) result(new_vec2f)
     implicit none
 
-    real(c_double), dimension(2), intent(in) :: xyz_array
+    real(c_float), dimension(2), intent(in) :: xyz_array
 
     new_vec2f = xyz_array(1:2)
   end function constructor_array_f64
@@ -96,7 +96,7 @@ contains
     implicit none
 
     class(vec2f), intent(inout) :: this
-    real(c_double), intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     this%x = i
     this%y = i
@@ -107,7 +107,7 @@ contains
     implicit none
 
     class(vec2f), intent(inout) :: this
-    real(c_double), dimension(2), intent(in) :: arr
+    real(c_float), dimension(2), intent(in) :: arr
 
     this%x = arr(1)
     this%y = arr(2)
@@ -133,9 +133,9 @@ contains
     implicit none
 
     class(vec2f), intent(in) :: this
-    real(c_double), intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
-    equality = f64_is_equal(this%x, i) .and. f64_is_equal(this%y, i)
+    equality = f32_is_equal(this%x, i) .and. f32_is_equal(this%y, i)
   end function equal_scalar_f64
 
 
@@ -144,9 +144,9 @@ contains
     implicit none
 
     class(vec2f), intent(in) :: this
-    real(c_double), dimension(2), intent(in) :: arr
+    real(c_float), dimension(2), intent(in) :: arr
 
-    equality = f64_is_equal(this%x, arr(1)) .and. f64_is_equal(this%y, arr(2))
+    equality = f32_is_equal(this%x, arr(1)) .and. f32_is_equal(this%y, arr(2))
   end function equal_array_f64
 
 
@@ -157,7 +157,7 @@ contains
     class(vec2f), intent(in) :: this
     type(vec2f), intent(in), value :: other
 
-    equality = f64_is_equal(this%x, other%x) .and. f64_is_equal(this%y, other%y)
+    equality = f32_is_equal(this%x, other%x) .and. f32_is_equal(this%y, other%y)
   end function equal_vec2f
 
 
@@ -168,7 +168,7 @@ contains
     implicit none
 
     class(vec2f), intent(in) :: this
-    real(c_double), intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     new_vec2f%x = this%x + i
     new_vec2f%y = this%y + i
@@ -179,7 +179,7 @@ contains
     implicit none
 
     class(vec2f), intent(in) :: this
-    real(c_double), dimension(2), intent(in) :: arr
+    real(c_float), dimension(2), intent(in) :: arr
 
     new_vec2f%x = this%x + arr(1)
     new_vec2f%y = this%y + arr(2)
@@ -204,7 +204,7 @@ contains
     implicit none
 
     class(vec2f), intent(in) :: this
-    real(c_double), intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     new_vec2f%x = this%x - i
     new_vec2f%y = this%y - i
@@ -215,7 +215,7 @@ contains
     implicit none
 
     class(vec2f), intent(in) :: this
-    real(c_double), dimension(2), intent(in) :: arr
+    real(c_float), dimension(2), intent(in) :: arr
 
     new_vec2f%x = this%x - arr(1)
     new_vec2f%y = this%y - arr(2)
@@ -240,7 +240,7 @@ contains
     implicit none
 
     class(vec2f), intent(in) :: this
-    real(c_double), intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     new_vec2f%x = this%x * i
     new_vec2f%y = this%y * i
@@ -251,7 +251,7 @@ contains
     implicit none
 
     class(vec2f), intent(in) :: this
-    real(c_double), dimension(2), intent(in) :: arr
+    real(c_float), dimension(2), intent(in) :: arr
 
     new_vec2f%x = this%x * arr(1)
     new_vec2f%y = this%y * arr(2)
@@ -276,7 +276,7 @@ contains
     implicit none
 
     class(vec2f), intent(in) :: this
-    real(c_double), intent(in), value :: i
+    real(c_float), intent(in), value :: i
 
     new_vec2f%x = this%x / i
     new_vec2f%y = this%y / i
@@ -287,7 +287,7 @@ contains
     implicit none
 
     class(vec2f), intent(in) :: this
-    real(c_double), dimension(2), intent(in) :: arr
+    real(c_float), dimension(2), intent(in) :: arr
 
     new_vec2f%x = this%x / arr(1)
     new_vec2f%y = this%y / arr(2)
@@ -309,7 +309,7 @@ contains
     implicit none
 
     class(vec2f), intent(in) :: this
-    real(c_double), dimension(2) :: new_array
+    real(c_float), dimension(2) :: new_array
 
     new_array = [this%x, this%y]
   end function
