@@ -21,8 +21,6 @@ module shader
 
 
   public :: shader_create
-  public :: shader_create_uniform_locations
-  public :: shader_get_uniform
   public :: shader_start
   public :: shader_clear_database
 
