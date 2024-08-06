@@ -78,9 +78,9 @@ program main
 
 
   ! Set up all shader components.
-  call shader_create("3d", "./shaders/vertex_3d.vert", "./shaders/fragment_3d.frag")
+  call shader_create("main", "./shaders/vertex.vert", "./shaders/fragment.frag")
 
-  call shader_create_uniform_locations("3d", heap_string_array("camera_matrix","object_matrix"))
+  call shader_create_uniform_locations("main", heap_string_array("camera_matrix", "object_matrix"))
 
   call font_create("./fonts/font_forgotten.png")
 
@@ -127,7 +127,7 @@ program main
       call gl_clear_color_scalar(1.0)
 
       ! Shader needs to start before the camera is updated.
-      call shader_start("3d")
+      call shader_start("main")
       ! call gl_use_program(1)
 
       call camera_update()

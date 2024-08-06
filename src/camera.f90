@@ -120,7 +120,7 @@ contains
     call camera_matrix%rotate_x(camera_rotation%x_f32())
     call camera_matrix%rotate_z(camera_rotation%z_f32())
 
-    call gl_uniform_mat4f(shader_get_uniform("3d", "camera_matrix"), camera_matrix)
+    call gl_uniform_mat4f(shader_get_uniform("main", "camera_matrix"), camera_matrix)
   end subroutine camera_update
 
 
@@ -152,7 +152,7 @@ contains
       scale_z &
       )
 
-    call gl_uniform_mat4f(shader_get_uniform("3d", "object_matrix"), object_matrix)
+    call gl_uniform_mat4f(shader_get_uniform("main", "object_matrix"), object_matrix)
   end subroutine camera_set_object_matrix_f32
 
 
