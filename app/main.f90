@@ -9,10 +9,12 @@ program main
   use :: delta
   use :: texture
   use :: font
+  use :: vector_2f
   use, intrinsic ::  iso_c_binding
   implicit none
 
   real(c_float) :: rotation
+  type(vec2f) :: text_size
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
@@ -109,6 +111,8 @@ program main
 
   rotation = 0.0
 
+  call font_generate_text("hello_fortran", 50.0, "This is my font library. :D", r = 0.5, g = 0.0, b = 1.0)
+
 
   !! This is debugging for functions!
   if (.true.) then
@@ -146,15 +150,25 @@ program main
 
       call camera_update_2d()
 
-      call camera_set_object_matrix_f32(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+      ! Select font.
 
       call texture_use("font")
 
-      call font_generate_text("hello", 100.0, "Hello, this is a test!", center = .true.)
+      ! Process first text.
+
+      call font_generate_text("hello", 50.0, "FPS: "//int_to_string(get_fps()), center = .false., size = text_size)
+
+      call camera_set_object_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - text_size%y) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
 
       call mesh_draw("hello")
 
       call mesh_delete("hello")
+
+      ! Process second text.
+
+      call camera_set_object_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - (text_size%y * 2.1)) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+
+      call mesh_draw("hello_fortran")
 
 
       !? END DRAW TEST ?!
