@@ -90,32 +90,32 @@ program main
 
   !! Old texture coordinates:
 
-  call mesh_create_3d( &
-    "debug", &
-    [ &
-    -0.5,  0.5, 0.0, &
-    -0.5, -0.5, 0.0, &
-    0.5,  -0.5, 0.0, &
-    0.5,   0.5, 0.0 &
-    ], &
-    [ &
-    0.0, 0.0, &
-    0.0, 1.0, &
-    1.0, 1.0, &
-    1.0, 0.0 &
-    ], &
-    [ &
-    1.0, 1.0, 1.0, &
-    1.0, 1.0, 1.0, &
-    1.0, 1.0, 1.0, &
-    1.0, 1.0, 1.0 &
-    ], &
-    [0,1,2, 2,3,0] &
-    )
+  ! call mesh_create_3d( &
+  !   "debug", &
+  !   [ &
+  !   -0.5,  0.5, 0.0, &
+  !   -0.5, -0.5, 0.0, &
+  !   0.5,  -0.5, 0.0, &
+  !   0.5,   0.5, 0.0 &
+  !   ], &
+  !   [ &
+  !   0.0, 0.0, &
+  !   0.0, 1.0, &
+  !   1.0, 1.0, &
+  !   1.0, 0.0 &
+  !   ], &
+  !   [ &
+  !   1.0, 1.0, 1.0, &
+  !   1.0, 1.0, 1.0, &
+  !   1.0, 1.0, 1.0, &
+  !   1.0, 1.0, 1.0 &
+  !   ], &
+  !   [0,1,2, 2,3,0] &
+  !   )
 
   rotation = 0.0
 
-  call font_generate_text("hello_fortran", 50.0, "This is my font library. :D", r = 0.5, g = 0.0, b = 1.0)
+  ! call font_generate_text("hello_fortran", 50.0, "This is my font library. :D", r = 0.5, g = 0.0, b = 1.0)
 
 
   !! This is debugging for functions!
@@ -129,21 +129,23 @@ program main
 
       call gl_clear_color_scalar(1.0)
 
+      call gl_clear_color_buffer()
+
       ! Shader needs to start before the camera is updated.
       call shader_start("main")
-      ! call gl_use_program(1)
 
-      call camera_update_3d()
 
-      call gl_clear_color_and_depth_buffer()
+      ! call camera_update_3d()
+
+      ! call gl_clear_depth_buffer()
 
       !? DRAW TEST ?!
 
-      call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
+      ! call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
 
-      call texture_use("fortran_logo_512x512.png")
+      ! call texture_use("fortran_logo_512x512.png")
 
-      call mesh_draw("debug")
+      ! call mesh_draw("debug")
 
 
       !* Move into "2D mode"
@@ -176,9 +178,9 @@ program main
 
       ! Process second text.
 
-      call camera_set_object_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - (text_size%y * 2.1)) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+      ! call camera_set_object_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - (text_size%y * 2.1)) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
 
-      call mesh_draw("hello_fortran")
+      ! call mesh_draw("hello_fortran")
 
 
       !? END DRAW TEST ?!
