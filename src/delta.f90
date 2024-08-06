@@ -9,6 +9,7 @@ module delta
   public :: delta_tick
   public :: get_delta_f32
   public :: get_delta_f64
+  public :: get_fps
 
   integer(c_int64_t) :: old_delta_integral = 0
   real(c_double) :: delta_time = 0.0d0
