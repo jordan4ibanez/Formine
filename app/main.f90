@@ -142,13 +142,15 @@ program main
 
       call gl_clear_depth_buffer()
 
+      ! call gl_clear_color_buffer()
+
       call camera_update_2d()
 
-      call camera_set_object_matrix_f32(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.5)
+      call camera_set_object_matrix_f32(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
 
       call texture_use("font")
 
-      call font_generate_text("hello", 1.0, "Hello, this is a test!", center = .true.)
+      call font_generate_text("hello", 100.0, "Hello, this is a test!", center = .true.)
 
       call mesh_draw("hello")
 
