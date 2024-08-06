@@ -169,27 +169,17 @@ contains
 
     character(len = *), intent(in) :: shader_name
     logical, intent(inout) :: exists
-    class(*), pointer :: generic
     integer :: status
-    type(shader_program), pointer :: gotten_program
+    integer(c_int) :: gotten_program
 
     exists = .false.
 
-    call shader_database%get_raw_ptr(key(shader_name), generic, stat = status)
+    call shader_database%get(key(shader_name), gotten_program, stat = status)
 
     if (status /= 0) then
       ! print"(A)","[Shader] Error: ["//shader_name//"] does not exist."
       return
     end if
-
-    select type(generic)
-     type is (shader_program)
-      exists = .true.
-      gotten_program => generic
-     class default
-      ! print"(A)","[Shader] Error: ["//shader_name//"] has the wrong type."
-      return
-    end select
   end function get_shader
 
 
@@ -199,10 +189,12 @@ contains
     implicit none
 
     character(len = *), intent(in) :: shader_name
-    type(shader_program), pointer :: poller
+    integer :: status
 
     ! All we must do is check the shader result and return the existence in the result.
-    poller => get_shader(shader_name, exists)
+    call shader_database%check_key(key(shader_name), stat = status)
+
+    exists = status == 0
   end function shader_exists
 
 
@@ -212,17 +204,17 @@ contains
     implicit none
 
     character(len = *), intent(in) :: shader_name
-    type(shader_program), pointer :: current_program_pointer
+    integer(c_int) :: current_program_id
     logical :: exists
 
-    current_program_pointer => get_shader(shader_name, exists)
+    current_program_id = get_shader(shader_name, exists)
 
     ! If the shader does not exist, bail out.
     if (.not. exists) then
       error stop "[Shader] Error: Cannot start shader ["//shader_name//"], it does not exist."
     end if
 
-    call gl_use_program(current_program_pointer%program_id)
+    call gl_use_program(current_program_id)
   end subroutine shader_start
 
 
@@ -238,8 +230,7 @@ contains
     type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
-    integer :: i, remaining_size, status
-    class(*), pointer :: generic_pointer
+    integer :: i, remaining_size
 
     ! Start with a size of 0.
     allocate(key_array(0))
@@ -254,9 +245,9 @@ contains
     do while(iterator%next(generic_key, generic_data))
       ! We will delete the programs as we go.
       select type(generic_data)
-       type is (shader_program)
-        call gl_delete_program(generic_data%program_id)
-        if (gl_is_program(generic_data%program_id)) then
+       type is (integer)
+        call gl_delete_program(generic_data)
+        if (gl_is_program(generic_data)) then
           error stop "[Shader] Error: Failed to delete program for shader ["//generic_key%to_string()//"]"
         end if
        class default
@@ -268,15 +259,6 @@ contains
 
     ! Now clear the database out.
     do i = 1,size(key_array)
-
-      ! Since we are manually managing the memory, we must manually clean up what we have used.
-      call shader_database%get_raw_ptr(key(key_array(i)%get()), generic_pointer, stat = status)
-      if (status /= 0) then
-        print"(A)", colorize_rgb("[Shader] Error: Failed to deallocate shader program ["//key_array(i)%get()//"]", 255, 0, 0)
-      else
-        deallocate(generic_pointer)
-      end if
-
       call shader_database%unset(key(key_array(i)%get()))
     end do
 
