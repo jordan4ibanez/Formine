@@ -28,12 +28,6 @@ module shader
   public :: shader_clear_database
 
 
-  !* A shader object. This holds all required shader components to run a shader.
-  type shader_program
-    integer :: program_id
-  end type shader_program
-
-
   type(fhash_tbl_t) :: shader_database
 
 
@@ -79,19 +73,17 @@ contains
     character(len = *), intent(in) :: vertex_code_location
     character(len = *), intent(in) :: fragment_code_location
     integer(c_int) :: vertex_id, fragment_id
-    type(shader_program), pointer :: shader
-
-    allocate(shader)
+    integer(c_int) :: program_id
 
     print"(A)","[Shader]: Begin creating shader ["//shader_name//"]."
 
     ! Program creation.
-    shader%program_id = gl_create_program()
+    program_id = gl_create_program()
 
-    if (.not. creation_succeeded(shader%program_id)) then
+    if (.not. creation_succeeded(program_id)) then
       error stop "[Shader] Error: Failed to create program for shader ["//shader_name//"]."
     else
-      print"(A)","[Shader]: Successfully created program for shader ["//shader_name//"] successfully at ID ["//int_to_string(shader%program_id)//"]."
+      print"(A)","[Shader]: Successfully created program for shader ["//shader_name//"] successfully at ID ["//int_to_string(program_id)//"]."
     end if
 
     ! Vertex shader compilation.
@@ -129,12 +121,12 @@ contains
     end if
 
     ! Attach and link.
-    call gl_attach_shader(shader%program_id, vertex_id)
-    call gl_attach_shader(shader%program_id, fragment_id)
-    call gl_link_program(shader%program_id)
+    call gl_attach_shader(program_id, vertex_id)
+    call gl_attach_shader(program_id, fragment_id)
+    call gl_link_program(program_id)
 
     ! We check that this think linked.
-    if (gl_get_program_iv(shader%program_id, GL_LINK_STATUS) == GL_FALSE) then
+    if (gl_get_program_iv(program_id, GL_LINK_STATUS) == GL_FALSE) then
       error stop "[Shader] Error: Failed to link shader ["//shader_name//"]."
     else
       print"(A)","[Shader]: Successfully linked shader ["//shader_name//"]."
@@ -142,21 +134,21 @@ contains
 
     ! Now remove the shaders objects because they're already compiled into the program.
     ! We're also going to verify that they're deleted.
-    call gl_detach_shader(shader%program_id, vertex_id)
+    call gl_detach_shader(program_id, vertex_id)
     call gl_delete_shader(vertex_id)
     if (gl_is_shader(vertex_id)) then
       error stop "[Shader] Error: Failed to delete the vertex shader object."
     end if
 
-    call gl_detach_shader(shader%program_id, fragment_id)
+    call gl_detach_shader(program_id, fragment_id)
     call gl_delete_shader(fragment_id)
     if (gl_is_shader(fragment_id)) then
       error stop "[Shader] Error: Failed to delete the fragment shader object."
     end if
 
     ! Finally validate this whole thing.
-    call gl_validate_program(shader%program_id)
-    if (gl_get_program_iv(shader%program_id, GL_VALIDATE_STATUS) == GL_FALSE) then
+    call gl_validate_program(program_id)
+    if (gl_get_program_iv(program_id, GL_VALIDATE_STATUS) == GL_FALSE) then
       error stop "[Shader] Error: Failed to validate shader ["//shader_name//"]."
     else
       print"(A)","[Shader]: Successfully validated shader ["//shader_name//"]."
@@ -166,7 +158,7 @@ contains
     print"(A)","[Shader]: Shader ["//shader_name//"] created successfully."
 
     ! Store it in the hash table for later use.
-    call shader_database%set_ptr(key(shader_name), shader)
+    call shader_database%set(key(shader_name), program_id)
   end subroutine shader_create
 
 
