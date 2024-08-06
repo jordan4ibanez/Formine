@@ -53,6 +53,8 @@ module glfw
   public :: glfw_set_window_size_callback
   public :: glfw_get_aspect_ratio
   public :: glfw_swap_interval
+  public :: glfw_get_window_width
+  public :: glfw_get_window_height
 
 
   ! Here I'm binding to the C glfw shared library.
@@ -347,5 +349,20 @@ contains
     ratio = real(window_width, kind = c_float) / real(window_height, kind = c_float)
   end function glfw_get_aspect_ratio
 
+
+  !* Get the window width.
+  integer(c_int) function glfw_get_window_width() result(width)
+    implicit none
+
+    width = window_width
+  end function glfw_get_window_width
+
+
+  !* Get the window height.
+  integer(c_int) function glfw_get_window_height() result(height)
+    implicit none
+
+    height = window_height
+  end function glfw_get_window_height
 
 end module glfw
