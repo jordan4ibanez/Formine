@@ -103,7 +103,7 @@ contains
   subroutine camera_update()
     use :: glfw, only: glfw_get_aspect_ratio
     use :: math_helpers, only: to_radians_f32
-    use :: shader, only: shader_get_uniform
+    use :: shader
     use :: opengl, only: gl_uniform_mat4f
     implicit none
 
@@ -120,14 +120,14 @@ contains
     call camera_matrix%rotate_x(camera_rotation%x_f32())
     call camera_matrix%rotate_z(camera_rotation%z_f32())
 
-    call gl_uniform_mat4f(shader_get_uniform("main", "camera_matrix"), camera_matrix)
+    call gl_uniform_mat4f(UNIFORM_CAMERA_MATRIX, camera_matrix)
   end subroutine camera_update
 
 
   !* This creates the raw data of the object matrix then uploads it into OpenGL.
   subroutine camera_set_object_matrix_f32(position_x, position_y, position_z, rotation_x, rotation_y, rotation_z, scale_x, scale_y, scale_z)
     use :: math_helpers, only: into_f32
-    use :: shader, only: shader_get_uniform
+    use :: shader
     use :: opengl, only: gl_uniform_mat4f
     implicit none
 
@@ -152,14 +152,14 @@ contains
       scale_z &
       )
 
-    call gl_uniform_mat4f(shader_get_uniform("main", "object_matrix"), object_matrix)
+    call gl_uniform_mat4f(UNIFORM_OBJECT_MATRIX, object_matrix)
   end subroutine camera_set_object_matrix_f32
 
 
   !* This creates the raw data of the object matrix then uploads it into OpenGL.
   subroutine camera_set_object_matrix_f64(position_x, position_y, position_z, rotation_x, rotation_y, rotation_z, scale_x, scale_y, scale_z)
     use :: math_helpers, only: into_f32
-    use :: shader, only: shader_get_uniform
+    use :: shader
     use :: opengl, only: gl_uniform_mat4f
     implicit none
 
@@ -184,7 +184,7 @@ contains
       into_f32(scale_z) &
       )
 
-    call gl_uniform_mat4f(shader_get_uniform("3d", "object_matrix"), object_matrix)
+    call gl_uniform_mat4f(UNIFORM_OBJECT_MATRIX, object_matrix)
   end subroutine camera_set_object_matrix_f64
 
 
