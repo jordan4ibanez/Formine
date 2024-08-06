@@ -11,6 +11,9 @@ module shader
   public :: ATTRIBUTE_TEXTURE_COORDINATE
   public :: ATTRIBUTE_COLOR
 
+  public :: UNIFORM_CAMERA_MATRIX
+  public :: UNIFORM_OBJECT_MATRIX
+
 
   integer(c_int), parameter :: ATTRIBUTE_POSITION = 0
   integer(c_int), parameter :: ATTRIBUTE_TEXTURE_COORDINATE = 1
