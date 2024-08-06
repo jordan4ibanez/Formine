@@ -7,14 +7,14 @@ module shader
   private
 
 
-  public :: LAYOUT_POSITION
-  public :: LAYOUT_TEXTURE_COORDINATE
-  public :: LAYOUT_COLOR
+  public :: ATTRIBUTE_LAYOUT_POSITION
+  public :: ATTRIBUTE_LAYOUT_TEXTURE_COORDINATE
+  public :: ATTRIBUTE_LAYOUT_COLOR
 
 
-  integer(c_int), parameter :: LAYOUT_POSITION = 0
-  integer(c_int), parameter :: LAYOUT_TEXTURE_COORDINATE = 1
-  integer(c_int), parameter :: LAYOUT_COLOR = 2
+  integer(c_int), parameter :: ATTRIBUTE_LAYOUT_POSITION = 0
+  integer(c_int), parameter :: ATTRIBUTE_LAYOUT_TEXTURE_COORDINATE = 1
+  integer(c_int), parameter :: ATTRIBUTE_LAYOUT_COLOR = 2
 
 
   public :: shader_create

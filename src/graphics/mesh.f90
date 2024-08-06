@@ -117,7 +117,7 @@ contains
     integer(c_int), intent(in), value :: vec_components
     integer :: position_vbo_position
 
-    position_vbo_position = LAYOUT_POSITION
+    position_vbo_position = ATTRIBUTE_LAYOUT_POSITION
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
@@ -154,7 +154,7 @@ contains
     real(c_float), dimension(:), intent(in), target :: texture_coordinates_pointer
     integer :: texture_coordinate_vbo_position
 
-    texture_coordinate_vbo_position = LAYOUT_TEXTURE_COORDINATE
+    texture_coordinate_vbo_position = ATTRIBUTE_LAYOUT_TEXTURE_COORDINATE
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
@@ -191,7 +191,7 @@ contains
     real(c_float), dimension(:), intent(in), target :: colors_pointer
     integer :: color_vbo_position
 
-    color_vbo_position = LAYOUT_COLOR
+    color_vbo_position = ATTRIBUTE_LAYOUT_COLOR
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
@@ -355,7 +355,7 @@ contains
     call gl_bind_vertex_array(gotten_mesh%vao)
 
     ! Positions.
-    call gl_disable_vertex_attrib_array(LAYOUT_POSITION)
+    call gl_disable_vertex_attrib_array(ATTRIBUTE_LAYOUT_POSITION)
     call gl_delete_buffers(gotten_mesh%vbo_position)
 
     if (gl_is_buffer(gotten_mesh%vbo_position)) then
@@ -366,7 +366,7 @@ contains
     ! end if
 
     ! Texture coordinates.
-    call gl_disable_vertex_attrib_array(LAYOUT_TEXTURE_COORDINATE)
+    call gl_disable_vertex_attrib_array(ATTRIBUTE_LAYOUT_TEXTURE_COORDINATE)
     call gl_delete_buffers(gotten_mesh%vbo_texture_coordinate)
 
     if (gl_is_buffer(gotten_mesh%vbo_texture_coordinate)) then
@@ -377,7 +377,7 @@ contains
     ! end if
 
     ! Colors
-    call gl_disable_vertex_attrib_array(LAYOUT_COLOR)
+    call gl_disable_vertex_attrib_array(ATTRIBUTE_LAYOUT_COLOR)
     call gl_delete_buffers(gotten_mesh%vbo_color)
 
     if (gl_is_buffer(gotten_mesh%vbo_color)) then
