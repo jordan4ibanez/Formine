@@ -55,7 +55,8 @@ module glfw
   public :: glfw_swap_interval
   public :: glfw_get_window_width
   public :: glfw_get_window_height
-
+  public :: glfw_get_window_width_f32
+  public :: glfw_get_window_height_f32
 
   ! Here I'm binding to the C glfw shared library.
 
@@ -364,5 +365,22 @@ contains
 
     height = window_height
   end function glfw_get_window_height
+
+
+  !* Get the window width floating point.
+  real(c_float) function glfw_get_window_width_f32() result(width)
+    implicit none
+
+    width = real(window_width, kind = c_float)
+  end function glfw_get_window_width_f32
+
+
+  !* Get the window height floating point.
+  real(c_float) function glfw_get_window_height_f32() result(height)
+    implicit none
+
+    height = real(window_height, kind = c_float)
+  end function glfw_get_window_height_f32
+
 
 end module glfw
