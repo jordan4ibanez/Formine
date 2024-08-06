@@ -60,7 +60,7 @@ module font
 contains
 
 
-  !* Generate a text mesh. (2d or 3d)
+  !* Generate a text mesh.
   subroutine font_generate_text(mesh_name, font_size, text, r,g,b, center)
     use :: mesh
     use :: string, only: string_get_non_space_characters
@@ -69,6 +69,7 @@ contains
     character(len = *), intent(in) :: mesh_name, text
     real(c_float), intent(in), value :: font_size
     real(c_float), intent(in), optional :: r,g,b
+
     logical, intent(in), optional :: center
     logical :: should_center
     real(c_float) :: red, green, blue
