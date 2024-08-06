@@ -30,7 +30,6 @@ module shader
 
   !* A shader object. This holds all required shader components to run a shader.
   type shader_program
-    character(len=:), allocatable :: shader_name
     integer :: program_id
   end type shader_program
 
@@ -70,13 +69,13 @@ contains
 
   !* Create a named shader program from vertex and fragment code locations
   !? Will return false if it fails, true if it succeeds.
-  subroutine shader_create(name, vertex_code_location, fragment_code_location)
+  subroutine shader_create(shader_name, vertex_code_location, fragment_code_location)
     use :: opengl
     use :: string
     use, intrinsic :: iso_c_binding
     implicit none
 
-    character(len = *), intent(in) :: name
+    character(len = *), intent(in) :: shader_name
     character(len = *), intent(in) :: vertex_code_location
     character(len = *), intent(in) :: fragment_code_location
     integer(c_int) :: vertex_id, fragment_id
@@ -84,51 +83,49 @@ contains
 
     allocate(shader)
 
-    shader%shader_name = name
-
-    print"(A)","[Shader]: Begin creating shader ["//shader%shader_name//"]."
+    print"(A)","[Shader]: Begin creating shader ["//shader_name//"]."
 
     ! Program creation.
     shader%program_id = gl_create_program()
 
     if (.not. creation_succeeded(shader%program_id)) then
-      error stop "[Shader] Error: Failed to create program for shader ["//shader%shader_name//"]."
+      error stop "[Shader] Error: Failed to create program for shader ["//shader_name//"]."
     else
-      print"(A)","[Shader]: Successfully created program for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(shader%program_id)//"]."
+      print"(A)","[Shader]: Successfully created program for shader ["//shader_name//"] successfully at ID ["//int_to_string(shader%program_id)//"]."
     end if
 
     ! Vertex shader compilation.
     vertex_id = gl_create_shader(GL_VERTEX_SHADER)
     if (.not. creation_succeeded(vertex_id)) then
-      error stop "[Shader] Error: Failed to create vertex for shader ["//shader%shader_name//"]."
+      error stop "[Shader] Error: Failed to create vertex for shader ["//shader_name//"]."
     else
-      print"(A)","[Shader]: Successfully created vertex for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(vertex_id)//"]."
+      print"(A)","[Shader]: Successfully created vertex for shader ["//shader_name//"] successfully at ID ["//int_to_string(vertex_id)//"]."
     end if
 
     call gl_shader_source(vertex_id, vertex_code_location)
     call gl_compile_shader(vertex_id)
 
     if (.not. shader_compilation_succeeded(vertex_id)) then
-      error stop "[Shader] Error: Failed to compile vertex for shader ["//shader%shader_name//"]."
+      error stop "[Shader] Error: Failed to compile vertex for shader ["//shader_name//"]."
     else
-      print"(A)","[Shader]: Successfully compiled vertex for shader ["//shader%shader_name//"]."
+      print"(A)","[Shader]: Successfully compiled vertex for shader ["//shader_name//"]."
     end if
 
     ! Fragment shader compilation.
     fragment_id = gl_create_shader(GL_FRAGMENT_SHADER)
     if (.not. creation_succeeded(fragment_id)) then
-      error stop "[Shader] Error: Failed to create fragment for shader ["//shader%shader_name//"]."
+      error stop "[Shader] Error: Failed to create fragment for shader ["//shader_name//"]."
     else
-      print"(A)","[Shader]: Successfully created fragment for shader ["//shader%shader_name//"] successfully at ID ["//int_to_string(fragment_id)//"]."
+      print"(A)","[Shader]: Successfully created fragment for shader ["//shader_name//"] successfully at ID ["//int_to_string(fragment_id)//"]."
     end if
 
     call gl_shader_source(fragment_id, fragment_code_location)
     call gl_compile_shader(fragment_id)
 
     if (.not. shader_compilation_succeeded(fragment_id)) then
-      error stop "[Shader] Error: Failed to compile fragment for shader ["//shader%shader_name//"]."
+      error stop "[Shader] Error: Failed to compile fragment for shader ["//shader_name//"]."
     else
-      print"(A)","[Shader]: Successfully compiled fragment for shader ["//shader%shader_name//"]."
+      print"(A)","[Shader]: Successfully compiled fragment for shader ["//shader_name//"]."
     end if
 
     ! Attach and link.
@@ -138,9 +135,9 @@ contains
 
     ! We check that this think linked.
     if (gl_get_program_iv(shader%program_id, GL_LINK_STATUS) == GL_FALSE) then
-      error stop "[Shader] Error: Failed to link shader ["//shader%shader_name//"]."
+      error stop "[Shader] Error: Failed to link shader ["//shader_name//"]."
     else
-      print"(A)","[Shader]: Successfully linked shader ["//shader%shader_name//"]."
+      print"(A)","[Shader]: Successfully linked shader ["//shader_name//"]."
     end if
 
     ! Now remove the shaders objects because they're already compiled into the program.
@@ -160,16 +157,16 @@ contains
     ! Finally validate this whole thing.
     call gl_validate_program(shader%program_id)
     if (gl_get_program_iv(shader%program_id, GL_VALIDATE_STATUS) == GL_FALSE) then
-      error stop "[Shader] Error: Failed to validate shader ["//shader%shader_name//"]."
+      error stop "[Shader] Error: Failed to validate shader ["//shader_name//"]."
     else
-      print"(A)","[Shader]: Successfully validated shader ["//shader%shader_name//"]."
+      print"(A)","[Shader]: Successfully validated shader ["//shader_name//"]."
     end if
 
     ! Woooo!
-    print"(A)","[Shader]: Shader ["//shader%shader_name//"] created successfully."
+    print"(A)","[Shader]: Shader ["//shader_name//"] created successfully."
 
     ! Store it in the hash table for later use.
-    call shader_database%set_ptr(key(name), shader)
+    call shader_database%set_ptr(key(shader_name), shader)
   end subroutine shader_create
 
 
