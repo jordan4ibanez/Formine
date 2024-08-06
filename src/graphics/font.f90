@@ -61,16 +61,17 @@ contains
 
 
   !* Generate a text mesh.
-  subroutine font_generate_text(mesh_name, font_size, text, r,g,b, center)
+  subroutine font_generate_text(mesh_name, font_size, text, r,g,b, center, size)
     use :: mesh
     use :: string, only: string_get_non_space_characters
+    use :: vector_2f
     implicit none
 
     character(len = *), intent(in) :: mesh_name, text
     real(c_float), intent(in), value :: font_size
     real(c_float), intent(in), optional :: r,g,b
-
     logical, intent(in), optional :: center
+    type(vec2f), intent(inout), optional :: size
     logical :: should_center
     real(c_float) :: red, green, blue
     real(c_float), dimension(:), allocatable :: positions, texture_coordinates, colors
@@ -202,6 +203,11 @@ contains
         indices(current_indices_offset + 5) = 0 + current_indices_index
       end if
     end do
+
+    if (present(size)) then
+      size%x = (current_scroll_right - (font_size * 0.1))
+      size%y = font_size
+    end if
 
     if (should_center) then
       do i = 1,allocation_len
