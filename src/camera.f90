@@ -130,8 +130,8 @@ contains
     !* So the trick is, the camera actually never moves, but the world moves around it.
     !* This maintains as much precision as possible where you can see it.
 
-    width = glfw_get_window_width_f32()
-    height = glfw_get_window_height_f32()
+    width = glfw_get_window_width_f32() / 2.0
+    height = glfw_get_window_height_f32() / 2.0
 
     call camera_matrix%identity()
 
