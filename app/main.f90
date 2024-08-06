@@ -48,7 +48,7 @@ program main
 
   call gl_get_version()
 
-  call glfw_swap_interval(1)
+  call glfw_swap_interval(0)
 
   !! This allows OpenGL debugging.
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
@@ -61,9 +61,6 @@ program main
 
   !! This enables backface culling.
   ! call gl_enable(GL_CULL_FACE)
-
-  !! This synchronizes the camera's depth matrix with OpenGL.
-  call gl_depth_range_f(camera_get_z_near(), camera_get_z_far())
 
   !! This enables alpha blending.
   call gl_enable(GL_BLEND)
@@ -128,7 +125,7 @@ program main
       call shader_start("main")
       ! call gl_use_program(1)
 
-      call camera_update()
+      call camera_update_3d()
 
       call gl_clear_color_and_depth_buffer()
 

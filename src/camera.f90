@@ -10,13 +10,11 @@ module camera
   private
 
 
-  public :: camera_update
+  public :: camera_update_3d
   public :: camera_set_position
   public :: camera_set_position_vec3d
   public :: camera_set_object_matrix_f32
   public :: camera_set_object_matrix_f64
-  public :: camera_get_z_near
-  public :: camera_get_z_far
 
 
   real(c_float), parameter :: MIN_FOV = 50.0
@@ -24,8 +22,8 @@ module camera
 
   real(c_float) :: fov_degrees = 72.0
 
-  real(c_float) :: z_near = 0.01
-  real(c_float) :: z_far = 100.0
+  real(c_float) :: z_near_3d = 0.01
+  real(c_float) :: z_far_3d = 100.0
 
 
   !? Position is not translation, translation is the inverse of position!
@@ -35,21 +33,6 @@ module camera
 
 
 contains
-
-
-  real(c_float) function camera_get_z_near() result(near)
-    implicit none
-
-    near = z_near
-  end function camera_get_z_near
-
-
-  real(c_float) function camera_get_z_far() result(far)
-    implicit none
-
-    far = z_far
-  end function camera_get_z_far
-
 
   subroutine camera_set_position(x, y, z)
     implicit none
@@ -100,11 +83,11 @@ contains
 
 
   !* This creates the raw data of the camera matrix then uploads it into OpenGL.
-  subroutine camera_update()
+  subroutine camera_update_3d()
     use :: glfw, only: glfw_get_aspect_ratio
     use :: math_helpers, only: to_radians_f32
     use :: shader
-    use :: opengl, only: gl_uniform_mat4f
+    use :: opengl, only: gl_uniform_mat4f, gl_depth_range_f
     implicit none
 
     !* So the trick is, the camera actually never moves, but the world moves around it.
@@ -114,14 +97,17 @@ contains
 
     call camera_matrix%identity()
 
-    call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), z_near, z_far)
+    call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), z_near_3d, z_far_3d)
 
     call camera_matrix%rotate_y(camera_rotation%y_f32())
     call camera_matrix%rotate_x(camera_rotation%x_f32())
     call camera_matrix%rotate_z(camera_rotation%z_f32())
 
+    !* This synchronizes the camera's depth matrix with OpenGL.
+    call gl_depth_range_f(z_near_3d, z_far_3d)
+
     call gl_uniform_mat4f(UNIFORM_CAMERA_MATRIX, camera_matrix)
-  end subroutine camera_update
+  end subroutine camera_update_3d
 
 
   !* This creates the raw data of the object matrix then uploads it into OpenGL.
