@@ -11,6 +11,7 @@ module camera
 
 
   public :: camera_update_3d
+  public :: camera_update_2d
   public :: camera_set_position
   public :: camera_set_position_vec3d
   public :: camera_set_object_matrix_f32
