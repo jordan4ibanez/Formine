@@ -31,9 +31,6 @@ module shader
   type shader_program
     character(len=:), allocatable :: shader_name
     integer :: program_id
-    !* Uniform locations.
-    type(fhash_tbl_t) :: uniforms
-    logical :: uniforms_created = .false.
   end type shader_program
 
 
@@ -217,49 +214,6 @@ contains
     ! All we must do is check the shader result and return the existence in the result.
     poller => get_shader(shader_name, exists)
   end function shader_exists
-
-
-  !* Create the database of uniform locations, inside the shader program.
-  subroutine shader_create_uniform_locations(shader_name, uniform_array)
-    use :: opengl
-    use :: string
-    implicit none
-
-    character(len = *), intent(in) :: shader_name
-    type(heap_string), dimension(:) :: uniform_array
-    type(shader_program), pointer :: current_program
-    character(len = :), allocatable :: temp_string
-    logical :: exists
-    integer :: i
-    integer :: location
-
-    current_program => get_shader(shader_name, exists)
-
-    ! If a non-existent shader is gotten, bail out.
-    if (.not. exists) then
-      error stop "[Shader] Error: Shader ["//shader_name//"] does not exist. Cannot create uniform locations."
-    end if
-
-    ! If we already created the uniform locations, bail out.
-    if (current_program%uniforms_created) then
-      error stop "[Shader] Error: Tried to create uniform locations more than once in shader ["//shader_name//"]"
-    end if
-
-    ! Now attempt to get all the shader uniform locations.
-    do i = 1,size(uniform_array)
-
-      temp_string = uniform_array(i)%get()
-      location = gl_get_uniform_location(current_program%program_id, into_c_string(temp_string))
-
-      ! If location is -1 that's OpenGL saying it couldn't find it basically.
-      if (location < 0) then
-        error stop "[Shader] Error: Shader["//shader_name//"] uniform ["//temp_string//"] does not exist in the shader. Got: "//int_to_string(location)//"."
-      else
-        print"(A)","[Shader]: Shader ["//shader_name//"] uniform ["//temp_string//"] created at location ["//int_to_string(location)//"]."
-        call current_program%uniforms%set(key(temp_string), location)
-      end if
-    end do
-  end subroutine shader_create_uniform_locations
 
 
   !* Get the integral position of a shader uniform.
