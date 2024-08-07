@@ -13,7 +13,7 @@ auto-tests = true
 auto-examples = true
 module-naming = false
 
-link = ["glfw", "GL", "stb"]
+link = ["glfw", "GL", "stb", "luajit-5.1"]
 
 [dependencies]
 # stdlib = "*"
