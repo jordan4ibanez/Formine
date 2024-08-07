@@ -28,6 +28,15 @@ module luajit
     end function lual_newstate
 
 
+    !* This makes the LuaJIT standard library available.
+    subroutine lual_openlibs(state) bind(c, name = "luaL_openlibs")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+    end subroutine lual_openlibs
+
+
   end interface
 
 
@@ -43,6 +52,9 @@ contains
     if (.not. c_associated(lua_state)) then
       error stop "[LuaJIT] Error: Failed to initialize."
     end if
+
+    ! Make the standard library available.
+    call lual_openlibs(lua_state)
   end subroutine luajit_initialize
 
 
