@@ -21,10 +21,14 @@ program main
   new_fps = 0
   old_fps = -1
 
+  call luajit_initialize()
+
+  call luajit_destroy()
+
   !! BEGIN WARNING: This is only to be used for when developing libraries.
-  ! if (.true.) then
-  !   return
-  ! end if
+  if (.true.) then
+    return
+  end if
   !! END WARNING.
 
 
