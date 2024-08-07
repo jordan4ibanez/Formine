@@ -6,16 +6,25 @@ module luajit
   private
 
   !* Why yes, I did have to read the way too much documentation to do this.
-  ! Reference: https://lucasklassmann.com/blog/2019-02-02-embedding-lua-in-c/
+  ! References:
+  ! https://lucasklassmann.com/blog/2019-02-02-embedding-lua-in-c/
+  ! https://github.com/LuaJIT/LuaJIT/blob/v2.1/src/lua.h#L43
+  ! https://github.com/LuaJIT/LuaJIT/blob/v2.1/src/luajit.c
+  ! And I pretty much have to search through the LuaJIT source code for anything else.
 
   public :: luajit_initialize
   public :: luajit_destroy
 
 
+  integer(c_int), parameter :: LUA_OK = 0
+  integer(c_int), parameter :: LUA_YIELD = 1
+  integer(c_int), parameter :: LUA_ERRRUN = 2
+  integer(c_int), parameter :: LUA_ERRSYNTAX = 3
+  integer(c_int), parameter :: LUA_ERRMEM = 4
+  integer(c_int), parameter :: LUA_ERRERR = 5
+
+
   type(c_ptr) :: lua_state
-
-
-
 
 
   interface
