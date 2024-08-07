@@ -3,12 +3,12 @@ module luajit
   implicit none
 
 
-  !* Why yes, I did have to read the luajit source code to do this.
+  !* Why yes, I did have to read the way too much documentation to do this.
 
 
   private
 
-  
+
 
 
 
