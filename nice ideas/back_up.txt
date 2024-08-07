@@ -1,0 +1,40 @@
+
+  ! call mesh_create_3d( &
+  !   "debug", &
+  !   [ &
+  !   -0.5,  0.5, 0.0, &
+  !   -0.5, -0.5, 0.0, &
+  !   0.5,  -0.5, 0.0, &
+  !   0.5,   0.5, 0.0 &
+  !   ], &
+  !   [ &
+  !   0.0, 0.0, &
+  !   0.0, 1.0, &
+  !   1.0, 1.0, &
+  !   1.0, 0.0 &
+  !   ], &
+  !   [ &
+  !   1.0, 1.0, 1.0, &
+  !   1.0, 1.0, 1.0, &
+  !   1.0, 1.0, 1.0, &
+  !   1.0, 1.0, 1.0 &
+  !   ], &
+  !   [0,1,2, 2,3,0] &
+  !   )
+
+  ! call font_generate_text("hello_fortran", 50.0, "This is my font library. :D", r = 0.5, g = 0.0, b = 1.0)
+
+! call texture_create("./fonts/font_forgotten.png")
+
+
+
+      ! call camera_update_3d()
+
+      ! call gl_clear_depth_buffer()
+
+
+            ! call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
+
+      ! call texture_use("fortran_logo_512x512.png")
+
+      ! call mesh_draw("debug")
