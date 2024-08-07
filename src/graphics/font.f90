@@ -611,4 +611,52 @@ contains
   end subroutine calculate_opengl_texture_coordinates
 
 
+  !* Completely wipe out all existing font characters. This might be slow.
+  subroutine font_clear_database()
+    use :: fhash, only: fhash_iter_t, fhash_key_t
+    use :: string
+    use :: terminal
+    implicit none
+
+    type(heap_string), dimension(:), allocatable :: key_array
+    type(fhash_iter_t) :: iterator
+    class(fhash_key_t), allocatable :: generic_key
+    class(*), allocatable :: generic_placeholder
+    integer :: i
+    integer :: remaining_size
+
+    !* We must check that there is anything in the database before we iterate.
+    call character_database%stats(num_items = remaining_size)
+    if (remaining_size == 0) then
+      print"(A)", "[Mesh]: Database was empty. Nothing to do. Success!"
+      return
+    end if
+
+    ! Start with a size of 0.
+    allocate(key_array(0))
+
+    ! Create the iterator.
+    iterator = fhash_iter_t(character_database)
+
+    ! Now we will collect the keys from the iterator.
+    do while(iterator%next(generic_key, generic_placeholder))
+      ! Appending. Allocatable will clean up the old data.
+      key_array = [key_array, heap_string_array(generic_key%to_string())]
+    end do
+
+    ! Now clear the database out.
+    do i = 1,size(key_array)
+      call mesh_delete(key_array(i)%get())
+    end do
+
+    !* We will always check that the remaining size is 0. This will protect us from random issues.
+    call character_database%stats(num_items = remaining_size)
+
+    if (remaining_size /= 0) then
+      print"(A)", colorize_rgb("[Mesh] Error: Did not delete all meshes! Expected size: [0] | Actual: ["//int_to_string(remaining_size)//"]", 255, 0, 0)
+    else
+      print"(A)", "[Mesh]: Successfully cleared the mesh database."
+    end if
+  end subroutine font_clear_database
+
 end module font
