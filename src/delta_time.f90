@@ -1,5 +1,5 @@
 !* Delta time module for doing engine things that involve time.
-module delta
+module delta_time
   use, intrinsic :: iso_c_binding, only: c_int64_t, c_double, c_float, c_int
   implicit none
 
@@ -100,4 +100,4 @@ contains
   end function get_fps
 
 
-end module delta
+end module delta_time
