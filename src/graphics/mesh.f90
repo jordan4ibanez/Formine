@@ -440,7 +440,7 @@ contains
     type(heap_string), dimension(:), allocatable :: key_array
     type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
-    class(*), allocatable :: generic_placeholder
+    class(*), allocatable :: generic_data
     integer :: i
     integer :: remaining_size
 
@@ -458,7 +458,7 @@ contains
     iterator = fhash_iter_t(mesh_database)
 
     ! Now we will collect the keys from the iterator.
-    do while(iterator%next(generic_key, generic_placeholder))
+    do while(iterator%next(generic_key, generic_data))
       ! Appending. Allocatable will clean up the old data.
       key_array = [key_array, heap_string_array(generic_key%to_string())]
     end do
