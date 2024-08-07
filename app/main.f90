@@ -6,7 +6,7 @@ program main
   use :: files
   use :: mesh
   use :: camera
-  use :: delta
+  use :: delta_time
   use :: texture
   use :: font
   use :: vector_2f
