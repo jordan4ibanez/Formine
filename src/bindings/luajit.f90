@@ -54,6 +54,14 @@ module luajit
       type(c_ptr), intent(in), value :: state
     end subroutine lua_close
 
+    function lual_loadstring(state, string) result(status) bind(c, name = "luaL_loadstring")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      character(kind = c_char), intent(in) :: string
+      integer(c_int) :: status
+    end function lual_loadstring
 
   end interface
 
@@ -83,6 +91,21 @@ contains
 
     call lua_close(lua_state)
   end subroutine luajit_destroy
+
+
+  subroutine luajit_run_string(string_to_run)
+    use :: string
+    implicit none
+
+    character(len = *), intent(in) :: string_to_run
+    character(len = :, kind = c_char), allocatable :: c_string
+
+    c_string = into_c_string(string_to_run)
+
+    if (lual_loadstring(lua_state, c_string) == LUA_OK) then
+      print*,"yay"
+    end if
+  end subroutine luajit_run_string
 
 
 end module luajit
