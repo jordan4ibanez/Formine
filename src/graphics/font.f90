@@ -622,6 +622,7 @@ contains
     type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
+    class(*), pointer :: generic_pointer
     integer :: i
     integer :: remaining_size
 
@@ -642,12 +643,15 @@ contains
     do while(iterator%next(generic_key, generic_data))
       ! Appending. Allocatable will clean up the old data.
       key_array = [key_array, heap_string_array(generic_key%to_string())]
-      !* We are manually managing memory, we must free as we go.
-      deallocate(generic_data)
     end do
 
     ! Now clear the database out.
     do i = 1,size(key_array)
+
+      !* We are manually managing memory, we must free as we go.
+      call character_database%get_raw_ptr(key(key_array(i)%get()), generic_pointer)
+      deallocate(generic_pointer)
+
       call character_database%unset(key(key_array(i)%get()))
     end do
 
