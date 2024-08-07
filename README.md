@@ -1,7 +1,9 @@
 # fortran_thing
  I realized I never posted any fortran stuff to my github so here it is.
 
-Also this is hand coded while looking at the glfw source code and docs so you'll have to excuse any mistakes.
+Also this is hand coded while looking at the glfw, opengl, stb, and luajit source code and docs so you'll have to excuse any mistakes.
+
+This is written in Fortran 2003 up to 2018. Basically whatever my compiler (gfortran) allows.
 
 Come join the Fortran Discord: https://discord.gg/tfn3M28ppP
 
