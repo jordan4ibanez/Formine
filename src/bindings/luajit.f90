@@ -73,6 +73,10 @@ contains
   subroutine luajit_initialize()
     implicit none
 
+    if (c_associated(lua_state)) then
+      error stop "[LuaJIT] Error: Tried to initialize LuaJIT when already initialized."
+    end if
+
     lua_state = lual_newstate()
 
     if (.not. c_associated(lua_state)) then
@@ -88,6 +92,10 @@ contains
   !* Clean up the memory used by LuaJIT and destroy it.
   subroutine luajit_destroy()
     implicit none
+
+    if (.not. c_associated(lua_state)) then
+      error stop "[LuaJIT] Error: Tried to destroy LuaJIT when not initialized."
+    end if
 
     call lua_close(lua_state)
   end subroutine luajit_destroy
