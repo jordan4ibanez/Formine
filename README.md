@@ -12,6 +12,16 @@ Here is what this thing currently looks like.
 ![Current progress.](https://raw.githubusercontent.com/jordan4ibanez/fortran_thing/master/screenshots/example_4.png)
 
 
+scaling:
+
+gui scaling
+
+base the scale around 1920x1080 then use the current window size
+
+1920/window_x or window_x/1920 to get a scalar value, do the same for the height
+
+then take the smaller value, and this is the gui scale, this will stop things from going horribly wrong while keeping
+a nice gui scaling!
 
 
 
