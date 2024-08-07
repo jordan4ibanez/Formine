@@ -14,6 +14,7 @@ module luajit
 
   public :: luajit_initialize
   public :: luajit_destroy
+  public :: luajit_run_string
 
 
   integer(c_int), parameter :: LUA_OK = 0

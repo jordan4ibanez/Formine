@@ -23,6 +23,8 @@ program main
 
   call luajit_initialize()
 
+  call luajit_run_string("print('hi')")
+
   call luajit_destroy()
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
