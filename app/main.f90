@@ -66,12 +66,13 @@ program main
   call gl_depth_func(GL_LESS)
 
   !! This enables backface culling.
-  ! call gl_enable(GL_CULL_FACE)
+  call gl_enable(GL_CULL_FACE)
 
   !! This enables alpha blending.
   call gl_enable(GL_BLEND)
   call gl_blend_equation(GL_FUNC_ADD)
   call gl_blend_func(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
   !? I don't know what the difference is between gl_blend_func and gl_blend_func_separate so disable this until someone tells me.
   ! call gl_blend_func_separate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
@@ -86,36 +87,9 @@ program main
   call font_create("./fonts/font_forgotten.png")
 
   call texture_create("./textures/fortran_logo_512x512.png")
-  ! call texture_create("./fonts/font_forgotten.png")
 
-  !! Old texture coordinates:
-
-  ! call mesh_create_3d( &
-  !   "debug", &
-  !   [ &
-  !   -0.5,  0.5, 0.0, &
-  !   -0.5, -0.5, 0.0, &
-  !   0.5,  -0.5, 0.0, &
-  !   0.5,   0.5, 0.0 &
-  !   ], &
-  !   [ &
-  !   0.0, 0.0, &
-  !   0.0, 1.0, &
-  !   1.0, 1.0, &
-  !   1.0, 0.0 &
-  !   ], &
-  !   [ &
-  !   1.0, 1.0, 1.0, &
-  !   1.0, 1.0, 1.0, &
-  !   1.0, 1.0, 1.0, &
-  !   1.0, 1.0, 1.0 &
-  !   ], &
-  !   [0,1,2, 2,3,0] &
-  !   )
 
   rotation = 0.0
-
-  ! call font_generate_text("hello_fortran", 50.0, "This is my font library. :D", r = 0.5, g = 0.0, b = 1.0)
 
 
   !! This is debugging for functions!
@@ -127,19 +101,21 @@ program main
       rotation = rotation + get_delta_f32() * 3.0
 
 
+      !? DRAW TEST ?!
+
       call gl_clear_color_scalar(1.0)
 
       call gl_clear_color_buffer()
 
-      ! Shader needs to start before the camera is updated.
+
+      !* Shader needs to start before the camera is updated.
       call shader_start("main")
 
+      call camera_update_3d()
 
-      ! call camera_update_3d()
+      call gl_clear_depth_buffer()
 
-      ! call gl_clear_depth_buffer()
 
-      !? DRAW TEST ?!
 
       ! call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
 
