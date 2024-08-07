@@ -98,7 +98,7 @@ program main
 
       call delta_tick()
 
-      rotation = rotation + get_delta_f32() * 3.0
+      rotation = rotation + delta_get_f32() * 3.0
 
 
       !? DRAW TEST ?!

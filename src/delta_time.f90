@@ -7,8 +7,8 @@ module delta_time
 
   public :: delta_initialize
   public :: delta_tick
-  public :: get_delta_f32
-  public :: get_delta_f64
+  public :: delta_get_f32
+  public :: delta_get_f64
   public :: get_fps
 
   integer(c_int64_t) :: old_delta_integral = 0
@@ -78,19 +78,19 @@ contains
   end subroutine fps_calculation
 
 
-  real(c_float) function get_delta_f32() result(current_delta)
+  real(c_float) function delta_get_f32() result(current_delta)
     implicit none
 
     ! Basically a precision chop.
     current_delta = real(delta, kind = c_float)
-  end function get_delta_f32
+  end function delta_get_f32
 
 
-  real(c_double) function get_delta_f64() result(current_delta)
+  real(c_double) function delta_get_f64() result(current_delta)
     implicit none
 
     current_delta = delta
-  end function get_delta_f64
+  end function delta_get_f64
 
 
   integer(c_int) function get_fps() result(fps)
