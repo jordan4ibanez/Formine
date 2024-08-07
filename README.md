@@ -11,34 +11,7 @@ Here is what this thing currently looks like.
 
 ![Current progress.](https://raw.githubusercontent.com/jordan4ibanez/fortran_thing/master/screenshots/example_4.png)
 
-Note: Current desktop workstation performance for creating string at beginning: 
-around 10-12k FPS.
 
-When generating a string every frame:
-6300-6600 FPS
-
-Focus on making this faster.
-
-also, side note: fhash will deallocate pointers for you.
-
-Possible causes:
-- need a custom implementation in the mesh library.
-- inefficiencies in the font mesh creation.
-- inefficiencies in parsing the text.
-- uneccessary database suffling
-worst case: OpenGL is slow
-
-Findings:
-
-- Lookups in the shader database hardcoded to direct positions yields:
-
-7800-8050 fps
-
-EXTREME speedup!
-
-using raw pointers instead of the ``get`` and ``set`` yields:
-
-15100-16300 fps
 
 
 
