@@ -13,6 +13,7 @@ module font
 
   public :: font_create
   public :: font_generate_text
+  public :: font_clear_database
 
 
   ! This is a container which holds the points on the texture that make the character appear correctly.
@@ -647,7 +648,6 @@ contains
 
     ! Now clear the database out.
     do i = 1,size(key_array)
-
       !* We are manually managing memory, we must free as we go.
       call character_database%get_raw_ptr(key(key_array(i)%get()), generic_pointer)
       deallocate(generic_pointer)
