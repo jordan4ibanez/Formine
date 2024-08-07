@@ -10,6 +10,7 @@ program main
   use :: texture
   use :: font
   use :: vector_2f
+  use :: luajit
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -80,6 +81,7 @@ program main
   !! This resets the gl_get_error integer back to 0.
   call gl_clear_error_data()
 
+  call luajit_initialize()
 
   ! Set up all shader components.
   call shader_create("main", "./shaders/vertex.vert", "./shaders/fragment.frag")
