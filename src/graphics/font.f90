@@ -628,7 +628,7 @@ contains
     !* We must check that there is anything in the database before we iterate.
     call character_database%stats(num_items = remaining_size)
     if (remaining_size == 0) then
-      print"(A)", "[Mesh]: Database was empty. Nothing to do. Success!"
+      print"(A)", "[Font]: Database was empty. Nothing to do. Success!"
       return
     end if
 
@@ -642,21 +642,24 @@ contains
     do while(iterator%next(generic_key, generic_placeholder))
       ! Appending. Allocatable will clean up the old data.
       key_array = [key_array, heap_string_array(generic_key%to_string())]
+      !* We are manually managing memory, we must free as we go.
+      deallocate(generic_placeholder)
     end do
 
     ! Now clear the database out.
     do i = 1,size(key_array)
-      call mesh_delete(key_array(i)%get())
+      call character_database%unset(key(key_array(i)%get()))
     end do
 
     !* We will always check that the remaining size is 0. This will protect us from random issues.
     call character_database%stats(num_items = remaining_size)
 
     if (remaining_size /= 0) then
-      print"(A)", colorize_rgb("[Mesh] Error: Did not delete all meshes! Expected size: [0] | Actual: ["//int_to_string(remaining_size)//"]", 255, 0, 0)
+      print"(A)", colorize_rgb("[Font] Error: Did not delete all characters! Expected size: [0] | Actual: ["//int_to_string(remaining_size)//"]", 255, 0, 0)
     else
-      print"(A)", "[Mesh]: Successfully cleared the mesh database."
+      print"(A)", "[Font]: Successfully cleared the character database."
     end if
   end subroutine font_clear_database
+
 
 end module font
