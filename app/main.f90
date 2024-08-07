@@ -171,6 +171,7 @@ program main
     end do
   end if
 
+  call luajit_destroy()
 
   call texture_clear_database()
 
