@@ -12,7 +12,7 @@ module delta_time
   public :: get_fps
 
   integer(c_int64_t) :: old_delta_integral = 0
-  real(c_double) :: delta_time = 0.0d0
+  real(c_double) :: delta = 0.0d0
 
   real(c_double) :: fps_delta_accumulator = 0.0d0
   integer(c_int) :: fps_accumulator = 0
@@ -50,9 +50,9 @@ contains
     new_delta_integral = count
 
     ! Now set it.
-    delta_time = real(new_delta_integral - old_delta_integral, kind = c_double)
+    delta = real(new_delta_integral - old_delta_integral, kind = c_double)
 
-    delta_time = delta_time / real(count_rate, kind = c_double)
+    delta = delta / real(count_rate, kind = c_double)
 
     ! Finally, save it.
     old_delta_integral = new_delta_integral
@@ -66,7 +66,7 @@ contains
     use :: string, only: int_to_string
     implicit none
 
-    fps_delta_accumulator = fps_delta_accumulator + delta_time
+    fps_delta_accumulator = fps_delta_accumulator + delta
     fps_accumulator = fps_accumulator + 1
 
     if (fps_delta_accumulator >= 1.0d0) then
@@ -82,14 +82,14 @@ contains
     implicit none
 
     ! Basically a precision chop.
-    current_delta = real(delta_time, kind = c_float)
+    current_delta = real(delta, kind = c_float)
   end function get_delta_f32
 
 
   real(c_double) function get_delta_f64() result(current_delta)
     implicit none
 
-    current_delta = delta_time
+    current_delta = delta
   end function get_delta_f64
 
 
