@@ -444,6 +444,13 @@ contains
     integer :: i
     integer :: remaining_size
 
+    !* We must check that there is anything in the database before we iterate.
+    call mesh_database%stats(num_items = remaining_size)
+    if (remaining_size == 0) then
+      print"(A)", "[Mesh]: Database was empty. Nothing to do."
+      return
+    end if
+
     ! Start with a size of 0.
     allocate(key_array(0))
 
