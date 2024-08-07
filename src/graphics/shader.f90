@@ -232,6 +232,13 @@ contains
     class(*), allocatable :: generic_data
     integer :: i, remaining_size
 
+    !* We must check that there is anything in the database before we iterate.
+    call shader_database%stats(num_items = remaining_size)
+    if (remaining_size == 0) then
+      print"(A)", "[Shader]: Database was empty. Nothing to do. Success!"
+      return
+    end if
+
     ! Start with a size of 0.
     allocate(key_array(0))
 
