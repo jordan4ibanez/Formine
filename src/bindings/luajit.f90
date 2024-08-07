@@ -53,7 +53,8 @@ contains
       error stop "[LuaJIT] Error: Failed to initialize."
     end if
 
-    ! Make the standard library available.
+    ! Make the entire standard library available.
+    !! Is this safe for the end user when using external mods? HELL NO.
     call lual_openlibs(lua_state)
   end subroutine luajit_initialize
 
