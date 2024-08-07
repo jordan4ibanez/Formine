@@ -9,6 +9,7 @@ module luajit
   ! Reference: https://lucasklassmann.com/blog/2019-02-02-embedding-lua-in-c/
 
   public :: luajit_initialize
+  public :: luajit_destroy
 
 
   type(c_ptr) :: lua_state
@@ -37,13 +38,21 @@ module luajit
     end subroutine lual_openlibs
 
 
+    subroutine lua_close(state) bind(c, name = "lua_close")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+    end subroutine lua_close
+
+
   end interface
 
 
 contains
 
 
-  !* This subroutine will create the actual lua state that we will use.
+  !* Create the actual LuaJIT state that we will use.
   subroutine luajit_initialize()
     implicit none
 
@@ -57,6 +66,14 @@ contains
     !! Is this safe for the end user when using external mods? HELL NO.
     call lual_openlibs(lua_state)
   end subroutine luajit_initialize
+
+
+  !* Clean up the memory used by LuaJIT and destroy it.
+  subroutine luajit_destroy()
+    implicit none
+
+    call lua_close(lua_state)
+  end subroutine luajit_destroy
 
 
 end module luajit
