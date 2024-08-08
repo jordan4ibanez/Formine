@@ -71,7 +71,7 @@ module luajit
     end function lual_loadstring
 
 
-    function lua_call(state, number_of_args, number_of_results) result(status) bind(c, name = "lua_pcall")
+    function lua_call(state, number_of_args, number_of_results) result(status) bind(c, name = "lua_call")
       use, intrinsic :: iso_c_binding
       implicit none
 
@@ -81,17 +81,17 @@ module luajit
     end function lua_call
 
 
-    function lua_p_call(state, number_of_args, number_of_results, error_function) result(status) bind(c, name = "lua_pcall")
+    function lua_pcall(state, number_of_args, number_of_results, error_function) result(status) bind(c, name = "lua_pcall")
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr), intent(in), value :: state
       integer(c_int), intent(in), value :: number_of_args, number_of_results, error_function
       integer(c_int) :: status
-    end function lua_p_call
+    end function lua_pcall
 
 
-    function lua_cp_call(state, func, unknown_data) result(status) bind(c, name = "lua_pcall")
+    function lua_cpcall(state, func, unknown_data) result(status) bind(c, name = "lua_cpcall")
       use, intrinsic :: iso_c_binding
       implicit none
 
@@ -99,7 +99,7 @@ module luajit
       type(c_funptr), intent(in), value :: func
       type(c_ptr), intent(inout) :: unknown_data
       integer(c_int) :: status
-    end function lua_cp_call
+    end function lua_cpcall
 
 
   end interface
@@ -140,6 +140,7 @@ contains
   end subroutine luajit_destroy
 
 
+  !* Simply run a LuaJIT string.
   subroutine luajit_run_string(string_to_run)
     use :: string
     implicit none
@@ -150,7 +151,7 @@ contains
     c_string = into_c_string(string_to_run)
 
     if (lual_loadstring(lua_state, c_string) == LUA_OK) then
-      print*,"yay"
+
     end if
   end subroutine luajit_run_string
 
