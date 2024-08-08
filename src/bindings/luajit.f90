@@ -102,6 +102,15 @@ module luajit
     end function lua_cpcall
 
 
+    function lua_gettop(state) result(index) bind(c, name = "lua_gettop")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int) :: index
+    end function lua_gettop
+
+
   end interface
 
 
@@ -140,6 +149,10 @@ contains
   end subroutine luajit_destroy
 
 
+  !* This was a macro in LuaJIT
+
+
+
   !* Simply run a LuaJIT string.
   subroutine luajit_run_string(string_to_run)
     use :: string
@@ -153,7 +166,7 @@ contains
     if (lual_loadstring(lua_state, c_string) == LUA_OK) then
       if (lua_pcall(lua_state, 0, 0, 0) == LUA_OK) then
         ! If code was executed successfully, we remove the code from the stack.
-        
+
       end if
     end if
   end subroutine luajit_run_string
