@@ -182,7 +182,7 @@ contains
     if (lual_loadstring(lua_state, c_string) == LUA_OK) then
       if (lua_pcall(lua_state, 0, 0, 0) == LUA_OK) then
         ! If code was executed successfully, we remove the code from the stack.
-
+        call lua_pop(lua_gettop(lua_state))
       end if
     end if
   end subroutine luajit_run_string
