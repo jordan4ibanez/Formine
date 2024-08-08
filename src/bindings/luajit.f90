@@ -111,6 +111,15 @@ module luajit
     end function lua_gettop
 
 
+    subroutine lua_settop(state, index) bind(c, name = "lua_settop")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+    end subroutine lua_settop
+
+
   end interface
 
 
