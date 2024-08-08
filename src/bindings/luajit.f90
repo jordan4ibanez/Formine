@@ -10,7 +10,12 @@ module luajit
   ! https://lucasklassmann.com/blog/2019-02-02-embedding-lua-in-c/
   ! https://github.com/LuaJIT/LuaJIT/blob/v2.1/src/lua.h#L43
   ! https://github.com/LuaJIT/LuaJIT/blob/v2.1/src/luajit.c
+  ! https://www.lua.org/manual/2.4/node18.html
   ! And I pretty much have to search through the LuaJIT source code for anything else.
+  !
+  !! For Fortran function see: https://www.lua.org/pil/26.1.html
+  ! Lua Fortran functions:
+  ! typedef int (*lua_CFunction) (lua_State *L);
 
   public :: luajit_initialize
   public :: luajit_destroy
