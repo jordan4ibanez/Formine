@@ -55,6 +55,7 @@ module luajit
       type(c_ptr), intent(in), value :: state
     end subroutine lua_close
 
+
     function lual_loadstring(state, string) result(status) bind(c, name = "luaL_loadstring")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -63,6 +64,17 @@ module luajit
       character(kind = c_char), intent(in) :: string
       integer(c_int) :: status
     end function lual_loadstring
+
+
+    function lua_call(state, number_of_args, number_of_results) result(status) bind(c, name = "lua_pcall")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: number_of_args, number_of_results
+      integer(c_int) :: status
+    end function lua_call
+
 
     function lua_pcall(state, number_of_args, number_of_results, error_function) result(status) bind(c, name = "lua_pcall")
       use, intrinsic :: iso_c_binding
