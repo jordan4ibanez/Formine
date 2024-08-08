@@ -91,6 +91,17 @@ module luajit
     end function lua_p_call
 
 
+    function lua_cp_call(state, func, unknown_data) result(status) bind(c, name = "lua_pcall")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      type(c_funptr), intent(in), value :: func
+      type(c_ptr), intent(inout) :: unknown_data
+      integer(c_int) :: status
+    end function lua_cp_call
+
+
   end interface
 
 
