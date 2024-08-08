@@ -158,7 +158,14 @@ contains
   end subroutine luajit_destroy
 
 
-  !* This was a macro in LuaJIT
+  !* Pop the stack. This was a macro in LuaJIT.
+  subroutine lua_pop(index)
+    implicit none
+
+    integer(c_int), intent(in), value :: index
+
+    call lua_settop(lua_State, -(index) - 1)
+  end subroutine lua_pop
 
 
 
