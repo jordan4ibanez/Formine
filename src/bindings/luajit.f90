@@ -81,14 +81,14 @@ module luajit
     end function lua_call
 
 
-    function lua_pcall(state, number_of_args, number_of_results, error_function) result(status) bind(c, name = "lua_pcall")
+    function lua_p_call(state, number_of_args, number_of_results, error_function) result(status) bind(c, name = "lua_pcall")
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr), intent(in), value :: state
       integer(c_int), intent(in), value :: number_of_args, number_of_results, error_function
       integer(c_int) :: status
-    end function lua_pcall
+    end function lua_p_call
 
 
   end interface
