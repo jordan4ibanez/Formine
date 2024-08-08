@@ -50,6 +50,32 @@ ln -s /usr/bin/gfortran-14 .local/bin/gfortran
 
 _Or_ you can just change the Makefile to use gfortran-14, but that's annoying.
 
+
+### fpm requirement:
+
+This is an fpm (Fortran Package Manager) project. There is a good reason for this.
+fpm makes working with fortran extremely easy. Think cargo for rust, or deno for typescript.
+
+To build this project properly, get fpm here:
+
+https://github.com/fortran-lang/fpm
+
+(You get the latest one in github releases.)
+
+Then you can simply rename the executable to fpm and move it into the system bin location as so (if it's in your Downloads folder on Linux):
+
+```
+cd Downloads/
+
+mv fpm-* fpm
+
+chmod +x fpm
+
+sudo mv fpm /usr/bin/
+```
+
+Now you should be able to run fpm anywhere in your system. :)
+
 -----
 
 ### Compiler note:
