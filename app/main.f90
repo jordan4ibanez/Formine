@@ -23,7 +23,9 @@ program main
 
   call luajit_initialize()
 
-  call luajit_run_string("print('hi')")
+  call luajit_run_string("print('hi')"// &
+  "local x = 5;"// &
+  "print(x)")
 
   call luajit_destroy()
 
