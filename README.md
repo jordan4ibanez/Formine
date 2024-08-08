@@ -33,14 +33,14 @@ a nice gui scaling!
 
 ### Install dependencies on fedora:
 ```
-sudo dnf install gfortran mesa-libGL-devel glfw-devel
+sudo dnf install gfortran mesa-libGL-devel glfw-devel git
 ```
 
 -----
 
 ### Install dependencies on linux mint 22+/ubuntu 24.04+
 ```
-sudo apt install gfortran-14 libglfw3-dev libgl-dev libstb-dev libluajit-5.1-dev
+sudo apt install gfortran-14 libglfw3-dev libgl-dev libstb-dev libluajit-5.1-dev git
 ```
 Then I would create a symbolic link to gfortran-14 in your ``.local/bin/`` directory via:
 ```
