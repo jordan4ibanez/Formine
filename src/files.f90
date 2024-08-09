@@ -61,11 +61,11 @@ contains
 
 
   !* Read a file into an array of heap_strings.
-  subroutine file_reader_read_file_into_lines(this, file_location)
+  subroutine file_reader_read_file_into_lines(this, file_path)
     implicit none
 
     class(file_reader), intent(inout) :: this
-    character(len = *), intent(in) :: file_location
+    character(len = *), intent(in) :: file_path
     !! This is testing debugging
     character(len = :), allocatable :: temporary_container
     integer :: found_newline_index
@@ -75,7 +75,7 @@ contains
     ! use the internal file_string component as a temp buffer.
 
     ! Push the entire string buffer into this.
-    call this%read_file(file_location)
+    call this%read_file(file_path)
 
     ! If the file does not exist, we're not going to attempt to do anything.
     if (this%exists) then
