@@ -155,6 +155,9 @@ contains
     end if
 
     call lua_close(lua_state)
+
+    ! Nullify. Allows re-initialization.
+    lua_state = c_null_ptr
   end subroutine luajit_destroy
 
 
