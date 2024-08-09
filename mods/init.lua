@@ -7,7 +7,7 @@ local x = 5
 print(x)
 
 -- The max we want to do with interop is 4 variables.
-function Lua_test(a, b, c, d)
+function my_function(a, b, c, d)
   print("lua function test")
   print("a:")
   print(a)

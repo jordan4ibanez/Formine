@@ -33,7 +33,7 @@ program main
     error stop "oops"
   end if
 
-  call luajit_call_function("test", 3)
+  call luajit_call_function("my_function")
 
   call luajit_destroy()
 
