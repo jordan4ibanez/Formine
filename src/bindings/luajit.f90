@@ -274,13 +274,42 @@ contains
 
   !* This function will attempt to push whatever variable type into the LuaJIT stack.
   subroutine luajit_push_generic(input)
+    use, intrinsic :: iso_c_binding
     implicit none
 
-    class(*), intent(in) :: input
+    class(*), intent(in), optional :: input
+
+
+    if (.not. present(input)) then
+      print*,"push nil"
+      return
+    end if
+
+    select type (input)
+     type is (integer(c_int))
+      print*,"push integer cast to c_int64_t"
+     type is (integer(c_int64_t))
+      print*, "push c_int64_t"
+     type is (real(c_float))
+      print*, "push float cast to c_double"
+     type is (real(c_double))
+      print*, "push c_double"
+     type is (character(len = *))
+      print*, "push string with length"
+     type is (logical)
+      print*, "push logical, convert to c_bool"
+     type is (logical(c_bool))
+      print*, "push c_bool"
+
+      !? Now we get into the interesting part.
+     class is (c_funptr)
+      print*, "push fortran lua c function"
+     class default
+      print*, "uh oh"
+    end select
 
 
   end subroutine luajit_push_generic
-
 
 
   !* Ultra generic LuaJIT function caller.
