@@ -78,42 +78,43 @@ contains
     call this%read_file(file_path)
 
     ! If the file does not exist, we're not going to attempt to do anything.
-    if (this%exists) then
-
-      ! Start off with nothing.
-      allocate(this%lines(0))
-
-      ! This should literally be unable to get stuck in an infinite loop.
-      do while(.true.)
-
-        ! Sniff out that \n.
-        found_newline_index = index(this%file_string, achar(10))
-
-        if (found_newline_index == 0) then
-          ! When we reached the end with no \n, we need specific handling of this.
-          ! Basically, just dump the final line in.
-
-          ! Tick up the number of lines.
-          this%line_count = this%line_count + 1
-          ! Dump it in.
-          this%lines = [this%lines, heap_string(this%file_string)]
-          ! And remove residual memory.
-          deallocate(this%file_string)
-          exit
-        else
-          ! Tick up the number of lines.
-          this%line_count = this%line_count + 1
-          ! We're just going to continuously roll a bigger array with new elements.
-          temporary_container = this%file_string(1:found_newline_index - 1)
-          ! Append it.
-          this%lines = [this%lines, heap_string(temporary_container)]
-          ! Find the new total length of the string buffer.
-          length_of_buffer = len(this%file_string)
-          ! Step it over the \n and cut out the beginning.
-          this%file_string = this%file_string(found_newline_index + 1:length_of_buffer)
-        end if
-      end do
+    if (.not. this%exists) then
+      return
     end if
+
+    ! Start off with nothing.
+    allocate(this%lines(0))
+
+    ! This should literally be unable to get stuck in an infinite loop.
+    do while(.true.)
+
+      ! Sniff out that \n.
+      found_newline_index = index(this%file_string, achar(10))
+
+      if (found_newline_index == 0) then
+        ! When we reached the end with no \n, we need specific handling of this.
+        ! Basically, just dump the final line in.
+
+        ! Tick up the number of lines.
+        this%line_count = this%line_count + 1
+        ! Dump it in.
+        this%lines = [this%lines, heap_string(this%file_string)]
+        ! And remove residual memory.
+        deallocate(this%file_string)
+        exit
+      else
+        ! Tick up the number of lines.
+        this%line_count = this%line_count + 1
+        ! We're just going to continuously roll a bigger array with new elements.
+        temporary_container = this%file_string(1:found_newline_index - 1)
+        ! Append it.
+        this%lines = [this%lines, heap_string(temporary_container)]
+        ! Find the new total length of the string buffer.
+        length_of_buffer = len(this%file_string)
+        ! Step it over the \n and cut out the beginning.
+        this%file_string = this%file_string(found_newline_index + 1:length_of_buffer)
+      end if
+    end do
   end subroutine file_reader_read_file_into_lines
 
 end module files
