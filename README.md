@@ -117,7 +117,15 @@ in C:
 (For C bindings)
 ``const char *`` would be interopped as ``character(kind = c_char), intent(in)``
 
-``const char **`` would be interopped as ``character(len = *, kind = c_char), intent(in)``
+This is because C does pointer arithmetic on the location we give it and we can use it to our advantage.
+You must ensure that the string is null terminated. You can do this with ``string//achar(0)``
+
+``const char **`` would be interopped as ``character(len = *, kind = c_char), intent(in)`` (if you only want 1)
+
+This one, I am still unsure why we need the length component. But I'm sure someone will tell me eventually.
+
+
+
 
 Back to fortran:
 
