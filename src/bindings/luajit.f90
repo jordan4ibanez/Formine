@@ -35,6 +35,10 @@ module luajit
   integer(c_int), parameter :: LUA_ERRMEM = 4
   integer(c_int), parameter :: LUA_ERRERR = 5
 
+  integer(c_int), parameter :: LUA_REGISTRYINDEX = (-10000)
+  integer(c_int), parameter :: LUA_ENVIRONINDEX = (-10001)
+  integer(c_int), parameter :: LUA_GLOBALSINDEX = (-10002)
+
 
   type(c_ptr) :: lua_state
 
