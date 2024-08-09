@@ -227,8 +227,8 @@ contains
   end subroutine luajit_run_string
 
 
-  !* Run a LuaJIT file.
-  subroutine luajit_run_file(file_path)
+  !* Run a LuaJIT file. Returns success.
+  function luajit_run_file(file_path) result(success)
     use :: string
     use :: files
     use :: terminal
@@ -237,11 +237,14 @@ contains
     character(len = *, kind = c_char), intent(in) :: file_path
     type(file_reader) :: reader
     character(len = :, kind = c_char), allocatable :: c_string
+    logical :: success
+
+    success = .false.
 
     call reader%read_file(file_path)
 
     if (.not. reader%exists) then
-      error stop "[LuaJIT] Error: Could not load file path ["//file_path//"]. Does not exist."
+      print"(A)", "[LuaJIT] Error: Could not load file path ["//file_path//"]. Does not exist."
     end if
 
     c_string = into_c_string(reader%file_string)
@@ -250,13 +253,14 @@ contains
       if (lua_pcall(lua_state, 0, 0, 0) == LUA_OK) then
         ! If code was executed successfully, we remove the code from the stack.
         call lua_pop(lua_gettop(lua_state))
+        success = .true.
       else
-        error stop colorize_rgb(achar(10)//"[LuaJIT] Error: Unrecoverable error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
+        print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
       end if
     else
-      error stop colorize_rgb(achar(10)//"[LuaJIT] Error: Unrecoverable error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
+      print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
     end if
-  end subroutine luajit_run_file
+  end function luajit_run_file
 
 
 end module luajit
