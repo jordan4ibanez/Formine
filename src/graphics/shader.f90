@@ -61,7 +61,7 @@ contains
   end function shader_compilation_succeeded
 
 
-  !* Create a named shader program from vertex and fragment code locations
+  !* Create a named shader program from vertex and fragment code file paths.
   !? Will return false if it fails, true if it succeeds.
   subroutine shader_create(shader_name, vertex_code_location, fragment_code_location)
     use :: opengl
