@@ -5,6 +5,7 @@ module luajit
 
   private
 
+
   !* Why yes, I did have to read the way too much documentation to do this.
   ! References:
   ! https://lucasklassmann.com/blog/2019-02-02-embedding-lua-in-c/
@@ -19,10 +20,12 @@ module luajit
   !
   !! For LuaJIT types see: https://github.com/LuaJIT/LuaJIT/blob/v2.1/src/luaconf.h
 
+
   public :: luajit_initialize
   public :: luajit_destroy
   public :: luajit_run_string
   public :: luajit_run_file
+  public :: luajit_call_function
 
 
   integer(c_int), parameter :: LUA_OK = 0
@@ -267,6 +270,13 @@ contains
       print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
     end if
   end function luajit_run_file
+
+
+  !* Ultra generic LuaJIT function caller.
+  subroutine luajit_call_function()
+    implicit none
+
+  end subroutine luajit_call_function
 
 
 end module luajit
