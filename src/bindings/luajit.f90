@@ -16,6 +16,8 @@ module luajit
   !! For Fortran function see: https://www.lua.org/pil/26.1.html
   ! Lua Fortran functions:
   ! typedef int (*lua_CFunction) (lua_State *L);
+  !
+  !! For LuaJIT types see: https://github.com/LuaJIT/LuaJIT/blob/v2.1/src/luaconf.h
 
   public :: luajit_initialize
   public :: luajit_destroy
