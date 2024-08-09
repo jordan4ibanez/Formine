@@ -257,7 +257,9 @@ contains
   end function get_character
 
 
-  !* Create a font from a png and a config.
+  !* Create a font from a png and a config using one file path.
+  !* It will be assumed that the only difference between the texture and the 
+  !* config file will be the file extension.
   subroutine font_create(font_texture_location)
     use :: stb_image
     use :: string
