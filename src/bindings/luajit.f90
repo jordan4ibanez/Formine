@@ -272,9 +272,26 @@ contains
   end function luajit_run_file
 
 
-  !* Ultra generic LuaJIT function caller.
-  subroutine luajit_call_function()
+  !* This function will attempt to push whatever variable type into the LuaJIT stack.
+  subroutine luajit_push_generic(input)
     implicit none
+
+    class(*), intent(in) :: input
+
+
+  end subroutine luajit_push_generic
+
+
+
+  !* Ultra generic LuaJIT function caller.
+  !* I'm maxing it out at 4 variables.
+  subroutine luajit_call_function(function_name, a, b, c, d, return_value)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: function_name
+    class(*), intent(in), optional :: a, b, c, d
+    class(*), intent(inout) :: return_value
+
 
   end subroutine luajit_call_function
 
