@@ -16,5 +16,7 @@
     "**/**.mod": true,
     "build/": true,
     "scripts/": true
-  }
+  },
+  // Lua configuration.
+  "Lua.runtime.version": "LuaJIT"
 }
