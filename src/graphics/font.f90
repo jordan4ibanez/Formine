@@ -260,14 +260,14 @@ contains
   !* Create a font from a png and a config using one file path.
   !* It will be assumed that the only difference between the texture and the 
   !* config file will be the file extension.
-  subroutine font_create(font_texture_location)
+  subroutine font_create(font_texture_file_path)
     use :: stb_image
     use :: string
     use :: files
     use :: texture
     implicit none
 
-    character(len = *, kind = c_char), intent(in) :: font_texture_location
+    character(len = *, kind = c_char), intent(in) :: font_texture_file_path
     integer :: x, y, channels, desired_channels
     character(len = :, kind = c_char), allocatable :: c_file_path
     character(len = :), allocatable :: font_data_file_name
@@ -279,14 +279,14 @@ contains
 
     !* We will assume that the only difference in png and the cfg is the file extension.
 
-    font_data_file_name = get_file_name_from_string(font_texture_location)
-    font_config_location = string_remove_file_extension(font_texture_location)//".cfg"
+    font_data_file_name = get_file_name_from_string(font_texture_file_path)
+    font_config_location = string_remove_file_extension(font_texture_file_path)//".cfg"
 
     ! This is quite a large and complex subroutine. It's getting all the data from the .cfg file.
     call process_font_configuration(font_config_location, character_database_integral)
 
     ! Now load up the font.
-    c_file_path = into_c_string(font_texture_location)
+    c_file_path = into_c_string(font_texture_file_path)
 
     ! We always want 4 channels.
     desired_channels = 4
