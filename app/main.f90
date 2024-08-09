@@ -27,6 +27,8 @@ program main
   "local x = 5;"// &
   "print(x)")
 
+  call luajit_run_file("./mods/init.lua")
+
   call luajit_destroy()
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
@@ -103,7 +105,7 @@ program main
 
 
   !! This is debugging for functions!
-  if (.false.) then
+  if (.true.) then
     do while(.not. glfw_window_should_close())
 
       call delta_tick()
