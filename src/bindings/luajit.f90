@@ -20,6 +20,7 @@ module luajit
   public :: luajit_initialize
   public :: luajit_destroy
   public :: luajit_run_string
+  public :: luajit_run_file
 
 
   integer(c_int), parameter :: LUA_OK = 0
@@ -172,7 +173,7 @@ contains
 
 
 
-  !* Simply run a LuaJIT string.
+  !* Run a LuaJIT string.
   subroutine luajit_run_string(string_to_run)
     use :: string
     implicit none
@@ -189,6 +190,25 @@ contains
       end if
     end if
   end subroutine luajit_run_string
+
+
+  !* Run a LuaJIT file.
+  subroutine luajit_run_file(file_path)
+    use :: string
+    use :: files
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: file_path
+    type(file_reader) :: reader
+
+    call reader%read_file(file_path)
+
+    if (.not. reader%exists) then
+      error stop "[LuaJIT] Error: Could not load file path ["//file_path//"]. Does not exist."
+    end if
+
+    call luajit_run_string(into_c_string(reader%file_string))
+  end subroutine luajit_run_file
 
 
 end module luajit
