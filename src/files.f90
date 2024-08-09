@@ -28,22 +28,22 @@ contains
 
 
   !* Open a file, read it into a string, close the file, return the string.
-  subroutine file_reader_read_file(this, file_location)
+  subroutine file_reader_read_file(this, file_path)
     implicit none
 
     class(file_reader), intent(inout) :: this
-    character(len = *), intent(in) :: file_location
+    character(len = *), intent(in) :: file_path
     integer :: file_io_identifier
     integer :: file_size
 
     ! First we check if the file exists.
-    inquire(file = file_location, exist = this%exists, size = file_size)
+    inquire(file = file_path, exist = this%exists, size = file_size)
 
     ! If the file does not exist, we're not going to attempt to allocate anything.
     if (this%exists) then
 
       ! We want readonly access and streaming of the data into a string.
-      open(newunit = file_io_identifier, file = file_location, status = "old", action = "read", access = "stream")
+      open(newunit = file_io_identifier, file = file_path, status = "old", action = "read", access = "stream")
 
       ! Now allocate the size of the string.
       allocate(character(len=file_size) :: this%file_string)
