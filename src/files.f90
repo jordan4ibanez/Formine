@@ -55,7 +55,7 @@ contains
       close(file_io_identifier)
     else
 
-      print"(A)","[Files] Error: file_location "//file_location//" does not exist."
+      print"(A)","[Files] Error: File path ["//file_path//"] does not exist."
     end if
   end subroutine file_reader_read_file
 
