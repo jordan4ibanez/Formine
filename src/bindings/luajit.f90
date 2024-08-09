@@ -246,6 +246,8 @@ contains
       if (lua_pcall(lua_state, 0, 0, 0) == LUA_OK) then
         ! If code was executed successfully, we remove the code from the stack.
         call lua_pop(lua_gettop(lua_state))
+      else
+        error stop lua_tostring(lua_gettop(lua_state))
       end if
     else
       error stop "[LuaJIT] Error: Failed to load file path ["//file_path//"] into the VM."
