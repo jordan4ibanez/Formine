@@ -63,15 +63,15 @@ contains
 
   !* Create a named shader program from vertex and fragment code file paths.
   !? Will return false if it fails, true if it succeeds.
-  subroutine shader_create(shader_name, vertex_code_location, fragment_code_location)
+  subroutine shader_create(shader_name, vertex_code_file_path, fragment_code_file_path)
     use :: opengl
     use :: string
     use, intrinsic :: iso_c_binding
     implicit none
 
     character(len = *), intent(in) :: shader_name
-    character(len = *), intent(in) :: vertex_code_location
-    character(len = *), intent(in) :: fragment_code_location
+    character(len = *), intent(in) :: vertex_code_file_path
+    character(len = *), intent(in) :: fragment_code_file_path
     integer(c_int) :: vertex_id, fragment_id
     integer(c_int) :: program_id
 
@@ -94,7 +94,7 @@ contains
       print"(A)","[Shader]: Successfully created vertex for shader ["//shader_name//"] successfully at ID ["//int_to_string(vertex_id)//"]."
     end if
 
-    call gl_shader_source(vertex_id, vertex_code_location)
+    call gl_shader_source(vertex_id, vertex_code_file_path)
     call gl_compile_shader(vertex_id)
 
     if (.not. shader_compilation_succeeded(vertex_id)) then
@@ -111,7 +111,7 @@ contains
       print"(A)","[Shader]: Successfully created fragment for shader ["//shader_name//"] successfully at ID ["//int_to_string(fragment_id)//"]."
     end if
 
-    call gl_shader_source(fragment_id, fragment_code_location)
+    call gl_shader_source(fragment_id, fragment_code_file_path)
     call gl_compile_shader(fragment_id)
 
     if (.not. shader_compilation_succeeded(fragment_id)) then
