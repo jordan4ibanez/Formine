@@ -218,10 +218,10 @@ contains
         ! If code was executed successfully, we remove the code from the stack.
         call lua_pop(lua_gettop(lua_state))
       else
-        error stop lua_tostring(lua_gettop(lua_state))
+        error stop achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(lua_gettop(lua_state))
       end if
     else
-      error stop lua_tostring(lua_gettop(lua_state))
+      error stop achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(lua_gettop(lua_state))
     end if
   end subroutine luajit_run_string
 
@@ -249,10 +249,10 @@ contains
         ! If code was executed successfully, we remove the code from the stack.
         call lua_pop(lua_gettop(lua_state))
       else
-        error stop lua_tostring(lua_gettop(lua_state))
+        error stop achar(10)//"[LuaJIT] Error: Unrecoverable error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state))
       end if
     else
-      error stop lua_tostring(lua_gettop(lua_state))
+      error stop achar(10)//"[LuaJIT] Error: Unrecoverable error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state))
     end if
   end subroutine luajit_run_file
 
