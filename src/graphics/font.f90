@@ -318,7 +318,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: font_config_file_path
     type(fhash_tbl_t), intent(inout) :: character_database_integral
     type(file_reader) :: reader
-    integer :: i, temp_buffer_len, comma_location, x_location, y_location
+    integer :: i, temp_buffer_length, comma_index, x_index, y_index
     character(len = :), allocatable :: temp_buffer
     character :: current_character
     character(len = :), allocatable :: x_str, y_str
@@ -328,21 +328,21 @@ contains
 
     ! If it doesn't exist, we need a font to render text so stop.
     if (.not. reader%exists) then
-      error stop "[Font] Error: Cannot read the font config in location ["//font_config_file_path//"]"
+      error stop "[Font] Error: Cannot read the font config in file path ["//font_config_file_path//"]"
     end if
 
     do i = 1,reader%line_count
       temp_buffer = reader%lines(i)%get()
 
-      ! This is a real half assed way to do this but who cares?
-      temp_buffer_len = len(temp_buffer)
+      ! This is a real sloppy way to do this but who cares?
+      temp_buffer_length = len(temp_buffer)
 
-      if (temp_buffer_len <= 0) then
+      if (temp_buffer_length <= 0) then
         cycle
       end if
 
       ! We want to avoid a buffer overflow.
-      if (temp_buffer_len >= 19 .and. temp_buffer(1:19) == "SLOTS_HORIZONTAL = ") then
+      if (temp_buffer_length >= 19 .and. temp_buffer(1:19) == "SLOTS_HORIZONTAL = ") then
         ! Cut the buffer and read it into the integer.
         temp_buffer = temp_buffer(19:len(temp_buffer))
         read(temp_buffer, '(i4)') slots_horizontal
@@ -350,7 +350,7 @@ contains
           error stop "[Font] Error: Impossible SLOTS_HORIZONTAL value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
-      else if (temp_buffer_len >= 17 .and. temp_buffer(1:17) == "SLOTS_VERTICAL = ") then
+      else if (temp_buffer_length >= 17 .and. temp_buffer(1:17) == "SLOTS_VERTICAL = ") then
         ! Cut the buffer and read it into the integer.
         temp_buffer = temp_buffer(17:len(temp_buffer))
         read(temp_buffer, '(i4)') slots_vertical
@@ -358,7 +358,7 @@ contains
           error stop "[Font] Error: Impossible SLOTS_VERTICAL value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
-      else if (temp_buffer_len >= 10 .and. temp_buffer(1:10) == "SPACING = ") then
+      else if (temp_buffer_length >= 10 .and. temp_buffer(1:10) == "SPACING = ") then
         ! Cut the buffer and read it into the integer.
         temp_buffer = temp_buffer(10:len(temp_buffer))
         read(temp_buffer, '(i4)') spacing
@@ -366,7 +366,7 @@ contains
           error stop "[Font] Error: Impossible SPACING value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
-      else if (temp_buffer_len >= 13 .and. temp_buffer(1:13) == "CHAR_WIDTH = ") then
+      else if (temp_buffer_length >= 13 .and. temp_buffer(1:13) == "CHAR_WIDTH = ") then
         ! Cut the buffer and read it into the integer.
         temp_buffer = temp_buffer(13:len(temp_buffer))
         read(temp_buffer, '(i4)') character_width
@@ -374,7 +374,7 @@ contains
           error stop "[Font] Error: Impossible CHAR_WIDTH value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
-      else if (temp_buffer_len >= 14 .and. temp_buffer(1:14) == "CHAR_HEIGHT = ") then
+      else if (temp_buffer_length >= 14 .and. temp_buffer(1:14) == "CHAR_HEIGHT = ") then
         ! Cut the buffer and read it into the integer.
         temp_buffer = temp_buffer(14:len(temp_buffer))
         read(temp_buffer, '(i4)') character_height
@@ -382,7 +382,7 @@ contains
           error stop "[Font] Error: Impossible CHAR_HEIGHT value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
-      else if (temp_buffer_len >= 7) then
+      else if (temp_buffer_length >= 7) then
         ! This is a real rigid way to do this.
         ! This is basically, it has to be formatted like:
         ! [A = ]
@@ -396,29 +396,29 @@ contains
           temp_buffer = temp_buffer(5:len(temp_buffer))
 
           ! Now we're going to chop up the X and Y out of the line.
-          comma_location = index(temp_buffer, ",")
+          comma_index = index(temp_buffer, ",")
 
           ! There is a formatting error.
-          if (comma_location <= 0) then
+          if (comma_index <= 0) then
             error stop "[Font] Error: There is a missing comma on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
           end if
 
           ! Get the X into an integer.
-          x_str = temp_buffer(1:comma_location - 1)
-          read(x_str, '(i4)') x_location
-          if (x_location <= 0) then
+          x_str = temp_buffer(1:comma_index - 1)
+          read(x_str, '(i4)') x_index
+          if (x_index <= 0) then
             error stop "[Font] Error: Impossible X value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
           end if
 
           ! Get the Y into an integer.
-          y_str = temp_buffer(comma_location + 1:len(temp_buffer))
-          read(y_str, '(i4)') y_location
-          if (y_location <= 0) then
+          y_str = temp_buffer(comma_index + 1:len(temp_buffer))
+          read(y_str, '(i4)') y_index
+          if (y_index <= 0) then
             error stop "[Font] Error: Impossible Y value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
           end if
 
           ! Now finally, dump the integral position into the database.
-          call character_database_integral%set(key(current_character), vec2i(x_location, y_location))
+          call character_database_integral%set(key(current_character), vec2i(x_index, y_index))
         end if
       end if
     end do
