@@ -27,7 +27,9 @@ program main
   ! "local x = 5;"// &
   ! "print(x)")
 
-  call luajit_run_file("./mods/init.lua")
+  if (.not. luajit_run_file("./mods/init.lua")) then
+    error stop "oops"
+  end if
 
   call luajit_destroy()
 
