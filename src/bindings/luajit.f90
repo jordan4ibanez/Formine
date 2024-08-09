@@ -307,8 +307,6 @@ contains
      class default
       print*, "uh oh"
     end select
-
-
   end subroutine luajit_push_generic
 
 
@@ -320,8 +318,12 @@ contains
     character(len = *, kind = c_char), intent(in) :: function_name
     class(*), intent(in), optional :: a, b, c, d
     !? This is written like this to allow pure LuaJIT functions.
-    class(*), intent(inout) :: return_value
+    class(*), intent(inout), optional :: return_value
 
+    call luajit_push_generic(a)
+    call luajit_push_generic(b)
+    call luajit_push_generic(c)
+    call luajit_push_generic(d)
 
   end subroutine luajit_call_function
 
