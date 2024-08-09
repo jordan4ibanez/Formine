@@ -188,6 +188,8 @@ contains
         ! If code was executed successfully, we remove the code from the stack.
         call lua_pop(lua_gettop(lua_state))
       end if
+    else
+      error stop "[LuaJIT] Error: Failed to load string ["//string_to_run//"] into the VM."
     end if
   end subroutine luajit_run_string
 
