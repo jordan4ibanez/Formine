@@ -274,16 +274,10 @@ contains
 
   !* This function will attempt to push whatever variable type into the LuaJIT stack.
   subroutine luajit_push_generic(input)
-    use, intrinsic :: iso_c_binding
+    use :: terminal
     implicit none
 
-    class(*), intent(in), optional :: input
-
-
-    if (.not. present(input)) then
-      print*,"push nil"
-      return
-    end if
+    class(*), intent(in) :: input
 
     select type (input)
      type is (integer(c_int))
@@ -319,11 +313,29 @@ contains
     class(*), intent(in), optional :: a, b, c, d
     !? This is written like this to allow pure LuaJIT functions.
     class(*), intent(inout), optional :: return_value
+    integer(c_int) :: argument_count
 
-    call luajit_push_generic(a)
-    call luajit_push_generic(b)
-    call luajit_push_generic(c)
-    call luajit_push_generic(d)
+    argument_count = 0
+
+    if (present(a)) then
+      call luajit_push_generic(a)
+      argument_count = argument_count + 1
+    end if
+
+    if (present(b)) then
+      call luajit_push_generic(b)
+      argument_count = argument_count + 1
+    end if
+
+    if (present(c)) then
+      call luajit_push_generic(c)
+      argument_count = argument_count + 1
+    end if
+
+    if (present(d)) then
+      call luajit_push_generic(d)
+      argument_count = argument_count + 1
+    end if
 
   end subroutine luajit_call_function
 
