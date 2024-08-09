@@ -271,7 +271,7 @@ contains
     integer :: x, y, channels, desired_channels
     character(len = :, kind = c_char), allocatable :: c_file_path
     character(len = :), allocatable :: font_data_file_name
-    character(len = :), allocatable :: font_config_location
+    character(len = :), allocatable :: font_config_file_path
     integer(1), dimension(:), allocatable :: raw_image_data
     type(fhash_tbl_t) :: character_database_integral
 
@@ -280,10 +280,10 @@ contains
     !* We will assume that the only difference in png and the cfg is the file extension.
 
     font_data_file_name = get_file_name_from_string(font_texture_file_path)
-    font_config_location = string_remove_file_extension(font_texture_file_path)//".cfg"
+    font_config_file_path = string_remove_file_extension(font_texture_file_path)//".cfg"
 
     ! This is quite a large and complex subroutine. It's getting all the data from the .cfg file.
-    call process_font_configuration(font_config_location, character_database_integral)
+    call process_font_configuration(font_config_file_path, character_database_integral)
 
     ! Now load up the font.
     c_file_path = into_c_string(font_texture_file_path)
