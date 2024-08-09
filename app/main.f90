@@ -23,9 +23,11 @@ program main
 
   call luajit_initialize()
 
-  ! call luajit_run_string("print('hi')"// &
-  ! "local x = 5;"// &
-  ! "print(x)")
+  if (.not. luajit_run_string("print('hi')"// &
+    "local x = 5;"// &
+    "print(x)")) then
+      error stop "oops"
+  end if
 
   if (.not. luajit_run_file("./mods/init.lua")) then
     error stop "oops"

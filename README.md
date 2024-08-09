@@ -117,7 +117,7 @@ in C:
 (For C bindings)
 ``const char *`` would be interopped as ``character(kind = c_char), intent(in)``
 
-This is because C does pointer arithmetic on the location we give it and we can use it to our advantage.
+This is because C does pointer arithmetic on the location we give it and we can use it to our advantage. Fortran will pass by reference by default. You could consider this ``&parameter`` in C.
 You must ensure that the string is null terminated. You can do this with ``string//achar(0)``
 
 ``const char **`` would be interopped as ``character(len = *, kind = c_char), intent(in)`` (if you only want 1)
