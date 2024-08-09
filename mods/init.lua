@@ -1,4 +1,4 @@
-require("mods.testing")
+require("testing")
 
 print("hi")
 
