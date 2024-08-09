@@ -39,6 +39,9 @@ module luajit
   integer(c_int), parameter :: LUA_ENVIRONINDEX = (-10001)
   integer(c_int), parameter :: LUA_GLOBALSINDEX = (-10002)
 
+  !* This is a custom parameter to indicate we're getting the result from a function.
+  integer(c_int), parameter :: LUA_RETURNINDEX = -1
+
 
   type(c_ptr) :: lua_state
 
@@ -342,6 +345,11 @@ contains
     class(*), intent(inout), optional :: return_value
     integer(c_int) :: argument_count
 
+    ! Load the function into the LuaJIT stack.
+    call lua_getglobal("Lua_test")
+
+    ! Now we have a 4 optional arguments we must parse.
+    ! If they exist, we push them to the stack.
     argument_count = 0
 
     if (present(a)) then
