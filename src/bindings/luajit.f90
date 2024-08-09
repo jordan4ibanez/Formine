@@ -206,6 +206,7 @@ contains
   !* Run a LuaJIT string.
   subroutine luajit_run_string(string_to_run)
     use :: string
+    use :: terminal
     implicit none
 
     character(len = *), intent(in) :: string_to_run
@@ -218,10 +219,10 @@ contains
         ! If code was executed successfully, we remove the code from the stack.
         call lua_pop(lua_gettop(lua_state))
       else
-        error stop achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(lua_gettop(lua_state))
+        error stop colorize_rgb(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
       end if
     else
-      error stop achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(lua_gettop(lua_state))
+      error stop colorize_rgb(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
     end if
   end subroutine luajit_run_string
 
@@ -230,6 +231,7 @@ contains
   subroutine luajit_run_file(file_path)
     use :: string
     use :: files
+    use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: file_path
@@ -249,10 +251,10 @@ contains
         ! If code was executed successfully, we remove the code from the stack.
         call lua_pop(lua_gettop(lua_state))
       else
-        error stop achar(10)//"[LuaJIT] Error: Unrecoverable error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state))
+        error stop colorize_rgb(achar(10)//"[LuaJIT] Error: Unrecoverable error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
       end if
     else
-      error stop achar(10)//"[LuaJIT] Error: Unrecoverable error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state))
+      error stop colorize_rgb(achar(10)//"[LuaJIT] Error: Unrecoverable error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
     end if
   end subroutine luajit_run_file
 
