@@ -155,6 +155,13 @@ module luajit
     end subroutine lua_getfield
 
 
+    subroutine lua_pushnil(state) bind(c, name = "lua_pushnil")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+    end subroutine lua_pushnil
+
   end interface
 
 
@@ -303,11 +310,14 @@ contains
 
 
   !* This function will attempt to push whatever variable type into the LuaJIT stack.
-  subroutine luajit_push_generic(input)
+  subroutine luajit_push_generic(input, argument_count)
     use :: terminal
     implicit none
 
     class(*), intent(in) :: input
+    integer(c_int), intent(inout) :: argument_count
+
+    argument_count = argument_count + 1
 
     select type (input)
      type is (integer(c_int))
@@ -335,43 +345,66 @@ contains
 
 
   !* Ultra generic LuaJIT function caller.
-  !* I'm maxing it out at 4 variables.
+  !* Limited to 4 input variables.
+  !* Limited to 1 output variables.
+  !* This could be changed though.
   subroutine luajit_call_function(function_name, a, b, c, d, return_value)
+    use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: function_name
     class(*), intent(in), optional :: a, b, c, d
     !? This is written like this to allow pure LuaJIT functions.
     class(*), intent(inout), optional :: return_value
-    integer(c_int) :: argument_count
+    integer(c_int) :: argument_count, return_value_count
 
     ! Load the function into the LuaJIT stack.
-    call lua_getglobal("Lua_test")
+    call lua_getglobal(function_name)
 
     ! Now we have a 4 optional arguments we must parse.
     ! If they exist, we push them to the stack.
     argument_count = 0
 
     if (present(a)) then
-      call luajit_push_generic(a)
-      argument_count = argument_count + 1
+      call luajit_push_generic(a, argument_count)
+    else
+      call lua_pushnil(lua_state)
     end if
 
     if (present(b)) then
-      call luajit_push_generic(b)
-      argument_count = argument_count + 1
+      call luajit_push_generic(b, argument_count)
+    else
+      call lua_pushnil(lua_state)
     end if
 
     if (present(c)) then
-      call luajit_push_generic(c)
-      argument_count = argument_count + 1
+      call luajit_push_generic(c, argument_count)
+    else
+      call lua_pushnil(lua_state)
     end if
 
     if (present(d)) then
-      call luajit_push_generic(d)
-      argument_count = argument_count + 1
+      call luajit_push_generic(d, argument_count)
+    else
+      call lua_pushnil(lua_state)
     end if
 
+    ! Now we're going to check if the return value is present.
+    return_value_count = 0
+
+    if (present(return_value)) then
+      return_value_count = return_value_count + 1
+    end if
+
+    print*,return_value_count
+
+
+    if (lua_pcall(lua_state, argument_count, return_value_count, 0) == LUA_OK) then
+      print*,"yay"
+    else
+      call lua_pop(lua_gettop(lua_state))
+      print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error running LuaJIT function ["//function_name//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
+    end if
   end subroutine luajit_call_function
 
 
