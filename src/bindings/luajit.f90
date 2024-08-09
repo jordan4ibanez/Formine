@@ -138,6 +138,16 @@ module luajit
     end function lua_tolstring
 
 
+    subroutine lua_getfield(state, index, key_string) bind(c, name = "lua_getfield")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+      character(kind = c_char), intent(in) :: key_string
+    end subroutine lua_getfield
+
+
   end interface
 
 
