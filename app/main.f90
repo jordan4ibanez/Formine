@@ -31,6 +31,8 @@ program main
     error stop "oops"
   end if
 
+  call luajit_call_function("test", 3)
+
   call luajit_destroy()
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
