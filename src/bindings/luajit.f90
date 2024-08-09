@@ -290,6 +290,7 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: function_name
     class(*), intent(in), optional :: a, b, c, d
+    !? This is written like this to allow pure LuaJIT functions.
     class(*), intent(inout) :: return_value
 
 
