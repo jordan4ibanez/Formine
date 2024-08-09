@@ -221,6 +221,20 @@ contains
   end function lua_tostring
 
 
+  !* Load a LuaJIT global into the stack.
+  subroutine lua_getglobal(function_name)
+    use :: string
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: function_name
+    character(len = :, kind = c_char), allocatable :: c_function_name
+
+    c_function_name = into_c_string(function_name)
+
+    call lua_getfield(lua_state, LUA_GLOBALSINDEX, c_function_name)
+  end subroutine lua_getglobal
+
+
   !* Run a LuaJIT string. Returns success.
   function luajit_run_string(string_to_run) result(success)
     use :: string
