@@ -45,7 +45,7 @@ contains
     image_data = stbi_load(c_file_path, x, y, channels, desired_channels)
 
     if (x + y + channels == 0) then
-      error stop "[Texture] Error: Could not load texture. It does not exist."
+      error stop "[Texture] Error: Could not load texture. File specified from file path ["//texture_file_path//"] does not exist."
     end if
 
     ! First we must generate the texture ID.
