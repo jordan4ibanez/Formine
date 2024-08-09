@@ -121,6 +121,17 @@ module luajit
     end subroutine lua_settop
 
 
+    function lua_tolstring(state, index, length_of_returning_string) result(new_string_pointer) bind(c, name = "lua_tolstring")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+      integer(c_size_t), intent(inout) :: length_of_returning_string
+      type(c_ptr) :: new_string_pointer
+    end function lua_tolstring
+
+
   end interface
 
 
