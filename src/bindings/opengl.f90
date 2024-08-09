@@ -770,20 +770,20 @@ contains
   end function gl_create_shader
 
 
-  subroutine gl_shader_source(shader_id, source_code_location)
+  subroutine gl_shader_source(shader_id, source_code_file_path)
     use :: string
     use :: files
     implicit none
 
     integer :: shader_id
-    character(len = *) :: source_code_location
+    character(len = *) :: source_code_file_path
     type(file_reader) :: reader
 
-    call reader%read_file(source_code_location)
+    call reader%read_file(source_code_file_path)
 
     ! If this source code file doesn't exist, give up.
     if (.not. reader%exists) then
-      error stop "[OpenGL] Error: Shader source code file ["//source_code_location//"] does not exist."
+      error stop "[OpenGL] Error: Shader source code file path ["//source_code_file_path//"] does not exist."
     end if
 
     ! Send the source code into the OpenGL state machine.
