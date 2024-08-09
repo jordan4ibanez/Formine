@@ -207,7 +207,6 @@ contains
   !* This has been reconfigured to work with Fortran.
   function lua_tostring(index) result(new_string)
     use :: string
-    use :: raw_c
     implicit none
 
     integer(c_int), intent(in), value :: index
