@@ -203,14 +203,17 @@ contains
   end function lua_tostring
 
 
-  !* Run a LuaJIT string.
-  subroutine luajit_run_string(string_to_run)
+  !* Run a LuaJIT string. Returns success.
+  function luajit_run_string(string_to_run) result(success)
     use :: string
     use :: terminal
     implicit none
 
     character(len = *), intent(in) :: string_to_run
     character(len = :, kind = c_char), allocatable :: c_string
+    logical :: success
+
+    success = .false.
 
     c_string = into_c_string(string_to_run)
 
@@ -218,13 +221,14 @@ contains
       if (lua_pcall(lua_state, 0, 0, 0) == LUA_OK) then
         ! If code was executed successfully, we remove the code from the stack.
         call lua_pop(lua_gettop(lua_state))
+        success = .true.
       else
-        error stop colorize_rgb(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
+        print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
       end if
     else
-      error stop colorize_rgb(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
+      print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
     end if
-  end subroutine luajit_run_string
+  end function luajit_run_string
 
 
   !* Run a LuaJIT file. Returns success.
