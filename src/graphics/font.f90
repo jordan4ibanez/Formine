@@ -77,7 +77,7 @@ contains
     real(c_float) :: red, green, blue
     real(c_float), dimension(:), allocatable :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), allocatable :: indices
-    integer :: text_len, allocation_len, i, buffer_index, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
+    integer :: text_length, allocation_length, i, buffer_index, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
     character :: current_character
     type(opengl_character), pointer :: character_data_pointer
     logical :: exists
@@ -113,21 +113,21 @@ contains
 
     current_scroll_right = 0.0
 
-    text_len = len(text)
-    allocation_len = string_get_non_space_characters(text)
+    text_length = len(text)
+    allocation_length = string_get_non_space_characters(text)
 
     ! todo: change this to 2 positions!
     ! 4 quads per character. 3 positions per point. This can probably be optimized, somehow.
-    allocate(positions(allocation_len * stride))
+    allocate(positions(allocation_length * stride))
     ! todo: use offset intead of 4 * 2
-    allocate(texture_coordinates(allocation_len * 8))
-    allocate(colors(allocation_len * 12))
-    allocate(indices(allocation_len * 6))
+    allocate(texture_coordinates(allocation_length * 8))
+    allocate(colors(allocation_length * 12))
+    allocate(indices(allocation_length * 6))
 
     ! With spaces, this desynchronizes. We must stop it from trying to reach outside the buffer.
     buffer_index = 0
 
-    do i = 1,text_len
+    do i = 1,text_length
 
       current_character = text(i:i)
 
@@ -211,7 +211,7 @@ contains
     end if
 
     if (should_center) then
-      do i = 1,allocation_len
+      do i = 1,allocation_length
         current_positions_offset = ((i - 1) * stride) + 1
 
         centering_offset = (current_scroll_right - (font_size * 0.1)) * 0.5
