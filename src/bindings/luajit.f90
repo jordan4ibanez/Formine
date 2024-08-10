@@ -74,6 +74,7 @@ module luajit
   public :: lua_pushnumber
   public :: lua_pushinteger
   public :: lua_pushlstring
+  public :: lua_pushstring
   public :: lua_pushcclosure
   public :: lua_pushboolean
   public :: lua_gettable
@@ -423,8 +424,6 @@ module luajit
     end subroutine lua_pushinteger
 
 
-    !* There are no other ways to push a string into LuaJIT at the moment.
-    !* I am only binding this one because it is the safest.
     subroutine lua_pushlstring(state, string, string_length) bind(c, name = "lua_pushlstring")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -433,6 +432,15 @@ module luajit
       character(kind = c_char), intent(in) :: string
       integer(c_size_t), intent(in), value :: string_length
     end subroutine lua_pushlstring
+
+
+    subroutine internal_lua_pushstring(state, string) bind(c, name = "lua_pushstring")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      character(kind = c_char), intent(in) :: string
+    end subroutine internal_lua_pushstring
 
 
     subroutine lua_pushcclosure(state, lua_c_function, index) bind(c, name = "lua_pushcclosure")
@@ -814,6 +822,19 @@ contains
   end subroutine test_luajit_closure
   !! END DEBUGGING LUAJIT CLOSURE !!
 
+
+  subroutine lua_pushstring(state, input_string)
+    use :: string, only: into_c_string
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    character(len = *, kind = c_char), intent(in) :: input_string
+    character(len = :, kind = c_char), allocatable :: c_string
+
+    c_string = into_c_string(input_string)
+
+    call internal_lua_pushstring(state, c_string)
+  end subroutine lua_pushstring
 
 
   !* Get the type of a variable as a string.
