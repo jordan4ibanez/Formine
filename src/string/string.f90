@@ -100,8 +100,9 @@ contains
   end function heap_string_array
 
 
-  ! Dump a raw Fortran string pointer into a string.
-  subroutine copy_string_pointer(length, input_pointer, output_string)
+  !* Dump a raw Fortran string pointer into a string.
+  !* Returns the new string.
+  function copy_string_pointer(length, input_pointer) result(output_string)
     use, intrinsic :: iso_c_binding
     implicit none
 
@@ -114,15 +115,13 @@ contains
     allocate(character(len = length, kind = c_char) :: output_string)
 
     ! Now copy over each character.
-    ! print"(A)",length
     do i = 1, length
       output_string(i:i) = input_pointer(i)
     end do
-  end subroutine copy_string_pointer
+  end function copy_string_pointer
 
 
-  ! Use this to convert C strings stored in a (character, pointer) into Fortran strings.
-  !* This is allocatable, remember to deallocate.
+  !* Use this to convert C strings stored in a (character, pointer) into Fortran strings.
   function string_from_c(c_string, string_length) result(fortran_string)
     use, intrinsic :: iso_c_binding
     implicit none
