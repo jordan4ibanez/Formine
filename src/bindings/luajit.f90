@@ -551,7 +551,7 @@ contains
     type(c_funptr), intent(in), value :: function_pointer
 
     call lua_pushcfunction(state, (function_pointer))
-    call lua_setglobal()
+    call lua_setglobal(state, function_name)
   end subroutine lua_register
 
 
