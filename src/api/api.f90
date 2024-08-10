@@ -23,6 +23,7 @@ module api
 
   public :: api_initialize
   public :: api_destroy
+  public :: api_run_file
 
 
   type(c_ptr) :: lua_state
@@ -31,6 +32,7 @@ module api
 contains
 
 
+  !* Initialize the API.
   function api_initialize() result(success)
     implicit none
 
@@ -54,11 +56,23 @@ contains
   end function api_initialize
 
 
+  !* Clean up the API data.
   subroutine api_destroy()
     implicit none
 
     call luajit_destroy(lua_state)
   end subroutine api_destroy
+
+
+  !* Run a LuaJIT file.
+  function api_run_file(file_path) result(success)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: file_path
+    logical :: success
+
+    success = luajit_run_file(lua_state, file_path)
+  end function api_run_file
 
 
 end module api
