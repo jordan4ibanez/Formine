@@ -111,7 +111,7 @@ contains
     integer(c_int) :: i, length
 
     ! Now allocate what is needed into the output string.
-    allocate(character(len = length) :: output_string)
+    allocate(character(len = length, kind = c_char) :: output_string)
 
     ! Now copy over each character.
     ! print"(A)",length
@@ -123,7 +123,7 @@ contains
 
   ! Use this to convert C strings stored in a (character, pointer) into Fortran strings.
   !* This is allocatable, remember to deallocate.
-  function string_from_c(c_string, size) result(fortran_string)
+  function string_from_c(c_string, string_length) result(fortran_string)
     use, intrinsic :: iso_c_binding
     implicit none
 
@@ -132,13 +132,13 @@ contains
     ! On the Fortran side.
     character(kind = c_char), dimension(:), pointer :: fortran_raw_string
     character(len = :, kind = c_char), allocatable :: fortran_string
-    integer :: size
+    integer :: string_length
     ! 4 BYTES, aka, 32 bit.
     ! If there is a string bigger than this, we have a problem.
-    integer(c_int) :: i, input_length, length
+    integer(c_int) :: i
 
     ! Starts off as 0
-    length = 0
+    ! length = 0
 
     ! We must ensure that we are not converting a null pointer
     ! as this can lead to SERIOUS UB.
@@ -149,14 +149,18 @@ contains
       fortran_string = ""
     else
       !? It seems that everything is okay, we will proceed.
-      call c_f_pointer(c_string, fortran_raw_string, [size])
+      call c_f_pointer(c_string, fortran_raw_string, [string_length])
 
       ! Get the size of the character pointer.
       ! This is so we do not go out of bounds.
       ! Manually cast this to 32 bit.
-      input_length = int(sizeof(fortran_raw_string))
+      ! input_length = int(sizeof(fortran_raw_string))
 
-      
+      ! print*,"input length", input_length
+      call copy_string_pointer(string_length, fortran_raw_string, fortran_string)
+
+      print*,fortran_string
+
 
       ! print*,fortran_raw_string
 
@@ -173,7 +177,7 @@ contains
       !   end if
       ! end do
 
-      print*,"final length", length
+      ! print*,"final length", length
 
       ! If the length is 0, we literally cannot do anything, so give up.
       ! if (length > 0) then
