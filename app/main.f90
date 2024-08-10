@@ -10,7 +10,7 @@ program main
   use :: texture
   use :: font
   use :: vector_2f
-  use :: luajit
+  use :: api
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -21,21 +21,21 @@ program main
   new_fps = 0
   old_fps = -1
 
-  call luajit_initialize()
+  ! call luajit_initialize()
 
-  ! if (.not. luajit_run_string("print('hi')"// &
-  !   "local x = 5;"// &
-  !   "print(x)")) then
+  ! ! if (.not. luajit_run_string("print('hi')"// &
+  ! !   "local x = 5;"// &
+  ! !   "print(x)")) then
+  ! !   error stop "oops"
+  ! ! end if
+
+  ! if (.not. luajit_run_file("./mods/init.lua")) then
   !   error stop "oops"
   ! end if
 
-  if (.not. luajit_run_file("./mods/init.lua")) then
-    error stop "oops"
-  end if
+  ! call luajit_call_function("my_function", luajit_closure(c_funloc(test_luajit_closure), 0), "test", 2, 3)
 
-  call luajit_call_function("my_function", luajit_closure(c_funloc(test_luajit_closure), 0), "test", 2, 3)
-
-  call luajit_destroy()
+  ! call luajit_destroy()
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   if (.true.) then
