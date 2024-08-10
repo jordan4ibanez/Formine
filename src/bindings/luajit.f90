@@ -73,6 +73,9 @@ module luajit
   interface
 
 
+!* STATE MANIPULATION. =================================================================================
+
+
     function lual_newstate() result(new_state) bind(c, name = "luaL_newstate")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -96,6 +99,9 @@ module luajit
 
       type(c_ptr), intent(in), value :: state
     end subroutine lua_close
+
+
+!* LOAD AND CALL. =================================================================================
 
 
     function lual_loadstring(state, string) result(status) bind(c, name = "luaL_loadstring")
@@ -137,6 +143,9 @@ module luajit
       type(c_ptr), intent(inout) :: unknown_data
       integer(c_int) :: status
     end function lua_cpcall
+
+
+!* STACK MANIPULATION. =================================================================================
 
 
     function lua_gettop(state) result(index) bind(c, name = "lua_gettop")
@@ -201,6 +210,9 @@ module luajit
       integer(c_int), intent(in), value :: extra_slots
       logical(c_bool) :: can_grow
     end function lua_checkstack
+
+
+!* ACCESS FUNCTIONS. =================================================================================
 
 
     function lua_isnumber(state, index) result(is_a_number) bind(c, name = "lua_isnumber")
@@ -345,6 +357,9 @@ module luajit
     end function lua_tocfunction
 
 
+!* PUSH FUNCTIONS (FORTRAN -> STACK) =================================================================================
+
+
     subroutine lua_pushnil(state) bind(c, name = "lua_pushnil")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -402,6 +417,9 @@ module luajit
     end subroutine lua_pushboolean
 
 
+!* GET FUNCTIONS. =================================================================================
+
+
     subroutine lua_gettable(state, index) bind(c, name = "lua_gettable")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -446,6 +464,9 @@ module luajit
       type(c_ptr), intent(in), value :: state
       integer(c_int), intent(in), value :: index, preallocation_amount
     end subroutine lua_createtable
+
+
+!* SET FUNCTIONS. =================================================================================
 
 
   end interface
