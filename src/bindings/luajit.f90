@@ -73,6 +73,8 @@ module luajit
 
   interface
 
+!? BEGIN RAW BINDINGS. =================================================================================
+
 
 !* STATE MANIPULATION. =================================================================================
 
@@ -507,6 +509,8 @@ module luajit
       integer(c_int) :: status
     end function lua_cpcall
 
+
+!? END RAW BINDINGS. =================================================================================
 
   end interface
 
