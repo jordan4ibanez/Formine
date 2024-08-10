@@ -172,6 +172,14 @@ module luajit
     end subroutine lua_pushnumber
 
 
+    subroutine lua_pushinteger(state, long_number) bind(c, name = "lua_pushnumber")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_ptrdiff_t), intent(in), value :: long_number
+    end subroutine lua_pushinteger
+
 
   end interface
 
