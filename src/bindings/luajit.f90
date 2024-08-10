@@ -154,18 +154,6 @@ module luajit
     end subroutine lua_settop
 
 
-    function lua_tolstring(state, index, length_of_returning_string) result(new_string_pointer) bind(c, name = "lua_tolstring")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: state
-      integer(c_int), intent(in), value :: index
-      !? This was originally c_size_t, but I don't think strings are going to go past 2 billion characters.
-      integer(c_int), intent(inout) :: length_of_returning_string
-      type(c_ptr) :: new_string_pointer
-    end function lua_tolstring
-
-
     subroutine lua_getfield(state, index, key_string) bind(c, name = "lua_getfield")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -312,6 +300,50 @@ module luajit
       logical(c_bool) :: is_less_than
     end function lua_lessthan
 
+
+    function lua_tonumber(state, index) result(output_double) bind(c, name = "lua_tonumber")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+      real(c_double) :: output_double
+    end function lua_tonumber
+
+
+    function lua_tointeger(state, index) result(output_integer) bind(c, name = "lua_tointeger")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+      integer(c_ptrdiff_t) :: output_integer
+    end function lua_tointeger
+
+
+    function lua_toboolean(state, index) result(output_boolean) bind(c, name = "lua_toboolean")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+      logical(c_bool) :: output_boolean
+    end function lua_toboolean
+
+
+    function lua_tolstring(state, index, length_of_returning_string) result(new_string_pointer) bind(c, name = "lua_tolstring")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+      !? This was originally c_size_t, but I don't think strings are going to go past 2 billion characters.
+      integer(c_int), intent(inout) :: length_of_returning_string
+      type(c_ptr) :: new_string_pointer
+    end function lua_tolstring
+
+
+    
 
   end interface
 
