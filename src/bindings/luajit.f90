@@ -343,7 +343,25 @@ module luajit
     end function lua_tolstring
 
 
-    
+    function lua_objlen(state, index) result(output_length) bind(c, name = "lua_objlen")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+      integer(c_size_t) :: output_length
+    end function lua_objlen
+
+
+    function lua_tocfunction(state, index) result(output_function_pointer) bind(c, name = "lua_tocfunction")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+      type(c_funptr) :: output_function_pointer
+    end function lua_tocfunction
+
 
   end interface
 
