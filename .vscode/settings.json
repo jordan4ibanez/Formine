@@ -21,6 +21,8 @@
   "Lua.runtime.version": "LuaJIT",
   "Lua.workspace.library": [],
   "Lua.diagnostics.globals": [
-    "blocks"
+    "blocks",
+    "world",
+    "entity"
   ]
 }
