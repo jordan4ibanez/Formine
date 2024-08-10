@@ -283,6 +283,18 @@ module luajit
     end function internal_lua_typename
 
 
+    function lua_equal(state, index_1, index_2) result(equality) bind(c, name = "lua_equal")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index_1, index_2
+      logical(c_bool) :: equality
+    end function lua_equal
+
+
+
+
   end interface
 
 
