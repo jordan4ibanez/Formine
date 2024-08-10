@@ -388,7 +388,7 @@ contains
     use :: string, only: into_c_string
     implicit none
 
-    class(*), intent(in), optional :: input
+    class(*), intent(in) :: input
 
     select type (input)
 
