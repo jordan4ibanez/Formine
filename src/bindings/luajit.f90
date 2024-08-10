@@ -550,8 +550,8 @@ contains
     character(len = *, kind = c_char) :: function_name
     type(c_funptr), intent(in), value :: function_pointer
 
-    ! //FIXME IMPLEMENT THIS!
-    error stop "fix this"
+    call lua_pushcfunction(state, (function_pointer))
+    call lua_setglobal()
   end subroutine lua_register
 
 
@@ -566,8 +566,10 @@ contains
   end subroutine lua_pushcfunction
 
 
+  
 
 
+! //fixme: need to implement lua_tolstring!
 
 
   !* Get if a variable is a function. This was a macro in LuaJIT.
