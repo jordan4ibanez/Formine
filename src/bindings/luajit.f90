@@ -19,6 +19,9 @@ module luajit
   ! typedef int (*lua_CFunction) (lua_State *L);
   !
   !! For LuaJIT types see: https://github.com/LuaJIT/LuaJIT/blob/v2.1/src/luaconf.h
+  !
+  !? going to need to learn how to handle userdata.
+  !
 
   public :: luajit_closure
   public :: test_luajit_closure
@@ -152,16 +155,6 @@ module luajit
       type(c_ptr), intent(in), value :: state
       integer(c_int), intent(in), value :: index
     end subroutine lua_settop
-
-
-    subroutine lua_getfield(state, index, key_string) bind(c, name = "lua_getfield")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: state
-      integer(c_int), intent(in), value :: index
-      character(kind = c_char), intent(in) :: key_string
-    end subroutine lua_getfield
 
 
     subroutine lua_pushnil(state) bind(c, name = "lua_pushnil")
@@ -361,6 +354,36 @@ module luajit
       integer(c_int), intent(in), value :: index
       type(c_funptr) :: output_function_pointer
     end function lua_tocfunction
+
+
+    subroutine lua_gettable(state, index) bind(c, name = "lua_gettable")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+    end subroutine lua_gettable
+
+
+    subroutine lua_getfield(state, index, key_string) bind(c, name = "lua_getfield")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+      character(kind = c_char), intent(in) :: key_string
+    end subroutine lua_getfield
+
+
+    subroutine lua_rawget(state, index) bind(c, name = "lua_rawget")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+    end subroutine lua_rawget
+
+
 
 
   end interface
