@@ -400,7 +400,7 @@ contains
     print*,return_value_count
 
 
-    if (lua_pcall(lua_state, argument_count, return_value_count, 0) == LUA_OK) then
+    if (lua_pcall(lua_state, 4, return_value_count, 0) == LUA_OK) then
       call lua_pop(lua_gettop(lua_state))
       print*,"yay"
     else
