@@ -226,7 +226,7 @@ contains
 
     c_string_pointer = lua_tolstring(lua_state, index, lua_string_length)
 
-    new_string = string_from_c(c_string_pointer, lua_string_length)
+    new_string = string_from_c(c_string_pointer, lua_string_length + 1)
     !? c_string_pointer is not done with malloc. No need to free. (tested)
   end function lua_tostring
 
