@@ -1,9 +1,21 @@
 --[[
-fortran_thing api
+
+Forgotten Lands API base.
+
+This is written like this, so you can see the data using the Lua VSCode extension.
+
 ]]
 
-blocks = {}
+print("[LuAJIT API]: Initializing.")
 
-world = {}
+blocks = {
 
-entity = {}
+}
+
+world = {
+
+}
+
+entity = {
+
+}
