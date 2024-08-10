@@ -20,6 +20,7 @@ module luajit
   !
   !! For LuaJIT types see: https://github.com/LuaJIT/LuaJIT/blob/v2.1/src/luaconf.h
 
+  public :: luajit_closure
 
   public :: luajit_initialize
   public :: luajit_destroy
@@ -44,6 +45,13 @@ module luajit
 
 
   type(c_ptr) :: lua_state
+
+  !* A custom wrapper type to allow X amount of arguments to be associated
+  !* With a fortran function.
+  type luajit_closure
+    type(c_funptr) :: pointer
+    integer(c_int) :: argument_count
+  end type luajit_closure
 
 
   interface
