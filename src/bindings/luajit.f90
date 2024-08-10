@@ -108,6 +108,7 @@ module luajit
 
 !* STATE MANIPULATION. =================================================================================
 
+  !//fixme: makethese internal!
 
     function lual_newstate() result(new_state) bind(c, name = "luaL_newstate")
       use, intrinsic :: iso_c_binding
