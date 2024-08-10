@@ -51,56 +51,13 @@ contains
       print*,"it worked"
     end if
 
-    ! We push our variable into the stack like a caveman, lol.
-    ! call lua_pushstring(state, "test")
-    ! call lua_pushstring(state, "I am a test!")
-    ! ! Then this is called as: -3 = blocks[test]
-    ! call lua_settable(state, -3)
-
-    ! ! Remove the values from the stack.
-    ! call lua_pop(state, -2)
-
-    ! if (.not. lua_istable(state, -1)) then
-    !   print"(A)", "this is no longer a table"
-    ! end if
-
-
-    ! ! Table is back at -1.
-    ! call lua_pushstring(state, "test")
-
-    ! ! Then this is called as: -2 = blocks[test]
-    ! call lua_gettable(state, -2)
-
-    ! if (.not. lua_isstring(state, -1)) then
-    !   print*,"That's not a string"
-    ! end if
-
-
-    ! test_string = lua_tostring(state, -1)
-
-    ! print"(A)","["//test_string//"]"
-
-
-
-
-
-
-    ! print*,test
-
-
-
-
-
-    ! if (.not. lua_isfunction(state, 2)) then
-    !   print*,"uh oh"
-    ! end if
-
-
-    ! if(lua_pcall(state, 0, 0, 0) == LUA_OK) then
-    !   print*," nice"
-    ! end if
-
-
+    ! The pcall has removed the function off the stack.
+    ! The table is now back at -1.
+    if (.not. lua_istable(state, -1)) then
+      print"(A)", "this is no longer a table"
+    else
+      print"(A)", "that's still a table"
+    end if
   end function block_repo_deploy_lua_api
 
 
