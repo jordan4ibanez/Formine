@@ -24,15 +24,47 @@ module luajit
   !
   !? Going to need to learn how to handle metatables.
 
-  public :: luajit_closure
-  public :: test_luajit_closure
-
-  public :: luajit_initialize
-  public :: luajit_destroy
-  public :: luajit_run_string
-  public :: luajit_run_file
-  public :: luajit_call_function
-
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
+  public :: 
 
   integer(c_int), parameter :: LUA_OK = 0
   integer(c_int), parameter :: LUA_YIELD = 1
