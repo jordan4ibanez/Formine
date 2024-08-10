@@ -555,7 +555,7 @@ contains
   end subroutine lua_register
 
 
-  !* Push a fortaion function pointer into the stack. This was a macro in LuaJIT.
+  !* Push a fortran function pointer into the stack. This was a macro in LuaJIT.
   subroutine lua_pushcfunction(state, function_pointer)
     implicit none
 
