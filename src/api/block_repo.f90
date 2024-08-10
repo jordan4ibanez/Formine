@@ -6,22 +6,73 @@ module block_repo
 
   private
 
-
+  public :: block_repo_deploy_lua_api
   public :: register_block
 
 
 contains
 
-  subroutine block_repo_deploy_lua_api(state)
+  !* This hooks a bunch of functions into the LuaJIT "blocks" table.
+  function block_repo_deploy_lua_api(state) result(success)
     implicit none
 
-    type(c_ptr) :: state
+    type(c_ptr), intent(in), value :: state
+    logical :: success
+    real(c_double) :: test
+
+    test = 0.0
+
+    ! Memory layout: (Stack grows down.)
+    ! -1 - blocks = {}
+    ! then moves to:
+    ! -2 - blocks = {}
+    ! -1 - function pointers.
+    ! Then we pop -1 off the stack.
+
+
+    call lua_getglobal(state, "blocks")
+
+    if (.not. lua_istable(state, 1)) then
+      print"(A)", "[Blocks Repo] Error: Can't initialize function pointers. [blocks] table is missing!"
+      success = .false.
+      return
+    end if
+
+    ! We push our variable into the stack like a caveman, lol.
+    call lua_pushstring(state, "test")
+    ! Then this is called as: -2 = blocks[test]
+    call lua_gettable(state, -2)
+
+    if (.not. lua_isnumber(state, -1)) then
+      print"(A)", "[Blocks Repo] Error: [test] is not a number!"
+      return
+    end if
+
+    test = lua_tonumber(state, -1)
 
 
 
-  end subroutine block_repo_deploy_lua_api
+    print*,test
 
 
+
+
+
+    ! if (.not. lua_isfunction(state, 2)) then
+    !   print*,"uh oh"
+    ! end if
+
+
+    ! if(lua_pcall(state, 0, 0, 0) == LUA_OK) then
+    !   print*," nice"
+    ! end if
+
+
+  end function block_repo_deploy_lua_api
+
+
+  !* Will intake the following components from LuaJIT:
+  !* name, data_table
   subroutine register_block(state)
     implicit none
 
