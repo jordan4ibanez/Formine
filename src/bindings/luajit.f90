@@ -551,7 +551,22 @@ contains
     type(c_funptr), intent(in), value :: function_pointer
 
     ! //FIXME IMPLEMENT THIS!
+    error stop "fix this"
   end subroutine lua_register
+
+
+  !* Push a fortaion function pointer into the stack. This was a macro in LuaJIT.
+  subroutine lua_pushcfunction(state, function_pointer)
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    type(c_funptr), intent(in), value :: function_pointer
+
+    call lua_pushcclosure(state, (function_pointer), 0)
+  end subroutine lua_pushcfunction
+
+
+
 
 
 
