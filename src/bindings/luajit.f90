@@ -108,7 +108,7 @@ module luajit
 
 !* STATE MANIPULATION. =================================================================================
 
-  !//fixme: makethese internal!
+    !//fixme: makethese internal!
 
     function lual_newstate() result(new_state) bind(c, name = "luaL_newstate")
       use, intrinsic :: iso_c_binding
@@ -315,6 +315,7 @@ module luajit
     end function lua_toboolean
 
 
+    !//fixme: make this internal!
     function lua_tolstring(state, index, length_of_returning_string) result(new_string_pointer) bind(c, name = "lua_tolstring")
       use, intrinsic :: iso_c_binding
       implicit none
