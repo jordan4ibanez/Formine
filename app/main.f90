@@ -97,14 +97,17 @@ program main
   !! This resets the gl_get_error integer back to 0.
   call gl_clear_error_data()
 
-  call luajit_initialize()
-
   ! Set up all shader components.
   call shader_create("main", "./shaders/vertex.vert", "./shaders/fragment.frag")
 
   call font_create("./fonts/font_forgotten.png")
 
   call texture_create("./textures/fortran_logo_512x512.png")
+
+  !* If we cannot initalize the API properly, we give up.
+  if (.not. api_initialize()) then
+    return
+  end if
 
 
   rotation = 0.0
@@ -189,7 +192,7 @@ program main
 
   call font_clear_database()
 
-  call luajit_destroy()
+  call api_destroy()
 
   call texture_clear_database()
 
