@@ -401,9 +401,9 @@ contains
 
 
     if (lua_pcall(lua_state, argument_count, return_value_count, 0) == LUA_OK) then
+      call lua_pop(lua_gettop(lua_state))
       print*,"yay"
     else
-      call lua_pop(lua_gettop(lua_state))
       print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error running LuaJIT function ["//function_name//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
     end if
   end subroutine luajit_call_function
