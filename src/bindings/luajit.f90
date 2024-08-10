@@ -251,15 +251,24 @@ module luajit
     end function lua_iscfunction
 
 
-    function lua_typename(state, index) result(type_name_pointer) bind(c, name = "lua_typename")
+    function internal_lua_type(state, index) result(type_index) bind(c, name = "lua_type")
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr), intent(in), value :: state
       integer(c_int), intent(in), value :: index
-      type(c_ptr) :: type_name_pointer
-    end function lua_typename
+      integer(c_int) :: type_index
+    end function internal_lua_type
 
+
+    function internal_lua_typename(state, lua_type_index) result(type_name_pointer) bind(c, name = "lua_typename")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: lua_type_index
+      type(c_ptr) :: type_name_pointer
+    end function internal_lua_typename
 
 
   end interface
