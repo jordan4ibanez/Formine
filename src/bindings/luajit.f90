@@ -353,6 +353,20 @@ contains
   end function lua_islightuserdata
 
 
+  !* Get if a variable is a boolean. This was a macro in LuaJIT.
+  function lua_isboolean(state, index) result(is_a_boolean)
+    use, intrinsic :: iso_c_binding
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    integer(c_int), intent(in), value :: index
+    logical(c_bool) :: is_a_boolean
+
+    is_a_boolean = (lua_type(state, (index)) == LUA_TBOOLEAN)
+  end function lua_isboolean
+
+
+
   !* Get the type of a variable as a string.
   function lua_typename(state, index) result(type_name)
     use :: string, only: string_from_c
