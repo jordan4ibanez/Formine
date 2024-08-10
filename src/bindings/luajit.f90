@@ -687,7 +687,22 @@ contains
   end subroutine lua_getglobal
 
 
-! //fixme: need to implement lua_tolstring!
+  !* Get a string from lua. This was a macro in LuaJIT.
+  !* This has been reconfigured to work with Fortran.
+  function lua_tostring(index) result(new_string)
+    use :: string
+    implicit none
+
+    integer(c_int), intent(in), value :: index
+    character(len = :, kind = c_char), allocatable :: new_string
+    integer(c_int) :: lua_string_length
+    type(c_ptr) :: c_string_pointer
+
+    c_string_pointer = lua_tolstring(lua_state, index, lua_string_length)
+
+    new_string = string_from_c(c_string_pointer, lua_string_length + 1)
+    !? c_string_pointer is not done with malloc. No need to free. (tested)
+  end function lua_tostring
 
 
 !? END TRANSLATED MACROS. =================================================================================
@@ -786,24 +801,6 @@ contains
     ! Nullify. Allows re-initialization.
     lua_state = c_null_ptr
   end subroutine luajit_destroy
-
-
-  !* Get a string from lua. This was a macro in LuaJIT.
-  !* This has been reconfigured to work with Fortran.
-  function lua_tostring(index) result(new_string)
-    use :: string
-    implicit none
-
-    integer(c_int), intent(in), value :: index
-    character(len = :, kind = c_char), allocatable :: new_string
-    integer(c_int) :: lua_string_length
-    type(c_ptr) :: c_string_pointer
-
-    c_string_pointer = lua_tolstring(lua_state, index, lua_string_length)
-
-    new_string = string_from_c(c_string_pointer, lua_string_length + 1)
-    !? c_string_pointer is not done with malloc. No need to free. (tested)
-  end function lua_tostring
 
 
   !* Run a LuaJIT string. Returns success.
