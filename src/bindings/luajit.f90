@@ -168,7 +168,9 @@ module luajit
       implicit none
 
       type(c_ptr), intent(in), value :: state
-      integer(c_int64_t), intent(in), value :: long_number
+      !* This is 32 bit on windows. LuaJIT defined this as simply long.
+      !! Not c_int64_t !!
+      integer(c_long), intent(in), value :: long_number
     end subroutine lua_pushnumber
 
 
