@@ -152,11 +152,11 @@ contains
 
       fortran_string = convert_c_string_pointer_to_string(string_length, fortran_string_pointer)
 
-      ! !! Force a null terminator to be applied.
-      ! !? This prevents strange behavior when C misbehaves.
+      ! Force a null terminator to be applied.
+      !? This prevents strange behavior when C misbehaves.
       fortran_string(string_length:string_length) = achar(0)
 
-      ! ! Let's find the null terminator.
+      ! Let's find the null terminator.
       do i = 1,string_length
         ! print*,fortran_raw_string(i)
         if (fortran_string(i:i) == achar(0)) then
@@ -167,6 +167,7 @@ contains
 
       ! If the length is 0, we literally cannot do anything, so give up.
       if (found_string_length > 0) then
+        ! Trim the string.
         fortran_string = fortran_string(1:found_string_length)
       else
         fortran_string = ""
