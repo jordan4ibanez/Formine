@@ -521,6 +521,17 @@ contains
 !? BEGIN TRANSLATED MACROS. =================================================================================
 
 
+  !* Pop the stack. This was a macro in LuaJIT.
+  subroutine lua_pop(state, index)
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    integer(c_int), intent(in), value :: index
+
+    call lua_settop(state, -(index) - 1)
+  end subroutine lua_pop
+
+
   !* Get if a variable is a function. This was a macro in LuaJIT.
   function lua_isfunction(state, index) result(is_a_function)
     use, intrinsic :: iso_c_binding
@@ -611,7 +622,9 @@ contains
     is_none_or_nil = (lua_type(state, (index)) <= 0)
   end function lua_isnoneornil
 
+
 !? END TRANSLATED MACROS. =================================================================================
+
 
   !! BEGIN DEBUGGING LUAJIT CLOSURE !!
   ! typedef int (*lua_CFunction) (lua_State *L);
@@ -706,16 +719,6 @@ contains
     ! Nullify. Allows re-initialization.
     lua_state = c_null_ptr
   end subroutine luajit_destroy
-
-
-  !* Pop the stack. This was a macro in LuaJIT.
-  subroutine lua_pop(index)
-    implicit none
-
-    integer(c_int), intent(in), value :: index
-
-    call lua_settop(lua_State, -(index) - 1)
-  end subroutine lua_pop
 
 
   !* Get a string from lua. This was a macro in LuaJIT.
