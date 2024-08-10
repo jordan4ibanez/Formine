@@ -152,6 +152,10 @@ contains
 
       fortran_string = convert_c_string_pointer_to_string(string_length, fortran_string_pointer)
 
+      !? This will crash, it automatically gets deallocated.
+      !? I have this here in case I audit my code in the future.
+      ! deallocate(fortran_string_pointer)
+
       ! Force a null terminator to be applied.
       !? This prevents strange behavior when C misbehaves.
       fortran_string(string_length:string_length) = achar(0)
