@@ -25,19 +25,9 @@ program main
     return
   end if
 
-  ! print*,"hi"
-
-  ! ! if (.not. luajit_run_string("print('hi')"// &
-  ! !   "local x = 5;"// &
-  ! !   "print(x)")) then
-  ! !   error stop "oops"
-  ! ! end if
-
-  ! if (.not. luajit_run_file("./mods/init.lua")) then
-  !   error stop "oops"
-  ! end if
-
-  ! call luajit_call_function("my_function", luajit_closure(c_funloc(test_luajit_closure), 0), "test", 2, 3)
+  if (.not. api_run_file("./mods/init.lua")) then
+    return
+  end if
 
   call api_destroy()
 
