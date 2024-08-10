@@ -405,7 +405,6 @@ contains
   end function lua_isnoneornil
 
 
-
   !* Get the type of a variable as a string.
   function lua_typename(state, index) result(type_name)
     use :: string, only: string_from_c
@@ -566,8 +565,6 @@ contains
 
   !* This function will attempt to push whatever variable type into the LuaJIT stack.
   subroutine luajit_push_generic(input)
-    use :: terminal
-    use :: string, only: into_c_string
     implicit none
 
     class(*), intent(in) :: input
