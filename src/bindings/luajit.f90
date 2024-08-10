@@ -181,6 +181,8 @@ module luajit
     end subroutine lua_pushinteger
 
 
+    !* There are no other ways to push a string into LuaJIT at the moment.
+    !* I am only binding this one because it is the safest.
     subroutine lua_pushlstring(state, string, string_length) bind(c, name = "lua_pushlstring")
       use, intrinsic :: iso_c_binding
       implicit none
