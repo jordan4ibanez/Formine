@@ -393,15 +393,15 @@ contains
 
 
   !* Get if a variable is none or nil. This was a macro in LuaJIT.
-  function lua_isnoneornil(state, index) result(is_none)
+  function lua_isnoneornil(state, index) result(is_none_or_nil)
     use, intrinsic :: iso_c_binding
     implicit none
 
     type(c_ptr), intent(in), value :: state
     integer(c_int), intent(in), value :: index
-    logical(c_bool) :: is_none
+    logical(c_bool) :: is_none_or_nil
 
-    is_none = (lua_type(state, (index)) <= 0)
+    is_none_or_nil = (lua_type(state, (index)) <= 0)
   end function lua_isnoneornil
 
 
