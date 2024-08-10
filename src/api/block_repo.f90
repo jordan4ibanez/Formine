@@ -48,7 +48,13 @@ contains
       return
     end if
 
+    ! Tada. 5.5 (at least during the test it was)
     test = lua_tonumber(state, -1)
+
+    ! Now we can remove this.
+    call lua_remove(state, -1)
+
+    ! The table is now back in -1.
 
 
 
