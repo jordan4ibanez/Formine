@@ -12,6 +12,8 @@ function my_function(a, b, c, d)
   -- print("a:")
   -- print(a)
   a(false, "Hello")
+
+  print("[" .. b .. "]")
   -- print("b:")
   -- print("[" .. b .. "]")
   -- print("c:")
