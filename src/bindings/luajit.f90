@@ -384,6 +384,22 @@ module luajit
     end subroutine lua_rawget
 
 
+    subroutine lua_rawgeti(state, index, number_of_elements) bind(c, name = "lua_rawgeti")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index, number_of_elements
+    end subroutine lua_rawgeti
+
+
+    subroutine lua_createtable(state, index, preallocation_amount) bind(c, name = "lua_createtable")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index, preallocation_amount
+    end subroutine lua_createtable
 
 
   end interface
