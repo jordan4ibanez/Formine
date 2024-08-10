@@ -20,8 +20,9 @@ module luajit
   !
   !! For LuaJIT types see: https://github.com/LuaJIT/LuaJIT/blob/v2.1/src/luaconf.h
   !
-  !? going to need to learn how to handle userdata.
+  !? Going to need to learn how to handle userdata.
   !
+  !? Going to need to learn how to handle metatables.
 
   public :: luajit_closure
   public :: test_luajit_closure
@@ -487,6 +488,24 @@ module luajit
       ! Was: [const char *k]
       character(kind = c_char), intent(in) :: key_string
     end subroutine internal_lua_setfield
+
+
+    subroutine lua_rawset(state, index) bind(c, name = "lua_rawset")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+    end subroutine lua_rawset
+
+
+    subroutine lua_rawseti(state, index, number_of_elements) bind(c, name = "lua_rawseti")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index, number_of_elements
+    end subroutine lua_rawseti
 
 
 
