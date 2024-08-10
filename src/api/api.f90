@@ -4,7 +4,11 @@ module api
   implicit none
 
 
+  !* This LuaJIT API has been written with love and care. :)
+
+
   private
+
 
   public :: api_initialize
   public :: api_destroy
@@ -25,7 +29,7 @@ contains
 
     call luajit_initialize(lua_state)
 
-    success = luajit_run_file(lua_state, "./api/inift.lua")
+    success = luajit_run_file(lua_state, "./api/init.lua")
 
     ! Someone removed the api init file, eh?
     if (.not. success) then
