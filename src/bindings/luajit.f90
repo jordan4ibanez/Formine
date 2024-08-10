@@ -476,6 +476,21 @@ module luajit
       type(c_ptr), intent(in), value :: state
       integer(c_int), intent(in), value :: index
     end subroutine lua_settable
+
+
+    subroutine internal_lua_setfield(state, index, key_string) bind(c, name = "lua_setfield")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+      ! Was: [const char *k]
+      character(kind = c_char), intent(in) :: key_string
+    end subroutine internal_lua_setfield
+
+
+
+
   end interface
 
 
@@ -613,6 +628,21 @@ contains
     c_string_pointer = internal_lua_typename(state, type_index)
     type_name = string_from_c(c_string_pointer, 36)
   end function lua_typename
+
+
+  subroutine lua_setfield(state, index, key_string)
+    use :: string, only: into_c_string
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    integer(c_int), intent(in), value :: index
+    character(len = *, kind = c_char) :: key_string
+    character(len = :, kind = c_char), allocatable :: c_string
+
+    c_string = into_c_string(key_string)
+
+    call internal_lua_setfield(state, index, c_string)
+  end subroutine lua_setfield
 
 
   !* Create the actual LuaJIT state that we will use.
