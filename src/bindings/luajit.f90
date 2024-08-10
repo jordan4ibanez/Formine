@@ -203,63 +203,6 @@ module luajit
     end function lua_checkstack
 
 
-    subroutine lua_pushnil(state) bind(c, name = "lua_pushnil")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: state
-    end subroutine lua_pushnil
-
-
-    subroutine lua_pushnumber(state, double_number) bind(c, name = "lua_pushnumber")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: state
-      real(c_double), intent(in), value :: double_number
-    end subroutine lua_pushnumber
-
-
-    subroutine lua_pushinteger(state, long_number) bind(c, name = "lua_pushinteger")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: state
-      integer(c_ptrdiff_t), intent(in), value :: long_number
-    end subroutine lua_pushinteger
-
-
-    !* There are no other ways to push a string into LuaJIT at the moment.
-    !* I am only binding this one because it is the safest.
-    subroutine lua_pushlstring(state, string, string_length) bind(c, name = "lua_pushlstring")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: state
-      character(kind = c_char), intent(in) :: string
-      integer(c_size_t), intent(in), value :: string_length
-    end subroutine lua_pushlstring
-
-
-    subroutine lua_pushcclosure(state, lua_c_function, index) bind(c, name = "lua_pushcclosure")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: state
-      type(c_funptr), intent(in), value :: lua_c_function
-      integer(c_int), intent(in), value :: index
-    end subroutine lua_pushcclosure
-
-
-    subroutine lua_pushboolean(state, boolean) bind(c, name = "lua_pushboolean")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: state
-      logical(c_bool), intent(in), value :: boolean
-    end subroutine lua_pushboolean
-
-
     function lua_isnumber(state, index) result(is_a_number) bind(c, name = "lua_isnumber")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -400,6 +343,63 @@ module luajit
       integer(c_int), intent(in), value :: index
       type(c_funptr) :: output_function_pointer
     end function lua_tocfunction
+
+
+    subroutine lua_pushnil(state) bind(c, name = "lua_pushnil")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+    end subroutine lua_pushnil
+
+
+    subroutine lua_pushnumber(state, double_number) bind(c, name = "lua_pushnumber")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      real(c_double), intent(in), value :: double_number
+    end subroutine lua_pushnumber
+
+
+    subroutine lua_pushinteger(state, long_number) bind(c, name = "lua_pushinteger")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_ptrdiff_t), intent(in), value :: long_number
+    end subroutine lua_pushinteger
+
+
+    !* There are no other ways to push a string into LuaJIT at the moment.
+    !* I am only binding this one because it is the safest.
+    subroutine lua_pushlstring(state, string, string_length) bind(c, name = "lua_pushlstring")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      character(kind = c_char), intent(in) :: string
+      integer(c_size_t), intent(in), value :: string_length
+    end subroutine lua_pushlstring
+
+
+    subroutine lua_pushcclosure(state, lua_c_function, index) bind(c, name = "lua_pushcclosure")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      type(c_funptr), intent(in), value :: lua_c_function
+      integer(c_int), intent(in), value :: index
+    end subroutine lua_pushcclosure
+
+
+    subroutine lua_pushboolean(state, boolean) bind(c, name = "lua_pushboolean")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      logical(c_bool), intent(in), value :: boolean
+    end subroutine lua_pushboolean
 
 
     subroutine lua_gettable(state, index) bind(c, name = "lua_gettable")
