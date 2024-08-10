@@ -780,7 +780,7 @@ contains
     if (lual_loadstring(lua_state, c_string) == LUA_OK) then
       if (lua_pcall(lua_state, 0, 0, 0) == LUA_OK) then
         ! If code was executed successfully, we remove the code from the stack.
-        call lua_pop(lua_gettop(lua_state))
+        call lua_pop(lua_state, lua_gettop(lua_state))
         success = .true.
       else
         print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
@@ -816,7 +816,7 @@ contains
     if (lual_loadstring(lua_state, c_string) == LUA_OK) then
       if (lua_pcall(lua_state, 0, 0, 0) == LUA_OK) then
         ! If code was executed successfully, we remove the code from the stack.
-        call lua_pop(lua_gettop(lua_state))
+        call lua_pop(lua_state, lua_gettop(lua_state))
         success = .true.
       else
         print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
@@ -933,7 +933,7 @@ contains
     !* We need 4 arguments, even if they do not exist. They are nil.
     !* The LuaJIT stack will read out of it's buffer if this isn't 4.
     if (lua_pcall(lua_state, 4, return_value_count, 0) == LUA_OK) then
-      call lua_pop(lua_gettop(lua_state))
+      call lua_pop(lua_state, lua_gettop(lua_state))
     else
       print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error running LuaJIT function ["//function_name//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
     end if
