@@ -366,6 +366,19 @@ contains
   end function lua_isboolean
 
 
+    !* Get if a variable is a boolean. This was a macro in LuaJIT.
+  function lua_isthread(state, index) result(is_a_thread)
+    use, intrinsic :: iso_c_binding
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    integer(c_int), intent(in), value :: index
+    logical(c_bool) :: is_a_thread
+
+    is_a_thread = (lua_type(state, (index)) == LUA_TTHREAD)
+  end function lua_isthread
+
+
 
   !* Get the type of a variable as a string.
   function lua_typename(state, index) result(type_name)
