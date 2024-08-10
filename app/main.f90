@@ -22,7 +22,6 @@ program main
   old_fps = -1
 
   if (.not. api_initialize()) then
-    print*, "the api broke, yay"
     return
   end if
 
