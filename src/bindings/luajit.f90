@@ -251,14 +251,14 @@ module luajit
     end function lua_iscfunction
 
 
-    function internal_lua_type(state, index) result(type_index) bind(c, name = "lua_type")
+    function lua_type(state, index) result(type_index) bind(c, name = "lua_type")
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr), intent(in), value :: state
       integer(c_int), intent(in), value :: index
       integer(c_int) :: type_index
-    end function internal_lua_type
+    end function lua_type
 
 
     function internal_lua_typename(state, lua_type_index) result(type_name_pointer) bind(c, name = "lua_typename")
@@ -292,7 +292,7 @@ contains
     testing = lua_typename(state, 1)
 
     print*,testing
-    ! print*,lua_isnumber(state, 1)
+    print*,lua_isnumber(state, 1)
 
     testing = lua_typename(state, 2)
 
@@ -314,7 +314,7 @@ contains
     integer(c_int) :: type_index
     type(c_ptr) :: c_string_pointer
 
-    type_index = internal_lua_type(state, index)
+    type_index = lua_type(state, index)
     c_string_pointer = internal_lua_typename(state, type_index)
     type_name = string_from_c(c_string_pointer, 36)
   end function lua_typename
