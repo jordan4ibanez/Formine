@@ -61,8 +61,6 @@ module luajit
   integer(c_int), parameter :: LUA_TTHREAD = 8
 
 
-  type(c_ptr) :: lua_state
-
   !* A custom wrapper type to allow X amount of arguments to be associated
   !* With a fortran function.
   type luajit_closure
