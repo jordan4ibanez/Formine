@@ -292,6 +292,23 @@ contains
   !! END DEBUGGING LUAJIT CLOSURE !!
 
 
+  !* Get the type of a variable as a string.
+  function lua_typename(state, index) result(type_name)
+    use :: string, only: string_from_c
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    integer(c_int), intent(in), value :: index
+    character(len = :, kind = c_char), allocatable :: type_name
+    integer(c_int) :: type_index
+    type(c_ptr) :: c_string_pointer
+
+    type_index = internal_lua_type(state, index)
+    c_string_pointer = internal_lua_typename(state, type_index)
+    type_name = string_from_c(c_string_pointer, 36)
+  end function lua_typename
+
+
   !* Create the actual LuaJIT state that we will use.
   subroutine luajit_initialize()
     implicit none
