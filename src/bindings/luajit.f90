@@ -392,6 +392,20 @@ contains
   end function lua_isnone
 
 
+  !* Get if a variable is none or nil. This was a macro in LuaJIT.
+  function lua_isnoneornil(state, index) result(is_none)
+    use, intrinsic :: iso_c_binding
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    integer(c_int), intent(in), value :: index
+    logical(c_bool) :: is_none
+
+    is_none = (lua_type(state, (index)) <= 0)
+  end function lua_isnoneornil
+
+
+
   !* Get the type of a variable as a string.
   function lua_typename(state, index) result(type_name)
     use :: string, only: string_from_c
