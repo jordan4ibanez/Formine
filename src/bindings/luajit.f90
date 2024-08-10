@@ -796,6 +796,10 @@ contains
 !? END TRANSLATED MACROS. =================================================================================
 
 
+
+!* The rest is totally custom. =================================================================================
+
+
   !! BEGIN DEBUGGING LUAJIT CLOSURE !!
   ! typedef int (*lua_CFunction) (lua_State *L);
   subroutine test_luajit_closure(state)
