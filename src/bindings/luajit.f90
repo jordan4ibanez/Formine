@@ -940,6 +940,7 @@ contains
 
     if (.not. reader%exists) then
       print"(A)", "[LuaJIT] Error: Could not load file path ["//file_path//"]. Does not exist."
+      return
     end if
 
     c_string = into_c_string(reader%file_string)
