@@ -18,17 +18,14 @@ contains
 
     type(c_ptr), intent(in), value :: state
     logical :: success
-    real(c_double) :: test
-    character(len = :, kind = c_char), allocatable :: test_string
-
-    test = 0.0
 
     ! Memory layout: (Stack grows down.)
     ! -1 - blocks = {}
     ! then moves to:
-    ! -2 - blocks = {}
+    ! -3 - blocks = {}
+    ! -2 - table key string.
     ! -1 - function pointers.
-    ! Then we pop -1 off the stack.
+    ! Then we pop -2 and -1 off the stack, shifting blocks back to -1.
 
 
     call lua_getglobal(state, "blocks")
