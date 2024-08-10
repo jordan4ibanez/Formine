@@ -532,6 +532,16 @@ contains
   end subroutine lua_pop
 
 
+  !* Create a new blank table. This was a macro in LuaJIT.
+  subroutine lua_newtable(state)
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+
+    call lua_createtable(state, 0, 0)
+  end subroutine lua_newtable
+
+
   !* Get if a variable is a function. This was a macro in LuaJIT.
   function lua_isfunction(state, index) result(is_a_function)
     use, intrinsic :: iso_c_binding
