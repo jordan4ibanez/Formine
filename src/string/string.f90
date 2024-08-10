@@ -130,9 +130,8 @@ contains
     ! On the C side. The view is great.
     type(c_ptr), intent(in), value :: c_string
     ! On the Fortran side.
-    character(c_char), dimension(:), pointer :: fortran_raw_string
-    character(:), allocatable :: fortran_string
-
+    character(kind = c_char), dimension(:), pointer :: fortran_raw_string
+    character(len = :, kind = c_char), allocatable :: fortran_string
     integer :: size
     ! 4 BYTES, aka, 32 bit.
     ! If there is a string bigger than this, we have a problem.
@@ -157,24 +156,31 @@ contains
       ! Manually cast this to 32 bit.
       input_length = int(sizeof(fortran_raw_string))
 
-      !! Force a null terminator to be applied.
-      !? This prevents strange behavior when C misbehaves.
-      fortran_raw_string(input_length) = achar(0)
+      
 
-      ! Let's find the null terminator.
-      do i = 1, input_length
-        if (fortran_raw_string(i) == achar(0)) then
-          length = i - 1
-          exit
-        end if
-      end do
+      ! print*,fortran_raw_string
+
+      ! !! Force a null terminator to be applied.
+      ! !? This prevents strange behavior when C misbehaves.
+      ! fortran_raw_string(input_length) = achar(0)
+
+      ! ! Let's find the null terminator.
+      ! do i = 1, input_length
+      !   print*,fortran_raw_string(i)
+      !   if (fortran_raw_string(i) == achar(0)) then
+      !     length = i - 1
+      !     exit
+      !   end if
+      ! end do
+
+      print*,"final length", length
 
       ! If the length is 0, we literally cannot do anything, so give up.
-      if (length > 0) then
-        call copy_string_pointer(length, fortran_raw_string, fortran_string)
-      else
-        fortran_string = ""
-      end if
+      ! if (length > 0) then
+      !   call copy_string_pointer(length, fortran_raw_string, fortran_string)
+      ! else
+      !   fortran_string = ""
+      ! end if
     end if
   end function string_from_c
 
