@@ -102,50 +102,6 @@ module luajit
     end subroutine lua_close
 
 
-!* LOAD AND CALL. =================================================================================
-
-
-    function lual_loadstring(state, string) result(status) bind(c, name = "luaL_loadstring")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: state
-      character(kind = c_char), intent(in) :: string
-      integer(c_int) :: status
-    end function lual_loadstring
-
-
-    function lua_call(state, number_of_args, number_of_results) result(status) bind(c, name = "lua_call")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: state
-      integer(c_int), intent(in), value :: number_of_args, number_of_results
-      integer(c_int) :: status
-    end function lua_call
-
-
-    function lua_pcall(state, number_of_args, number_of_results, error_function) result(status) bind(c, name = "lua_pcall")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: state
-      integer(c_int), intent(in), value :: number_of_args, number_of_results, error_function
-      integer(c_int) :: status
-    end function lua_pcall
-
-
-    function lua_cpcall(state, func, unknown_data) result(status) bind(c, name = "lua_cpcall")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: state
-      type(c_funptr), intent(in), value :: func
-      type(c_ptr), intent(inout) :: unknown_data
-      integer(c_int) :: status
-    end function lua_cpcall
-
-
 !* STACK MANIPULATION. =================================================================================
 
 
@@ -508,6 +464,48 @@ module luajit
     end subroutine lua_rawseti
 
 
+!* LOAD AND CALL. =================================================================================
+
+
+    function lual_loadstring(state, string) result(status) bind(c, name = "luaL_loadstring")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      character(kind = c_char), intent(in) :: string
+      integer(c_int) :: status
+    end function lual_loadstring
+
+
+    function lua_call(state, number_of_args, number_of_results) result(status) bind(c, name = "lua_call")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: number_of_args, number_of_results
+      integer(c_int) :: status
+    end function lua_call
+
+
+    function lua_pcall(state, number_of_args, number_of_results, error_function) result(status) bind(c, name = "lua_pcall")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: number_of_args, number_of_results, error_function
+      integer(c_int) :: status
+    end function lua_pcall
+
+
+    function lua_cpcall(state, func, unknown_data) result(status) bind(c, name = "lua_cpcall")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      type(c_funptr), intent(in), value :: func
+      type(c_ptr), intent(inout) :: unknown_data
+      integer(c_int) :: status
+    end function lua_cpcall
 
 
   end interface
