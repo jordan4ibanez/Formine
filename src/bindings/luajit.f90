@@ -240,6 +240,15 @@ module luajit
       logical(c_bool) :: is_a_string
     end function lua_isstring
 
+
+    function lua_iscfunction(state, index) result(is_a_c_function) bind(c, name = "lua_iscfunction")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+      logical(c_bool) :: is_a_c_function
+    end function lua_iscfunction
   end interface
 
 
