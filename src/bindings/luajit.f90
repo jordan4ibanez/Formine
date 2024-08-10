@@ -24,47 +24,94 @@ module luajit
   !
   !? Going to need to learn how to handle metatables.
 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
-  public :: 
+
+  !* LuaJIT constants.
+  public :: LUA_OK
+  public :: LUA_YIELD
+  public :: LUA_ERRRUN
+  public :: LUA_ERRSYNTAX
+  public :: LUA_ERRMEM
+  public :: LUA_ERRERR
+  public :: LUA_REGISTRYINDEX
+  public :: LUA_ENVIRONINDEX
+  public :: LUA_GLOBALSINDEX
+  public :: LUA_RETURNINDEX
+  public :: LUA_TNONE
+  public :: LUA_TNIL
+  public :: LUA_TBOOLEAN
+  public :: LUA_TLIGHTUSERDATA
+  public :: LUA_TNUMBER
+  public :: LUA_TSTRING
+  public :: LUA_TTABLE
+  public :: LUA_TFUNCTION
+  public :: LUA_TUSERDATA
+  public :: LUA_TTHREAD
+
+
+  !* LuaJIT raw bindings.
+  public :: luajit_closure
+  public :: lua_gettop
+  public :: lua_settop
+  public :: lua_pushvalue
+  public :: lua_remove
+  public :: lua_insert
+  public :: lua_replace
+  public :: lua_checkstack
+  public :: lua_isnumber
+  public :: lua_isstring
+  public :: lua_iscfunction
+  public :: lua_type
+  public :: lua_equal
+  public :: lua_rawequal
+  public :: lua_lessthan
+  public :: lua_tonumber
+  public :: lua_tointeger
+  public :: lua_toboolean
+  public :: lua_objlen
+  public :: lua_tocfunction
+  public :: lua_pushnil
+  public :: lua_pushnumber
+  public :: lua_pushinteger
+  public :: lua_pushlstring
+  public :: lua_pushcclosure
+  public :: lua_pushboolean
+  public :: lua_gettable
+  public :: lua_getfield
+  public :: lua_rawget
+  public :: lua_rawgeti
+  public :: lua_createtable
+  public :: lua_settable
+  public :: lua_rawset
+  public :: lua_rawseti
+  public :: lual_loadstring
+  public :: lua_call
+  public :: lua_pcall
+  public :: lua_cpcall
+
+
+  !* Custom and macros.
+  public :: lua_pop
+  public :: lua_newtable
+  public :: lua_register
+  public :: lua_pushcfunction
+  public :: lua_isfunction
+  public :: lua_istable
+  public :: lua_islightuserdata
+  public :: lua_isboolean
+  public :: lua_isthread
+  public :: lua_isnone
+  public :: lua_isnoneornil
+  public :: lua_setglobal
+  public :: lua_getglobal
+  public :: lua_tostring
+  public :: lua_typename
+  public :: lua_setfield
+  public :: luajit_initialize
+  public :: luajit_destroy
+  public :: luajit_run_string
+  public :: luajit_run_file
+  public :: luajit_push_generic
+  public :: luajit_call_function
 
   integer(c_int), parameter :: LUA_OK = 0
   integer(c_int), parameter :: LUA_YIELD = 1
