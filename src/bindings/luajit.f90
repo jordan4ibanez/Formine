@@ -221,6 +221,15 @@ module luajit
     end subroutine lua_pushboolean
 
 
+    function lua_isnumber(state, index) result(is_a_number) bind(c, name = "lua_isnumber")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+      logical(c_bool) :: is_a_number
+    end function lua_isnumber
+
   end interface
 
 
@@ -236,6 +245,7 @@ contains
     !! NOTE: IF THE FUNCTION DOESN'T DO ANYTHING, IT IS OPTIMIZED OUT !!
     !! IT WILL SEGFAULT IF IT DOES NOT DO ANYTHING !!
     print*,"hello from fortran, passed into lua, called from lua, back into fortran"
+
 
   end subroutine test_luajit_closure
   !! END DEBUGGING LUAJIT CLOSURE !!
