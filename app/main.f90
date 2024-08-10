@@ -21,7 +21,12 @@ program main
   new_fps = 0
   old_fps = -1
 
-  ! call luajit_initialize()
+  if (.not. api_initialize()) then
+    print*, "the api broke, yay"
+    return
+  end if
+
+  print*,"hi"
 
   ! ! if (.not. luajit_run_string("print('hi')"// &
   ! !   "local x = 5;"// &
@@ -35,7 +40,7 @@ program main
 
   ! call luajit_call_function("my_function", luajit_closure(c_funloc(test_luajit_closure), 0), "test", 2, 3)
 
-  ! call luajit_destroy()
+  call api_destroy()
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   if (.true.) then
