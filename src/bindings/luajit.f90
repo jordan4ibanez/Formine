@@ -157,6 +157,52 @@ module luajit
     end subroutine lua_settop
 
 
+    subroutine lua_pushvalue(state, index) bind(c, name = "lua_pushvalue")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+    end subroutine lua_pushvalue
+
+
+    subroutine lua_remove(state, index) bind(c, name = "lua_remove")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+    end subroutine lua_remove
+
+
+    subroutine lua_insert(state, index) bind(c, name = "lua_insert")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+    end subroutine lua_insert
+
+
+    subroutine lua_replace(state, index) bind(c, name = "lua_replace")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+    end subroutine lua_replace
+
+
+    function lua_checkstack(state, extra_slots) result(can_grow) bind(c, name = "lua_checkstack")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: extra_slots
+      logical(c_bool) :: can_grow
+    end function lua_checkstack
+
+
     subroutine lua_pushnil(state) bind(c, name = "lua_pushnil")
       use, intrinsic :: iso_c_binding
       implicit none
