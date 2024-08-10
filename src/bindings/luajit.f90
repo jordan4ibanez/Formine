@@ -211,6 +211,16 @@ module luajit
     end subroutine lua_pushcclosure
 
 
+    subroutine lua_pushboolean(state, boolean) bind(c, name = "lua_pushboolean")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      !* This was an integer. This may cause problems.
+      logical(c_bool), intent(in), value :: boolean
+    end subroutine lua_pushboolean
+
+
   end interface
 
 
