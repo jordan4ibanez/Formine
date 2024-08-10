@@ -558,7 +558,6 @@ contains
     !* The LuaJIT stack will read out of it's buffer if this isn't 4.
     if (lua_pcall(lua_state, 4, return_value_count, 0) == LUA_OK) then
       call lua_pop(lua_gettop(lua_state))
-      print*,"yay"
     else
       print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error running LuaJIT function ["//function_name//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
     end if
