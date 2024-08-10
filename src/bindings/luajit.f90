@@ -566,38 +566,6 @@ contains
   end subroutine lua_pushcfunction
 
 
-
-  !* Set a global. This was a macro in LuaJIT.
-  subroutine lua_setglobal(state, global_name)
-    use :: string, only: into_c_string
-    implicit none
-
-    type(c_ptr), intent(in), value :: state
-    character(len = *, kind = c_char), intent(in) :: global_name
-    character(len = :, kind = c_char), allocatable :: c_string
-
-    c_string = into_c_string(global_name)
-
-    call lua_setfield(state, LUA_GLOBALSINDEX, (c_string))
-  end subroutine lua_setglobal
-
-
-  !* Get a global. This was a macro in LuaJIT.
-  subroutine lua_getglobal(state, global_name)
-    use :: string, only: into_c_string
-    implicit none
-
-    type(c_ptr), intent(in), value :: state
-    character(len = *, kind = c_char), intent(in) :: global_name
-    character(len = :, kind = c_char), allocatable :: c_string
-
-    c_string = into_c_string(global_name)
-
-    call lua_getfield(state, LUA_GLOBALSINDEX, (c_string))
-  end subroutine lua_getglobal
-
-
-
 ! //fixme: need to implement lua_tolstring!
 
 
@@ -690,6 +658,36 @@ contains
 
     is_none_or_nil = (lua_type(state, (index)) <= 0)
   end function lua_isnoneornil
+
+
+  !* Set a global. This was a macro in LuaJIT.
+  subroutine lua_setglobal(state, global_name)
+    use :: string, only: into_c_string
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    character(len = *, kind = c_char), intent(in) :: global_name
+    character(len = :, kind = c_char), allocatable :: c_string
+
+    c_string = into_c_string(global_name)
+
+    call lua_setfield(state, LUA_GLOBALSINDEX, (c_string))
+  end subroutine lua_setglobal
+
+
+  !* Get a global. This was a macro in LuaJIT.
+  subroutine lua_getglobal(state, global_name)
+    use :: string, only: into_c_string
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    character(len = *, kind = c_char), intent(in) :: global_name
+    character(len = :, kind = c_char), allocatable :: c_string
+
+    c_string = into_c_string(global_name)
+
+    call lua_getfield(state, LUA_GLOBALSINDEX, (c_string))
+  end subroutine lua_getglobal
 
 
 !? END TRANSLATED MACROS. =================================================================================
