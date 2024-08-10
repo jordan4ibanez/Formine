@@ -366,7 +366,7 @@ contains
   end function lua_isboolean
 
 
-    !* Get if a variable is a boolean. This was a macro in LuaJIT.
+  !* Get if a variable is a thread. This was a macro in LuaJIT.
   function lua_isthread(state, index) result(is_a_thread)
     use, intrinsic :: iso_c_binding
     implicit none
