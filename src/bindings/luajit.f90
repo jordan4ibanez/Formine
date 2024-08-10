@@ -21,6 +21,7 @@ module luajit
   !! For LuaJIT types see: https://github.com/LuaJIT/LuaJIT/blob/v2.1/src/luaconf.h
 
   public :: luajit_closure
+  public :: test_luajit_closure
 
   public :: luajit_initialize
   public :: luajit_destroy
@@ -224,6 +225,20 @@ module luajit
 
 
 contains
+
+  !! BEGIN DEBUGGING LUAJIT CLOSURE !!
+  ! typedef int (*lua_CFunction) (lua_State *L);
+  subroutine test_luajit_closure(state)
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+
+    !! NOTE: IF THE FUNCTION DOESN'T DO ANYTHING, IT IS OPTIMIZED OUT !!
+    !! IT WILL SEGFAULT IF IT DOES NOT DO ANYTHING !!
+    print*,"hello from fortran, passed into lua, called from lua, back into fortran"
+
+  end subroutine test_luajit_closure
+  !! END DEBUGGING LUAJIT CLOSURE !!
 
 
   !* Create the actual LuaJIT state that we will use.
