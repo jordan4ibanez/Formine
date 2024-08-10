@@ -19,6 +19,7 @@ contains
     type(c_ptr), intent(in), value :: state
     logical :: success
     real(c_double) :: test
+    character(len = :, kind = c_char), allocatable :: test_string
 
     test = 0.0
 
@@ -32,7 +33,7 @@ contains
 
     call lua_getglobal(state, "blocks")
 
-    if (.not. lua_istable(state, 1)) then
+    if (.not. lua_istable(state, -1)) then
       print"(A)", "[Blocks Repo] Error: Can't initialize function pointers. [blocks] table is missing!"
       success = .false.
       return
@@ -40,25 +41,39 @@ contains
 
     ! We push our variable into the stack like a caveman, lol.
     call lua_pushstring(state, "test")
+    call lua_pushstring(state, "I am a test!")
+    ! Then this is called as: -3 = blocks[test]
+    call lua_settable(state, -3)
+
+    ! Remove the values from the stack.
+    call lua_pop(state, -2)
+
+    if (.not. lua_istable(state, -1)) then
+      print"(A)", "this is no longer a table"
+    end if
+
+
+    ! Table is back at -1.
+    call lua_pushstring(state, "test")
+
     ! Then this is called as: -2 = blocks[test]
     call lua_gettable(state, -2)
 
-    if (.not. lua_isnumber(state, -1)) then
-      print"(A)", "[Blocks Repo] Error: [test] is not a number!"
-      return
+    if (.not. lua_isstring(state, -1)) then
+      print*,"That's not a string"
     end if
 
-    ! Tada. 5.5 (at least during the test it was)
-    test = lua_tonumber(state, -1)
 
-    ! Now we can remove this.
-    call lua_remove(state, -1)
+    test_string = lua_tostring(state, -1)
 
-    ! The table is now back in -1.
+    print"(A)","["//test_string//"]"
 
 
 
-    print*,test
+
+
+
+    ! print*,test
 
 
 
