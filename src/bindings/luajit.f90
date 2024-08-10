@@ -67,6 +67,7 @@ module luajit
   public :: lua_tonumber
   public :: lua_tointeger
   public :: lua_toboolean
+  public :: lua_tolstring
   public :: lua_objlen
   public :: lua_tocfunction
   public :: lua_pushnil
@@ -361,7 +362,6 @@ module luajit
     end function lua_toboolean
 
 
-    !//fixme: make this internal!
     function lua_tolstring(state, index, length_of_returning_string) result(new_string_pointer) bind(c, name = "lua_tolstring")
       use, intrinsic :: iso_c_binding
       implicit none
