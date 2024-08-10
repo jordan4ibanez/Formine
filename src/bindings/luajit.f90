@@ -938,7 +938,7 @@ contains
     integer(c_int) :: return_value_count
 
     ! Load the function into the LuaJIT stack.
-    call lua_getglobal(function_name)
+    call lua_getglobal(lua_state, function_name)
 
     ! We must push 4 values, nil or not, into the LuaJIT stack.
     ! They are positional arguments.
