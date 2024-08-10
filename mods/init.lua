@@ -21,3 +21,7 @@ function my_function(a, b, c, d)
   -- print("d:")
   -- print(d)
 end
+
+blocks.register_block("test", {
+
+})
