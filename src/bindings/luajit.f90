@@ -370,29 +370,49 @@ contains
   !* This function will attempt to push whatever variable type into the LuaJIT stack.
   subroutine luajit_push_generic(input)
     use :: terminal
+    use :: string, only: into_c_string
     implicit none
 
     class(*), intent(in), optional :: input
 
     select type (input)
+
+      !* Integer.
      type is (integer(c_int))
+      call lua_pushinteger(lua_state, int(input, kind = c_int64_t))
       print*,"push integer cast to c_int64_t"
      type is (integer(c_int64_t))
+      call lua_pushinteger(lua_state, input)
       print*, "push c_int64_t"
+
+      !* Floating point.
      type is (real(c_float))
+      call lua_pushnumber(lua_state, real(input, kind = c_double))
       print*, "push float cast to c_double"
      type is (real(c_double))
+      call lua_pushnumber(lua_state, input)
       print*, "push c_double"
+
+      !* String.
      type is (character(len = *))
+      call lua_pushlstring(lua_state, into_c_string(input), int(len(input) + 1, kind = c_size_t))
       print*, "push string with length"
+
+      !* Boolean.
      type is (logical)
+      call lua_pushboolean(lua_state, logical(input, kind = c_bool))
       print*, "push logical, convert to c_bool"
      type is (logical(c_bool))
+      call lua_pushboolean(lua_state, input)
       print*, "push c_bool"
 
       !? Now we get into the interesting part.
-     class is (c_funptr)
+      !* Function pointer. Aka, "closure".
+     type is (luajit_closure)
+      call lua_pushcclosure(lua_state, input%pointer, input%argument_count)
       print*, "push fortran lua c function"
+
+      !* We did something very bad.
      class default
       print*, "uh oh"
     end select
