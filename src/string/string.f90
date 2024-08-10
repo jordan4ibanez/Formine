@@ -122,14 +122,14 @@ contains
 
 
   !* Use this to convert C strings stored in a (character, pointer) into Fortran strings.
-  function string_from_c(c_string, string_length) result(fortran_string)
+  function string_from_c(c_string_pointer, string_length) result(fortran_string)
     use, intrinsic :: iso_c_binding
     implicit none
 
     ! On the C side. The view is great.
-    type(c_ptr), intent(in), value :: c_string
+    type(c_ptr), intent(in), value :: c_string_pointer
     ! On the Fortran side.
-    character(kind = c_char), dimension(:), pointer :: fortran_raw_string
+    character(kind = c_char), dimension(:), pointer :: fortran_string_pointer
     character(len = :, kind = c_char), allocatable :: fortran_string
     integer :: string_length
     ! 4 BYTES, aka, 32 bit.
@@ -141,31 +141,20 @@ contains
 
     ! We must ensure that we are not converting a null pointer
     ! as this can lead to SERIOUS UB.
-    if (.not. c_associated(c_string)) then
+    if (.not. c_associated(c_string_pointer)) then
       !? So we will choose to return a blank string instead of halting.
       !? This comment is left here as a backup and retroactive development documentation.
       ! error stop "string_from_c: NULL POINTER IN C STRING"
       fortran_string = ""
     else
       !? It seems that everything is okay, we will proceed.
-      call c_f_pointer(c_string, fortran_raw_string, [string_length])
+      call c_f_pointer(c_string_pointer, fortran_string_pointer, [string_length])
 
-      ! Get the size of the character pointer.
-      ! This is so we do not go out of bounds.
-      ! Manually cast this to 32 bit.
-      ! input_length = int(sizeof(fortran_raw_string))
-
-      ! print*,"input length", input_length
-      call convert_c_string_to_string(string_length, fortran_raw_string, fortran_string)
-
-      print*,fortran_string
-
-
-      ! print*,fortran_raw_string
+      fortran_string = convert_c_string_to_string(string_length, fortran_string_pointer)
 
       ! !! Force a null terminator to be applied.
       ! !? This prevents strange behavior when C misbehaves.
-      ! fortran_raw_string(input_length) = achar(0)
+      fortran_string_pointer(string_length) = achar(0)
 
       ! ! Let's find the null terminator.
       ! do i = 1, input_length
