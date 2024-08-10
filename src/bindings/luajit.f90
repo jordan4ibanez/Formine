@@ -155,31 +155,30 @@ module luajit
 
 !* STATE MANIPULATION. =================================================================================
 
-    !//fixme: makethese internal!
 
-    function lual_newstate() result(new_state) bind(c, name = "luaL_newstate")
+    function internal_lual_newstate() result(new_state) bind(c, name = "luaL_newstate")
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr) :: new_state
-    end function lual_newstate
+    end function internal_lual_newstate
 
 
     !* This makes the LuaJIT standard library available.
-    subroutine lual_openlibs(state) bind(c, name = "luaL_openlibs")
+    subroutine internal_lual_openlibs(state) bind(c, name = "luaL_openlibs")
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr), intent(in), value :: state
-    end subroutine lual_openlibs
+    end subroutine internal_lual_openlibs
 
 
-    subroutine lua_close(state) bind(c, name = "lua_close")
+    subroutine internal_lua_close(state) bind(c, name = "lua_close")
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr), intent(in), value :: state
-    end subroutine lua_close
+    end subroutine internal_lua_close
 
 
 !* STACK MANIPULATION. =================================================================================
@@ -862,7 +861,7 @@ contains
       error stop "[LuaJIT] Error: Tried to initialize LuaJIT when already initialized."
     end if
 
-    state = lual_newstate()
+    state = internal_lual_newstate()
 
     if (.not. c_associated(state)) then
       error stop "[LuaJIT] Error: Failed to initialize."
@@ -870,7 +869,7 @@ contains
 
     ! Make the entire standard library available.
     !! Is this safe for the end user when using external mods? HELL NO.
-    call lual_openlibs(state)
+    call internal_lual_openlibs(state)
   end subroutine luajit_initialize
 
 
@@ -886,7 +885,7 @@ contains
       error stop "[LuaJIT] Error: Tried to destroy LuaJIT when not initialized."
     end if
 
-    call lua_close(state)
+    call internal_lua_close(state)
 
     ! Nullify. Allows re-initialization.
     state = c_null_ptr
