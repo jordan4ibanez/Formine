@@ -310,14 +310,11 @@ contains
 
 
   !* This function will attempt to push whatever variable type into the LuaJIT stack.
-  subroutine luajit_push_generic(input, argument_count)
+  subroutine luajit_push_generic(input)
     use :: terminal
     implicit none
 
-    class(*), intent(in) :: input
-    integer(c_int), intent(inout) :: argument_count
-
-    argument_count = argument_count + 1
+    class(*), intent(in), optional :: input
 
     select type (input)
      type is (integer(c_int))
@@ -356,35 +353,32 @@ contains
     class(*), intent(in), optional :: a, b, c, d
     !? This is written like this to allow pure LuaJIT functions.
     class(*), intent(inout), optional :: return_value
-    integer(c_int) :: argument_count, return_value_count
+    integer(c_int) :: return_value_count
 
     ! Load the function into the LuaJIT stack.
     call lua_getglobal(function_name)
 
-    ! Now we have a 4 optional arguments we must parse.
-    ! If they exist, we push them to the stack.
-    argument_count = 0
-
+    ! We must push 4 values, nil or not, into the LuaJIT stack.
     if (present(a)) then
-      call luajit_push_generic(a, argument_count)
+      call luajit_push_generic(a)
     else
       call lua_pushnil(lua_state)
     end if
 
     if (present(b)) then
-      call luajit_push_generic(b, argument_count)
+      call luajit_push_generic(b)
     else
       call lua_pushnil(lua_state)
     end if
 
     if (present(c)) then
-      call luajit_push_generic(c, argument_count)
+      call luajit_push_generic(c)
     else
       call lua_pushnil(lua_state)
     end if
 
     if (present(d)) then
-      call luajit_push_generic(d, argument_count)
+      call luajit_push_generic(d)
     else
       call lua_pushnil(lua_state)
     end if
@@ -396,10 +390,10 @@ contains
       return_value_count = return_value_count + 1
     end if
 
-    print*,argument_count
     print*,return_value_count
 
-
+    !* We need 4 arguments, even if they do not exist. They are nil.
+    !* The LuaJIT stack will read out of it's buffer if this isn't 4.
     if (lua_pcall(lua_state, 4, return_value_count, 0) == LUA_OK) then
       call lua_pop(lua_gettop(lua_state))
       print*,"yay"
