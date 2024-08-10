@@ -469,6 +469,13 @@ module luajit
 !* SET FUNCTIONS. =================================================================================
 
 
+    subroutine lua_settable(state, index) bind(c, name = "lua_settable")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+    end subroutine lua_settable
   end interface
 
 
