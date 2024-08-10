@@ -1036,6 +1036,20 @@ contains
   end subroutine luajit_push_generic
 
 
+  !* This is an extremely specific function for swapping table values
+  !* in the API. It allows me to swap the declaration with a fortran
+  !* function pointer.
+  !* This is a very delicate function as well, must be handled with care.
+  function luajit_swap_table_function() result(success)
+    implicit none
+
+    logical :: success
+
+    success = .false.
+
+  end function luajit_swap_table_function
+
+
   !* Ultra generic LuaJIT function caller.
   !* Limited to 4 input variables.
   !* Limited to 1 output variables.
