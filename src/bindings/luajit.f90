@@ -172,7 +172,7 @@ module luajit
     end subroutine lua_pushnumber
 
 
-    subroutine lua_pushinteger(state, long_number) bind(c, name = "lua_pushnumber")
+    subroutine lua_pushinteger(state, long_number) bind(c, name = "lua_pushinteger")
       use, intrinsic :: iso_c_binding
       implicit none
 
