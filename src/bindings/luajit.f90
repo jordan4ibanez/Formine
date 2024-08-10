@@ -181,6 +181,16 @@ module luajit
     end subroutine lua_pushinteger
 
 
+    subroutine lua_pushlstring(state, string, string_length) bind(c, name = "lua_pushlstring")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      character(kind = c_char), intent(in) :: string
+      integer(c_size_t), intent(in), value :: string_length
+    end subroutine lua_pushlstring
+    
+
   end interface
 
 
