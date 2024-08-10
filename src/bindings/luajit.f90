@@ -396,6 +396,7 @@ contains
       return_value_count = return_value_count + 1
     end if
 
+    print*,argument_count
     print*,return_value_count
 
 
