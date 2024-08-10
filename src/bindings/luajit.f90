@@ -323,7 +323,7 @@ contains
     integer(c_int), intent(in), value :: index
     logical(c_bool) :: is_a_function
 
-    is_a_function = (lua_type(lua_state, (index)) == LUA_TFUNCTION)
+    is_a_function = (lua_type(state, (index)) == LUA_TFUNCTION)
   end function lua_isfunction
 
 
