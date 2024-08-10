@@ -341,15 +341,15 @@ contains
 
 
   !* Get if a variable is userdata. This was a macro in LuaJIT.
-  function lua_islightuserdata(state, index) result(is_a_table)
+  function lua_islightuserdata(state, index) result(is_userdata)
     use, intrinsic :: iso_c_binding
     implicit none
 
     type(c_ptr), intent(in), value :: state
     integer(c_int), intent(in), value :: index
-    logical(c_bool) :: is_a_table
+    logical(c_bool) :: is_userdata
 
-    is_a_table = (lua_type(state, (index)) == LUA_TLIGHTUSERDATA)
+    is_userdata = (lua_type(state, (index)) == LUA_TLIGHTUSERDATA)
   end function lua_islightuserdata
 
 
