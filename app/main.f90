@@ -25,7 +25,7 @@ program main
     return
   end if
 
-  print*,"hi"
+  ! print*,"hi"
 
   ! ! if (.not. luajit_run_string("print('hi')"// &
   ! !   "local x = 5;"// &
