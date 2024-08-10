@@ -786,6 +786,7 @@ contains
   end function lua_typename
 
 
+  !* Set a field. (variable)
   subroutine lua_setfield(state, index, key_string)
     use :: string, only: into_c_string
     implicit none
