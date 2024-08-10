@@ -367,26 +367,26 @@ contains
 
     if (present(a)) then
       call luajit_push_generic(a, argument_count)
-    ! else
-    !   call lua_pushnil(lua_state)
+    else
+      call lua_pushnil(lua_state)
     end if
 
     if (present(b)) then
       call luajit_push_generic(b, argument_count)
-    ! else
-    !   call lua_pushnil(lua_state)
+    else
+      call lua_pushnil(lua_state)
     end if
 
     if (present(c)) then
       call luajit_push_generic(c, argument_count)
-    ! else
-    !   call lua_pushnil(lua_state)
+    else
+      call lua_pushnil(lua_state)
     end if
 
     if (present(d)) then
       call luajit_push_generic(d, argument_count)
-    ! else
-    !   call lua_pushnil(lua_state)
+    else
+      call lua_pushnil(lua_state)
     end if
 
     ! Now we're going to check if the return value is present.
