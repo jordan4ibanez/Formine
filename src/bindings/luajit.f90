@@ -566,9 +566,6 @@ contains
   end subroutine lua_pushcfunction
 
 
-! //fixme: need to implement lua_tolstring!
-
-
   !* Get if a variable is a function. This was a macro in LuaJIT.
   function lua_isfunction(state, index) result(is_a_function)
     use, intrinsic :: iso_c_binding
@@ -688,6 +685,9 @@ contains
 
     call lua_getfield(state, LUA_GLOBALSINDEX, (c_string))
   end subroutine lua_getglobal
+
+
+! //fixme: need to implement lua_tolstring!
 
 
 !? END TRANSLATED MACROS. =================================================================================
