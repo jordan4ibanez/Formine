@@ -314,7 +314,7 @@ contains
   end subroutine test_luajit_closure
   !! END DEBUGGING LUAJIT CLOSURE !!
 
-  !* This was a macro in LuaJIT.
+  !* Get if a variable is a function. This was a macro in LuaJIT.
   function lua_isfunction(state, index) result(is_a_function)
     use, intrinsic :: iso_c_binding
     implicit none
@@ -327,7 +327,7 @@ contains
   end function lua_isfunction
 
 
-  !* This was a macro in LuaJIT.
+  !* Get if a variable is a table. This was a macro in LuaJIT.
   function lua_istable(state, index) result(is_a_table)
     use, intrinsic :: iso_c_binding
     implicit none
@@ -340,7 +340,7 @@ contains
   end function lua_istable
 
 
-  !* This was a macro in LuaJIT.
+  !* Get if a variable is userdata. This was a macro in LuaJIT.
   function lua_islightuserdata(state, index) result(is_a_table)
     use, intrinsic :: iso_c_binding
     implicit none
