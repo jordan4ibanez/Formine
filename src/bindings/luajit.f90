@@ -452,6 +452,7 @@ contains
     call lua_getglobal(function_name)
 
     ! We must push 4 values, nil or not, into the LuaJIT stack.
+    ! They are positional arguments.
     if (present(a)) then
       call luajit_push_generic(a)
     else
