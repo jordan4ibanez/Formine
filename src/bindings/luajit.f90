@@ -44,6 +44,18 @@ module luajit
   !* This is a custom parameter to indicate we're getting the result from a function.
   integer(c_int), parameter :: LUA_RETURNINDEX = -1
 
+  integer(c_int), parameter :: LUA_TNONE = (-1)
+
+  integer(c_int), parameter :: LUA_TNIL = 0
+  integer(c_int), parameter :: LUA_TBOOLEAN = 1
+  integer(c_int), parameter :: LUA_TLIGHTUSERDATA = 2
+  integer(c_int), parameter :: LUA_TNUMBER = 3
+  integer(c_int), parameter :: LUA_TSTRING = 4
+  integer(c_int), parameter :: LUA_TTABLE = 5
+  integer(c_int), parameter :: LUA_TFUNCTION = 6
+  integer(c_int), parameter :: LUA_TUSERDATA = 7
+  integer(c_int), parameter :: LUA_TTHREAD = 8
+
 
   type(c_ptr) :: lua_state
 
