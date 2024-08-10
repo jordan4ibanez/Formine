@@ -39,34 +39,46 @@ contains
       return
     end if
 
-    ! We push our variable into the stack like a caveman, lol.
-    call lua_pushstring(state, "test")
-    call lua_pushstring(state, "I am a test!")
-    ! Then this is called as: -3 = blocks[test]
-    call lua_settable(state, -3)
+    ! Swap the declaration with the actual fortran function.
+    call luajit_swap_table_function(state, "register_block", c_funloc(register_block))
 
-    ! Remove the values from the stack.
-    call lua_pop(state, -2)
-
-    if (.not. lua_istable(state, -1)) then
-      print"(A)", "this is no longer a table"
-    end if
-
-
-    ! Table is back at -1.
-    call lua_pushstring(state, "test")
-
-    ! Then this is called as: -2 = blocks[test]
+    ! Let's try to call it.
+    call lua_pushstring(state, "register_block")
+    ! Table is now at -2.
     call lua_gettable(state, -2)
 
-    if (.not. lua_isstring(state, -1)) then
-      print*,"That's not a string"
+    if (lua_pcall(state, 0, 0, 0) == LUA_OK) then
+      print*,"it worked"
     end if
 
+    ! We push our variable into the stack like a caveman, lol.
+    ! call lua_pushstring(state, "test")
+    ! call lua_pushstring(state, "I am a test!")
+    ! ! Then this is called as: -3 = blocks[test]
+    ! call lua_settable(state, -3)
 
-    test_string = lua_tostring(state, -1)
+    ! ! Remove the values from the stack.
+    ! call lua_pop(state, -2)
 
-    print"(A)","["//test_string//"]"
+    ! if (.not. lua_istable(state, -1)) then
+    !   print"(A)", "this is no longer a table"
+    ! end if
+
+
+    ! ! Table is back at -1.
+    ! call lua_pushstring(state, "test")
+
+    ! ! Then this is called as: -2 = blocks[test]
+    ! call lua_gettable(state, -2)
+
+    ! if (.not. lua_isstring(state, -1)) then
+    !   print*,"That's not a string"
+    ! end if
+
+
+    ! test_string = lua_tostring(state, -1)
+
+    ! print"(A)","["//test_string//"]"
 
 
 
@@ -99,7 +111,7 @@ contains
 
     type(c_ptr) :: state
 
-    print*,"hi"
+    print"(A)","Hello, I am register_block!"
   end subroutine register_block
 
 
