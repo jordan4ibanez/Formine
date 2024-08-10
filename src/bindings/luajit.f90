@@ -113,6 +113,7 @@ module luajit
   public :: luajit_run_string
   public :: luajit_run_file
   public :: luajit_push_generic
+  public :: luajit_swap_table_function
   public :: luajit_call_function
 
   integer(c_int), parameter :: LUA_OK = 0
@@ -1040,14 +1041,24 @@ contains
   !* in the API. It allows me to swap the declaration with a fortran
   !* function pointer.
   !* This is a very delicate function as well, must be handled with care.
-  function luajit_swap_table_function() result(success)
+  !* We will assume that the table is at stack level -1.
+  subroutine luajit_swap_table_function(state, table_key, function_pointer)
     implicit none
 
-    logical :: success
+    type(c_ptr), intent(in), value :: state
+    character(len = *, kind = c_char), intent(in) :: table_key
+    type(c_funptr), intent(in), value :: function_pointer
 
-    success = .false.
+    ! Push our stack values. Everything will shift back.
+    call lua_pushstring(state, table_key)
+    call lua_pushcfunction(state, function_pointer)
 
-  end function luajit_swap_table_function
+    ! The table now resides in -3. Set it.
+    call lua_settable(state, -3)
+
+    ! Finally, remove the values from the stack.
+    call lua_pop(state, -2)
+  end subroutine luajit_swap_table_function
 
 
   !* Ultra generic LuaJIT function caller.
