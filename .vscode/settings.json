@@ -18,5 +18,9 @@
     "scripts/": true
   },
   // Lua configuration.
-  "Lua.runtime.version": "LuaJIT"
+  "Lua.runtime.version": "LuaJIT",
+  "Lua.workspace.library": [],
+  "Lua.diagnostics.globals": [
+    "blocks"
+  ]
 }
