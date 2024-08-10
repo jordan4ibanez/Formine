@@ -293,23 +293,23 @@ module luajit
     end function lua_equal
 
 
-    function lua_rawequal(state, index_1, index_2) result(equality) bind(c, name = "lua_rawequal")
+    function lua_rawequal(state, index_1, index_2) result(raw_equality) bind(c, name = "lua_rawequal")
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr), intent(in), value :: state
       integer(c_int), intent(in), value :: index_1, index_2
-      logical(c_bool) :: equality
+      logical(c_bool) :: raw_equality
     end function lua_rawequal
 
 
-    function lua_lessthan(state, index_1, index_2) result(equality) bind(c, name = "lua_lessthan")
+    function lua_lessthan(state, index_1, index_2) result(is_less_than) bind(c, name = "lua_lessthan")
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr), intent(in), value :: state
       integer(c_int), intent(in), value :: index_1, index_2
-      logical(c_bool) :: equality
+      logical(c_bool) :: is_less_than
     end function lua_lessthan
 
 
