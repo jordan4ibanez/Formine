@@ -294,6 +294,10 @@ contains
     print*,testing
     ! print*,lua_isnumber(state, 1)
 
+    testing = lua_typename(state, 2)
+
+    print*,testing
+
 
   end subroutine test_luajit_closure
   !! END DEBUGGING LUAJIT CLOSURE !!
