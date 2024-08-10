@@ -102,7 +102,7 @@ contains
 
   !* Dump a raw Fortran string pointer into a string.
   !* Returns the new string.
-  function convert_c_string_to_string(length, input_pointer) result(output_string)
+  function convert_c_string_pointer_to_string(length, input_pointer) result(output_string)
     use, intrinsic :: iso_c_binding
     implicit none
 
@@ -118,7 +118,7 @@ contains
     do i = 1, length
       output_string(i:i) = input_pointer(i)
     end do
-  end function convert_c_string_to_string
+  end function convert_c_string_pointer_to_string
 
 
   !* Use this to convert C strings stored in a (character, pointer) into Fortran strings.
