@@ -589,7 +589,8 @@ contains
 
       !* String.
      type is (character(len = *))
-      call lua_pushlstring(lua_state, into_c_string(input), int(len(input) + 1, kind = c_size_t))
+      !* It appears that LuaJIT will simply grab the length without a null terminator.
+      call lua_pushlstring(lua_state, input, int(len(input), kind = c_size_t))
       ! print*, "push string with length"
 
       !* Boolean.
