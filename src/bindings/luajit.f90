@@ -687,16 +687,17 @@ contains
 
   !* Get a string from lua. This was a macro in LuaJIT.
   !* This has been reconfigured to work with Fortran.
-  function lua_tostring(index) result(new_string)
+  function lua_tostring(state, index) result(new_string)
     use :: string
     implicit none
 
+    type(c_ptr), intent(in), value :: state
     integer(c_int), intent(in), value :: index
     character(len = :, kind = c_char), allocatable :: new_string
     integer(c_int) :: lua_string_length
     type(c_ptr) :: c_string_pointer
 
-    c_string_pointer = lua_tolstring(lua_state, index, lua_string_length)
+    c_string_pointer = lua_tolstring(state, index, lua_string_length)
 
     new_string = string_from_c(c_string_pointer, lua_string_length + 1)
     !? c_string_pointer is not done with malloc. No need to free. (tested)
@@ -767,46 +768,55 @@ contains
 
 
   !* Create the actual LuaJIT state that we will use.
-  subroutine luajit_initialize()
+  subroutine luajit_initialize(state)
     implicit none
 
-    if (c_associated(lua_state)) then
+    type(c_ptr), intent(inout) :: state
+
+    !? This is written like this to protect myself, from myself.
+
+    if (c_associated(state)) then
       error stop "[LuaJIT] Error: Tried to initialize LuaJIT when already initialized."
     end if
 
-    lua_state = lual_newstate()
+    state = lual_newstate()
 
-    if (.not. c_associated(lua_state)) then
+    if (.not. c_associated(state)) then
       error stop "[LuaJIT] Error: Failed to initialize."
     end if
 
     ! Make the entire standard library available.
     !! Is this safe for the end user when using external mods? HELL NO.
-    call lual_openlibs(lua_state)
+    call lual_openlibs(state)
   end subroutine luajit_initialize
 
 
   !* Clean up the memory used by LuaJIT and destroy it.
-  subroutine luajit_destroy()
+  subroutine luajit_destroy(state)
     implicit none
 
-    if (.not. c_associated(lua_state)) then
+    type(c_ptr), intent(inout) :: state
+
+    !? This is written like this to protect myself, from myself.
+
+    if (.not. c_associated(state)) then
       error stop "[LuaJIT] Error: Tried to destroy LuaJIT when not initialized."
     end if
 
-    call lua_close(lua_state)
+    call lua_close(state)
 
     ! Nullify. Allows re-initialization.
-    lua_state = c_null_ptr
+    state = c_null_ptr
   end subroutine luajit_destroy
 
 
   !* Run a LuaJIT string. Returns success.
-  function luajit_run_string(string_to_run) result(success)
+  function luajit_run_string(state, string_to_run) result(success)
     use :: string
     use :: terminal
     implicit none
 
+    type(c_ptr), intent(in), value :: state
     character(len = *), intent(in) :: string_to_run
     character(len = :, kind = c_char), allocatable :: c_string
     logical :: success
@@ -815,27 +825,28 @@ contains
 
     c_string = into_c_string(string_to_run)
 
-    if (lual_loadstring(lua_state, c_string) == LUA_OK) then
-      if (lua_pcall(lua_state, 0, 0, 0) == LUA_OK) then
+    if (lual_loadstring(state, c_string) == LUA_OK) then
+      if (lua_pcall(state, 0, 0, 0) == LUA_OK) then
         ! If code was executed successfully, we remove the code from the stack.
-        call lua_pop(lua_state, lua_gettop(lua_state))
+        call lua_pop(state, lua_gettop(state))
         success = .true.
       else
-        print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
+        print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
       end if
     else
-      print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
+      print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
     end if
   end function luajit_run_string
 
 
   !* Run a LuaJIT file. Returns success.
-  function luajit_run_file(file_path) result(success)
+  function luajit_run_file(state, file_path) result(success)
     use :: string
     use :: files
     use :: terminal
     implicit none
 
+    type(c_ptr), intent(in), value :: state
     character(len = *, kind = c_char), intent(in) :: file_path
     type(file_reader) :: reader
     character(len = :, kind = c_char), allocatable :: c_string
@@ -851,62 +862,63 @@ contains
 
     c_string = into_c_string(reader%file_string)
 
-    if (lual_loadstring(lua_state, c_string) == LUA_OK) then
-      if (lua_pcall(lua_state, 0, 0, 0) == LUA_OK) then
+    if (lual_loadstring(state, c_string) == LUA_OK) then
+      if (lua_pcall(state, 0, 0, 0) == LUA_OK) then
         ! If code was executed successfully, we remove the code from the stack.
-        call lua_pop(lua_state, lua_gettop(lua_state))
+        call lua_pop(state, lua_gettop(state))
         success = .true.
       else
-        print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
+        print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
       end if
     else
-      print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
+      print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
     end if
   end function luajit_run_file
 
 
   !* This function will attempt to push whatever variable type into the LuaJIT stack.
-  subroutine luajit_push_generic(input)
+  subroutine luajit_push_generic(state, input)
     implicit none
 
+    type(c_ptr), intent(in), value :: state
     class(*), intent(in) :: input
 
     select type (input)
 
       !* Integer.
      type is (integer(c_int))
-      call lua_pushinteger(lua_state, int(input, kind = c_int64_t))
+      call lua_pushinteger(state, int(input, kind = c_int64_t))
       ! print*,"push integer cast to c_int64_t"
      type is (integer(c_int64_t))
-      call lua_pushinteger(lua_state, input)
+      call lua_pushinteger(state, input)
       ! print*, "push c_int64_t"
 
       !* Floating point.
      type is (real(c_float))
-      call lua_pushnumber(lua_state, real(input, kind = c_double))
+      call lua_pushnumber(state, real(input, kind = c_double))
       ! print*, "push float cast to c_double"
      type is (real(c_double))
-      call lua_pushnumber(lua_state, input)
+      call lua_pushnumber(state, input)
       ! print*, "push c_double"
 
       !* String.
      type is (character(len = *))
       !* It appears that LuaJIT will simply grab the length without a null terminator.
-      call lua_pushlstring(lua_state, input, int(len(input), kind = c_size_t))
+      call lua_pushlstring(state, input, int(len(input), kind = c_size_t))
       ! print*, "push string with length"
 
       !* Boolean.
      type is (logical)
-      call lua_pushboolean(lua_state, logical(input, kind = c_bool))
+      call lua_pushboolean(state, logical(input, kind = c_bool))
       ! print*, "push logical, convert to c_bool"
      type is (logical(c_bool))
-      call lua_pushboolean(lua_state, input)
+      call lua_pushboolean(state, input)
       ! print*, "push c_bool"
 
       !? Now we get into the interesting part.
       !* Function pointer. Aka, "closure".
      type is (luajit_closure)
-      call lua_pushcclosure(lua_state, input%pointer, input%argument_count)
+      call lua_pushcclosure(state, input%pointer, input%argument_count)
       ! print*, "push fortran lua c function"
 
       !* We did something very bad.
@@ -920,10 +932,11 @@ contains
   !* Limited to 4 input variables.
   !* Limited to 1 output variables.
   !* This could be changed though.
-  subroutine luajit_call_function(function_name, a, b, c, d, return_value)
+  subroutine luajit_call_function(state, function_name, a, b, c, d, return_value)
     use :: terminal
     implicit none
 
+    type(c_ptr), intent(in), value :: state
     character(len = *, kind = c_char), intent(in) :: function_name
     class(*), intent(in), optional :: a, b, c, d
     !? This is written like this to allow pure LuaJIT functions.
@@ -931,32 +944,32 @@ contains
     integer(c_int) :: return_value_count
 
     ! Load the function into the LuaJIT stack.
-    call lua_getglobal(lua_state, function_name)
+    call lua_getglobal(state, function_name)
 
     ! We must push 4 values, nil or not, into the LuaJIT stack.
     ! They are positional arguments.
     if (present(a)) then
-      call luajit_push_generic(a)
+      call luajit_push_generic(state, a)
     else
-      call lua_pushnil(lua_state)
+      call lua_pushnil(state)
     end if
 
     if (present(b)) then
-      call luajit_push_generic(b)
+      call luajit_push_generic(state, b)
     else
-      call lua_pushnil(lua_state)
+      call lua_pushnil(state)
     end if
 
     if (present(c)) then
-      call luajit_push_generic(c)
+      call luajit_push_generic(state, c)
     else
-      call lua_pushnil(lua_state)
+      call lua_pushnil(state)
     end if
 
     if (present(d)) then
-      call luajit_push_generic(d)
+      call luajit_push_generic(state, d)
     else
-      call lua_pushnil(lua_state)
+      call lua_pushnil(state)
     end if
 
     ! Now we're going to check if the return value is present.
@@ -970,10 +983,10 @@ contains
 
     !* We need 4 arguments, even if they do not exist. They are nil.
     !* The LuaJIT stack will read out of it's buffer if this isn't 4.
-    if (lua_pcall(lua_state, 4, return_value_count, 0) == LUA_OK) then
-      call lua_pop(lua_state, lua_gettop(lua_state))
+    if (lua_pcall(state, 4, return_value_count, 0) == LUA_OK) then
+      call lua_pop(state, lua_gettop(state))
     else
-      print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error running LuaJIT function ["//function_name//"]"//achar(10)//lua_tostring(lua_gettop(lua_state)), 255, 0, 0)
+      print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error running LuaJIT function ["//function_name//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
     end if
   end subroutine luajit_call_function
 
