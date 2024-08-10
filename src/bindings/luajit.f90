@@ -163,14 +163,12 @@ module luajit
     end subroutine lua_pushnil
 
 
-    subroutine lua_pushnumber(state, long_number) bind(c, name = "lua_pushnumber")
+    subroutine lua_pushnumber(state, double_number) bind(c, name = "lua_pushnumber")
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr), intent(in), value :: state
-      !* This is 32 bit on windows. LuaJIT defined this as simply long.
-      !! Not c_int64_t !!
-      integer(c_long), intent(in), value :: long_number
+      real(c_double), intent(in), value :: double_number
     end subroutine lua_pushnumber
 
 
