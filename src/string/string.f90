@@ -131,13 +131,13 @@ contains
     ! On the Fortran side.
     character(kind = c_char), dimension(:), pointer :: fortran_string_pointer
     character(len = :, kind = c_char), allocatable :: fortran_string
-    integer :: string_length
+    integer :: string_length, found_string_length
     ! 4 BYTES, aka, 32 bit.
     ! If there is a string bigger than this, we have a problem.
     integer(c_int) :: i
 
     ! Starts off as 0
-    ! length = 0
+    found_string_length = 0
 
     ! We must ensure that we are not converting a null pointer
     ! as this can lead to SERIOUS UB.
@@ -150,29 +150,27 @@ contains
       !? It seems that everything is okay, we will proceed.
       call c_f_pointer(c_string_pointer, fortran_string_pointer, [string_length])
 
-      fortran_string = convert_c_string_to_string(string_length, fortran_string_pointer)
+      fortran_string = convert_c_string_pointer_to_string(string_length, fortran_string_pointer)
 
       ! !! Force a null terminator to be applied.
       ! !? This prevents strange behavior when C misbehaves.
-      fortran_string_pointer(string_length) = achar(0)
+      fortran_string(string_length:string_length) = achar(0)
 
       ! ! Let's find the null terminator.
-      ! do i = 1, input_length
-      !   print*,fortran_raw_string(i)
-      !   if (fortran_raw_string(i) == achar(0)) then
-      !     length = i - 1
-      !     exit
-      !   end if
-      ! end do
-
-      ! print*,"final length", length
+      do i = 1,string_length
+        ! print*,fortran_raw_string(i)
+        if (fortran_string(i:i) == achar(0)) then
+          found_string_length = i - 1
+          exit
+        end if
+      end do
 
       ! If the length is 0, we literally cannot do anything, so give up.
-      ! if (length > 0) then
-      !   call copy_string_pointer(length, fortran_raw_string, fortran_string)
-      ! else
-      !   fortran_string = ""
-      ! end if
+      if (found_string_length > 0) then
+        fortran_string = fortran_string(1:found_string_length)
+      else
+        fortran_string = ""
+      end if
     end if
   end function string_from_c
 
