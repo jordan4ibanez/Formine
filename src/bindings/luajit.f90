@@ -216,7 +216,6 @@ module luajit
       implicit none
 
       type(c_ptr), intent(in), value :: state
-      !* This was an integer. This may cause problems.
       logical(c_bool), intent(in), value :: boolean
     end subroutine lua_pushboolean
 
