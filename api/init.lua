@@ -1,3 +1,4 @@
+---@diagnostic disable: unused-local
 --[[
 
 Forgotten Lands API base.
@@ -18,7 +19,9 @@ print("[LuaJIT API]: Initializing.")
 --- @class Array<T>: { [integer] : T }
 
 
-
+--- A block definition.
+---
+--- The texture array must contains 6 elements.
 --- @class block_definition
 --- @field name string
 --- @field textures Array<string>
@@ -27,23 +30,34 @@ print("[LuaJIT API]: Initializing.")
 --* APIS. =================================================================================
 
 
+--? BLOCK. =================================================================================
+
 --- The block library.
 --- You use this to set and get block definitions.
-block = {
+block = {}
 
 
-  --- Register a block into the engine.
-  --- @param name string The name of the block.
-  --- @param data_table block_definition A table containing block definition data.
-  register_block = function(name, data_table) print("test") end,
+block.draw_type = {
 
-
-  test = 5.5
 }
+
+
+--- Register a block into the engine.
+--- @param name string The name of the block.
+--- @param data_table block_definition A block definition.
+block.register = function(name, data_table) end
+
+
+--? WORLD. =================================================================================
+
 
 world = {
 
 }
+
+
+--? ENTITY. =================================================================================
+
 
 entity = {
 
