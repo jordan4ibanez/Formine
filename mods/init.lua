@@ -22,4 +22,8 @@ function my_function(a, b, c, d)
   -- print(d)
 end
 
-block.register("test", {})
+block.register("test", {
+  name = "air",
+  textures = { "test.png" },
+  draw_type = block.draw_type.air
+})
