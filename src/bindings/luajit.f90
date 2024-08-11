@@ -92,7 +92,7 @@ module luajit
   public :: lua_error
   public :: lua_next
   public :: lua_concat
-  public :: luaL_error
+  public :: lual_error
 
 
   !* Custom and macros.
@@ -633,7 +633,7 @@ module luajit
     end function lua_concat
 
 
-    function internal_luaL_error(state, format_string, string) result(status) bind(c, name = "luaL_error")
+    function internal_lual_error(state, format_string, string) result(status) bind(c, name = "luaL_error")
       use, intrinsic :: iso_c_binding
       implicit none
 
@@ -642,7 +642,7 @@ module luajit
       type(c_ptr), intent(in), value :: state
       character(kind = c_char), intent(in) :: format_string, string
       integer(c_int) :: status
-    end function internal_luaL_error
+    end function internal_lual_error
 
 
 !? END RAW BINDINGS. =================================================================================
@@ -876,7 +876,7 @@ contains
   !! END DEBUGGING LUAJIT CLOSURE !!
 
 
-  function luaL_error(state, error_string) result(status)
+  function lual_error(state, error_string) result(status)
     use :: string, only: into_c_string
     implicit none
 
@@ -885,7 +885,7 @@ contains
     integer(c_int) :: status
 
     status = internal_luaL_error(state, into_c_string("%s"), into_c_string(error_string))
-  end function luaL_error
+  end function lual_error
 
 
   subroutine lua_pushstring(state, input_string)
