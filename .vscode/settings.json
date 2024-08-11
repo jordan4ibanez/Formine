@@ -19,9 +19,15 @@
   },
   // Lua configuration.
   "Lua.runtime.version": "LuaJIT",
-  "Lua.workspace.library": [],
+  "Lua.workspace.library": [
+    "./api/*"
+  ],
+  "Lua.format.defaultConfig": {
+    "indent_style": "space",
+    "indent_size": "2"
+  },
   "Lua.diagnostics.globals": [
-    "blocks",
+    "block",
     "world",
     "entity"
   ]
