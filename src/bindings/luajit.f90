@@ -1224,7 +1224,6 @@ contains
       if (.not. lua_isnumber(state, index)) then
         return
       end if
-
       generic_data = int(lua_tonumber(state, index), kind = c_int)
       print*,"get integer cast to c_int"
      type is (integer(c_int64_t))
@@ -1236,24 +1235,39 @@ contains
 
       !* Floating point.
      type is (real(c_float))
+      if (.not. lua_isnumber(state, index)) then
+        return
+      end if
       generic_data = real(lua_tonumber(state, index), kind = c_int)
       print*, "get float cast to c_int"
      type is (real(c_double))
+      if (.not. lua_isnumber(state, index)) then
+        return
+      end if
       generic_data = lua_tonumber(state, index)
       print*, "get c_double"
 
       !* String.
      type is (character(len = *))
+      if (.not. lua_isstring(state, index)) then
+        return
+      end if
       generic_data = lua_tostring(state, index)
       print*, "get string"
 
       !* Boolean.
      type is (logical)
+      if (.not. lua_isboolean(state, index)) then
+        return
+      end if
       generic_data = lua_toboolean(state, index)
-      print*, "get logical, convert to c_bool"
+      print*, "get logical"
      type is (logical(c_bool))
+      if (.not. lua_isboolean(state, index)) then
+        return
+      end if
       generic_data = lua_toboolean(state, index)
-      print*, "get c_bool"
+      print*, "get c_bool, convert to c_bool"
 
       !? Now we get into the interesting part.
       !* Function pointer. Aka, "closure".
@@ -1265,6 +1279,8 @@ contains
      class default
       ! print*, "uh oh"
     end select
+
+    success = .true.
   end function luajit_get_generic
 
 
