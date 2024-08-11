@@ -82,9 +82,16 @@ contains
     ! Now we need to get the table which contains the textures.
     call luajit_put_table_in_table_on_stack_required(state, module_name, "definition", "textures", "Array<string>")
 
-    status = lua_objlen(state, -1)
+    associate(value => luajit_get_generic(state, -1, textures))
+      if (value /= LUAJIT_GET_OK) then
+        if (value == LUAJIT_GET_MISSING) then
+          print*,"It's missing!"
+        else
+          print*,"it's the wrong type"
+        end if
+      end if
+    end associate
 
-    print*, status
 
 
 
@@ -92,9 +99,9 @@ contains
     ! call luajit_table_get_required(state, module_name, "definition", "textures", textures, "Array<string>")
 
 
-    print"(A)", module_name//": Current Block definition:"
-    print"(A)", "Name: "//name%get()
-    print"(A)", "Description: "//description%get()
+    ! print"(A)", module_name//": Current Block definition:"
+    ! print"(A)", "Name: "//name%get()
+    ! print"(A)", "Description: "//description%get()
 
 
 

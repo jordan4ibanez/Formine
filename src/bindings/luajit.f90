@@ -1199,6 +1199,24 @@ contains
     end if
   end subroutine luajit_call_function
 
+  !* Copy a string array into a string_array.
+  subroutine luajit_copy_string_array_from_table(state, target_array)
+    use :: array, only: string_array
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    type(string_array), intent(inout) :: target_array
+
+    ! Unwind the whole stack if it's not a table.
+    if (.not. lua_istable(state, -1)) then
+      call luajit_error_stop(state, "Not a table!")
+    end if
+
+    print*, "we got a table :D"
+
+
+  end subroutine luajit_copy_string_array_from_table
+
 
   !* This is an extremely specific function for swapping table values
   !* in the API. It allows me to swap the declaration with a fortran
@@ -1243,6 +1261,7 @@ contains
   !* This subroutine will attempt to grab data from whatever index you give it.
   function luajit_get_generic(state, index, generic_data) result(status)
     use :: string
+    use :: array
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -1315,6 +1334,10 @@ contains
       end if
       generic_data = lua_toboolean(state, index)
       ! print*, "get c_bool, convert to c_bool"
+
+     type is (string_array)
+      print*,"hit string array, copying"
+      call luajit_copy_string_array_from_table(state, generic_data)
 
       !? Now we get into the interesting part.
       !* Function pointer. Aka, "closure".
