@@ -24,6 +24,7 @@ program main
   call api_initialize()
 
   if (.not. api_run_file("./mods/init.lua")) then
+    print*,"FAILED TO RUN FILE"
     return
   end if
 
