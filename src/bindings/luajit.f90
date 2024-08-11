@@ -26,6 +26,7 @@ module luajit
 
 
   !* LuaJIT constants.
+
   public :: LUA_OK
   public :: LUA_YIELD
   public :: LUA_ERRRUN
@@ -35,7 +36,6 @@ module luajit
   public :: LUA_REGISTRYINDEX
   public :: LUA_ENVIRONINDEX
   public :: LUA_GLOBALSINDEX
-  public :: LUA_RETURNINDEX
   public :: LUA_TNONE
   public :: LUA_TNIL
   public :: LUA_TBOOLEAN
@@ -49,6 +49,7 @@ module luajit
 
 
   !* LuaJIT raw bindings.
+
   public :: luajit_closure
   public :: lua_gettop
   public :: lua_settop
@@ -96,6 +97,7 @@ module luajit
 
 
   !* Custom and macros.
+
   public :: lua_pop
   public :: lua_newtable
   public :: lua_register
@@ -123,6 +125,13 @@ module luajit
   public :: luajit_get_generic
   public :: luajit_table_get
 
+  public :: LUA_RETURNINDEX
+  public :: LUAJIT_TABLE_OK
+  public :: LUAJIT_TABLE_MISSING
+  public :: LUAJIT_TABLE_WRONG_TYPE
+
+  !* LuaJIT constants.
+
   integer(c_int), parameter :: LUA_OK = 0
   integer(c_int), parameter :: LUA_YIELD = 1
   integer(c_int), parameter :: LUA_ERRRUN = 2
@@ -133,9 +142,6 @@ module luajit
   integer(c_int), parameter :: LUA_REGISTRYINDEX = (-10000)
   integer(c_int), parameter :: LUA_ENVIRONINDEX = (-10001)
   integer(c_int), parameter :: LUA_GLOBALSINDEX = (-10002)
-
-  !* This is a custom parameter to indicate we're getting the result from a function.
-  integer(c_int), parameter :: LUA_RETURNINDEX = -1
 
   integer(c_int), parameter :: LUA_TNONE = (-1)
 
@@ -148,6 +154,14 @@ module luajit
   integer(c_int), parameter :: LUA_TFUNCTION = 6
   integer(c_int), parameter :: LUA_TUSERDATA = 7
   integer(c_int), parameter :: LUA_TTHREAD = 8
+
+  !* Custom constants
+
+  !* This is a custom parameter to indicate we're getting the result from a function.
+  integer(c_int), parameter :: LUA_RETURNINDEX = -1
+  integer(c_int), parameter :: LUAJIT_TABLE_OK = 0
+  integer(c_int), parameter :: LUAJIT_TABLE_MISSING = 1
+  integer(c_int), parameter :: LUAJIT_TABLE_WRONG_TYPE = 2
 
 
   !* A custom wrapper type to allow X amount of arguments to be associated
