@@ -89,6 +89,9 @@ module luajit
   public :: lua_call
   public :: lua_pcall
   public :: lua_cpcall
+  public :: lua_error
+  public :: lua_next
+  public :: lua_concat
 
 
   !* Custom and macros.
@@ -595,6 +598,38 @@ module luajit
       type(c_ptr), intent(inout) :: unknown_data
       integer(c_int) :: status
     end function lua_cpcall
+
+
+!* MISCELLANEOUS FUNCTIONS. =================================================================================
+
+
+    function lua_error(state) result(status) bind(c, name = "lua_error")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int) :: status
+    end function lua_error
+
+
+    function lua_next(state, index) result(status) bind(c, name = "lua_next")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: index
+      integer(c_int) :: status
+    end function lua_next
+
+
+    function lua_concat(state, number_of_things_to_concat) result(status) bind(c, name = "lua_concat")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int), intent(in), value :: number_of_things_to_concat
+      integer(c_int) :: status
+    end function lua_concat
 
 
 !? END RAW BINDINGS. =================================================================================
