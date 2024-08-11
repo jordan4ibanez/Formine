@@ -54,7 +54,7 @@ contains
   !* See the LuaJIT API [./api/init.lua] for the layout of block_definition.
   subroutine register_block(state)
     use :: string
-    use :: array
+    use :: array, only: string_array
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -62,12 +62,10 @@ contains
     integer(c_int) :: status
     ! block_definition fields.
     type(heap_string) :: name, description
-    type(int_array) :: textures
+    type(string_array) :: textures
     integer(c_int) :: draw_type
 
     status = LUAJIT_GET_OK
-
-    textures = (/1.3,2.3,3.3,4.3/)
 
     ! Enforce the first and only argument to be a table.
     if (.not. lua_istable(state, -1)) then
@@ -75,13 +73,17 @@ contains
     end if
 
     ! Name is required.
-    call luajit_table_get_required(state, module_name, "definition", "name", name, "string")
+    call luajit_table_get_key_required(state, module_name, "definition", "name", name, "string")
 
     ! Description is required.
-    call luajit_table_get_required(state, module_name, "definition", "description", description, "string")
+    call luajit_table_get_key_required(state, module_name, "definition", "description", description, "string")
+
+    ! Now we need to get the table which contains the textures.
+    call luajit_put_table_in_table_on_stack_required(state, module_name, "definition", "textures", "Array<string>")
+
 
     ! Textures are required
-    !! call luajit_table_get_required(state, module_name, "definition", "textures", textures, "Array<string>")
+    ! call luajit_table_get_required(state, module_name, "definition", "textures", textures, "Array<string>")
 
 
     print"(A)", module_name//": Current Block definition:"
