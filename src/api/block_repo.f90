@@ -52,15 +52,10 @@ contains
 
     type(c_ptr), intent(in), value :: state
 
-    
-    call luajit_throw_error(state, "uh oh")
-
-    ! error stop "[Block Repo] Error: Can't initialize function pointers. [blocks] table is missing!"
-
+    ! Enforce the first and only argument to be a table.
     if (.not. lua_istable(state, -1)) then
-      error stop "[Block Repo] Error: Can't initialize function pointers. [blocks] table is missing!"
+      call luajit_error_stop(state, "[Block Repo] Error: Cannot register block. Not a table.")
     end if
-
 
   end subroutine register_block
 
