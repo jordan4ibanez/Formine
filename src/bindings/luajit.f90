@@ -120,6 +120,8 @@ module luajit
   public :: luajit_push_generic
   public :: luajit_swap_table_function
   public :: luajit_call_function
+  public :: luajit_get_generic
+  public :: luajit_table_get
 
   integer(c_int), parameter :: LUA_OK = 0
   integer(c_int), parameter :: LUA_YIELD = 1
@@ -1200,6 +1202,70 @@ contains
     ! Finally, remove the values from the stack.
     call lua_pop(state, -2)
   end subroutine luajit_swap_table_function
+
+
+  !* This subroutine will attempt to grab data from whatever index you give it.
+  subroutine luajit_get_generic(state, index, input)
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    integer(c_int), intent(in), value :: index
+    class(*), intent(in) :: input
+
+    select type (input)
+
+      !* Integer.
+     type is (integer(c_int))
+      ! call lua_pushinteger(state, int(input, kind = c_int64_t))
+      print*,"get integer cast to c_int64_t"
+     type is (integer(c_int64_t))
+      ! call lua_pushinteger(state, input)
+      print*, "get c_int64_t"
+
+      !* Floating point.
+     type is (real(c_float))
+      ! call lua_pushnumber(state, real(input, kind = c_double))
+      print*, "get float cast to c_double"
+     type is (real(c_double))
+      ! call lua_pushnumber(state, input)
+      print*, "get c_double"
+
+      !* String.
+     type is (character(len = *))
+      !* It appears that LuaJIT will simply grab the length without a null terminator.
+      ! call lua_pushlstring(state, input, int(len(input), kind = c_size_t))
+      print*, "get string with length"
+
+      !* Boolean.
+     type is (logical)
+      ! call lua_pushboolean(state, logical(input, kind = c_bool))
+      print*, "get logical, convert to c_bool"
+     type is (logical(c_bool))
+      ! call lua_pushboolean(state, input)
+      print*, "get c_bool"
+
+      !? Now we get into the interesting part.
+      !* Function pointer. Aka, "closure".
+     type is (luajit_closure)
+      ! call lua_pushcclosure(state, input%pointer, input%argument_count)
+      print*, "get fortran lua c function"
+
+      !* We did something very bad.
+     class default
+      ! print*, "uh oh"
+    end select
+  end subroutine luajit_get_generic
+
+
+  subroutine luajit_table_get(state, table_key, data_output)
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    character(len = *, kind = c_char), intent(in) :: table_key
+    class(*), intent(inout) :: data_output
+
+  end subroutine luajit_table_get
+
 
 
 end module luajit
