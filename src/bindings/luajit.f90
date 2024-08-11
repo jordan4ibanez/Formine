@@ -112,6 +112,7 @@ module luajit
   public :: lua_tostring
   public :: lua_typename
   public :: lua_setfield
+  public :: luajit_throw_error
   public :: luajit_initialize
   public :: luajit_destroy
   public :: luajit_run_string
@@ -933,6 +934,21 @@ contains
 
     call internal_lua_setfield(state, index, c_string)
   end subroutine lua_setfield
+
+
+  !* Just chuck an error into LuaJIT.
+  !* This is built upon a bunch of things to make it easy as heck.
+  subroutine luajit_throw_error(state, error_string)
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    character(len = *, kind = c_char) :: error_string
+
+    ! If we fail to throw an error, what the heck.
+    if (lual_error(state, error_string) /= LUA_OK) then
+      error stop "LuaJIT: Error: Failed to trow error!"
+    end if
+  end subroutine luajit_throw_error
 
 
   !* Create the actual LuaJIT state that we will use.
