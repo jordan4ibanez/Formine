@@ -1,7 +1,7 @@
 ---@diagnostic disable: unused-local
 --[[
 
-Forgotten Lands API base.
+Fortlands API base.
 
 This is written like this, so you can see the data using the Lua VSCode extension.
 
@@ -24,6 +24,7 @@ print("[LuaJIT API]: Initializing.")
 --- The texture array must contains 6 elements.
 --- @class block_definition
 --- @field name string
+--- @field description string
 --- @field textures Array<string>
 --- @field draw_type draw_type
 
@@ -47,9 +48,8 @@ block.draw_type = {
 
 
 --- Register a block into the engine.
---- @param name string The name of the block.
---- @param data_table block_definition A block definition.
-block.register = function(name, data_table) end
+--- @param block_definition block_definition A block definition.
+block.register = function(block_definition) end
 
 
 --? WORLD. =================================================================================
