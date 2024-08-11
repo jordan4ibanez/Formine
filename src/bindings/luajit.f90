@@ -1205,17 +1205,19 @@ contains
 
 
   !* This subroutine will attempt to grab data from whatever index you give it.
-  function luajit_get_generic(state, index, data) result(success)
+  function luajit_get_generic(state, index, generic_data) result(success)
     implicit none
 
     type(c_ptr), intent(in), value :: state
     integer(c_int), intent(in), value :: index
-    class(*), intent(in) :: data
+    class(*), intent(in) :: generic_data
     logical :: success
 
     success = .false.
 
-    select type (data)
+    !* This is written a bit defensively to prevent problems.
+
+    select type (generic_data)
 
       !* Integer.
      type is (integer(c_int))
