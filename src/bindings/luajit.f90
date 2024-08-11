@@ -129,7 +129,7 @@ module luajit
   public :: luajit_table_get
   public :: luajit_require_table_key
   public :: luajit_table_get_required
-  public :: luajit_put_table_in_table_on_stack
+  public :: luajit_put_table_in_table_on_stack_required
 
   public :: LUA_RETURNINDEX
   public :: LUAJIT_GET_OK
@@ -1395,14 +1395,11 @@ contains
 
   !* This will specifically get and verify a table inside of a table.
   !* Pushes it into -1 on the stack.
-  function luajit_put_table_in_table_on_stack(state, key_name) result(status)
+  subroutine luajit_put_table_in_table_on_stack_required(state, module_name, table_name, key_name, expected_type)
     implicit none
 
     type(c_ptr), intent(in), value :: state
-    character(len = *, kind = c_char), intent(in) :: key_name
-    integer(c_int) :: status
-
-    status = LUAJIT_GET_OK
+    character(len = *, kind = c_char), intent(in) :: module_name, table_name, key_name, expected_type
 
     !* Push "name" to -1.
     call lua_pushstring(state, key_name)
@@ -1411,12 +1408,12 @@ contains
 
     if (.not. lua_istable(state, -1)) then
       if (lua_isnoneornil(state, -1)) then
-        status = LUAJIT_GET_MISSING
+        call luajit_error_stop(state, module_name//" Error: Table ["//table_name//"] is missing table key ["//key_name//"]")
       else
-        status = LUAJIT_GET_WRONG_TYPE
+        call luajit_error_stop(state, module_name//" Error: Table ["//table_name//"] table key ["//key_name//"] has the wrong type. Expected type: ["//expected_type//"]")
       end if
     end if
-  end function luajit_put_table_in_table_on_stack
+  end subroutine luajit_put_table_in_table_on_stack_required
 
 
 end module luajit
