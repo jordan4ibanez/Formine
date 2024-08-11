@@ -1334,12 +1334,13 @@ contains
   !* This function is simply a shorthand helper for a few
   !* function calls. It also clarifies what things are doing.
   !* Table must be in stack -1.
-  subroutine luajit_table_get(state, table_key, data_output)
+  function luajit_table_get(state, table_key, data_output) result(status)
     implicit none
 
     type(c_ptr), intent(in), value :: state
     character(len = *, kind = c_char), intent(in) :: table_key
     class(*), intent(inout) :: data_output
+    integer(c_int) :: status
 
     !* Push "name" to -1.
     call lua_pushstring(state, table_key)
@@ -1347,11 +1348,11 @@ contains
     call lua_gettable(state, -2)
 
     !* Now the value is pushed into the stack at -1.
-    (luajit_get_generic(state, -1, data_output))
+    status = luajit_get_generic(state, -1, data_output)
 
     !* And we can pop the getters and data output off the LuaJIT stack.
     call lua_pop(state, -2)
-  end subroutine luajit_table_get
+  end function luajit_table_get
 
 
 
