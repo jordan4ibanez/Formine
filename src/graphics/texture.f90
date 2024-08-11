@@ -266,10 +266,11 @@ contains
   subroutine texture_clear_database()
     use :: fhash, only: fhash_iter_t, fhash_key_t
     use :: string
+    use :: array, only: string_array
     use :: terminal
     implicit none
 
-    type(heap_string), dimension(:), allocatable :: key_array
+    type(string_array) :: key_array
     type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_placeholder
@@ -284,7 +285,7 @@ contains
     end if
 
     ! Start with a size of 0.
-    allocate(key_array(0))
+    allocate(key_array%data(0))
 
     ! Create the iterator.
     iterator = fhash_iter_t(texture_database)
@@ -292,11 +293,11 @@ contains
     ! Now we will collect the keys from the iterator.
     do while(iterator%next(generic_key, generic_placeholder))
       ! Appending. Allocatable will clean up the old data.
-      key_array = [key_array, heap_string_array(generic_key%to_string())]
+      key_array%data = [key_array%data, heap_string(generic_key%to_string())]
     end do
 
-    do i = 1,size(key_array)
-      call texture_delete(key_array(i)%get())
+    do i = 1,size(key_array%data)
+      call texture_delete(key_array%data(i)%get())
     end do
 
     !* We will always check that the remaining size is 0. This will protect us from random issues.
