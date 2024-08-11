@@ -92,6 +92,7 @@ module luajit
   public :: lua_error
   public :: lua_next
   public :: lua_concat
+  public :: luaL_error
 
 
   !* Custom and macros.
@@ -632,6 +633,18 @@ module luajit
     end function lua_concat
 
 
+    function internal_luaL_error(state, format_string, string) result(status) bind(c, name = "luaL_error")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      !? This is written horribly wrong because I only use this to print errors.
+
+      type(c_ptr), intent(in), value :: state
+      character(kind = c_char), intent(in) :: format_string, string
+      integer(c_int) :: status
+    end function internal_luaL_error
+
+
 !? END RAW BINDINGS. =================================================================================
 
 
@@ -861,6 +874,18 @@ contains
 
   end subroutine test_luajit_closure
   !! END DEBUGGING LUAJIT CLOSURE !!
+
+
+  function luaL_error(state, error_string) result(status)
+    use :: string, only: into_c_string
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    character(len = *, kind = c_char), intent(in) :: error_string
+    integer(c_int) :: status
+
+    status = internal_luaL_error(state, into_c_string("%s"), into_c_string(error_string))
+  end function luaL_error
 
 
   subroutine lua_pushstring(state, input_string)
