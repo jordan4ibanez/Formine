@@ -73,6 +73,16 @@ contains
     ! Name is required.
     call luajit_table_get_required(state, module_name, "definition", "name", name, "string")
 
+    ! Description is required.
+    call luajit_table_get_required(state, module_name, "definition", "description", description, "string")
+
+
+
+    print"(A)", module_name//": Current Block definition:"
+    print"(A)", "Name: "//name%get()
+    print"(A)", "Description: "//description%get()
+
+
 
     if (.not. lua_istable(state, -1)) then
       call luajit_error_stop(state, module_name//" Error: Cannot register block. Not a table.")
