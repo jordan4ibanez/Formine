@@ -12,7 +12,6 @@ module string
   public :: long_to_string
   public :: into_c_string
   public :: bool_to_string
-  public :: heap_string_array
   public :: get_file_name_from_string
   public :: string_remove_file_extension
   public :: string_get_non_space_characters
@@ -21,83 +20,6 @@ module string
 
 
 contains
-
-
-  !* Convert an optional variable length string into an integral representation of a boolean.
-  !? Exi stands for exists.
-  integer function exi(input) result(integer_representation)
-    implicit none
-
-    character(len = *), intent(in), optional :: input
-
-    if (present(input)) then
-      integer_representation = 1
-    else
-      integer_representation = 0
-    end if
-  end function exi
-
-
-  !* Helper function for heap_string_array
-  ! Basically a HUGE chain of if then statements simplified into call.
-  subroutine assign_heap_array(arr, slot, data)
-    implicit none
-
-    type(heap_string), dimension(:), intent(inout), allocatable :: arr
-    integer, intent(in), value :: slot
-    character(len = *), intent(in), optional :: data
-
-    if (present(data)) then
-      arr(slot) = data
-    end if
-  end subroutine assign_heap_array
-
-  !* Create an array of dynamically sized strings.
-  !* Can take upto 26 elements cause I ran out of letters.
-  ! This is a substitute for not having varargs.
-  function heap_string_array(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(heap_array)
-    implicit none
-
-    character(len = *), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
-    !? Because we need to allocate with unknown width, we must allow this to live in the heap.
-    !? This also basically points to other objects in the heap as well.
-    type(heap_string), dimension(:), allocatable :: heap_array
-    ! integer :: int
-
-    ! Now we only allocate how much we need.
-    allocate(heap_array(exi(a)+exi(b)+exi(c)+exi(d)+exi(e)+exi(f)+exi(g)+exi(h)+exi(i)+exi(j)+exi(k)+exi(l)+exi(m)+exi(n)+exi(o)+exi(p)+exi(q)+exi(r)+exi(s)+exi(t)+exi(u)+exi(v)+exi(w)+exi(x)+exi(y)+exi(z)))
-
-    call assign_heap_array(heap_array, 1, a)
-    call assign_heap_array(heap_array, 2, b)
-    call assign_heap_array(heap_array, 3, c)
-    call assign_heap_array(heap_array, 4, d)
-    call assign_heap_array(heap_array, 5, e)
-    call assign_heap_array(heap_array, 6, f)
-    call assign_heap_array(heap_array, 7, g)
-    call assign_heap_array(heap_array, 8, h)
-    call assign_heap_array(heap_array, 9, i)
-    call assign_heap_array(heap_array, 10, j)
-    call assign_heap_array(heap_array, 11, k)
-    call assign_heap_array(heap_array, 12, l)
-    call assign_heap_array(heap_array, 13, m)
-    call assign_heap_array(heap_array, 14, n)
-    call assign_heap_array(heap_array, 15, o)
-    call assign_heap_array(heap_array, 16, p)
-    call assign_heap_array(heap_array, 17, q)
-    call assign_heap_array(heap_array, 18, r)
-    call assign_heap_array(heap_array, 19, s)
-    call assign_heap_array(heap_array, 20, t)
-    call assign_heap_array(heap_array, 21, u)
-    call assign_heap_array(heap_array, 22, v)
-    call assign_heap_array(heap_array, 23, w)
-    call assign_heap_array(heap_array, 24, x)
-    call assign_heap_array(heap_array, 25, y)
-    call assign_heap_array(heap_array, 26, z)
-
-    ! do int = 1,size(heap_array)
-    !   print*,heap_array(int)%get()
-    ! end do
-  end function heap_string_array
 
 
   !* Dump a raw Fortran string pointer into a string.
