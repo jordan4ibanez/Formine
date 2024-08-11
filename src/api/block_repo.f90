@@ -61,7 +61,17 @@ contains
       call luajit_error_stop(state, "[Block Repo] Error: Cannot register block. Not a table.")
     end if
 
-    call luajit_table_get(state, "debugging", testing)
+    ! This is kind of like the rust if let block.
+    associate (result => luajit_table_get(state, "debugging", testing))
+      ! If we enter into a none OK value, it either doesn't exist or we have the wrong type.
+      if (result /= LUAJIT_GET_OK) then
+        if (result == LUAJIT_GET_MISSING) then
+          call luajit_error_stop(state, "[Block Repo] Error: block_definition is missing field [debugging].")
+        else
+          call luajit_error_stop(state, "[Block Repo] Error: block_definition field [debugging] has the wrong type.")
+        end if
+      end if
+    end associate
 
     print*,"["//testing%get()//"]"
     print*,len(testing%get())
