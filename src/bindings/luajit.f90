@@ -1210,7 +1210,7 @@ contains
 
     type(c_ptr), intent(in), value :: state
     integer(c_int), intent(in), value :: index
-    class(*), intent(in) :: generic_data
+    class(*), intent(inout) :: generic_data
     logical :: success
 
     success = .false.
@@ -1221,39 +1221,45 @@ contains
 
       !* Integer.
      type is (integer(c_int))
-      ! call lua_pushinteger(state, int(input, kind = c_int64_t))
-      print*,"get integer cast to c_int64_t"
+      if (.not. lua_isnumber(state, index)) then
+        return
+      end if
+
+      generic_data = int(lua_tonumber(state, index), kind = c_int)
+      print*,"get integer cast to c_int"
      type is (integer(c_int64_t))
-      ! call lua_pushinteger(state, input)
+      if (.not. lua_isnumber(state, index)) then
+        return
+      end if
+      generic_data = int(lua_tonumber(state, index), kind = c_int64_t)
       print*, "get c_int64_t"
 
       !* Floating point.
      type is (real(c_float))
-      ! call lua_pushnumber(state, real(input, kind = c_double))
-      print*, "get float cast to c_double"
+      generic_data = real(lua_tonumber(state, index), kind = c_int)
+      print*, "get float cast to c_int"
      type is (real(c_double))
-      ! call lua_pushnumber(state, input)
+      generic_data = lua_tonumber(state, index)
       print*, "get c_double"
 
       !* String.
      type is (character(len = *))
-      !* It appears that LuaJIT will simply grab the length without a null terminator.
-      ! call lua_pushlstring(state, input, int(len(input), kind = c_size_t))
-      print*, "get string with length"
+      generic_data = lua_tostring(state, index)
+      print*, "get string"
 
       !* Boolean.
      type is (logical)
-      ! call lua_pushboolean(state, logical(input, kind = c_bool))
+      generic_data = lua_toboolean(state, index)
       print*, "get logical, convert to c_bool"
      type is (logical(c_bool))
-      ! call lua_pushboolean(state, input)
+      generic_data = lua_toboolean(state, index)
       print*, "get c_bool"
 
       !? Now we get into the interesting part.
       !* Function pointer. Aka, "closure".
-     type is (luajit_closure)
+      !  type is (luajit_closure)
       ! call lua_pushcclosure(state, input%pointer, input%argument_count)
-      print*, "get fortran lua c function"
+      ! print*, "get fortran lua c function"
 
       !* We did something very bad.
      class default
