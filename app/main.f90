@@ -21,9 +21,7 @@ program main
   new_fps = 0
   old_fps = -1
 
-  if (.not. api_initialize()) then
-    return
-  end if
+  call api_initialize()
 
   if (.not. api_run_file("./mods/init.lua")) then
     return
@@ -99,9 +97,7 @@ program main
   call texture_create("./textures/fortran_logo_512x512.png")
 
   !* If we cannot initalize the API properly, we give up.
-  if (.not. api_initialize()) then
-    return
-  end if
+  call api_initialize()
 
 
   rotation = 0.0
