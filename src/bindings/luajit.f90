@@ -1359,11 +1359,11 @@ contains
 
   !* This will luajit_error_stop if a table is missing a required key.
   !* This is going to be repeated, quite a lot. So I'm making it a subroutine.
-  subroutine luajit_require_table_key(state, module_name, table_name, key_name, status)
+  subroutine luajit_require_table_key(state, module_name, table_name, key_name, status, expected_type)
     implicit none
 
     type(c_ptr), intent(in), value :: state
-    character(len = *, kind = c_char), intent(in) :: module_name, table_name, key_name
+    character(len = *, kind = c_char), intent(in) :: module_name, table_name, key_name, expected_type
     integer(c_int), intent(in), value :: status
 
     ! If we enter into a none OK value, it either doesn't exist or we have the wrong type.
@@ -1371,7 +1371,7 @@ contains
       if (status == LUAJIT_GET_MISSING) then
         call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] is missing key ["//key_name//"].")
       else
-        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] key ["//key_name//"] has the wrong type.")
+        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] key ["//key_name//"] has the wrong type. Expected type: ["//expected_type//"]")
       end if
     end if
   end subroutine luajit_require_table_key
@@ -1379,16 +1379,16 @@ contains
 
   !* This function simply combines luajit_table_get and luajit_require_table_key.
   !* It'll make it less likely for me to make a mistake.
-  subroutine luajit_table_get_required(state, module_name, table_name, key_name, data_output)
+  subroutine luajit_table_get_required(state, module_name, table_name, key_name, data_output, expected_type)
     implicit none
 
     type(c_ptr), intent(in), value :: state
-    character(len = *, kind = c_char), intent(in) :: module_name, table_name, key_name
+    character(len = *, kind = c_char), intent(in) :: module_name, table_name, key_name, expected_type
     class(*), intent(inout) :: data_output
     integer(c_int) :: status
 
     status = luajit_table_get(state, key_name, data_output)
-    call luajit_require_table_key(state, module_name, table_name, key_name, status)
+    call luajit_require_table_key(state, module_name, table_name, key_name, status, expected_type)
   end subroutine luajit_table_get_required
 
 
