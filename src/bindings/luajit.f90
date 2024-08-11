@@ -1236,6 +1236,7 @@ contains
       if (lua_next(state,-2) /= 0) then
         !* If it's not a string, unwind everything and give up.
         if (.not. lua_isstring(state, -1)) then
+          print"(A)", "[LuaJIT] Error: Non-string element at index ["//int_to_string(i)//"] in array table."
           status = LUAJIT_GET_WRONG_TYPE
           deallocate(target_array%data)
           call lua_pop(state, 1)
