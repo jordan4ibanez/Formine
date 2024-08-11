@@ -20,7 +20,7 @@
   // Lua configuration.
   "Lua.runtime.version": "LuaJIT",
   "Lua.workspace.library": [
-    "./api/*"
+    "./api"
   ],
   "Lua.format.defaultConfig": {
     "indent_style": "space",
