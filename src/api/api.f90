@@ -42,17 +42,13 @@ contains
 
     call luajit_initialize(lua_state)
 
-    success = luajit_run_file(lua_state, "./api/init.lua")
-
     ! Someone removed the api init file, eh?
-    if (.not. success) then
-      return
+    if (.not. luajit_run_file(lua_state, "./api/init.lua")) then
+      error stop "[API] Error: Failed to load the init file."
     end if
 
     !* Initialize LuaJIT compatible modules.
-    if (.not. block_repo_deploy_lua_api(lua_state)) then
-      return
-    end if
+    call block_repo_deploy_lua_api(lua_state)
   end function api_initialize
 
 
