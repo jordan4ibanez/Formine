@@ -50,26 +50,21 @@ contains
   !* This allows you to register a block into the engine from LuaJIT.
   !* See the LuaJIT API [./api/init.lua] for the layout of block_definition.
   subroutine register_block(state)
+    use :: string
     implicit none
 
     type(c_ptr), intent(in), value :: state
-    character(len = :, kind = c_char), allocatable :: testing
+    type(heap_string) :: testing
 
     ! Enforce the first and only argument to be a table.
     if (.not. lua_istable(state, -1)) then
       call luajit_error_stop(state, "[Block Repo] Error: Cannot register block. Not a table.")
     end if
 
-    !* Push "name" to -1.
-    call lua_pushstring(state, "name")
-    !* Table is now at -2. Calling as table["name"].
-    call lua_gettable(state, -2)
+    call luajit_table_get(state, "debugging", testing)
 
-    testing = lua_tostring(state, -1)
-
-    print*,len(testing)
-
-    call lua_pop(state, -2)
+    print*,"["//testing%get()//"]"
+    print*,len(testing%get())
 
     if (.not. lua_istable(state, -1)) then
       call luajit_error_stop(state, "[Block Repo] Error: Cannot register block. Not a table.")
