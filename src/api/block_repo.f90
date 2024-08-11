@@ -28,7 +28,7 @@ contains
     ! Then we pop -2 and -1 off the stack, shifting blocks back to -1.
 
 
-    call lua_getglobal(state, "blocks")
+    call lua_getglobal(state, "block")
 
     if (.not. lua_istable(state, -1)) then
       print"(A)", "[Blocks Repo] Error: Can't initialize function pointers. [blocks] table is missing!"
