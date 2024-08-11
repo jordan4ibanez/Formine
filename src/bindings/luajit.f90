@@ -1302,9 +1302,14 @@ contains
     call lua_pushstring(state, table_key)
     !* Table is now at -2. Calling as table["name"].
     call lua_gettable(state, -2)
+
     !* Now the value is pushed into the stack at -1.
-    !* You can clear this after you get it with:
-    !* call lua_pop(state, -2)
+    if (luajit_get_generic(state, -1, data_output)) then
+      print*,"heap string works!"
+    end if
+
+    !* And we can pop the getters and data output off the LuaJIT stack.
+    call lua_pop(state, -2)
   end subroutine luajit_table_get
 
 
