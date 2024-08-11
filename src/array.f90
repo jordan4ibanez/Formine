@@ -158,14 +158,90 @@ contains
 
     integer(c_int), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
     type(int_array) :: new_int_array
-    integer(c_int) :: allocation_size
+    integer(c_int) :: index, allocation_size
 
     allocation_size = ex(a)+ex(b)+ex(c)+ex(d)+ex(e)+ex(f)+ex(g)+ex(h)+ex(i)+ex(j)+ex(k)+ex(l)+ex(m)+ex(n)+ex(o)+ex(p)+ex(q)+ex(r)+ex(s)+ex(t)+ex(u)+ex(v)+ex(w)+ex(x)+ex(y)+ex(z)
 
     allocate(new_int_array%data(allocation_size))
 
-    ! Truncation is very handy.
-    new_int_array%data(1:3) = [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z]
+    index = 1
+
+    if (present(a)) new_int_array%data(1) = a
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(b)) new_int_array%data(2) = b
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(c)) new_int_array%data(3) = c
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(d)) new_int_array%data(4) = d
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(e)) new_int_array%data(5) = e
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(f)) new_int_array%data(6) = f
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(g)) new_int_array%data(7) = g
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(h)) new_int_array%data(8) = h
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(i)) new_int_array%data(9) = i
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(j)) new_int_array%data(10) = j
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(k)) new_int_array%data(11) = k
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(l)) new_int_array%data(12) = l
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(m)) new_int_array%data(13) = m
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(n)) new_int_array%data(14) = n
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(o)) new_int_array%data(15) = o
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(p)) new_int_array%data(16) = p
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(q)) new_int_array%data(17) = q
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(r)) new_int_array%data(18) = r
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(s)) new_int_array%data(19) = s
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(t)) new_int_array%data(20) = t
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(u)) new_int_array%data(21) = u
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(v)) new_int_array%data(22) = v
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(w)) new_int_array%data(23) = w
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(x)) new_int_array%data(24) = x
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(y)) new_int_array%data(25) = y
+    index = index + 1
+    if (index > allocation_size) return
+    if (present(z)) new_int_array%data(26) = z
   end function constructor_int
 
 
