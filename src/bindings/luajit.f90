@@ -1219,16 +1219,14 @@ contains
 
 
   !* This subroutine will attempt to grab data from whatever index you give it.
-  function luajit_get_generic(state, index, generic_data) result(success)
+  function luajit_get_generic(state, index, generic_data) result(status)
     use :: string
     implicit none
 
     type(c_ptr), intent(in), value :: state
     integer(c_int), intent(in), value :: index
     class(*), intent(inout) :: generic_data
-    logical :: success
-
-    success = .false.
+    integer(c_int) :: status
 
     !* This is written a bit defensively to prevent problems.
 
@@ -1237,6 +1235,11 @@ contains
       !* Integer.
      type is (integer(c_int))
       if (.not. lua_isnumber(state, index)) then
+        if (lua_isnoneornil(state, index)) then
+          status = LUAJIT_TABLE_MISSING
+        else
+          status = LUAJIT_TABLE_WRONG_TYPE
+        end if
         return
       end if
       generic_data = int(lua_tonumber(state, index), kind = c_int)
@@ -1298,7 +1301,7 @@ contains
       ! print*, "uh oh"
     end select
 
-    success = .true.
+    status = LUAJIT_TABLE_OK
   end function luajit_get_generic
 
 
