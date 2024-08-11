@@ -53,9 +53,7 @@ contains
     type(c_ptr), intent(in), value :: state
 
     
-    if (luaL_error(state, "hi") == LUA_OK) then
-      return
-    end if
+    call luajit_throw_error(state, "uh oh")
 
     ! error stop "[Block Repo] Error: Can't initialize function pointers. [blocks] table is missing!"
 
