@@ -1201,23 +1201,27 @@ contains
 
 
   !* Copy a string array (indices table) into a string_array.
-  subroutine luajit_copy_string_array_from_table(state, target_array)
+  function luajit_copy_string_array_from_table(state, target_array) result(status)
     use :: array, only: string_array
     use :: string, only: int_to_string
     implicit none
 
     type(c_ptr), intent(in), value :: state
     type(string_array), intent(inout) :: target_array
-    integer(c_int) :: table_size, i
+    integer(c_int) :: table_size, i, status
+
+    status = LUAJIT_GET_OK
 
     ! Unwind the whole stack if it's not a table.
     if (.not. lua_istable(state, -1)) then
-      call luajit_error_stop(state, "Not a table!")
+      status = LUAJIT_GET_WRONG_TYPE
+      return
     end if
 
     table_size = int(lua_objlen(state, -1), kind = c_int)
 
     ! If the table is empty, literally nothing to do.
+    ! I mean, that's technically a table.
     if (table_size == 0) then
       return
     end if
@@ -1230,8 +1234,12 @@ contains
     ! Now iterate through the table and collect the strings.
     do i = 1, table_size
       if (lua_next(state,-2) /= 0) then
+        !* If it's not a string, unwind everything and give up.
         if (.not. lua_isstring(state, -1)) then
-          call luajit_error_stop(state, "[LuaJIT] Error: Not a string at index ["//int_to_string(i)//"]")
+          status = LUAJIT_GET_WRONG_TYPE
+          deallocate(target_array%data)
+          call lua_pop(state, 1)
+          return
         end if
         target_array%data(i) = lua_tostring(state, -1)
         call lua_pop(state, 1)
@@ -1240,7 +1248,7 @@ contains
 
     !* Move the table back to -1.
     call lua_pop(state, 1)
-  end subroutine luajit_copy_string_array_from_table
+  end function luajit_copy_string_array_from_table
 
 
   !* This is an extremely specific function for swapping table values
@@ -1295,6 +1303,8 @@ contains
     integer(c_int) :: status
 
     !* This is written a bit defensively to prevent problems.
+
+    status = LUAJIT_GET_OK
 
     select type (generic_data)
 
@@ -1362,7 +1372,7 @@ contains
 
      type is (string_array)
       print*,"hit string array, copying"
-      call luajit_copy_string_array_from_table(state, generic_data)
+      status = luajit_copy_string_array_from_table(state, generic_data)
 
       !? Now we get into the interesting part.
       !* Function pointer. Aka, "closure".
@@ -1377,8 +1387,6 @@ contains
       error stop "LuaJIT Error: Tried to get an unknown data type."
       ! print*, "uh oh"
     end select
-
-    status = LUAJIT_GET_OK
   end function luajit_get_generic
 
 
