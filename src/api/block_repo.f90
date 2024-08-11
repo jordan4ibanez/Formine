@@ -11,7 +11,7 @@ module block_repo
   public :: register_block
 
   ! Bake the module name into the executable.
-  character(len = 10, kind =c_char), parameter :: module_name = "Block Repo"
+  character(len = 12, kind =c_char), parameter :: module_name = "[Block Repo]"
 
 
 contains
@@ -63,6 +63,7 @@ contains
     type(heap_string) :: name, description
     integer(c_int) :: draw_type
 
+    status = LUAJIT_GET_OK
 
     ! Enforce the first and only argument to be a table.
     if (.not. lua_istable(state, -1)) then
