@@ -1199,22 +1199,47 @@ contains
     end if
   end subroutine luajit_call_function
 
-  !* Copy a string array into a string_array.
+
+  !* Copy a string array (indices table) into a string_array.
   subroutine luajit_copy_string_array_from_table(state, target_array)
     use :: array, only: string_array
+    use :: string, only: int_to_string
     implicit none
 
     type(c_ptr), intent(in), value :: state
     type(string_array), intent(inout) :: target_array
+    integer(c_int) :: table_size, i
 
     ! Unwind the whole stack if it's not a table.
     if (.not. lua_istable(state, -1)) then
       call luajit_error_stop(state, "Not a table!")
     end if
 
-    print*, "we got a table :D"
+    table_size = int(lua_objlen(state, -1), kind = c_int)
 
+    ! If the table is empty, literally nothing to do.
+    if (table_size == 0) then
+      return
+    end if
 
+    allocate(target_array%data(table_size))
+
+    !* Push a null stack element to be used as the iterator.
+    call lua_pushnil(state)
+
+    ! Now iterate through the table and collect the strings.
+    do i = 1, table_size
+      if (lua_next(state,-2) /= 0) then
+        if (.not. lua_isstring(state, -1)) then
+          call luajit_error_stop(state, "[LuaJIT] Error: Not a string at index ["//int_to_string(i)//"]")
+        end if
+        target_array%data(i) = lua_tostring(state, -1)
+        call lua_pop(state, 1)
+      end if
+    end do
+
+    !* Move the table back to -1.
+    call lua_pop(state, 1)
   end subroutine luajit_copy_string_array_from_table
 
 
