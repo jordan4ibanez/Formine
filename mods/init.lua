@@ -22,4 +22,4 @@ function my_function(a, b, c, d)
   -- print(d)
 end
 
-block.register_block("test", {})
+block.register("test", {})
