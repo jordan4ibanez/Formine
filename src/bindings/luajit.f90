@@ -23,6 +23,9 @@ module luajit
   !? Going to need to learn how to handle userdata.
   !
   !? Going to need to learn how to handle metatables.
+  !
+  !* Note: The LuaJIT stack grows negative with return values and
+  !* pushes things backwards as it grows.
 
 
   !* LuaJIT constants.
