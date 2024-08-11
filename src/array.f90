@@ -164,8 +164,10 @@ contains
 
     allocate(new_int_array%data(allocation_size))
 
-    index = 1
+    index = 0
 
+    index = index + 1
+    if (index > allocation_size) return
     if (present(a)) new_int_array%data(1) = a
     index = index + 1
     if (index > allocation_size) return
