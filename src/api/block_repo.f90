@@ -45,8 +45,8 @@ contains
   end subroutine block_repo_deploy_lua_api
 
 
-  !* Will intake the following components from LuaJIT:
-  !* name, data_table
+  !* This allows you to register a block into the engine from LuaJIT.
+  !* See the LuaJIT API [./api/init.lua] for the layout of block_definition.
   subroutine register_block(state)
     implicit none
 
