@@ -52,8 +52,8 @@ contains
 
     type(c_ptr), intent(in), value :: state
 
-    call lua_pushstring(state, "hooplah")
-    if (lua_error(state) == LUA_OK) then
+    
+    if (luaL_error(state, "hi") == LUA_OK) then
       return
     end if
 
