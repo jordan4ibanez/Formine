@@ -127,6 +127,7 @@ module luajit
   public :: luajit_call_function
   public :: luajit_get_generic
   public :: luajit_table_get
+  public :: luajit_require_table_field
 
   public :: LUA_RETURNINDEX
   public :: LUAJIT_GET_OK
@@ -1354,6 +1355,25 @@ contains
     call lua_pop(state, -2)
   end function luajit_table_get
 
+
+  !* This will luajit_error_stop if a table is missing a required field.
+  !* This is going to be repeated, quite a lot. So I'm making it a subroutine.
+  subroutine luajit_require_table_field(state, module_name, table_name, field_name, output_status)
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    character(len = *, kind = c_char), intent(in) :: module_name, table_name, field_name
+    integer(c_int), intent(in), value :: output_status
+
+    ! If we enter into a none OK value, it either doesn't exist or we have the wrong type.
+    if (output_status /= LUAJIT_GET_OK) then
+      if (output_status == LUAJIT_GET_MISSING) then
+        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] is missing field ["//field_name//"].")
+      else
+        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] field ["//field_name//"] has the wrong type.")
+      end if
+    end if
+  end subroutine
 
 
 end module luajit
