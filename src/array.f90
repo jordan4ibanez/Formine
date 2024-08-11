@@ -26,12 +26,22 @@ module array
   end type int_array
 
 
+  interface int_array
+
+  end interface int_array
+
+
   type :: int64_array
     integer(c_int64_t), dimension(:), allocatable :: data
   contains
     generic :: assignment(=) => assign_int64
     procedure :: assign_int64
   end type int64_array
+
+
+  interface int64_array
+
+  end interface int64_array
 
 
   type :: float_array
@@ -42,6 +52,11 @@ module array
   end type float_array
 
 
+  interface float_array
+
+  end interface float_array
+
+
   type :: double_array
     real(c_double), dimension(:), allocatable :: data
   contains
@@ -50,12 +65,22 @@ module array
   end type double_array
 
 
+  interface double_array
+
+  end interface double_array
+
+
   type :: string_array
     type(heap_string), dimension(:), allocatable :: data
   contains
     generic :: assignment(=) => assign_string
     procedure :: assign_string
   end type string_array
+
+
+  interface string_array
+
+  end interface string_array
 
 
 contains
