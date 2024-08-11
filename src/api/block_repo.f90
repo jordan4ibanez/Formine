@@ -69,9 +69,8 @@ contains
       call luajit_error_stop(state, "[Block Repo] Error: Cannot register block. Not a table.")
     end if
 
-    ! This is kind of like the rust if let block.
-    status = luajit_table_get(state, "name", name)
-    call luajit_require_table_field(state, "Block Repo", "block_definition", "name", status)
+    ! Name is required.
+    call luajit_table_get_required(state, module_name, "definition", "name", name, "string")
 
 
     if (.not. lua_istable(state, -1)) then
