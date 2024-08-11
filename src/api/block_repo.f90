@@ -40,6 +40,8 @@ contains
     call luajit_swap_table_function(state, "register", c_funloc(register_block))
 
 
+
+
     ! Now clear the stack. We're done with the block LuaJIT table.
     call lua_pop(state, lua_gettop(state))
   end subroutine block_repo_deploy_lua_api
@@ -51,11 +53,29 @@ contains
     implicit none
 
     type(c_ptr), intent(in), value :: state
+    character(len = :, kind = c_char), allocatable :: testing
 
     ! Enforce the first and only argument to be a table.
     if (.not. lua_istable(state, -1)) then
       call luajit_error_stop(state, "[Block Repo] Error: Cannot register block. Not a table.")
     end if
+
+    !* Push "name" to -1.
+    call lua_pushstring(state, "name")
+    !* Table is now at -2. Calling as table["name"].
+    call lua_gettable(state, -2)
+
+    testing = lua_tostring(state, -1)
+
+    print*,len(testing)
+
+    call lua_pop(state, -2)
+
+    if (.not. lua_istable(state, -1)) then
+      call luajit_error_stop(state, "[Block Repo] Error: Cannot register block. Not a table.")
+    end if
+
+
 
   end subroutine register_block
 
