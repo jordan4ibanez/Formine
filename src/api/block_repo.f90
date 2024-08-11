@@ -58,7 +58,7 @@ contains
     integer(c_int) :: status
     ! block_definition fields.
     type(heap_string) :: name, description
-    type(c_int) :: draw_type
+    integer(c_int) :: draw_type
 
 
     ! Enforce the first and only argument to be a table.
@@ -67,8 +67,8 @@ contains
     end if
 
     ! This is kind of like the rust if let block.
-    status = luajit_table_get(state, "debugging", testing)
-    call luajit_require_table_field(state, "Block Repo", "block_definition", "debugging", status)
+    status = luajit_table_get(state, "name", name)
+    call luajit_require_table_field(state, "Block Repo", "block_definition", "name", status)
 
 
     if (.not. lua_istable(state, -1)) then
