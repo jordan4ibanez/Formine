@@ -4,8 +4,18 @@ module array
   implicit none
 
 
+  private
+
+
   !* This is just a bunch of different array types.
   !* They can be used as scalars for tricky situations.
+
+
+  public :: int_array
+  public :: int64_array
+  public :: float_array
+  public :: double_array
+  public :: string_array
 
 
   type :: int_array
