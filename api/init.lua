@@ -25,6 +25,7 @@ print("[LuaJIT API]: Initializing.")
 --- @class block_definition
 --- @field name string
 --- @field textures Array<string>
+--- @field draw_type draw_type
 
 
 --* APIS. =================================================================================
@@ -37,8 +38,11 @@ print("[LuaJIT API]: Initializing.")
 block = {}
 
 
+--- A block's drawtype.
+---@enum draw_type
 block.draw_type = {
-
+  air = 0,
+  normal = 1
 }
 
 
