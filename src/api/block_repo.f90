@@ -97,20 +97,23 @@ contains
 
     ! We're back into the block_definition table.
 
-
-    print"(A)", module_name//": Current Block definition:"
-    print"(A)", "Name: "//name%get()
-    print"(A)", "Description: "//description%get()
-    print*, "Textures: [",textures%data,"]"
-
-
+    ! draw_type is required.
+    call luajit_table_get_key_required(state, module_name, "definition", "draw_type", draw_type, "draw_type")
 
     if (.not. lua_istable(state, -1)) then
       call luajit_error_stop(state, module_name//" Error: Cannot register block. Not a table.")
     end if
 
+    print"(A)", module_name//": Current Block definition:"
+    print"(A)", "Name: "//name%get()
+    print"(A)", "Description: "//description%get()
+    print*, "Textures: [",textures%data,"]"
+    print"(A)", "draw_type: "//int_to_string(draw_type)
 
+    ! // TODO: Collect this data into a database.
 
+    ! Now clean up the stack. We are done with the stack.
+    call lua_pop(state, lua_gettop(state))
   end subroutine register_block
 
 
