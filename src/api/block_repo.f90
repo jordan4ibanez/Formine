@@ -85,9 +85,9 @@ contains
     associate(value => luajit_get_generic(state, -1, textures))
       if (value /= LUAJIT_GET_OK) then
         if (value == LUAJIT_GET_MISSING) then
-          print*,"It's missing!"
+          call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] is missing.")
         else
-          print*,"it's the wrong type"
+          call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] has a non-string element.")
         end if
       end if
     end associate
