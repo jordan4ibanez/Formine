@@ -92,7 +92,12 @@ contains
       end if
     end associate
 
+    ! Now we get rid of the string table.
+    call lua_pop(state, 1)
 
+    ! We're back into the block_definition table.
+
+    print*,lua_objlen(state, -1)
 
 
     ! Textures are required
