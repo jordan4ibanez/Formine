@@ -128,7 +128,7 @@ module luajit
   public :: luajit_get_generic
   public :: luajit_table_get
   public :: luajit_require_table_key
-  public :: luajit_table_get_required
+  public :: luajit_table_get_key_required
   public :: luajit_put_table_in_table_on_stack_required
 
   public :: LUA_RETURNINDEX
@@ -1380,7 +1380,7 @@ contains
 
   !* This function simply combines luajit_table_get and luajit_require_table_key.
   !* It'll make it less likely for me to make a mistake.
-  subroutine luajit_table_get_required(state, module_name, table_name, key_name, data_output, expected_type)
+  subroutine luajit_table_get_key_required(state, module_name, table_name, key_name, data_output, expected_type)
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -1390,7 +1390,7 @@ contains
 
     status = luajit_table_get(state, key_name, data_output)
     call luajit_require_table_key(state, module_name, table_name, key_name, status, expected_type)
-  end subroutine luajit_table_get_required
+  end subroutine luajit_table_get_key_required
 
 
   !* This will specifically get and verify a table inside of a table.
