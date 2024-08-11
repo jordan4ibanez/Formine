@@ -1284,6 +1284,9 @@ contains
   end function luajit_get_generic
 
 
+  !* This function is simply a shorthand helper for a few
+  !* function calls. It also clarifies what things are doing.
+  !* Table must be in stack -1.
   subroutine luajit_table_get(state, table_key, data_output)
     implicit none
 
@@ -1291,6 +1294,13 @@ contains
     character(len = *, kind = c_char), intent(in) :: table_key
     class(*), intent(inout) :: data_output
 
+    !* Push "name" to -1.
+    call lua_pushstring(state, table_key)
+    !* Table is now at -2. Calling as table["name"].
+    call lua_gettable(state, -2)
+    !* Now the value is pushed into the stack at -1.
+    !* You can clear this after you get it with:
+    !* call lua_pop(state, -2)
   end subroutine luajit_table_get
 
 
