@@ -120,6 +120,7 @@ module luajit
   public :: luajit_push_generic
   public :: luajit_swap_table_function
   public :: luajit_call_function
+  public :: luajit_get_generic
   public :: luajit_table_get
 
   integer(c_int), parameter :: LUA_OK = 0
@@ -1203,22 +1204,93 @@ contains
   end subroutine luajit_swap_table_function
 
 
-  !* This function is simply a shorthand helper for a few
-  !* function calls. It also clarifies what things are doing.
-  !* Table must be in stack -1.
-  subroutine luajit_table_get(state, table_key)
+  !* This subroutine will attempt to grab data from whatever index you give it.
+  function luajit_get_generic(state, index, generic_data) result(success)
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    integer(c_int), intent(in), value :: index
+    class(*), intent(inout) :: generic_data
+    logical :: success
+
+    success = .false.
+
+    !* This is written a bit defensively to prevent problems.
+
+    select type (generic_data)
+
+      !* Integer.
+     type is (integer(c_int))
+      if (.not. lua_isnumber(state, index)) then
+        return
+      end if
+      generic_data = int(lua_tonumber(state, index), kind = c_int)
+      print*,"get integer cast to c_int"
+     type is (integer(c_int64_t))
+      if (.not. lua_isnumber(state, index)) then
+        return
+      end if
+      generic_data = int(lua_tonumber(state, index), kind = c_int64_t)
+      print*, "get c_int64_t"
+
+      !* Floating point.
+     type is (real(c_float))
+      if (.not. lua_isnumber(state, index)) then
+        return
+      end if
+      generic_data = real(lua_tonumber(state, index), kind = c_int)
+      print*, "get float cast to c_int"
+     type is (real(c_double))
+      if (.not. lua_isnumber(state, index)) then
+        return
+      end if
+      generic_data = lua_tonumber(state, index)
+      print*, "get c_double"
+
+      !* String.
+     type is (character(len = *))
+      if (.not. lua_isstring(state, index)) then
+        return
+      end if
+      generic_data = lua_tostring(state, index)
+      print*, "get string"
+
+      !* Boolean.
+     type is (logical)
+      if (.not. lua_isboolean(state, index)) then
+        return
+      end if
+      generic_data = lua_toboolean(state, index)
+      print*, "get logical"
+     type is (logical(c_bool))
+      if (.not. lua_isboolean(state, index)) then
+        return
+      end if
+      generic_data = lua_toboolean(state, index)
+      print*, "get c_bool, convert to c_bool"
+
+      !? Now we get into the interesting part.
+      !* Function pointer. Aka, "closure".
+      !  type is (luajit_closure)
+      ! call lua_pushcclosure(state, input%pointer, input%argument_count)
+      ! print*, "get fortran lua c function"
+
+      !* We did something very bad.
+     class default
+      ! print*, "uh oh"
+    end select
+
+    success = .true.
+  end function luajit_get_generic
+
+
+  subroutine luajit_table_get(state, table_key, data_output)
     implicit none
 
     type(c_ptr), intent(in), value :: state
     character(len = *, kind = c_char), intent(in) :: table_key
+    class(*), intent(inout) :: data_output
 
-    !* Push "name" to -1.
-    call lua_pushstring(state, table_key)
-    !* Table is now at -2. Calling as table["name"].
-    call lua_gettable(state, -2)
-    !* Now the value is pushed into the stack at -1.
-    !* You can clear this after you get it with:
-    !* call lua_pop(state, -2)
   end subroutine luajit_table_get
 
 
