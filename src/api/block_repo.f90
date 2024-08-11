@@ -10,6 +10,9 @@ module block_repo
   public :: block_repo_deploy_lua_api
   public :: register_block
 
+  ! Bake the module name into the executable.
+  character(len = 10, kind =c_char), parameter :: module_name = "Block Repo"
+
 
 contains
 
