@@ -166,15 +166,10 @@ contains
 
     index = 1
 
-    print*,allocation_size
-
     if (index > allocation_size) return
     if (present(a)) new_int_array%data(index) = a
     index = index + 1
-    if (index > allocation_size) then
-      print*,"returning"
-      return
-    end if
+    if (index > allocation_size) return
     if (present(b)) new_int_array%data(index) = b
     index = index + 1
     if (index > allocation_size) return
