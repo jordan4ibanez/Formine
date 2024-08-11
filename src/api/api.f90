@@ -33,23 +33,19 @@ contains
 
 
   !* Initialize the API.
-  function api_initialize() result(success)
+  subroutine api_initialize()
     implicit none
-
-    logical :: success
-
-    success = .false.
 
     call luajit_initialize(lua_state)
 
-    ! Someone removed the api init file, eh?
     if (.not. luajit_run_file(lua_state, "./api/init.lua")) then
+      ! Someone removed the api init file, eh?
       error stop "[API] Error: Failed to load the init file."
     end if
 
     !* Initialize LuaJIT compatible modules.
     call block_repo_deploy_lua_api(lua_state)
-  end function api_initialize
+  end subroutine api_initialize
 
 
   !* Clean up the API data.
