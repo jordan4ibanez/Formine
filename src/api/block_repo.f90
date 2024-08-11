@@ -12,12 +12,12 @@ module block_repo
 
 contains
 
-  !* This hooks a bunch of functions into the LuaJIT "blocks" table.
-  function block_repo_deploy_lua_api(state) result(success)
+
+  !* This hooks the required fortran functions into the LuaJIT "blocks" table.
+  subroutine block_repo_deploy_lua_api(state)
     implicit none
 
     type(c_ptr), intent(in), value :: state
-    logical :: success
 
 
     ! Memory layout: (Stack grows down.)
@@ -32,9 +32,7 @@ contains
     call lua_getglobal(state, "block")
 
     if (.not. lua_istable(state, -1)) then
-      print"(A)", "[Blocks Repo] Error: Can't initialize function pointers. [blocks] table is missing!"
-      success = .false.
-      return
+      error stop "[Blocks Repo] Error: Can't initialize function pointers. [blocks] table is missing!"
     end if
 
     ! Swap the declaration with the actual fortran function.
@@ -43,7 +41,7 @@ contains
 
     ! Now clear the stack. We're done with the block LuaJIT table.
     call lua_pop(state, lua_gettop(state))
-  end function block_repo_deploy_lua_api
+  end subroutine block_repo_deploy_lua_api
 
 
   !* Will intake the following components from LuaJIT:
