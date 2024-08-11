@@ -1357,7 +1357,7 @@ contains
   end function luajit_table_get
 
 
-  !* This will luajit_error_stop if a table is missing a required field.
+  !* This will luajit_error_stop if a table is missing a required key.
   !* This is going to be repeated, quite a lot. So I'm making it a subroutine.
   subroutine luajit_require_table_key(state, module_name, table_name, key_name, status)
     implicit none
@@ -1374,10 +1374,10 @@ contains
         call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] key ["//key_name//"] has the wrong type.")
       end if
     end if
-  end subroutine
+  end subroutine luajit_require_table_key
 
 
-  !* This function simply combines luajit_table_get and luajit_require_table_field.
+  !* This function simply combines luajit_table_get and luajit_require_table_key.
   !* It'll make it less likely for me to make a mistake.
   subroutine luajit_table_get_required(state, module_name, table_name, key_name, data_output)
     implicit none
