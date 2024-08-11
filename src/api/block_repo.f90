@@ -97,16 +97,11 @@ contains
 
     ! We're back into the block_definition table.
 
-    print*,lua_objlen(state, -1)
 
-
-    ! Textures are required
-    ! call luajit_table_get_required(state, module_name, "definition", "textures", textures, "Array<string>")
-
-
-    ! print"(A)", module_name//": Current Block definition:"
-    ! print"(A)", "Name: "//name%get()
-    ! print"(A)", "Description: "//description%get()
+    print"(A)", module_name//": Current Block definition:"
+    print"(A)", "Name: "//name%get()
+    print"(A)", "Description: "//description%get()
+    print*, "Textures: [",textures%data,"]"
 
 
 
