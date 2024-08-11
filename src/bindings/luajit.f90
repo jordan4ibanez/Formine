@@ -1369,9 +1369,9 @@ contains
     ! If we enter into a none OK value, it either doesn't exist or we have the wrong type.
     if (status /= LUAJIT_GET_OK) then
       if (status == LUAJIT_GET_MISSING) then
-        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] is missing key ["//key_name//"].")
+        call luajit_error_stop(state, module_name//" Error: Table ["//table_name//"] is missing key ["//key_name//"].")
       else
-        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] key ["//key_name//"] has the wrong type. Expected type: ["//expected_type//"]")
+        call luajit_error_stop(state, module_name//" Error: Table ["//table_name//"] key ["//key_name//"] has the wrong type. Expected type: ["//expected_type//"]")
       end if
     end if
   end subroutine luajit_require_table_key
