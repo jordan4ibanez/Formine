@@ -139,28 +139,57 @@ contains
   !* CONSTRUCTORS.
 
 
-  function constructor_int() result(new_int_array)
+  !* Convert an optional variable length string into an integral representation of a boolean.
+  integer function ex(input) result(i)
+    implicit none
 
+    class(*), intent(in), optional :: input
+
+    if (present(input)) then
+      i = 1
+    else
+      i = 0
+    end if
+  end function ex
+
+
+  function constructor_int(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(new_int_array)
+    implicit none
+
+    integer(c_int), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
+    type(int_array) :: new_int_array
   end function constructor_int
 
 
-  function constructor_int64() result(new_int64_array)
+  function constructor_int64(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(new_int64_array)
+    implicit none
 
+    integer(c_int64_t), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
+    type(int64_array) :: new_int64_array
   end function constructor_int64
 
 
-  function constructor_float() result(new_float_array)
+  function constructor_float(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(new_float_array)
+    implicit none
 
+    real(c_float), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
+    type(float_array) :: new_float_array
   end function constructor_float
 
 
-  function constructor_double() result(new_double_array)
+  function constructor_double(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(new_double_array)
+    implicit none
 
+    real(c_double), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
+    type(double_array) :: new_double_array
   end function constructor_double
 
 
-  function constructor_string() result(new_string_array)
+  function constructor_string(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(new_string_array)
+    implicit none
 
+    character(len = *, kind = c_char), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
+    type(string_array) :: new_string_array
   end function constructor_string
 
 
