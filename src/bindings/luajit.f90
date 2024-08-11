@@ -1251,17 +1251,14 @@ contains
       !* Integer.
      type is (integer(c_int))
       if (.not. lua_isnumber(state, index)) then
-        if (lua_isnoneornil(state, index)) then
-          status = LUAJIT_TABLE_MISSING
-        else
-          status = LUAJIT_TABLE_WRONG_TYPE
-        end if
+        call internal_get_if_nil_or_wrong_type(state, index, status)
         return
       end if
       generic_data = int(lua_tonumber(state, index), kind = c_int)
       print*,"get integer cast to c_int"
      type is (integer(c_int64_t))
       if (.not. lua_isnumber(state, index)) then
+        call internal_get_if_nil_or_wrong_type(state, index, status)
         return
       end if
       generic_data = int(lua_tonumber(state, index), kind = c_int64_t)
@@ -1270,12 +1267,14 @@ contains
       !* Floating point.
      type is (real(c_float))
       if (.not. lua_isnumber(state, index)) then
+        call internal_get_if_nil_or_wrong_type(state, index, status)
         return
       end if
       generic_data = real(lua_tonumber(state, index), kind = c_int)
       print*, "get float cast to c_int"
      type is (real(c_double))
       if (.not. lua_isnumber(state, index)) then
+        call internal_get_if_nil_or_wrong_type(state, index, status)
         return
       end if
       generic_data = lua_tonumber(state, index)
@@ -1284,23 +1283,28 @@ contains
       !* String. (Only heap string)
      type is (heap_string)
       if (.not. lua_isstring(state, index)) then
+        call internal_get_if_nil_or_wrong_type(state, index, status)
         return
       end if
       generic_data = lua_tostring(state, index)
       print*, "get string into heap_string"
-
+      !* If you try to use a regular allocatable string, it can cause
+      !* horrible problems so I'm not going to allow that.
+      !* Use a heap_string.
      type is (character(len = *))
       error stop "[LuaJIT] Error: Cannot process an non-heap_string."
 
       !* Boolean.
      type is (logical)
       if (.not. lua_isboolean(state, index)) then
+        call internal_get_if_nil_or_wrong_type(state, index, status)
         return
       end if
       generic_data = lua_toboolean(state, index)
       print*, "get logical"
      type is (logical(c_bool))
       if (.not. lua_isboolean(state, index)) then
+        call internal_get_if_nil_or_wrong_type(state, index, status)
         return
       end if
       generic_data = lua_toboolean(state, index)
@@ -1308,12 +1312,15 @@ contains
 
       !? Now we get into the interesting part.
       !* Function pointer. Aka, "closure".
+      !! I have no idea why I would use this but it's here in case
+      !! I ever decide to use it.
       !  type is (luajit_closure)
       ! call lua_pushcclosure(state, input%pointer, input%argument_count)
       ! print*, "get fortran lua c function"
 
       !* We did something very bad.
      class default
+      error stop "LuaJIT Error: Tried to get an unknown data type."
       ! print*, "uh oh"
     end select
 
