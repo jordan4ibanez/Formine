@@ -1260,14 +1260,14 @@ contains
         return
       end if
       generic_data = int(lua_tonumber(state, index), kind = c_int)
-      print*,"get integer cast to c_int"
+      ! print*,"get integer cast to c_int"
      type is (integer(c_int64_t))
       if (.not. lua_isnumber(state, index)) then
         call internal_get_if_nil_or_wrong_type(state, index, status)
         return
       end if
       generic_data = int(lua_tonumber(state, index), kind = c_int64_t)
-      print*, "get c_int64_t"
+      ! print*, "get c_int64_t"
 
       !* Floating point.
      type is (real(c_float))
@@ -1276,14 +1276,14 @@ contains
         return
       end if
       generic_data = real(lua_tonumber(state, index), kind = c_int)
-      print*, "get float cast to c_int"
+      ! print*, "get float cast to c_int"
      type is (real(c_double))
       if (.not. lua_isnumber(state, index)) then
         call internal_get_if_nil_or_wrong_type(state, index, status)
         return
       end if
       generic_data = lua_tonumber(state, index)
-      print*, "get c_double"
+      ! print*, "get c_double"
 
       !* String. (Only heap string)
      type is (heap_string)
@@ -1292,7 +1292,7 @@ contains
         return
       end if
       generic_data = lua_tostring(state, index)
-      print*, "get string into heap_string"
+      ! print*, "get string into heap_string"
       !* If you try to use a regular allocatable string, it can cause
       !* horrible problems so I'm not going to allow that.
       !* Use a heap_string.
@@ -1306,14 +1306,14 @@ contains
         return
       end if
       generic_data = lua_toboolean(state, index)
-      print*, "get logical"
+      ! print*, "get logical"
      type is (logical(c_bool))
       if (.not. lua_isboolean(state, index)) then
         call internal_get_if_nil_or_wrong_type(state, index, status)
         return
       end if
       generic_data = lua_toboolean(state, index)
-      print*, "get c_bool, convert to c_bool"
+      ! print*, "get c_bool, convert to c_bool"
 
       !? Now we get into the interesting part.
       !* Function pointer. Aka, "closure".
