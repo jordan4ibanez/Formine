@@ -33,7 +33,7 @@ contains
     call lua_getglobal(state, "block")
 
     if (.not. lua_istable(state, -1)) then
-      error stop "[Blocks Repo] Error: Can't initialize function pointers. [blocks] table is missing!"
+      error stop "[Block Repo] Error: Can't initialize function pointers. [blocks] table is missing!"
     end if
 
     ! Swap the declaration with the actual fortran function.
@@ -50,9 +50,20 @@ contains
   subroutine register_block(state)
     implicit none
 
-    type(c_ptr) :: state
+    type(c_ptr), intent(in), value :: state
 
-    print"(A)","Hello, I am register_block!"
+    call lua_pushstring(state, "hooplah")
+    if (lua_error(state) == LUA_OK) then
+      return
+    end if
+
+    ! error stop "[Block Repo] Error: Can't initialize function pointers. [blocks] table is missing!"
+
+    if (.not. lua_istable(state, -1)) then
+      error stop "[Block Repo] Error: Can't initialize function pointers. [blocks] table is missing!"
+    end if
+
+
   end subroutine register_block
 
 
