@@ -1218,6 +1218,22 @@ contains
   end subroutine luajit_swap_table_function
 
 
+  !* This is simply a helper function for luajit_get_generic.
+  subroutine internal_get_if_nil_or_wrong_type(state, index, status)
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    integer(c_int), intent(in), value :: index
+    integer(c_int), intent(inout) :: status
+
+    if (lua_isnoneornil(state, index)) then
+      status = LUAJIT_TABLE_MISSING
+    else
+      status = LUAJIT_TABLE_WRONG_TYPE
+    end if
+  end subroutine internal_get_if_nil_or_wrong_type
+
+
   !* This subroutine will attempt to grab data from whatever index you give it.
   function luajit_get_generic(state, index, generic_data) result(status)
     use :: string
