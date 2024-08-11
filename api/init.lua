@@ -48,8 +48,8 @@ block.draw_type = {
 
 
 --- Register a block into the engine.
---- @param block_definition block_definition A block definition.
-block.register = function(block_definition) end
+--- @param definition block_definition A block definition.
+block.register = function(definition) end
 
 
 --? WORLD. =================================================================================
