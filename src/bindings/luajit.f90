@@ -127,7 +127,8 @@ module luajit
   public :: luajit_call_function
   public :: luajit_get_generic
   public :: luajit_table_get
-  public :: luajit_require_table_field
+  public :: luajit_require_table_key
+  public :: luajit_table_get_required
 
   public :: LUA_RETURNINDEX
   public :: LUAJIT_GET_OK
@@ -1358,7 +1359,7 @@ contains
 
   !* This will luajit_error_stop if a table is missing a required field.
   !* This is going to be repeated, quite a lot. So I'm making it a subroutine.
-  subroutine luajit_require_table_field(state, module_name, table_name, key_name, status)
+  subroutine luajit_require_table_key(state, module_name, table_name, key_name, status)
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -1368,9 +1369,9 @@ contains
     ! If we enter into a none OK value, it either doesn't exist or we have the wrong type.
     if (status /= LUAJIT_GET_OK) then
       if (status == LUAJIT_GET_MISSING) then
-        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] is missing field ["//key_name//"].")
+        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] is missing key ["//key_name//"].")
       else
-        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] field ["//key_name//"] has the wrong type.")
+        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] key ["//key_name//"] has the wrong type.")
       end if
     end if
   end subroutine
@@ -1387,7 +1388,7 @@ contains
     integer(c_int) :: status
 
     status = luajit_table_get(state, key_name, data_output)
-    call luajit_require_table_field(state, module_name, table_name, key_name, status)
+    call luajit_require_table_key(state, module_name, table_name, key_name, status)
   end subroutine luajit_table_get_required
 
 
