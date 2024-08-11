@@ -67,7 +67,7 @@ contains
 
     ! Enforce the first and only argument to be a table.
     if (.not. lua_istable(state, -1)) then
-      call luajit_error_stop(state, "[Block Repo] Error: Cannot register block. Not a table.")
+      call luajit_error_stop(state, module_name//" Error: Cannot register block. Not a table.")
     end if
 
     ! Name is required.
@@ -75,7 +75,7 @@ contains
 
 
     if (.not. lua_istable(state, -1)) then
-      call luajit_error_stop(state, "[Block Repo] Error: Cannot register block. Not a table.")
+      call luajit_error_stop(state, module_name//" Error: Cannot register block. Not a table.")
     end if
 
 
