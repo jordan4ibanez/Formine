@@ -129,9 +129,9 @@ module luajit
   public :: luajit_table_get
 
   public :: LUA_RETURNINDEX
-  public :: LUAJIT_TABLE_OK
-  public :: LUAJIT_TABLE_MISSING
-  public :: LUAJIT_TABLE_WRONG_TYPE
+  public :: LUAJIT_GET_OK
+  public :: LUAJIT_GET_MISSING
+  public :: LUAJIT_GET_WRONG_TYPE
 
   !* LuaJIT constants.
 
@@ -162,9 +162,9 @@ module luajit
 
   !* This is a custom parameter to indicate we're getting the result from a function.
   integer(c_int), parameter :: LUA_RETURNINDEX = -1
-  integer(c_int), parameter :: LUAJIT_TABLE_OK = 0
-  integer(c_int), parameter :: LUAJIT_TABLE_MISSING = 1
-  integer(c_int), parameter :: LUAJIT_TABLE_WRONG_TYPE = 2
+  integer(c_int), parameter :: LUAJIT_GET_OK = 0
+  integer(c_int), parameter :: LUAJIT_GET_MISSING = 1
+  integer(c_int), parameter :: LUAJIT_GET_WRONG_TYPE = 2
 
 
   !* A custom wrapper type to allow X amount of arguments to be associated
@@ -1230,9 +1230,9 @@ contains
     integer(c_int), intent(inout) :: status
 
     if (lua_isnoneornil(state, index)) then
-      status = LUAJIT_TABLE_MISSING
+      status = LUAJIT_GET_MISSING
     else
-      status = LUAJIT_TABLE_WRONG_TYPE
+      status = LUAJIT_GET_WRONG_TYPE
     end if
   end subroutine internal_get_if_nil_or_wrong_type
 
@@ -1327,7 +1327,7 @@ contains
       ! print*, "uh oh"
     end select
 
-    status = LUAJIT_TABLE_OK
+    status = LUAJIT_GET_OK
   end function luajit_get_generic
 
 
@@ -1347,9 +1347,7 @@ contains
     call lua_gettable(state, -2)
 
     !* Now the value is pushed into the stack at -1.
-    if (luajit_get_generic(state, -1, data_output)) then
-      print*,"heap string works!"
-    end if
+    (luajit_get_generic(state, -1, data_output))
 
     !* And we can pop the getters and data output off the LuaJIT stack.
     call lua_pop(state, -2)
