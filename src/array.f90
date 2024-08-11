@@ -136,4 +136,32 @@ contains
   end subroutine assign_string
 
 
+  !* CONSTRUCTORS.
+
+
+  function constructor_int() result(new_int_array)
+
+  end function constructor_int
+
+
+  function constructor_int64() result(new_int64_array)
+
+  end function constructor_int64
+
+
+  function constructor_float() result(new_float_array)
+
+  end function constructor_float
+
+
+  function constructor_double() result(new_double_array)
+
+  end function constructor_double
+
+
+  function constructor_string() result(new_string_array)
+
+  end function constructor_string
+
+
 end module array
