@@ -618,10 +618,11 @@ contains
   subroutine font_clear_database()
     use :: fhash, only: fhash_iter_t, fhash_key_t
     use :: string
+    use :: array, only: string_array
     use :: terminal
     implicit none
 
-    type(heap_string), dimension(:), allocatable :: key_array
+    type(string_array) :: key_array
     type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
@@ -637,7 +638,7 @@ contains
     end if
 
     ! Start with a size of 0.
-    allocate(key_array(0))
+    allocate(key_array%data(0))
 
     ! Create the iterator.
     iterator = fhash_iter_t(character_database)
@@ -645,16 +646,16 @@ contains
     ! Now we will collect the keys from the iterator.
     do while(iterator%next(generic_key, generic_data))
       ! Appending. Allocatable will clean up the old data.
-      key_array = [key_array, heap_string_array(generic_key%to_string())]
+      key_array%data = [key_array%data, heap_string(generic_key%to_string())]
     end do
 
     ! Now clear the database out.
-    do i = 1,size(key_array)
+    do i = 1,size(key_array%data)
       !* We are manually managing memory, we must free as we go.
-      call character_database%get_raw_ptr(key(key_array(i)%get()), generic_pointer)
+      call character_database%get_raw_ptr(key(key_array%data(i)%get()), generic_pointer)
       deallocate(generic_pointer)
 
-      call character_database%unset(key(key_array(i)%get()))
+      call character_database%unset(key(key_array%data(i)%get()))
     end do
 
     !* We will always check that the remaining size is 0. This will protect us from random issues.
