@@ -112,7 +112,7 @@ module luajit
   public :: lua_tostring
   public :: lua_typename
   public :: lua_setfield
-  public :: luajit_throw_error
+  public :: luajit_error_stop
   public :: luajit_initialize
   public :: luajit_destroy
   public :: luajit_run_string
@@ -938,7 +938,9 @@ contains
 
   !* Just chuck an error into LuaJIT.
   !* This is built upon a bunch of things to make it easy as heck.
-  subroutine luajit_throw_error(state, error_string)
+  !* This will also pull the stack pointer out of your function
+  !* using a jump. So when this is hit, the function stops executing.
+  subroutine luajit_error_stop(state, error_string)
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -946,9 +948,9 @@ contains
 
     ! If we fail to throw an error, what the heck.
     if (lual_error(state, error_string) /= LUA_OK) then
-      error stop "LuaJIT: Error: Failed to trow error!"
+      error stop "LuaJIT: Error: Failed to throw error!"
     end if
-  end subroutine luajit_throw_error
+  end subroutine luajit_error_stop
 
 
   !* Create the actual LuaJIT state that we will use.
