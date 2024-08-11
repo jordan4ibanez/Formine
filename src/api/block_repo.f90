@@ -65,6 +65,7 @@ contains
     type(string_array) :: textures
     integer(c_int) :: draw_type
 
+
     status = LUAJIT_GET_OK
 
     ! Enforce the first and only argument to be a table.
@@ -80,6 +81,11 @@ contains
 
     ! Now we need to get the table which contains the textures.
     call luajit_put_table_in_table_on_stack_required(state, module_name, "definition", "textures", "Array<string>")
+
+    status = lua_objlen(state, -1)
+
+    print*, status
+
 
 
     ! Textures are required
