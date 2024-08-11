@@ -1335,16 +1335,16 @@ contains
   !* This function is simply a shorthand helper for a few
   !* function calls. It also clarifies what things are doing.
   !* Table must be in stack -1.
-  function luajit_table_get(state, table_key, data_output) result(status)
+  function luajit_table_get(state, key_name, data_output) result(status)
     implicit none
 
     type(c_ptr), intent(in), value :: state
-    character(len = *, kind = c_char), intent(in) :: table_key
+    character(len = *, kind = c_char), intent(in) :: key_name
     class(*), intent(inout) :: data_output
     integer(c_int) :: status
 
     !* Push "name" to -1.
-    call lua_pushstring(state, table_key)
+    call lua_pushstring(state, key_name)
     !* Table is now at -2. Calling as table["name"].
     call lua_gettable(state, -2)
 
@@ -1358,22 +1358,37 @@ contains
 
   !* This will luajit_error_stop if a table is missing a required field.
   !* This is going to be repeated, quite a lot. So I'm making it a subroutine.
-  subroutine luajit_require_table_field(state, module_name, table_name, field_name, output_status)
+  subroutine luajit_require_table_field(state, module_name, table_name, key_name, status)
     implicit none
 
     type(c_ptr), intent(in), value :: state
-    character(len = *, kind = c_char), intent(in) :: module_name, table_name, field_name
-    integer(c_int), intent(in), value :: output_status
+    character(len = *, kind = c_char), intent(in) :: module_name, table_name, key_name
+    integer(c_int), intent(in), value :: status
 
     ! If we enter into a none OK value, it either doesn't exist or we have the wrong type.
-    if (output_status /= LUAJIT_GET_OK) then
-      if (output_status == LUAJIT_GET_MISSING) then
-        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] is missing field ["//field_name//"].")
+    if (status /= LUAJIT_GET_OK) then
+      if (status == LUAJIT_GET_MISSING) then
+        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] is missing field ["//key_name//"].")
       else
-        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] field ["//field_name//"] has the wrong type.")
+        call luajit_error_stop(state, "["//module_name//"] Error: Table ["//table_name//"] field ["//key_name//"] has the wrong type.")
       end if
     end if
   end subroutine
+
+
+  !* This function simply combines luajit_table_get and luajit_require_table_field.
+  !* It'll make it less likely for me to make a mistake.
+  subroutine luajit_table_get_required(state, module_name, table_name, key_name, data_output)
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    character(len = *, kind = c_char), intent(in) :: module_name, table_name, key_name
+    class(*), intent(inout) :: data_output
+    integer(c_int) :: status
+
+    status = luajit_table_get(state, key_name, data_output)
+    call luajit_require_table_field(state, module_name, table_name, key_name, status)
+  end subroutine luajit_table_get_required
 
 
 end module luajit
