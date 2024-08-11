@@ -27,7 +27,7 @@ module array
 
 
   interface int_array
-
+    module procedure :: constructor_int
   end interface int_array
 
 
@@ -40,7 +40,7 @@ module array
 
 
   interface int64_array
-
+    module procedure :: constructor_int64
   end interface int64_array
 
 
@@ -53,7 +53,7 @@ module array
 
 
   interface float_array
-
+    module procedure :: constructor_float
   end interface float_array
 
 
@@ -66,7 +66,7 @@ module array
 
 
   interface double_array
-
+    module procedure :: constructor_double
   end interface double_array
 
 
@@ -79,7 +79,7 @@ module array
 
 
   interface string_array
-
+    module procedure :: constructor_string
   end interface string_array
 
 
