@@ -21,6 +21,7 @@ module array
   type :: int_array
     integer(c_int), dimension(:), allocatable :: data
   contains
+    private
     generic :: assignment(=) => assign_int
     procedure :: assign_int
   end type int_array
@@ -34,6 +35,7 @@ module array
   type :: int64_array
     integer(c_int64_t), dimension(:), allocatable :: data
   contains
+    private
     generic :: assignment(=) => assign_int64
     procedure :: assign_int64
   end type int64_array
@@ -47,6 +49,7 @@ module array
   type :: float_array
     real(c_float), dimension(:), allocatable :: data
   contains
+    private
     generic :: assignment(=) => assign_float
     procedure :: assign_float
   end type float_array
@@ -60,6 +63,7 @@ module array
   type :: double_array
     real(c_double), dimension(:), allocatable :: data
   contains
+    private
     generic :: assignment(=) => assign_double
     procedure :: assign_double
   end type double_array
@@ -73,6 +77,7 @@ module array
   type :: string_array
     type(heap_string), dimension(:), allocatable :: data
   contains
+    private
     generic :: assignment(=) => assign_string
     procedure :: assign_string
   end type string_array
