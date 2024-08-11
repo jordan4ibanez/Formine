@@ -55,6 +55,8 @@ contains
 
     type(c_ptr), intent(in), value :: state
     type(heap_string) :: testing
+    ! We're going to be using the status quite a lot.
+    integer(c_int) :: status
 
     ! Enforce the first and only argument to be a table.
     if (.not. lua_istable(state, -1)) then
@@ -62,16 +64,8 @@ contains
     end if
 
     ! This is kind of like the rust if let block.
-    associate (result => luajit_table_get(state, "debugging", testing))
-      ! If we enter into a none OK value, it either doesn't exist or we have the wrong type.
-      if (result /= LUAJIT_GET_OK) then
-        if (result == LUAJIT_GET_MISSING) then
-          call luajit_error_stop(state, "[Block Repo] Error: block_definition is missing field [debugging].")
-        else
-          call luajit_error_stop(state, "[Block Repo] Error: block_definition field [debugging] has the wrong type.")
-        end if
-      end if
-    end associate
+    status = luajit_table_get(state, "debugging", testing)
+    call luajit_require_table_field(state, "Block Repo", "block_definition", "debugging", status)
 
     print*,"["//testing%get()//"]"
     print*,len(testing%get())
