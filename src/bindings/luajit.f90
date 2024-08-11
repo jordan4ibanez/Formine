@@ -1206,6 +1206,7 @@ contains
 
   !* This subroutine will attempt to grab data from whatever index you give it.
   function luajit_get_generic(state, index, generic_data) result(success)
+    use :: string
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -1247,13 +1248,16 @@ contains
       generic_data = lua_tonumber(state, index)
       print*, "get c_double"
 
-      !* String.
-     type is (character(len = *))
+      !* String. (Only heap string)
+     type is (heap_string)
       if (.not. lua_isstring(state, index)) then
         return
       end if
       generic_data = lua_tostring(state, index)
-      print*, "get string"
+      print*, "get string into heap_string"
+
+     type is (character(len = *))
+      error stop "[LuaJIT] Error: Cannot process an non-heap_string."
 
       !* Boolean.
      type is (logical)
