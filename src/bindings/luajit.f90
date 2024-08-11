@@ -1182,7 +1182,7 @@ contains
   !* in the API. It allows me to swap the declaration with a fortran
   !* function pointer.
   !* This is a very delicate function as well, must be handled with care.
-  !* We will assume that the table is at stack level -1.
+  !* The table must be at stack level -1.
   subroutine luajit_swap_table_function(state, table_key, function_pointer)
     implicit none
 
