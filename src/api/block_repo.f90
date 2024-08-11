@@ -54,9 +54,12 @@ contains
     implicit none
 
     type(c_ptr), intent(in), value :: state
-    type(heap_string) :: testing
     ! We're going to be using the status quite a lot.
     integer(c_int) :: status
+    ! block_definition fields.
+    type(heap_string) :: name, description
+    type(c_int) :: draw_type
+
 
     ! Enforce the first and only argument to be a table.
     if (.not. lua_istable(state, -1)) then
@@ -67,8 +70,6 @@ contains
     status = luajit_table_get(state, "debugging", testing)
     call luajit_require_table_field(state, "Block Repo", "block_definition", "debugging", status)
 
-    print*,"["//testing%get()//"]"
-    print*,len(testing%get())
 
     if (.not. lua_istable(state, -1)) then
       call luajit_error_stop(state, "[Block Repo] Error: Cannot register block. Not a table.")
