@@ -158,6 +158,13 @@ contains
 
     integer(c_int), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
     type(int_array) :: new_int_array
+    integer(c_int) :: allocation_size
+
+    allocation_size = ex(a)+ex(b)+ex(c)+ex(d)+ex(e)+ex(f)+ex(g)+ex(h)+ex(i)+ex(j)+ex(k)+ex(l)+ex(m)+ex(n)+ex(o)+ex(p)+ex(q)+ex(r)+ex(s)+ex(t)+ex(u)+ex(v)+ex(w)+ex(x)+ex(y)+ex(z)
+
+    allocate(new_int_array%data(allocation_size))
+
+    new_int_array%data(1:allocation_size) = [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z]
   end function constructor_int
 
 
@@ -166,6 +173,87 @@ contains
 
     integer(c_int64_t), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
     type(int64_array) :: new_int64_array
+
+    allocate(new_int64_array%data(ex(a)+ex(b)+ex(c)+ex(d)+ex(e)+ex(f)+ex(g)+ex(h)+ex(i)+ex(j)+ex(k)+ex(l)+ex(m)+ex(n)+ex(o)+ex(p)+ex(q)+ex(r)+ex(s)+ex(t)+ex(u)+ex(v)+ex(w)+ex(x)+ex(y)+ex(z)))
+
+    if (present(a)) then
+      new_int64_array%data(1) = a
+    end if
+    if (present(b)) then
+      new_int64_array%data(2) = b
+    end if
+    if (present(c)) then
+      new_int64_array%data(3) = c
+    end if
+    if (present(d)) then
+      new_int64_array%data(4) = d
+    end if
+    if (present(e)) then
+      new_int64_array%data(5) = e
+    end if
+    if (present(f)) then
+      new_int64_array%data(6) = f
+    end if
+    if (present(g)) then
+      new_int64_array%data(7) = g
+    end if
+    if (present(h)) then
+      new_int64_array%data(8) = h
+    end if
+    if (present(i)) then
+      new_int64_array%data(9) = i
+    end if
+    if (present(j)) then
+      new_int64_array%data(10) = j
+    end if
+    if (present(k)) then
+      new_int64_array%data(11) = k
+    end if
+    if (present(l)) then
+      new_int64_array%data(12) = l
+    end if
+    if (present(m)) then
+      new_int64_array%data(13) = m
+    end if
+    if (present(n)) then
+      new_int64_array%data(14) = n
+    end if
+    if (present(o)) then
+      new_int64_array%data(15) = o
+    end if
+    if (present(p)) then
+      new_int64_array%data(16) = p
+    end if
+    if (present(q)) then
+      new_int64_array%data(17) = q
+    end if
+    if (present(r)) then
+      new_int64_array%data(18) = r
+    end if
+    if (present(s)) then
+      new_int64_array%data(19) = s
+    end if
+    if (present(t)) then
+      new_int64_array%data(20) = t
+    end if
+    if (present(u)) then
+      new_int64_array%data(21) = u
+    end if
+    if (present(v)) then
+      new_int64_array%data(22) = v
+    end if
+    if (present(w)) then
+      new_int64_array%data(23) = w
+    end if
+    if (present(x)) then
+      new_int64_array%data(24) = x
+    end if
+    if (present(y)) then
+      new_int64_array%data(25) = y
+    end if
+    if (present(z)) then
+      new_int64_array%data(26) = z
+    end if
   end function constructor_int64
 
 
@@ -174,6 +262,9 @@ contains
 
     real(c_float), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
     type(float_array) :: new_float_array
+
+    allocate(new_float_array%data(ex(a)+ex(b)+ex(c)+ex(d)+ex(e)+ex(f)+ex(g)+ex(h)+ex(i)+ex(j)+ex(k)+ex(l)+ex(m)+ex(n)+ex(o)+ex(p)+ex(q)+ex(r)+ex(s)+ex(t)+ex(u)+ex(v)+ex(w)+ex(x)+ex(y)+ex(z)))
+
   end function constructor_float
 
 
@@ -182,6 +273,9 @@ contains
 
     real(c_double), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
     type(double_array) :: new_double_array
+
+    allocate(new_double_array%data(ex(a)+ex(b)+ex(c)+ex(d)+ex(e)+ex(f)+ex(g)+ex(h)+ex(i)+ex(j)+ex(k)+ex(l)+ex(m)+ex(n)+ex(o)+ex(p)+ex(q)+ex(r)+ex(s)+ex(t)+ex(u)+ex(v)+ex(w)+ex(x)+ex(y)+ex(z)))
+
   end function constructor_double
 
 
@@ -190,6 +284,9 @@ contains
 
     character(len = *, kind = c_char), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
     type(string_array) :: new_string_array
+
+    allocate(new_string_array%data(ex(a)+ex(b)+ex(c)+ex(d)+ex(e)+ex(f)+ex(g)+ex(h)+ex(i)+ex(j)+ex(k)+ex(l)+ex(m)+ex(n)+ex(o)+ex(p)+ex(q)+ex(r)+ex(s)+ex(t)+ex(u)+ex(v)+ex(w)+ex(x)+ex(y)+ex(z)))
+
   end function constructor_string
 
 
