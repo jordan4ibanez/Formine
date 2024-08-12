@@ -158,7 +158,8 @@ contains
     ! print*, "Textures: [",definition_pointer%textures,"]"
     ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
 
-    ! // TODO: Collect this data into a database.
+    !!//todo: Change this to an index.
+    call block_database%set_ptr(key(definition_pointer%name), definition_pointer)
   end subroutine register_block
 
 
