@@ -96,7 +96,7 @@ contains
     integer(c_int) :: draw_type
     !* The pointer where we will store the block definiton.
     !* We will only allocate this after a successful data query from LuaJIT.
-    type(block_definition), pointer :: definition
+    type(block_definition), pointer :: definition_pointer
 
 
     status = LUAJIT_GET_OK
@@ -145,19 +145,18 @@ contains
 
     ! We have completed a successful query of the definition table from LuaJIT.
     ! Put all the data into the fortran database.
-    allocate(definition)
+    allocate(definition_pointer)
 
+    definition_pointer%name = name%get()
+    definition_pointer%description = description%get()
+    definition_pointer%textures = textures%data
+    definition_pointer%draw_type = draw_type
 
-    definition%name = name%get()
-    definition%description = description%get()
-    definition%textures = textures%data
-    definition%draw_type = draw_type
-
-    print"(A)", module_name//": Current Block definition:"
-    print"(A)", "Name: "//definition%name
-    print"(A)", "Description: "//definition%description
-    print*, "Textures: [",definition%textures,"]"
-    print"(A)", "draw_type: "//int_to_string(definition%draw_type)
+    ! print"(A)", module_name//": Current Block definition:"
+    ! print"(A)", "Name: "//definition_pointer%name
+    ! print"(A)", "Description: "//definition_pointer%description
+    ! print*, "Textures: [",definition_pointer%textures,"]"
+    ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
 
     ! // TODO: Collect this data into a database.
   end subroutine register_block
