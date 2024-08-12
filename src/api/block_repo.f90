@@ -1,5 +1,7 @@
 module block_repo
   use :: luajit
+  use :: string
+  use :: fhash, only: fhash_tbl_t, key => fhash_key
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -10,8 +12,36 @@ module block_repo
   public :: block_repo_deploy_lua_api
   public :: register_block
 
-  ! Bake the module name into the executable.
+
+  !* Bake the module name into the executable.
+
   character(len = 12, kind =c_char), parameter :: module_name = "[Block Repo]"
+
+
+  !* Block draw types.
+
+  ! This is a simple range check that can be used to verify input draw_type.
+  ! If new draw_types are added, syncronize the max.
+  integer(c_int), parameter :: DRAW_TYPE_MIN = 0
+  integer(c_int), parameter :: DRAW_TYPE_MAX = 1
+
+  integer(c_int), parameter :: DRAW_TYPE_AIR = 0
+  integer(c_int), parameter :: DRAW_TYPE_NORMAL = 1
+
+
+  !* Block definition.
+
+  type block_definition
+    character(len = :, kind = c_char), allocatable :: name
+    character(len = :, kind = c_char), allocatable :: description
+    type(heap_string), dimension(6) :: textures
+    integer(c_int) :: draw_type
+  end type block_definition
+
+
+  !* Block database.
+
+  type(fhash_tbl_t) :: block_database
 
 
 contains
@@ -64,6 +94,9 @@ contains
     type(heap_string) :: name, description
     type(string_array) :: textures
     integer(c_int) :: draw_type
+    !* The pointer where we will store the block definiton.
+    !* We will only allocate this after a successful data query from LuaJIT.
+    type(block_definition), pointer :: definition
 
 
     status = LUAJIT_GET_OK
@@ -97,23 +130,36 @@ contains
 
     ! We're back into the block_definition table.
 
-    ! draw_type is required.
+    ! draw_type is required. This will auto push and pop the target table so
+    ! we're still at the definition table being at -1.
     call luajit_table_get_key_required(state, module_name, "definition", "draw_type", draw_type, "draw_type")
 
-    if (.not. lua_istable(state, -1)) then
-      call luajit_error_stop(state, module_name//" Error: Cannot register block. Not a table.")
-    end if
+
+    !* todo: can add in more definition components here. :)
+
+
+    ! Clean up the stack. We are done with the LuaJIT stack.
+    !? The definition table has now disappeared.
+    call lua_pop(state, lua_gettop(state))
+
+
+    ! We have completed a successful query of the definition table from LuaJIT.
+    ! Put all the data into the fortran database.
+    allocate(definition)
+
+
+    definition%name = name%get()
+    definition%description = description%get()
+    definition%textures = textures%data
+    definition%draw_type = draw_type
 
     print"(A)", module_name//": Current Block definition:"
-    print"(A)", "Name: "//name%get()
-    print"(A)", "Description: "//description%get()
-    print*, "Textures: [",textures%data,"]"
-    print"(A)", "draw_type: "//int_to_string(draw_type)
+    print"(A)", "Name: "//definition%name
+    print"(A)", "Description: "//definition%description
+    print*, "Textures: [",definition%textures,"]"
+    print"(A)", "draw_type: "//int_to_string(definition%draw_type)
 
     ! // TODO: Collect this data into a database.
-
-    ! Now clean up the stack. We are done with the stack.
-    call lua_pop(state, lua_gettop(state))
   end subroutine register_block
 
 
