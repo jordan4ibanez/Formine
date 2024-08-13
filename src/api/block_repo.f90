@@ -40,15 +40,19 @@ module block_repo
     integer(c_int) :: draw_type
   end type block_definition
 
+
   !* Block database.
   !*
   !* Since this is attempted to utilize the CPU cache to the extreme,
   !* we will have some ground rules laid out.
+  !*
+  !* The idea is: We want the memory to be contiguous.
+  !*
   !* It will be extremely unsafe if we do not follow these rules.
   !*
   !! Ground rules:
   !*
-  !* The array will live in the heap as a pointer.
+  !* The array will live in the heap as an allocated smart pointer.
   !*
   !* Block definitions will be created as the game starts up.
   !*
