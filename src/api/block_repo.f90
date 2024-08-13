@@ -70,6 +70,7 @@ module block_repo
   !* As new blocks are added in, they will incremement the available ID.
   !*
 
+  integer(c_int) :: current_id = 1
   integer(c_int) :: block_array_length = 0
   type(block_definition), dimension(:), allocatable :: block_array
 
@@ -142,6 +143,13 @@ contains
 
     ! Name is required.
     call luajit_table_get_key_required(state, module_name, "definition", "name", name, "string")
+
+    !! If it is "air" silent abord.
+    if (name%get() == "air") then
+      print"(A)", module_name//" warning: Please do not try to register air."
+      call lua_pop(state, lua_gettop(state))
+      return
+    end if
 
     ! Description is required.
     call luajit_table_get_key_required(state, module_name, "definition", "description", description, "string")
