@@ -50,16 +50,12 @@ module block_repo
   !*
   !* Blocks will not be deleted during the game runtime.
   !*
-  !* The string database will simply point to an index in the array.
-  !* This is for the LuaJIT API. It allows you to request block information via a string.
+  !* The string database will simply point to an index in the array via a raw pointer.
+  !* This is here for when we need to access into the array.
   !*
+  !* LuaJIT will never have access to the direct block_definition pointer.
   !*
-  !*
-  !*
-  !*
-  !*
-
-
+  !* LuaJIT shall have it's own copy of the database which will be immutable with metatables.
 
 
   type(fhash_tbl_t) :: block_database_string
