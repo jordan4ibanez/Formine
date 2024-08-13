@@ -121,7 +121,7 @@ contains
     type(heap_string) :: name, description
     type(string_array) :: textures
     integer(c_int) :: draw_type
-    !* The pointer where we will store the block definiton.
+    !* The smart pointer where we will store the block definiton.
     !* We will only allocate this after a successful data query from LuaJIT.
     type(block_definition), pointer :: definition_pointer
 
