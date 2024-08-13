@@ -75,8 +75,6 @@ module block_repo
   type(block_definition), dimension(:), allocatable :: definition_array
   type(fhash_tbl_t) :: definition_database_string
 
- 
-
 
 contains
 
@@ -205,7 +203,6 @@ contains
 
     ! Copy the definition into the block array.
     call copy_block_definition_into_array(definition_smart_pointer)
-
   end subroutine register_block
 
 
@@ -254,5 +251,6 @@ contains
     deallocate(definition_array)
     call move_alloc(new_block_array, definition_array)
   end subroutine expand_block_array
+
 
 end module block_repo
