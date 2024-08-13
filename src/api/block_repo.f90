@@ -30,6 +30,8 @@ module block_repo
 
 
   !* Block definition.
+  !* 200 bytes in size. (at time of writing)
+  !* 1_000_000 definitions would take up 200 mb.
 
   type block_definition
     character(len = :, kind = c_char), allocatable :: name
