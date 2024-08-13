@@ -46,6 +46,8 @@ module block_repo
   !*
   !! Ground rules:
   !*
+  !* The array will live in the heap as a pointer.
+  !*
   !* Block definitions will be created as the game starts up.
   !*
   !* Blocks will not be deleted during the game runtime.
