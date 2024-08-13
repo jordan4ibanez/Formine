@@ -38,10 +38,32 @@ module block_repo
     integer(c_int) :: draw_type
   end type block_definition
 
-
   !* Block database.
+  !*
+  !* Since this is attempted to utilize the CPU cache to the extreme,
+  !* we will have some ground rules laid out.
+  !* It will be extremely unsafe if we do not follow these rules.
+  !*
+  !! Ground rules:
+  !*
+  !* Block definitions will be created as the game starts up.
+  !*
+  !* Blocks will not be deleted during the game runtime.
+  !*
+  !* The string database will simply point to an index in the array.
+  !* This is for the LuaJIT API. It allows you to request block information via a string.
+  !*
+  !*
+  !*
+  !*
+  !*
+  !*
 
-  type(fhash_tbl_t) :: block_database
+
+
+
+  type(fhash_tbl_t) :: block_database_string
+
 
 
 contains
@@ -159,7 +181,7 @@ contains
     ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
 
     !!//todo: Change this to an index.
-    call block_database%set_ptr(key(definition_pointer%name), definition_pointer)
+    call block_database_string%set_ptr(key(definition_pointer%name), definition_pointer)
   end subroutine register_block
 
 
