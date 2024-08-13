@@ -70,7 +70,9 @@ module block_repo
   !* As new blocks are added in, they will incremement the available ID.
   !*
 
-  type(block_definition), dimension(:), pointer :: block_array
+  integer(c_int) :: block_array_length = 0
+  type(block_definition), dimension(:), allocatable :: block_array
+
   type(fhash_tbl_t) :: block_database_string
 
 
