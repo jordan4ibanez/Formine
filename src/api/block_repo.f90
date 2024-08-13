@@ -56,6 +56,11 @@ module block_repo
   !* LuaJIT will never have access to the direct block_definition pointer.
   !*
   !* LuaJIT shall have it's own copy of the database which will be immutable with metatables.
+  !*
+  !* No block shall share an ID. The history of the block IDs will be held in the world database. (when that is created)
+  !*
+  !* As new blocks are added in, they will incremement the available ID.
+  !*
 
 
   type(fhash_tbl_t) :: block_database_string
