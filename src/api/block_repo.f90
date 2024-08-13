@@ -71,11 +71,11 @@ module block_repo
   !*
 
   integer(c_int) :: current_id = 1
-  integer(c_int) :: block_array_length = 0
-  type(block_definition), dimension(:), allocatable :: block_array
+  integer(c_int) :: definition_array_length = 0
+  type(block_definition), dimension(:), allocatable :: definition_array
+  type(fhash_tbl_t) :: definition_database_string
 
-  type(fhash_tbl_t) :: block_database_string
-
+ 
 
 
 contains
@@ -89,7 +89,7 @@ contains
 
 
     !* Create the base smart pointer of the block array.
-    allocate(block_array(0))
+    allocate(definition_array(0))
 
 
     ! Memory layout: (Stack grows down.)
@@ -201,10 +201,58 @@ contains
     ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
 
     ! Copy the definition into the string based database.
-    call block_database_string%set(key(definition_smart_pointer%name), definition_smart_pointer)
+    call definition_database_string%set(key(definition_smart_pointer%name), definition_smart_pointer)
 
+    ! Copy the definition into the block array.
+    call copy_block_definition_into_array(definition_smart_pointer)
 
   end subroutine register_block
 
+
+  !* Putting a definition in the array is broken off into a separate subroutine
+  !* because this is going to get a bit complex when missing IDs are possible.
+  subroutine copy_block_definition_into_array(definition_smart_pointer)
+    implicit none
+
+    type(block_definition), allocatable :: definition_smart_pointer
+
+    ! Grow the array.
+    call expand_block_array(1)
+
+    ! Copy the definition in.
+    definition_array(current_id) = definition_smart_pointer
+
+    ! Prepare this for the next definition.
+    current_id = current_id + 1
+  end subroutine copy_block_definition_into_array
+
+
+  ! * This is a workaround for gfortran not implementing type bound array re-allocation.
+  ! * Fair word of warning: This could possibly be why the game starts up slowly.
+  ! * This is utilizing copying.
+  subroutine expand_block_array(number_of_elements)
+    implicit none
+
+    integer(c_int), intent(in), value :: number_of_elements
+    type(block_definition), dimension(:), allocatable :: new_block_array
+    integer(c_int) :: old_size, new_size, i
+
+    old_size = definition_array_length
+    new_size = old_size + number_of_elements
+
+    allocate(new_block_array(new_size))
+
+    ! Now we stream the data in, one by one.
+    do i = 1,old_size
+      new_block_array(i) = definition_array(i)
+    end do
+
+    ! Now update the size.
+    definition_array_length = new_size
+
+    ! Finally, swap the data.
+    deallocate(definition_array)
+    call move_alloc(new_block_array, definition_array)
+  end subroutine expand_block_array
 
 end module block_repo
