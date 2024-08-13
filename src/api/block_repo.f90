@@ -15,7 +15,7 @@ module block_repo
 
   !* Bake the module name into the executable.
 
-  character(len = 12, kind =c_char), parameter :: module_name = "[Block Repo]"
+  character(len = 12, kind = c_char), parameter :: module_name = "[Block Repo]"
 
 
   !* Block draw types.
