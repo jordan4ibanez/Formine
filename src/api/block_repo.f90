@@ -82,8 +82,6 @@ contains
     !* Create the base smart pointer of the block array.
     allocate(block_array(0))
 
-    print*,associated(block_array)
-
 
     ! Memory layout: (Stack grows down.)
     ! -1 - blocks = {}
