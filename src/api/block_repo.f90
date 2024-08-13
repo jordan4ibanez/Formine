@@ -123,10 +123,7 @@ contains
     integer(c_int) :: draw_type
     !* The smart pointer where we will store the block definiton.
     !* We will only allocate this after a successful data query from LuaJIT.
-    type(block_definition), pointer :: definition_pointer
-
-
-    print*,sizeof(definition_pointer)
+    type(block_definition), allocatable :: definition_smart_pointer
 
     status = LUAJIT_GET_OK
 
@@ -174,12 +171,12 @@ contains
 
     ! We have completed a successful query of the definition table from LuaJIT.
     ! Put all the data into the fortran database.
-    allocate(definition_pointer)
+    allocate(definition_smart_pointer)
 
-    definition_pointer%name = name%get()
-    definition_pointer%description = description%get()
-    definition_pointer%textures = textures%data
-    definition_pointer%draw_type = draw_type
+    definition_smart_pointer%name = name%get()
+    definition_smart_pointer%description = description%get()
+    definition_smart_pointer%textures = textures%data
+    definition_smart_pointer%draw_type = draw_type
 
     ! print"(A)", module_name//": Current Block definition:"
     ! print"(A)", "Name: "//definition_pointer%name
@@ -187,10 +184,10 @@ contains
     ! print*, "Textures: [",definition_pointer%textures,"]"
     ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
 
-    print*,sizeof(definition_pointer)
+    ! Copy the definition into the string based database.
+    call block_database_string%set(key(definition_smart_pointer%name), definition_smart_pointer)
 
-    !!//todo: Change this to an index.
-    call block_database_string%set_ptr(key(definition_pointer%name), definition_pointer)
+
   end subroutine register_block
 
 
