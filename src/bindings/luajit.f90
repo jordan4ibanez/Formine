@@ -1372,7 +1372,7 @@ contains
       ! print*, "get c_bool, convert to c_bool"
 
      type is (string_array)
-      print*,"hit string array, copying"
+      ! print*,"hit string array, copying"
       status = luajit_copy_string_array_from_table(state, generic_data)
 
       !? Now we get into the interesting part.
