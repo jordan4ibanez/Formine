@@ -79,7 +79,7 @@ contains
     type(c_ptr), intent(in), value :: state
 
 
-    !* Create the base pointer of the block array.
+    !* Create the base smart pointer of the block array.
     allocate(block_array(0))
 
     print*,associated(block_array)
