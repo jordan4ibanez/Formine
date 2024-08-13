@@ -10,6 +10,7 @@
   "fortran.formatting.findentArgs": [
     "-i2"
   ],
+  "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|!|^|^[ \\t]*(-|\\d+.))\\s*($TAGS)",
   // We don't want to see the mod files or the build directory because it clutters everything up.
   "files.exclude": {
     "**/.git": true,
