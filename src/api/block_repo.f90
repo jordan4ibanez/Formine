@@ -62,7 +62,7 @@ module block_repo
   !* As new blocks are added in, they will incremement the available ID.
   !*
 
-
+  type(block_definition), dimension(:), pointer :: block_array
   type(fhash_tbl_t) :: block_database_string
 
 
@@ -75,6 +75,12 @@ contains
     implicit none
 
     type(c_ptr), intent(in), value :: state
+
+
+    !* Create the base pointer of the block array.
+    allocate(block_array(0))
+
+    print*,associated(block_array)
 
 
     ! Memory layout: (Stack grows down.)
@@ -94,8 +100,6 @@ contains
 
     ! Swap the declaration with the actual fortran function.
     call luajit_swap_table_function(state, "register", c_funloc(register_block))
-
-
 
 
     ! Now clear the stack. We're done with the block LuaJIT table.
@@ -121,6 +125,8 @@ contains
     !* We will only allocate this after a successful data query from LuaJIT.
     type(block_definition), pointer :: definition_pointer
 
+
+    print*,sizeof(definition_pointer)
 
     status = LUAJIT_GET_OK
 
@@ -180,6 +186,8 @@ contains
     ! print"(A)", "Description: "//definition_pointer%description
     ! print*, "Textures: [",definition_pointer%textures,"]"
     ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
+
+    print*,sizeof(definition_pointer)
 
     !!//todo: Change this to an index.
     call block_database_string%set_ptr(key(definition_pointer%name), definition_pointer)
