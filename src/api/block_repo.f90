@@ -205,6 +205,7 @@ contains
     ! call copy_block_definition_into_array(definition_smart_pointer)
     definition_array = [definition_array, definition_smart_pointer]
     definition_array_length = definition_array_length + 1
+    current_id = current_id + 1
   end subroutine register_block
 
 
