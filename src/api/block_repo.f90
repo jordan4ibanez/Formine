@@ -36,7 +36,7 @@ module block_repo
   type block_definition
     character(len = :, kind = c_char), allocatable :: name
     character(len = :, kind = c_char), allocatable :: description
-    type(heap_string), dimension(6) :: textures
+    type(heap_string), dimension(:), allocatable :: textures
     integer(c_int) :: draw_type
   end type block_definition
 
