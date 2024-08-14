@@ -24,6 +24,11 @@ module files
   end type file_reader
 
 
+  type :: directory_reader
+
+  end type directory_reader
+
+
 contains
 
 
