@@ -202,7 +202,6 @@ contains
     call definition_database_string%set(key(definition_smart_pointer%name), definition_smart_pointer)
 
     ! Copy the definition into the block array.
-    ! call copy_block_definition_into_array(definition_smart_pointer)
     definition_array = [definition_array, definition_smart_pointer]
     definition_array_length = definition_array_length + 1
     current_id = current_id + 1

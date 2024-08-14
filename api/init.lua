@@ -1,7 +1,7 @@
 ---@diagnostic disable: unused-local
 --[[
 
-Fortlands API base.
+Formine API base.
 
 This is written like this, so you can see the data using the Lua VSCode extension.
 
