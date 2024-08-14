@@ -17,7 +17,7 @@ module font
 
 
   ! This is a container which holds the points on the texture that make the character appear correctly.
-  type opengl_character
+  type :: opengl_character
     ! We use this for constructing the quad to match the size of the texture mapping.
     integer(c_int) :: width_pixels = 0
     real(c_double) :: width_real = 0.0d0
@@ -30,7 +30,7 @@ module font
 
   ! This is an abstraction over the raw array components to allow me to actually
   ! read what I'm doing during the subroutine that checks how wide characters are.
-  type rgba
+  type :: rgba
     integer(c_int) :: r = 0
     integer(c_int) :: g = 0
     integer(c_int) :: b = 0

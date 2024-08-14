@@ -23,7 +23,7 @@ module orient_class
   public :: orientation
 
 
-  type orientation
+  type :: orientation
     private
     ! Encapsulate this.
     integer :: value

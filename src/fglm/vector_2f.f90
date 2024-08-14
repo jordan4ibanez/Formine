@@ -16,7 +16,7 @@ module vector_2f
   !
   !? Implementation note: I added a whole bunch of f32 assignment and math because it's easier to write out 0.0 than it is 0.0d0.
 
-  type vec2f
+  type :: vec2f
     real(c_float):: x = 0.0
     real(c_float):: y = 0.0
   contains

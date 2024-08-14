@@ -9,7 +9,7 @@ module factory
 
   integer, save :: yep
 
-  type mob
+  type :: mob
     integer :: id = 0
     integer :: hp = 0
   contains

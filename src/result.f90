@@ -9,7 +9,7 @@ module rez
   public result_wrap
 
 
-  type res
+  type :: res
 
     class(*), allocatable :: data
     logical :: exists

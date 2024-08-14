@@ -22,7 +22,7 @@ module mesh
   type(fhash_tbl_t) :: mesh_database
 
 
-  type mesh_data
+  type :: mesh_data
     integer :: vao = 0
     integer :: vbo_position = 0
     integer :: vbo_texture_coordinate = 0

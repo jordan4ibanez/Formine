@@ -172,7 +172,7 @@ module luajit
 
   !* A custom wrapper type to allow X amount of arguments to be associated
   !* With a fortran function.
-  type luajit_closure
+  type :: luajit_closure
     type(c_funptr) :: pointer
     integer(c_int) :: argument_count
   end type luajit_closure

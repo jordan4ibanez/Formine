@@ -25,7 +25,7 @@ module chunk
 
   !* Block data is one element in a chunk.
 
-  type block_data
+  type :: block_data
     ! Starts off as air.
     integer(c_int) :: id = 0
     ! Starts off as pitch black. Range: 0-15
@@ -37,7 +37,7 @@ module chunk
 
   !* Chunk data is the data for the entire chunk.
 
-  type chunk_data
+  type :: chunk_data
     type(block_data), dimension(CHUNK_ARRAY_SIZE) :: data
     type(heap_string), dimension(MESH_STACK_ARRAY_SIZE) :: mesh
   end type chunk_data

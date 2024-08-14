@@ -15,7 +15,7 @@ module vector_2i
   !* They do not mix. Can't add vec2i to vec2d, and so forth. This will cause weird problems that I don't feel like solving.
 
 
-  type vec2i
+  type :: vec2i
     integer(c_int) :: x, y = 0
   contains
     generic :: assignment(=) => assign_scalar_i32, assign_array_i32, assign_vec2i

@@ -51,7 +51,7 @@ module matrix_4f
 
 
 
-  type mat4f
+  type :: mat4f
     real(c_float), dimension(16) :: data = [ &
       1.0, 0.0, 0.0, 0.0, &
       0.0, 1.0, 0.0, 0.0, &

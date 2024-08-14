@@ -9,7 +9,7 @@ module h_string
 
 
   !* A heap string is a string on the heap. Amazing, I know.
-  type heap_string
+  type :: heap_string
     private
     character(len = :), allocatable :: data
   contains
