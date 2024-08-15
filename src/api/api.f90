@@ -34,7 +34,13 @@ contains
 
   !* Initialize the API.
   subroutine api_initialize()
+    use :: directory
     implicit none
+
+    type(directory_reader) :: testing
+
+
+    call testing%read_directory("./")
 
     call luajit_initialize(lua_state)
 
