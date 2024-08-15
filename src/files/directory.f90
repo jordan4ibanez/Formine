@@ -56,21 +56,21 @@ contains
     inquire(file = FIFO_PIPE, exist = pipe_exists)
     if (pipe_exists) then
       print"(A)", "[Directory] warning: FIFO was never closed, deleting."
-      open(unit = 7023, iostat = status, file = FIFO_PIPE, status = "old")
+      open(unit = file_io_identifier, iostat = status, file = FIFO_PIPE, status = "old")
       if (status == 0) then
-        close(7023, status = "delete")
+        close(file_io_identifier, status = "delete")
       else
         error stop "[Directory] Error: Failed to delete outdated FIFO."
       end if
     end if
 
+    ! Create the FIFO pipe.
     call execute_command_line("mkfifo "//FIFO_PIPE)
 
     inquire(file = FIFO_PIPE, exist = pipe_exists)
     if (.not. pipe_exists) then
       error stop "[Directory] Error: Failed to create the FIFO."
     end if
-
 
     ! Open up this file reader so we can trigger bash to start dumping in raw data.
     open(file = FIFO_PIPE, newunit = file_io_identifier, access = "sequential", action = "readwrite")
