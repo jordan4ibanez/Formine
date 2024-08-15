@@ -39,25 +39,39 @@ contains
     logical :: pipe_exists
     character(len = *, kind = c_char), intent(in) :: path
     character(len = :, kind = c_char), allocatable :: message
+    integer :: status
 
     ! We are literally creating a custom pipe on posix to act as a virtual file.
-    ! You can thank: janneb https://stackoverflow.com/a/53450193
+    !! DO NOT use this for high performance IO. I have no idea how fast this actually is lol.
+    !! DO NOT use this for asynchronous IO!
+    ! You can thank:
+    ! janneb https://stackoverflow.com/a/53450193
+    ! Alexander Vogt: https://stackoverflow.com/a/18671521
 
-    !! This needs a windows check.
+    !! This needs a windows check and a windows implementation. You can make named pipes on windows.
+
+    ! todo: turn this into a module.
+    ! Make sure we deleted this pipe last time.
+    inquire(file = FIFO_PIPE, exist = pipe_exists)
+    if (pipe_exists) then
+      print"(A)", "[Directory] warning: FIFO was never closed, deleting."
+      open(unit = 7023, iostat = status, file = FIFO_PIPE, status = "old")
+      if (status == 0) then
+        close(7023, status = "delete")
+      else
+        error stop "[Directory] Error: Failed to delete outdated FIFO."
+      end if
+    end if
+
+    call execute_command_line("mkfifo "//FIFO_PIPE)
 
     inquire(file = FIFO_PIPE, exist = pipe_exists)
-
-    if (pipe_exists) then
-      error stop "[Directory] Error: Never closed the FIFO!"
+    if (.not. pipe_exists) then
+      error stop "[Directory] Error: Failed to create the FIFO."
     end if
+
 
     call execute_command_line("ls -1 "//path//" > "//FIFO_PIPE, wait = .true.)
-
-    inquire(file = FIFO_PIPE, exist = pipe_exists)
-
-    if (pipe_exists) then
-      error stop "[Directory] Error: Never closed the FIFO!"
-    end if
 
 
 
