@@ -95,6 +95,7 @@ contains
     ! Finally, allocate self with X amount of file names.
     allocate(this%files(file_count))
 
+    ! Scan through each entry, and dump it into the persistent data.
     do i = 1,file_count
       read(file_io_identifier, "(A)") message
       message_length = index(message, " ") - 1
