@@ -82,8 +82,7 @@ contains
     ! Nothing to do.
     if (file_count == 0) then
       print*,"bailing out."
-      open(unit = 7023, iostat = status, file = FIFO_PIPE, status = "old")
-      close(7023, status = "delete")
+      close(file_io_identifier, status = "delete")
     end if
 
     ! Now we will overwrite this thing and loop for X amount of file names.
