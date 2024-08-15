@@ -37,8 +37,8 @@ contains
     implicit none
 
     class(directory_reader), intent(inout) :: this
-    logical :: pipe_exists
     character(len = *, kind = c_char), intent(in) :: path
+    logical :: pipe_exists
     character(len = :, kind = c_char), allocatable :: message
     integer :: file_count, status, file_io_identifier, i, message_length
 
