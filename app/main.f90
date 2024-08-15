@@ -23,7 +23,7 @@ program main
 
   call api_initialize()
 
-  if (.not. api_run_file("./mods/init.lua")) then
+  if (.not. api_run_file("./mods/formine/init.lua")) then
     print*,"FAILED TO RUN FILE"
     return
   end if
