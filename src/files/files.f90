@@ -24,18 +24,6 @@ module files
   end type file_reader
 
 
-  type :: file_component
-    type(heap_string) :: file_name
-    logical :: is_folder
-  end type file_component
-
-  ! todo: this will bind to C to get the files in a directory.
-  ! todo: Then it will put the files into an array consisting of file_components.
-  type :: directory_reader
-
-  end type directory_reader
-
-
 contains
 
 
