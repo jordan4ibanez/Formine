@@ -90,7 +90,7 @@ contains
     type(c_ptr) :: c_for_dir_pointer
     type(for_dir), pointer :: for_dir_pointer
     integer :: i
-    character(len = :, kind = c_char), allocatable :: temp
+    character(len = :, kind = c_char), allocatable :: temp_string
     ! We have our arrays of integers and pointers which we can extract.
     integer(kind = c_int), dimension(:), pointer :: string_lengths
     type(c_ptr), dimension(:), pointer :: c_strings
@@ -128,7 +128,7 @@ contains
     ! Now we're going to loop through and grab all the data from these pointers.
     ! If you look at the memory addresses, they appear to be tightly packed.
     do i = 1,for_dir_pointer%array_length
-      temp = string_from_c(c_strings(i), string_lengths(i))
+      temp_string = string_from_c(c_strings(i), string_lengths(i))
 
     end do
 
