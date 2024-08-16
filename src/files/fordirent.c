@@ -169,7 +169,7 @@ bool close_directory_folder_parse(for_dir *output)
   // Next the string lengths array.
   free(output->string_lengths);
 
-  // Also the is folder tracker.
+  // Also the is_folder tracker array.
   free(output->is_folder);
 
   // Then we can finally blow this thing up.
