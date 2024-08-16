@@ -62,8 +62,8 @@ char *check_ends_with_forward_slash(const char *path)
   return new_string;
 }
 
-//* Grab the files in a directory.
 //* This is POSIX only.
+//* Grab the files in a directory.
 //! todo: need a windows version.
 for_dir *parse_directory_folders(const char *input_path)
 {
@@ -73,14 +73,16 @@ for_dir *parse_directory_folders(const char *input_path)
   struct dirent *dir;
   for_dir *output = malloc(sizeof(for_dir));
   DIR *d = opendir(path);
-  int count = 0;
+  int total_entry_count = 0;
+  int file_count = 0;
+  int folder_count = 0;
   int string_length;
 
   output->is_folder = malloc(sizeof(bool[ARRAY_LENGTH]));
   output->string_lengths = malloc(sizeof(int[ARRAY_LENGTH]));
   output->strings = malloc(sizeof(char *[ARRAY_LENGTH]));
 
-  output->array_length = count;
+  output->array_length = total_entry_count;
 
   if (d)
   {
@@ -101,6 +103,7 @@ for_dir *parse_directory_folders(const char *input_path)
 
       // See if this is a file or a folder.
       // There are many things this can be, but we only care about the boolean.
+      // Also this chunk may look scary, but it's mainly string manipulation.
       const char *temp_file_directory = malloc(sizeof(char[path_string_length]));
       strncpy(temp_file_directory, path, path_string_length);
       strcat(temp_file_directory, allocated_string);
@@ -112,14 +115,24 @@ for_dir *parse_directory_folders(const char *input_path)
       free(temp_file_directory);
 
       // Now we assign.
-      output->is_folder[count] = is_folder;
-      output->string_lengths[count] = string_length;
-      output->strings[count] = allocated_string;
+      output->is_folder[total_entry_count] = is_folder;
+      output->string_lengths[total_entry_count] = string_length;
+      output->strings[total_entry_count] = allocated_string;
+
+      // Tick up the folder or file count.
+      if (is_folder)
+      {
+        folder_count = folder_count + 1;
+      }
+      else
+      {
+        file_count = file_count + 1;
+      }
 
       // And make sure this thing doesn't blow up as we increment.
-      count = count + 1;
+      total_entry_count = total_entry_count + 1;
 
-      if (count >= ARRAY_LENGTH)
+      if (total_entry_count >= ARRAY_LENGTH)
       {
         printf("[FORDIRENT C] SEVERE ERROR: More than [%i] files in path [%s]! BAILING.", ARRAY_LENGTH, path);
         break;
@@ -137,7 +150,9 @@ for_dir *parse_directory_folders(const char *input_path)
     output->open_success = false;
   }
 
-  output->array_length = count;
+  output->array_length = total_entry_count;
+  output->file_count = file_count;
+  output->folder_count = folder_count;
 
   // The path has been customized with a malloc, free it.
   free(path);
@@ -146,8 +161,8 @@ for_dir *parse_directory_folders(const char *input_path)
   return output;
 }
 
-// We need this because we first must free the interior before the exterior
-// of the struct.
+//* We need this because we first must free the interior before the exterior
+//* of the struct.
 bool close_directory_folder_parse(for_dir *output)
 {
   if (output == NULL)
