@@ -30,15 +30,64 @@ module directory
   end type directory_reader
 
 
+  interface
+
+
+    !* dirent.
+    function internal_open_dir(path) result(dir_pointer) bind(c, name = "opendir")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      character(kind = c_char), intent(in) :: path
+      type(c_ptr) :: dir_pointer
+    end function internal_open_dir
+
+
+    !* Custom built upon dirent.
+    !* Basically, it will
+    subroutine parse_directory_folders(dir_pointer) bind(c, name = "parse_directory_folders")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: dir_pointer
+    end subroutine parse_directory_folders
+
+  end interface
+
+
 contains
 
-  !* This is an extreme hack job because I don't feel like writing libc bindings. :D
+  function open_directory(path) result(dir_pointer)
+    use, intrinsic :: iso_c_binding
+    implicit none
+
+    character(kind = c_char), intent(in) :: path
+    type(c_ptr) :: dir_pointer
+    character(len = :, kind = c_char), allocatable :: c_path
+
+    c_path = into_c_string(path)
+
+    dir_pointer = internal_open_dir(c_path)
+  end function open_directory
+
+
   subroutine read_directory(this, path)
     implicit none
 
     class(directory_reader), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: path
-    
+    type(c_ptr) :: dir
+
+    dir = open_directory("./")
+
+    if (c_associated(dir)) then
+      print*,"it's associated"
+    end if
+
+    ! call say_hello()
+
+    ! call parse_directory_folders(dir)
+
   end subroutine read_directory
 
 
