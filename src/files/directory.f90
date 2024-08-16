@@ -172,7 +172,6 @@ contains
     if (.not. close_directory_folder_parse(c_for_dir_pointer)) then
       error stop "[Directory] error: Failed to free the c for_dir."
     end if
-
   end subroutine read_directory
 
 
