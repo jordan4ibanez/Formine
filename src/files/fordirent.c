@@ -8,6 +8,9 @@
 /*
 You can thank:
 Jean-Bernard Jansen https://stackoverflow.com/a/4204758
+Frédéric Hamidi: https://stackoverflow.com/a/4553076
+https://www.gnu.org/software/libc/manual/html_node/Testing-File-Type.html
+
 
 This is built upon this, completely converted into fortran operable
 implementation.
@@ -22,7 +25,7 @@ typedef struct
   int array_length;
   int file_count;
   int folder_count;
-  bool *is_folder;
+  bool *is_folder;     // ARRAY_LENGTH
   int *string_lengths; // ARRAY_LENGTH
   char **strings;      // ARRAY_LENGTH
 } for_dir;
@@ -93,10 +96,6 @@ for_dir *parse_directory_folders(const char *input_path)
       //* Manually put the null terminator at the end of the string.
       allocated_string[string_length - 1] = '\0';
 
-      // Now we assign.
-      output->string_lengths[count] = string_length;
-      output->strings[count] = allocated_string;
-
       // See if this is a file or a folder.
       // There are many things this can be, but we only care about the boolean.
       const char *temp_file_directory = malloc(sizeof(char[path_string_length]));
@@ -109,8 +108,10 @@ for_dir *parse_directory_folders(const char *input_path)
       // Free this string.
       free(temp_file_directory);
 
-      // Now assign if it's a folder or not.
+      // Now we assign.
       output->is_folder[count] = is_folder;
+      output->string_lengths[count] = string_length;
+      output->strings[count] = allocated_string;
 
       // And make sure this thing doesn't blow up as we increment.
       count = count + 1;
@@ -152,6 +153,12 @@ bool close_directory_folder_parse(for_dir *output)
     return false;
   }
 
+  // Free the is_folder tracker array.
+  free(output->is_folder);
+
+  // Next the string lengths array.
+  free(output->string_lengths);
+
   // We must walk the string array like a caveman to free the heap pointers.
   for (int i = 0; i < ARRAY_LENGTH; i++)
   {
@@ -165,12 +172,6 @@ bool close_directory_folder_parse(for_dir *output)
 
   // Now free the string array.
   free(output->strings);
-
-  // Next the string lengths array.
-  free(output->string_lengths);
-
-  // Also the is_folder tracker array.
-  free(output->is_folder);
 
   // Then we can finally blow this thing up.
   free(output);
