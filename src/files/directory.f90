@@ -92,6 +92,7 @@ contains
     integer :: i
     character(len = :, kind = c_char), allocatable :: temp_string
     ! We have our arrays of integers and pointers which we can extract.
+    logical(kind = c_bool), dimension(:), pointer :: is_folder
     integer(kind = c_int), dimension(:), pointer :: string_lengths
     type(c_ptr), dimension(:), pointer :: c_strings
 
@@ -109,7 +110,11 @@ contains
     call c_f_pointer(c_for_dir_pointer, for_dir_pointer)
 
     ! First in the data extraction is to get the is_folder tracker.
+    call c_f_pointer(for_dir_pointer%is_folder, is_folder, [for_dir_pointer%array_length])
 
+    if (size(is_folder) /= for_dir_pointer%array_length) then
+      error stop "[Directory] error: Incorrect allocation length for is_folder."
+    end if
 
     ! Next we extract the lengths.
     call c_f_pointer(for_dir_pointer%string_lengths, string_lengths, [for_dir_pointer%array_length])
