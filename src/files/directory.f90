@@ -71,7 +71,7 @@ contains
     use, intrinsic :: iso_c_binding
     implicit none
 
-    character(kind = c_char), intent(in) :: path
+    character(len = *, kind = c_char), intent(in) :: path
     type(c_ptr) :: dir_pointer
     character(len = :, kind = c_char), allocatable :: c_path
 
@@ -99,7 +99,7 @@ contains
     !* c_for_dir_pointer and for_dir_pointer are the same memory address.
     !* This was allocated by C, it will be freed by C.
 
-    c_for_dir_pointer = parse_directory_folders("./")
+    c_for_dir_pointer = parse_directory_folders(path)
 
     if (.not. c_associated(c_for_dir_pointer)) then
       error stop "[Directory] error: Failed to open path ["//path//"]"
