@@ -153,6 +153,7 @@ contains
     do i = 1,for_dir_pointer%array_length
       temp_string = string_from_c(c_strings(i), string_lengths(i))
 
+      ! We do not want these "folder names".
       if (temp_string == ".." .or. temp_string == ".") then
         ! print*,"skipping "//temp_string
         cycle
