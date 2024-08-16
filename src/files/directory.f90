@@ -168,10 +168,6 @@ contains
       end if
     end do
 
-    print*,"files:", this%files
-    print*,"folders:", this%folders
-
-
     !? C now frees the memory.
     if (.not. close_directory_folder_parse(c_for_dir_pointer)) then
       error stop "[Directory] error: Failed to free the c for_dir."
