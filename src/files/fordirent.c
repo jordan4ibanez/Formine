@@ -25,6 +25,8 @@ typedef struct
 } for_dir;
 
 //* Grab the files in a directory.
+//* This is POSIX only.
+//! todo: need a windows version.
 for_dir *parse_directory_folders(const char *path)
 {
   struct dirent *dir;
@@ -33,8 +35,10 @@ for_dir *parse_directory_folders(const char *path)
   int count = 0;
   int string_length;
 
+  output->is_folder = malloc(sizeof(bool[ARRAY_LENGTH]));
   output->string_lengths = malloc(sizeof(int[ARRAY_LENGTH]));
   output->strings = malloc(sizeof(char *[ARRAY_LENGTH]));
+
   output->array_length = count;
 
   if (d)
@@ -109,8 +113,11 @@ bool close_directory_folder_parse(for_dir *output)
   // Now free the string array.
   free(output->strings);
 
-  // And then the string lengths array.
+  // Next the string lengths array.
   free(output->string_lengths);
+
+  // Also the is folder tracker.
+  free(output->is_folder);
 
   // Then we can finally blow this thing up.
   free(output);
