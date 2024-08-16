@@ -89,7 +89,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: path
     type(c_ptr) :: c_for_dir_pointer
     type(for_dir), pointer :: for_dir_pointer
-    integer :: i
+    integer :: i, file_index, folder_index
     character(len = :, kind = c_char), allocatable :: temp_string
     ! We have our arrays of integers and pointers which we can extract.
     logical(kind = c_bool), dimension(:), pointer :: is_folder
@@ -108,6 +108,15 @@ contains
 
     ! Grab the raw pointer into a fortran pointer.
     call c_f_pointer(c_for_dir_pointer, for_dir_pointer)
+
+    if (.not. for_dir_pointer%open_success) then
+      error stop "[Directory] error: Failed to open path ["//path//"]"
+    end if
+
+    ! A simple assertion to ensure nothing has gone horribly wrong.
+    if (for_dir_pointer%array_length /= for_dir_pointer%file_count + for_dir_pointer%folder_count) then
+      error stop "[Directory] error: Array length does not total file count plus folder count."
+    end if
 
     ! First in the data extraction is to get the is_folder tracker.
     call c_f_pointer(for_dir_pointer%is_folder, is_folder, [for_dir_pointer%array_length])
@@ -130,12 +139,36 @@ contains
       error stop "[Directory] error: Incorrect allocation length for c strings."
     end if
 
+    ! We shall now pre-allocate the internal type memory with the counted number
+    ! of files and folders.
+    allocate(this%files(for_dir_pointer%file_count))
+    allocate(this%folders(for_dir_pointer%folder_count))
+
+    ! Set our indices.
+    file_index = 1
+    folder_index = 1
+
     ! Now we're going to loop through and grab all the data from these pointers.
     ! If you look at the memory addresses, they appear to be tightly packed.
     do i = 1,for_dir_pointer%array_length
       temp_string = string_from_c(c_strings(i), string_lengths(i))
 
+      if (temp_string == ".." .or. temp_string == ".") then
+        ! print*,"skipping "//temp_string
+        cycle
+      end if
+
+      if (is_folder(i)) then
+        this%folders(folder_index) = temp_string
+        folder_index = folder_index + 1
+      else
+        this%files(file_index) = temp_string
+        file_index = file_index + 1
+      end if
     end do
+
+    print*,"files:", this%files
+    print*,"folders:", this%folders
 
 
     !? C now frees the memory.
