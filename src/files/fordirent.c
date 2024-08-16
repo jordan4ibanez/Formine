@@ -17,6 +17,8 @@ typedef struct
 {
   bool open_success;
   int array_length;
+  int file_count;
+  int folder_count;
   bool *is_folder;
   int *string_lengths; // ARRAY_LENGTH
   char **strings;      // ARRAY_LENGTH

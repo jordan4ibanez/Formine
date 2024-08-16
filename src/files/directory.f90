@@ -31,6 +31,9 @@ module directory
   type, bind(c) :: for_dir
     logical(c_bool) :: open_success
     integer(c_int) :: array_length
+    integer(c_int) :: file_count
+    integer(c_int) :: folder_count
+    type(c_ptr) :: is_folder
     type(c_ptr) :: string_lengths
     type(c_ptr) :: strings
   end type for_dir
