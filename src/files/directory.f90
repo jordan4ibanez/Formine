@@ -80,13 +80,13 @@ contains
 
     dir = open_directory("./")
 
-    if (c_associated(dir)) then
-      print*,"it's associated"
+    if (.not. c_associated(dir)) then
+      error stop "[Directory] error: Failed to open path ["//path//"]"
     end if
 
     ! call say_hello()
 
-    ! call parse_directory_folders(dir)
+    call parse_directory_folders(dir)
 
   end subroutine read_directory
 

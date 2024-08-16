@@ -1,5 +1,6 @@
 #include <dirent.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 /*
 You can thank:
@@ -9,24 +10,24 @@ This is built upon this, completely converted into fortran operable
 implementation.
 */
 
-// DIR *open_directory(const char *path)
-// {
-
-//   printf("%s\n",path);
-
-//   return NULL;
-// }
-
-void parse_directory_folders(DIR *d)
+typedef struct
 {
+  int array_length;
+  char *strings[256];
+} fort_dir;
 
+fort_dir *parse_directory_folders(DIR *d)
+{
   struct dirent *dir;
+  fort_dir output;
+  int count = 0;
 
   if (d)
   {
     while ((dir = readdir(d)) != NULL)
     {
-      printf("%s\n", dir->d_name);
+      output.strings[count] = dir->d_name;
+      count = count + 1;
     }
     closedir(d);
   }
@@ -34,5 +35,11 @@ void parse_directory_folders(DIR *d)
   {
     printf("uh oh\n");
   }
-  return (0);
+
+  output.array_length = count;
+
+  //! Check if this works on windows.
+  free(dir);
+
+  return &output;
 }
