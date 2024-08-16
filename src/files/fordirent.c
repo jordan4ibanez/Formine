@@ -68,7 +68,7 @@ bool close_directory_folder_parse(for_dir *output)
 {
   if (output == NULL)
   {
-    printf("that's a null pointer!\n");
+    printf("[FORDIRENT C] SEVERE ERROR: That's a null pointer!\n");
     return false;
   }
 
