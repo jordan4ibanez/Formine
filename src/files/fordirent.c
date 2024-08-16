@@ -86,8 +86,6 @@ for_dir *parse_directory_folders(const char *path)
 // of the struct.
 bool close_directory_folder_parse(for_dir *output)
 {
-  printf("freeing\n");
-
   if (output == NULL)
   {
     printf("[FORDIRENT C] SEVERE ERROR: That's a null pointer!\n");

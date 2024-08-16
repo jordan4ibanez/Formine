@@ -50,12 +50,13 @@ module directory
     end function internal_parse_directory_folders
 
 
-    subroutine close_directory_folder_parse(dir_pointer) bind(c, name = "close_directory_folder_parse")
+    function close_directory_folder_parse(dir_pointer) result(success) bind(c, name = "close_directory_folder_parse")
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr), intent(in), value :: dir_pointer
-    end subroutine close_directory_folder_parse
+      logical(c_bool) :: success
+    end function close_directory_folder_parse
 
 
   end interface
@@ -128,7 +129,9 @@ contains
 
 
     !? C now frees the memory.
-    call close_directory_folder_parse(c_for_dir_pointer)
+    if (.not. close_directory_folder_parse(c_for_dir_pointer)) then
+      error stop "[Directory] error: Failed to free the c for_dir."
+    end if
 
   end subroutine read_directory
 
