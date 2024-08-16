@@ -16,17 +16,11 @@ module directory
   character(len = 30, kind = c_char), parameter :: FIFO_PIPE = ".formine_fifo_operator_hackjob"
 
 
-  type :: file_component
-    type(heap_string) :: file_name
-    logical :: is_folder
-  end type file_component
-
-
-
   !* Ultra duct-taped together directory reader.
   !* We already have the tools on the system, use them.
   type :: directory_reader
     type(heap_string), dimension(:), allocatable :: files
+    type(heap_string), dimension(:), allocatable :: folders
   contains
     procedure :: read_directory
   end type directory_reader
