@@ -51,9 +51,11 @@ for_dir *parse_directory_folders(const char *path)
       //* Manually put the null terminator at the end of the string.
       allocated_string[string_length - 1] = '\0';
 
+      // Now we assign.
       output->string_lengths[count] = string_length;
       output->strings[count] = allocated_string;
 
+      // And make sure this thing doesn't blow up as we increment.
       count = count + 1;
 
       if (count >= ARRAY_LENGTH)
@@ -71,7 +73,6 @@ for_dir *parse_directory_folders(const char *path)
   else
   {
     printf("[FORDIRENT C] SEVERE ERROR: Path [%s] failed to open.", path);
-    printf("OH NO\n");
     output->open_success = false;
   }
 
@@ -85,14 +86,27 @@ for_dir *parse_directory_folders(const char *path)
 // of the struct.
 bool close_directory_folder_parse(for_dir *output)
 {
+  printf("freeing\n");
+
   if (output == NULL)
   {
     printf("[FORDIRENT C] SEVERE ERROR: That's a null pointer!\n");
     return false;
   }
 
+  // We must walk the array like a caveman to free the heap pointers.
+  for (int i = 0; i < ARRAY_LENGTH; i++)
+  {
+    free(output->strings[i]);
+  }
+
+  // Now free the array.
   free(output->strings);
-  // free(output->string_lengths);
+
+  // And then the string lengths array.
+  free(output->string_lengths);
+
+  // Then we can finally blow this thing up.
   free(output);
 
   output = NULL;

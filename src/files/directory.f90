@@ -39,7 +39,6 @@ module directory
   interface
 
 
-
     !* Custom built upon dirent.
     !* Basically, it will
     function internal_parse_directory_folders(path) result(for_dir_pointer) bind(c, name = "parse_directory_folders")
@@ -129,7 +128,7 @@ contains
 
 
     !? C now frees the memory.
-    ! call close_directory_folder_parse(c_for_dir_pointer)
+    call close_directory_folder_parse(c_for_dir_pointer)
 
   end subroutine read_directory
 
