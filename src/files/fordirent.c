@@ -92,7 +92,7 @@ bool close_directory_folder_parse(for_dir *output)
     return false;
   }
 
-  // We must walk the array like a caveman to free the heap pointers.
+  // We must walk the string array like a caveman to free the heap pointers.
   for (int i = 0; i < ARRAY_LENGTH; i++)
   {
     // Don't allow this thing to walk into undefined behavior.
@@ -103,7 +103,7 @@ bool close_directory_folder_parse(for_dir *output)
     free(output->strings[i]);
   }
 
-  // Now free the array.
+  // Now free the string array.
   free(output->strings);
 
   // And then the string lengths array.
