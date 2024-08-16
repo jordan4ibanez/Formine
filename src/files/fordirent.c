@@ -12,6 +12,7 @@ implementation.
 
 typedef struct
 {
+  bool open_success;
   int array_length;
   char *strings[256];
 } fort_dir;
@@ -24,6 +25,7 @@ fort_dir *parse_directory_folders(DIR *d)
 
   if (d)
   {
+    output.open_success = true;
     while ((dir = readdir(d)) != NULL)
     {
       output.strings[count] = dir->d_name;
@@ -33,7 +35,7 @@ fort_dir *parse_directory_folders(DIR *d)
   }
   else
   {
-    printf("uh oh\n");
+    output.open_success = false;
   }
 
   output.array_length = count;
@@ -41,5 +43,6 @@ fort_dir *parse_directory_folders(DIR *d)
   //! Check if this works on windows.
   free(dir);
 
+  // Keep in mind, this is a pointer, to the stack.
   return &output;
 }

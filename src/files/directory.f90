@@ -29,6 +29,11 @@ module directory
     procedure :: read_directory
   end type directory_reader
 
+  !* This directly reflects the type in: [fordirent.c]
+  type :: fort_dir
+    logical(c_bool) :: open_success
+  end type fort_dir
+
 
   interface
 
