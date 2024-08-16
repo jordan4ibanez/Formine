@@ -105,17 +105,20 @@ contains
       error stop "[Directory] error: Failed to open path ["//path//"]"
     end if
 
-
+    ! Grab the raw pointer into a fortran pointer.
     call c_f_pointer(c_for_dir_pointer, for_dir_pointer)
 
-    ! First we extract the lengths.
+    ! First in the data extraction is to get the is_folder tracker.
+
+
+    ! Next we extract the lengths.
     call c_f_pointer(for_dir_pointer%string_lengths, string_lengths, [for_dir_pointer%array_length])
 
     if (size(string_lengths) /= for_dir_pointer%array_length) then
       error stop "[Directory] error: Incorrect allocation length for string lengths."
     end if
 
-    ! Next we extract the array of strings.
+    ! The final move is we extract the array of strings.
     call c_f_pointer(for_dir_pointer%strings, c_strings, [for_dir_pointer%array_length])
 
     if (size(c_strings) /= for_dir_pointer%array_length) then
@@ -125,7 +128,6 @@ contains
     ! Now we're going to loop through and grab all the data from these pointers.
     ! If you look at the memory addresses, they appear to be tightly packed.
     do i = 1,for_dir_pointer%array_length
-
       temp = string_from_c(c_strings(i), string_lengths(i))
 
     end do
