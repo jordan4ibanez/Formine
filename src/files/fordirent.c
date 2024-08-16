@@ -16,6 +16,7 @@ This is built upon this, completely converted into fortran operable
 implementation.
 */
 
+//! This may not be enough, and it might blow up. :D
 const int ARRAY_LENGTH = 1024;
 
 //* This directly reflects the type in: [directory.f90]
