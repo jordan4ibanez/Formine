@@ -17,7 +17,8 @@ typedef struct
 {
   bool open_success;
   int array_length;
-  char **strings; // ARRAY_LENGTH
+  int *string_lengths; // ARRAY_LENGTH
+  char **strings;      // ARRAY_LENGTH
 } for_dir;
 
 //* Grab the files in a directory.
@@ -25,10 +26,12 @@ for_dir *parse_directory_folders(const char *path)
 {
   struct dirent *dir;
   for_dir *output = malloc(sizeof(for_dir));
-  output->strings = malloc(sizeof(char *[ARRAY_LENGTH]));
   DIR *d = opendir(path);
-
   int count = 0;
+  int string_length;
+
+  output->string_lengths = malloc(sizeof(int[ARRAY_LENGTH]));
+  output->strings = malloc(sizeof(char *[ARRAY_LENGTH]));
   output->array_length = count;
 
   if (d)
@@ -36,12 +39,28 @@ for_dir *parse_directory_folders(const char *path)
     output->open_success = true;
     while ((dir = readdir(d)) != NULL)
     {
-      output->strings[count] = dir->d_name;
+      //* Add +1 for null terminator.
+      string_length = strlen(dir->d_name) + 1;
+
+      // Allocate the string.
+      char *allocated_string = malloc(sizeof(char[string_length]));
+
+      // Use the safe version of strcpy.
+      strncpy(allocated_string, &dir->d_name, string_length);
+
+      //* Manually put the null terminator at the end of the string.
+      allocated_string[string_length - 1] = '\0';
+
+      output->string_lengths[count] = string_length;
+      output->strings[count] = allocated_string;
+
       // printf("%s\n", output->strings[count]);
       count = count + 1;
+
       if (count >= ARRAY_LENGTH)
       {
         printf("[FORDIRENT C] SEVERE ERROR: More than [%i] files in path [%s]! BAILING.", ARRAY_LENGTH, path);
+        break;
       }
     }
 
@@ -73,6 +92,7 @@ bool close_directory_folder_parse(for_dir *output)
   }
 
   free(output->strings);
+  // free(output->string_lengths);
   free(output);
 
   output = NULL;
