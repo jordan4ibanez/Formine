@@ -21,6 +21,8 @@ module directory
     logical :: is_folder
   end type file_component
 
+
+
   !* Ultra duct-taped together directory reader.
   !* We already have the tools on the system, use them.
   type :: directory_reader
@@ -29,40 +31,45 @@ module directory
     procedure :: read_directory
   end type directory_reader
 
+
+
   !* This directly reflects the type in: [fordirent.c]
-  type :: fort_dir
+  type, bind(c) :: for_dir
     logical(c_bool) :: open_success
-  end type fort_dir
+    integer(c_int) :: array_length
+    type(c_ptr), dimension(256) :: strings
+  end type for_dir
 
 
   interface
 
 
-    !* dirent.
-    function internal_open_dir(path) result(dir_pointer) bind(c, name = "opendir")
+
+    !* Custom built upon dirent.
+    !* Basically, it will
+    function internal_parse_directory_folders(path) result(for_dir_pointer) bind(c, name = "parse_directory_folders")
       use, intrinsic :: iso_c_binding
       implicit none
 
       character(kind = c_char), intent(in) :: path
-      type(c_ptr) :: dir_pointer
-    end function internal_open_dir
+      type(c_ptr) :: for_dir_pointer
+    end function internal_parse_directory_folders
 
 
-    !* Custom built upon dirent.
-    !* Basically, it will
-    subroutine parse_directory_folders(dir_pointer) bind(c, name = "parse_directory_folders")
+    subroutine close_directory_folder_parse(dir_pointer) bind(c, name = "close_directory_folder_parse")
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr), intent(in), value :: dir_pointer
-    end subroutine parse_directory_folders
+    end subroutine close_directory_folder_parse
+
 
   end interface
 
 
 contains
 
-  function open_directory(path) result(dir_pointer)
+  function parse_directory_folders(path) result(dir_pointer)
     use, intrinsic :: iso_c_binding
     implicit none
 
@@ -72,26 +79,40 @@ contains
 
     c_path = into_c_string(path)
 
-    dir_pointer = internal_open_dir(c_path)
-  end function open_directory
+    dir_pointer = internal_parse_directory_folders(c_path)
+  end function parse_directory_folders
 
 
   subroutine read_directory(this, path)
+    use :: raw_c
     implicit none
 
     class(directory_reader), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: path
-    type(c_ptr) :: dir
+    type(c_ptr) :: c_for_dir_pointer
+    type(for_dir), pointer :: for_dir_pointer
 
-    dir = open_directory("./")
+    !* Implementation note:
+    !* c_for_dir_pointer and for_dir_pointer are the same memory address.
+    !* This was allocated by C, it will be freed by C.
 
-    if (.not. c_associated(dir)) then
+    c_for_dir_pointer = parse_directory_folders("./")
+
+    if (.not. c_associated(c_for_dir_pointer)) then
       error stop "[Directory] error: Failed to open path ["//path//"]"
     end if
 
-    ! call say_hello()
 
-    call parse_directory_folders(dir)
+    call c_f_pointer(c_for_dir_pointer, for_dir_pointer)
+
+    print*,for_dir_pointer%array_length
+
+
+    ! print*,associated(for_dir_pointer)
+    ! print*,c_associated(c_for_dir_pointer)
+
+    !? C now frees the memory.
+    call close_directory_folder_parse(c_for_dir_pointer)
 
   end subroutine read_directory
 
