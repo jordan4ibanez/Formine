@@ -38,6 +38,8 @@ char *check_ends_with_forward_slash(const char *path)
   int string_length;
   bool ends_with_slash;
   char *new_string;
+  int file_count = 0;
+  int folder_count = 0;
 
   string_length = strlen(path);
 
