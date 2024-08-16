@@ -54,7 +54,6 @@ for_dir *parse_directory_folders(const char *path)
       output->string_lengths[count] = string_length;
       output->strings[count] = allocated_string;
 
-      // printf("%s\n", output->strings[count]);
       count = count + 1;
 
       if (count >= ARRAY_LENGTH)
@@ -71,6 +70,7 @@ for_dir *parse_directory_folders(const char *path)
   }
   else
   {
+    printf("[FORDIRENT C] SEVERE ERROR: Path [%s] failed to open.", path);
     printf("OH NO\n");
     output->open_success = false;
   }
