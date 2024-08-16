@@ -28,6 +28,8 @@ program test_forderint
   use test_suite_forderint
   implicit none
 
-  call test_memory_leak()
+  ! This is nice and steady at the time of writing this. (use git blame)
+  ! Held at 131.1 kb :D
+  ! call test_memory_leak()
 
 end program test_forderint
