@@ -24,11 +24,42 @@ typedef struct
   char **strings;      // ARRAY_LENGTH
 } for_dir;
 
+//* This is POSIX only.
+//* This enforces a path to end with "/".
+char *check_ends_with_forward_slash(const char *path)
+{
+  int string_length;
+  bool ends_with_slash;
+  char *new_string;
+
+  string_length = strlen(path);
+
+  ends_with_slash = path[string_length - 1] == '/';
+
+  if (ends_with_slash)
+  {
+    // We're doing this so we can free it regardless.
+    new_string = malloc(sizeof(char[string_length]) + 1);
+    strncpy(new_string, path, string_length);
+    new_string[string_length] = '\0';
+  }
+  else
+  {
+    new_string = malloc(sizeof(char[string_length]) + 2);
+    strncpy(new_string, path, string_length);
+    new_string[string_length + 0] = '/';
+    new_string[string_length + 1] = '\0';
+  }
+  return new_string;
+}
+
 //* Grab the files in a directory.
 //* This is POSIX only.
 //! todo: need a windows version.
-for_dir *parse_directory_folders(const char *path)
+for_dir *parse_directory_folders(const char *input_path)
 {
+  const char *path = check_ends_with_forward_slash(input_path);
+
   struct dirent *dir;
   for_dir *output = malloc(sizeof(for_dir));
   DIR *d = opendir(path);
