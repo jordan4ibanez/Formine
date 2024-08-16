@@ -37,7 +37,8 @@ module directory
   type, bind(c) :: for_dir
     logical(c_bool) :: open_success
     integer(c_int) :: array_length
-    type(c_ptr), dimension(256) :: strings
+    type(c_ptr) :: string_lengths
+    type(c_ptr) :: strings
   end type for_dir
 
 
@@ -91,6 +92,11 @@ contains
     character(len = *, kind = c_char), intent(in) :: path
     type(c_ptr) :: c_for_dir_pointer
     type(for_dir), pointer :: for_dir_pointer
+    integer :: i
+    character(len = :, kind = c_char), allocatable :: temp
+    ! We have our arrays of integers and pointers which we can extract.
+    integer(kind = c_int), dimension(:), pointer :: string_lengths
+    type(c_ptr), dimension(:), pointer :: c_strings
 
     !* Implementation note:
     !* c_for_dir_pointer and for_dir_pointer are the same memory address.
@@ -105,14 +111,31 @@ contains
 
     call c_f_pointer(c_for_dir_pointer, for_dir_pointer)
 
-    print*,for_dir_pointer%array_length
+    ! First we extract the lengths.
+    call c_f_pointer(for_dir_pointer%string_lengths, string_lengths, [for_dir_pointer%array_length])
 
+    if (size(string_lengths) /= for_dir_pointer%array_length) then
+      error stop "[Directory] error: Incorrect allocation length for string lengths."
+    end if
 
-    ! print*,associated(for_dir_pointer)
-    ! print*,c_associated(c_for_dir_pointer)
+    ! Next we extract the array of strings.
+    call c_f_pointer(for_dir_pointer%strings, c_strings, [for_dir_pointer%array_length])
+
+    if (size(c_strings) /= for_dir_pointer%array_length) then
+      error stop "[Directory] error: Incorrect allocation length for c strings."
+    end if
+
+    ! Now we're going to loop through and grab all the data from these pointers.
+    ! If you look at the memory addresses, they appear to be tightly packed.
+    do i = 1,for_dir_pointer%array_length
+
+      temp = string_from_c(c_strings(i), string_lengths(i))
+
+    end do
+
 
     !? C now frees the memory.
-    call close_directory_folder_parse(c_for_dir_pointer)
+    ! call close_directory_folder_parse(c_for_dir_pointer)
 
   end subroutine read_directory
 
