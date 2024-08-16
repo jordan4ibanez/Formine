@@ -23,6 +23,7 @@ module directory
     type(heap_string), dimension(:), allocatable :: folders
   contains
     procedure :: read_directory
+    procedure :: deallocate_memory
   end type directory_reader
 
 
@@ -173,6 +174,22 @@ contains
       error stop "[Directory] error: Failed to free the c for_dir."
     end if
   end subroutine read_directory
+
+
+  !* Deallocate the string arrays within the directory_reader.
+  subroutine deallocate_memory(this)
+    implicit none
+
+    class(directory_reader), intent(inout) :: this
+
+    ! We will allow this to overwrite itself when testing.
+    if (allocated(this%files)) then
+      deallocate(this%files)
+    end if
+    if (allocated(this%folders)) then
+      deallocate(this%folders)
+    end if
+  end subroutine deallocate_memory
 
 
 end module directory
