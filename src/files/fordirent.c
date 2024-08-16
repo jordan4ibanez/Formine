@@ -1,6 +1,9 @@
 #include <dirent.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 /*
 You can thank:
@@ -59,7 +62,8 @@ char *check_ends_with_forward_slash(const char *path)
 for_dir *parse_directory_folders(const char *input_path)
 {
   const char *path = check_ends_with_forward_slash(input_path);
-
+  // We want that null terminator.
+  const int path_string_length = strlen(path) + 1;
   struct dirent *dir;
   for_dir *output = malloc(sizeof(for_dir));
   DIR *d = opendir(path);
@@ -93,6 +97,21 @@ for_dir *parse_directory_folders(const char *input_path)
       output->string_lengths[count] = string_length;
       output->strings[count] = allocated_string;
 
+      // See if this is a file or a folder.
+      // There are many things this can be, but we only care about the boolean.
+      const char *temp_file_directory = malloc(sizeof(char[path_string_length]));
+      strncpy(temp_file_directory, path, path_string_length);
+      strcat(temp_file_directory, allocated_string);
+      struct stat path_status;
+      stat(temp_file_directory, &path_status);
+      // S_ISDIR returns a non-zero if it's a folder.
+      bool is_folder = S_ISDIR(path_status.st_mode) != 0;
+      // Free this string.
+      free(temp_file_directory);
+
+      // Now assign if it's a folder or not.
+      output->is_folder[count] = is_folder;
+
       // And make sure this thing doesn't blow up as we increment.
       count = count + 1;
 
@@ -115,6 +134,9 @@ for_dir *parse_directory_folders(const char *input_path)
   }
 
   output->array_length = count;
+
+  // The path has been customized with a malloc, free it.
+  free(path);
 
   // Keep in mind, this is a malloc pointer, needs to be freed.
   return output;
