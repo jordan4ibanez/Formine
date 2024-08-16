@@ -1,4 +1,4 @@
-# fortran_thing
+# Formine
  I realized I never posted any fortran stuff to my github so here it is.
 
 Also this is hand coded while looking at the glfw, opengl, stb, and luajit source code and docs so you'll have to excuse any mistakes.
