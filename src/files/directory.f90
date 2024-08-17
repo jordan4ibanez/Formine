@@ -70,6 +70,7 @@ module directory
 
 contains
 
+  !* A helper to bind to the C code.
   function parse_directory_folders(path) result(dir_pointer)
     use, intrinsic :: iso_c_binding
     implicit none
@@ -84,6 +85,7 @@ contains
   end function parse_directory_folders
 
 
+  !* Get all the files and folders from a directory.
   subroutine read_directory(this, path)
     use :: raw_c
     implicit none
@@ -181,7 +183,7 @@ contains
   end subroutine read_directory
 
 
-  !* Deallocate the string arrays within the directory_reader.
+  !* Deallocate the string arrays within the directory_reader and reset the counts.
   subroutine deallocate_memory(this)
     implicit none
 
