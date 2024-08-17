@@ -6,6 +6,7 @@ module directory
 
   private
 
+
   public :: directory_reader
 
 
@@ -69,6 +70,7 @@ module directory
 
 
 contains
+
 
   !* A helper to bind to the C code.
   function parse_directory_folders(path) result(dir_pointer)
