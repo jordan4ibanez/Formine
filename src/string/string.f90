@@ -13,6 +13,7 @@ module string
   public :: into_c_string
   public :: bool_to_string
   public :: get_file_name_from_string
+  public :: string_remove_file_name_from_path
   public :: string_remove_file_extension
   public :: string_get_file_extension
   public :: string_get_non_space_characters
@@ -219,6 +220,26 @@ contains
     ! So this is a file. Let's now get it
     resulting_name_of_file = input_string(i + 1:length_of_string)
   end function get_file_name_from_string
+
+
+  !* Can convert [./test/cool.png] into [./test/]
+  function string_remove_file_name_from_path(input_file_name) result(file_name_without_extension)
+    implicit none
+
+    character(len = *), intent(in) :: input_file_name
+    character(len = :), allocatable :: file_name_without_extension
+    integer(c_int) :: i
+
+    i = index(input_file_name, "/", back = .true.)
+
+    if (i == 0) then
+      print"(A)", achar(27)//"[38;2;255;128;0m[String] Warning: Tried to remove file name off string that's not a file path."//achar(27)//"[m"
+      file_name_without_extension = ""
+      return
+    end if
+
+    file_name_without_extension = input_file_name(1:i)
+  end function string_remove_file_name_from_path
 
 
   !* Convert something like "test.png" into "test"
