@@ -136,9 +136,9 @@ module luajit
   public :: LUAJIT_GET_MISSING
   public :: LUAJIT_GET_WRONG_TYPE
 
-  public :: LUAJIT_FILE_RUN_OK
-  public :: LUAJIT_FILE_RUN_MISSING
-  public :: LUAJIT_FILE_RUN_FAILURE
+  public :: LUAJIT_RUN_FILE_OK
+  public :: LUAJIT_RUN_FILE_MISSING
+  public :: LUAJIT_RUN_FILE_FAILURE
 
   !* LuaJIT constants.
 
@@ -173,9 +173,9 @@ module luajit
   integer(c_int), parameter :: LUAJIT_GET_MISSING = 1
   integer(c_int), parameter :: LUAJIT_GET_WRONG_TYPE = 2
 
-  integer(c_int), parameter :: LUAJIT_FILE_RUN_OK = 0
-  integer(c_int), parameter :: LUAJIT_FILE_RUN_MISSING = 1
-  integer(c_int), parameter :: LUAJIT_FILE_RUN_FAILURE = 2
+  integer(c_int), parameter :: LUAJIT_RUN_FILE_OK = 0
+  integer(c_int), parameter :: LUAJIT_RUN_FILE_MISSING = 1
+  integer(c_int), parameter :: LUAJIT_RUN_FILE_FAILURE = 2
 
 
   !* A custom wrapper type to allow X amount of arguments to be associated
@@ -1072,7 +1072,7 @@ contains
 
     if (.not. reader%exists) then
       print"(A)", "[LuaJIT] Error: Could not load file path ["//file_path//"]. Does not exist."
-      status = LUAJIT_FILE_RUN_MISSING
+      status = LUAJIT_RUN_FILE_MISSING
       return
     end if
 
@@ -1082,14 +1082,14 @@ contains
       if (lua_pcall(state, 0, 0, 0) == LUA_OK) then
         ! If code was executed successfully, we remove the code from the stack.
         call lua_pop(state, lua_gettop(state))
-        status = LUAJIT_FILE_RUN_OK
+        status = LUAJIT_RUN_FILE_OK
       else
         print"(A)", colorize_rgb("[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
-        status = LUAJIT_FILE_RUN_FAILURE
+        status = LUAJIT_RUN_FILE_FAILURE
       end if
     else
       print"(A)", colorize_rgb("[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
-      status = LUAJIT_FILE_RUN_FAILURE
+      status = LUAJIT_RUN_FILE_FAILURE
     end if
   end function luajit_run_file
 
