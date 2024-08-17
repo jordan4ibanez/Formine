@@ -47,7 +47,6 @@ contains
     new_element%file_name = file_name
 
     textures_to_pack = [textures_to_pack, new_element]
-
   end subroutine texture_atlas_add_texture_to_pack
 
 

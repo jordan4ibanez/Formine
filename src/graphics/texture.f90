@@ -82,7 +82,9 @@ contains
     if (.not. gl_is_texture(texture_id)) then
       error stop "[Texture] Error: Failed to create texture ["//texture_file_path//"]. Does not exist."
     else
-      print"(A)", "[Texture]: Created ["//file_name//"] at ID ["//int_to_string(texture_id)//"]"
+      if (debug_mode) then
+        print"(A)", "[Texture]: Created ["//file_name//"] at ID ["//int_to_string(texture_id)//"]"
+      end if
     end if
 
     ! Generate the mipmaps.
