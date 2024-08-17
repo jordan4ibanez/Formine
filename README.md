@@ -1,13 +1,27 @@
 # Formine
  I realized I never posted any fortran stuff to my github so here it is.
 
+## Why is this called Formine?
+
+I honestly had a hard time naming this project. After much thought and research, I had an inspiration from the language creator himself, [John Backus](https://en.wikipedia.org/wiki/John_Backus). You can see this [here](https://youtu.be/KohboWwrsXg&t=471).
+
+Fortran mining game. Formine.
+
+Formine translates to **molds** in Italian. The type of molds you use to form things like metal casting and creating clay products.
+
+I think this is quite fitting because Formine can not only be molded to how you envision it through the mod api, but it can also be molded with help from others due to it's open source nature.
+
+
+## General notes
+
 Also this is hand coded while looking at the glfw, opengl, stb, and luajit source code and docs so you'll have to excuse any mistakes.
 
 This is written in Fortran 2003 up to 2018. Basically whatever my compiler (gfortran) allows.
 
+
 Come join the Fortran Discord: https://discord.gg/tfn3M28ppP
 
-And you can join my barren, empty, Discord: https://discord.gg/D95q7BHUE4
+My Discord: https://discord.gg/D95q7BHUE4
 
 Here is what this thing currently looks like.
 
