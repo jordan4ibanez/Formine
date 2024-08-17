@@ -194,6 +194,9 @@ contains
     if (allocated(this%folders)) then
       deallocate(this%folders)
     end if
+
+    this%file_count = 0
+    this%folder_count = 0
   end subroutine deallocate_memory
 
 
