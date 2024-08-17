@@ -47,7 +47,7 @@ contains
           ! Someone removed the api init file, eh?
           error stop "[API] Error: Failed to load the API init file. It's missing."
          case default
-          error stop "[API] Error: Unimplemented error loading the API init file."
+          error stop "[API] Error: Failed to load the API init file. UNIMPLEMENTED ERROR!"
         end select
       end if
     end associate
