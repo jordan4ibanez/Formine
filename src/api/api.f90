@@ -42,10 +42,12 @@ contains
       if (status /= LUAJIT_RUN_FILE_OK) then
         select case(status)
          case (LUAJIT_RUN_FILE_FAILURE)
-          error stop "[API] Error: Failed to load the init file. Execution error."
+          error stop "[API] Error: Failed to load the API init file. Execution error."
          case (LUAJIT_RUN_FILE_MISSING)
           ! Someone removed the api init file, eh?
-          error stop "[API] Error: Failed to load the init file. It's missing."
+          error stop "[API] Error: Failed to load the API init file. It's missing."
+         case default
+          error stop "[API] Error: Unimplemented error loading the API init file."
         end select
       end if
     end associate
