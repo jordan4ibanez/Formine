@@ -66,13 +66,13 @@ contains
 
 
   !* Run a LuaJIT file.
-  function api_run_file(file_path) result(success)
+  function api_run_file(file_path) result(status)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: file_path
-    logical :: success
+    integer(c_int) :: status
 
-    success = luajit_run_file(lua_state, file_path)
+    status = luajit_run_file(lua_state, file_path)
   end function api_run_file
 
 
