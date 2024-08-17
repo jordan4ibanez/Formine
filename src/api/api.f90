@@ -210,26 +210,27 @@ contains
   !* This will only load PNG images.
   !* If there is no textures folder this is a no-op.
   !* If there are no textures in the textures folder this is a no-op.
+  !* This will only attempt to go 4 folders deep.
   subroutine load_up_all_textures(mod_path)
     use :: directory
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mod_path
-    type(directory_reader) :: dir_reader
+    type(directory_reader), dimension(5) :: dir_reader
     integer :: i
     logical :: found_textures_folder
 
     found_textures_folder = .false.
 
-    call dir_reader%read_directory(mod_path)
+    call dir_reader(1)%read_directory(mod_path)
 
     ! No folders.
-    if (dir_reader%folder_count == 0) then
+    if (dir_reader(1)%folder_count == 0) then
       return
     end if
 
-    do i = 1,dir_reader%folder_count
-      if (dir_reader%folders(i)%get() == "textures") then
+    do i = 1,dir_reader(1)%folder_count
+      if (dir_reader(1)%folders(i)%get() == "textures") then
         found_textures_folder = .true.
       end if
     end do
@@ -238,6 +239,8 @@ contains
     if (.not. found_textures_folder) then
       return
     end if
+
+    ! This allows for 4 folders deep.
 
 
   end subroutine load_up_all_textures
