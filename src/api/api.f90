@@ -153,8 +153,11 @@ contains
         end if
       end associate
 
-      ! Now, if the mod loaded up properly, we can store the configuration.
+      ! If the mod loaded up properly, we can store the configuration.
       call mod_database%set(key(mod_config_struct%name%get()), mod_config_struct)
+
+      ! Finally, we want to get all the textures stored in the [./mod/mod_name/textures/] folder.
+      call load_up_all_textures(mod_path_string)
     end do
   end subroutine load_all_mods
 
@@ -202,5 +205,12 @@ contains
     new_mod_config%path = mod_path
   end function construct_mod_config_from_file
 
+
+  subroutine load_up_all_textures(mod_path)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: mod_path
+
+  end subroutine load_up_all_textures
 
 end module api
