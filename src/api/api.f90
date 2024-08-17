@@ -216,21 +216,24 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mod_path
-    type(directory_reader), dimension(5) :: dir_reader
-    integer :: i
+    character(len = :, kind = c_char), allocatable :: textures_path, file_extension
+    type(directory_reader), dimension(5) :: dir_readers
+    type(heap_string), dimension(5) :: file_paths
+    type(heap_string), dimension(5) :: temp_strings
+    integer :: i, a, b, c, d, e
     logical :: found_textures_folder
 
     found_textures_folder = .false.
 
-    call dir_reader(1)%read_directory(mod_path)
+    call dir_readers(1)%read_directory(mod_path)
 
     ! No folders.
-    if (dir_reader(1)%folder_count == 0) then
+    if (dir_readers(1)%folder_count == 0) then
       return
     end if
 
-    do i = 1,dir_reader(1)%folder_count
-      if (dir_reader(1)%folders(i)%get() == "textures") then
+    do i = 1,dir_readers(1)%folder_count
+      if (dir_readers(1)%folders(i)%get() == "textures") then
         found_textures_folder = .true.
       end if
     end do
@@ -240,7 +243,33 @@ contains
       return
     end if
 
+    ! We're going to reallocate the base directory reader.
+    call dir_readers(1)%deallocate_memory()
+
+    textures_path = mod_path//"textures/"
+
+    call dir_readers(1)%read_directory(textures_path)
+
     ! This allows for 4 folders deep.
+
+    ! Welcome to the easy part.
+    do a = 1,dir_readers(1)%file_count
+
+      temp_strings(1) = dir_readers(1)%files(a)%get()
+      file_extension = string_get_file_extension(temp_strings(1)%get())
+
+      if (file_extension == "png") then
+        file_paths(1) = textures_path//temp_strings(1)%get()
+        print*,temp_strings(1)%get()
+      end if
+
+    end do
+
+
+    ! Climb the mountain!
+    do b = 1,dir_readers(1)%folder_count
+
+    end do
 
 
   end subroutine load_up_all_textures
