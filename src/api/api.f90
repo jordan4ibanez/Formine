@@ -134,11 +134,11 @@ contains
 
     do i = 1,dir_reader%folder_count
       folder_name = dir_reader%folders(i)%get()
-      mod_path_string = "./mods/"//folder_name
-      init_path_string = mod_path_string//"/init.lua"
-      conf_path_string = mod_path_string//"/mod.conf"
+      mod_path_string = "./mods/"//folder_name//"/"
+      init_path_string = mod_path_string//"init.lua"
+      conf_path_string = mod_path_string//"mod.conf"
 
-      mod_config_struct = construct_mod_config_from_file(conf_path_string)
+      mod_config_struct = construct_mod_config_from_file(conf_path_string, mod_path_string)
 
 
       associate (status => api_run_file(init_path_string))
