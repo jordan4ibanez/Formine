@@ -270,7 +270,6 @@ contains
     end if
 
     extension = input_file_name(i:string_length)
-    print*,extension
   end function string_get_file_extension
 
 
