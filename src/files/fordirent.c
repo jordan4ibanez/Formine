@@ -134,6 +134,7 @@ for_dir *parse_directory_folders(const char *input_path)
 
       if (total_entry_count >= ARRAY_LENGTH)
       {
+        perror("opendir");
         printf("[FORDIRENT C] SEVERE ERROR: More than [%i] files in path [%s]! BAILING.", ARRAY_LENGTH, path);
         break;
       }
