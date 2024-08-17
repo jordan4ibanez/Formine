@@ -211,12 +211,25 @@ contains
     call texture_database%get(key(texture_name), texture_id, stat = status)
 
     if (status /= 0) then
-      print"(A)",colorize_rgb("[Texture] Error: ["//texture_name//"] does not exist.", 255, 0, 0)
+      error stop colorize_rgb("[Texture] Error: ["//texture_name//"] does not exist.", 255, 0, 0)
     end if
   end function get_texture
 
 
   function get_texture_size(texture_name) result(texture_size)
+    use :: terminal
+    implicit none
+
+    character(len = *), intent(in) :: texture_name
+    class(*), allocatable :: generic_data
+    type(vec2i) :: texture_size
+    integer(c_int) :: status
+
+    call texture_size_database%get_raw(key(texture_name), generic_data, stat = status)
+
+    if (status /= 0) then
+      error stop colorize_rgb("[Texture] Error: ["//texture_name//"] does not exist.", 255, 0, 0)
+    end if
 
 
   end function get_texture_size
