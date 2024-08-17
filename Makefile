@@ -11,6 +11,9 @@ release:
 
 .PHONY: test
 test:
+	fpm test
+
+testgdb:
 	@MALLOC_CHECK_=2 fpm test --flag   -g --flag   -fsanitize=address\
 	                          --c-flag -g --c-flag -fsanitize=address
 	
