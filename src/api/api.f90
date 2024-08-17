@@ -97,6 +97,7 @@ contains
     integer :: i
     logical :: found_mods_folder
     character(len = :, kind = c_char), allocatable :: folder_name, mod_path_string, conf_path_string, init_path_string
+    type(mod_config) :: mod_config_struct
 
 
     found_mods_folder = .false.
@@ -135,7 +136,9 @@ contains
       folder_name = dir_reader%folders(i)%get()
       mod_path_string = "./mods/"//folder_name
       init_path_string = mod_path_string//"/init.lua"
+      conf_path_string = mod_path_string//"/mod.conf"
 
+      mod_config_struct = construct_mod_config_from_file(conf_path_string)
 
 
       associate (status => api_run_file(init_path_string))
@@ -156,13 +159,16 @@ contains
   end subroutine load_all_mods
 
 
+  !* This will take the mod folder's conf file (if it exists) and parse it.
   function construct_mod_config_from_file(path) result(new_mod_config)
     use :: files
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: path
-    type(mod_config), pointer :: new_mod_config
+    type(mod_config) :: new_mod_config
     type(file_reader) :: reader
+    character(len = :, kind = c_char), allocatable :: temp_string
+    integer :: i
 
     call reader%read_lines(path)
 
@@ -170,7 +176,25 @@ contains
       error stop "[API] error: Mod folder ["//path//"] is missing a [mod.conf] file."
     end if
 
-    allocate(new_mod_config)
+    if (reader%line_count == 0) then
+      error stop "[API] error: Mod folder ["//path//"] has a blank [mod.conf] file."
+    end if
+
+    do i = 1,reader%line_count
+      temp_string = reader%lines(i)%get()
+      print*,temp_string
+
+      if (string_starts_with(temp_string, "name = ")) then
+
+      else if (string_starts_with(temp_string, "description = ")) then
+
+      end if
+    end do
+
+
+    new_mod_config%path = path
+
+
 
 
   end function construct_mod_config_from_file
