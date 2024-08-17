@@ -34,13 +34,7 @@ contains
 
   !* Initialize the API.
   subroutine api_initialize()
-    use :: directory
     implicit none
-
-    type(directory_reader) :: testing
-
-
-    call testing%read_directory("./")
 
     call luajit_initialize(lua_state)
 
@@ -49,8 +43,11 @@ contains
       error stop "[API] Error: Failed to load the init file."
     end if
 
-    !* Initialize LuaJIT compatible modules.
+    ! Initialize LuaJIT compatible modules.
     call block_repo_deploy_lua_api(lua_state)
+
+    ! Load up all mods.
+    call load_all_mods()
   end subroutine api_initialize
 
 
@@ -72,5 +69,45 @@ contains
     success = luajit_run_file(lua_state, file_path)
   end function api_run_file
 
+
+  !* This will attempt to load up all init.lua files in the mods folder.
+  subroutine load_all_mods()
+    use :: directory
+    implicit none
+
+    type(directory_reader) :: dir_reader
+    integer :: i
+    logical :: found_mods_folder
+
+    found_mods_folder = .false.
+
+    ! We can reuse the directory reader.
+    call dir_reader%read_directory("./")
+
+    ! So let's get the mods folder.
+
+    if (dir_reader%folder_count == 0) then
+      error stop "[API] error: No folders in the directory [./]"
+    end if
+
+    do i = 1,dir_reader%folder_count
+      if (dir_reader%folders(i) == "mods") then
+        found_mods_folder = .true.
+        exit
+      end if
+    end do
+
+    if (.not. found_mods_folder) then
+      error stop "[API] error: Could not find the [mods] folder in the directory [./]"
+    end if
+
+    ! Now, we can attempt to load up all the mods.
+
+    call dir_reader%deallocate_memory()
+
+    print*,"=== new ==="
+
+    call dir_reader%read_directory("./mods/")
+  end subroutine load_all_mods
 
 end module api
