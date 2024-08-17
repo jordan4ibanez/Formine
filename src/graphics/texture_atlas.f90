@@ -1,10 +1,13 @@
 module texture_atlas
   use :: string
+  use :: vector_2i
   use, intrinsic :: iso_c_binding
   implicit none
 
+
   !* We need a pool of things to build upon.
   !* The game only has one texture atlas.
+  
 
   private
 
@@ -30,7 +33,6 @@ contains
     implicit none
 
     allocate(textures_to_pack(0))
-
   end subroutine texture_atlas_initialize
 
 
