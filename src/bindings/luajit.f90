@@ -1055,8 +1055,8 @@ contains
   end function luajit_run_string
 
 
-  !* Run a LuaJIT file. Returns success.
-  function luajit_run_file(state, file_path) result(success)
+  !* Run a LuaJIT file. Returns status.
+  function luajit_run_file(state, file_path) result(status)
     use :: string
     use :: files
     use :: terminal
@@ -1066,14 +1066,13 @@ contains
     character(len = *, kind = c_char), intent(in) :: file_path
     type(file_reader) :: reader
     character(len = :, kind = c_char), allocatable :: c_string
-    logical :: success
-
-    success = .false.
+    integer(c_int) :: status
 
     call reader%read_file(file_path)
 
     if (.not. reader%exists) then
       print"(A)", "[LuaJIT] Error: Could not load file path ["//file_path//"]. Does not exist."
+      status = LUAJIT_FILE_RUN_MISSING
       return
     end if
 
@@ -1083,12 +1082,14 @@ contains
       if (lua_pcall(state, 0, 0, 0) == LUA_OK) then
         ! If code was executed successfully, we remove the code from the stack.
         call lua_pop(state, lua_gettop(state))
-        success = .true.
+        status = LUAJIT_FILE_RUN_OK
       else
         print"(A)", colorize_rgb("[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
+        status = LUAJIT_FILE_RUN_FAILURE
       end if
     else
       print"(A)", colorize_rgb("[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
+      status = LUAJIT_FILE_RUN_FAILURE
     end if
   end function luajit_run_file
 
