@@ -186,6 +186,7 @@ bool close_directory_folder_parse(for_dir *output)
     {
       break;
     }
+    // printf("%s\n", output->strings[i]);
     free(output->strings[i]);
   }
 
