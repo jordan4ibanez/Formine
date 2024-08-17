@@ -1,6 +1,7 @@
 module texture
   use :: fhash, only: fhash_tbl_t, key => fhash_key
   use :: vector_2i
+  use, intrinsic :: iso_c_binding
   implicit none
 
 
@@ -218,6 +219,12 @@ contains
       print"(A)",colorize_rgb("[Texture] Error: ["//texture_name//"] does not exist.", 255, 0, 0)
     end if
   end function get_texture
+
+
+  function get_texture_size(texture_name) result(texture_size)
+
+
+  end function get_texture_size
 
 
   !* Delete a texture. From OpenGL and the database.
