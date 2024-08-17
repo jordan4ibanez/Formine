@@ -89,6 +89,7 @@ for_dir *parse_directory_folders(const char *input_path)
     output->open_success = true;
     while ((dir = readdir(d)) != NULL)
     {
+      // We do not want these "folder names".
       // strcmp will return 0 for true.
       if (strcmp(dir->d_name, "..") == 0 || strcmp(dir->d_name, ".") == 0)
       {
