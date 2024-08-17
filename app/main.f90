@@ -11,6 +11,7 @@ program main
   use :: font
   use :: vector_2f
   use :: api
+  use :: texture_atlas
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -77,6 +78,7 @@ program main
   !? I don't know what the difference is between gl_blend_func and gl_blend_func_separate so disable this until someone tells me.
   ! call gl_blend_func_separate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
+  call texture_atlas_initialize()
 
   !! This resets the gl_get_error integer back to 0.
   call gl_clear_error_data()
