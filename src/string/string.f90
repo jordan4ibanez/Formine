@@ -312,7 +312,7 @@ contains
 
     found_index = index(input_string, char)
 
-    !* No character found.
+    ! No character found.
     if (found_index == 0) then
       output_string = ""
       return
@@ -323,13 +323,14 @@ contains
     ! Shift it to the right of the found character index.
     found_index = found_index + 1
 
+    ! Out of bounds.
     if (found_index >= input_length) then
       output_string = ""
       return
     end if
 
+    ! Then process it.
     output_string = input_string(found_index:input_length)
-
     output_string = string_trim_white_space(output_string)
   end function string_get_right_of_character
 
