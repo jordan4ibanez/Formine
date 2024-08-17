@@ -87,7 +87,7 @@ contains
     type(directory_reader) :: dir_reader
     integer :: i
     logical :: found_mods_folder
-    character(len = :, kind = c_char), allocatable :: path_string
+    character(len = :, kind = c_char), allocatable :: folder_name, mod_path_string, init_path_string
 
     found_mods_folder = .false.
 
@@ -122,8 +122,24 @@ contains
     end if
 
     do i = 1,dir_reader%folder_count
-      path_string = "./mods/"//dir_reader%folders(i)%get()
-      print*,path_string
+      folder_name = dir_reader%folders(i)%get()
+      mod_path_string = "./mods/"//folder_name
+      init_path_string = mod_path_string//"/init.lua"
+
+      associate (status => api_run_file(init_path_string))
+        if (status /= LUAJIT_RUN_FILE_OK) then
+          ! todo: make a conf reader.
+          ! fixme: change folder_name to the mod name!
+          select case (status)
+           case (LUAJIT_RUN_FILE_FAILURE)
+            error stop "[API] error: Failed to run the mod ["//folder_name//"]. Execution error."
+           case (LUAJIT_RUN_FILE_MISSING)
+            error stop "[API] error: Failed to run the mod ["//folder_name//"]. Missing init.lua"
+           case default
+            error stop "[API] error: Failed to run the mod ["//folder_name//"]. UNIMPLEMENTED ERROR!"
+          end select
+        end if
+      end associate
     end do
   end subroutine load_all_mods
 
