@@ -14,6 +14,12 @@ https://www.gnu.org/software/libc/manual/html_node/Testing-File-Type.html
 
 This is built upon this, completely converted into fortran operable
 implementation.
+
+What this does is, basically creates a synchronized database of files and folders.
+So if index 0 is a file named [test], it'll be set up like this in this micro database:
+for_dir[0]->string = "test\0";
+for_dir[0]->string_length = 4;
+for_dir[0]->is_folder = false;
 */
 
 //! This may not be enough, and it might blow up. :D
@@ -63,7 +69,7 @@ char *check_ends_with_forward_slash(const char *path)
 }
 
 //* This is POSIX only.
-//* Grab the files in a directory.
+//* Grab the files and folders in a directory.
 //! todo: need a windows version.
 for_dir *parse_directory_folders(const char *input_path)
 {
