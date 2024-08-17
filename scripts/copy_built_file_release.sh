@@ -12,9 +12,14 @@ if [ ! -d "./out/" ]; then
   mkdir ./out/
 fi
 
-rm ./out/formine_release 2> /dev/null
+rm -f ./out/formine_release
 
-mv $location ./out/formine_release
+cp -f $location ./out/
+
+# Bash is extremely annoying.
+sleep 0.2
+
+mv ./out/formine ./out/formine_release
 
 echo "Copied release binary."
 
