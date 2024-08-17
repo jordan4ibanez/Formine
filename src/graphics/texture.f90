@@ -199,6 +199,7 @@ contains
     end if
 
     call texture_database%set(key(texture_name), new_texture)
+    call texture_size_database%set(key(texture_name), vec2i(x, y))
   end subroutine set_texture
 
 
