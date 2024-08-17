@@ -211,9 +211,22 @@ contains
   !* If there is no textures folder this is a no-op.
   !* If there are no textures in the textures folder this is a no-op.
   subroutine load_up_all_textures(mod_path)
+    use :: directory
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mod_path
+    type(directory_reader) :: dir_reader
+
+    print*,mod_path
+
+    call dir_reader%read_directory(mod_path)
+
+    ! Nothing to do.
+    if (dir_reader%folder_count == 0) then
+      return
+    end if
+
+
 
   end subroutine load_up_all_textures
 
