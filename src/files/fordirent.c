@@ -119,7 +119,7 @@ for_dir *parse_directory_folders(const char *input_path)
       // See if this is a file or a folder.
       // There are many things this can be, but we only care about the boolean.
       // Also this chunk may look scary, but it's mainly string manipulation.
-      const char *temp_file_directory = malloc(sizeof(char[path_string_length]));
+      const char *temp_file_directory = malloc(sizeof(char[path_string_length + string_length]));
       strncpy(temp_file_directory, path, path_string_length);
       strcat(temp_file_directory, allocated_string);
       struct stat path_status;
