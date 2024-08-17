@@ -1,5 +1,7 @@
 default:
-	@fpm run --flag -g --c-flag -g
+# These are GDB flags.
+#--flag -g --c-flag -g
+	@fpm run 
 
 release:
 	@fpm run --flag -fuse-ld=mold --flag -O3 --flag -march=native --flag -mtune=native 
