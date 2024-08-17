@@ -291,6 +291,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: input_string
     character(len = :, kind = c_char), allocatable :: output_string
 
+    ! This is kind of like how you remove bits in a bit shift, but for strings.
     output_string = trim(adjustl(input_string))
   end function string_trim_white_space
 
