@@ -8,14 +8,19 @@ contains
     implicit none
 
     type(directory_reader) :: reader
+    ! integer :: i
 
+    ! i = 1
     print*, "begin testing forderint memory leak."
 
     do while (.true.)
+      ! print*,"loop: ", i
 
       call reader%deallocate_memory()
 
-      call reader%read_directory("./")
+      call reader%read_directory("./mods/formine/")
+
+      ! i = i + 1
 
     end do
   end subroutine test_memory_leak
