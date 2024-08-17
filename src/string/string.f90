@@ -16,6 +16,7 @@ module string
   public :: string_remove_file_extension
   public :: string_get_non_space_characters
   public :: string_starts_with
+  public :: string_trim_white_space
   !? Pass through the type.
   public :: heap_string
 
@@ -280,4 +281,15 @@ contains
       starts_with = .true.
     end if
   end function string_starts_with
+
+
+  !* Strip leading and trailing white space off a string.
+  function string_trim_white_space(input_string) result(output_string)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: input_string
+    character(len = :, kind = c_char), allocatable :: output_string
+
+    output_string = trim(adjustl(input_string))
+  end function string_trim_white_space
 end module string
