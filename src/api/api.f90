@@ -140,26 +140,21 @@ contains
 
       mod_config_struct = construct_mod_config_from_file(conf_path_string, mod_path_string)
 
-
-      print*,mod_config_struct%name
-      print*,mod_config_struct%description
-      print*,mod_config_struct%path
-
-
       associate (status => api_run_file(init_path_string))
         if (status /= LUAJIT_RUN_FILE_OK) then
-          ! todo: make a conf reader.
-          ! fixme: change folder_name to the mod name!
           select case (status)
            case (LUAJIT_RUN_FILE_FAILURE)
-            error stop "[API] error: Failed to run the mod ["//folder_name//"]. Execution error."
+            error stop "[API] error: Failed to run the mod ["//mod_config_struct%name%get()//"]. Execution error."
            case (LUAJIT_RUN_FILE_MISSING)
-            error stop "[API] error: Failed to run the mod ["//folder_name//"]. Missing init.lua"
+            error stop "[API] error: Failed to run the mod ["//mod_config_struct%name%get()//"]. Missing init.lua"
            case default
-            error stop "[API] error: Failed to run the mod ["//folder_name//"]. UNIMPLEMENTED ERROR!"
+            error stop "[API] error: Failed to run the mod ["//mod_config_struct%name%get()//"]. UNIMPLEMENTED ERROR!"
           end select
         end if
       end associate
+
+      ! Now, if the mod loaded up properly, we can store the configuration.
+      call mod_database%set(key(mod_config_struct%name%get()), mod_config_struct)
     end do
   end subroutine load_all_mods
 
