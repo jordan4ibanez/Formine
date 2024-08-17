@@ -14,6 +14,7 @@ module string
   public :: bool_to_string
   public :: get_file_name_from_string
   public :: string_remove_file_extension
+  public :: string_get_file_extension
   public :: string_get_non_space_characters
   public :: string_starts_with
   public :: string_trim_white_space
@@ -238,6 +239,29 @@ contains
 
     file_name_without_extension = input_file_name(1:i - 1)
   end function string_remove_file_extension
+
+
+  !* Get a file extension from a string.
+  !* If it has no extension, this returns "".
+  function string_get_file_extension(input_file_name) result(extension)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: input_file_name
+    character(len = :, kind = c_char), allocatable :: extension
+    integer(c_int) :: i, string_length
+
+    i = index(input_file_name, ".", back = .true.)
+
+    string_length = len(input_file_name)
+
+    if (i >= string_length) then
+      extension = ""
+      return
+    end if
+
+    extension = input_file_name(i:string_length)
+    print*,extension
+  end function string_get_file_extension
 
 
   !* Get the count of non space characters in a string.
