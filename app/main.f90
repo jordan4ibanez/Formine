@@ -23,11 +23,6 @@ program main
 
   call api_initialize()
 
-  if (.not. api_run_file("./mods/formine/init.lua")) then
-    print*,"FAILED TO RUN FILE"
-    return
-  end if
-
   call api_destroy()
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
