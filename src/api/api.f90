@@ -141,6 +141,11 @@ contains
       mod_config_struct = construct_mod_config_from_file(conf_path_string, mod_path_string)
 
 
+      print*,mod_config_struct%name
+      print*,mod_config_struct%description
+      print*,mod_config_struct%path
+
+
       associate (status => api_run_file(init_path_string))
         if (status /= LUAJIT_RUN_FILE_OK) then
           ! todo: make a conf reader.
@@ -160,14 +165,14 @@ contains
 
 
   !* This will take the mod folder's conf file (if it exists) and parse it.
-  function construct_mod_config_from_file(path) result(new_mod_config)
+  function construct_mod_config_from_file(path, mod_path) result(new_mod_config)
     use :: files
     implicit none
 
-    character(len = *, kind = c_char), intent(in) :: path
+    character(len = *, kind = c_char), intent(in) :: path, mod_path
     type(mod_config) :: new_mod_config
     type(file_reader) :: reader
-    character(len = :, kind = c_char), allocatable :: temp_string
+    character(len = :, kind = c_char), allocatable :: temp_string, value_string
     integer :: i
 
     call reader%read_lines(path)
@@ -180,23 +185,26 @@ contains
       error stop "[API] error: Mod folder ["//path//"] has a blank [mod.conf] file."
     end if
 
+    ! Parse each line to try to accumulate the required elements.
     do i = 1,reader%line_count
       temp_string = reader%lines(i)%get()
-      print*,temp_string
 
       if (string_starts_with(temp_string, "name = ")) then
-
+        value_string = string_get_right_of_character(temp_string, "=")
+        if (value_string == "") then
+          error stop "[API] error: Missing value for [mod.conf] key [name]."
+        end if
+        new_mod_config%name = value_string
       else if (string_starts_with(temp_string, "description = ")) then
-
+        value_string = string_get_right_of_character(temp_string, "=")
+        if (value_string == "") then
+          error stop "[API] error: Missing value for [mod.conf] key [description]."
+        end if
+        new_mod_config%description = value_string
       end if
     end do
 
-
-    new_mod_config%path = path
-
-
-
-
+    new_mod_config%path = mod_path
   end function construct_mod_config_from_file
 
 
