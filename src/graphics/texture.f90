@@ -15,7 +15,8 @@ module texture
 
 
   type(fhash_tbl_t) :: texture_database
-  logical :: debug_mode = .true.
+  type(fhash_tbl_t) :: texture_size_database
+  logical :: debug_mode = .false.
 
 
 contains
