@@ -94,7 +94,7 @@ contains
     implicit none
 
     type(directory_reader) :: dir_reader
-    integer :: i
+    integer :: i, status
     logical :: found_mods_folder
     character(len = :, kind = c_char), allocatable :: folder_name, mod_path_string, conf_path_string, init_path_string
     type(mod_config) :: mod_config_struct
@@ -139,6 +139,13 @@ contains
       conf_path_string = mod_path_string//"mod.conf"
 
       mod_config_struct = construct_mod_config_from_file(conf_path_string, mod_path_string)
+
+      ! Check if there's already a mod with this name in the database.
+      call mod_database%check_key(key(mod_config_struct%name%get()), stat = status)
+
+      if (status == 0) then
+        error stop "[API] error: There is already a mod named ["//mod_config_struct%name%get()//"]. Responsible folder: ["//mod_path_string//"]"
+      end if
 
       associate (status => api_run_file(init_path_string))
         if (status /= LUAJIT_RUN_FILE_OK) then
@@ -333,7 +340,7 @@ contains
 
     if (file_extension == "png") then
       full_file_path = file_path//file_name
-      print*,full_file_path
+      ! print*,full_file_path
     end if
   end subroutine attempt_texture_upload
 
