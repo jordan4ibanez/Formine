@@ -20,6 +20,8 @@ So if index 0 is a file named [test], it'll be set up like this in this micro da
 for_dir[0]->string = "test\0";
 for_dir[0]->string_length = 4;
 for_dir[0]->is_folder = false;
+
+The other fields are mainly for it to be super easy to parse it in Fortran.
 */
 
 //! This may not be enough, and it might blow up. :D
