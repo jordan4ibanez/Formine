@@ -176,11 +176,11 @@ contains
     call reader%read_lines(path)
 
     if (.not. reader%exists) then
-      error stop "[API] error: Mod folder ["//path//"] is missing a [mod.conf] file."
+      error stop "[API] error: Mod folder ["//string_remove_file_name_from_path(path)//"] is missing a [mod.conf] file."
     end if
 
     if (reader%line_count == 0) then
-      error stop "[API] error: Mod folder ["//path//"] has a blank [mod.conf] file."
+      error stop "[API] error: Mod folder ["//string_remove_file_name_from_path(path)//"] has a blank [mod.conf] file."
     end if
 
     ! Parse each line to try to accumulate the required elements.
