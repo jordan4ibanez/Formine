@@ -11,6 +11,7 @@ module texture
   public :: texture_create
   public :: texture_create_from_memory
   public :: texture_use
+  public :: texture_get_size
   public :: texture_delete
   public :: texture_exists
   public :: texture_clear_database
@@ -217,7 +218,7 @@ contains
 
 
   !* This is mainly used by the texture packer to get the dimensions of the texture.
-  function get_texture_size(texture_name) result(texture_size)
+  function texture_get_size(texture_name) result(texture_size)
     use :: terminal
     implicit none
 
@@ -238,7 +239,7 @@ contains
      class default
       error stop colorize_rgb("[Texture] Error: ["//texture_name//"] is the wrong type.", 255, 0, 0)
     end select
-  end function get_texture_size
+  end function texture_get_size
 
 
   !* Delete a texture. From OpenGL and the database.
