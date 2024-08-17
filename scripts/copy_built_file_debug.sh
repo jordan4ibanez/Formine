@@ -6,8 +6,8 @@ if [ "$location" == "" ]; then
   exit 1
 fi
 
-cp $location ./out/
+cp $location ./out/formine_debug
 
-echo "Copied binary."
+echo "Copied debug binary."
 
 exit 0
