@@ -206,6 +206,10 @@ contains
   end function construct_mod_config_from_file
 
 
+  !* Load up all PNG textures in the mod folder's texture folder. (if it exists)
+  !* This will only load PNG images.
+  !* If there is no textures folder this is a no-op.
+  !* If there are no textures in the textures folder this is a no-op.
   subroutine load_up_all_textures(mod_path)
     implicit none
 
