@@ -216,6 +216,7 @@ contains
   end function get_texture
 
 
+  !* This is mainly used by the texture packer to get the dimensions of the texture.
   function get_texture_size(texture_name) result(texture_size)
     use :: terminal
     implicit none
@@ -231,7 +232,12 @@ contains
       error stop colorize_rgb("[Texture] Error: ["//texture_name//"] does not exist.", 255, 0, 0)
     end if
 
-
+    select type (generic_data)
+     type is (vec2i)
+      texture_size = generic_data
+     class default
+      error stop colorize_rgb("[Texture] Error: ["//texture_name//"] is the wrong type.", 255, 0, 0)
+    end select
   end function get_texture_size
 
 
