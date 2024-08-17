@@ -89,6 +89,12 @@ for_dir *parse_directory_folders(const char *input_path)
     output->open_success = true;
     while ((dir = readdir(d)) != NULL)
     {
+      // strcmp will return 0 for true.
+      if (strcmp(dir->d_name, "..") == 0 || strcmp(dir->d_name, ".") == 0)
+      {
+        continue;
+      }
+
       //* Add +1 for null terminator.
       string_length = strlen(dir->d_name) + 1;
 
