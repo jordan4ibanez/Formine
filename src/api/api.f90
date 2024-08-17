@@ -251,27 +251,90 @@ contains
     call dir_readers(1)%read_directory(textures_path)
 
     ! This allows for 4 folders deep.
+    ! This is a bit complicated, I could have made this a recursive function
+    ! but I wanted to keep the implementation flat, dumb, and simple.
+    ! Needless to say, the textures_path variable will be getting a workout.
 
-    ! Welcome to the easy part.
+    ! Root level.
     do a = 1,dir_readers(1)%file_count
-
-      temp_strings(1) = dir_readers(1)%files(a)%get()
-      file_extension = string_get_file_extension(temp_strings(1)%get())
-
-      if (file_extension == "png") then
-        file_paths(1) = textures_path//temp_strings(1)%get()
-        print*,temp_strings(1)%get()
-      end if
-
+      call attempt_texture_upload(dir_readers(1)%files(a)%get(), textures_path)
     end do
 
+    do a = 1,dir_readers(1)%folder_count
 
-    ! Climb the mountain!
-    do b = 1,dir_readers(1)%folder_count
+      !* + 1 depth.
+      textures_path = mod_path//"textures/"//dir_readers(1)%folders(a)%get()//"/"
 
+      call dir_readers(2)%deallocate_memory()
+      call dir_readers(2)%read_directory(textures_path)
+
+      do b = 1,dir_readers(2)%file_count
+        call attempt_texture_upload(dir_readers(2)%files(b)%get(), textures_path)
+      end do
+
+      do b = 1,dir_readers(2)%folder_count
+
+        !* + 2 depth.
+        textures_path = mod_path//"textures/"// &
+          dir_readers(1)%folders(a)%get()//"/"// &
+          dir_readers(2)%folders(b)%get()//"/"
+
+        call dir_readers(3)%deallocate_memory()
+        call dir_readers(3)%read_directory(textures_path)
+
+        do c = 1,dir_readers(3)%file_count
+          call attempt_texture_upload(dir_readers(3)%files(c)%get(), textures_path)
+        end do
+
+        do c = 1,dir_readers(3)%folder_count
+
+          !* + 3 depth.
+          textures_path = mod_path//"textures/"// &
+            dir_readers(1)%folders(a)%get()//"/"// &
+            dir_readers(2)%folders(b)%get()//"/"// &
+            dir_readers(3)%folders(c)%get()//"/"
+
+          call dir_readers(4)%deallocate_memory()
+          call dir_readers(4)%read_directory(textures_path)
+
+          do d = 1,dir_readers(4)%file_count
+            call attempt_texture_upload(dir_readers(4)%files(d)%get(), textures_path)
+          end do
+
+          do d = 1,dir_readers(4)%folder_count
+
+            !* + 4 depth.
+            textures_path = mod_path//"textures/"// &
+              dir_readers(1)%folders(a)%get()//"/"// &
+              dir_readers(2)%folders(b)%get()//"/"// &
+              dir_readers(3)%folders(c)%get()//"/"// &
+              dir_readers(4)%folders(d)%get()//"/"
+
+            call dir_readers(5)%deallocate_memory()
+            call dir_readers(5)%read_directory(textures_path)
+
+            do e = 1,dir_readers(5)%file_count
+              call attempt_texture_upload(dir_readers(5)%files(e)%get(), textures_path)
+            end do
+          end do
+        end do
+      end do
     end do
-
-
   end subroutine load_up_all_textures
+
+
+  subroutine attempt_texture_upload(file_name, file_path)
+    implicit none
+
+    character(len = *, kind = c_char) :: file_name, file_path
+    character(len = :, kind = c_char), allocatable :: full_file_path, file_extension
+
+    file_extension = string_get_file_extension(file_name)
+
+    if (file_extension == "png") then
+      full_file_path = file_path//file_name
+      print*,full_file_path
+    end if
+  end subroutine attempt_texture_upload
 
 end module api
