@@ -40,7 +40,6 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: full_path, file_name
     type(texture_pack_element), allocatable :: new_element
-    integer :: i
 
     allocate(new_element)
 
@@ -48,14 +47,6 @@ contains
     new_element%file_name = file_name
 
     textures_to_pack = [textures_to_pack, new_element]
-
-    i = size(textures_to_pack)
-
-    print*,i
-
-    print*,sizeof(textures_to_pack)
-
-    ! print*,allocated(textures_to_pack(i))
 
   end subroutine texture_atlas_add_texture_to_pack
 
