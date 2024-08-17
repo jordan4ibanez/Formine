@@ -163,12 +163,6 @@ contains
     do i = 1,for_dir_pointer%array_length
       temp_string = string_from_c(c_strings(i), string_lengths(i))
 
-      ! We do not want these "folder names".
-      if (temp_string == ".." .or. temp_string == ".") then
-        ! print*,"skipping "//temp_string
-        cycle
-      end if
-
       if (is_folder(i)) then
         this%folders(folder_index) = temp_string
         folder_index = folder_index + 1
