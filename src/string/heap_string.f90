@@ -121,7 +121,6 @@ contains
   end subroutine write_formatted
 
 
-
   !* Very simple check to see if the internal data is allocated.
   logical function is_allocated(this) result(res)
     implicit none
