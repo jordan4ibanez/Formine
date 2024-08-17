@@ -38,10 +38,16 @@ contains
 
     call luajit_initialize(lua_state)
 
-    if (.not. luajit_run_file(lua_state, "./api/init.lua")) then
-      ! Someone removed the api init file, eh?
-      error stop "[API] Error: Failed to load the init file."
-    end if
+    associate (status => luajit_run_file(lua_state, "./api/init.lua"))
+      if (status /= LUAJIT_RUN_FILE_OK) then
+        if (status == LUAJIT_RUN_FILE_MISSING) then
+          ! Someone removed the api init file, eh?
+          error stop "[API] Error: Failed to load the init file. It's missing."
+        else
+          error stop "[API] Error: Failed to load the init file. Execution error."
+        end if
+      end if
+    end associate
 
     ! Initialize LuaJIT compatible modules.
     call block_repo_deploy_lua_api(lua_state)
