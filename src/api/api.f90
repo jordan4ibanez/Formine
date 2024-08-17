@@ -88,7 +88,7 @@ contains
   end function api_run_file
 
 
-  !* This will attempt to load up all init.lua files in the mods folder.
+  !* This will attempt to load up all init.lua files in the mod folders.
   subroutine load_all_mods()
     use :: directory
     implicit none
