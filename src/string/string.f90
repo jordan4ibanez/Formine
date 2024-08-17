@@ -17,6 +17,7 @@ module string
   public :: string_get_non_space_characters
   public :: string_starts_with
   public :: string_trim_white_space
+  public :: string_get_right_of_character
   !? Pass through the type.
   public :: heap_string
 
@@ -292,4 +293,37 @@ contains
 
     output_string = trim(adjustl(input_string))
   end function string_trim_white_space
+
+
+  !* This helper function is mainly made for parsing conf files.
+  !* It will remove all surrounding space.
+  !* Will return "" if can't parse.
+  !* Example:
+  !* test = blah
+  !* return: [blah]
+  function string_get_right_of_character(input_string, char) result(output_string)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: input_string
+    character(len = 1, kind = c_char), intent(in) :: char
+    character(len = :, kind = c_char), allocatable :: output_string
+    integer(c_int) :: found_index, input_length
+
+
+    found_index = index(input_string, char)
+
+    !* No character found.
+    if (found_index == 0) then
+      output_string = ""
+      return
+    end if
+
+    input_length = len(input_string)
+
+    output_string = input_string(found_index:input_length)
+
+    output_string = string_trim_white_space(output_string)
+  end function string_get_right_of_character
+
+
 end module string
