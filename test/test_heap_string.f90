@@ -250,14 +250,17 @@ contains
     character(len = :), allocatable :: name_of_file
 
     blank = ""
+    print*,"Should error."
     name_of_file = blank%get_file_name()
     call assert_str_equal(name_of_file, "")
 
     wrong = "hello, am a thing"
+    print*,"Should error."
     name_of_file = wrong%get_file_name()
     call assert_str_equal(name_of_file, "")
 
     folder_path = "/home/user/Desktop/flop/"
+    print*,"Should error."
     name_of_file = folder_path%get_file_name()
     call assert_str_equal(name_of_file, "")
 
