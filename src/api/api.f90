@@ -144,7 +144,7 @@ contains
       call mod_database%check_key(key(mod_config_struct%name%get()), stat = status)
 
       if (status == 0) then
-        error stop "[API] error: There is already a mod named ["//mod_config_struct%name%get()//"]. Responsible folder: ["//mod_path_string//"]"
+        error stop "[API] error: There is already a mod named ["//mod_config_struct%name%get()//"]. Culprit: ["//mod_path_string//"]"
       end if
 
       associate (status => api_run_file(init_path_string))
