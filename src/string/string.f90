@@ -320,6 +320,14 @@ contains
 
     input_length = len(input_string)
 
+    ! Shift it to the right of the found character index.
+    found_index = found_index + 1
+
+    if (found_index >= input_length) then
+      output_string = ""
+      return
+    end if
+
     output_string = input_string(found_index:input_length)
 
     output_string = string_trim_white_space(output_string)
