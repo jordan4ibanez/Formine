@@ -32,3 +32,6 @@ build/
 *.exe
 *.out
 *.app
+
+# Binary output
+/out/**
