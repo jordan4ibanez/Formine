@@ -2,8 +2,11 @@ default:
 	@fpm run 
 
 gdb:
-	@MALLOC_CHECK_=2 fpm run --flag   -g --flag   -fsanitize=address --flag   -fanalyzer --flag   -Wno-analyzer-out-of-bounds --flag   -Wno-stack-usage\
-	                         --c-flag -g --c-flag -fsanitize=address --c-flag -fanalyzer --c-flag -Wno-analyzer-out-of-bounds --c-flag -Wno-stack-usage
+	@MALLOC_CHECK_=2 fpm run --flag   -g \
+	                         --c-flag -g
+
+valgrind:
+	valgrind --trace-children=yes --leak-check=full  fpm run
 
 release:
 	@fpm run --flag   -fuse-ld=mold --flag   -O3 --flag   -march=native --flag   -mtune=native \
@@ -14,8 +17,8 @@ test:
 	fpm test
 
 testgdb:
-	@MALLOC_CHECK_=2 fpm test --flag   -g --flag   -fsanitize=address --flag   -fanalyzer --flag   -Wno-analyzer-out-of-bounds\
-	                          --c-flag -g --c-flag -fsanitize=address --c-flag -fanalyzer --c-flag -Wno-analyzer-out-of-bounds
+	@MALLOC_CHECK_=2 fpm run --flag   -g \
+	                         --c-flag -g
 	
 # Use this if the vscode extension gives up.
 clean:
