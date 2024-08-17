@@ -216,16 +216,28 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: mod_path
     type(directory_reader) :: dir_reader
+    integer :: i
+    logical :: found_textures_folder
 
-    print*,mod_path
+    found_textures_folder = .false.
 
     call dir_reader%read_directory(mod_path)
 
-    ! Nothing to do.
+    ! No folders.
     if (dir_reader%folder_count == 0) then
       return
     end if
 
+    do i = 1,dir_reader%folder_count
+      if (dir_reader%folders(i)%get() == "textures") then
+        found_textures_folder = .true.
+      end if
+    end do
+
+    ! No textures folders.
+    if (.not. found_textures_folder) then
+      return
+    end if
 
 
   end subroutine load_up_all_textures
