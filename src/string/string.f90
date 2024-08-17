@@ -252,8 +252,18 @@ contains
 
     i = index(input_file_name, ".", back = .true.)
 
+    ! Has no extension.
+    if (i == 0) then
+      extension = ""
+      return
+    end if
+
+    ! Move the index past the [.]
+    i = i + 1
+
     string_length = len(input_file_name)
 
+    ! Probably a sentence?
     if (i >= string_length) then
       extension = ""
       return
