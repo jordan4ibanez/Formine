@@ -136,6 +136,10 @@ module luajit
   public :: LUAJIT_GET_MISSING
   public :: LUAJIT_GET_WRONG_TYPE
 
+  public :: LUAJIT_FILE_RUN_OK
+  public :: LUAJIT_FILE_RUN_MISSING
+  public :: LUAJIT_FILE_RUN_FAILURE
+
   !* LuaJIT constants.
 
   integer(c_int), parameter :: LUA_OK = 0
@@ -168,6 +172,10 @@ module luajit
   integer(c_int), parameter :: LUAJIT_GET_OK = 0
   integer(c_int), parameter :: LUAJIT_GET_MISSING = 1
   integer(c_int), parameter :: LUAJIT_GET_WRONG_TYPE = 2
+
+  integer(c_int), parameter :: LUAJIT_FILE_RUN_OK = 0
+  integer(c_int), parameter :: LUAJIT_FILE_RUN_MISSING = 1
+  integer(c_int), parameter :: LUAJIT_FILE_RUN_FAILURE = 2
 
 
   !* A custom wrapper type to allow X amount of arguments to be associated
