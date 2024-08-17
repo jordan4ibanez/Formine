@@ -3,7 +3,7 @@
 
 ## Why is this called Formine?
 
-I honestly had a hard time naming this project. After much thought and research, I had an inspiration from the language creator himself, [John Backus](https://en.wikipedia.org/wiki/John_Backus). You can see this [here](https://youtu.be/KohboWwrsXg&t=471).
+I had a hard time naming this project. After much thought and research, I had an inspiration from the language creator himself, [John Backus](https://en.wikipedia.org/wiki/John_Backus). You can see this [here](https://youtu.be/KohboWwrsXg&t=471).
 
 Fortran mining game. Formine.
 
