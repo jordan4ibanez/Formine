@@ -216,10 +216,8 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mod_path
-    character(len = :, kind = c_char), allocatable :: textures_path, file_extension
+    character(len = :, kind = c_char), allocatable :: textures_path
     type(directory_reader), dimension(5) :: dir_readers
-    type(heap_string), dimension(5) :: file_paths
-    type(heap_string), dimension(5) :: temp_strings
     integer :: i, a, b, c, d, e
     logical :: found_textures_folder
 
@@ -323,6 +321,8 @@ contains
   end subroutine load_up_all_textures
 
 
+  !* We will not only upload the texture into the texture module,
+  !* We will also put it into the texture atlas so we can stitch it together.
   subroutine attempt_texture_upload(file_name, file_path)
     implicit none
 
