@@ -19,6 +19,8 @@ module directory
   !* Ultra duct-taped together directory reader.
   !* We already have the tools on the system, use them.
   type :: directory_reader
+    integer(c_int) :: file_count = 0
+    integer(c_int) :: folder_count = 0
     type(heap_string), dimension(:), allocatable :: files
     type(heap_string), dimension(:), allocatable :: folders
   contains
@@ -144,6 +146,9 @@ contains
     ! of files and folders.
     allocate(this%files(for_dir_pointer%file_count))
     allocate(this%folders(for_dir_pointer%folder_count))
+
+    this%file_count = for_dir_pointer%file_count
+    this%folder_count = for_dir_pointer%folder_count
 
     ! Set our indices.
     file_index = 1
