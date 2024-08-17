@@ -15,6 +15,7 @@ module string
   public :: get_file_name_from_string
   public :: string_remove_file_extension
   public :: string_get_non_space_characters
+  public :: string_starts_with
   !? Pass through the type.
   public :: heap_string
 
@@ -257,4 +258,26 @@ contains
   end function string_get_non_space_characters
 
 
+  !* Check if a string starts with a sub string.
+  function string_starts_with(input_string, sub_string) result(starts_with)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: input_string, sub_string
+    logical :: starts_with
+    integer(c_int) :: input_length, sub_string_length
+
+    starts_with = .false.
+
+    input_length = len(input_string)
+    sub_string_length = len(sub_string)
+
+    ! Can't contain if it's smaller.
+    if (input_length < sub_string_length) then
+      return
+    end if
+
+    if (sub_string == input_string(1:sub_string_length)) then
+      starts_with = .true.
+    end if
+  end function string_starts_with
 end module string
