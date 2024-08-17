@@ -30,7 +30,6 @@ contains
     use :: string
     use :: opengl
     use :: terminal
-    use, intrinsic :: iso_c_binding
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_file_path
@@ -107,7 +106,6 @@ contains
     use :: string
     use :: opengl
     use :: terminal
-    use, intrinsic :: iso_c_binding
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
@@ -164,7 +162,6 @@ contains
   subroutine texture_use(texture_name)
     use :: opengl
     use :: terminal
-    use, intrinsic :: iso_c_binding
     implicit none
 
     character(len = *), intent(in) :: texture_name
@@ -183,7 +180,6 @@ contains
 
   !* Internal only. Set a texture in the database.
   subroutine set_texture(texture_name, new_texture, x, y)
-    use, intrinsic :: iso_c_binding
     implicit none
 
     character(len = *), intent(in) :: texture_name
@@ -206,7 +202,6 @@ contains
 
   !* Internal only. Get a texture from the database.
   function get_texture(texture_name) result(texture_id)
-    use, intrinsic :: iso_c_binding
     use :: terminal
     implicit none
 
@@ -229,7 +224,6 @@ contains
 
   !* Delete a texture. From OpenGL and the database.
   subroutine texture_delete(texture_name)
-    use, intrinsic :: iso_c_binding
     use :: opengl
     use :: terminal
     implicit none
@@ -262,7 +256,6 @@ contains
 
 
   logical function texture_exists(texture_name) result(existence)
-    use, intrinsic :: iso_c_binding
     implicit none
 
     character(len = *), intent(in) :: texture_name
