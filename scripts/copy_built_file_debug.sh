@@ -6,7 +6,15 @@ if [ "$location" == "" ]; then
   exit 1
 fi
 
-cp $location ./out/formine_debug
+./scripts/clear_mod_files.sh
+
+if [ ! -d "./out/" ]; then
+  mkdir ./out/
+fi
+
+rm ./out/formine_release 2> /dev/null
+
+mv $location ./out/formine_debug
 
 echo "Copied debug binary."
 
