@@ -1,5 +1,6 @@
 module texture
   use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use :: vector_2i
   implicit none
 
 
@@ -94,8 +95,8 @@ contains
     ! Finally, unbind. Done.
     call gl_bind_texture(GL_TEXTURE_2D, 0)
 
-    ! Now we can assign it into the database by the file name.
-    call set_texture(file_name, texture_id)
+    ! Now we can assign it into the database by the file name and dimensions.
+    call set_texture(file_name, texture_id, x, y)
   end subroutine texture_create
 
 
@@ -153,8 +154,8 @@ contains
     ! Finally, unbind. Done.
     call gl_bind_texture(GL_TEXTURE_2D, 0)
 
-    ! Now we can assign it into the database by the file name.
-    call set_texture(texture_name, texture_id)
+    ! Now we can assign it into the database by the custom name and the dimensions.
+    call set_texture(texture_name, texture_id, width, height)
   end subroutine texture_create_from_memory
 
 
@@ -180,12 +181,12 @@ contains
 
 
   !* Internal only. Set a texture in the database.
-  subroutine set_texture(texture_name, new_texture)
+  subroutine set_texture(texture_name, new_texture, x, y)
     use, intrinsic :: iso_c_binding
     implicit none
 
     character(len = *), intent(in) :: texture_name
-    integer(c_int), intent(in) :: new_texture
+    integer(c_int), intent(in) :: new_texture, x, y
 
     ! This creates an enforcement where the texture must be deleted before it can be re-assigned.
     ! This prevents a severe memory leak.
