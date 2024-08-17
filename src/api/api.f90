@@ -78,6 +78,7 @@ contains
     type(directory_reader) :: dir_reader
     integer :: i
     logical :: found_mods_folder
+    character(len = :, kind = c_char), allocatable :: path_string
 
     found_mods_folder = .false.
 
@@ -105,9 +106,16 @@ contains
 
     call dir_reader%deallocate_memory()
 
-    print*,"=== new ==="
-
     call dir_reader%read_directory("./mods/")
+
+    if (dir_reader%folder_count == 0) then
+      error stop "[API] error: There are no mods installed."
+    end if
+
+    do i = 1,dir_reader%folder_count
+      path_string = "./mods/"//dir_reader%folders(i)%get()
+      print*,path_string
+    end do
   end subroutine load_all_mods
 
 end module api
