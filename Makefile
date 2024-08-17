@@ -2,7 +2,8 @@ default:
 	@fpm run 
 
 gdb:
-	@MALLOC_CHECK_=2 fpm run --flag -g --c-flag -g
+	@MALLOC_CHECK_=2 fpm run --flag   -g --flag   -fsanitize=address\
+	                         --c-flag -g --c-flag -fsanitize=address
 
 release:
 	@fpm run --flag   -fuse-ld=mold --flag   -O3 --flag   -march=native --flag   -mtune=native \
@@ -10,7 +11,8 @@ release:
 
 .PHONY: test
 test:
-	@fpm test
+	@MALLOC_CHECK_=2 fpm test --flag   -g --flag   -fsanitize=address\
+	                          --c-flag -g --c-flag -fsanitize=address
 	
 # Use this if the vscode extension gives up.
 clean:
