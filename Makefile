@@ -6,7 +6,8 @@ gdb:
 	                         --c-flag -g
 
 valgrind:
-	valgrind --trace-children=yes --leak-check=full  fpm run
+	valgrind --trace-children=yes --leak-check=full fpm run --flag   -g \
+	                                                        --c-flag -g
 
 release:
 	@fpm run --flag   -fuse-ld=mold --flag   -O3 --flag   -march=native --flag   -mtune=native \
