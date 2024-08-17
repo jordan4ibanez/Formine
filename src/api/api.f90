@@ -40,12 +40,13 @@ contains
 
     associate (status => luajit_run_file(lua_state, "./api/init.lua"))
       if (status /= LUAJIT_RUN_FILE_OK) then
-        if (status == LUAJIT_RUN_FILE_MISSING) then
+        select case(status)
+         case (LUAJIT_RUN_FILE_FAILURE)
+          error stop "[API] Error: Failed to load the init file. Execution error."
+         case (LUAJIT_RUN_FILE_MISSING)
           ! Someone removed the api init file, eh?
           error stop "[API] Error: Failed to load the init file. It's missing."
-        else
-          error stop "[API] Error: Failed to load the init file. Execution error."
-        end if
+        end select
       end if
     end associate
 
