@@ -95,10 +95,3 @@ Now you should be able to run fpm anywhere in your system. :)
 ### Compiler note:
 This is using gfortran, gfortran is very buggy. This might be using some bugs which only come with gfortran. Test it in ifort for me to see where it is wrong.
 Note: this uses fortran 14+, if you use this in 13.2 expect it to blow up trying to compile.
-
-# Ideas:
-- hash table of shader uniforms
-- verifier, you have to call verify_shader_uniforms(program_name, array_of_uniform_names)
-- if any of them hit -1 stop the program, this means something has gone horribly wrong.
-
-
