@@ -335,6 +335,7 @@ contains
   !! Do not optimize this, we need this for when windows compatibility is implemented.
   subroutine attempt_texture_upload(file_name, file_path)
     use :: texture
+    use :: texture_atlas
     implicit none
 
     character(len = *, kind = c_char) :: file_name, file_path
@@ -345,7 +346,9 @@ contains
     if (file_extension == "png") then
       full_file_path = file_path//file_name
       call texture_create(full_file_path)
+      call texture_atlas_add_texture_to_pack(full_file_path, file_name)
     end if
   end subroutine attempt_texture_upload
+
 
 end module api
