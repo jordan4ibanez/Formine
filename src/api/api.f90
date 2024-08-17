@@ -1,5 +1,7 @@
 module api
   use :: luajit
+  use :: string
+  use :: fhash, only: fhash_tbl_t, key => fhash_key
   use, intrinsic :: iso_c_binding
   !* LuaJIT API compatiblemodules.
   use :: block_repo
@@ -26,8 +28,15 @@ module api
   public :: api_run_file
 
 
-  type(c_ptr) :: lua_state
+  type :: mod_config
+    type(heap_string) :: name
+    type(heap_string) :: description
+    type(heap_string) :: path
+  end type mod_config
 
+
+  type(fhash_tbl_t) :: mod_database
+  type(c_ptr) :: lua_state
 
 contains
 
@@ -87,7 +96,8 @@ contains
     type(directory_reader) :: dir_reader
     integer :: i
     logical :: found_mods_folder
-    character(len = :, kind = c_char), allocatable :: folder_name, mod_path_string, init_path_string
+    character(len = :, kind = c_char), allocatable :: folder_name, mod_path_string, conf_path_string, init_path_string
+
 
     found_mods_folder = .false.
 
@@ -126,6 +136,8 @@ contains
       mod_path_string = "./mods/"//folder_name
       init_path_string = mod_path_string//"/init.lua"
 
+
+
       associate (status => api_run_file(init_path_string))
         if (status /= LUAJIT_RUN_FILE_OK) then
           ! todo: make a conf reader.
@@ -142,5 +154,26 @@ contains
       end associate
     end do
   end subroutine load_all_mods
+
+
+  function construct_mod_config_from_file(path) result(new_mod_config)
+    use :: files
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: path
+    type(mod_config), pointer :: new_mod_config
+    type(file_reader) :: reader
+
+    call reader%read_lines(path)
+
+    if (.not. reader%exists) then
+      error stop "[API] error: Mod folder ["//path//"] is missing a [mod.conf] file."
+    end if
+
+    allocate(new_mod_config)
+
+
+  end function construct_mod_config_from_file
+
 
 end module api
