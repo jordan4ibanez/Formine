@@ -686,7 +686,7 @@ contains
 
     real(c_float), intent(in), value :: r, g, b
 
-    call internal_gl_clear_color(r,g,b,1.0)
+    call internal_gl_clear_color(r, g, b, 1.0)
   end subroutine gl_clear_color
 
 
@@ -709,8 +709,7 @@ contains
 
     integer, intent(in), value :: source, type, id, severity, length
     type(c_ptr), intent(in), value :: message_pointer, user_param_pointer
-    character(len = :, kind = c_char), allocatable :: fortran_message
-    character(len = :), allocatable :: text_color, severity_text
+    character(len = :, kind = c_char), allocatable :: fortran_message, text_color, severity_text
 
     ! Shut the compiler up.
     if (.false.) then
@@ -764,7 +763,8 @@ contains
   function gl_create_shader(shader_type) result(shader_id)
     implicit none
 
-    integer(c_int) :: shader_type, shader_id
+    integer(c_int), intent(in), value :: shader_type
+    integer(c_int) :: shader_id
 
     shader_id = internal_gl_create_shader(shader_type)
   end function gl_create_shader
@@ -827,10 +827,8 @@ contains
     use :: string
     implicit none
 
-    integer(c_int) :: shader
-    ! integer(c_int) :: max_length
+    integer(c_int), intent(in), value :: shader
     integer(c_int) :: length
-    ! character(len = :, kind = c_char), allocatable :: info_log
     type(c_ptr) :: c_string
 
     call internal_gl_get_shader_info_log(shader, 512, length, c_string)
@@ -840,8 +838,7 @@ contains
   function gl_get_shader_iv(shader, pname) result(code)
     implicit none
 
-    integer(c_int) :: shader
-    integer(c_int) :: pname
+    integer(c_int), intent(in), value :: shader, pname
     integer(c_int) :: code
 
     call internal_gl_get_shader_iv(shader, pname, code)
@@ -852,8 +849,7 @@ contains
     use :: string
     implicit none
 
-    integer(c_int) :: program_id
-    integer(c_int) :: pname
+    integer(c_int), intent(in), value :: program_id, pname
     integer(c_int) :: code
 
     call internal_gl_get_program_iv(program_id, pname, code)
