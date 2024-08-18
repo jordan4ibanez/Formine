@@ -8,7 +8,7 @@ module h_string
   public :: heap_string
 
 
-  !* A heap string is a string on the heap. Amazing, I know.
+  !* A heap string is a container to allow strings to be put into arrays dynamically.
   type :: heap_string
     private
     character(len = :), allocatable :: data
