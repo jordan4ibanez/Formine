@@ -190,6 +190,17 @@ contains
   end function bool_to_string
 
 
+  !* Convert a string to an int.
+  function string_to_int(input_string) result(int)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: input_string
+    integer(kind = c_int) :: int
+
+    int = 0
+
+    read(input_string, *) int
+  end function string_to_int
   !* Get a file name string from a string that is a path.
   function get_file_name_from_string(input_string) result(resulting_name_of_file)
     use, intrinsic :: iso_c_binding, only: c_char
