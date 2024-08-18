@@ -835,24 +835,24 @@ contains
   end subroutine gl_get_shader_info_log
 
 
-  function gl_get_shader_iv(shader, pname) result(code)
+  function gl_get_shader_iv(shader, pname) result(status)
     implicit none
 
     integer(c_int), intent(in), value :: shader, pname
-    integer(c_int) :: code
+    integer(c_int) :: status
 
-    call internal_gl_get_shader_iv(shader, pname, code)
+    call internal_gl_get_shader_iv(shader, pname, status)
   end function gl_get_shader_iv
 
 
-  function gl_get_program_iv(program_id, pname) result(code)
+  function gl_get_program_iv(program_id, pname) result(status)
     use :: string
     implicit none
 
     integer(c_int), intent(in), value :: program_id, pname
-    integer(c_int) :: code
+    integer(c_int) :: status
 
-    call internal_gl_get_program_iv(program_id, pname, code)
+    call internal_gl_get_program_iv(program_id, pname, status)
   end function gl_get_program_iv
 
 
