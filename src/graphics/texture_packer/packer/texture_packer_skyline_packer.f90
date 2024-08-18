@@ -30,6 +30,7 @@ module texture_packer_skyline_packer
     procedure :: split => skyline_packer_split
     procedure :: merge => skyline_packer_merge
     procedure :: pack => skyline_packer_pack
+    procedure :: can_pack => skyline_packer_can_pack
   end type skyline_packer
 
 
@@ -289,7 +290,6 @@ contains
     width = width + this%config%texture_padding + this%config%texture_extrusion * 2;
     height = height + this%config%texture_padding + this%config%texture_extrusion * 2;
 
-    ! i = option_index | rect = optional_rectangle
     if (this%find_skyline(width, height, optional_rectangle, option_index)) then
       call this%split(option_index, optional_rectangle);
       call this%merge();
@@ -308,21 +308,29 @@ contains
   end function skyline_packer_pack
 
 
-! fn can_pack(&self, texture_rect: &Rect) -> bool {
-!     if let Some((_, rect)) = this%find_skyline(
-!         texture_rect%w + this%config%texture_padding + this%config%texture_extrusion * 2,
-!         texture_rect%h + this%config%texture_padding + this%config%texture_extrusion * 2,
-!     ) {
-!         let skyline = Skyline {
-!             x: rect%left(),
-!             y: rect%bottom() + 1,
-!             w: rect%w,
-!         };
+  function skyline_packer_can_pack(this, texture_rect) result(can_pack)
+    implicit none
 
-!         return skyline.right() <= this%border.right() && skyline%y <= this%border.bottom();
-!     }
-!     false
-! }
+    class(skyline_packer), intent(in) :: this
+    type(rect), intent(in) :: texture_rect
+    logical(c_bool) :: can_pack
+    type(rect) :: optional_rectangle
+    integer(c_int) :: optional_index
+    type(skyline) :: the_skyline
+
+    can_pack = .false.
+
+    if (this%find_skyline( &
+      texture_rect%w + this%config%texture_padding + this%config%texture_extrusion * 2, &
+      texture_rect%h + this%config%texture_padding + this%config%texture_extrusion * 2, &
+      optional_rectangle, optional_index)) then
+        
+      the_skyline = skyline(optional_rectangle%left(), optional_rectangle%bottom() + 1, optional_rectangle%w)
+
+      can_pack = the_skyline%right() <= this%border%right() .and. the_skyline%y <= this%border%bottom();
+      return
+    end if
+  end function skyline_packer_can_pack
 
 end module texture_packer_skyline_packer
 
