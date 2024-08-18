@@ -178,7 +178,6 @@ contains
 
     the_skyline = skyline(rectangle%left(), rectangle%bottom() + 1, rectangle%w)
 
-
     if (the_skyline%right() > this%border%right()) then
       error stop "[Skyline Packer] Error: Out of bounds."
     end if
@@ -188,7 +187,7 @@ contains
     end if
 
 
-    ! Inserting
+    !? INSERT.
     allocate(temp_skylines_array(size(this%skylines) + 1))
     old_array_index = 1
     do i = 1,size(this%skylines)
@@ -199,10 +198,9 @@ contains
         old_array_index = old_array_index + 1
       end if
     end do
-
     this%skylines = temp_skylines_array
-
     deallocate(temp_skylines_array)
+    !? END INSERT.
 
     i = index + 1;
 
@@ -218,18 +216,16 @@ contains
 
         if (this%skylines(i)%w <= shrink) then
 
-          ! Remove.
+          !? REMOVE.
           allocate(temp_skylines_array(0))
-
           do current_index = 1,size(this%skylines)
             if (current_index == i) then
               cycle
             end if
-
             temp_skylines_array = [temp_skylines_array, this%skylines(i)]
           end do
-
           this%skylines = temp_skylines_array
+          !? END REMOVE.
 
         else
           this%skylines(i)%x = this%skylines(i)%x + shrink;
