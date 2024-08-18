@@ -230,7 +230,7 @@ contains
     implicit none
 
     integer(c_int) :: width, height
-    character(len = *,kind = c_char) :: title
+    character(len = *, kind = c_char) :: title
 
     window_title = into_c_string(title)
 
