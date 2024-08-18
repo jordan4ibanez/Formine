@@ -24,6 +24,7 @@ module texture_packer_skyline_packer
     type(skyline), dimension(:), allocatable :: skylines
   contains
     procedure :: can_put => skyline_packer_can_put
+    procedure :: find_skyline => skyline_packer_find_skyline
   end type skyline_packer
 
 
@@ -76,34 +77,36 @@ contains
   !* return `rect` if rectangle (w, h) can fit the skyline started at `i`
   !* This had to be reworked because Fortran has a different style.
   !* This will always return, but it will signal if it could put it or not via [can_put]
-  function skyline_packer_can_put(this, i, w, h, can_put) result(optional_rectangle)
+  function skyline_packer_can_put(this, i, w, h, option_rectangle) result(can_put)
     implicit none
 
     class(skyline_packer), intent(in) :: this
     integer(c_int), intent(inout) :: i
     integer(c_int), intent(in), value :: w, h
-    logical(c_bool), intent(inout) :: can_put
-    type(rect) :: optional_rectangle
+    type(rect), intent(inout) :: option_rectangle
+    logical(c_bool) :: can_put
     integer(c_int) :: width_left
 
-    optional_rectangle = rect(this%skylines(i)%x, 0, w, h)
-    width_left = optional_rectangle%w
+    can_put = .false.
+    option_rectangle = rect(this%skylines(i)%x, 0, w, h)
+    width_left = option_rectangle%w
 
     do
-      optional_rectangle%y = max(optional_rectangle%y, this%skylines(i)%y);
+      option_rectangle%y = max(option_rectangle%y, this%skylines(i)%y)
       ! the source rect is too large
-      if (.not. this%border%contains(optional_rectangle)) then
+      if (.not. this%border%contains(option_rectangle)) then
         can_put = .false.
         return
       end if
 
       if (this%skylines(i)%w >= width_left) then
+        option_rectangle = option_rectangle
         can_put = .true.
         return
       end if
 
-      width_left = width_left - this%skylines(i)%w;
-      i = i + 1;
+      width_left = width_left - this%skylines(i)%w
+      i = i + 1
 
       if (i >= size(this%skylines)) then
         error stop "[Skyline Packer] Error: Out of bounds."
@@ -111,39 +114,53 @@ contains
     end do
   end function skyline_packer_can_put
 
+
   !* This had to be reworked because Fortran has a different style.
-  !* This will always return, but it will signal if it could put it or not via [can_put]
-fn find_skyline(&self, w: u32, h: u32) -> Option<(usize, Rect)> {
-  let mut bottom = std::u32::MAX;
-  let mut width = std::u32::MAX;
-  let mut index = None;
-  let mut rect = Rect::new(0, 0, 0, 0);
+  !* This will always return, but it will signal if it could put it or not via [can_find]
+  function skyline_packer_find_skyline(this, w, h, option_rectangle, option_index) result(can_find)
+    use :: constants
+    implicit none
 
-  // keep the `bottom` and `width` as small as possible
-  for i in 0..self.skylines.len() {
-      if let Some(r) = self.can_put(i, w, h) {
-          if r.bottom() < bottom || (r.bottom() == bottom && self.skylines[i].w < width) {
-              bottom = r.bottom();
-              width = self.skylines[i].w;
-              index = Some(i);
-              rect = r;
-          }
-      }
+    class(skyline_packer), intent(in) :: this
+    integer(c_int), intent(in), value :: w, h
+    type(rect), intent(inout) :: option_rectangle
+    integer(c_int), intent(inout) :: option_index
+    logical(c_bool) :: can_find
+    type(rect) :: r
+    integer(c_int) :: bottom, width, i
 
-      if self.config.allow_rotation {
-          if let Some(r) = self.can_put(i, h, w) {
-              if r.bottom() < bottom || (r.bottom() == bottom && self.skylines[i].w < width) {
-                  bottom = r.bottom();
-                  width = self.skylines[i].w;
-                  index = Some(i);
-                  rect = r;
-              }
-          }
-      }
-  }
+    bottom = C_INT_MAX
+    width = C_INT_MAX
+    option_index = 0
+    option_rectangle = rect(0, 0, 0, 0)
+    r = rect(0, 0, 0, 0)
+    can_find = .false.
 
-  index.map(|x| (x, rect))
-}
+    ! keep the `bottom` and `width` as small as possible
+    do i = 0, size(this%skylines)
+      if (this%can_put(i, w, h, r))  then
+        if (r%bottom() < bottom .or. (r%bottom() == bottom .and. this%skylines(i)%w < width)) then
+          bottom = r%bottom();
+          width = this%skylines(i)%w;
+          option_index = i
+          can_find = .true.
+          option_rectangle = r;
+        end if
+      end if
+
+      if (this%config%allow_rotation) then
+        if (this%can_put(i, h, w, r)) then
+          if (r%bottom() < bottom .or. (r%bottom() == bottom .and. this%skylines(i)%w < width)) then
+            bottom = r%bottom();
+            width = this%skylines(i)%w;
+            option_index = i;
+            can_find = .true.
+            option_rectangle = r;
+          end if
+        end if
+      end if
+    end do
+  end function skyline_packer_find_skyline
 
 ! fn split(&mut self, index: usize, rect: &Rect) {
 !   let skyline = Skyline {
