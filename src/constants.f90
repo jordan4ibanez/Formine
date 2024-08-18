@@ -5,23 +5,23 @@ module constants
 
   !* Floating point.
   !? 32 bits. 4 bytes.
-  integer(kind = c_int), parameter :: F32_SIZE = sizeof(c_float)
+  integer(c_int), parameter :: F32_SIZE = sizeof(c_float)
   !? 64 bits. 8 bytes.
-  integer(kind = c_int), parameter :: F64_SIZE = sizeof(c_double)
+  integer(c_int), parameter :: F64_SIZE = sizeof(c_double)
 
 
   !* Integral
   !? 32 bits. 4 bytes.
-  integer(kind = c_int), parameter :: I32_SIZE = sizeof(c_int32_t)
+  integer(c_int), parameter :: I32_SIZE = sizeof(c_int32_t)
   !? 64 bits. 8 bytes.
-  integer(kind = c_int), parameter :: I64_SIZE = sizeof(c_int64_t)
+  integer(c_int), parameter :: I64_SIZE = sizeof(c_int64_t)
 
 
   !* Unsigned Integral
   !? 32 bits. 4 bytes.
-  integer(kind = c_int), parameter :: U32_SIZE = sizeof(c_int32_t)
+  integer(c_int), parameter :: U32_SIZE = sizeof(c_int32_t)
   !? 64 bits. 8 bytes.
-  integer(kind = c_int), parameter :: U64_SIZE = sizeof(c_int64_t)
+  integer(c_int), parameter :: U64_SIZE = sizeof(c_int64_t)
 
 
   !* Floating point.

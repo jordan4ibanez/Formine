@@ -100,7 +100,7 @@ contains
     character(len = :, kind = c_char), allocatable :: temp_string
     ! We have our arrays of integers and pointers which we can extract.
     logical(kind = c_bool), dimension(:), pointer :: is_folder
-    integer(kind = c_int), dimension(:), pointer :: string_lengths
+    integer(c_int), dimension(:), pointer :: string_lengths
     type(c_ptr), dimension(:), pointer :: c_strings
 
     !* Implementation note:

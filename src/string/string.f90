@@ -213,7 +213,7 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: input_string
-    integer(kind = c_int) :: int
+    integer(c_int) :: int
 
     int = 0
 

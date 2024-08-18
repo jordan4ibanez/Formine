@@ -929,7 +929,7 @@ contains
     use, intrinsic :: iso_c_binding
     implicit none
 
-    real(kind = c_float), dimension(:), target :: float_array
+    real(c_float), dimension(:), target :: float_array
 
     !! FIXME: Might be wrong.
     call internal_gl_buffer_data(GL_ARRAY_BUFFER, F32_SIZE * size(float_array), c_loc(float_array), GL_STATIC_DRAW)
@@ -956,7 +956,7 @@ contains
     use, intrinsic :: iso_c_binding
     implicit none
 
-    integer(kind = c_int), dimension(:), target :: indices_array
+    integer(c_int), dimension(:), target :: indices_array
     integer(c_int) :: total_size, length_of_array
 
     length_of_array = size(indices_array)
