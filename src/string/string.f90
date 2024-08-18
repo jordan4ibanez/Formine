@@ -8,23 +8,28 @@ module string
 
 
   public :: string_from_c
+
   public :: int_to_string
   public :: long_to_string
   public :: into_c_string
   public :: bool_to_string
   public :: string_to_int
   public :: string_to_int64
+
   public :: get_file_name_from_string
   public :: string_remove_file_name_from_path
   public :: string_remove_file_extension
   public :: string_get_file_extension
+
   public :: string_get_non_space_characters
   public :: string_starts_with
   public :: string_ends_with
+  
   public :: string_trim_white_space
   public :: string_get_right_of_character
   public :: string_get_left_of_character
   public :: string_contains_character
+
   !? Pass through the type.
   public :: heap_string
 
