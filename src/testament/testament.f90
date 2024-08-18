@@ -1,6 +1,7 @@
 !* Testament is a simple testing library I slapped together.
 !? Who's going to write the unit test for the unit test library?
 module testament
+  use, intrinsic :: iso_c_binding
   implicit none
 
   ! Whole thing is public, purely functional library.
