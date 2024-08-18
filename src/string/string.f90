@@ -6,9 +6,10 @@ module string
 
   private
 
-
+  !* Specialty C operators.
   public :: string_from_c
 
+  !* Casting to/from string.
   public :: int_to_string
   public :: long_to_string
   public :: into_c_string
@@ -16,6 +17,7 @@ module string
   public :: string_to_int
   public :: string_to_int64
 
+  !* String manipulation.
   public :: string_get_file_name
   public :: string_remove_file_name_from_path
   public :: string_remove_file_extension
@@ -24,6 +26,7 @@ module string
   public :: string_cut_last
   public :: string_cut_all
 
+  !* String querying.
   public :: string_get_non_space_characters
   public :: string_starts_with
   public :: string_ends_with
