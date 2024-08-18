@@ -30,8 +30,7 @@ module h_string
     procedure :: get
 
 
-    !? Strip all leading and trailing white space off the string.
-    procedure :: strip
+
     !? Cut a substring out of a string. Searching from left to right.
     procedure :: cut
     !? Cut a substring out of a string. Searching from right to left.
@@ -164,16 +163,6 @@ contains
     ! Very simple operation. The ol' swap.
     this%data = other//this%data
   end subroutine prepend
-
-
-  !* Strip leading and trailing white space off a string.
-  subroutine strip(this)
-    implicit none
-
-    class(heap_string), intent(inout) :: this
-
-    this%data = trim(adjustl(this%data))
-  end subroutine strip
 
 
   !* Cut a substring out of a string.
