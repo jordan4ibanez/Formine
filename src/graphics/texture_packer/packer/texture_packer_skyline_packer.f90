@@ -28,6 +28,7 @@ module texture_packer_skyline_packer
     procedure :: can_put => skyline_packer_can_put
     procedure :: find_skyline => skyline_packer_find_skyline
     procedure :: split => skyline_packer_split
+    procedure :: merge => skyline_packer_merge
   end type skyline_packer
 
 
@@ -238,33 +239,52 @@ contains
     end do
   end subroutine skyline_packer_split
 
-! fn merge(&mut self) {
-!   let mut i = 1;
-!   while i < self.skylines.len() {
-!       if self.skylines[i - 1].y == self.skylines[i].y {
-!           self.skylines[i - 1].w += self.skylines[i].w;
-!           self.skylines.remove(i);
-!           i -= 1;
-!       }
-!       i += 1;
-!   }
-! }
+
+  subroutine skyline_packer_merge(this)
+    implicit none
+
+    class(skyline_packer), intent(inout) :: this
+    integer(c_int) :: i, current_index
+    type(skyline), dimension(:), allocatable :: temp_skylines_array
+
+    i = 1
+
+    do while (i <= size(this%skylines))
+      if (this%skylines(i - 1)%y == this%skylines(i)%y) then
+        this%skylines(i - 1)%w = this%skylines(i - 1)%w + this%skylines(i)%w;
+
+        !? REMOVE.
+        allocate(temp_skylines_array(0))
+        do current_index = 1,size(this%skylines)
+          if (current_index == i) then
+            cycle
+          end if
+          temp_skylines_array = [temp_skylines_array, this%skylines(i)]
+        end do
+        this%skylines = temp_skylines_array
+        !? END REMOVE.
+
+        i = i - 1;
+      end if
+      i = i + 1;
+    end do
+  end subroutine skyline_packer_merge
 
 ! fn pack(&mut self, key: K, texture_rect: &Rect) -> Option<Frame<K>> {
-!     let mut width = texture_rect.w;
+!     let mut width = texture_rect%w;
 !     let mut height = texture_rect.h;
 
-!     width += self.config.texture_padding + self.config.texture_extrusion * 2;
-!     height += self.config.texture_padding + self.config.texture_extrusion * 2;
+!     width += this%config.texture_padding + this%config.texture_extrusion * 2;
+!     height += this%config.texture_padding + this%config.texture_extrusion * 2;
 
-!     if let Some((i, mut rect)) = self.find_skyline(width, height) {
-!         self.split(i, &rect);
-!         self.merge();
+!     if let Some((i, mut rect)) = this%find_skyline(width, height) {
+!         this%split(i, &rect);
+!         this%merge();
 
-!         let rotated = width != rect.w;
+!         let rotated = width != rect%w;
 
-!         rect.w -= self.config.texture_padding + self.config.texture_extrusion * 2;
-!         rect.h -= self.config.texture_padding + self.config.texture_extrusion * 2;
+!         rect%w -= this%config.texture_padding + this%config.texture_extrusion * 2;
+!         rect.h -= this%config.texture_padding + this%config.texture_extrusion * 2;
 
 !         Some(Frame {
 !             key,
@@ -274,7 +294,7 @@ contains
 !             source: Rect {
 !                 x: 0,
 !                 y: 0,
-!                 w: texture_rect.w,
+!                 w: texture_rect%w,
 !                 h: texture_rect.h,
 !             },
 !         })
@@ -284,17 +304,17 @@ contains
 ! }
 
 ! fn can_pack(&self, texture_rect: &Rect) -> bool {
-!     if let Some((_, rect)) = self.find_skyline(
-!         texture_rect.w + self.config.texture_padding + self.config.texture_extrusion * 2,
-!         texture_rect.h + self.config.texture_padding + self.config.texture_extrusion * 2,
+!     if let Some((_, rect)) = this%find_skyline(
+!         texture_rect%w + this%config.texture_padding + this%config.texture_extrusion * 2,
+!         texture_rect.h + this%config.texture_padding + this%config.texture_extrusion * 2,
 !     ) {
 !         let skyline = Skyline {
 !             x: rect.left(),
 !             y: rect.bottom() + 1,
-!             w: rect.w,
+!             w: rect%w,
 !         };
 
-!         return skyline.right() <= self.border.right() && skyline.y <= self.border.bottom();
+!         return skyline.right() <= this%border.right() && skyline%y <= this%border.bottom();
 !     }
 !     false
 ! }
