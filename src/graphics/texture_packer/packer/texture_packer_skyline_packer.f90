@@ -8,6 +8,8 @@ module texture_packer_skyline_packer
   !* This is not wise to make this one module, but I will mimic the Rust impl.
   !* Nothing is documented, so I will mirror that.
 
+  ! fixme: turn the 0 index into 1 index.
+
   type :: skyline
     integer(c_int) :: x = 0
     integer(c_int) :: y = 0
@@ -25,6 +27,7 @@ module texture_packer_skyline_packer
   contains
     procedure :: can_put => skyline_packer_can_put
     procedure :: find_skyline => skyline_packer_find_skyline
+    procedure :: split => skyline_packer_split
   end type skyline_packer
 
 
@@ -137,7 +140,7 @@ contains
     can_find = .false.
 
     ! keep the `bottom` and `width` as small as possible
-    do i = 0, size(this%skylines)
+    do i = 1, size(this%skylines)
       if (this%can_put(i, w, h, r))  then
         if (r%bottom() < bottom .or. (r%bottom() == bottom .and. this%skylines(i)%w < width)) then
           bottom = r%bottom();
@@ -162,36 +165,82 @@ contains
     end do
   end function skyline_packer_find_skyline
 
-! fn split(&mut self, index: usize, rect: &Rect) {
-!   let skyline = Skyline {
-!       x: rect.left(),
-!       y: rect.bottom() + 1,
-!       w: rect.w,
-!   };
 
-!   assert!(skyline.right() <= self.border.right());
-!   assert!(skyline.y <= self.border.bottom());
+  subroutine skyline_packer_split(this, index, rectangle)
+    implicit none
 
-!   self.skylines.insert(index, skyline);
+    class(skyline_packer), intent(inout) :: this
+    integer(c_int), intent(in), value :: index
+    type(rect), intent(in) :: rectangle
+    type(skyline) :: the_skyline
+    type(skyline), dimension(:), allocatable :: temp_skylines_array
+    integer(c_int) :: i, old_array_index, shrink, current_index
 
-!   let i = index + 1;
-!   while i < self.skylines.len() {
-!       assert!(self.skylines[i - 1].left() <= self.skylines[i].left());
+    the_skyline = skyline(rectangle%left(), rectangle%bottom() + 1, rectangle%w)
 
-!       if self.skylines[i].left() <= self.skylines[i - 1].right() {
-!           let shrink = self.skylines[i - 1].right() - self.skylines[i].left() + 1;
-!           if self.skylines[i].w <= shrink {
-!               self.skylines.remove(i);
-!           } else {
-!               self.skylines[i].x += shrink;
-!               self.skylines[i].w -= shrink;
-!               break;
-!           }
-!       } else {
-!           break;
-!       }
-!   }
-! }
+
+    if (the_skyline%right() > this%border%right()) then
+      error stop "[Skyline Packer] Error: Out of bounds."
+    end if
+
+    if (the_skyline%y >this%border%bottom()) then
+      error stop "[Skyline Packer] Error: Out of bounds."
+    end if
+
+
+    ! Inserting
+    allocate(temp_skylines_array(size(this%skylines) + 1))
+    old_array_index = 1
+    do i = 1,size(this%skylines)
+      if (i == index) then
+        temp_skylines_array(i) = the_skyline
+      else
+        temp_skylines_array(i) = this%skylines(old_array_index)
+        old_array_index = old_array_index + 1
+      end if
+    end do
+
+    this%skylines = temp_skylines_array
+
+    deallocate(temp_skylines_array)
+
+    i = index + 1;
+
+    do while (i <= size(this%skylines))
+
+      if (this%skylines(i - 1)%left() > this%skylines(i)%left()) then
+        error stop "[Skyline Packer] Error: Out of bounds."
+      end if
+
+      if (this%skylines(i)%left() <= this%skylines(i - 1)%right()) then
+
+        shrink = this%skylines(i - 1)%right() - this%skylines(i)%left() + 1
+
+        if (this%skylines(i)%w <= shrink) then
+
+          ! Remove.
+          allocate(temp_skylines_array(0))
+
+          do current_index = 1,size(this%skylines)
+            if (current_index == i) then
+              cycle
+            end if
+
+            temp_skylines_array = [temp_skylines_array, this%skylines(i)]
+          end do
+
+          this%skylines = temp_skylines_array
+
+        else
+          this%skylines(i)%x = this%skylines(i)%x + shrink;
+          this%skylines(i)%w = this%skylines(i)%w - shrink;
+          exit
+        end if
+      else
+        exit
+      end if
+    end do
+  end subroutine skyline_packer_split
 
 ! fn merge(&mut self) {
 !   let mut i = 1;
