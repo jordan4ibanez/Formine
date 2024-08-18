@@ -348,22 +348,12 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: input_string, sub_string
     logical :: starts_with
-    integer(c_int) :: input_length, sub_string_length
 
-    starts_with = .false.
-
-    input_length = len(input_string)
-    sub_string_length = len(sub_string)
-
-    ! Can't contain if it's smaller.
-    if (input_length < sub_string_length) then
-      return
-    end if
-
-    if (sub_string == input_string(1:sub_string_length)) then
-      starts_with = .true.
-    end if
+    starts_with = index(input_string, sub_string) == 1
   end function string_starts_with
+
+
+
 
 
   !* Strip leading and trailing white space off a string.
