@@ -22,6 +22,7 @@ module string
   public :: string_get_file_extension
   public :: string_cut_first
   public :: string_cut_last
+  public :: string_cut_all
 
   public :: string_get_non_space_characters
   public :: string_starts_with
@@ -423,6 +424,33 @@ contains
     ! Now we just concatenate the beginning and ending together.
     cut_string = input_string(inner_left:inner_right)//input_string(outer_left:outer_right)
   end function string_cut_last
+
+
+  !* Cut all instances of a substring out of a string.
+  function string_cut_all(input_string, sub_string) result(cut_string)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: input_string, sub_string
+    character(len = :, kind = c_char), allocatable :: old_string, cut_string
+
+    old_string = input_string
+    cut_string = input_string
+
+    do while(.true.)
+      !? If you want to see this happen in real time, turn this on. It's neat. :)
+      ! print*,"old: ["//old_string//"]"
+
+      cut_string = string_cut_first(cut_string, sub_string)
+
+      ! The strings are now equal, it failed to cut.
+      if (cut_string == old_string) then
+        exit
+      end if
+
+      ! Save this state for the next cycle.
+      old_string = cut_string
+    end do
+  end function string_cut_all
 
 
   !* Get the count of non space characters in a string.
