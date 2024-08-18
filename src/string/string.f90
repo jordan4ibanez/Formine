@@ -18,6 +18,7 @@ module string
   public :: string_to_int64
 
   !* String manipulation.
+  !* Will always generate a new string treating the original as immutable.
   public :: string_get_file_name
   public :: string_remove_file_name_from_path
   public :: string_remove_file_extension
