@@ -21,4 +21,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 This has been translated from Rust to Fortran.
-The original project can be found here: https://github.com/PistonDevelopers/texture_packer/blob/master/LICENSE
+The original project can be found here: https://github.com/PistonDevelopers/texture_packer/
