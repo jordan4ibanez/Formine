@@ -111,37 +111,39 @@ contains
     end do
   end function skyline_packer_can_put
 
-! fn find_skyline(&self, w: u32, h: u32) -> Option<(usize, Rect)> {
-!   let mut bottom = std::u32::MAX;
-!   let mut width = std::u32::MAX;
-!   let mut index = None;
-!   let mut rect = Rect::new(0, 0, 0, 0);
+  !* This had to be reworked because Fortran has a different style.
+  !* This will always return, but it will signal if it could put it or not via [can_put]
+fn find_skyline(&self, w: u32, h: u32) -> Option<(usize, Rect)> {
+  let mut bottom = std::u32::MAX;
+  let mut width = std::u32::MAX;
+  let mut index = None;
+  let mut rect = Rect::new(0, 0, 0, 0);
 
-!   // keep the `bottom` and `width` as small as possible
-!   for i in 0..self.skylines.len() {
-!       if let Some(r) = self.can_put(i, w, h) {
-!           if r.bottom() < bottom || (r.bottom() == bottom && self.skylines[i].w < width) {
-!               bottom = r.bottom();
-!               width = self.skylines[i].w;
-!               index = Some(i);
-!               rect = r;
-!           }
-!       }
+  // keep the `bottom` and `width` as small as possible
+  for i in 0..self.skylines.len() {
+      if let Some(r) = self.can_put(i, w, h) {
+          if r.bottom() < bottom || (r.bottom() == bottom && self.skylines[i].w < width) {
+              bottom = r.bottom();
+              width = self.skylines[i].w;
+              index = Some(i);
+              rect = r;
+          }
+      }
 
-!       if self.config.allow_rotation {
-!           if let Some(r) = self.can_put(i, h, w) {
-!               if r.bottom() < bottom || (r.bottom() == bottom && self.skylines[i].w < width) {
-!                   bottom = r.bottom();
-!                   width = self.skylines[i].w;
-!                   index = Some(i);
-!                   rect = r;
-!               }
-!           }
-!       }
-!   }
+      if self.config.allow_rotation {
+          if let Some(r) = self.can_put(i, h, w) {
+              if r.bottom() < bottom || (r.bottom() == bottom && self.skylines[i].w < width) {
+                  bottom = r.bottom();
+                  width = self.skylines[i].w;
+                  index = Some(i);
+                  rect = r;
+              }
+          }
+      }
+  }
 
-!   index.map(|x| (x, rect))
-! }
+  index.map(|x| (x, rect))
+}
 
 ! fn split(&mut self, index: usize, rect: &Rect) {
 !   let skyline = Skyline {
