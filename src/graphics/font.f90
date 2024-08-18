@@ -319,8 +319,7 @@ contains
     type(fhash_tbl_t), intent(inout) :: character_database_integral
     type(file_reader) :: reader
     integer :: i, temp_buffer_length, comma_index, x_index, y_index
-    character(len = :), allocatable :: temp_buffer
-    character :: current_character
+    character(len = :), allocatable :: current_character, temp_buffer
     character(len = :), allocatable :: x_str, y_str
 
 
@@ -376,44 +375,56 @@ contains
           error stop "[Font] Error: Impossible CHAR_HEIGHT value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
-      else if (temp_buffer_length >= 7) then
+      else
         ! This is a real rigid way to do this.
         ! This is basically, it has to be formatted like:
         ! [A = ]
         ! Minus the brackets.
-        if (temp_buffer(1:1) /= " " .and. temp_buffer(2:4) == " = ") then
-          ! print*,temp_buffer
-          current_character = temp_buffer(1:1)
-          ! print*,current_character
 
-          ! Now we're going to cut the temp buffer.
-          temp_buffer = temp_buffer(5:len(temp_buffer))
-
-          ! Now we're going to chop up the X and Y out of the line.
-          comma_index = index(temp_buffer, ",")
-
-          ! There is a formatting error.
-          if (comma_index <= 0) then
-            error stop "[Font] Error: There is a missing comma on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
-          end if
-
-          ! Get the X into an integer.
-          x_str = temp_buffer(1:comma_index - 1)
-          read(x_str, '(i4)') x_index
-          if (x_index <= 0) then
-            error stop "[Font] Error: Impossible X value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
-          end if
-
-          ! Get the Y into an integer.
-          y_str = temp_buffer(comma_index + 1:len(temp_buffer))
-          read(y_str, '(i4)') y_index
-          if (y_index <= 0) then
-            error stop "[Font] Error: Impossible Y value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
-          end if
-
-          ! Now finally, dump the integral position into the database.
-          call character_database_integral%set(key(current_character), vec2i(x_index, y_index))
+        ! This is a comment.
+        if (string_starts_with(temp_buffer, "#")) then
+          cycle
         end if
+
+        ! Extract the data between the brackets.
+        if (.not. string_starts_with(temp_buffer, "[") .or. .not. string_ends_with(temp_buffer, "]")) then
+          error stop "[Font] Error: Line ["//int_to_string(i)//"] is missing brackets []."
+        end if
+
+        temp_buffer = string_get_right_of_character(temp_buffer, "[")
+        temp_buffer = string_get_left_of_character(temp_buffer, "]")
+
+        ! Get the character key.
+        current_character = string_get_left_of_character(temp_buffer, "=")
+
+        if (len(current_character) /= 1) then
+          error stop "[Font] Error: The key on line ["//int_to_string(i)//"] must be a character."
+        end if
+
+        ! Get the tuple value.
+        temp_buffer = string_get_right_of_character(temp_buffer, "=")
+
+        ! Make sure it has a comma.
+        if (.not. string_contains_character(temp_buffer, ",")) then
+          error stop "[Font] Error: There is a missing comma on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
+        end if
+
+        ! First value.
+        x_str = string_get_left_of_character(temp_buffer, ",")
+        x_index = string_to_int(x_str)
+        if (x_index <= 0) then
+          error stop "[Font] Error: Impossible X value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
+        end if
+
+        ! Second value.
+        y_str = string_get_right_of_character(temp_buffer, ",")
+        y_index = string_to_int(y_str)
+        if (y_index <= 0) then
+          error stop "[Font] Error: Impossible Y value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
+        end if
+
+        ! Now finally, dump the integral position into the database.
+        call character_database_integral%set(key(current_character), vec2i(x_index, y_index))
       end if
     end do
 
