@@ -51,8 +51,8 @@ contains
     use, intrinsic :: iso_c_binding
     implicit none
 
-    character(c_char), pointer :: input_pointer(:)
-    character(:), allocatable :: output_string
+    character(len = 1, kind = c_char), dimension(:), pointer :: input_pointer
+    character(len = :, kind = c_char), allocatable :: output_string
     ! Start off with the pointer width.
     integer(c_int) :: i, length
 
