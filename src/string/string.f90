@@ -12,6 +12,8 @@ module string
   public :: long_to_string
   public :: into_c_string
   public :: bool_to_string
+  public :: string_to_int
+  public :: string_to_int64
   public :: get_file_name_from_string
   public :: string_remove_file_name_from_path
   public :: string_remove_file_extension
