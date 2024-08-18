@@ -40,8 +40,23 @@ then take the smaller value, and this is the gui scale, this will stop things fr
 a nice gui scaling!
 
 
+## Credits:
 
+### JOML
 
+Link: https://github.com/JOML-CI/JOML
+
+License: MIT
+
+Usage: Translated mat4f methods into fglm.
+
+### PistonDevelopers texture_packer
+
+Link: https://github.com/PistonDevelopers/texture_packer
+
+License: MIT
+
+Usage: Translated to Fortran.
 
 -----
 
