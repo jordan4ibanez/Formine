@@ -3,7 +3,7 @@ module mesh
   use :: string
   use :: vector_3f
   use :: fhash, only: fhash_tbl_t, key => fhash_key
-  use, intrinsic :: iso_c_binding, only: c_float, c_int
+  use, intrinsic :: iso_c_binding
   implicit none
 
 
@@ -39,7 +39,7 @@ contains
   subroutine mesh_create_2d(mesh_name, positions, texture_coordinates, colors, indices)
     implicit none
 
-    character(len = *), intent(in) :: mesh_name
+    character(len = *, kind = c_char), intent(in) :: mesh_name
     real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), intent(in), target :: indices
 
@@ -51,7 +51,7 @@ contains
   subroutine mesh_create_3d(mesh_name, positions, texture_coordinates, colors, indices)
     implicit none
 
-    character(len = *), intent(in) :: mesh_name
+    character(len = *, kind = c_char), intent(in) :: mesh_name
     real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), intent(in), target :: indices
 
@@ -68,7 +68,7 @@ contains
     use :: terminal
     implicit none
 
-    character(len = *), intent(in) :: mesh_name
+    character(len = *, kind = c_char), intent(in) :: mesh_name
     integer(c_int), intent(in), value :: dimensions
     real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), intent(in), target :: indices
@@ -249,7 +249,7 @@ contains
   subroutine set_mesh(mesh_name, new_mesh)
     implicit none
 
-    character(len = *), intent(in) :: mesh_name
+    character(len = *, kind = c_char), intent(in) :: mesh_name
     type(mesh_data), intent(in), pointer :: new_mesh
 
     ! This creates an enforcement where the mesh must be deleted before it can be re-assigned.
@@ -272,7 +272,7 @@ contains
     use :: terminal
     implicit none
 
-    character(len = *), intent(in) :: mesh_name
+    character(len = *, kind = c_char), intent(in) :: mesh_name
     logical, intent(inout) :: exists
     class(*), pointer :: generic_pointer
     integer :: status
@@ -303,7 +303,7 @@ contains
     use :: opengl
     implicit none
 
-    character(len = *), intent(in) :: mesh_name
+    character(len = *, kind = c_char), intent(in) :: mesh_name
     type(mesh_data), pointer :: gotten_mesh
     logical :: exists
 
@@ -329,7 +329,7 @@ contains
     use :: terminal
     implicit none
 
-    character(len = *), intent(in) :: mesh_name
+    character(len = *, kind = c_char), intent(in) :: mesh_name
     class(*), pointer :: generic
     integer :: status
     type(mesh_data), pointer :: gotten_mesh
@@ -421,7 +421,7 @@ contains
   logical function mesh_exists(mesh_name) result(existence)
     implicit none
 
-    character(len = *), intent(in) :: mesh_name
+    character(len = *, kind = c_char), intent(in) :: mesh_name
     integer :: status
 
     call mesh_database%check_key(key(mesh_name), stat = status)

@@ -1,4 +1,5 @@
 module h_string
+  use, intrinsic :: iso_c_binding
   implicit none
 
 
@@ -44,7 +45,7 @@ contains
   function constructor(optional_string) result(new_str)
     implicit none
 
-    character(len = *), intent(in), optional :: optional_string
+    character(len = *, kind = c_char), intent(in), optional :: optional_string
     type(heap_string) :: new_str
 
     if (present(optional_string)) then
@@ -58,7 +59,7 @@ contains
     implicit none
 
     class(heap_string), intent(inout) :: this
-    character(len = *), intent(in) :: new_data
+    character(len = *, kind = c_char), intent(in) :: new_data
 
     this%data = new_data
   end subroutine assign
@@ -80,7 +81,7 @@ contains
     implicit none
 
     class(heap_string), intent(in) :: this
-    character(len = *), intent(in) :: other
+    character(len = *, kind = c_char), intent(in) :: other
 
     res = this%data == other .and. len(this%data) == len(other)
   end function equal_raw_string
@@ -92,10 +93,10 @@ contains
 
     class(heap_string), intent(in) :: this
     integer, intent(in) :: unit         ! Internal unit to write to.
-    character(*), intent(in) :: iotype  ! LISTDIRECTED or DTxxx
+    character(len = *, kind = c_char), intent(in) :: iotype  ! LISTDIRECTED or DTxxx
     integer, intent(in) :: v_list(:)    ! parameters from fmt spec.
     integer, intent(out) :: iostat      ! non zero on error, etc.
-    character(*), intent(inout) :: iomsg  ! define if iostat non zero.
+    character(len = *, kind = c_char), intent(inout) :: iomsg  ! define if iostat non zero.
 
     if (.false.) then
       print*,iotype, v_list

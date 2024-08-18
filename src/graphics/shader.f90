@@ -1,6 +1,6 @@
 module shader
   use :: fhash, only: fhash_tbl_t, key => fhash_key
-  use, intrinsic :: iso_c_binding, only: c_int
+  use, intrinsic :: iso_c_binding
   implicit none
 
 
@@ -69,9 +69,9 @@ contains
     use, intrinsic :: iso_c_binding
     implicit none
 
-    character(len = *), intent(in) :: shader_name
-    character(len = *), intent(in) :: vertex_code_file_path
-    character(len = *), intent(in) :: fragment_code_file_path
+    character(len = *, kind = c_char), intent(in) :: shader_name
+    character(len = *, kind = c_char), intent(in) :: vertex_code_file_path
+    character(len = *, kind = c_char), intent(in) :: fragment_code_file_path
     integer(c_int) :: vertex_id, fragment_id
     integer(c_int) :: program_id
 
@@ -167,7 +167,7 @@ contains
   function get_shader(shader_name, exists) result(gotten_program)
     implicit none
 
-    character(len = *), intent(in) :: shader_name
+    character(len = *, kind = c_char), intent(in) :: shader_name
     logical, intent(inout) :: exists
     integer :: status
     integer(c_int) :: gotten_program
@@ -188,7 +188,7 @@ contains
     use :: string
     implicit none
 
-    character(len = *), intent(in) :: shader_name
+    character(len = *, kind = c_char), intent(in) :: shader_name
     integer :: status
 
     ! All we must do is check the shader result and return the existence in the result.
@@ -203,7 +203,7 @@ contains
     use :: opengl
     implicit none
 
-    character(len = *), intent(in) :: shader_name
+    character(len = *, kind = c_char), intent(in) :: shader_name
     integer(c_int) :: current_program_id
     logical :: exists
 

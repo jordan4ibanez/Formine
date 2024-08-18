@@ -34,7 +34,7 @@ module raw_c
       implicit none
 
       ! Value because it is const char *
-      character(kind = c_char), intent(in) :: input_string
+      character(len = 1, kind = c_char), intent(in) :: input_string
     end subroutine internal_print_f
 
 
@@ -48,7 +48,7 @@ contains
     !! Use the STD C ISO printf function in fortran.
     implicit none
 
-    character(len = *), intent(in) :: input_string
+    character(len = *, kind = c_char), intent(in) :: input_string
 
     ! Null terminate the string with achar(0).
     call internal_print_f(input_string//achar(0))

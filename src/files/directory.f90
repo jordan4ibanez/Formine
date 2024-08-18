@@ -52,7 +52,7 @@ module directory
       use, intrinsic :: iso_c_binding
       implicit none
 
-      character(kind = c_char), intent(in) :: path
+      character(len = 1, kind = c_char), intent(in) :: path
       type(c_ptr) :: for_dir_pointer
     end function internal_parse_directory_folders
 

@@ -1,4 +1,5 @@
 module terminal
+  use, intrinsic :: iso_c_binding
   implicit none
 
   private
@@ -48,7 +49,7 @@ contains
     use :: string
     implicit none
 
-    character(len = *), intent(in) :: input_string
+    character(len = *, kind = c_char), intent(in) :: input_string
     integer, intent(in) :: r
     integer, intent(in) :: g
     integer, intent(in) :: b
@@ -71,8 +72,8 @@ contains
   function colorize_rgb_string(input_string, rgb_string) result(colorized_text)
     implicit none
 
-    character(len = *), intent(in) :: input_string
-    character(len = *), intent(in) :: rgb_string
+    character(len = *, kind = c_char), intent(in) :: input_string
+    character(len = *, kind = c_char), intent(in) :: rgb_string
     character(len = :), allocatable :: colorized_text
 
     ! Using 24 bit color standard.

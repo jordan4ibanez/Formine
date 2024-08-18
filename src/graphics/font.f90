@@ -68,7 +68,7 @@ contains
     use :: vector_2f
     implicit none
 
-    character(len = *), intent(in) :: mesh_name, text
+    character(len = *, kind = c_char), intent(in) :: mesh_name, text
     real(c_float), intent(in), value :: font_size
     real(c_float), intent(in), optional :: r,g,b
     logical, intent(in), optional :: center

@@ -74,7 +74,7 @@ contains
     ! On the C side. The view is great.
     type(c_ptr), intent(in), value :: c_string_pointer
     ! On the Fortran side.
-    character(kind = c_char), dimension(:), pointer :: fortran_string_pointer
+    character(len = 1, kind = c_char), dimension(:), pointer :: fortran_string_pointer
     character(len = :, kind = c_char), allocatable :: fortran_string
     integer :: string_length, found_string_length
     ! 4 BYTES, aka, 32 bit.
@@ -145,7 +145,7 @@ contains
     implicit none
 
     integer(c_int) :: i
-    character(:, kind = c_char), allocatable :: output
+    character(len = :, kind = c_char), allocatable :: output
 
     ! If the number is any bigger than this, wat.
     allocate(character(11) :: output)
@@ -168,7 +168,7 @@ contains
     implicit none
 
     integer(c_int64_t) :: i
-    character(:, kind = c_char), allocatable :: output
+    character(len = :, kind = c_char), allocatable :: output
 
     ! If the number is any bigger than this, wat.
     allocate(character(20) :: output)
@@ -281,7 +281,7 @@ contains
   function string_remove_file_name_from_path(input_file_name) result(file_name_without_extension)
     implicit none
 
-    character(len = *), intent(in) :: input_file_name
+    character(len = *, kind = c_char), intent(in) :: input_file_name
     character(len = :), allocatable :: file_name_without_extension
     integer(c_int) :: i
 
@@ -301,7 +301,7 @@ contains
   function string_remove_file_extension(input_file_name) result(file_name_without_extension)
     implicit none
 
-    character(len = *), intent(in) :: input_file_name
+    character(len = *, kind = c_char), intent(in) :: input_file_name
     character(len = :), allocatable :: file_name_without_extension
     integer(c_int) :: i
 
@@ -551,7 +551,7 @@ contains
   function string_get_non_space_characters(input_string) result(character_count)
     implicit none
 
-    character(len = *), intent(in) :: input_string
+    character(len = *, kind = c_char), intent(in) :: input_string
     integer(c_int) :: character_count, i
 
     character_count = 0

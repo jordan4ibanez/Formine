@@ -262,7 +262,7 @@ module opengl
 
       integer(c_int), intent(in), value :: shader_id
       integer(c_int), intent(in), value :: count
-      character(len=*, kind=c_char), intent(in) :: source_code
+      character(len = *, kind = c_char), intent(in) :: source_code
       !? Less than 0 represents that the string is null terminated. So use that only.
       type(c_ptr), intent(in), optional :: string_length
     end subroutine internal_gl_shader_source
@@ -367,7 +367,7 @@ module opengl
       implicit none
 
       integer(c_int), intent(in), value :: program_id
-      character(kind = c_char), intent(in) :: uniform_name
+      character(len = 1, kind = c_char), intent(in) :: uniform_name
     end function internal_gl_get_uniform_location
 
 
@@ -376,7 +376,7 @@ module opengl
       implicit none
 
       integer(c_int), intent(in), value :: program_id
-      character(kind = c_char), intent(in) :: attrib_name
+      character(len = 1, kind = c_char), intent(in) :: attrib_name
     end function internal_gl_get_attrib_location
 
 
@@ -709,7 +709,7 @@ contains
 
     integer, intent(in), value :: source, type, id, severity, length
     type(c_ptr), intent(in), value :: message_pointer, user_param_pointer
-    character(:), allocatable :: fortran_message
+    character(len = :, kind = c_char), allocatable :: fortran_message
     character(len = :), allocatable :: text_color, severity_text
 
     ! Shut the compiler up.
@@ -776,7 +776,7 @@ contains
     implicit none
 
     integer :: shader_id
-    character(len = *) :: source_code_file_path
+    character(len = *, kind = c_char) :: source_code_file_path
     type(file_reader) :: reader
 
     call reader%read_file(source_code_file_path)
@@ -830,7 +830,7 @@ contains
     integer :: shader
     ! integer :: max_length
     integer :: length
-    ! character(:), allocatable :: info_log
+    ! character(len = :, kind = c_char), allocatable :: info_log
     type(c_ptr) :: c_string
 
     call internal_gl_get_shader_info_log(shader, 512, length, c_string)
@@ -865,7 +865,7 @@ contains
     implicit none
 
     integer, intent(in), value :: program_id
-    character(len = *), intent(in) :: uniform_name
+    character(len = *, kind = c_char), intent(in) :: uniform_name
 
     location = internal_gl_get_uniform_location(program_id, into_c_string(uniform_name))
     ! print*,"uniform: ", uniform_name," | loc: ", location
@@ -877,7 +877,7 @@ contains
     implicit none
 
     integer, intent(in), value :: program_id
-    character(len = *), intent(in) :: uniform_name
+    character(len = *, kind = c_char), intent(in) :: uniform_name
 
     location = internal_gl_get_attrib_location(program_id, into_c_string(uniform_name))
     ! print*,"attrib: ", uniform_name," | loc: ", location

@@ -465,7 +465,7 @@ module luajit
       implicit none
 
       type(c_ptr), intent(in), value :: state
-      character(kind = c_char), intent(in) :: string
+      character(len = 1, kind = c_char), intent(in) :: string
       integer(c_size_t), intent(in), value :: string_length
     end subroutine lua_pushlstring
 
@@ -475,7 +475,7 @@ module luajit
       implicit none
 
       type(c_ptr), intent(in), value :: state
-      character(kind = c_char), intent(in) :: string
+      character(len = 1, kind = c_char), intent(in) :: string
     end subroutine internal_lua_pushstring
 
 
@@ -516,7 +516,7 @@ module luajit
 
       type(c_ptr), intent(in), value :: state
       integer(c_int), intent(in), value :: index
-      character(kind = c_char), intent(in) :: key_string
+      character(len = 1, kind = c_char), intent(in) :: key_string
     end subroutine lua_getfield
 
 
@@ -566,7 +566,7 @@ module luajit
       type(c_ptr), intent(in), value :: state
       integer(c_int), intent(in), value :: index
       ! Was: [const char *k]
-      character(kind = c_char), intent(in) :: key_string
+      character(len = 1, kind = c_char), intent(in) :: key_string
     end subroutine internal_lua_setfield
 
 
@@ -596,7 +596,7 @@ module luajit
       implicit none
 
       type(c_ptr), intent(in), value :: state
-      character(kind = c_char), intent(in) :: string
+      character(len = 1, kind = c_char), intent(in) :: string
       integer(c_int) :: status
     end function lual_loadstring
 
@@ -671,7 +671,7 @@ module luajit
       !? This is written horribly wrong because I only use this to print errors.
 
       type(c_ptr), intent(in), value :: state
-      character(kind = c_char), intent(in) :: format_string, string
+      character(len = 1, kind = c_char), intent(in) :: format_string, string
       integer(c_int) :: status
     end function internal_lual_error
 
@@ -1033,7 +1033,7 @@ contains
     implicit none
 
     type(c_ptr), intent(in), value :: state
-    character(len = *), intent(in) :: string_to_run
+    character(len = *, kind = c_char), intent(in) :: string_to_run
     character(len = :, kind = c_char), allocatable :: c_string
     logical :: success
 
@@ -1120,7 +1120,7 @@ contains
       ! print*, "push c_double"
 
       !* String.
-     type is (character(len = *))
+     type is (character(len = *, kind = c_char))
       !* It appears that LuaJIT will simply grab the length without a null terminator.
       call lua_pushlstring(state, input, int(len(input), kind = c_size_t))
       ! print*, "push string with length"
@@ -1361,7 +1361,7 @@ contains
       !* If you try to use a regular allocatable string, it can cause
       !* horrible problems so I'm not going to allow that.
       !* Use a heap_string.
-     type is (character(len = *))
+     type is (character(len = *, kind = c_char))
       error stop "[LuaJIT] Error: Cannot process an non-heap_string."
 
       !* Boolean.

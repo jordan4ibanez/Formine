@@ -165,7 +165,7 @@ contains
     use :: terminal
     implicit none
 
-    character(len = *), intent(in) :: texture_name
+    character(len = *, kind = c_char), intent(in) :: texture_name
     integer(c_int) :: texture_id, status
 
     call texture_database%get(key(texture_name), texture_id, stat = status)
@@ -183,7 +183,7 @@ contains
   subroutine set_texture(texture_name, new_texture, x, y)
     implicit none
 
-    character(len = *), intent(in) :: texture_name
+    character(len = *, kind = c_char), intent(in) :: texture_name
     integer(c_int), intent(in) :: new_texture, x, y
 
     ! This creates an enforcement where the texture must be deleted before it can be re-assigned.
@@ -206,7 +206,7 @@ contains
     use :: terminal
     implicit none
 
-    character(len = *), intent(in) :: texture_name
+    character(len = *, kind = c_char), intent(in) :: texture_name
     integer(c_int) :: texture_id, status
 
     call texture_database%get(key(texture_name), texture_id, stat = status)
@@ -222,7 +222,7 @@ contains
     use :: terminal
     implicit none
 
-    character(len = *), intent(in) :: texture_name
+    character(len = *, kind = c_char), intent(in) :: texture_name
     class(*), allocatable :: generic_data
     type(vec2i) :: texture_size
     integer(c_int) :: status
@@ -248,7 +248,7 @@ contains
     use :: terminal
     implicit none
 
-    character(len = *), intent(in) :: texture_name
+    character(len = *, kind = c_char), intent(in) :: texture_name
     integer(c_int) :: texture_id, status
 
     call texture_database%get(key(texture_name), texture_id, stat = status)
@@ -278,7 +278,7 @@ contains
   logical function texture_exists(texture_name) result(existence)
     implicit none
 
-    character(len = *), intent(in) :: texture_name
+    character(len = *, kind = c_char), intent(in) :: texture_name
     integer(c_int) :: status
 
     call texture_database%check_key(key(texture_name), stat = status)

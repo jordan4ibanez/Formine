@@ -11,9 +11,9 @@ contains
   subroutine assert_str_equal(b,a, error_message)
     implicit none
 
-    character(len = *), intent(in) :: a
-    character(len = *), intent(in) :: b
-    character(len = *), intent(in), optional :: error_message
+    character(len = *, kind = c_char), intent(in) :: a
+    character(len = *, kind = c_char), intent(in) :: b
+    character(len = *, kind = c_char), intent(in), optional :: error_message
 
     if (a /= b .or. len(a) /= len(b)) then
       if (present(error_message)) then
@@ -28,9 +28,9 @@ contains
   subroutine assert_str_not_equal(b,a, error_message)
     implicit none
 
-    character(len = *), intent(in) :: a
-    character(len = *), intent(in) :: b
-    character(len = *), intent(in), optional :: error_message
+    character(len = *, kind = c_char), intent(in) :: a
+    character(len = *, kind = c_char), intent(in) :: b
+    character(len = *, kind = c_char), intent(in), optional :: error_message
 
     if (a == b .and. len(a) == len(b)) then
       if (present(error_message)) then

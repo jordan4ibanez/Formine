@@ -56,7 +56,7 @@
     call execute_command_line("ls -1 "//path//" > "//FIFO_PIPE, wait = .true.)
 
     ! This should probably be 4096 since that's the linux limit.
-    allocate(character(256) :: message)
+    allocate(character(len = 256, kind = c_char) :: message)
 
     ! Finally, allocate self with X amount of file names.
     allocate(this%files(file_count))

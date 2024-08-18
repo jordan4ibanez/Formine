@@ -19,7 +19,7 @@ contains
   subroutine deallocate_string(string)
     implicit none
 
-    character(:), allocatable :: string
+    character(len = :, kind = c_char), allocatable :: string
 
     if (allocated(string)) then
       if (debug_mode) then

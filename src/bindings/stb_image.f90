@@ -18,7 +18,7 @@ module stb_image
       use, intrinsic :: iso_c_binding
       implicit none
 
-      character(kind = c_char), intent(in) :: file_name
+      character(len = 1, kind = c_char), intent(in) :: file_name
       integer(c_int), intent(inout) :: x, y, channels_in_file
       integer(c_int), intent(in), value :: desired_channels
       type(c_ptr) :: raw_data
@@ -61,7 +61,7 @@ contains
     use :: math_helpers, only: c_uchar_to_int_array
     implicit none
 
-    character(kind = c_char), intent(in) :: file_name
+    character(len = 1, kind = c_char), intent(in) :: file_name
     integer(c_int), intent(inout) :: x, y, channels_in_file
     integer(c_int), intent(in), value :: desired_channels
     type(c_ptr) :: c_pointer

@@ -1,6 +1,7 @@
 !* To keep file io synchronous, only use this library to work with files.
 module files
   use :: string
+  use, intrinsic :: iso_c_binding
   implicit none
 
 
@@ -32,7 +33,7 @@ contains
     implicit none
 
     class(file_reader), intent(inout) :: this
-    character(len = *), intent(in) :: file_path
+    character(len = *, kind = c_char), intent(in) :: file_path
     integer :: file_io_identifier
     integer :: file_size
 
@@ -46,7 +47,7 @@ contains
       open(newunit = file_io_identifier, file = file_path, status = "old", action = "read", access = "stream")
 
       ! Now allocate the size of the string.
-      allocate(character(len=file_size) :: this%file_string)
+      allocate(character(len = file_size, kind = c_char) :: this%file_string)
 
       ! And finally stream it into the string.
       read(file_io_identifier) this%file_string
@@ -65,7 +66,7 @@ contains
     implicit none
 
     class(file_reader), intent(inout) :: this
-    character(len = *), intent(in) :: file_path
+    character(len = *, kind = c_char), intent(in) :: file_path
     !! This is testing debugging
     character(len = :), allocatable :: temporary_container
     integer :: found_newline_index
