@@ -222,7 +222,7 @@ contains
     use, intrinsic :: iso_c_binding, only: c_char
     implicit none
 
-    character(len = *), intent(in) :: input_string
+    character(len = *, kind = c_char), intent(in) :: input_string
     character(len = :, kind = c_char), allocatable :: resulting_name_of_file
     integer :: i, length_of_string
 
