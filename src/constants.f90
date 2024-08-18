@@ -49,7 +49,7 @@ module constants
   !? 32 bits. 4 bytes.
   real(c_float), public, parameter :: PI_F32 = 3.141592
   !? 64 bits. 8 bytes.
-  real(c_double), public, parameter :: PI_F64 = 3.141592653589793
+  real(c_double), public, parameter :: PI_F64 = 3.141592653589793d0
 
 
   !* Floating point.
