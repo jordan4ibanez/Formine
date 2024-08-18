@@ -204,6 +204,11 @@ contains
 
     int = 0
 
+    ! Don't parse empty strings.
+    if (input_string == "") then
+      return
+    end if
+
     read(input_string, *) int
   end function string_to_int
 
@@ -214,6 +219,13 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: input_string
     integer(kind = c_int64_t) :: int64
+
+    int64 = 0
+
+    ! Don't parse empty strings.
+    if (input_string == "") then
+      return
+    end if
 
     read(input_string, *) int64
   end function string_to_int64
