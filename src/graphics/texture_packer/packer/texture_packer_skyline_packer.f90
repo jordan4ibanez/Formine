@@ -29,6 +29,7 @@ module texture_packer_skyline_packer
     procedure :: find_skyline => skyline_packer_find_skyline
     procedure :: split => skyline_packer_split
     procedure :: merge => skyline_packer_merge
+    procedure :: pack => skyline_packer_pack
   end type skyline_packer
 
 
@@ -270,47 +271,51 @@ contains
     end do
   end subroutine skyline_packer_merge
 
-! fn pack(&mut self, key: K, texture_rect: &Rect) -> Option<Frame<K>> {
-!     let mut width = texture_rect%w;
-!     let mut height = texture_rect.h;
 
-!     width += this%config.texture_padding + this%config.texture_extrusion * 2;
-!     height += this%config.texture_padding + this%config.texture_extrusion * 2;
+  function skyline_packer_pack(this, key, texture_rect, optional_frame) result(could_pack)
+    implicit none
 
-!     if let Some((i, mut rect)) = this%find_skyline(width, height) {
-!         this%split(i, &rect);
-!         this%merge();
+    class(skyline_packer), intent(inout) :: this
+    character(len = *, kind = c_char), intent(in) :: key
+    type(rect), intent(in) :: texture_rect
+    type(frame), intent(inout) :: optional_frame
+    type(rect) :: optional_rectangle
+    logical(c_bool) :: could_pack, rotated
+    integer(c_int) :: width, height, option_index
 
-!         let rotated = width != rect%w;
+    width = texture_rect%w;
+    height = texture_rect%h;
 
-!         rect%w -= this%config.texture_padding + this%config.texture_extrusion * 2;
-!         rect.h -= this%config.texture_padding + this%config.texture_extrusion * 2;
+    width = width + this%config%texture_padding + this%config%texture_extrusion * 2;
+    height = height + this%config%texture_padding + this%config%texture_extrusion * 2;
 
-!         Some(Frame {
-!             key,
-!             frame: rect,
-!             rotated,
-!             trimmed: false,
-!             source: Rect {
-!                 x: 0,
-!                 y: 0,
-!                 w: texture_rect%w,
-!                 h: texture_rect.h,
-!             },
-!         })
-!     } else {
-!         None
-!     }
-! }
+    ! i = option_index | rect = optional_rectangle
+    if (this%find_skyline(width, height, optional_rectangle, option_index)) then
+      call this%split(option_index, optional_rectangle);
+      call this%merge();
+
+      rotated = width /= optional_rectangle%w;
+
+      optional_rectangle%w = optional_rectangle%w - this%config%texture_padding + this%config%texture_extrusion * 2;
+      optional_rectangle%h = optional_rectangle%h - this%config%texture_padding + this%config%texture_extrusion * 2;
+
+      could_pack = .true.
+
+      optional_frame = frame(key, optional_rectangle, rotated, .false., rect(0, 0, texture_rect%w, texture_rect%h))
+    else
+      could_pack = .false.
+    end if
+  end function skyline_packer_pack
+
 
 ! fn can_pack(&self, texture_rect: &Rect) -> bool {
 !     if let Some((_, rect)) = this%find_skyline(
-!         texture_rect%w + this%config.texture_padding + this%config.texture_extrusion * 2,
-!         texture_rect.h + this%config.texture_padding + this%config.texture_extrusion * 2,
+!         texture_rect%w + this%config%texture_padding + this%config%texture_extrusion * 2,
+!         texture_rect%h + this%config%texture_padding + this%config%texture_extrusion * 2,
 !     ) {
 !         let skyline = Skyline {
-!             x: rect.left(),
-!             y: rect.bottom() + 1,
+!             x: rect%left(),
+!             y: rect%bottom() + 1,
 !             w: rect%w,
 !         };
 
