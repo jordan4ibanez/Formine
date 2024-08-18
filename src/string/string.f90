@@ -22,6 +22,7 @@ module string
   public :: string_starts_with
   public :: string_trim_white_space
   public :: string_get_right_of_character
+  public :: string_get_left_of_character
   !? Pass through the type.
   public :: heap_string
 
@@ -391,7 +392,6 @@ contains
     character(len = :, kind = c_char), allocatable :: output_string
     integer(c_int) :: found_index, input_length
 
-
     found_index = index(input_string, char)
 
     ! No character found.
@@ -415,6 +415,43 @@ contains
     output_string = input_string(found_index:input_length)
     output_string = string_trim_white_space(output_string)
   end function string_get_right_of_character
+
+
+  !* This helper function is mainly made for parsing conf files.
+  !* It will remove all surrounding space.
+  !* Will return "" if can't parse.
+  !* Example:
+  !* test = blah
+  !* return: [test]
+  function string_get_left_of_character(input_string, char) result(output_string)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: input_string
+    character(len = 1, kind = c_char), intent(in) :: char
+    character(len = :, kind = c_char), allocatable :: output_string
+    integer(c_int) :: found_index
+
+    found_index = index(input_string, char)
+
+    ! No character found.
+    if (found_index == 0) then
+      output_string = ""
+      return
+    end if
+
+    ! Shift it to the left of the found character index.
+    found_index = found_index - 1
+
+    ! Out of bounds.
+    if (found_index <= 1) then
+      output_string = ""
+      return
+    end if
+
+    ! Then process it.
+    output_string = input_string(1:found_index)
+    output_string = string_trim_white_space(output_string)
+  end function string_get_left_of_character
 
 
 end module string
