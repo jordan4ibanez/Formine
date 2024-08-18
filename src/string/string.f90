@@ -8,11 +8,11 @@ module string
 
   !* Specialty C operators.
   public :: string_from_c
+  public :: into_c_string
 
   !* Casting to/from string.
   public :: int_to_string
   public :: long_to_string
-  public :: into_c_string
   public :: bool_to_string
   public :: string_to_int
   public :: string_to_int64
@@ -43,6 +43,9 @@ module string
 
 
 contains
+
+
+!* SPECIALTY C OPERATORS. =================================================================================
 
 
   !* Dump a raw Fortran string pointer into a string.
@@ -126,7 +129,6 @@ contains
 
 
   ! Convert a regular Fortran string into a null terminated C string.
-  !* Allocated, remember to deallocate!
   function into_c_string(input) result(output)
     implicit none
 
@@ -160,6 +162,9 @@ contains
     ! print"(A)","len: ", len(output)
     ! print"(A)","-----"
   end function int_to_string
+
+
+!* CASTING TO/FROM STRING. =================================================================================
 
 
   ! Convert an integer into an allocated string.
@@ -243,6 +248,8 @@ contains
     read(input_string, *) int64
   end function string_to_int64
 
+
+!* STRING MANIPULATION. =================================================================================
 
 
   !* Get a file name string from a string that is a path.
@@ -546,6 +553,9 @@ contains
   end function string_get_left_of_character
 
 
+!* STRING QUERYING. =================================================================================
+
+
   !* Get the count of non space characters in a string.
   !* So "a b c" is a count of 3.
   function string_get_non_space_characters(input_string) result(character_count)
@@ -640,5 +650,6 @@ contains
 
     has_sub_string = index(input_string, sub_string) /= 0
   end function string_contains_substring
+
 
 end module string
