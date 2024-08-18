@@ -30,9 +30,6 @@ module h_string
     procedure :: get
 
 
-
-    !? Cut a substring out of a string. Searching from left to right.
-    procedure :: cut
     !? Cut a substring out of a string. Searching from right to left.
     procedure :: cut_last
     !? Cut ALL instances of a substring out of a string.
@@ -139,72 +136,6 @@ contains
 
     data = this%data
   end function get
-
-
-  !* Append another string onto this string.
-  subroutine append(this, other)
-    implicit none
-
-    class(heap_string), intent(inout) :: this
-    character(len = *), intent(in) :: other
-
-    ! Very simple operation. The ol' swap.
-    this%data = this%data//other
-  end subroutine append
-
-
-  !* Prepend another string onto this string.
-  subroutine prepend(this, other)
-    implicit none
-
-    class(heap_string), intent(inout) :: this
-    character(len = *), intent(in) :: other
-
-    ! Very simple operation. The ol' swap.
-    this%data = other//this%data
-  end subroutine prepend
-
-
-  !* Cut a substring out of a string.
-  subroutine cut(this, substring)
-    implicit none
-
-    class(heap_string), intent(inout) :: this
-    character(len = *), intent(in) :: substring
-    integer :: i
-    integer :: width
-    integer :: inner_left
-    integer :: inner_right
-    integer :: outer_left
-    integer :: outer_right
-
-    width = len(substring)
-
-    ! If width is 0, give up.
-    if (width == 0) then
-      ! print*,"width 0 giving up"
-      return
-    end if
-
-    i = index(this%data, substring)
-
-    ! Doesn't contain, give up.
-    if (i == 0) then
-      ! print*,"not found giving up"
-      return
-    end if
-
-    ! Left side of the target.
-    inner_left = 1
-    inner_right = i - 1
-
-    ! Right side of the target.
-    outer_left = i + width
-    outer_right = len(this%data)
-
-    ! Now we just glue the beginning and ending together.
-    this%data = this%data(inner_left:inner_right)//this%data(outer_left:outer_right)
-  end subroutine cut
 
 
   !* Cut a substring out of a string.
