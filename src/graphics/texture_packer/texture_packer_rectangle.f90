@@ -29,6 +29,7 @@ module texture_packer_rectangle
     procedure :: crop => rect_crop
   end type rect
 
+
   interface rect
     module procedure :: constructor_rect
   end interface rect
