@@ -148,8 +148,8 @@ contains
     character(:, kind = c_char), allocatable :: output
 
     ! If the number is any bigger than this, wat.
-    allocate(character(128) :: output)
-    write(output, "(i128)") i
+    allocate(character(11) :: output)
+    write(output, "(i11)") i
 
     ! Now we shift the whole thing left and trim it to fit.
     output = trim(adjustl(output))
@@ -171,8 +171,8 @@ contains
     character(:, kind = c_char), allocatable :: output
 
     ! If the number is any bigger than this, wat.
-    allocate(character(128) :: output)
-    write(output, "(i128)") i
+    allocate(character(20) :: output)
+    write(output, "(i20)") i
 
     ! Now we shift the whole thing left and trim it to fit.
     output = trim(adjustl(output))
