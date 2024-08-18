@@ -28,11 +28,7 @@ module h_string
     procedure :: is_allocated
     !? Get internal data.
     procedure :: get
-
-
-
-    !? Cut ALL instances of a substring out of a string.
-    procedure :: cut_all
+    
     !? Check if a string contains a substring.
     procedure :: contains
     !? Get the file name out of a system path.
@@ -135,36 +131,6 @@ contains
 
     data = this%data
   end function get
-
-
-  !* Cut all instances of a substring out of a string.
-  subroutine cut_all(this, substring)
-    implicit none
-
-    class(heap_string), intent(inout) :: this
-    character(len = *), intent(in) :: substring
-    character(len = :), allocatable :: old
-
-    ! Assign old to current as a base.
-    old = this%data
-
-    ! Then, we simply repeatedly cut until it's the same, that's about it.
-    do while(.true.)
-
-      !? If you want to see this happen in real time, turn this on. It's neat. :)
-      ! print*,old
-
-      ! call this%cut(substring)
-
-      ! No more changes happened. Exit loop.
-      if (this == old) then
-        exit
-      end if
-
-      ! A change happened, save state and loop again.
-      old = this%data
-    end do
-  end subroutine cut_all
 
 
   !* Check if a string contains a substring.
