@@ -20,6 +20,7 @@ module string
   public :: string_remove_file_name_from_path
   public :: string_remove_file_extension
   public :: string_get_file_extension
+  public :: string_cut_first
 
   public :: string_get_non_space_characters
   public :: string_starts_with
@@ -339,6 +340,47 @@ contains
 
     extension = input_file_name(i:string_length)
   end function string_get_file_extension
+
+
+  !* Cut the first instance of a substring out of a string. Left to right.
+  function string_cut_first(input_string, sub_string) result(cut_string)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: input_string, sub_string
+    character(len = :, kind = c_char), allocatable :: cut_string
+    integer :: found_index, sub_string_width, inner_left, inner_right, outer_left, outer_right
+    
+
+    ! Starts off as the input.
+    cut_string = input_string
+
+    ! If blank, return.
+    if (input_string == "") then
+      return
+    end if
+
+    ! If a character, there's no way to really work with that.
+
+    found_index = index(input_string, sub_string)
+
+    ! Not found.
+    if (found_index == 0) then
+      return
+    end if
+
+    sub_string_width = len(sub_string)
+
+    ! Left side of the target.
+    inner_left = 1
+    inner_right = found_index - 1
+
+    ! Right side of the target.
+    outer_left = found_index + sub_string_width
+    outer_right = len(input_string)
+
+    ! Now we just concatenate the beginning and ending together.
+    cut_string = input_string(inner_left:inner_right)//input_string(outer_left:outer_right)
+  end function string_cut_first
 
 
   !* Get the count of non space characters in a string.
