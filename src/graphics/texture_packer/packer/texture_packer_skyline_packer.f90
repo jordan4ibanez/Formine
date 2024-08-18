@@ -76,30 +76,28 @@ contains
   !* return `rect` if rectangle (w, h) can fit the skyline started at `i`
   !* This had to be reworked because Fortran has a different style.
   !* This will always return, but it will signal if it could put it or not via [can_put]
-  function skyline_packer_can_put(this, i, w, h, can_put) result(optional_return)
+  function skyline_packer_can_put(this, i, w, h, can_put) result(optional_rectangle)
     implicit none
 
     class(skyline_packer), intent(in) :: this
     integer(c_int), intent(inout) :: i
     integer(c_int), intent(in), value :: w, h
     logical(c_bool), intent(inout) :: can_put
-    type(rect) :: optional_return
-    type(rect) :: rectangle
+    type(rect) :: optional_rectangle
     integer(c_int) :: width_left
 
-    rectangle = rect(this%skylines(i)%x, 0, w, h)
-    width_left = rectangle%w
+    optional_rectangle = rect(this%skylines(i)%x, 0, w, h)
+    width_left = optional_rectangle%w
 
     do
-      rectangle%y = max(rectangle%y, this%skylines(i)%y);
+      optional_rectangle%y = max(optional_rectangle%y, this%skylines(i)%y);
       ! the source rect is too large
-      if (.not. this%border%contains(rectangle)) then
+      if (.not. this%border%contains(optional_rectangle)) then
         can_put = .false.
         return
       end if
 
       if (this%skylines(i)%w >= width_left) then
-        optional_return = rectangle
         can_put = .true.
         return
       end if
