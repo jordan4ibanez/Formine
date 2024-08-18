@@ -23,6 +23,7 @@ module texture_packer_skyline_packer
     type(rect) :: border
     type(skyline), dimension(:), allocatable :: skylines
   contains
+    procedure :: can_put => skyline_packer_can_put
   end type skyline_packer
 
 
@@ -71,24 +72,46 @@ contains
     new_skyline_packer = skyline_packer(config, rect(0, 0, config%max_width, config%max_height), skylines)
   end function constructor_skyline_packer
 
-! // return `rect` if rectangle (w, h) can fit the skyline started at `i`
-! fn can_put(&self, mut i: usize, w: u32, h: u32) -> Option<Rect> {
-!   let mut rect = Rect::new(self.skylines[i].x, 0, w, h);
-!   let mut width_left = rect.w;
-!   loop {
-!       rect.y = max(rect.y, self.skylines[i].y);
-!       // the source rect is too large
-!       if !self.border.contains(&rect) {
-!           return None;
-!       }
-!       if self.skylines[i].w >= width_left {
-!           return Some(rect);
-!       }
-!       width_left -= self.skylines[i].w;
-!       i += 1;
-!       assert!(i < self.skylines.len());
-!   }
-! }
+
+  !* return `rect` if rectangle (w, h) can fit the skyline started at `i`
+  !* This had to be reworked because Fortran has a different style.
+  !* This will always return, but it will signal if it could put it or not via [can_put]
+  function skyline_packer_can_put(this, i, w, h, can_put) result(optional_return)
+    implicit none
+
+    class(skyline_packer), intent(in) :: this
+    integer(c_int), intent(inout) :: i
+    integer(c_int), intent(in), value :: w, h
+    logical(c_bool), intent(inout) :: can_put
+    type(rect) :: optional_return
+    type(rect) :: rectangle
+    integer(c_int) :: width_left
+
+    rectangle = rect(this%skylines(i)%x, 0, w, h)
+    width_left = rectangle%w
+
+    do
+      rectangle%y = max(rectangle%y, this%skylines(i)%y);
+      ! the source rect is too large
+      if (.not. this%border%contains(rectangle)) then
+        can_put = .false.
+        return
+      end if
+
+      if (this%skylines(i)%w >= width_left) then
+        optional_return = rectangle
+        can_put = .true.
+        return
+      end if
+
+      width_left = width_left - this%skylines(i)%w;
+      i = i + 1;
+
+      if (i >= size(this%skylines)) then
+        error stop "[Skyline Packer] Error: Out of bounds."
+      end if
+    end do
+  end function skyline_packer_can_put
 
 ! fn find_skyline(&self, w: u32, h: u32) -> Option<(usize, Rect)> {
 !   let mut bottom = std::u32::MAX;
