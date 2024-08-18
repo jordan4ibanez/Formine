@@ -318,7 +318,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: font_config_file_path
     type(fhash_tbl_t), intent(inout) :: character_database_integral
     type(file_reader) :: reader
-    integer :: i, temp_buffer_length, comma_index, x_index, y_index
+    integer :: i, temp_buffer_length, x_index, y_index
     character(len = :), allocatable :: current_character, temp_buffer
     character(len = :), allocatable :: x_str, y_str
 
