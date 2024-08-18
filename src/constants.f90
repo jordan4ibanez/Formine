@@ -5,11 +5,13 @@ module constants
 
   private
 
+
   ! Placeholders to trigger a variable for analysis.
   real(c_float) :: f__32__
   real(c_double) :: f__64__
   integer(c_int) :: int__32__
   integer(c_int64_t) :: int__64__
+
 
   !* Integral in.
   !? 32 bits. 4 bytes.
