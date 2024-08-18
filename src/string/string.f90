@@ -28,6 +28,7 @@ module string
   public :: string_starts_with
   public :: string_ends_with
   public :: string_contains_character
+  public :: string_contains_substring
 
   public :: string_trim_white_space
   public :: string_get_right_of_character
@@ -536,6 +537,17 @@ contains
 
     has_char = index(input_string, char) /= 0
   end function string_contains_character
+
+
+  !* Check if a string has a character.
+  function string_contains_substring(input_string, sub_string) result(has_sub_string)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: input_string, sub_string
+    logical :: has_sub_string
+
+    has_sub_string = index(input_string, sub_string) /= 0
+  end function string_contains_substring
 
 
   !* Strip leading and trailing white space off a string.
