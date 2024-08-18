@@ -16,7 +16,7 @@ module string
   public :: string_to_int
   public :: string_to_int64
 
-  public :: get_file_name_from_string
+  public :: string_get_file_name
   public :: string_remove_file_name_from_path
   public :: string_remove_file_extension
   public :: string_get_file_extension
@@ -242,7 +242,7 @@ contains
 
 
   !* Get a file name string from a string that is a path.
-  function get_file_name_from_string(input_string) result(resulting_name_of_file)
+  function string_get_file_name(input_string) result(resulting_name_of_file)
     use, intrinsic :: iso_c_binding, only: c_char
     implicit none
 
@@ -270,7 +270,7 @@ contains
 
     ! So this is a file. Let's now get it
     resulting_name_of_file = input_string(i + 1:length_of_string)
-  end function get_file_name_from_string
+  end function string_get_file_name
 
 
   !* Can convert [./test/cool.png] into [./test/]

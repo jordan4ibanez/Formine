@@ -79,7 +79,7 @@ contains
     call gl_tex_image_2d(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data)
 
     ! This is done by the file name, we don't care about the path.
-    file_name = get_file_name_from_string(texture_file_path)
+    file_name = string_get_file_name(texture_file_path)
 
     ! We ensure that this thing exists.
     if (.not. gl_is_texture(texture_id)) then

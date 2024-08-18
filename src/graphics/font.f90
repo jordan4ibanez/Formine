@@ -279,7 +279,7 @@ contains
 
     !* We will assume that the only difference in png and the cfg is the file extension.
 
-    font_data_file_name = get_file_name_from_string(font_texture_file_path)
+    font_data_file_name = string_get_file_name(font_texture_file_path)
     font_config_file_path = string_remove_file_extension(font_texture_file_path)//".cfg"
 
     ! This is quite a large and complex subroutine. It's getting all the data from the .cfg file.
