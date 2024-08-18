@@ -146,22 +146,22 @@ contains
     do i = 1, size(this%skylines)
       if (this%can_put(i, w, h, r))  then
         if (r%bottom() < bottom .or. (r%bottom() == bottom .and. this%skylines(i)%w < width)) then
-          bottom = r%bottom();
-          width = this%skylines(i)%w;
+          bottom = r%bottom()
+          width = this%skylines(i)%w
           option_index = i
           can_find = .true.
-          option_rectangle = r;
+          option_rectangle = r
         end if
       end if
 
       if (this%config%allow_rotation) then
         if (this%can_put(i, h, w, r)) then
           if (r%bottom() < bottom .or. (r%bottom() == bottom .and. this%skylines(i)%w < width)) then
-            bottom = r%bottom();
-            width = this%skylines(i)%w;
-            option_index = i;
+            bottom = r%bottom()
+            width = this%skylines(i)%w
+            option_index = i
             can_find = .true.
-            option_rectangle = r;
+            option_rectangle = r
           end if
         end if
       end if
@@ -205,7 +205,7 @@ contains
     deallocate(temp_skylines_array)
     !? END INSERT.
 
-    i = index + 1;
+    i = index + 1
 
     do while (i <= size(this%skylines))
 
@@ -231,8 +231,8 @@ contains
           !? END REMOVE.
 
         else
-          this%skylines(i)%x = this%skylines(i)%x + shrink;
-          this%skylines(i)%w = this%skylines(i)%w - shrink;
+          this%skylines(i)%x = this%skylines(i)%x + shrink
+          this%skylines(i)%w = this%skylines(i)%w - shrink
           exit
         end if
       else
@@ -253,7 +253,7 @@ contains
 
     do while (i <= size(this%skylines))
       if (this%skylines(i - 1)%y == this%skylines(i)%y) then
-        this%skylines(i - 1)%w = this%skylines(i - 1)%w + this%skylines(i)%w;
+        this%skylines(i - 1)%w = this%skylines(i - 1)%w + this%skylines(i)%w
 
         !? REMOVE.
         allocate(temp_skylines_array(0))
@@ -266,9 +266,9 @@ contains
         this%skylines = temp_skylines_array
         !? END REMOVE.
 
-        i = i - 1;
+        i = i - 1
       end if
-      i = i + 1;
+      i = i + 1
     end do
   end subroutine skyline_packer_merge
 
@@ -284,20 +284,20 @@ contains
     logical(c_bool) :: could_pack, rotated
     integer(c_int) :: width, height, option_index
 
-    width = texture_rect%w;
-    height = texture_rect%h;
+    width = texture_rect%w
+    height = texture_rect%h
 
-    width = width + this%config%texture_padding + this%config%texture_extrusion * 2;
-    height = height + this%config%texture_padding + this%config%texture_extrusion * 2;
+    width = width + this%config%texture_padding + this%config%texture_extrusion * 2
+    height = height + this%config%texture_padding + this%config%texture_extrusion * 2
 
     if (this%find_skyline(width, height, optional_rectangle, option_index)) then
-      call this%split(option_index, optional_rectangle);
-      call this%merge();
+      call this%split(option_index, optional_rectangle)
+      call this%merge()
 
-      rotated = width /= optional_rectangle%w;
+      rotated = width /= optional_rectangle%w
 
-      optional_rectangle%w = optional_rectangle%w - this%config%texture_padding + this%config%texture_extrusion * 2;
-      optional_rectangle%h = optional_rectangle%h - this%config%texture_padding + this%config%texture_extrusion * 2;
+      optional_rectangle%w = optional_rectangle%w - this%config%texture_padding + this%config%texture_extrusion * 2
+      optional_rectangle%h = optional_rectangle%h - this%config%texture_padding + this%config%texture_extrusion * 2
 
       could_pack = .true.
 
@@ -324,10 +324,10 @@ contains
       texture_rect%w + this%config%texture_padding + this%config%texture_extrusion * 2, &
       texture_rect%h + this%config%texture_padding + this%config%texture_extrusion * 2, &
       optional_rectangle, optional_index)) then
-        
+
       the_skyline = skyline(optional_rectangle%left(), optional_rectangle%bottom() + 1, optional_rectangle%w)
 
-      can_pack = the_skyline%right() <= this%border%right() .and. the_skyline%y <= this%border%bottom();
+      can_pack = the_skyline%right() <= this%border%right() .and. the_skyline%y <= this%border%bottom()
       return
     end if
   end function skyline_packer_can_pack
