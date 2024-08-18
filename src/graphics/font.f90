@@ -341,42 +341,36 @@ contains
         cycle
       end if
 
-      ! We want to avoid a buffer overflow.
       if (string_starts_with(temp_buffer, "SLOTS_HORIZONTAL = ")) then
-        ! Cut the buffer and read it into the integer.
-        temp_buffer = temp_buffer(19:len(temp_buffer))
+        temp_buffer = string_get_right_of_character(temp_buffer, "=")
         read(temp_buffer, '(i4)') slots_horizontal
         if (slots_horizontal <= 0) then
           error stop "[Font] Error: Impossible SLOTS_HORIZONTAL value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
       else if (string_starts_with(temp_buffer, "SLOTS_VERTICAL = ")) then
-        ! Cut the buffer and read it into the integer.
-        temp_buffer = temp_buffer(17:len(temp_buffer))
+        temp_buffer = string_get_right_of_character(temp_buffer, "=")
         read(temp_buffer, '(i4)') slots_vertical
         if (slots_vertical <= 0) then
           error stop "[Font] Error: Impossible SLOTS_VERTICAL value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
       else if (string_starts_with(temp_buffer, "SPACING = ")) then
-        ! Cut the buffer and read it into the integer.
-        temp_buffer = temp_buffer(10:len(temp_buffer))
+        temp_buffer = string_get_right_of_character(temp_buffer, "=")
         read(temp_buffer, '(i4)') spacing
         if (spacing <= 0) then
           error stop "[Font] Error: Impossible SPACING value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
       else if (string_starts_with(temp_buffer, "CHAR_WIDTH = ")) then
-        ! Cut the buffer and read it into the integer.
-        temp_buffer = temp_buffer(13:len(temp_buffer))
+        temp_buffer = string_get_right_of_character(temp_buffer, "=")
         read(temp_buffer, '(i4)') character_width
         if (character_width <= 0) then
           error stop "[Font] Error: Impossible CHAR_WIDTH value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
       else if (string_starts_with(temp_buffer, "CHAR_HEIGHT = ")) then
-        ! Cut the buffer and read it into the integer.
-        temp_buffer = temp_buffer(14:len(temp_buffer))
+        temp_buffer = string_get_right_of_character(temp_buffer, "=")
         read(temp_buffer, '(i4)') character_height
         if (character_height <= 0) then
           error stop "[Font] Error: Impossible CHAR_HEIGHT value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
