@@ -1,5 +1,6 @@
 module factory
   implicit none
+  use, intrinsic :: iso_c_bindings
   private
 
   public :: mob
@@ -26,7 +27,7 @@ contains
 
     type(mob) :: a_mob
     integer, save :: total_mobs = 0
-    real :: randomness = 0.0
+    rea(c_float) :: randomness = 0.0
 
     ! Seed the random generator.
     if (total_mobs == 0) then
