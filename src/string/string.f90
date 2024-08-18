@@ -342,14 +342,14 @@ contains
   end function string_get_file_extension
 
 
-  !* Cut the first instance of a substring out of a string. Left to right.
+  !* Cut the first instance of a substring out of a string. Searches left to right.
   function string_cut_first(input_string, sub_string) result(cut_string)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: input_string, sub_string
     character(len = :, kind = c_char), allocatable :: cut_string
     integer :: found_index, sub_string_width, inner_left, inner_right, outer_left, outer_right
-    
+
 
     ! Starts off as the input.
     cut_string = input_string
