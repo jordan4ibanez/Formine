@@ -449,7 +449,7 @@ contains
     found_index = found_index + 1
 
     ! Out of bounds.
-    if (found_index >= input_length) then
+    if (found_index > input_length) then
       output_string = ""
       return
     end if
