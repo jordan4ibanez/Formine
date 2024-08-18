@@ -28,12 +28,6 @@ module h_string
     procedure :: is_allocated
     !? Get internal data.
     procedure :: get
-    
-    !? Check if a string contains a substring.
-    procedure :: contains
-    !? Get the file name out of a system path.
-    !? If the string isn't a system path, you'll get a nice warning and a blank string.
-    procedure :: get_file_name
   end type heap_string
 
 
@@ -131,52 +125,4 @@ contains
 
     data = this%data
   end function get
-
-
-  !* Check if a string contains a substring.
-  logical function contains(this, substring) result(does_contain)
-    implicit none
-
-    class(heap_string), intent(inout) :: this
-    character(len = *), intent(in) :: substring
-
-    !? If the index is 0, this means it does not contain the substring.
-    !? So we invert the logic.
-    does_contain = index(this%data, substring) /= 0
-  end function contains
-
-
-  !* Get a file name string from a path.
-  function get_file_name(this) result(resulting_name_of_file)
-    use, intrinsic :: iso_c_binding, only: c_char
-    implicit none
-
-    class(heap_string), intent(in) :: this
-    character(len = :, kind = c_char), allocatable :: resulting_name_of_file
-    integer :: i
-    integer :: length_of_string
-
-    i = index(this%data, "/", back = .true.)
-
-    ! This probably isn't a path.
-    if (i == 0) then
-      print"(A)", achar(27)//"[38;2;255;128;0m[Heap String] Warning: Could not extract file name from directory."//achar(27)//"[m"
-      resulting_name_of_file = ""
-      return
-    end if
-
-    length_of_string = len(this%data)
-
-    ! This is a folder.
-    if (i == length_of_string) then
-      print"(A)", achar(27)//"[38;2;255;128;0m[Heap String] Warning: Tried to get file name of folder."//achar(27)//"[m"
-      resulting_name_of_file = ""
-      return
-    end if
-
-    ! So this is a file. Let's now get it
-    resulting_name_of_file = this%data(i + 1:length_of_string)
-  end function get_file_name
-
-
 end module h_string
