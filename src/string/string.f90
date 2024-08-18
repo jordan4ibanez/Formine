@@ -201,6 +201,20 @@ contains
 
     read(input_string, *) int
   end function string_to_int
+
+
+  !* Convert a string to an int.
+  function string_to_int64(input_string) result(int64)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: input_string
+    integer(kind = c_int64_t) :: int64
+
+    read(input_string, *) int64
+  end function string_to_int64
+
+
+
   !* Get a file name string from a string that is a path.
   function get_file_name_from_string(input_string) result(resulting_name_of_file)
     use, intrinsic :: iso_c_binding, only: c_char
