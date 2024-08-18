@@ -486,7 +486,7 @@ contains
     found_index = found_index - 1
 
     ! Out of bounds.
-    if (found_index <= 1) then
+    if (found_index <= 0) then
       output_string = ""
       return
     end if
