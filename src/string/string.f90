@@ -350,6 +350,13 @@ contains
     character(len = *, kind = c_char), intent(in) :: input_string, sub_string
     logical :: starts_with
 
+    starts_with = .false.
+
+    ! Blank.
+    if (sub_string == "" .or. input_string == "") then
+      return
+    end if
+
     starts_with = index(input_string, sub_string) == 1
   end function string_starts_with
 
@@ -364,6 +371,11 @@ contains
 
     ends_with = .false.
     found_index = index(input_string, sub_string, back = .true.)
+
+    ! Blank.
+    if (sub_string == "" .or. input_string == "") then
+      return
+    end if
 
     ! Not found.
     if (found_index == 0) then
