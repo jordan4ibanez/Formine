@@ -370,12 +370,13 @@ contains
     integer(c_int) :: input_length, sub_string_length, found_index
 
     ends_with = .false.
-    found_index = index(input_string, sub_string, back = .true.)
 
     ! Blank.
     if (sub_string == "" .or. input_string == "") then
       return
     end if
+
+    found_index = index(input_string, sub_string, back = .true.)
 
     ! Not found.
     if (found_index == 0) then
