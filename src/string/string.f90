@@ -38,7 +38,6 @@ module string
   public :: string_contains_substring
 
 
-
   !? Pass through the type.
   public :: heap_string
 
