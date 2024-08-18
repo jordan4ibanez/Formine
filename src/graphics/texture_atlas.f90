@@ -7,7 +7,7 @@ module texture_atlas
 
   !* We need a pool of things to build upon.
   !* The game only has one texture atlas.
-  
+
 
   private
 
