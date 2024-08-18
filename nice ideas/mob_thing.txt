@@ -10,8 +10,8 @@ module factory
   integer, save :: yep
 
   type :: mob
-    integer :: id = 0
-    integer :: hp = 0
+    integer(c_int) :: id = 0
+    integer(c_int) :: hp = 0
   contains
     procedure :: yell
   end type mob

@@ -755,7 +755,7 @@ contains
   function gl_create_program() result(program_id)
     implicit none
 
-    integer :: program_id
+    integer(c_int) :: program_id
 
     program_id = internal_gl_create_program()
   end function gl_create_program
@@ -764,7 +764,7 @@ contains
   function gl_create_shader(shader_type) result(shader_id)
     implicit none
 
-    integer :: shader_type, shader_id
+    integer(c_int) :: shader_type, shader_id
 
     shader_id = internal_gl_create_shader(shader_type)
   end function gl_create_shader
@@ -775,7 +775,7 @@ contains
     use :: files
     implicit none
 
-    integer :: shader_id
+    integer(c_int) :: shader_id
     character(len = *, kind = c_char) :: source_code_file_path
     type(file_reader) :: reader
 
@@ -814,7 +814,7 @@ contains
   subroutine gl_clear_error_data()
     implicit none
 
-    integer :: i, error
+    integer(c_int) :: i, error
 
     do i = 1,3
       error = gl_get_error()
@@ -827,9 +827,9 @@ contains
     use :: string
     implicit none
 
-    integer :: shader
-    ! integer :: max_length
-    integer :: length
+    integer(c_int) :: shader
+    ! integer(c_int) :: max_length
+    integer(c_int) :: length
     ! character(len = :, kind = c_char), allocatable :: info_log
     type(c_ptr) :: c_string
 
@@ -840,9 +840,9 @@ contains
   function gl_get_shader_iv(shader, pname) result(code)
     implicit none
 
-    integer :: shader
-    integer :: pname
-    integer :: code
+    integer(c_int) :: shader
+    integer(c_int) :: pname
+    integer(c_int) :: code
 
     call internal_gl_get_shader_iv(shader, pname, code)
   end function gl_get_shader_iv
@@ -852,9 +852,9 @@ contains
     use :: string
     implicit none
 
-    integer :: program_id
-    integer :: pname
-    integer :: code
+    integer(c_int) :: program_id
+    integer(c_int) :: pname
+    integer(c_int) :: code
 
     call internal_gl_get_program_iv(program_id, pname, code)
   end function gl_get_program_iv

@@ -165,8 +165,8 @@ contains
 
     integer(1), dimension(:), intent(in) :: input_array
     integer(c_int), dimension(:), allocatable :: output_array
-    integer :: array_length
-    integer :: i
+    integer(c_int) :: array_length
+    integer(c_int) :: i
 
     array_length = size(input_array)
 
@@ -198,8 +198,8 @@ contains
 
     integer(c_int), dimension(:), intent(in) :: input_array
     integer(1), dimension(:), allocatable :: output_array
-    integer :: array_length
-    integer :: i
+    integer(c_int) :: array_length
+    integer(c_int) :: i
 
     array_length = size(input_array)
 

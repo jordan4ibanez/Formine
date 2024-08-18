@@ -76,7 +76,7 @@ contains
     ! On the Fortran side.
     character(len = 1, kind = c_char), dimension(:), pointer :: fortran_string_pointer
     character(len = :, kind = c_char), allocatable :: fortran_string
-    integer :: string_length, found_string_length
+    integer(c_int) :: string_length, found_string_length
     ! 4 BYTES, aka, 32 bit.
     ! If there is a string bigger than this, we have a problem.
     integer(c_int) :: i
@@ -252,7 +252,7 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: input_string
     character(len = :, kind = c_char), allocatable :: resulting_name_of_file
-    integer :: i, length_of_string
+    integer(c_int) :: i, length_of_string
 
     i = index(input_string, "/", back = .true.)
 
@@ -355,7 +355,7 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: input_string, sub_string
     character(len = :, kind = c_char), allocatable :: cut_string
-    integer :: found_index, sub_string_width, inner_left, inner_right, outer_left, outer_right
+    integer(c_int) :: found_index, sub_string_width, inner_left, inner_right, outer_left, outer_right
 
 
     ! Starts off as the input.
@@ -396,7 +396,7 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: input_string, sub_string
     character(len = :, kind = c_char), allocatable :: cut_string
-    integer :: found_index, sub_string_width, inner_left, inner_right, outer_left, outer_right
+    integer(c_int) :: found_index, sub_string_width, inner_left, inner_right, outer_left, outer_right
 
 
     ! Starts off as the input.

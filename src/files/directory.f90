@@ -96,7 +96,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: path
     type(c_ptr) :: c_for_dir_pointer
     type(for_dir), pointer :: for_dir_pointer
-    integer :: i, file_index, folder_index
+    integer(c_int) :: i, file_index, folder_index
     character(len = :, kind = c_char), allocatable :: temp_string
     ! We have our arrays of integers and pointers which we can extract.
     logical(kind = c_bool), dimension(:), pointer :: is_folder

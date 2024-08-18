@@ -65,7 +65,7 @@ contains
     integer(c_int), intent(inout) :: x, y, channels_in_file
     integer(c_int), intent(in), value :: desired_channels
     type(c_ptr) :: c_pointer
-    integer :: array_length
+    integer(c_int) :: array_length
     integer(1), dimension(:), pointer :: passed_data_pointer
     integer(1), dimension(:), allocatable :: raw_image_data
     ! integer(c_int), dimension(:), allocatable :: output_data_int

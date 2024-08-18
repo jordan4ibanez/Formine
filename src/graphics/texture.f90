@@ -34,7 +34,7 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_file_path
-    integer :: x, y, channels, desired_channels
+    integer(c_int) :: x, y, channels, desired_channels
     character(len = :, kind = c_char), allocatable :: c_file_path
     integer(1), dimension(:), allocatable :: image_data
     integer(c_int) :: texture_id
@@ -299,8 +299,8 @@ contains
     type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_placeholder
-    integer :: i
-    integer :: remaining_size
+    integer(c_int) :: i
+    integer(c_int) :: remaining_size
 
     !* We must check that there is anything in the database before we iterate.
     call texture_database%stats(num_items = remaining_size)

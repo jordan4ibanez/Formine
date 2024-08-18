@@ -15,7 +15,7 @@ contains
     use :: string
     implicit none
 
-    integer :: i
+    integer(c_int) :: i
 
     if (i < 0 .or. i > 255) then
       error stop "[Terminal] Error: RGB range check failed. Got: ["//int_to_string(i)//"] | Valid range: 0-255."

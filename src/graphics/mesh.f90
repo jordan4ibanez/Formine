@@ -23,12 +23,12 @@ module mesh
 
 
   type :: mesh_data
-    integer :: vao = 0
-    integer :: vbo_position = 0
-    integer :: vbo_texture_coordinate = 0
-    integer :: vbo_color = 0
-    integer :: vbo_indices = 0
-    integer :: indices_length = 0
+    integer(c_int) :: vao = 0
+    integer(c_int) :: vbo_position = 0
+    integer(c_int) :: vbo_texture_coordinate = 0
+    integer(c_int) :: vbo_color = 0
+    integer(c_int) :: vbo_indices = 0
+    integer(c_int) :: indices_length = 0
   end type mesh_data
 
 
@@ -115,7 +115,7 @@ contains
 
     real(c_float), dimension(:), intent(in), target :: position_array_pointer
     integer(c_int), intent(in), value :: vec_components
-    integer :: position_vbo_position
+    integer(c_int) :: position_vbo_position
 
     position_vbo_position = ATTRIBUTE_POSITION
 
@@ -152,7 +152,7 @@ contains
     implicit none
 
     real(c_float), dimension(:), intent(in), target :: texture_coordinates_pointer
-    integer :: texture_coordinate_vbo_position
+    integer(c_int) :: texture_coordinate_vbo_position
 
     texture_coordinate_vbo_position = ATTRIBUTE_TEXTURE_COORDINATE
 
@@ -189,7 +189,7 @@ contains
     implicit none
 
     real(c_float), dimension(:), intent(in), target :: colors_pointer
-    integer :: color_vbo_position
+    integer(c_int) :: color_vbo_position
 
     color_vbo_position = ATTRIBUTE_COLOR
 
@@ -275,7 +275,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: mesh_name
     logical, intent(inout) :: exists
     class(*), pointer :: generic_pointer
-    integer :: status
+    integer(c_int) :: status
     type(mesh_data), pointer :: gotten_mesh
 
     exists = .false.
@@ -331,7 +331,7 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
     class(*), pointer :: generic
-    integer :: status
+    integer(c_int) :: status
     type(mesh_data), pointer :: gotten_mesh
 
     ! This wipes out the OpenGL memory as well or else there's going to be a massive memory leak.
@@ -422,7 +422,7 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
-    integer :: status
+    integer(c_int) :: status
 
     call mesh_database%check_key(key(mesh_name), stat = status)
 
@@ -442,8 +442,8 @@ contains
     type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
-    integer :: i
-    integer :: remaining_size
+    integer(c_int) :: i
+    integer(c_int) :: remaining_size
 
     !* We must check that there is anything in the database before we iterate.
     call mesh_database%stats(num_items = remaining_size)

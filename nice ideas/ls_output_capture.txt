@@ -7,7 +7,7 @@
     character(len = *, kind = c_char), intent(in) :: path
     logical :: pipe_exists
     character(len = :, kind = c_char), allocatable :: message
-    integer :: file_count, status, file_io_identifier, i, message_length
+    integer(c_int) :: file_count, status, file_io_identifier, i, message_length
 
     ! We are literally creating a custom pipe on posix to act as a virtual file.
     !! DO NOT use this for high performance IO. I have no idea how fast this actually is lol.

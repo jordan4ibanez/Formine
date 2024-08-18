@@ -39,22 +39,22 @@ module font
 
 
   ! The size of each character in pixels.
-  integer :: character_width = 0
-  integer :: character_height = 0
+  integer(c_int) :: character_width = 0
+  integer(c_int) :: character_height = 0
 
   ! Spacing between each character in pixels.
-  integer :: spacing = 0
+  integer(c_int) :: spacing = 0
 
   ! Slots are the total size of a character, including the border, in pixels.
-  integer :: slot_width = 0
-  integer :: slot_height = 0
+  integer(c_int) :: slot_width = 0
+  integer(c_int) :: slot_height = 0
 
   ! How many characters X and Y in total.
-  integer :: slots_horizontal = 0
-  integer :: slots_vertical = 0
+  integer(c_int) :: slots_horizontal = 0
+  integer(c_int) :: slots_vertical = 0
 
-  integer :: font_texture_width = 0
-  integer :: font_texture_height = 0
+  integer(c_int) :: font_texture_width = 0
+  integer(c_int) :: font_texture_height = 0
 
   type(fhash_tbl_t) :: character_database
 
@@ -77,7 +77,7 @@ contains
     real(c_float) :: red, green, blue
     real(c_float), dimension(:), allocatable :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), allocatable :: indices
-    integer :: text_length, allocation_length, i, buffer_index, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
+    integer(c_int) :: text_length, allocation_length, i, buffer_index, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
     character :: current_character
     type(opengl_character), pointer :: character_data_pointer
     logical :: exists
@@ -236,7 +236,7 @@ contains
     logical, intent(inout) :: exists
     type(opengl_character), pointer :: gl_char_information_pointer
     class(*), pointer :: generic_pointer
-    integer :: status
+    integer(c_int) :: status
 
     exists = .false.
 
@@ -268,7 +268,7 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: font_texture_file_path
-    integer :: x, y, channels, desired_channels
+    integer(c_int) :: x, y, channels, desired_channels
     character(len = :, kind = c_char), allocatable :: c_file_path
     character(len = :), allocatable :: font_data_file_name
     character(len = :), allocatable :: font_config_file_path
@@ -318,7 +318,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: font_config_file_path
     type(fhash_tbl_t), intent(inout) :: character_database_integral
     type(file_reader) :: reader
-    integer :: i, temp_buffer_length, x_index, y_index
+    integer(c_int) :: i, temp_buffer_length, x_index, y_index
     character(len = :), allocatable :: current_character, temp_buffer
     character(len = :), allocatable :: x_str, y_str
 
@@ -473,7 +473,7 @@ contains
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     type(vec2i) :: position
-    integer :: pixel_x, pixel_y
+    integer(c_int) :: pixel_x, pixel_y
     type(opengl_character), pointer :: gpu_character
 
     ! Shift this into a format we can use.
@@ -632,8 +632,8 @@ contains
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     class(*), pointer :: generic_pointer
-    integer :: i
-    integer :: remaining_size
+    integer(c_int) :: i
+    integer(c_int) :: remaining_size
 
     !* We must check that there is anything in the database before we iterate.
     call character_database%stats(num_items = remaining_size)

@@ -8,7 +8,7 @@ contains
     implicit none
 
     type(directory_reader) :: reader
-    ! integer :: i
+    ! integer(c_int) :: i
 
     ! i = 1
     print*, "begin testing forderint memory leak."

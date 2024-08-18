@@ -6,7 +6,7 @@
     implicit none
 
     type(vec3f), dimension(:), intent(in) :: position_array
-    integer :: position_vbo_position
+    integer(c_int) :: position_vbo_position
 
     position_vbo_position = shader_get_attribute("3d", "position")
 

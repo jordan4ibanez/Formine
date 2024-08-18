@@ -94,7 +94,7 @@ contains
     implicit none
 
     type(directory_reader) :: dir_reader
-    integer :: i, status
+    integer(c_int) :: i, status
     logical :: found_mods_folder
     character(len = :, kind = c_char), allocatable :: folder_name, mod_path_string, conf_path_string, init_path_string
     type(mod_config) :: mod_config_struct
@@ -180,7 +180,7 @@ contains
     type(mod_config) :: new_mod_config
     type(file_reader) :: reader
     character(len = :, kind = c_char), allocatable :: temp_string, value_string
-    integer :: i
+    integer(c_int) :: i
 
     call reader%read_lines(path)
 
@@ -227,7 +227,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: mod_path
     character(len = :, kind = c_char), allocatable :: textures_path
     type(directory_reader), dimension(5) :: dir_readers
-    integer :: i, a, b, c, d, e
+    integer(c_int) :: i, a, b, c, d, e
     logical :: found_textures_folder
 
     found_textures_folder = .false.

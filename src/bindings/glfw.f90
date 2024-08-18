@@ -206,7 +206,7 @@ contains
     ! C side.
     type(c_ptr) :: c_string
     ! Fortran side.
-    integer :: error_result
+    integer(c_int) :: error_result
     character(len = :, kind = c_char), allocatable :: error_result_text
 
     error_result = internal_glfw_get_error(c_string)

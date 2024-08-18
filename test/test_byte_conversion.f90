@@ -26,7 +26,7 @@ contains
     integer(c_int), dimension(256) :: i32
     integer(1), dimension(256) :: u8
     integer(c_int), dimension(256) :: conversion_output
-    integer :: i
+    integer(c_int) :: i
 
     ! This is insane overkill.
     do i = 1,256

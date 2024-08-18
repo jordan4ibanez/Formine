@@ -18,7 +18,7 @@ module files
     character(len = :), allocatable :: file_string
     ! By line components.
     type(heap_string), dimension(:), allocatable :: lines
-    integer :: line_count = 0
+    integer(c_int) :: line_count = 0
   contains
     procedure :: read_file => file_reader_read_file
     procedure :: read_lines => file_reader_read_file_into_lines
@@ -34,8 +34,8 @@ contains
 
     class(file_reader), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: file_path
-    integer :: file_io_identifier
-    integer :: file_size
+    integer(c_int) :: file_io_identifier
+    integer(c_int) :: file_size
 
     ! First we check if the file exists.
     inquire(file = file_path, exist = this%exists, size = file_size)
@@ -69,8 +69,8 @@ contains
     character(len = *, kind = c_char), intent(in) :: file_path
     !! This is testing debugging
     character(len = :), allocatable :: temporary_container
-    integer :: found_newline_index
-    integer :: length_of_buffer
+    integer(c_int) :: found_newline_index
+    integer(c_int) :: length_of_buffer
 
     ! I can't figure out how to make the io operation read line by line so we're going to
     ! use the internal file_string component as a temp buffer.

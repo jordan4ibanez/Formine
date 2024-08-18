@@ -26,7 +26,7 @@ module orient_class
   type :: orientation
     private
     ! Encapsulate this.
-    integer :: value
+    integer(c_int) :: value
 
   contains
 
@@ -198,7 +198,7 @@ contains
     implicit none
 
     integer, intent(in), optional :: optional_initial_value
-    integer :: value
+    integer(c_int) :: value
 
     ! Make sure we're not getting garbage data.
     if (present(optional_initial_value)) then

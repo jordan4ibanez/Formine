@@ -169,7 +169,7 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: shader_name
     logical, intent(inout) :: exists
-    integer :: status
+    integer(c_int) :: status
     integer(c_int) :: gotten_program
 
     call shader_database%get(key(shader_name), gotten_program, stat = status)
@@ -189,7 +189,7 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: shader_name
-    integer :: status
+    integer(c_int) :: status
 
     ! All we must do is check the shader result and return the existence in the result.
     call shader_database%check_key(key(shader_name), stat = status)
@@ -231,7 +231,7 @@ contains
     type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
-    integer :: i, remaining_size
+    integer(c_int) :: i, remaining_size
 
     !* We must check that there is anything in the database before we iterate.
     call shader_database%stats(num_items = remaining_size)
