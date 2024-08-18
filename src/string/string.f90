@@ -20,6 +20,7 @@ module string
   public :: string_get_file_extension
   public :: string_get_non_space_characters
   public :: string_starts_with
+  public :: string_ends_with
   public :: string_trim_white_space
   public :: string_get_right_of_character
   public :: string_get_left_of_character
@@ -353,7 +354,33 @@ contains
   end function string_starts_with
 
 
+  !* Check if a string ends with a sub string.
+  function string_ends_with(input_string, sub_string) result(ends_with)
+    implicit none
 
+    character(len = *, kind = c_char), intent(in) :: input_string, sub_string
+    logical :: ends_with
+    integer(c_int) :: input_length, sub_string_length, found_index
+
+    ends_with = .false.
+    found_index = index(input_string, sub_string, back = .true.)
+
+    ! Not found.
+    if (found_index == 0) then
+      return
+    end if
+
+    input_length = len(input_string)
+    sub_string_length = len(sub_string)
+
+    ! We can simply check if adding the found index with the size
+    ! of the substring matches the input length.
+    ! Subtract 1 to push it back to 0 index.
+    ! [hi there] check [re]
+    ! found at [7], sub length: [2], in length: [8]
+    ! [[7 + 2] - 1] == 8 == .true.
+    ends_with = (found_index + sub_string_length) - 1 == input_length
+  end function string_ends_with
 
 
   !* Strip leading and trailing white space off a string.
