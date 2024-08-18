@@ -24,11 +24,11 @@ module string
   public :: string_get_non_space_characters
   public :: string_starts_with
   public :: string_ends_with
-  
+  public :: string_contains_character
+
   public :: string_trim_white_space
   public :: string_get_right_of_character
   public :: string_get_left_of_character
-  public :: string_contains_character
 
   !? Pass through the type.
   public :: heap_string
@@ -414,6 +414,18 @@ contains
   end function string_ends_with
 
 
+  !* Check if a string has a character.
+  function string_contains_character(input_string, char) result(has_char)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: input_string
+    character(len = 1, kind = c_char), intent(in) :: char
+    logical :: has_char
+
+    has_char = index(input_string, char) /= 0
+  end function string_contains_character
+
+
   !* Strip leading and trailing white space off a string.
   function string_trim_white_space(input_string) result(output_string)
     implicit none
@@ -501,16 +513,5 @@ contains
     output_string = string_trim_white_space(output_string)
   end function string_get_left_of_character
 
-
-  !* Check if a string has a character.
-  function string_contains_character(input_string, char) result(has_char)
-    implicit none
-
-    character(len = *, kind = c_char), intent(in) :: input_string
-    character(len = 1, kind = c_char), intent(in) :: char
-    logical :: has_char
-
-    has_char = index(input_string, char) /= 0
-  end function string_contains_character
 
 end module string
