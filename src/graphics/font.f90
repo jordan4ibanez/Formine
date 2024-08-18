@@ -343,35 +343,35 @@ contains
 
       if (string_starts_with(temp_buffer, "SLOTS_HORIZONTAL = ")) then
         temp_buffer = string_get_right_of_character(temp_buffer, "=")
-        read(temp_buffer, '(i4)') slots_horizontal
+        slots_horizontal = string_to_int(temp_buffer)
         if (slots_horizontal <= 0) then
           error stop "[Font] Error: Impossible SLOTS_HORIZONTAL value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
       else if (string_starts_with(temp_buffer, "SLOTS_VERTICAL = ")) then
         temp_buffer = string_get_right_of_character(temp_buffer, "=")
-        read(temp_buffer, '(i4)') slots_vertical
+        slots_vertical = string_to_int(temp_buffer)
         if (slots_vertical <= 0) then
           error stop "[Font] Error: Impossible SLOTS_VERTICAL value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
       else if (string_starts_with(temp_buffer, "SPACING = ")) then
         temp_buffer = string_get_right_of_character(temp_buffer, "=")
-        read(temp_buffer, '(i4)') spacing
+        spacing = string_to_int(temp_buffer)
         if (spacing <= 0) then
           error stop "[Font] Error: Impossible SPACING value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
       else if (string_starts_with(temp_buffer, "CHAR_WIDTH = ")) then
         temp_buffer = string_get_right_of_character(temp_buffer, "=")
-        read(temp_buffer, '(i4)') character_width
+        character_width = string_to_int(temp_buffer)
         if (character_width <= 0) then
           error stop "[Font] Error: Impossible CHAR_WIDTH value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
       else if (string_starts_with(temp_buffer, "CHAR_HEIGHT = ")) then
         temp_buffer = string_get_right_of_character(temp_buffer, "=")
-        read(temp_buffer, '(i4)') character_height
+        character_height = string_to_int(temp_buffer)
         if (character_height <= 0) then
           error stop "[Font] Error: Impossible CHAR_HEIGHT value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
