@@ -9,6 +9,7 @@ module h_string
 
 
   !* A heap string is a container to allow strings to be put into arrays dynamically.
+  !* The internal data must be gotten with %get() to prevent UB.
   type :: heap_string
     private
     character(len = :), allocatable :: data
@@ -27,10 +28,8 @@ module h_string
     procedure :: is_allocated
     !? Get internal data.
     procedure :: get
-    !? Append another string to it.
-    procedure :: append
-    !? Prepend another string to it.
-    procedure :: prepend
+
+
     !? Strip all leading and trailing white space off the string.
     procedure :: strip
     !? Cut a substring out of a string. Searching from left to right.
