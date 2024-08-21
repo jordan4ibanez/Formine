@@ -229,6 +229,7 @@ contains
             temp_skylines_array = [temp_skylines_array, this%skylines(i)]
           end do
           this%skylines = temp_skylines_array
+          deallocate(temp_skylines_array)
           !? END REMOVE.
 
         else
@@ -265,6 +266,7 @@ contains
           temp_skylines_array = [temp_skylines_array, this%skylines(i)]
         end do
         this%skylines = temp_skylines_array
+        deallocate(temp_skylines_array)
         !? END REMOVE.
 
         i = i - 1
