@@ -185,7 +185,7 @@ contains
       error stop "[Skyline Packer] Error: Out of bounds."
     end if
 
-    if (the_skyline%y >this%border%bottom()) then
+    if (the_skyline%y > this%border%bottom()) then
       error stop "[Skyline Packer] Error: Out of bounds."
     end if
 
