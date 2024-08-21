@@ -15,6 +15,11 @@ module texture_packer_mod
   public :: texture_packer_conf
   public :: texture_packer
 
+  public :: TEXTURE_PACKER_OK
+  public :: TEXTURE_PACKER_IMAGE_TOO_LARGE_TO_FIT_IN_ATLAS
+  public :: TEXTURE_PACKER_WRONG_TYPE
+  public :: TEXTURE_PACKER_NOT_FOUND
+
   ! todo: going to need to look into implementing this into fortran.
   ! todo: simply use stb image and make a custom type for this.
 !   texture::{Pixel, SubTexture, Texture},
@@ -28,7 +33,7 @@ module texture_packer_mod
   integer(c_int), parameter :: TEXTURE_PACKER_IMAGE_TOO_LARGE_TO_FIT_IN_ATLAS = 1
   ! I hope I never hit this return.
   integer(c_int), parameter :: TEXTURE_PACKER_WRONG_TYPE = 2
-  integer(c_int), parameter :: TEXTURE_PACKER_MISSING = 3
+  integer(c_int), parameter :: TEXTURE_PACKER_NOT_FOUND = 3
 
 
 
@@ -57,6 +62,7 @@ module texture_packer_mod
     procedure :: pack_own => texture_packer_pack_own
     procedure :: get_frames => texture_packer_get_frames
     procedure :: get_frame => texture_packer_get_frame
+    procedure :: get_frame_at => texture_packer_get_frame_at
   end type texture_packer
 
 
@@ -227,30 +233,56 @@ contains
         status = TEXTURE_PACKER_WRONG_TYPE
       end select
     else
-      status = TEXTURE_PACKER_MISSING
+      status = TEXTURE_PACKER_NOT_FOUND
     end if
   end function texture_packer_get_frame
 
   !* Get the frame that overlaps with a specified coordinate.
-!     fn get_frame_at(&self, x: u32, y: u32) -> Option<&Frame<K>> {
-!         let extrusion = this%config%texture_extrusion;
+  function texture_packer_get_frame_at(this, x, y, optional_frame) result(status)
+    use :: math_helpers, only: saturating_sub
+    use :: fhash, only: fhash_iter_t, fhash_key_t
+    implicit none
 
-!         for (_, frame) in this%frames.iter() {
-!             let mut rect = frame%frame;
+    class(texture_packer), intent(in), target :: this
+    integer(c_int), intent(in), value :: x, y
+    type(frame), intent(inout) :: optional_frame
+    integer(c_int) :: status
+    integer(c_int) :: extrusion
+    type(fhash_iter_t) :: iterator
+    class(fhash_key_t), allocatable :: generic_key
+    class(*), allocatable :: generic_data
+    type(frame) :: worker_frame
+    type(rect) :: rectangle
 
-!             rect.x = rect.x.saturating_sub(extrusion);
-!             rect.y = rect.y.saturating_sub(extrusion);
+    extrusion = this%config%texture_extrusion;
 
-!             rect.w += extrusion * 2;
-!             rect.h += extrusion * 2;
+    iterator = fhash_iter_t(this%frames)
 
-!             if rect.contains_point(x, y) {
-!                 return Some(frame);
-!             }
-!         }
-!         None
-!     }
-! }
+    do while(iterator%next(generic_key, generic_data))
+      select type (generic_data)
+       type is (frame)
+        worker_frame = generic_data
+       class default
+        error stop "[Texture Packer] Error: How did this type get in here?"
+      end select
+
+      rectangle = worker_frame%frame
+
+      rectangle%x = saturating_sub(rectangle%x, extrusion, 0)
+      rectangle%y = saturating_sub(rectangle%y, extrusion, 0);
+
+      rectangle%w = rectangle%w + (extrusion * 2);
+      rectangle%h = rectangle%h + (extrusion * 2);
+
+      if (rectangle%contains_point(x, y)) then
+        optional_frame = worker_frame
+        status = TEXTURE_PACKER_OK
+        return
+      end if
+    end do
+
+    status = TEXTURE_PACKER_NOT_FOUND
+  end function texture_packer_get_frame_at
 
 ! impl<'a, Pix, T: Clone, K: Clone + Eq + Hash> Texture for TexturePacker<'a, T, K>
 ! where
