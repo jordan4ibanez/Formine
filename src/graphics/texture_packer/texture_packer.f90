@@ -25,18 +25,13 @@ module texture_packer_mod
 !     TextureTooLargeToFitIntoAtlas,
 ! }
 
-! /// Packs textures into a single texture atlas.
-! pub struct TexturePacker<'a, T: 'a + Clone, K: Clone + Eq + Hash> {
-!     textures: HashMap<K, SubTexture<'a, T>>,
-!     frames: HashMap<K, Frame<K>>,
-!     packer: Box<dyn Packer<K>>,
-!     config: TexturePackerConfig,
-! }
-
-  type :: texture_packer_type
-
-  end type texture_packer_type
-
+  !* Packs textures into a single texture atlas.
+  type :: texture_packer
+    type(fhash_tbl_t), allocatable :: textures
+    type(fhash_tbl_t), allocatable :: frames
+    type(skyline_packer), allocatable :: packer
+    type(texture_packer_conf) :: config
+  end type texture_packer
 
 contains
 
