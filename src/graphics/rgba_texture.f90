@@ -1,4 +1,4 @@
-module rgba8_texture_mod
+module rgba8_texture_module
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -227,4 +227,4 @@ contains
   end function rgba8_texture_internal_position_to_index
 
 
-end module rgba8_texture_mod
+end module rgba8_texture_module
