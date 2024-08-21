@@ -261,7 +261,7 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: font_texture_file_path
-    integer(c_int) :: x, y, channels, desired_channels
+    integer(c_int) :: image_width, image_height, channels, desired_channels
     character(len = :, kind = c_char), allocatable :: c_file_path
     character(len = :), allocatable :: font_data_file_name
     character(len = :), allocatable :: font_config_file_path
@@ -284,20 +284,20 @@ contains
     ! We always want 4 channels.
     desired_channels = 4
 
-    raw_image_data = stbi_load(c_file_path, x, y, channels, desired_channels)
+    raw_image_data = stbi_load(c_file_path, image_width, image_height, channels, desired_channels)
 
     ! Let's check if the configuration file is correct.
-    if (x /= font_texture_width) then
-      error stop "[Font] Error: Font sizing in configuration file is wrong on X axis. Expected: ["//int_to_string(font_texture_width)//"] | received: ["//int_to_string(x)//"]"
-    else if (y /= font_texture_height) then
-      error stop "[Font] Error: Font sizing in configuration file is wrong on Y axis. Expected: ["//int_to_string(font_texture_height)//"] | received: ["//int_to_string(y)//"]"
+    if (image_width /= font_texture_width) then
+      error stop "[Font] Error: Font sizing in configuration file is wrong on X axis. Expected: ["//int_to_string(font_texture_width)//"] | received: ["//int_to_string(image_width)//"]"
+    else if (image_height /= font_texture_height) then
+      error stop "[Font] Error: Font sizing in configuration file is wrong on Y axis. Expected: ["//int_to_string(font_texture_height)//"] | received: ["//int_to_string(image_height)//"]"
     end if
 
     ! Now, we will bake in the OpenGL texture coordinates into the double floating point database.
     call calculate_opengl_texture_coordinates(raw_image_data, character_database_integral)
 
     ! Then we can finally upload it into the texture database.
-    call texture_create_from_memory("font", raw_image_data, x, y)
+    call texture_create_from_memory("font", raw_image_data, image_width, image_height)
   end subroutine font_create
 
 
