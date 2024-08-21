@@ -63,6 +63,7 @@ module texture_packer_mod
     procedure :: get_frames => texture_packer_get_frames
     procedure :: get_frame => texture_packer_get_frame
     procedure :: get_frame_at => texture_packer_get_frame_at
+    procedure :: width => texture_packer_width
   end type texture_packer
 
 
@@ -184,7 +185,6 @@ contains
     the_sub_texture = sub_texture_from_ref(texture, source)
     call rectangle%from(texture)
 
-
     if (this%packer%pack(texture_key, rectangle, optional_frame)) then
       optional_frame%frame%x = optional_frame%frame%x + this%config%border_padding;
       optional_frame%frame%y = optional_frame%frame%y + this%config%border_padding;
@@ -237,6 +237,7 @@ contains
     end if
   end function texture_packer_get_frame
 
+
   !* Get the frame that overlaps with a specified coordinate.
   function texture_packer_get_frame_at(this, x, y, optional_frame) result(status)
     use :: math_helpers, only: saturating_sub
@@ -284,36 +285,58 @@ contains
     status = TEXTURE_PACKER_NOT_FOUND
   end function texture_packer_get_frame_at
 
-! impl<'a, Pix, T: Clone, K: Clone + Eq + Hash> Texture for TexturePacker<'a, T, K>
-! where
-!     Pix: Pixel,
-!     T: Texture<Pixel = Pix>,
-! {
-!     type Pixel = Pix;
 
-!     fn width(&self) -> u32 {
-!         if this%config%force_max_dimensions {
-!             return this%config%max_width
-!         }
+  function texture_packer_width(this) result(the_width)
+    use :: fhash, only: fhash_iter_t, fhash_key_t
+    use :: constants
+    implicit none
 
-!         let mut right = None;
+    class(texture_packer), intent(in) :: this
+    integer(c_int) :: the_width
+    type(fhash_iter_t) :: iterator
+    class(fhash_key_t), allocatable :: generic_key
+    class(*), allocatable :: generic_data
+    type(frame) :: worker_frame
+    logical :: found_right
+    integer(c_int) :: the_right
 
-!         for (_, frame) in this%frames.iter() {
-!             if let Some(r) = right {
-!                 if frame%frame%right() > r {
-!                     right = Some(frame%frame%right());
-!                 }
-!             } else {
-!                 right = Some(frame%frame%right());
-!             }
-!         }
 
-!         if let Some(right) = right {
-!             right + 1 + this%config%border_padding
-!         } else {
-!             0
-!         }
-!     }
+    if (this%config%force_max_dimensions) then
+      the_width = this%config%max_width
+      return
+    end if
+
+    found_right = .false.
+
+    the_right = C_INT_MIN
+
+    iterator = fhash_iter_t(this%frames)
+
+    do while(iterator%next(generic_key, generic_data))
+      select type (generic_data)
+       type is (frame)
+        worker_frame = generic_data
+       class default
+        error stop "[Texture Packer] Error: How did this type get in here?"
+      end select
+
+      if (found_right) then
+        if (worker_frame%frame%right() > the_right) then
+          found_right = .true.
+          the_right = worker_frame%frame%right();
+        end if
+      else
+        found_right = .true.
+        the_right = worker_frame%frame%right();
+      end if
+    end do
+
+    if (found_right) then
+      the_width = the_right + 1 + this%config%border_padding
+    else
+      the_width = 0
+    end if
+  end function texture_packer_width
 
 !     fn height(&self) -> u32 {
 !         if this%config%force_max_dimensions {
