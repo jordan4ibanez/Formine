@@ -3,6 +3,7 @@ module texture_packer
   use :: texture_packer_skyline_packer
   use :: texture_packer_rectangle
   use :: texture_packer_config
+  use :: fhash, only: fhash_tbl_t, key => fhash_key
   implicit none
 
   ! todo: going to need to look into implementing this into fortran.
@@ -30,6 +31,10 @@ module texture_packer
 !     packer: Box<dyn Packer<K>>,
 !     config: TexturePackerConfig,
 ! }
+
+  type :: texture_packer_type
+  
+  end type texture_packer_type
 
 
 contains
