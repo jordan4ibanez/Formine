@@ -26,6 +26,11 @@ module texture_packer_mod
 
   integer(c_int), parameter :: TEXTURE_PACKER_OK = 0
   integer(c_int), parameter :: TEXTURE_PACKER_IMAGE_TOO_LARGE_TO_FIT_IN_ATLAS = 1
+  ! I hope I never hit this return.
+  integer(c_int), parameter :: TEXTURE_PACKER_WRONG_TYPE = 2
+  integer(c_int), parameter :: TEXTURE_PACKER_MISSING = 3
+
+
 
 ! use std::cmp::min;
 ! use std::collections::HashMap;
@@ -46,7 +51,12 @@ module texture_packer_mod
     type(texture_packer_conf), allocatable :: config
   contains
     procedure :: can_pack => texture_packer_can_pack
+    !! This doesn't make any sense to have two of these lol.
+    ! fixme: undo this nonsense.
     procedure :: pack_ref => texture_packer_pack_ref
+    procedure :: pack_own => texture_packer_pack_own
+    procedure :: get_frames => texture_packer_get_frames
+    procedure :: get_frame => texture_packer_get_frame
   end type texture_packer
 
 
@@ -137,49 +147,91 @@ contains
     status = TEXTURE_PACKER_OK
   end function texture_packer_pack_ref
 
-!     /// Pack the `texture` into this packer, taking ownership of the texture object.
-!     pub fn pack_own(&mut self, key: K, texture: T) -> PackResult<()> {
-!         let (w, h) = (texture.width(), texture.height());
-!         let source = if this%config%trim {
-!             trim_texture(&texture)
-!         } else {
-!             Rect::new(0, 0, w, h)
-!         };
-!         if !this%packer%can_pack(&source) {
-!             return Err(PackError::TextureTooLargeToFitIntoAtlas);
-!         }
+  !* Pack the `texture` into this packer, taking ownership of the texture object.
+  function texture_packer_pack_own(this, texture_key, texture) result(status)
+    implicit none
 
-!         let texture = SubTexture::new(texture, source);
-!         let rect = (&texture).into();
-!         if let Some(mut frame) = this%packer%pack(key.clone(), &rect) {
-!             frame%frame%x += this%config%border_padding;
-!             frame%frame%y += this%config%border_padding;
-!             frame%trimmed = this%config%trim;
-!             frame%source = source;
-!             frame%source.w = w;
-!             frame%source.h = h;
-!             this%frames.insert(key.clone(), frame);
-!         }
+    class(texture_packer), intent(inout) :: this
+    character(len = *, kind = c_char), intent(in) :: texture_key
+    type(rgba8_texture), intent(in) :: texture
+    integer(c_int) :: status, w, h
+    type(rect) :: source, rectangle
+    type(sub_texture) :: the_sub_texture
+    type(frame) :: optional_frame
 
-!         this%textures.insert(key, texture);
-!         Ok(())
-!     }
+    w = texture%width
+    h = texture%height
 
-!     /// Get the backing mapping from strings to frames.
-!     pub fn get_frames(&self) -> &HashMap<K, Frame<K>> {
-!         &this%frames
-!     }
+    if (this%config%trim) then
+      print*,"fixme: implement trimming!"
+      ! todo: implement trimming
+      ! source = trim_texture(texture)
+    else
+      source = rect(0, 0, w, h)
+    end if
 
-!     /// Acquire a frame by its name.
-!     pub fn get_frame(&self, key: &K) -> Option<&Frame<K>> {
-!         if let Some(frame) = this%frames.get(key) {
-!             Some(frame)
-!         } else {
-!             None
-!         }
-!     }
+    if (.not. this%packer%can_pack(source)) then
+      status = TEXTURE_PACKER_IMAGE_TOO_LARGE_TO_FIT_IN_ATLAS
+      return
+    end if
 
-!     /// Get the frame that overlaps with a specified coordinate.
+    the_sub_texture = sub_texture_from_ref(texture, source)
+    call rectangle%from(texture)
+
+
+    if (this%packer%pack(texture_key, rectangle, optional_frame)) then
+      optional_frame%frame%x = optional_frame%frame%x + this%config%border_padding;
+      optional_frame%frame%y = optional_frame%frame%y + this%config%border_padding;
+      optional_frame%trimmed = this%config%trim;
+      optional_frame%source = source;
+      optional_frame%source%w = w;
+      optional_frame%source%h = h;
+
+      call this%frames%set(key(texture_key), optional_frame)
+    end if
+
+    call this%textures%set(key(texture_key), texture);
+
+    status = TEXTURE_PACKER_OK
+  end function texture_packer_pack_own
+
+
+  !* Get the backing mapping from strings to frames.
+  function texture_packer_get_frames(this) result(the_frames)
+    implicit none
+
+    class(texture_packer), intent(in), target :: this
+    type(fhash_tbl_t), pointer :: the_frames
+
+    the_frames => this%frames
+  end function texture_packer_get_frames
+
+
+  !* Acquire a frame by its name.
+  function texture_packer_get_frame(this, frame_key, optional_frame) result(status)
+    implicit none
+
+    class(texture_packer), intent(in), target :: this
+    character(len = *, kind = c_char), intent(in) :: frame_key
+    type(frame), intent(inout) :: optional_frame
+    class(*), allocatable :: generic_data
+    integer :: status
+
+    call this%frames%get_raw(key(frame_key), generic_data, stat = status)
+
+    if (status == 0) then
+      select type(generic_data)
+       type is (frame)
+        optional_frame = generic_data
+       class default
+        status = TEXTURE_PACKER_WRONG_TYPE
+      end select
+    else
+      status = TEXTURE_PACKER_MISSING
+    end if
+  end function texture_packer_get_frame
+
+  !* Get the frame that overlaps with a specified coordinate.
 !     fn get_frame_at(&self, x: u32, y: u32) -> Option<&Frame<K>> {
 !         let extrusion = this%config%texture_extrusion;
 
