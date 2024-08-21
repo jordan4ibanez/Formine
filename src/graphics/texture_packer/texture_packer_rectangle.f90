@@ -253,7 +253,7 @@ contains
 
   !* Allow translating the dimensions from an rgba8_texture into a rectangle.
   subroutine rect_from_rgba8_texture(this, texture)
-    use :: rgba8_texture_mod
+    use :: rgba8_texture_module
     implicit none
 
     class(rect), intent(inout) :: this

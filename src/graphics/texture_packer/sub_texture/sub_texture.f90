@@ -1,6 +1,6 @@
 module sub_texture_module
   use :: texture_packer_rectangle
-  use :: rgba8_texture_mod
+  use :: rgba8_texture_module
   use, intrinsic :: iso_c_binding
   implicit none
 
