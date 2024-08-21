@@ -3,7 +3,8 @@ module texture_packer_mod
   use :: texture_packer_skyline_packer
   use :: texture_packer_rectangle
   use :: texture_packer_config
-  use :: rgba8_texture_mod
+  use :: rgba8_texture_module
+  use :: sub_texture_module
   use :: fhash, only: fhash_tbl_t, key => fhash_key
   use, intrinsic :: iso_c_binding
   implicit none
@@ -95,8 +96,9 @@ contains
     type(rgba8_texture), intent(in) :: texture
     integer(c_int) :: status
     integer(c_int) :: w, h
-    type(rect) :: source
-
+    type(rect) :: source, rectangle
+    type(sub_texture) :: the_sub_texture
+    type(frame) :: optional_frame
 
     w = texture%width
     h = texture%height
@@ -114,18 +116,20 @@ contains
       return
     end if
 
-!         let texture = SubTexture::from_ref(texture, source);
-!         let rect = (&texture).into();
 
-!         if let Some(mut frame) = this%packer%pack(key.clone(), &rect) {
-!             frame.frame.x += this%config%border_padding;
-!             frame.frame.y += this%config%border_padding;
-!             frame.trimmed = this%config%trim;
-!             frame.source = source;
-!             frame.source.w = w;
-!             frame.source.h = h;
-!             this%frames.insert(key.clone(), frame);
-!         }
+    the_sub_texture = sub_texture_from_ref(texture, source)
+    call rectangle%from(texture)
+
+    ! let Some(mut frame) =
+    if  (this%packer%pack(texture_key, rectangle, optional_frame)) then
+      frame%frame%x = frame%frame%x + this%config%border_padding;
+      frame%frame%y = frame%frame%y + this%config%border_padding;
+      frame%trimmed = this%config%trim;
+      frame%source = source;
+      frame%source.w = w;
+      frame%source.h = h;
+      this%frames.insert(key.clone(), frame);
+    end if
 
 !         this%textures.insert(key, texture);
 !         Ok(())
@@ -146,12 +150,12 @@ contains
 !         let texture = SubTexture::new(texture, source);
 !         let rect = (&texture).into();
 !         if let Some(mut frame) = this%packer%pack(key.clone(), &rect) {
-!             frame.frame.x += this%config%border_padding;
-!             frame.frame.y += this%config%border_padding;
-!             frame.trimmed = this%config%trim;
-!             frame.source = source;
-!             frame.source.w = w;
-!             frame.source.h = h;
+!             frame%frame%x += this%config%border_padding;
+!             frame%frame%y += this%config%border_padding;
+!             frame%trimmed = this%config%trim;
+!             frame%source = source;
+!             frame%source.w = w;
+!             frame%source.h = h;
 !             this%frames.insert(key.clone(), frame);
 !         }
 
@@ -178,7 +182,7 @@ contains
 !         let extrusion = this%config%texture_extrusion;
 
 !         for (_, frame) in this%frames.iter() {
-!             let mut rect = frame.frame;
+!             let mut rect = frame%frame;
 
 !             rect.x = rect.x.saturating_sub(extrusion);
 !             rect.y = rect.y.saturating_sub(extrusion);
@@ -210,11 +214,11 @@ contains
 
 !         for (_, frame) in this%frames.iter() {
 !             if let Some(r) = right {
-!                 if frame.frame.right() > r {
-!                     right = Some(frame.frame.right());
+!                 if frame%frame%right() > r {
+!                     right = Some(frame%frame%right());
 !                 }
 !             } else {
-!                 right = Some(frame.frame.right());
+!                 right = Some(frame%frame%right());
 !             }
 !         }
 
@@ -234,11 +238,11 @@ contains
 
 !         for (_, frame) in this%frames.iter() {
 !             if let Some(b) = bottom {
-!                 if frame.frame.bottom() > b {
-!                     bottom = Some(frame.frame.bottom());
+!                 if frame%frame%bottom() > b {
+!                     bottom = Some(frame%frame%bottom());
 !                 }
 !             } else {
-!                 bottom = Some(frame.frame.bottom());
+!                 bottom = Some(frame%frame%bottom());
 !             }
 !         }
 
@@ -251,15 +255,15 @@ contains
 
 !     fn get(&self, x: u32, y: u32) -> Option<Pix> {
 !         if let Some(frame) = this%get_frame_at(x, y) {
-!             if this%config%texture_outlines && frame.frame.is_outline(x, y) {
+!             if this%config%texture_outlines && frame%frame%is_outline(x, y) {
 !                 return Some(<Pix as Pixel>::outline());
 !             }
 
-!             if let Some(texture) = this%textures.get(&frame.key) {
-!                 let x = x.saturating_sub(frame.frame.x);
-!                 let y = y.saturating_sub(frame.frame.y);
+!             if let Some(texture) = this%textures.get(&frame%key) {
+!                 let x = x.saturating_sub(frame%frame%x);
+!                 let y = y.saturating_sub(frame%frame%y);
 
-!                 return if frame.rotated {
+!                 return if frame%rotated {
 !                     let x = min(x, texture.height() - 1);
 !                     let y = min(y, texture.width() - 1);
 !                     texture.get_rotated(x, y)
