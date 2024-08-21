@@ -77,7 +77,7 @@ contains
     c_pointer = internal_stbi_load(file_name, x, y, channels_in_file, desired_channels)
 
     ! Calculate the length of the array.
-    array_length = x * y * channels_in_file
+    array_length = x * y * desired_channels
 
     ! Pass it into fortran.
     call c_f_pointer(c_pointer, passed_data_pointer, shape = [array_length])
