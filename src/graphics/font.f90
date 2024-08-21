@@ -79,6 +79,7 @@ contains
     integer, parameter :: dimensions = 2
     integer, parameter :: stride = dimensions * points
 
+    !todo: implement this :)
     print*,"[Font] FIXME: Use the new [rgba_texture] module components!"
 
     if (.not. present(r)) then
