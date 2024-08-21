@@ -8,6 +8,12 @@ module texture_packer_mod
   use, intrinsic :: iso_c_binding
   implicit none
 
+
+  private
+
+  public :: texture_packer_conf
+  public :: texture_packer
+
   ! todo: going to need to look into implementing this into fortran.
   ! todo: simply use stb image and make a custom type for this.
 !   texture::{Pixel, SubTexture, Texture},
@@ -31,7 +37,7 @@ module texture_packer_mod
     type(fhash_tbl_t), allocatable :: textures
     type(fhash_tbl_t), allocatable :: frames
     type(skyline_packer), allocatable :: packer
-    type(texture_packer_conf) :: config
+    type(texture_packer_conf), allocatable :: config
   end type texture_packer
 
 
@@ -50,12 +56,18 @@ contains
     type(texture_packer_conf), intent(in) :: config
     type(texture_packer) :: new_texture_packer
 
-
+    allocate(new_texture_packer%textures)
     call new_texture_packer%textures%allocate()
+
+    allocate(new_texture_packer%frames)
     call new_texture_packer%frames%allocate()
+    
     new_texture_packer%packer = skyline_packer(config)
     new_texture_packer%config = config
   end function constructor_texture_packer
+
+
+
 
 ! impl<'a, Pix: Pixel, T: Clone + Texture<Pixel = Pix>, K: Clone + Eq + Hash>
 !     TexturePacker<'a, T, K>
