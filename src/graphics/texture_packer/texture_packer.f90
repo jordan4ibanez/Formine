@@ -64,6 +64,7 @@ module texture_packer_mod
     procedure :: get_frame => texture_packer_get_frame
     procedure :: get_frame_at => texture_packer_get_frame_at
     procedure :: width => texture_packer_width
+    procedure :: height => texture_packer_height
   end type texture_packer
 
 
@@ -307,7 +308,6 @@ contains
     end if
 
     found_right = .false.
-
     the_right = C_INT_MIN
 
     iterator = fhash_iter_t(this%frames)
@@ -338,29 +338,57 @@ contains
     end if
   end function texture_packer_width
 
-!     fn height(&self) -> u32 {
-!         if this%config%force_max_dimensions {
-!             return this%config%max_height
-!         }
 
-!         let mut bottom = None;
+  function texture_packer_height(this) result(the_height)
+    use :: fhash, only: fhash_iter_t, fhash_key_t
+    use :: constants
+    implicit none
 
-!         for (_, frame) in this%frames.iter() {
-!             if let Some(b) = bottom {
-!                 if frame%frame%bottom() > b {
-!                     bottom = Some(frame%frame%bottom());
-!                 }
-!             } else {
-!                 bottom = Some(frame%frame%bottom());
-!             }
-!         }
+    class(texture_packer), intent(in) :: this
+    integer(c_int) :: the_height
+    type(fhash_iter_t) :: iterator
+    class(fhash_key_t), allocatable :: generic_key
+    class(*), allocatable :: generic_data
+    type(frame) :: worker_frame
+    logical :: found_bottom
+    integer(c_int) :: the_bottom
 
-!         if let Some(bottom) = bottom {
-!             bottom + 1 + this%config%border_padding
-!         } else {
-!             0
-!         }
-!     }
+
+    if (this%config%force_max_dimensions) then
+      the_height = this%config%max_height
+      return
+    end if
+
+    found_bottom = .false.
+    the_bottom = C_INT_MIN
+
+    iterator = fhash_iter_t(this%frames)
+
+    do while(iterator%next(generic_key, generic_data))
+      select type (generic_data)
+       type is (frame)
+        worker_frame = generic_data
+       class default
+        error stop "[Texture Packer] Error: How did this type get in here?"
+      end select
+
+      if (found_bottom) then
+        if (worker_frame%frame%bottom() > the_bottom) then
+          found_bottom = .true.
+          the_bottom = worker_frame%frame%bottom()
+        end if
+      else
+        found_bottom = .true.
+        the_bottom = worker_frame%frame%bottom()
+      end if
+    end do
+
+    if (found_bottom) then
+      the_height = the_bottom + 1 + this%config%border_padding
+    else
+      the_height = 0
+    end if
+  end function texture_packer_height
 
 !     fn get(&self, x: u32, y: u32) -> Option<Pix> {
 !         if let Some(frame) = this%get_frame_at(x, y) {
