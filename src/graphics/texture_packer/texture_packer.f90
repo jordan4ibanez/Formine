@@ -38,6 +38,8 @@ module texture_packer_mod
     type(fhash_tbl_t), allocatable :: frames
     type(skyline_packer), allocatable :: packer
     type(texture_packer_conf), allocatable :: config
+  contains
+    procedure :: can_pack => texture_packer_can_pack
   end type texture_packer
 
 
@@ -61,22 +63,24 @@ contains
 
     allocate(new_texture_packer%frames)
     call new_texture_packer%frames%allocate()
-    
+
     new_texture_packer%packer = skyline_packer(config)
     new_texture_packer%config = config
   end function constructor_texture_packer
 
 
+  !* Check if the texture can be packed into this packer.
+  function texture_packer_can_pack(this, texture) result(can_pack)
+    implicit none
 
+    class(texture_packer), intent(in) :: this
+    type(rgba8_texture), intent(in) :: texture
+    logical :: can_pack
+    type(rect) :: rectangle
 
-! impl<'a, Pix: Pixel, T: Clone + Texture<Pixel = Pix>, K: Clone + Eq + Hash>
-!     TexturePacker<'a, T, K>
-! {
-!     /// Check if the texture can be packed into this packer.
-!     pub fn can_pack(&self, texture: &'a T) -> bool {
-!         let rect = texture.into();
-!         self.packer.can_pack(&rect)
-!     }
+    call rectangle%from(texture)
+    can_pack = this%packer%can_pack(rectangle)
+  end function texture_packer_can_pack
 
 !     /// Pack the `texture` into this packer, taking a reference of the texture object.
 !     pub fn pack_ref(&mut self, key: K, texture: &'a T) -> PackResult<()> {
