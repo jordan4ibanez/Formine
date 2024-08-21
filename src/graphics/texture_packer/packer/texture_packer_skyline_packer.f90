@@ -249,7 +249,7 @@ contains
     integer(c_int) :: i, current_index
     type(skyline), dimension(:), allocatable :: temp_skylines_array
 
-    i = 1
+    i = 2
 
     do while (i <= size(this%skylines))
       if (this%skylines(i - 1)%y == this%skylines(i)%y) then
