@@ -122,12 +122,13 @@ contains
 
     ! let Some(mut frame) =
     if  (this%packer%pack(texture_key, rectangle, optional_frame)) then
-      frame%frame%x = frame%frame%x + this%config%border_padding;
-      frame%frame%y = frame%frame%y + this%config%border_padding;
-      frame%trimmed = this%config%trim;
-      frame%source = source;
-      frame%source.w = w;
-      frame%source.h = h;
+      optional_frame%frame%x = optional_frame%frame%x + this%config%border_padding;
+      optional_frame%frame%y = optional_frame%frame%y + this%config%border_padding;
+      optional_frame%trimmed = this%config%trim;
+      optional_frame%source = source;
+      optional_frame%source%w = w;
+      optional_frame%source%h = h;
+      
       this%frames.insert(key.clone(), frame);
     end if
 
