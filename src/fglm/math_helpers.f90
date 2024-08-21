@@ -208,4 +208,21 @@ contains
   end function int_to_c_uchar_array
 
 
+  !* This basically clamps subtraction to the min limit set.
+  !* This is a really dumb way to do this.
+  function saturating_sub(input, sub, limit) result(clamped)
+    implicit none
+
+    integer(c_int), intent(in), value :: input, sub, limit
+    integer(c_int) :: clamped
+
+    clamped = input - sub
+
+    ! Build in rollover protection.
+    if (clamped < limit .or. clamped > input) then
+      clamped = limit
+    end if
+  end function saturating_sub
+
+
 end module math_helpers
