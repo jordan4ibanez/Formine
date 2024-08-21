@@ -11,8 +11,8 @@ module texture_packer_rectangle
 
   !* Defines a rectangle in pixels with the origin at the top-left of the texture atlas.
   type :: rect
-    integer(c_int) :: x = 1
-    integer(c_int) :: y = 1
+    integer(c_int) :: x = 0
+    integer(c_int) :: y = 0
     integer(c_int) :: w = 0
     integer(c_int) :: h = 0
   contains

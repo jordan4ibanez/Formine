@@ -11,8 +11,8 @@ module texture_packer_skyline_packer
   ! fixme: turn the 0 index into 1 index.
 
   type :: skyline
-    integer(c_int) :: x = 1
-    integer(c_int) :: y = 1
+    integer(c_int) :: x = 0
+    integer(c_int) :: y = 0
     integer(c_int) :: w = 0
   contains
     procedure :: left => skyline_left
@@ -76,7 +76,7 @@ contains
 
     skylines = [skylines, skyline(0, 0, config%max_width)]
 
-    new_skyline_packer = skyline_packer(config, rect(1, 1, config%max_width, config%max_height), skylines)
+    new_skyline_packer = skyline_packer(config, rect(0, 0, config%max_width, config%max_height), skylines)
   end function constructor_skyline_packer
 
 
@@ -94,7 +94,7 @@ contains
     integer(c_int) :: width_left
 
     can_put = .false.
-    option_rectangle = rect(this%skylines(i)%x, 1, w, h)
+    option_rectangle = rect(this%skylines(i)%x, 0, w, h)
     width_left = option_rectangle%w
 
     do
@@ -139,8 +139,8 @@ contains
     bottom = C_INT_MAX
     width = C_INT_MAX
     option_index = 0
-    option_rectangle = rect(1, 1, 0, 0)
-    r = rect(1, 1, 0, 0)
+    option_rectangle = rect(0, 0, 0, 0)
+    r = rect(0, 0, 0, 0)
     can_find = .false.
 
     ! keep the `bottom` and `width` as small as possible
@@ -304,7 +304,7 @@ contains
 
       could_pack = .true.
 
-      optional_frame = frame(key, optional_rectangle, rotated, .false., rect(1, 1, texture_rect%w, texture_rect%h))
+      optional_frame = frame(key, optional_rectangle, rotated, .false., rect(0, 0, texture_rect%w, texture_rect%h))
     else
       could_pack = .false.
     end if
