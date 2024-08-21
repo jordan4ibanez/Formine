@@ -1,4 +1,4 @@
-module memory_rgba8_texture
+module memory_rgba8_texture_mod
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -11,4 +11,8 @@ module memory_rgba8_texture
     integer(c_int) :: a = 0
   end type rgba8
 
-end module memory_rgba8_texture
+  type :: memory_rgba8_texture
+
+  end type memory_rgba8_texture
+
+end module memory_rgba8_texture_mod
