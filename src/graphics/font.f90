@@ -294,7 +294,7 @@ contains
     end if
 
     ! Now, we will bake in the OpenGL texture coordinates into the double floating point database.
-    call calculate_opengl_texture_coordinates(raw_image_data, character_database_integral)
+    call calculate_opengl_texture_coordinates(raw_image_data, image_width, image_height, character_database_integral)
 
     ! Then we can finally upload it into the texture database.
     call texture_create_from_memory("font", raw_image_data, image_width, image_height)
@@ -568,48 +568,8 @@ contains
       pos = vec2d(x_f64 / canvas_width_f64, y_f64 / canvas_height_f64)
     end function pixel_position_to_opengl_position
 
+ 
 
-    !* This wraps a chain of functions to just get the data we need, which is RGBA of a pixel.
-    function get_color(x,y) result(color)
-      implicit none
-
-      integer(c_int), intent(in), value :: x, y
-      type(rgba8_pixel) :: color
-
-      color = index_get_color(position_to_index(x,y))
-    end function get_color
-
-
-    !* Position (in pixels) to the index in the texture array.
-    function position_to_index(x, y) result(i)
-      implicit none
-
-      integer(c_int), intent(in), value :: x, y
-      integer(c_int) :: a, b
-      integer(c_int) :: i
-
-      ! Shift into 0 indexed, because math.
-      a = x - 1
-      b = y - 1
-
-      ! Times 4 because we have 4 individual channels we're hopping over.
-      ! Plus 1 because we're shifting back into 1 indexed.
-      i = (((b * font_texture_width) + a) * 4) + 1
-    end function position_to_index
-
-
-    !* Get the RGBA of an index.
-    function index_get_color(index) result(color)
-      implicit none
-
-      integer(c_int), intent(in), value :: index
-      type(rgba8_pixel) :: color
-
-      color%r = integral_image_data(index)
-      color%g = integral_image_data(index + 1)
-      color%b = integral_image_data(index + 2)
-      color%a = integral_image_data(index + 3)
-    end function index_get_color
   end subroutine calculate_opengl_texture_coordinates
 
 
