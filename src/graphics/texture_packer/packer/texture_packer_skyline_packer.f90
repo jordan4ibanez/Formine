@@ -99,6 +99,7 @@ contains
 
     do
       option_rectangle%y = max(option_rectangle%y, this%skylines(i)%y)
+
       ! the source rect is too large
       if (.not. this%border%contains(option_rectangle)) then
         can_put = .false.
@@ -114,7 +115,7 @@ contains
       width_left = width_left - this%skylines(i)%w
       i = i + 1
 
-      if (i <= size(this%skylines)) then
+      if (i > size(this%skylines)) then
         error stop "[Skyline Packer] Error: Out of bounds."
       end if
     end do
