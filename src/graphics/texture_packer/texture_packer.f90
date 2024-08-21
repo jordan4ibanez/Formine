@@ -31,6 +31,9 @@ module texture_packer
 !     config: TexturePackerConfig,
 ! }
 
+
+contains
+
 ! impl<'a, Pix: Pixel, T: 'a + Clone + Texture<Pixel = Pix>, K: Clone + Eq + Hash>
 !     TexturePacker<'a, T, K>
 ! {
