@@ -5,6 +5,7 @@ module texture_packer_mod
   use :: texture_packer_config
   use :: rgba8_texture_mod
   use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use, intrinsic :: iso_c_binding
   implicit none
 
   ! todo: going to need to look into implementing this into fortran.
@@ -33,21 +34,28 @@ module texture_packer_mod
     type(texture_packer_conf) :: config
   end type texture_packer
 
+
+  interface texture_packer
+    module procedure :: constructor_texture_packer
+  end interface texture_packer
+
+
 contains
 
-! impl<'a, Pix: Pixel, T: 'a + Clone + Texture<Pixel = Pix>, K: Clone + Eq + Hash>
-!     TexturePacker<'a, T, K>
-! {
-!     /// Create a new packer using the skyline packing algorithm.
-!     pub fn new_skyline(config: TexturePackerConfig) -> Self {
-!         TexturePacker {
-!             textures: HashMap::new(),
-!             frames: HashMap::new(),
-!             packer: Box::new(SkylinePacker::new(config)),
-!             config,
-!         }
-!     }
-! }
+
+  !* Create a new packer using the skyline packing algorithm.
+  function constructor_texture_packer(config) result(new_texture_packer)
+    implicit none
+
+    type(texture_packer_conf), intent(in) :: config
+    type(texture_packer) :: new_texture_packer
+
+
+    call new_texture_packer%textures%allocate()
+    call new_texture_packer%frames%allocate()
+    new_texture_packer%packer = skyline_packer(config)
+    new_texture_packer%config = config
+  end function constructor_texture_packer
 
 ! impl<'a, Pix: Pixel, T: Clone + Texture<Pixel = Pix>, K: Clone + Eq + Hash>
 !     TexturePacker<'a, T, K>
