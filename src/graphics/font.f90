@@ -302,7 +302,7 @@ contains
 
 
   !* Very simple configuration file processing.
-  subroutine process_font_configuration(font_config_file_path, x, y, character_database_integral)
+  subroutine process_font_configuration(font_config_file_path, character_database_integral)
     use :: string
     use :: files
     use :: vector_2i
