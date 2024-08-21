@@ -21,6 +21,11 @@ module rgba8_texture_mod
   end type rgba8
 
 
+  interface rgba8_pixel
+    module procedure :: rgba8_pixel_constructor
+  end interface rgba8_pixel
+
+
   !* This is an actual texture
   !* It contains pixels in the pixels component.
   !* In the standard of: RGBA_8
@@ -29,8 +34,11 @@ module rgba8_texture_mod
     integer(c_int) :: width
     integer(c_int) :: height
   end type rgba8_texture
+  
 
-
+  interface rgba8_texture
+    module procedure :: rgba8_texture_constructor
+  end interface rgba8_texture
 
 
 contains
