@@ -46,6 +46,7 @@ contains
       if(result == TEXTURE_PACKER_OK) then
         print*,"PACKED"
         print*,packer%packer%skylines
+        print*,"skyline size:",size(packer%packer%skylines)
       else
         print*,result
       end if
