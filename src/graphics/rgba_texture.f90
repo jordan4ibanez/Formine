@@ -5,6 +5,7 @@ module rgba8_texture_mod
 
   private
 
+  ! todo: color -> pixel
 
   public :: rgba8_pixel
   public :: rgba8_texture
@@ -31,12 +32,16 @@ module rgba8_texture_mod
   !* In the standard of: RGBA_8
   type :: rgba8_texture
     type(rgba8_pixel), dimension(:), allocatable :: pixels
+    integer(c_int) :: pixel_array_length
     integer(c_int) :: width
     integer(c_int) :: height
   contains
     procedure :: index_get_color => rgba8_texture_index_get_color
+    procedure :: index_get_color_optional => rgba8_texture_index_get_color_optional
     procedure :: get_color => rgba8_texture_get_color
+    procedure :: get_color_optional => rgba8_texture_get_color_optional
     procedure :: position_to_index => rgba8_texture_internal_position_to_index
+
   end type rgba8_texture
 
 
@@ -118,7 +123,29 @@ contains
         raw_texture_memory_i32(current_index + 3) &
         )
     end do
+
+    new_rgba_texture%pixel_array_length = pixel_array_length
   end function rgba8_texture_constructor
+
+
+  !* Get the RGBA of an index. Returns success.
+  function rgba8_texture_index_get_color_optional(this, index, optional_pixel) result(success)
+    implicit none
+
+    class(rgba8_texture), intent(in) :: this
+    integer(c_int), intent(in), value :: index
+    type(rgba8_pixel), intent(inout) :: optional_pixel
+    logical :: success
+
+    success = .false.
+
+    if (index <= 0 .or. index > this%pixel_array_length) then
+      return
+    end if
+
+    success = .true.
+    optional_pixel = this%pixels(index)
+  end function rgba8_texture_index_get_color_optional
 
 
   !* Get the RGBA of an index.
@@ -152,6 +179,20 @@ contains
 
     color = this%index_get_color(this%position_to_index(x,y))
   end function rgba8_texture_get_color
+
+
+  !* Get a pixel that might be out of bounds.
+  function rgba8_texture_get_color_optional(this, x, y, optional_pixel) result(success)
+    use :: string
+    implicit none
+
+    class(rgba8_texture), intent(in) :: this
+    integer(c_int), intent(in), value :: x, y
+    type(rgba8_pixel), intent(inout) :: optional_pixel
+    logical :: success
+
+    success = this%index_get_color_optional(this%position_to_index(x,y), optional_pixel)
+  end function rgba8_texture_get_color_optional
 
 
   !* Position (in pixels) to the index in the texture array.
