@@ -45,6 +45,7 @@ contains
       result = packer%pack_own(temp_path, rgba_image_data)
       if(result == TEXTURE_PACKER_OK) then
         print*,"PACKED"
+        print*,packer%packer%skylines
       else
         print*,result
       end if
