@@ -1,6 +1,6 @@
 module font
   use :: vector_2d
-  use :: memory_rgba8_texture
+  use :: rgba8_texture_mod
   use :: fhash, only: fhash_tbl_t, key => fhash_key
   use, intrinsic :: iso_c_binding
   implicit none
