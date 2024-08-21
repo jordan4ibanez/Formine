@@ -5,7 +5,11 @@ module texture_packer
   use :: texture_packer_config
   implicit none
 
+  ! todo: going to need to look into implementing this into fortran.
+  ! todo: simply use stb image and make a custom type for this.
 !   texture::{Pixel, SubTexture, Texture},
+
+  ! todo: fix all the bugs where things start at 1 index and make them 2
 
 
 ! use std::cmp::min;
