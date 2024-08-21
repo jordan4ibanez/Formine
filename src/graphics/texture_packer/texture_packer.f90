@@ -20,6 +20,9 @@ module texture_packer_mod
 !   texture::{Pixel, SubTexture, Texture},
 
   ! todo: fix all the bugs where things start at 1 index and make them 2
+  !*
+  !* Implementation note: The intrinsics of rust are different from fortran.
+  !* You're going to see a bunch of duplicate and nonsensical things while I prototype this.
 
   integer(c_int), parameter :: TEXTURE_PACKER_OK = 0
   integer(c_int), parameter :: TEXTURE_PACKER_IMAGE_TOO_LARGE_TO_FIT_IN_ATLAS = 1
@@ -118,8 +121,7 @@ contains
     the_sub_texture = sub_texture_from_ref(texture, source)
     call rectangle%from(texture)
 
-    ! let Some(mut frame) =
-    if  (this%packer%pack(texture_key, rectangle, optional_frame)) then
+    if (this%packer%pack(texture_key, rectangle, optional_frame)) then
       optional_frame%frame%x = optional_frame%frame%x + this%config%border_padding;
       optional_frame%frame%y = optional_frame%frame%y + this%config%border_padding;
       optional_frame%trimmed = this%config%trim;
