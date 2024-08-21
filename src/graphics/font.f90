@@ -539,6 +539,7 @@ contains
       scanner: do scan_x = starting_x + character_width - 1, starting_x, - 1
         do scan_y = starting_y + character_height - 1, starting_y, - 1
           pixel_color = get_color(scan_x, scan_y)
+          ! fixme: we only need to check for alpha here.
           if (pixel_color%r + pixel_color%g + pixel_color%b + pixel_color%a > 0) then
             pixel_width = (scan_x - starting_x) + 1
             exit scanner
@@ -567,9 +568,6 @@ contains
       ! A 0.0 - 1.0 range is the goal.
       pos = vec2d(x_f64 / canvas_width_f64, y_f64 / canvas_height_f64)
     end function pixel_position_to_opengl_position
-
- 
-
   end subroutine calculate_opengl_texture_coordinates
 
 
