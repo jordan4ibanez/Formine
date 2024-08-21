@@ -529,7 +529,7 @@ contains
       integer(c_int), intent(in), value :: starting_x, starting_y
       integer(c_int) :: scan_x, scan_y
       integer(c_int) :: pixel_width
-      type(rgba8) :: pixel_color
+      type(rgba8_pixel) :: pixel_color
 
       ! Vertical scan, by row, right to left, until we hit something.
       scanner: do scan_x = starting_x + character_width - 1, starting_x, - 1
@@ -570,7 +570,7 @@ contains
       implicit none
 
       integer(c_int), intent(in), value :: x, y
-      type(rgba8) :: color
+      type(rgba8_pixel) :: color
 
       color = index_get_color(position_to_index(x,y))
     end function get_color
@@ -599,7 +599,7 @@ contains
       implicit none
 
       integer(c_int), intent(in), value :: index
-      type(rgba8) :: color
+      type(rgba8_pixel) :: color
 
       color%r = integral_image_data(index)
       color%g = integral_image_data(index + 1)
