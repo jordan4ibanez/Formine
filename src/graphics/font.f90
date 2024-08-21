@@ -79,6 +79,8 @@ contains
     integer, parameter :: dimensions = 2
     integer, parameter :: stride = dimensions * points
 
+    print*,"[Font] FIXME: Use the new [rgba_texture] module components!"
+
     if (.not. present(r)) then
       red = 0.0
     else

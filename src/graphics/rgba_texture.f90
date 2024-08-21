@@ -52,18 +52,16 @@ contains
     integer(c_int), intent(in), value :: r, g, b, a
     type(rgba8_pixel) :: new_pixel
 
+    ! Range checks for RGBA.
     if (r < 0 .or. r > 255) then
       error stop "[RGBA Texture] Error: Red is out of range. Range: [0-255]. Received: ["//int_to_string(r)//"]"
     end if
-
     if (g < 0 .or. g > 255) then
       error stop "[RGBA Texture] Error: Green is out of range. Range: [0-255]. Received: ["//int_to_string(g)//"]"
     end if
-
     if (b < 0 .or. b > 255) then
       error stop "[RGBA Texture] Error: Blue is out of range. Range: [0-255]. Received: ["//int_to_string(b)//"]"
     end if
-
     if (a < 0 .or. a > 255) then
       error stop "[RGBA Texture] Error: Alpha is out of range. Range: [0-255]. Received: ["//int_to_string(a)//"]"
     end if
