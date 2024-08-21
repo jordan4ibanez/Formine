@@ -114,7 +114,7 @@ contains
       width_left = width_left - this%skylines(i)%w
       i = i + 1
 
-      if (i >= size(this%skylines)) then
+      if (i <= size(this%skylines)) then
         error stop "[Skyline Packer] Error: Out of bounds."
       end if
     end do
