@@ -65,6 +65,7 @@ module texture_packer_mod
     procedure :: get_frame_at => texture_packer_get_frame_at
     procedure :: width => texture_packer_width
     procedure :: height => texture_packer_height
+    procedure :: get => texture_packer_get
   end type texture_packer
 
 
@@ -390,30 +391,59 @@ contains
     end if
   end function texture_packer_height
 
-!     fn get(&self, x: u32, y: u32) -> Option<Pix> {
-!         if let Some(frame) = this%get_frame_at(x, y) {
-!             if this%config%texture_outlines && frame%frame%is_outline(x, y) {
-!                 return Some(<Pix as Pixel>::outline());
-!             }
 
-!             if let Some(texture) = this%textures.get(&frame%key) {
-!                 let x = x.saturating_sub(frame%frame%x);
-!                 let y = y.saturating_sub(frame%frame%y);
+  function texture_packer_get(this, x, y, optional_pixel) result(status)
+    use :: math_helpers, only: saturating_sub
+    implicit none
 
-!                 return if frame%rotated {
-!                     let x = min(x, texture.height() - 1);
-!                     let y = min(y, texture.width() - 1);
-!                     texture.get_rotated(x, y)
-!                 } else {
-!                     let x = min(x, texture.width() - 1);
-!                     let y = min(y, texture.height() - 1);
-!                     texture.get(x, y)
-!                 };
-!             }
-!         }
+    class(texture_packer), intent(in) :: this
+    integer(c_int), intent(in), value :: x, y
+    type(rgba8_pixel), intent(inout) :: optional_pixel
+    integer(c_int) :: status, a, b
+    type(frame) :: optional_frame
+    class(*), allocatable :: generic_data
+    type(rgba8_texture) :: worker_texture
 
-!         None
-!     }
+    status = this%get_frame_at(x, y, optional_frame)
+
+    if (status == TEXTURE_PACKER_OK) then
+      if (this%config%texture_outlines .and. optional_frame%frame%is_outline(x, y)) then
+        status = TEXTURE_PACKER_OK
+        optional_pixel = this%config%outline
+        return
+      end if
+
+      call this%textures%get_raw(key(optional_frame%key), generic_data, stat = status)
+
+      if (status == 0) then
+        select type (generic_data)
+         type is (rgba8_texture)
+          worker_texture = generic_data
+         class default
+          error stop "[Texture Packer] Error: How did this type get in here?"
+        end select
+
+        a = saturating_sub(x, optional_frame%frame%x, 0);
+        b = saturating_sub(y, optional_frame%frame%y, 0);
+
+        if (optional_frame%rotated) then
+          a = min(x, worker_texture%height - 1);
+          b = min(y, worker_texture%width - 1);
+          ! todo: implement rotated (or not)
+          print*,"fixme: get_rotated is not implemented, hooray"
+          ! optional_pixel = worker_texture%get_rotated(a, b)
+          status = TEXTURE_PACKER_OK
+          return
+        else
+          a = min(x, worker_texture%width - 1);
+          b = min(y, worker_texture%height - 1);
+          optional_pixel = worker_texture%get_color(a, b)
+          status = TEXTURE_PACKER_OK
+          return
+        end if
+      end if
+    end if
+  end function texture_packer_get
 
 !     fn set(&mut self, _x: u32, _y: u32, _val: Pix) {
 !         panic!("Can't set pixel directly");
