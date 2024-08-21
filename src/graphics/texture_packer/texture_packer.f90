@@ -1,8 +1,9 @@
-module texture_packer
+module texture_packer_mod
   use :: texture_packer_frame
   use :: texture_packer_skyline_packer
   use :: texture_packer_rectangle
   use :: texture_packer_config
+  use :: rgba8_texture_mod
   use :: fhash, only: fhash_tbl_t, key => fhash_key
   implicit none
 
@@ -33,7 +34,7 @@ module texture_packer
 ! }
 
   type :: texture_packer_type
-  
+
   end type texture_packer_type
 
 
@@ -296,4 +297,4 @@ contains
 !     }
 ! }
 
-end module texture_packer
+end module texture_packer_mod
