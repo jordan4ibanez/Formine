@@ -302,7 +302,7 @@ contains
 
 
   !* Very simple configuration file processing.
-  subroutine process_font_configuration(font_config_file_path, character_database_integral)
+  subroutine process_font_configuration(font_config_file_path, x, y, character_database_integral)
     use :: string
     use :: files
     use :: vector_2i
@@ -452,7 +452,7 @@ contains
 
 
   !* Automates converting the pixel positions into OpenGL texture mapping positions.
-  subroutine calculate_opengl_texture_coordinates(raw_image_data, character_database_integral)
+  subroutine calculate_opengl_texture_coordinates(raw_image_data, image_width, image_height, character_database_integral)
     use :: math_helpers
     use, intrinsic :: iso_c_binding
     use :: fhash, only: fhash_iter_t, fhash_key_t
@@ -460,6 +460,7 @@ contains
     implicit none
 
     integer(1), dimension(:), intent(in) :: raw_image_data
+    integer(c_int), intent(in), value :: image_width, image_height
     type(fhash_tbl_t), intent(in) :: character_database_integral
     type(rgba8_texture) :: rgb8_texture_data
     type(fhash_iter_t) :: iterator
@@ -470,7 +471,7 @@ contains
     type(opengl_character), pointer :: gpu_character
 
     ! Shift this into a format we can use.
-    integral_image_data = c_uchar_to_int_array(raw_image_data)
+    rgb8_texture_data = rgba8_texture(raw_image_data, image_width, image_height)
 
     ! Iterate integral character position.
     iterator = fhash_iter_t(character_database_integral)
