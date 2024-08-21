@@ -1,5 +1,5 @@
 module math_helpers
-  use, intrinsic :: iso_c_binding, only: c_float, c_double
+  use, intrinsic :: iso_c_binding
   implicit none
 
 
@@ -140,7 +140,6 @@ contains
 
   !* This is a lazy way to convert a C uchar into a Fortran integer(c_int).
   function c_uchar_to_int(input) result(output)
-    use, intrinsic :: iso_c_binding, only: c_int
     implicit none
 
     integer(1), intent(in), value :: input
@@ -180,7 +179,6 @@ contains
 
   !* This simply makes the fact that we're casting into a uchar from integer(c_int) EXTREMELY explicit to our intent.
   function int_to_c_uchar(input) result(output)
-    use, intrinsic :: iso_c_binding
     implicit none
 
     integer(c_int), intent(in), value :: input
@@ -193,7 +191,6 @@ contains
 
   !* This simply makes the fact that we're casting into a uchar array from an integer(c_int) array EXTREMELY explicit to our intent.
   function int_to_c_uchar_array(input_array) result(output_array)
-    use, intrinsic :: iso_c_binding, only: c_int
     implicit none
 
     integer(c_int), dimension(:), intent(in) :: input_array
