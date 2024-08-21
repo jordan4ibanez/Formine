@@ -1,5 +1,6 @@
 module texture_packer_config
   use, intrinsic :: iso_c_binding
+  use :: rgba8_texture_module
   implicit none
 
 
@@ -35,6 +36,9 @@ module texture_packer_config
     !* True to draw the red line on the edge of the each frames. Useful for debugging. Default
     !* value is `false`.
     logical(c_bool) :: texture_outlines = .false.
+
+    !* This was halfhazardly added in cause I don't feel like translating more rust. :D
+    type(rgba8_pixel) :: outline
   end type texture_packer_conf
 
 end module texture_packer_config
