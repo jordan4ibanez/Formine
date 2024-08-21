@@ -96,6 +96,9 @@ contains
       error stop "[RGBA Texture] Error: Received raw texture memory with assumed width ["//int_to_string(width)//"] | height ["//int_to_string(height)//"]. Assumed size is wrong."
     end if
 
+    new_rgba_texture%width = width
+    new_rgba_texture%height = height
+
     ! Shift this into a format we can use.
     raw_texture_memory_i32 = c_uchar_to_int_array(raw_texture_memory_u8)
 
