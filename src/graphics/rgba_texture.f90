@@ -36,7 +36,7 @@ module rgba8_texture_mod
   contains
     procedure :: index_get_color => rgba8_texture_index_get_color
     procedure :: get_color => rgba8_texture_get_color
-    procedure, private :: position_to_index => rgba8_texture_internal_position_to_index
+    procedure :: position_to_index => rgba8_texture_internal_position_to_index
   end type rgba8_texture
 
 
