@@ -93,16 +93,19 @@ contains
     type(rgba8_texture), intent(in) :: texture
     logical :: could_pack
     integer(c_int) :: w, h
+    type(rect) :: source
 
 
     w = texture%width
     h = texture%height
 
-!         let source = if this%config.trim {
-!             trim_texture(texture)
-!         } else {
-!             Rect::new(0, 0, w, h)
-!         };
+
+
+    if (this%config%trim) {
+    source =  trim_texture(texture)
+    } else {
+    source = Rect::new(0, 0, w, h)
+    };
 
 !         if !this%packer.can_pack(&source) {
 !             return Err(PackError::TextureTooLargeToFitIntoAtlas);
@@ -112,9 +115,9 @@ contains
 !         let rect = (&texture).into();
 
 !         if let Some(mut frame) = this%packer.pack(key.clone(), &rect) {
-!             frame.frame.x += this%config.border_padding;
-!             frame.frame.y += this%config.border_padding;
-!             frame.trimmed = this%config.trim;
+!             frame.frame.x += this%config%border_padding;
+!             frame.frame.y += this%config%border_padding;
+!             frame.trimmed = this%config%trim;
 !             frame.source = source;
 !             frame.source.w = w;
 !             frame.source.h = h;
@@ -128,7 +131,7 @@ contains
 !     /// Pack the `texture` into this packer, taking ownership of the texture object.
 !     pub fn pack_own(&mut self, key: K, texture: T) -> PackResult<()> {
 !         let (w, h) = (texture.width(), texture.height());
-!         let source = if this%config.trim {
+!         let source = if this%config%trim {
 !             trim_texture(&texture)
 !         } else {
 !             Rect::new(0, 0, w, h)
@@ -140,9 +143,9 @@ contains
 !         let texture = SubTexture::new(texture, source);
 !         let rect = (&texture).into();
 !         if let Some(mut frame) = this%packer.pack(key.clone(), &rect) {
-!             frame.frame.x += this%config.border_padding;
-!             frame.frame.y += this%config.border_padding;
-!             frame.trimmed = this%config.trim;
+!             frame.frame.x += this%config%border_padding;
+!             frame.frame.y += this%config%border_padding;
+!             frame.trimmed = this%config%trim;
 !             frame.source = source;
 !             frame.source.w = w;
 !             frame.source.h = h;
@@ -169,7 +172,7 @@ contains
 
 !     /// Get the frame that overlaps with a specified coordinate.
 !     fn get_frame_at(&self, x: u32, y: u32) -> Option<&Frame<K>> {
-!         let extrusion = this%config.texture_extrusion;
+!         let extrusion = this%config%texture_extrusion;
 
 !         for (_, frame) in this%frames.iter() {
 !             let mut rect = frame.frame;
@@ -196,8 +199,8 @@ contains
 !     type Pixel = Pix;
 
 !     fn width(&self) -> u32 {
-!         if this%config.force_max_dimensions {
-!             return this%config.max_width
+!         if this%config%force_max_dimensions {
+!             return this%config%max_width
 !         }
 
 !         let mut right = None;
@@ -213,15 +216,15 @@ contains
 !         }
 
 !         if let Some(right) = right {
-!             right + 1 + this%config.border_padding
+!             right + 1 + this%config%border_padding
 !         } else {
 !             0
 !         }
 !     }
 
 !     fn height(&self) -> u32 {
-!         if this%config.force_max_dimensions {
-!             return this%config.max_height
+!         if this%config%force_max_dimensions {
+!             return this%config%max_height
 !         }
 
 !         let mut bottom = None;
@@ -237,7 +240,7 @@ contains
 !         }
 
 !         if let Some(bottom) = bottom {
-!             bottom + 1 + this%config.border_padding
+!             bottom + 1 + this%config%border_padding
 !         } else {
 !             0
 !         }
@@ -245,7 +248,7 @@ contains
 
 !     fn get(&self, x: u32, y: u32) -> Option<Pix> {
 !         if let Some(frame) = this%get_frame_at(x, y) {
-!             if this%config.texture_outlines && frame.frame.is_outline(x, y) {
+!             if this%config%texture_outlines && frame.frame.is_outline(x, y) {
 !                 return Some(<Pix as Pixel>::outline());
 !             }
 
