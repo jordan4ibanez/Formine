@@ -73,14 +73,44 @@ contains
   end function rgba8_pixel_constructor
 
 
-
-  function rgba8_texture_constructor(r, g, b, a) result(new_pixel)
+  function rgba8_texture_constructor(raw_texture_memory_u8, width, height) result(new_rgba_texture)
+    use :: string
+    use :: math_helpers
     implicit none
 
-    integer(c_int), intent(in), value :: r, g, b, a
-    type(rgba8_pixel) :: new_pixel
+    integer(1), dimension(:) :: raw_texture_memory_u8
+    integer(c_int), intent(in), value :: width, height
+    type(rgba8_texture) :: new_rgba_texture
+    integer(c_int) :: array_length, pixel_array_length, i, current_index
+    integer(c_int), dimension(:), allocatable :: raw_texture_memory_i32
 
+    array_length = size(raw_texture_memory_u8)
+    ! 4 channels per pixel.
+    pixel_array_length = array_length / 4
 
+    if (width * height /= pixel_array_length) then
+      error stop "[RGBA Texture] Error: Received raw texture memory with assumed width ["//int_to_string(width)//"] | height ["//int_to_string(height)//"]. Assumed size is wrong."
+    end if
+
+    ! Shift this into a format we can use.
+    raw_texture_memory_i32 = c_uchar_to_int_array(raw_texture_memory_u8)
+
+    ! Allocate the array.
+    allocate(new_rgba_texture%pixels(pixel_array_length))
+
+    do i = 1,pixel_array_length
+
+      ! Shift into offset then back into index because math.
+      current_index = ((i - 1) * 4) + 1
+
+      ! Now we create the pixel.
+      new_rgba_texture%pixels(i) = rgba8_pixel( &
+        raw_texture_memory_i32(current_index), &
+        raw_texture_memory_i32(current_index + 1), &
+        raw_texture_memory_i32(current_index + 2), &
+        raw_texture_memory_i32(current_index + 3) &
+        )
+    end do
   end function rgba8_texture_constructor
 
 
