@@ -108,10 +108,8 @@ contains
     text_length = len(text)
     allocation_length = string_get_non_space_characters(text)
 
-    ! todo: change this to 2 positions!
-    ! 4 quads per character. 3 positions per point. This can probably be optimized, somehow.
+    ! Per character: 1 quad. 4 positions. 3 positions per tri. 2 tris. This can probably be optimized, somehow.
     allocate(positions(allocation_length * stride))
-    ! todo: use offset intead of 4 * 2
     allocate(texture_coordinates(allocation_length * 8))
     allocate(colors(allocation_length * 12))
     allocate(indices(allocation_length * 6))
