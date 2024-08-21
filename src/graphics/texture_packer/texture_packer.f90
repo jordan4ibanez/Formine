@@ -20,6 +20,8 @@ module texture_packer_mod
 
   ! todo: fix all the bugs where things start at 1 index and make them 2
 
+  integer(c_int), parameter :: TEXTURE_PACKER_OK = 0
+  integer(c_int), parameter :: TEXTURE_PACKER_IMAGE_TOO_LARGE_TO_FIT_IN_ATLAS = 1
 
 ! use std::cmp::min;
 ! use std::collections::HashMap;
@@ -70,7 +72,7 @@ contains
   end function constructor_texture_packer
 
 
-  !* Check if the texture can be packed into this packer.
+  !* Check if the texture can be packed into this packer%
   function texture_packer_can_pack(this, texture) result(can_pack)
     implicit none
 
@@ -85,13 +87,13 @@ contains
 
 
   !* Pack the `texture` into this packer, taking a reference of the texture object.
-  function texture_packer_pack_ref(this, texture_key, texture) result(could_pack)
+  function texture_packer_pack_ref(this, texture_key, texture) result(status)
     implicit none
 
     class(texture_packer), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: texture_key
     type(rgba8_texture), intent(in) :: texture
-    logical :: could_pack
+    integer(c_int) :: status
     integer(c_int) :: w, h
     type(rect) :: source
 
@@ -99,22 +101,23 @@ contains
     w = texture%width
     h = texture%height
 
+    if (this%config%trim) then
+      print*,"fixme: implement trimming!"
+      ! todo: implement trimming
+      ! source = trim_texture(texture)
+    else
+      source = rect(0, 0, w, h)
+    end if
 
-
-    if (this%config%trim) {
-    source =  trim_texture(texture)
-    } else {
-    source = Rect::new(0, 0, w, h)
-    };
-
-!         if !this%packer.can_pack(&source) {
-!             return Err(PackError::TextureTooLargeToFitIntoAtlas);
-!         }
+    if (.not. this%packer%can_pack(source)) then
+      status = TEXTURE_PACKER_IMAGE_TOO_LARGE_TO_FIT_IN_ATLAS
+      return
+    end if
 
 !         let texture = SubTexture::from_ref(texture, source);
 !         let rect = (&texture).into();
 
-!         if let Some(mut frame) = this%packer.pack(key.clone(), &rect) {
+!         if let Some(mut frame) = this%packer%pack(key.clone(), &rect) {
 !             frame.frame.x += this%config%border_padding;
 !             frame.frame.y += this%config%border_padding;
 !             frame.trimmed = this%config%trim;
@@ -136,13 +139,13 @@ contains
 !         } else {
 !             Rect::new(0, 0, w, h)
 !         };
-!         if !this%packer.can_pack(&source) {
+!         if !this%packer%can_pack(&source) {
 !             return Err(PackError::TextureTooLargeToFitIntoAtlas);
 !         }
 
 !         let texture = SubTexture::new(texture, source);
 !         let rect = (&texture).into();
-!         if let Some(mut frame) = this%packer.pack(key.clone(), &rect) {
+!         if let Some(mut frame) = this%packer%pack(key.clone(), &rect) {
 !             frame.frame.x += this%config%border_padding;
 !             frame.frame.y += this%config%border_padding;
 !             frame.trimmed = this%config%trim;
