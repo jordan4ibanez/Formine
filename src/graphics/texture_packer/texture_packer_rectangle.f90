@@ -27,6 +27,7 @@ module texture_packer_rectangle
     procedure :: contains_point => rect_contains_point
     procedure :: is_outline => rect_is_outline
     procedure :: crop => rect_crop
+    procedure :: from => rect_from_rgba8_texture
   end type rect
 
 
@@ -248,6 +249,21 @@ contains
       rect_array = [rect_array, r4]
     end if
   end function rect_crop
+
+
+  !* Allow translating the dimensions from an rgba8_texture into a rectangle.
+  subroutine rect_from_rgba8_texture(this, texture)
+    use :: rgba8_texture_mod
+    implicit none
+
+    class(rect), intent(inout) :: this
+    type(rgba8_texture), intent(in) :: texture
+
+    this%x = 0
+    this%y = 0
+    this%w = texture%width
+    this%h = texture%height
+  end subroutine rect_from_rgba8_texture
 
 
 end module texture_packer_rectangle
