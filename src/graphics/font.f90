@@ -1,7 +1,8 @@
 module font
-  use, intrinsic :: iso_c_binding
-  use :: fhash, only: fhash_tbl_t, key => fhash_key
   use :: vector_2d
+  use :: memory_rgba8_texture
+  use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use, intrinsic :: iso_c_binding
   implicit none
 
   !* I am a solo developer. I only use 1 font.
@@ -27,15 +28,6 @@ module font
     type(vec2d) :: bottom_right
     type(vec2d) :: top_right
   end type opengl_character
-
-  ! This is an abstraction over the raw array components to allow me to actually
-  ! read what I'm doing during the subroutine that checks how wide characters are.
-  type :: rgba
-    integer(c_int) :: r = 0
-    integer(c_int) :: g = 0
-    integer(c_int) :: b = 0
-    integer(c_int) :: a = 0
-  end type rgba
 
 
   ! The size of each character in pixels.
@@ -539,7 +531,7 @@ contains
       integer(c_int), intent(in), value :: starting_x, starting_y
       integer(c_int) :: scan_x, scan_y
       integer(c_int) :: pixel_width
-      type(rgba) :: pixel_color
+      type(rgba8) :: pixel_color
 
       ! Vertical scan, by row, right to left, until we hit something.
       scanner: do scan_x = starting_x + character_width - 1, starting_x, - 1
@@ -580,7 +572,7 @@ contains
       implicit none
 
       integer(c_int), intent(in), value :: x, y
-      type(rgba) :: color
+      type(rgba8) :: color
 
       color = index_get_color(position_to_index(x,y))
     end function get_color
@@ -609,7 +601,7 @@ contains
       implicit none
 
       integer(c_int), intent(in), value :: index
-      type(rgba) :: color
+      type(rgba8) :: color
 
       color%r = integral_image_data(index)
       color%g = integral_image_data(index + 1)
