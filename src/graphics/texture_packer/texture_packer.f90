@@ -1,12 +1,13 @@
 module texture_packer
-! use crate::{
-!   frame::Frame,
-!   packer::{Packer, SkylinePacker},
-!   rect::Rect,
+  use :: texture_packer_frame
+  use :: texture_packer_skyline_packer
+  use :: texture_packer_rectangle
+  use :: texture_packer_config
+  implicit none
+
 !   texture::{Pixel, SubTexture, Texture},
-!   texture_packer_config::TexturePackerConfig,
-! };
-  
+
+
 ! use std::cmp::min;
 ! use std::collections::HashMap;
 ! use std::hash::Hash;
