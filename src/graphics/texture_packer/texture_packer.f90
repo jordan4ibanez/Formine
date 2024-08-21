@@ -94,8 +94,7 @@ contains
     class(texture_packer), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: texture_key
     type(rgba8_texture), intent(in) :: texture
-    integer(c_int) :: status
-    integer(c_int) :: w, h
+    integer(c_int) :: status, w, h
     type(rect) :: source, rectangle
     type(sub_texture) :: the_sub_texture
     type(frame) :: optional_frame
@@ -116,7 +115,6 @@ contains
       return
     end if
 
-
     the_sub_texture = sub_texture_from_ref(texture, source)
     call rectangle%from(texture)
 
@@ -128,12 +126,13 @@ contains
       optional_frame%source = source;
       optional_frame%source%w = w;
       optional_frame%source%h = h;
-      
-      this%frames.insert(key.clone(), frame);
+
+      call this%frames%set(key(texture_key), optional_frame)
     end if
 
-!         this%textures.insert(key, texture);
-!         Ok(())
+    call this%textures%set(key(texture_key), texture);
+
+    status = TEXTURE_PACKER_OK
   end function texture_packer_pack_ref
 
 !     /// Pack the `texture` into this packer, taking ownership of the texture object.
