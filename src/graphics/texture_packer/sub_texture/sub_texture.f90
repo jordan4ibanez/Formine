@@ -5,7 +5,6 @@ module sub_texture_module
   implicit none
 
 
-
   private
 
 
@@ -23,11 +22,14 @@ module sub_texture_module
     procedure :: get => sub_texture_get
   end type sub_texture
 
+
   interface sub_texture
     module procedure :: constructor_sub_texture
   end interface sub_texture
 
+
 contains
+
 
   !* Get a `SubTexture` owning the parent texture%
   function constructor_sub_texture(texture, source) result(new_sub_texture)
@@ -106,7 +108,7 @@ contains
     else
       error stop "[Sub Texture] Error: Cannot set pixel, no texture pointed to."
     end if
-
   end subroutine sub_texture_set
+
 
 end module sub_texture_module
