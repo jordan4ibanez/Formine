@@ -538,7 +538,7 @@ contains
       ! Vertical scan, by row, right to left, until we hit something.
       scanner: do scan_x = starting_x + character_width - 1, starting_x, - 1
         do scan_y = starting_y + character_height - 1, starting_y, - 1
-          pixel_color = get_color(scan_x, scan_y)
+          pixel_color = rgba8_texture_data%get_color(scan_x, scan_y)
           ! fixme: we only need to check for alpha here.
           if (pixel_color%r + pixel_color%g + pixel_color%b + pixel_color%a > 0) then
             pixel_width = (scan_x - starting_x) + 1
