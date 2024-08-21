@@ -461,9 +461,7 @@ contains
 
     integer(1), dimension(:), intent(in) :: raw_image_data
     type(fhash_tbl_t), intent(in) :: character_database_integral
-
-    integer(c_int), dimension(:), allocatable :: integral_image_data
-    
+    type(rgba8_texture) :: rgb8_texture_data
     type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
