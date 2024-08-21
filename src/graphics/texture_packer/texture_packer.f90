@@ -40,6 +40,7 @@ module texture_packer_mod
     type(texture_packer_conf), allocatable :: config
   contains
     procedure :: can_pack => texture_packer_can_pack
+    procedure :: pack_ref => texture_packer_pack_ref
   end type texture_packer
 
 
@@ -82,70 +83,84 @@ contains
     can_pack = this%packer%can_pack(rectangle)
   end function texture_packer_can_pack
 
-!     /// Pack the `texture` into this packer, taking a reference of the texture object.
-!     pub fn pack_ref(&mut self, key: K, texture: &'a T) -> PackResult<()> {
-!         let (w, h) = (texture.width(), texture.height());
-!         let source = if self.config.trim {
+
+  !* Pack the `texture` into this packer, taking a reference of the texture object.
+  function texture_packer_pack_ref(this, texture_key, texture) result(could_pack)
+    implicit none
+
+    class(texture_packer), intent(inout) :: this
+    character(len = *, kind = c_char), intent(in) :: texture_key
+    type(rgba8_texture), intent(in) :: texture
+    logical :: could_pack
+    integer(c_int) :: w, h
+
+
+    w = texture%width
+    h = texture%height
+
+!         let source = if this%config.trim {
 !             trim_texture(texture)
 !         } else {
 !             Rect::new(0, 0, w, h)
 !         };
-!         if !self.packer.can_pack(&source) {
+
+!         if !this%packer.can_pack(&source) {
 !             return Err(PackError::TextureTooLargeToFitIntoAtlas);
 !         }
 
 !         let texture = SubTexture::from_ref(texture, source);
 !         let rect = (&texture).into();
-!         if let Some(mut frame) = self.packer.pack(key.clone(), &rect) {
-!             frame.frame.x += self.config.border_padding;
-!             frame.frame.y += self.config.border_padding;
-!             frame.trimmed = self.config.trim;
+
+!         if let Some(mut frame) = this%packer.pack(key.clone(), &rect) {
+!             frame.frame.x += this%config.border_padding;
+!             frame.frame.y += this%config.border_padding;
+!             frame.trimmed = this%config.trim;
 !             frame.source = source;
 !             frame.source.w = w;
 !             frame.source.h = h;
-!             self.frames.insert(key.clone(), frame);
+!             this%frames.insert(key.clone(), frame);
 !         }
 
-!         self.textures.insert(key, texture);
+!         this%textures.insert(key, texture);
 !         Ok(())
-!     }
+  end function texture_packer_pack_ref
 
 !     /// Pack the `texture` into this packer, taking ownership of the texture object.
 !     pub fn pack_own(&mut self, key: K, texture: T) -> PackResult<()> {
 !         let (w, h) = (texture.width(), texture.height());
-!         let source = if self.config.trim {
+!         let source = if this%config.trim {
 !             trim_texture(&texture)
 !         } else {
 !             Rect::new(0, 0, w, h)
 !         };
-!         if !self.packer.can_pack(&source) {
+!         if !this%packer.can_pack(&source) {
 !             return Err(PackError::TextureTooLargeToFitIntoAtlas);
 !         }
 
 !         let texture = SubTexture::new(texture, source);
 !         let rect = (&texture).into();
-!         if let Some(mut frame) = self.packer.pack(key.clone(), &rect) {
-!             frame.frame.x += self.config.border_padding;
-!             frame.frame.y += self.config.border_padding;
-!             frame.trimmed = self.config.trim;
+!         if let Some(mut frame) = this%packer.pack(key.clone(), &rect) {
+!             frame.frame.x += this%config.border_padding;
+!             frame.frame.y += this%config.border_padding;
+!             frame.trimmed = this%config.trim;
 !             frame.source = source;
 !             frame.source.w = w;
 !             frame.source.h = h;
-!             self.frames.insert(key.clone(), frame);
+!             this%frames.insert(key.clone(), frame);
 !         }
 
-!         self.textures.insert(key, texture);
+!         this%textures.insert(key, texture);
 !         Ok(())
 !     }
 
 !     /// Get the backing mapping from strings to frames.
 !     pub fn get_frames(&self) -> &HashMap<K, Frame<K>> {
-!         &self.frames
+!         &this%frames
 !     }
 
 !     /// Acquire a frame by its name.
 !     pub fn get_frame(&self, key: &K) -> Option<&Frame<K>> {
-!         if let Some(frame) = self.frames.get(key) {
+!         if let Some(frame) = this%frames.get(key) {
 !             Some(frame)
 !         } else {
 !             None
@@ -154,9 +169,9 @@ contains
 
 !     /// Get the frame that overlaps with a specified coordinate.
 !     fn get_frame_at(&self, x: u32, y: u32) -> Option<&Frame<K>> {
-!         let extrusion = self.config.texture_extrusion;
+!         let extrusion = this%config.texture_extrusion;
 
-!         for (_, frame) in self.frames.iter() {
+!         for (_, frame) in this%frames.iter() {
 !             let mut rect = frame.frame;
 
 !             rect.x = rect.x.saturating_sub(extrusion);
@@ -181,13 +196,13 @@ contains
 !     type Pixel = Pix;
 
 !     fn width(&self) -> u32 {
-!         if self.config.force_max_dimensions {
-!             return self.config.max_width
+!         if this%config.force_max_dimensions {
+!             return this%config.max_width
 !         }
 
 !         let mut right = None;
 
-!         for (_, frame) in self.frames.iter() {
+!         for (_, frame) in this%frames.iter() {
 !             if let Some(r) = right {
 !                 if frame.frame.right() > r {
 !                     right = Some(frame.frame.right());
@@ -198,20 +213,20 @@ contains
 !         }
 
 !         if let Some(right) = right {
-!             right + 1 + self.config.border_padding
+!             right + 1 + this%config.border_padding
 !         } else {
 !             0
 !         }
 !     }
 
 !     fn height(&self) -> u32 {
-!         if self.config.force_max_dimensions {
-!             return self.config.max_height
+!         if this%config.force_max_dimensions {
+!             return this%config.max_height
 !         }
 
 !         let mut bottom = None;
 
-!         for (_, frame) in self.frames.iter() {
+!         for (_, frame) in this%frames.iter() {
 !             if let Some(b) = bottom {
 !                 if frame.frame.bottom() > b {
 !                     bottom = Some(frame.frame.bottom());
@@ -222,19 +237,19 @@ contains
 !         }
 
 !         if let Some(bottom) = bottom {
-!             bottom + 1 + self.config.border_padding
+!             bottom + 1 + this%config.border_padding
 !         } else {
 !             0
 !         }
 !     }
 
 !     fn get(&self, x: u32, y: u32) -> Option<Pix> {
-!         if let Some(frame) = self.get_frame_at(x, y) {
-!             if self.config.texture_outlines && frame.frame.is_outline(x, y) {
+!         if let Some(frame) = this%get_frame_at(x, y) {
+!             if this%config.texture_outlines && frame.frame.is_outline(x, y) {
 !                 return Some(<Pix as Pixel>::outline());
 !             }
 
-!             if let Some(texture) = self.textures.get(&frame.key) {
+!             if let Some(texture) = this%textures.get(&frame.key) {
 !                 let x = x.saturating_sub(frame.frame.x);
 !                 let y = y.saturating_sub(frame.frame.y);
 
