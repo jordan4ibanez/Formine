@@ -533,10 +533,12 @@ contains
       type(rgba8_pixel) :: pixel_color
 
       ! Vertical scan, by row, right to left, until we hit something.
+      !? -1 because: character width includes the border. We must remove this.
       scanner: do scan_x = starting_x + character_width - 1, starting_x, - 1
         do scan_y = starting_y + character_height - 1, starting_y, - 1
           pixel_color = rgba8_texture_data%get_color(scan_x, scan_y)
           if (pixel_color%a > 0) then
+            !? +1 because: We need the "bottom left" of the current pixel.
             pixel_width = (scan_x - starting_x) + 1
             exit scanner
           end if
