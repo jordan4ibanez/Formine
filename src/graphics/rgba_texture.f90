@@ -40,8 +40,8 @@ module rgba8_texture_mod
     procedure :: index_get_color_optional => rgba8_texture_index_get_color_optional
     procedure :: get_color => rgba8_texture_get_color
     procedure :: get_color_optional => rgba8_texture_get_color_optional
+    procedure :: set_pixel => rgba_texture_set_pixel
     procedure :: position_to_index => rgba8_texture_internal_position_to_index
-
   end type rgba8_texture
 
 
@@ -183,7 +183,6 @@ contains
 
   !* Get a pixel that might be out of bounds.
   function rgba8_texture_get_color_optional(this, x, y, optional_pixel) result(success)
-    use :: string
     implicit none
 
     class(rgba8_texture), intent(in) :: this
@@ -193,6 +192,21 @@ contains
 
     success = this%index_get_color_optional(this%position_to_index(x,y), optional_pixel)
   end function rgba8_texture_get_color_optional
+
+
+  !* Set the pixel of a texture.
+  subroutine rgba_texture_set_pixel(this, x, y, new_pixel)
+    implicit none
+
+    class(rgba8_texture), intent(inout) :: this
+    integer(c_int), intent(in), value :: x, y
+    type(rgba8_pixel), intent(in) :: new_pixel
+    integer(c_int) :: i
+
+    i = this%position_to_index(x, y)
+
+    this%pixels(i) = new_pixel
+  end subroutine rgba_texture_set_pixel
 
 
   !* Position (in pixels) to the index in the texture array.
