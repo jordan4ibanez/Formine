@@ -190,7 +190,7 @@ contains
     end if
 
 
-    !? INSERT.
+    !? BEGIN INSERT.
     allocate(temp_skylines_array(size(this%skylines) + 1))
     old_array_index = 1
     do i = 1,size(this%skylines)
@@ -219,7 +219,7 @@ contains
 
         if (this%skylines(i)%w <= shrink) then
 
-          !? REMOVE.
+          !? BEGIN REMOVE.
           allocate(temp_skylines_array(0))
           do current_index = 1,size(this%skylines)
             if (current_index == i) then
@@ -255,7 +255,7 @@ contains
       if (this%skylines(i - 1)%y == this%skylines(i)%y) then
         this%skylines(i - 1)%w = this%skylines(i - 1)%w + this%skylines(i)%w
 
-        !? REMOVE.
+        !? BEGIN REMOVE.
         allocate(temp_skylines_array(0))
         do current_index = 1,size(this%skylines)
           if (current_index == i) then
