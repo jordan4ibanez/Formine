@@ -33,6 +33,10 @@ module rgba8_texture_mod
     type(rgba8_pixel), dimension(:), allocatable :: pixels
     integer(c_int) :: width
     integer(c_int) :: height
+  contains
+    procedure :: index_get_color => rgba8_texture_index_get_color
+    procedure :: get_color => rgba8_texture_get_color
+    procedure, private :: position_to_index => rgba8_texture_internal_position_to_index
   end type rgba8_texture
 
 
@@ -112,6 +116,49 @@ contains
         )
     end do
   end function rgba8_texture_constructor
+
+
+  !* Get the RGBA of an index.
+  function rgba8_texture_index_get_color(this, index) result(color)
+    implicit none
+
+    class(rgba8_texture), intent(in) :: this
+    integer(c_int), intent(in), value :: index
+    type(rgba8_pixel) :: color
+
+    color = this%pixels(index)
+  end function rgba8_texture_index_get_color
+
+
+  !* This wraps a chain of functions to just get the data we need, which is RGBA of a pixel.
+  function rgba8_texture_get_color(this, x,y) result(color)
+    implicit none
+
+    class(rgba8_texture), intent(in) :: this
+    integer(c_int), intent(in), value :: x, y
+    type(rgba8_pixel) :: color
+
+    color = this%index_get_color(this%position_to_index(x,y))
+  end function rgba8_texture_get_color
+
+
+  !* Position (in pixels) to the index in the texture array.
+  function rgba8_texture_internal_position_to_index(this, x, y) result(i)
+    implicit none
+
+    class(rgba8_texture), intent(in) :: this
+    integer(c_int), intent(in), value :: x, y
+    integer(c_int) :: a, b
+    integer(c_int) :: i
+
+    ! Shift into 0 indexed, because math.
+    a = x - 1
+    b = y - 1
+
+    ! Times 4 because we have 4 individual channels we're hopping over.
+    ! Plus 1 because we're shifting back into 1 indexed.
+    i = (((b * this%width) + a) * 4) + 1
+  end function rgba8_texture_internal_position_to_index
 
 
 end module rgba8_texture_mod
