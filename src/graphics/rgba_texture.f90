@@ -135,11 +135,20 @@ contains
 
   !* This wraps a chain of functions to just get the data we need, which is RGBA of a pixel.
   function rgba8_texture_get_color(this, x,y) result(color)
+    use :: string
     implicit none
 
     class(rgba8_texture), intent(in) :: this
     integer(c_int), intent(in), value :: x, y
     type(rgba8_pixel) :: color
+
+    ! This is calculated via offsets.
+    if (x < 0 .or. x >= this%width) then
+      error stop "[RGBA Texture] Error: X is out of bounds ["//int_to_string(x)//"]"
+    end if
+    if (y < 0 .or. y >= this%height) then
+      error stop "[RGBA Texture] Error: Y is out of bounds ["//int_to_string(y)//"]"
+    end if
 
     color = this%index_get_color(this%position_to_index(x,y))
   end function rgba8_texture_get_color
@@ -154,13 +163,12 @@ contains
     integer(c_int) :: a, b
     integer(c_int) :: i
 
-    ! Shift into 0 indexed, because math.
+    ! Shift into offsets.
     a = x - 1
     b = y - 1
 
-    ! Times 4 because we have 4 individual channels we're hopping over.
-    ! Plus 1 because we're shifting back into 1 indexed.
-    i = (((b * this%width) + a) * 4) + 1
+    ! Plus 1 because we're shifting from offsets into indices.
+    i = ((b * this%width) + a) + 1
   end function rgba8_texture_internal_position_to_index
 
 
