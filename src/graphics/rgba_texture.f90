@@ -163,11 +163,11 @@ contains
     integer(c_int) :: a, b
     integer(c_int) :: i
 
-    ! Shift into offsets.
+    ! -1 because: We're shifting from indices into offsets.
     a = x - 1
     b = y - 1
 
-    ! Plus 1 because we're shifting from offsets into indices.
+    ! +1 because: We're shifting from offsets into indices.
     i = ((b * this%width) + a) + 1
   end function rgba8_texture_internal_position_to_index
 
