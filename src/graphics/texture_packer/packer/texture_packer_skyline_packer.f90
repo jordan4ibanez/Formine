@@ -193,7 +193,7 @@ contains
     !? BEGIN INSERT.
     allocate(temp_skylines_array(size(this%skylines) + 1))
     old_array_index = 1
-    do i = 1,size(this%skylines)
+    do i = 1,size(this%skylines) + 1
       if (i == index) then
         temp_skylines_array(i) = the_skyline
       else
