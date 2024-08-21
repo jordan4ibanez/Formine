@@ -129,7 +129,7 @@ contains
       ! todo: implement trimming
       ! source = trim_texture(texture)
     else
-      source = rect(0, 0, w, h)
+      source = rect(1, 1, w, h)
     end if
 
     if (.not. this%packer%can_pack(source)) then
@@ -176,7 +176,7 @@ contains
       ! todo: implement trimming
       ! source = trim_texture(texture)
     else
-      source = rect(0, 0, w, h)
+      source = rect(1, 1, w, h)
     end if
 
     if (.not. this%packer%can_pack(source)) then
