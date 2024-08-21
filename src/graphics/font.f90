@@ -462,7 +462,7 @@ contains
     integer(1), dimension(:), intent(in) :: raw_image_data
     integer(c_int), intent(in), value :: image_width, image_height
     type(fhash_tbl_t), intent(in) :: character_database_integral
-    type(rgba8_texture) :: rgb8_texture_data
+    type(rgba8_texture) :: rgba8_texture_data
     type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
@@ -471,7 +471,7 @@ contains
     type(opengl_character), pointer :: gpu_character
 
     ! Shift this into a format we can use.
-    rgb8_texture_data = rgba8_texture(raw_image_data, image_width, image_height)
+    rgba8_texture_data = rgba8_texture(raw_image_data, image_width, image_height)
 
     ! Iterate integral character position.
     iterator = fhash_iter_t(character_database_integral)
