@@ -103,8 +103,6 @@ contains
     type(sub_texture) :: the_sub_texture
     type(frame) :: optional_frame
 
-    print*,"DEBUG 1 =================="
-
     w = texture%width
     h = texture%height
 
@@ -114,7 +112,6 @@ contains
       ! source = trim_texture(texture)
     else
       source = rect(0, 0, w, h)
-      print*,"source:",source
     end if
 
     if (.not. this%packer%can_pack(source)) then

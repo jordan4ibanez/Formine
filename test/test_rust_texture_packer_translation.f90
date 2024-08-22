@@ -36,6 +36,9 @@ contains
 
     do i = 1,10
 
+      print*,size(packer%packer%skylines)
+
+      print*,"----[NEW PACK]----"
       temp_path = root_path//int_to_string(i)//".png"
       print*,temp_path
 
