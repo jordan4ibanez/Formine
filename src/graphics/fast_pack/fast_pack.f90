@@ -19,8 +19,8 @@ module fast_pack
 
   !* Configure the fast packer.
   type :: fast_packer_config
-    logical(c_bool) :: fast_canvas_export
-    integer(c_int) :: padding
+    logical(c_bool) :: fast_canvas_export = .true.
+    integer(c_int) :: padding = 1
     type(pixel) :: edge_color
     type(pixel) :: blank_color
     integer(c_int) :: canvas_expansion_amount = 100
@@ -33,12 +33,18 @@ module fast_pack
   !* The fast packer.
   type :: fast_packer
     integer(c_int) :: current_id = 1
-    type(fast_packer_config) :: config
-    type(fhash_tbl_t) :: keys
+
+    logical(c_bool) :: fast_canvas_export = .true.
+    integer(c_int) :: padding = 1
+    type(pixel) :: edge_color
+    type(pixel) :: blank_color
+    integer(c_int) :: canvas_expansion_amount = 100
+    logical(c_bool) :: debug_edge = .false.
     integer(c_int) :: canvas_width = 0
     integer(c_int) :: canvas_height = 0
-
+    logical(c_bool), private :: allocated = .false.
     !! Everything below this should be allocated in the constructor.
+    type(fhash_tbl_t) :: keys
     integer(c_int), dimension(:), allocatable :: position_x
     integer(c_int), dimension(:), allocatable :: position_y
     integer(c_int), dimension(:), allocatable :: box_width
@@ -48,7 +54,46 @@ module fast_pack
     integer(c_int), dimension(:), allocatable :: available_y ! [0]
   end type fast_packer
 
+
+  interface fast_packer
+    module procedure :: constructor_fast_packer
+  end interface fast_packer
+
+
 contains
+
+
+  function constructor_fast_packer(config) result(new_fast_packer)
+    implicit none
+
+    type(fast_packer_config), intent(in) :: config
+    type(fast_packer) :: new_fast_packer
+
+    ! Assign from config.
+    new_fast_packer%fast_canvas_export = config%fast_canvas_export
+    new_fast_packer%padding = config%padding
+    new_fast_packer%edge_color = config%edge_color
+    new_fast_packer%blank_color = config%blank_color
+    new_fast_packer%canvas_expansion_amount = config%canvas_expansion_amount
+    new_fast_packer%debug_edge = config%debug_edge
+    new_fast_packer%canvas_width = config%width
+    new_fast_packer%canvas_height = config%height
+
+    ! Allocate
+    call new_fast_packer%keys%allocate()
+    allocate(new_fast_packer%position_x(0))
+    allocate(new_fast_packer%position_y(0))
+    allocate(new_fast_packer%box_width(0))
+    allocate(new_fast_packer%box_height(0))
+    allocate(new_fast_packer%textures(0))
+    allocate(new_fast_packer%available_x(1))
+    allocate(new_fast_packer%available_y(1))
+
+    new_fast_packer%available_x(1) = 0
+    new_fast_packer%available_y(1) = 0
+
+    new_fast_packer%allocated = .true.
+  end function constructor_fast_packer
 
 
 end module fast_pack
