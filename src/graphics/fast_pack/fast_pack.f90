@@ -218,29 +218,30 @@ contains
               end if
             end do inner_iter
 
-            ! if (!failed) {
-            !     found = true
-            !     bestX = x
-            !     bestY = y
-            !     score = newScore
-            !     break
-            ! }
+            if (.not. failed) then
+              found = .true.
+              best_x = x
+              best_y = y
+              score = new_score
+              exit x_iter
+            end if
           end if
         end if
       end do x_iter
     end do y_iter
 
-    ! if (!found) {
-    !     return false
-    ! }
+    if (.not. found) then
+      pack_success = .false.
+      return
+    end if
 
-    ! this.positionX[currentIndex] = bestX
-    ! this.positionY[currentIndex] = bestY
+    this%position_x(current_index) = best_x
+    this%position_y(current_index) = best_y
 
-    ! this.availableX ~= bestX + thisWidth + padding
-    ! this.availableY ~= bestY + thisHeight + padding
+    this%available_x = [this%available_x, best_x + this_width + padding]
+    this%available_y = [this%available_y, best_y + this_height + padding]
 
-    ! return true
+    pack_success = .true.
   end function fast_packer_tetris_pack
 
 
