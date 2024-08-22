@@ -43,12 +43,13 @@ contains
 
       ! print*,packer%packer%skylines
       result = packer%pack_own(temp_path, rgba_image_data)
+
       if(result == TEXTURE_PACKER_OK) then
-        print*,"PACKED"
-        print*,packer%packer%skylines
-        print*,"skyline size:",size(packer%packer%skylines)
+        ! print*,"PACKED"
+        ! print*,packer%packer%skylines
+        ! print*,"skyline size:",size(packer%packer%skylines)
       else
-        print*,result
+        print*,result, "failed to pack"
       end if
     end do
 
