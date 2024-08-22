@@ -154,14 +154,83 @@ contains
 
 
   !* Tetris packing algorithm.
+  !* This algorithm is HORRIBLE.
   function fast_packer_tetris_pack(this, current_index) result(pack_success)
+    use :: constants, only: C_INT_MAX
     implicit none
 
     class(fast_packer), intent(inout) :: this
     integer(c_int), intent(in) :: current_index
-    logical :: pack_success
+    logical(c_bool) :: pack_success, found
+    integer(c_int) :: padding, score, max_x, max_y, best_x, best_y, y, x
 
-    ! todo: implementation.
+    found = .false.
+    padding = this%padding
+    score = C_INT_MAX
+    max_x = this%new_canvas_width
+    max_y = this%new_canvas_height
+    best_x = padding
+    best_y = padding
+
+    ! /// Iterate all available positions
+    ! foreach (uint y; this.availableY) {
+
+    !     if (found) {
+    !         break;
+    !     }
+
+    !     foreach (uint x; this.availableX) {
+    !         uint newScore = x + y;
+    !         if (newScore < score) {
+    !             /// In bounds check
+    !             if (x + thisWidth + padding < maxX && y + thisHeight + padding < maxY ) {
+
+    !                 bool failed = false;
+
+    !                 /// Collided with other box failure
+    !                 /// Index each collision box to check if within
+
+    !                 foreach(int i;0..currentIndex) {
+
+    !                     uint otherX = this.positionX[i];
+    !                     uint otherY = this.positionY[i];
+    !                     uint otherWidth = this.boxWidth[i];
+    !                     uint otherHeight = this.boxHeight[i];
+
+    !                     // If it found a free slot, first come first plop
+    !                     if (otherX + otherWidth + padding > x  &&
+    !                         otherX <= x + thisWidth + padding  &&
+    !                         otherY + otherHeight + padding > y &&
+    !                         otherY <= y + thisHeight + padding
+    !                         ) {
+    !                             failed = true;
+    !                             break;
+    !                     }
+    !                 }
+
+    !                 if (!failed) {
+    !                     found = true;
+    !                     bestX = x;
+    !                     bestY = y;
+    !                     score = newScore;
+    !                     break;
+    !                 }
+    !             }
+    !         }
+    !     }
+    ! }
+
+    ! if (!found) {
+    !     return false;
+    ! }
+
+    ! this.positionX[currentIndex] = bestX;
+    ! this.positionY[currentIndex] = bestY;
+
+    ! this.availableX ~= bestX + thisWidth + padding;
+    ! this.availableY ~= bestY + thisHeight + padding;
+
+    ! return true;
   end function fast_packer_tetris_pack
 
 
