@@ -13,9 +13,7 @@ contains
     unit_1 = (/5,2,3,4,5,5,1,2,7,42,5,1,2/)
 
     unit_1 = array_i32_small_to_large_unique(unit_1)
-    unit_1 = array_i32_small_to_large_unique(unit_3)
-
-
+    unit_1 = array_i32_small_to_large_unique(unit_1)
     unit_2 = array_i32_unique(unit_1)
 
     print*,unit_2
