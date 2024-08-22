@@ -327,11 +327,15 @@ contains
     print*,"DEBUG 2"
 
     if (this%find_skyline( &
-      texture_rect%w + this%config%texture_padding + this%config%texture_extrusion * 2, &
-      texture_rect%h + this%config%texture_padding + this%config%texture_extrusion * 2, &
+      texture_rect%w + this%config%texture_padding + (this%config%texture_extrusion * 2), &
+      texture_rect%h + this%config%texture_padding + (this%config%texture_extrusion * 2), &
       optional_rectangle, optional_index)) then
 
+      print*,"optional rectangle:", optional_rectangle
+
       the_skyline = skyline(optional_rectangle%left(), optional_rectangle%bottom() + 1, optional_rectangle%w)
+
+      print*,"found skyline:", the_skyline
 
       can_pack = the_skyline%right() <= this%border%right() .and. the_skyline%y <= this%border%bottom()
       return
