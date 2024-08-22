@@ -34,7 +34,18 @@ module fast_pack
   type :: fast_packer
     integer(c_int) :: current_id = 1
     type(fast_packer_config) :: config
+    type(fhash_tbl_t) :: keys
+    integer(c_int) :: canvas_width = 0
+    integer(c_int) :: canvas_height = 0
 
+    !! Everything below this should be allocated in the constructor.
+    integer(c_int), dimension(:), allocatable :: position_x
+    integer(c_int), dimension(:), allocatable :: position_y
+    integer(c_int), dimension(:), allocatable :: box_width
+    integer(c_int), dimension(:), allocatable :: box_height
+    type(memory_texture), dimension(:), allocatable :: textures
+    integer(c_int), dimension(:), allocatable :: available_x ! [0]
+    integer(c_int), dimension(:), allocatable :: available_y ! [0]
   end type fast_packer
 
 contains
