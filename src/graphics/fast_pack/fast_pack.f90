@@ -162,7 +162,7 @@ contains
     class(fast_packer), intent(inout) :: this
     integer(c_int), intent(in) :: current_index
     logical(c_bool) :: pack_success, found
-    integer(c_int) :: padding, score, max_x, max_y, best_x, best_y, y, x
+    integer(c_int) :: padding, score, max_x, max_y, best_x, best_y, y_index, x_index, y, x
 
     found = .false.
     padding = this%padding
@@ -173,51 +173,56 @@ contains
     best_y = padding
 
     ! Iterate all available positions
-    do y = 1,size(this%available_y)
+    do y_index = 1,size(this%available_y)
 
       if (found) then
         exit
       end if
 
-      !     foreach (uint x; this.availableX) {
-      !         uint newScore = x + y;
-      !         if (newScore < score) {
-      !             /// In bounds check
-      !             if (x + thisWidth + padding < maxX && y + thisHeight + padding < maxY ) {
+      y = this%available_y(y_index)
 
-      !                 bool failed = false;
+      do x_index = 1, size(this%available_x)
 
-      !                 /// Collided with other box failure
-      !                 /// Index each collision box to check if within
+        x = this%available_x(x_index)
 
-      !                 foreach(int i;0..currentIndex) {
+        !         uint newScore = x + y;
+        !         if (newScore < score) {
+        !             /// In bounds check
+        !             if (x + thisWidth + padding < maxX && y + thisHeight + padding < maxY ) {
 
-      !                     uint otherX = this.positionX[i];
-      !                     uint otherY = this.positionY[i];
-      !                     uint otherWidth = this.boxWidth[i];
-      !                     uint otherHeight = this.boxHeight[i];
+        !                 bool failed = false;
 
-      !                     // If it found a free slot, first come first plop
-      !                     if (otherX + otherWidth + padding > x  &&
-      !                         otherX <= x + thisWidth + padding  &&
-      !                         otherY + otherHeight + padding > y &&
-      !                         otherY <= y + thisHeight + padding
-      !                         ) {
-      !                             failed = true;
-      !                             break;
-      !                     }
-      !                 }
+        !                 /// Collided with other box failure
+        !                 /// Index each collision box to check if within
 
-      !                 if (!failed) {
-      !                     found = true;
-      !                     bestX = x;
-      !                     bestY = y;
-      !                     score = newScore;
-      !                     break;
-      !                 }
-      !             }
-      !         }
-      !     }
+        !                 foreach(int i;0..currentIndex) {
+
+        !                     uint otherX = this.positionX[i];
+        !                     uint otherY = this.positionY[i];
+        !                     uint otherWidth = this.boxWidth[i];
+        !                     uint otherHeight = this.boxHeight[i];
+
+        !                     // If it found a free slot, first come first plop
+        !                     if (otherX + otherWidth + padding > x  &&
+        !                         otherX <= x + thisWidth + padding  &&
+        !                         otherY + otherHeight + padding > y &&
+        !                         otherY <= y + thisHeight + padding
+        !                         ) {
+        !                             failed = true;
+        !                             break;
+        !                     }
+        !                 }
+
+        !                 if (!failed) {
+        !                     found = true;
+        !                     bestX = x;
+        !                     bestY = y;
+        !                     score = newScore;
+        !                     break;
+        !                 }
+        !             }
+        !         }
+      end do
     end do
 
     ! if (!found) {
