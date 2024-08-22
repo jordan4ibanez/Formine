@@ -17,6 +17,7 @@ module array
   public :: double_array
   public :: string_array
   public :: array_i32_unique
+  public :: array_i32_small_to_large_unique
 
 
   type :: int_array
@@ -625,6 +626,7 @@ contains
 
 
   !* Create an array of only unique elements from an array of i32.
+  !* This was mainly a test.
   function array_i32_unique(input) result(output)
     implicit none
 
@@ -653,5 +655,44 @@ contains
       end if
     end do
   end function array_i32_unique
+
+
+  !* Sort array of i32. Small to large.
+  function array_i32_small_to_large_unique(input) result(output)
+    implicit none
+
+    integer(c_int), dimension(:), intent(in) :: input
+    integer(c_int), dimension(:), allocatable :: output, temp
+
+    integer :: input_index, current_index
+
+    allocate(output(0))
+
+    input_index = 1
+    current_index = 0
+    temp = input
+
+    do
+      input_index = minloc(temp, dim = 1)
+
+      if (input_index == 0) then
+        exit
+      end if
+
+      if (current_index /= 0) then
+        ! We want to ensure that the values do not repeat.
+        if (output(current_index) /= temp(input_index)) then
+          output = [output, temp(input_index)]
+          current_index = current_index + 1
+        end if
+      else
+        output = [output, temp(input_index)]
+        current_index = 1
+      end if
+
+      temp = array_i32_remove(temp, input_index)
+    end do
+  end function array_i32_small_to_large_unique
+
 
 end module array
