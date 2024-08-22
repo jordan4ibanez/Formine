@@ -32,8 +32,9 @@ module fast_pack
 
   !* The fast packer.
   type :: fast_packer
-    integer(c_int) :: current_id = 1
+    private
 
+    integer(c_int) :: current_id = 1
     logical(c_bool) :: fast_canvas_export = .true.
     integer(c_int) :: padding = 1
     type(pixel) :: edge_color
@@ -42,8 +43,8 @@ module fast_pack
     logical(c_bool) :: debug_edge = .false.
     integer(c_int) :: canvas_width = 0
     integer(c_int) :: canvas_height = 0
-    logical(c_bool), private :: allocated = .false.
-    !! Everything below this should be allocated in the constructor.
+    logical(c_bool) :: allocated = .false.
+    ! Everything below this is allocated in the constructor.
     type(fhash_tbl_t) :: keys
     integer(c_int), dimension(:), allocatable :: position_x
     integer(c_int), dimension(:), allocatable :: position_y
