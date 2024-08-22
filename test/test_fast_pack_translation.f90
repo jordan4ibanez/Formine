@@ -31,22 +31,22 @@ contains
 
     ! packer = texture_packer(config)
 
-    root_path = "./test/textures/"
+    ! root_path = "./test/textures/"
 
     do i = 1,10
 
       ! print*,size(packer%packer%skylines)
 
-      print*,"----[NEW PACK]----"
-      temp_path = root_path//int_to_string(i)//".png"
-      print*,temp_path
+      ! print*,"----[NEW PACK]----"
+      ! temp_path = root_path//int_to_string(i)//".png"
+      ! print*,temp_path
 
-      raw_image_data = stbi_load(temp_path, width, height, channels, 4)
+      ! raw_image_data = stbi_load(temp_path, width, height, channels, 4)
 
       ! print*,"len",size(raw_image_data) / 4
       ! print*,width, height, channels
 
-      rgba_image_data = memory_texture(raw_image_data, width, height)
+      ! rgba_image_data = memory_texture(raw_image_data, width, height)
 
 
       ! ! print*,packer%packer%skylines
