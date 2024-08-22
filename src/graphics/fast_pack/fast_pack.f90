@@ -143,6 +143,7 @@ contains
     integer(c_int), intent(in) :: current_index
 
     do while(.not. this%tetris_pack(current_index))
+      !! fixme: this might be HORRIBLY wrong.
       this%new_canvas_width = this%new_canvas_width + this%canvas_expansion_amount
       this%new_canvas_height = this%new_canvas_height + this%canvas_expansion_amount
     end do
@@ -172,9 +173,16 @@ contains
     integer(c_int), intent(in) :: current_index
     integer(c_int) :: new_right, new_top, padding
 
-    new_right = this%position_x(current_index)
+    new_right = this%position_x(current_index) + this%box_width(current_index)
+    new_top = this%position_y(current_index) + this%box_height(current_index)
 
-    ! todo: implementation.
+    if (new_right > this%canvas_width) then
+      this%canvas_width = new_right + padding
+    end if
+
+    if (new_top > this%canvas_height) then
+      this%canvas_height = new_top + padding
+    end if
   end subroutine
 
 
