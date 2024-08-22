@@ -207,9 +207,9 @@ contains
               other_width = this%box_width(i)
               other_height = this%box_height(i)
 
-              ! If it found a free slot, place it.
-              if (other_x + other_width + padding > x  .and. &
-                other_x <= x + this_width + padding  .and. &
+              ! If it hit something, we'll try the next position.
+              if (other_x + other_width + padding > x .and. &
+                other_x <= x + this_width + padding .and. &
                 other_y + other_height + padding > y .and. &
                 other_y <= y + this_height + padding) then
 
