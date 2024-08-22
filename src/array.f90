@@ -623,4 +623,15 @@ contains
   end function constructor_string
 
 
+  function array_i32_unique(input) result(output)
+    implicit none
+
+    integer(c_int), dimension(:), intent(in) :: input
+    integer(c_int), dimension(:), allocatable :: output, temp
+
+    do
+
+    end do
+  end function array_i32_unique
+
 end module array
