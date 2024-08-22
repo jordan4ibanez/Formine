@@ -20,14 +20,12 @@ module texture_packer_mod
   public :: TEXTURE_PACKER_WRONG_TYPE
   public :: TEXTURE_PACKER_NOT_FOUND
 
-  ! todo: going to need to look into implementing this into fortran.
-  ! todo: simply use stb image and make a custom type for this.
-!   texture::{Pixel, SubTexture, Texture},
 
   ! todo: fix all the bugs where things start at 1 index and make them 2
   !*
   !* Implementation note: The intrinsics of rust are different from fortran.
   !* You're going to see a bunch of duplicate and nonsensical things while I prototype this.
+
 
   integer(c_int), parameter :: TEXTURE_PACKER_OK = 0
   integer(c_int), parameter :: TEXTURE_PACKER_IMAGE_TOO_LARGE_TO_FIT_IN_ATLAS = 1
