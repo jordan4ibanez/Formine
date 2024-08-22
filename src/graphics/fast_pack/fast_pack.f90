@@ -170,18 +170,21 @@ contains
 
     class(fast_packer), intent(inout) :: this
     integer(c_int), intent(in) :: current_index
+    integer(c_int) :: new_right, new_top, padding
+
+    new_right = this%position_x(current_index)
 
     ! todo: implementation.
   end subroutine
 
 
   !* Upload a texture from a file path into the fast_packer.
-  function fast_packer_upload_texture_from_file_path(this, texture_key, file_path) result(new_id)
+  function fast_packer_upload_texture_from_file_path(this, texture_key, file_path) result(new_index)
     implicit none
 
     class(fast_packer), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: texture_key, file_path
-    integer(c_int) :: new_id
+    integer(c_int) :: new_index
     integer(c_int) :: width, height, channels
     integer(1), dimension(:), allocatable :: temporary_raw_texture
     type(memory_texture) :: new_texture
@@ -191,22 +194,22 @@ contains
     new_texture = memory_texture(temporary_raw_texture, width, height)
 
     ! This is chained.
-    new_id = this%upload_texture_memory(texture_key, new_texture)
+    new_index = this%upload_texture_memory(texture_key, new_texture)
   end function fast_packer_upload_texture_from_file_path
 
 
   !* Upload a memory_texture into the fast_packer.
-  function fast_packer_upload_texture_from_memory(this, texture_key, mem_texture) result(new_id)
+  function fast_packer_upload_texture_from_memory(this, texture_key, mem_texture) result(new_index)
     implicit none
 
     class(fast_packer), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: texture_key
     type(memory_texture), intent(in) :: mem_texture
-    integer(c_int) :: new_id
+    integer(c_int) :: new_index
 
     ! todo: implement trimming maybe
 
-    new_id = this%current_id
+    new_index = this%current_id
 
     this%current_id = this%current_id + 1
 
