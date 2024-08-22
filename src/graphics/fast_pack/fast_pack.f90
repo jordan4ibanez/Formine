@@ -221,12 +221,17 @@ contains
     call this%trim_and_sort_available_slots()
   end function fast_packer_upload_texture_from_memory
 
+
+  !* Removes duplicates, automatically sorts small to large.
   subroutine fast_packer_trim_and_sort_available_slots(this)
+    use :: array, only: array_i32_small_to_large_unique
     implicit none
 
     class(fast_packer), intent(inout) :: this
-  end subroutine fast_packer_trim_and_sort_available_slots
 
+    this%available_x = array_i32_small_to_large_unique(this%available_x)
+    this%available_y = array_i32_small_to_large_unique(this%available_y)
+  end subroutine fast_packer_trim_and_sort_available_slots
 
 
 end module fast_pack
