@@ -1,5 +1,4 @@
 module test_fast_pack_suite
-  ! use :: texture_packer_mod
   implicit none
 
 
