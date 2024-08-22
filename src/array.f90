@@ -16,6 +16,7 @@ module array
   public :: float_array
   public :: double_array
   public :: string_array
+  public :: array_i32_unique
 
 
   type :: int_array
@@ -623,14 +624,33 @@ contains
   end function constructor_string
 
 
+  !* Create an array of only unique elements from an array of i32.
   function array_i32_unique(input) result(output)
     implicit none
 
     integer(c_int), dimension(:), intent(in) :: input
-    integer(c_int), dimension(:), allocatable :: output, temp
+    integer(c_int), dimension(:), allocatable :: output
+    integer(c_int) :: i, x, current, current_inner
+    logical :: found
 
-    do
+    allocate(output(0))
 
+    do i = 1,size(input)
+      found = .false.
+
+      current = input(i)
+
+      inner: do x = 1,size(output)
+        current_inner = output(x)
+        if (current_inner == current) then
+          found = .true.
+          exit inner
+        end if
+      end do inner
+
+      if (.not. found) then
+        output = [output, current]
+      end if
     end do
   end function array_i32_unique
 
