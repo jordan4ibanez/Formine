@@ -42,7 +42,7 @@ contains
 
 
       ! print*,packer%packer%skylines
-      result = packer%pack_own(temp_path, rgba_image_data)
+      result = packer%pack(temp_path, rgba_image_data)
 
       if(result == TEXTURE_PACKER_OK) then
         ! print*,"PACKED"

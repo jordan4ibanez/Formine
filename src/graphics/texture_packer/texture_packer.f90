@@ -44,7 +44,7 @@ module texture_packer_mod
     type(texture_packer_conf), allocatable :: config
   contains
     procedure :: can_pack => texture_packer_can_pack
-    procedure :: pack_own => texture_packer_pack_own
+    procedure :: pack => texture_packer_pack
     procedure :: get_frames => texture_packer_get_frames
     procedure :: get_frame => texture_packer_get_frame
     procedure :: get_frame_at => texture_packer_get_frame_at
@@ -94,7 +94,7 @@ contains
   end function texture_packer_can_pack
 
   !* Pack the `texture` into this packer, taking ownership of the texture object.
-  function texture_packer_pack_own(this, texture_key, texture) result(status)
+  function texture_packer_pack(this, texture_key, texture) result(status)
     implicit none
 
     class(texture_packer), intent(inout) :: this
@@ -123,8 +123,6 @@ contains
 
     the_sub_texture = sub_texture_from_ref(texture, source)
 
-    print*,"sub: ", the_sub_texture%width(), the_sub_texture%height()
-
     call rectangle%from(texture)
 
     if (this%packer%pack(texture_key, rectangle, optional_frame)) then
@@ -141,7 +139,7 @@ contains
     call this%textures%set(key(texture_key), texture);
 
     status = TEXTURE_PACKER_OK
-  end function texture_packer_pack_own
+  end function texture_packer_pack
 
 
   !* Get the backing mapping from strings to frames.
