@@ -50,13 +50,13 @@ License: MIT
 
 Usage: Translated mat4f methods into fglm.
 
-### PistonDevelopers texture_packer
+### (My) fast_pack
 
-Link: https://github.com/PistonDevelopers/texture_packer
+Link: https://github.com/jordan4ibanez/fast_pack
 
 License: MIT
 
-Usage: Translated to Fortran.
+Usage: Translated from D to Fortran.
 
 -----
 
