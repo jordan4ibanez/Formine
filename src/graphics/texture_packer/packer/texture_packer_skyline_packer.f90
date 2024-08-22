@@ -207,7 +207,7 @@ contains
     deallocate(temp_skylines_array)
     !? END INSERT.
 
-    i = index + 1
+    i = index + 2
 
     do while (i <= size(this%skylines))
 
@@ -229,14 +229,7 @@ contains
             end if
             temp_skylines_array = [temp_skylines_array, this%skylines(i)]
           end do
-
-          print*,"BEFORE:"
-          print*,size(this%skylines)
-          print*,"AFTER:"
-          print*,size(temp_skylines_array)
-
           this%skylines = temp_skylines_array
-          
           deallocate(temp_skylines_array)
           !? END REMOVE.
 
