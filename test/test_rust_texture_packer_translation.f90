@@ -22,7 +22,13 @@ contains
     type(rgba8_texture) :: rgba_image_data
 
 
+    config%max_width = 400
+    config%max_height = 400
     config%trim = .false.
+    config%allow_rotation = .false.
+    config%texture_outlines = .true.
+    config%border_padding = 2
+    config%force_max_dimensions = .false.
 
     packer = texture_packer(config)
 
