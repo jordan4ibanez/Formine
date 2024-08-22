@@ -103,6 +103,8 @@ contains
     type(sub_texture) :: the_sub_texture
     type(frame) :: optional_frame
 
+    print*,"DEBUG 1"
+
     w = texture%width
     h = texture%height
 
