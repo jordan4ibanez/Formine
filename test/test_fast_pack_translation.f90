@@ -1,4 +1,4 @@
-module test_texture_packer_suite
+module test_fast_pack_suite
   ! use :: texture_packer_mod
   implicit none
 
@@ -65,15 +65,15 @@ contains
   end subroutine
 
 
-end module test_texture_packer_suite
+end module test_fast_pack_suite
 
 
-program test_texture_packer
-  use test_texture_packer_suite
+program test_fast_pack
+  use test_fast_pack_suite
   implicit none
 
 
   call begin_test()
 
 
-end program test_texture_packer
+end program test_fast_pack
