@@ -18,6 +18,7 @@ module array
   public :: string_array
   public :: array_i32_unique
   public :: array_i32_small_to_large_unique
+  public :: array_i32_remove
 
 
   type :: int_array
@@ -694,5 +695,35 @@ contains
     end do
   end function array_i32_small_to_large_unique
 
+
+  !* Remove an index from an i32 array.
+  function array_i32_remove(input, index) result(output)
+    implicit none
+
+    integer(c_int), dimension(:), intent(in) :: input
+    integer(c_int), intent(in), value :: index
+    integer(c_int), dimension(:), allocatable :: output
+    integer(c_int) :: i, old_index, input_length
+
+    input_length = size(input)
+
+    if (input_length <= 0) then
+      output = input
+      return
+    end if
+
+    allocate(output(input_length - 1))
+
+    old_index = 1
+
+    do i = 1,input_length
+      if (i == index) then
+        cycle
+      end if
+
+      output(old_index) = input(i)
+      old_index = old_index + 1
+    end do
+  end function array_i32_remove
 
 end module array
