@@ -41,6 +41,8 @@ module fast_pack
     type(pixel) :: blank_color
     integer(c_int) :: canvas_expansion_amount = 100
     logical(c_bool) :: debug_edge = .false.
+    integer(c_int) :: new_canvas_width = 0
+    integer(c_int) :: new_canvas_height = 0
     integer(c_int) :: canvas_width = 0
     integer(c_int) :: canvas_height = 0
     logical(c_bool) :: allocated = .false.
@@ -56,6 +58,9 @@ module fast_pack
 
   contains
     procedure :: pack => fast_packer_pack_from_file_path, fast_packer_pack_from_memory
+    procedure, private :: internal_pack => fast_packer_internal_pack
+    procedure, private :: tetris_pack => fast_packer_tetris_pack
+    procedure, private :: update_canvas_size => fast_packer_update_canvas_size
   end type fast_packer
 
 
@@ -83,6 +88,8 @@ contains
     new_fast_packer%debug_edge = config%debug_edge
     new_fast_packer%canvas_width = config%width
     new_fast_packer%canvas_height = config%height
+    new_fast_packer%new_canvas_width = config%width
+    new_fast_packer%new_canvas_height = config%height
 
     ! Allocate
     call new_fast_packer%keys%allocate()
@@ -121,6 +128,47 @@ contains
 
     ! todo: implementation.
   end subroutine fast_packer_pack_from_memory
+
+
+  !* Pack the image data.
+  subroutine fast_packer_internal_pack(this, current_index)
+    implicit none
+
+    class(fast_packer), intent(inout) :: this
+    integer(c_int), intent(in) :: current_index
+
+    do while(.not. this%tetris_pack(current_index))
+      this%new_canvas_width = this%new_canvas_width + this%canvas_expansion_amount
+      this%new_canvas_height = this%new_canvas_height + this%canvas_expansion_amount
+    end do
+
+    ! Finally, update the canvas's size in memory.
+    call this%update_canvas_size(current_index)
+  end subroutine fast_packer_internal_pack
+
+
+  !* Tetris packing algorithm.
+  function fast_packer_tetris_pack(this, current_index) result(pack_success)
+    implicit none
+
+    class(fast_packer), intent(inout) :: this
+    integer(c_int), intent(in) :: current_index
+    logical :: pack_success
+
+    ! todo: implementation.
+  end function fast_packer_tetris_pack
+
+
+  !* Update the size of the texture packer's canvas.
+  subroutine fast_packer_update_canvas_size(this, current_index)
+    implicit none
+
+    class(fast_packer), intent(inout) :: this
+    integer(c_int), intent(in) :: current_index
+
+    ! todo: implementation.
+  end subroutine
+
 
 
 end module fast_pack
