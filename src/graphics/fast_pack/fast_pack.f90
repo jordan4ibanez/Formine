@@ -163,6 +163,7 @@ contains
     integer(c_int), intent(in) :: current_index
     logical(c_bool) :: pack_success, found, failed
     integer(c_int) :: padding, score, max_x, max_y, best_x, best_y, this_width, this_height, y_index, x_index, y, x, new_score, i
+    integer(c_int) :: other_x, other_y, other_width, other_height
 
     found = .false.
     padding = this%padding
@@ -175,7 +176,7 @@ contains
     this_height = this%box_height(current_index)
 
     ! Iterate all available positions.
-    do y_index = 1,size(this%available_y)
+    y_iter: do y_index = 1,size(this%available_y)
 
       if (found) then
         exit
@@ -183,11 +184,11 @@ contains
 
       y = this%available_y(y_index)
 
-      do x_index = 1, size(this%available_x)
+      x_iter: do x_index = 1, size(this%available_x)
 
         x = this%available_x(x_index)
 
-        new_score = x + y;
+        new_score = x + y
 
         if (new_score < score) then
 
@@ -199,48 +200,47 @@ contains
             ! Collided with other box failure.
             ! Index each collision box to check if within.
 
-            do i = 1,current_index
-              
+            inner_iter: do i = 1,current_index
 
-              !     uint otherX = this.positionX[i];
-              !     uint otherY = this.positionY[i];
-              !     uint otherWidth = this.boxWidth[i];
-              !     uint otherHeight = this.boxHeight[i];
+              other_x = this%position_x(i)
+              other_y = this%position_y(i)
+              other_width = this%box_width(i)
+              other_height = this%box_height(i)
 
-              !     // If it found a free slot, first come first plop
-              !     if (otherX + otherWidth + padding > x  &&
-              !         otherX <= x + thisWidth + padding  &&
-              !         otherY + otherHeight + padding > y &&
-              !         otherY <= y + thisHeight + padding
-              !         ) {
-              !             failed = true;
-              !             break;
-              !     }
-            end do
+              ! If it found a free slot, place it.
+              if (other_x + other_width + padding > x  .and. &
+                other_x <= x + this_width + padding  .and. &
+                other_y + other_height + padding > y .and. &
+                other_y <= y + this_height + padding) then
+
+                failed = .true.
+                exit inner_iter
+              end if
+            end do inner_iter
 
             ! if (!failed) {
-            !     found = true;
-            !     bestX = x;
-            !     bestY = y;
-            !     score = newScore;
-            !     break;
+            !     found = true
+            !     bestX = x
+            !     bestY = y
+            !     score = newScore
+            !     break
             ! }
           end if
         end if
-      end do
-    end do
+      end do x_iter
+    end do y_iter
 
     ! if (!found) {
-    !     return false;
+    !     return false
     ! }
 
-    ! this.positionX[currentIndex] = bestX;
-    ! this.positionY[currentIndex] = bestY;
+    ! this.positionX[currentIndex] = bestX
+    ! this.positionY[currentIndex] = bestY
 
-    ! this.availableX ~= bestX + thisWidth + padding;
-    ! this.availableY ~= bestY + thisHeight + padding;
+    ! this.availableX ~= bestX + thisWidth + padding
+    ! this.availableY ~= bestY + thisHeight + padding
 
-    ! return true;
+    ! return true
   end function fast_packer_tetris_pack
 
 
