@@ -21,7 +21,7 @@ module memory_texture_module
 
 
   interface pixel
-    module procedure :: rgba8_pixel_constructor
+    module procedure :: pixel_constructor
   end interface pixel
 
 
@@ -34,12 +34,10 @@ module memory_texture_module
     integer(c_int) :: width
     integer(c_int) :: height
   contains
-    procedure :: index_get_color => rgba8_texture_index_get_color
-    procedure :: index_get_color_optional => rgba8_texture_index_get_color_optional
-    procedure :: get_color => rgba8_texture_get_color
-    procedure :: get_color_optional => rgba8_texture_get_color_optional
-    procedure :: set_pixel => rgba_texture_set_pixel
-    procedure :: position_to_index => rgba8_texture_internal_position_to_index
+    procedure :: index_get_pixel => memory_texture_index_get_pixel
+    procedure :: get_pixel => memory_texture_get_pixel
+    procedure :: set_pixel => memory_texture_set_pixel
+    procedure :: position_to_index => memory_texture_internal_position_to_index
   end type memory_texture
 
 
@@ -52,7 +50,7 @@ contains
 
 
   !* Constructor for a pixel.
-  function rgba8_pixel_constructor(r, g, b, a) result(new_pixel)
+  function pixel_constructor(r, g, b, a) result(new_pixel)
     use :: string
     implicit none
 
@@ -77,7 +75,7 @@ contains
     new_pixel%g = g
     new_pixel%b = b
     new_pixel%a = a
-  end function rgba8_pixel_constructor
+  end function pixel_constructor
 
 
   function rgba8_texture_constructor(raw_texture_memory_u8, width, height) result(new_rgba_texture)
@@ -126,28 +124,8 @@ contains
   end function rgba8_texture_constructor
 
 
-  !* Get the RGBA of an index. Returns success.
-  function rgba8_texture_index_get_color_optional(this, index, optional_pixel) result(success)
-    implicit none
-
-    class(memory_texture), intent(in) :: this
-    integer(c_int), intent(in), value :: index
-    type(pixel), intent(inout) :: optional_pixel
-    logical :: success
-
-    success = .false.
-
-    if (index <= 0 .or. index > this%pixel_array_length) then
-      return
-    end if
-
-    success = .true.
-    optional_pixel = this%pixels(index)
-  end function rgba8_texture_index_get_color_optional
-
-
   !* Get the RGBA of an index.
-  function rgba8_texture_index_get_color(this, index) result(color)
+  function memory_texture_index_get_pixel(this, index) result(color)
     implicit none
 
     class(memory_texture), intent(in) :: this
@@ -155,11 +133,11 @@ contains
     type(pixel) :: color
 
     color = this%pixels(index)
-  end function rgba8_texture_index_get_color
+  end function memory_texture_index_get_pixel
 
 
   !* This wraps a chain of functions to just get the data we need, which is RGBA of a pixel.
-  function rgba8_texture_get_color(this, x,y) result(color)
+  function memory_texture_get_pixel(this, x,y) result(color)
     use :: string
     implicit none
 
@@ -175,25 +153,12 @@ contains
       error stop "[RGBA Texture] Error: Y is out of bounds ["//int_to_string(y)//"]"
     end if
 
-    color = this%index_get_color(this%position_to_index(x,y))
-  end function rgba8_texture_get_color
-
-
-  !* Get a pixel that might be out of bounds.
-  function rgba8_texture_get_color_optional(this, x, y, optional_pixel) result(success)
-    implicit none
-
-    class(memory_texture), intent(in) :: this
-    integer(c_int), intent(in), value :: x, y
-    type(pixel), intent(inout) :: optional_pixel
-    logical :: success
-
-    success = this%index_get_color_optional(this%position_to_index(x,y), optional_pixel)
-  end function rgba8_texture_get_color_optional
+    color = this%index_get_pixel(this%position_to_index(x,y))
+  end function memory_texture_get_pixel
 
 
   !* Set the pixel of a texture.
-  subroutine rgba_texture_set_pixel(this, x, y, new_pixel)
+  subroutine memory_texture_set_pixel(this, x, y, new_pixel)
     implicit none
 
     class(memory_texture), intent(inout) :: this
@@ -204,11 +169,11 @@ contains
     i = this%position_to_index(x, y)
 
     this%pixels(i) = new_pixel
-  end subroutine rgba_texture_set_pixel
+  end subroutine memory_texture_set_pixel
 
 
   !* Position (in pixels) to the index in the texture array.
-  function rgba8_texture_internal_position_to_index(this, x, y) result(i)
+  function memory_texture_internal_position_to_index(this, x, y) result(i)
     implicit none
 
     class(memory_texture), intent(in) :: this
@@ -222,7 +187,7 @@ contains
 
     ! +1 because: We're shifting from offsets into indices.
     i = ((b * this%width) + a) + 1
-  end function rgba8_texture_internal_position_to_index
+  end function memory_texture_internal_position_to_index
 
 
 end module memory_texture_module
