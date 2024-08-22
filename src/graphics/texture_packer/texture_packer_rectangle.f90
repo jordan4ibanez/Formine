@@ -175,6 +175,7 @@ contains
     is_outline = x == this%left() .or. x == this%right() .or. y == this%top() .or. y == this%bottom()
   end function rect_is_outline
 
+
   !* Split two rectangles into non-overlapping regions.
   function rect_crop(this, other) result(rect_array)
     implicit none
