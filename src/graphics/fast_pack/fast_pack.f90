@@ -53,6 +53,9 @@ module fast_pack
     type(memory_texture), dimension(:), allocatable :: textures
     integer(c_int), dimension(:), allocatable :: available_x ! [0]
     integer(c_int), dimension(:), allocatable :: available_y ! [0]
+
+  contains
+    procedure :: pack => fast_packer_pack_from_file_path, fast_packer_pack_from_memory
   end type fast_packer
 
 
@@ -62,6 +65,7 @@ module fast_pack
 
 
 contains
+
 
 
   function constructor_fast_packer(config) result(new_fast_packer)
@@ -95,6 +99,28 @@ contains
 
     new_fast_packer%allocated = .true.
   end function constructor_fast_packer
+
+
+  !* Pack a texture located on disk.
+  subroutine fast_packer_pack_from_file_path(this, file_path)
+    implicit none
+
+    class(fast_packer), intent(inout) :: this
+    character(len = *, kind = c_char), intent(in) :: file_path
+
+    ! todo: implementation.
+  end subroutine fast_packer_pack_from_file_path
+
+
+  !* Pack a texture located in memory.
+  subroutine fast_packer_pack_from_memory(this, mem_texture)
+    implicit none
+
+    class(fast_packer), intent(inout) :: this
+    type(memory_texture), intent(in) :: mem_texture
+
+    ! todo: implementation.
+  end subroutine fast_packer_pack_from_memory
 
 
 end module fast_pack
