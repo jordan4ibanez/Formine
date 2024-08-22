@@ -185,6 +185,9 @@ contains
     end if
 
     the_sub_texture = sub_texture_from_ref(texture, source)
+
+    print*,"sub: ", the_sub_texture%width(), the_sub_texture%height()
+
     call rectangle%from(texture)
 
     if (this%packer%pack(texture_key, rectangle, optional_frame)) then

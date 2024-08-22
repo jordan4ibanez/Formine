@@ -30,7 +30,7 @@ module texture_packer_config
     !* Size of the repeated pixels at the border of each image. Default value is `0`.
     integer(c_int) :: texture_extrusion = 0
 
-    !* True to trim the empty pixels of the input images. Default value is `true`.
+    !* True to trim the empty pixels of the input images. Default value is `false`.
     logical(c_bool) :: trim = .false.
 
     !* True to draw the red line on the edge of the each frames. Useful for debugging. Default
