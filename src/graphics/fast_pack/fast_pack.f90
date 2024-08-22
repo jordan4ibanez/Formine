@@ -172,53 +172,53 @@ contains
     best_x = padding
     best_y = padding
 
-    ! /// Iterate all available positions
-    ! foreach (uint y; this.availableY) {
+    ! Iterate all available positions
+    do y = 1,size(this%available_y)
 
-    !     if (found) {
-    !         break;
-    !     }
+      if (found) then
+        exit
+      end if
 
-    !     foreach (uint x; this.availableX) {
-    !         uint newScore = x + y;
-    !         if (newScore < score) {
-    !             /// In bounds check
-    !             if (x + thisWidth + padding < maxX && y + thisHeight + padding < maxY ) {
+      !     foreach (uint x; this.availableX) {
+      !         uint newScore = x + y;
+      !         if (newScore < score) {
+      !             /// In bounds check
+      !             if (x + thisWidth + padding < maxX && y + thisHeight + padding < maxY ) {
 
-    !                 bool failed = false;
+      !                 bool failed = false;
 
-    !                 /// Collided with other box failure
-    !                 /// Index each collision box to check if within
+      !                 /// Collided with other box failure
+      !                 /// Index each collision box to check if within
 
-    !                 foreach(int i;0..currentIndex) {
+      !                 foreach(int i;0..currentIndex) {
 
-    !                     uint otherX = this.positionX[i];
-    !                     uint otherY = this.positionY[i];
-    !                     uint otherWidth = this.boxWidth[i];
-    !                     uint otherHeight = this.boxHeight[i];
+      !                     uint otherX = this.positionX[i];
+      !                     uint otherY = this.positionY[i];
+      !                     uint otherWidth = this.boxWidth[i];
+      !                     uint otherHeight = this.boxHeight[i];
 
-    !                     // If it found a free slot, first come first plop
-    !                     if (otherX + otherWidth + padding > x  &&
-    !                         otherX <= x + thisWidth + padding  &&
-    !                         otherY + otherHeight + padding > y &&
-    !                         otherY <= y + thisHeight + padding
-    !                         ) {
-    !                             failed = true;
-    !                             break;
-    !                     }
-    !                 }
+      !                     // If it found a free slot, first come first plop
+      !                     if (otherX + otherWidth + padding > x  &&
+      !                         otherX <= x + thisWidth + padding  &&
+      !                         otherY + otherHeight + padding > y &&
+      !                         otherY <= y + thisHeight + padding
+      !                         ) {
+      !                             failed = true;
+      !                             break;
+      !                     }
+      !                 }
 
-    !                 if (!failed) {
-    !                     found = true;
-    !                     bestX = x;
-    !                     bestY = y;
-    !                     score = newScore;
-    !                     break;
-    !                 }
-    !             }
-    !         }
-    !     }
-    ! }
+      !                 if (!failed) {
+      !                     found = true;
+      !                     bestX = x;
+      !                     bestY = y;
+      !                     score = newScore;
+      !                     break;
+      !                 }
+      !             }
+      !         }
+      !     }
+    end do
 
     ! if (!found) {
     !     return false;
