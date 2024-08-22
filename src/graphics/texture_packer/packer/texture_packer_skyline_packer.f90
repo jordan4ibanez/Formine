@@ -324,6 +324,8 @@ contains
 
     can_pack = .false.
 
+    print*,"DEBUG 2"
+
     if (this%find_skyline( &
       texture_rect%w + this%config%texture_padding + this%config%texture_extrusion * 2, &
       texture_rect%h + this%config%texture_padding + this%config%texture_extrusion * 2, &

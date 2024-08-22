@@ -114,6 +114,7 @@ contains
       ! source = trim_texture(texture)
     else
       source = rect(0, 0, w, h)
+      print*,"source:",source
     end if
 
     if (.not. this%packer%can_pack(source)) then
