@@ -192,6 +192,7 @@ contains
 
 
     !? BEGIN INSERT.
+    !* THIS HAS BEEN VERIFIED FUNCTIONING.
     allocate(temp_skylines_array(size(this%skylines) + 1))
     old_array_index = 1
     do i = 1,size(this%skylines) + 1
