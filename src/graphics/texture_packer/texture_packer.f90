@@ -36,18 +36,6 @@ module texture_packer_mod
   integer(c_int), parameter :: TEXTURE_PACKER_NOT_FOUND = 3
 
 
-
-! use std::cmp::min;
-! use std::collections::HashMap;
-! use std::hash::Hash;
-
-! pub type PackResult<T> = Result<T, PackError>;
-
-! #[derive(Debug, Copy, Clone, PartialEq, Eq)]
-! pub enum PackError {
-!     TextureTooLargeToFitIntoAtlas,
-! }
-
   !* Packs textures into a single texture atlas.
   type :: texture_packer
     type(fhash_tbl_t), allocatable :: textures
