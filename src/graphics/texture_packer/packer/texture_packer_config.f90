@@ -31,7 +31,7 @@ module texture_packer_config
     integer(c_int) :: texture_extrusion = 0
 
     !* True to trim the empty pixels of the input images. Default value is `true`.
-    logical(c_bool) :: trim = .true.
+    logical(c_bool) :: trim = .false.
 
     !* True to draw the red line on the edge of the each frames. Useful for debugging. Default
     !* value is `false`.
