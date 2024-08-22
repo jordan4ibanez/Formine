@@ -1,5 +1,7 @@
 module fast_pack
   use :: memory_texture_module
+  ! use :: texture
+  use :: stb_image
   use :: fhash, only: fhash_tbl_t, key => fhash_key
   use, intrinsic :: iso_c_binding
   implicit none
@@ -61,6 +63,9 @@ module fast_pack
     procedure, private :: internal_pack => fast_packer_internal_pack
     procedure, private :: tetris_pack => fast_packer_tetris_pack
     procedure, private :: update_canvas_size => fast_packer_update_canvas_size
+    procedure, private :: upload_texture_path => fast_packer_upload_texture_from_file_path
+    procedure, private :: upload_texture_memory => fast_packer_upload_texture_from_memory
+    procedure, private :: trim_and_sort_available_slots => fast_packer_trim_and_sort_available_slots
   end type fast_packer
 
 
@@ -168,6 +173,59 @@ contains
 
     ! todo: implementation.
   end subroutine
+
+
+  !* Upload a texture from a file path into the fast_packer.
+  function fast_packer_upload_texture_from_file_path(this, texture_key, file_path) result(new_id)
+    implicit none
+
+    class(fast_packer), intent(inout) :: this
+    character(len = *, kind = c_char), intent(in) :: texture_key, file_path
+    integer(c_int) :: new_id
+    integer(c_int) :: width, height, channels
+    integer(1), dimension(:), allocatable :: temporary_raw_texture
+    type(memory_texture) :: new_texture
+
+    temporary_raw_texture = stbi_load(file_path, width, height, channels, 4)
+
+    new_texture = memory_texture(temporary_raw_texture, width, height)
+
+    ! This is chained.
+    new_id = this%upload_texture_memory(texture_key, new_texture)
+  end function fast_packer_upload_texture_from_file_path
+
+
+  !* Upload a memory_texture into the fast_packer.
+  function fast_packer_upload_texture_from_memory(this, texture_key, mem_texture) result(new_id)
+    implicit none
+
+    class(fast_packer), intent(inout) :: this
+    character(len = *, kind = c_char), intent(in) :: texture_key
+    type(memory_texture), intent(in) :: mem_texture
+    integer(c_int) :: new_id
+
+    ! todo: implement trimming maybe
+
+    new_id = this%current_id
+
+    this%current_id = this%current_id + 1
+
+    ! Add data.
+    call this%keys%set(key(texture_key), mem_texture)
+    this%position_x = [this%position_x, 0]
+    this%position_y = [this%position_y, 0]
+    this%box_width = [this%box_width, mem_texture%width]
+    this%box_height = [this%box_height, mem_texture%height]
+    this%textures = [this%textures, mem_texture]
+
+    call this%trim_and_sort_available_slots()
+  end function fast_packer_upload_texture_from_memory
+
+  subroutine fast_packer_trim_and_sort_available_slots(this)
+    implicit none
+
+    class(fast_packer), intent(inout) :: this
+  end subroutine fast_packer_trim_and_sort_available_slots
 
 
 
