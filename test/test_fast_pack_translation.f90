@@ -10,7 +10,7 @@ contains
     use :: iso_c_binding
     use :: string
     use :: stb_image
-    use :: rgba8_texture_module
+    use :: memory_texture_module
     implicit none
 
     ! type(texture_packer_conf) :: config
@@ -19,7 +19,7 @@ contains
     character(len = :, kind = c_char), allocatable :: root_path, temp_path
     integer(1), dimension(:), allocatable :: raw_image_data
     integer(c_int) :: width, height, channels, result
-    type(rgba8_texture) :: rgba_image_data
+    type(memory_texture) :: rgba_image_data
 
 
     ! config%max_width = 400
@@ -47,7 +47,7 @@ contains
       ! print*,"len",size(raw_image_data) / 4
       ! print*,width, height, channels
 
-      rgba_image_data = rgba8_texture(raw_image_data, width, height)
+      rgba_image_data = memory_texture(raw_image_data, width, height)
 
 
       ! ! print*,packer%packer%skylines

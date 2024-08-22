@@ -1,37 +1,35 @@
-module rgba8_texture_module
+module memory_texture_module
   use, intrinsic :: iso_c_binding
   implicit none
 
 
   private
 
-  ! todo: color -> pixel
-
-  public :: rgba8_pixel
-  public :: rgba8_texture
+  public :: pixel
+  public :: memory_texture
 
 
   !* This is a single pixel.
   !* This is commonly called: RGBA_8
   !* In the range of 0-255.
-  type :: rgba8_pixel
+  type :: pixel
     integer(c_int) :: r = 0
     integer(c_int) :: g = 0
     integer(c_int) :: b = 0
     integer(c_int) :: a = 0
-  end type rgba8_pixel
+  end type pixel
 
 
-  interface rgba8_pixel
+  interface pixel
     module procedure :: rgba8_pixel_constructor
-  end interface rgba8_pixel
+  end interface pixel
 
 
   !* This is an actual texture
   !* It contains pixels in the pixels component.
   !* In the standard of: RGBA_8
-  type :: rgba8_texture
-    type(rgba8_pixel), dimension(:), allocatable :: pixels
+  type :: memory_texture
+    type(pixel), dimension(:), allocatable :: pixels
     integer(c_int) :: pixel_array_length
     integer(c_int) :: width
     integer(c_int) :: height
@@ -42,12 +40,12 @@ module rgba8_texture_module
     procedure :: get_color_optional => rgba8_texture_get_color_optional
     procedure :: set_pixel => rgba_texture_set_pixel
     procedure :: position_to_index => rgba8_texture_internal_position_to_index
-  end type rgba8_texture
+  end type memory_texture
 
 
-  interface rgba8_texture
+  interface memory_texture
     module procedure :: rgba8_texture_constructor
-  end interface rgba8_texture
+  end interface memory_texture
 
 
 contains
@@ -59,7 +57,7 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: r, g, b, a
-    type(rgba8_pixel) :: new_pixel
+    type(pixel) :: new_pixel
 
     ! Range checks for RGBA.
     if (r < 0 .or. r > 255) then
@@ -89,7 +87,7 @@ contains
 
     integer(1), dimension(:) :: raw_texture_memory_u8
     integer(c_int), intent(in), value :: width, height
-    type(rgba8_texture) :: new_rgba_texture
+    type(memory_texture) :: new_rgba_texture
     integer(c_int) :: array_length, pixel_array_length, i, current_index
     integer(c_int), dimension(:), allocatable :: raw_texture_memory_i32
 
@@ -116,7 +114,7 @@ contains
       current_index = ((i - 1) * 4) + 1
 
       ! Now we create the pixel.
-      new_rgba_texture%pixels(i) = rgba8_pixel( &
+      new_rgba_texture%pixels(i) = pixel( &
         raw_texture_memory_i32(current_index), &
         raw_texture_memory_i32(current_index + 1), &
         raw_texture_memory_i32(current_index + 2), &
@@ -132,9 +130,9 @@ contains
   function rgba8_texture_index_get_color_optional(this, index, optional_pixel) result(success)
     implicit none
 
-    class(rgba8_texture), intent(in) :: this
+    class(memory_texture), intent(in) :: this
     integer(c_int), intent(in), value :: index
-    type(rgba8_pixel), intent(inout) :: optional_pixel
+    type(pixel), intent(inout) :: optional_pixel
     logical :: success
 
     success = .false.
@@ -152,9 +150,9 @@ contains
   function rgba8_texture_index_get_color(this, index) result(color)
     implicit none
 
-    class(rgba8_texture), intent(in) :: this
+    class(memory_texture), intent(in) :: this
     integer(c_int), intent(in), value :: index
-    type(rgba8_pixel) :: color
+    type(pixel) :: color
 
     color = this%pixels(index)
   end function rgba8_texture_index_get_color
@@ -165,9 +163,9 @@ contains
     use :: string
     implicit none
 
-    class(rgba8_texture), intent(in) :: this
+    class(memory_texture), intent(in) :: this
     integer(c_int), intent(in), value :: x, y
-    type(rgba8_pixel) :: color
+    type(pixel) :: color
 
     ! This is calculated via offsets.
     if (x < 0 .or. x >= this%width) then
@@ -185,9 +183,9 @@ contains
   function rgba8_texture_get_color_optional(this, x, y, optional_pixel) result(success)
     implicit none
 
-    class(rgba8_texture), intent(in) :: this
+    class(memory_texture), intent(in) :: this
     integer(c_int), intent(in), value :: x, y
-    type(rgba8_pixel), intent(inout) :: optional_pixel
+    type(pixel), intent(inout) :: optional_pixel
     logical :: success
 
     success = this%index_get_color_optional(this%position_to_index(x,y), optional_pixel)
@@ -198,9 +196,9 @@ contains
   subroutine rgba_texture_set_pixel(this, x, y, new_pixel)
     implicit none
 
-    class(rgba8_texture), intent(inout) :: this
+    class(memory_texture), intent(inout) :: this
     integer(c_int), intent(in), value :: x, y
-    type(rgba8_pixel), intent(in) :: new_pixel
+    type(pixel), intent(in) :: new_pixel
     integer(c_int) :: i
 
     i = this%position_to_index(x, y)
@@ -213,7 +211,7 @@ contains
   function rgba8_texture_internal_position_to_index(this, x, y) result(i)
     implicit none
 
-    class(rgba8_texture), intent(in) :: this
+    class(memory_texture), intent(in) :: this
     integer(c_int), intent(in), value :: x, y
     integer(c_int) :: a, b
     integer(c_int) :: i
@@ -227,4 +225,4 @@ contains
   end function rgba8_texture_internal_position_to_index
 
 
-end module rgba8_texture_module
+end module memory_texture_module
