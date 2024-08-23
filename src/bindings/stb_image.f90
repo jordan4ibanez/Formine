@@ -35,6 +35,7 @@ module stb_image
 
     subroutine stbi_set_flip_vertically_on_load(flag_true_if_should_flip) bind(c, name = "stbi_set_flip_vertically_on_load")
       use, intrinsic :: iso_c_binding
+      implicit none
 
       logical(c_bool), intent(in), value :: flag_true_if_should_flip
     end subroutine stbi_set_flip_vertically_on_load
