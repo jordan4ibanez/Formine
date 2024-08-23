@@ -8,6 +8,7 @@ module stb_image
 
   public :: stbi_enable_vertical_flipping
   public :: stbi_load
+  public :: stbi_write_png
 
 
   ! Here I'm binding to the C stb_image shared library.
@@ -45,7 +46,7 @@ module stb_image
       use, intrinsic :: iso_c_binding
 
       character(len = 1, kind = c_char), intent(in) :: file_name
-      integer(c_int), intent(inout) :: w, h, comp, stride_in_bytes
+      integer(c_int), intent(in) :: w, h, comp, stride_in_bytes
       type(c_ptr), intent(in), value :: data
       integer(c_int) :: status
     end function internal_stbi_write_png
@@ -109,5 +110,16 @@ contains
     ! The image data is now handled by Fortran.
   end function stbi_load
 
+
+  function stbi_write_png(file_name, w, h, comp, data, stride_in_bytes) result(status)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: file_name
+    integer(c_int), intent(in), value :: w, h, comp, stride_in_bytes
+    integer(1), dimension(:), intent(in), target:: data
+    integer(c_int) :: status
+
+    status = internal_stbi_write_png(file_name, w, h, comp, c_loc(data), stride_in_bytes)
+  end function stbi_write_png
 
 end module stb_image
