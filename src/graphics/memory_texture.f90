@@ -157,7 +157,7 @@ contains
 
 
   !* This wraps a chain of functions to just get the data we need, which is RGBA of a pixel.
-  function memory_texture_get_pixel(this, x,y) result(color)
+  function memory_texture_get_pixel(this, x, y) result(color)
     use :: string
     implicit none
 
@@ -165,11 +165,11 @@ contains
     integer(c_int), intent(in), value :: x, y
     type(pixel) :: color
 
-    ! This is calculated via offsets.
-    if (x < 0 .or. x >= this%width) then
+    ! This is calculated via indices.
+    if (x < 1 .or. x > this%width) then
       error stop "[RGBA Texture] Error: X is out of bounds ["//int_to_string(x)//"]"
     end if
-    if (y < 0 .or. y >= this%height) then
+    if (y < 1 .or. y > this%height) then
       error stop "[RGBA Texture] Error: Y is out of bounds ["//int_to_string(y)//"]"
     end if
 
