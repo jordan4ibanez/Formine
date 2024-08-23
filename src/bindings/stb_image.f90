@@ -71,22 +71,27 @@ contains
 
   function stbi_load(file_name, x, y, channels_in_file, desired_channels) result(raw_image_data)
     use :: math_helpers, only: c_uchar_to_int_array
+    use :: string
     implicit none
 
     character(len = 1, kind = c_char), intent(in) :: file_name
     integer(c_int), intent(inout) :: x, y, channels_in_file
     integer(c_int), intent(in), value :: desired_channels
+    integer(1), dimension(:), allocatable :: raw_image_data
+    character(len = :, kind = c_char), allocatable :: c_string
     type(c_ptr) :: c_pointer
     integer(c_int) :: array_length
     integer(1), dimension(:), pointer :: passed_data_pointer
-    integer(1), dimension(:), allocatable :: raw_image_data
+
     ! integer(c_int), dimension(:), allocatable :: output_data_int
 
     !! WARNING: All data in the output is assumed to be overflowed, do not modify it.
     !! It is designed to be passed straight into C.
 
+    c_string = into_c_string(file_name)
+
     ! Get the raw C data.
-    c_pointer = internal_stbi_load(file_name, x, y, channels_in_file, desired_channels)
+    c_pointer = internal_stbi_load(c_string, x, y, channels_in_file, desired_channels)
 
     ! Calculate the length of the array.
     array_length = x * y * desired_channels
