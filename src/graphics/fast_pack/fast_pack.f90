@@ -75,6 +75,7 @@ module fast_pack
     procedure, private :: upload_texture_path => fast_packer_upload_texture_from_file_path
     procedure, private :: upload_texture_memory => fast_packer_upload_texture_from_memory
     procedure, private :: trim_and_sort_available_slots => fast_packer_trim_and_sort_available_slots
+    procedure, private :: trim_texture => fast_packer_trim_texture
   end type fast_packer
 
 
@@ -429,6 +430,79 @@ contains
     this%available_x = array_i32_small_to_large_unique(this%available_x)
     this%available_y = array_i32_small_to_large_unique(this%available_y)
   end subroutine fast_packer_trim_and_sort_available_slots
+
+
+  function fast_packer_trim_texture(this, input) result(output)
+    implicit none
+
+    class(fast_packer), intent(in) :: this
+    type(memory_texture), intent(in) :: input
+    type(memory_texture) :: output
+    integer(c_int) :: texture_width, texture_height, min_x, min_y, x, y, max_x, max_y
+    logical(c_bool) :: found
+    type(pixel) :: current_pixel
+
+
+    min_x = 1;
+
+    ! MIN_X: Scan rows for alpha.
+    iterator_min_x: do x = 1,texture_width
+      found = .false.
+      do y = 1, texture_height
+        current_pixel = input%get_pixel(x,y)
+        if (current_pixel%a > 0) then
+          min_x = x;
+          found = .true.
+          exit iterator_min_x
+        end if
+      end do
+    end do iterator_min_x
+
+
+    ! MAX_X: Scan rows for alpha in reverse.
+    iterator_max_x: do x = texture_width,1,-1
+      found = .false.
+      do y = 1, texture_height
+        current_pixel = input%get_pixel(x,y)
+        if (current_pixel%a > 0) then
+          max_x = x;
+          found = .true.
+          exit iterator_max_x
+        end if
+      end do
+    end do iterator_max_x
+
+
+    ! MIN_Y: Scan columns for alpha.
+    iterator_min_y: do y = 1, texture_height
+      found = .false.
+      do x = 1,texture_width
+        current_pixel = input%get_pixel(x,y)
+        if (current_pixel%a > 0) then
+          min_y = y;
+          found = .true.
+          exit iterator_min_y
+        end if
+      end do
+    end do iterator_min_y
+
+
+    ! MAX_Y: Scan columns for alpha in reverse.
+    iterator_max_y: do y = texture_height,1,-1
+      found = .false.
+      do x = 1,texture_width
+        current_pixel = input%get_pixel(x,y)
+        if (current_pixel%a > 0) then
+          max_y = y;
+          found = .true.
+          exit iterator_max_y
+        end if
+      end do
+    end do iterator_max_y
+
+
+
+  end function fast_packer_trim_texture
 
 
 end module fast_pack
