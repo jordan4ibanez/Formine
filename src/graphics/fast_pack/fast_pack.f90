@@ -194,8 +194,8 @@ contains
     class(fast_packer), intent(inout) :: this
     integer(c_int), intent(in) :: current_index
     logical(c_bool) :: pack_success, found, failed
-    integer(c_int) :: padding, score, max_x, max_y, best_x, best_y, this_width, this_height, y_index, x_index, y, x, new_score, i
-    integer(c_int) :: other_x, other_y, other_width, other_height
+    integer(c_int) :: padding, score, max_x, max_y, best_x, best_y, this_width, this_height
+    integer(c_int) :: y_index, x_index, y, x, new_score, i, other_x, other_y, other_width, other_height
 
     found = .false.
     padding = this%padding
