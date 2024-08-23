@@ -55,6 +55,8 @@ module fast_pack
     integer(c_int) :: canvas_width = 0
     integer(c_int) :: canvas_height = 0
     logical(c_bool) :: allocated = .false.
+    integer(c_int) :: max_x = 0
+    integer(c_int) :: max_y = 0
     ! Everything below this is allocated in the constructor.
     type(fhash_tbl_t) :: keys
     integer(c_int), dimension(:), allocatable :: position_x
@@ -62,8 +64,8 @@ module fast_pack
     integer(c_int), dimension(:), allocatable :: box_width
     integer(c_int), dimension(:), allocatable :: box_height
     type(memory_texture), dimension(:), allocatable :: textures
-    integer(c_int), dimension(:), allocatable :: available_x ! [0]
-    integer(c_int), dimension(:), allocatable :: available_y ! [0]
+    integer(c_int), dimension(:), allocatable :: available_x
+    integer(c_int), dimension(:), allocatable :: available_y
 
   contains
     procedure :: pack => fast_packer_pack_from_file_path, fast_packer_pack_from_memory
@@ -353,12 +355,12 @@ contains
     new_right = this%position_x(current_index) + this%box_width(current_index)
     new_top = this%position_y(current_index) + this%box_height(current_index)
 
-    if (new_right > this%canvas_width) then
-      this%canvas_width = new_right + this%padding
+    if (new_right > this%max_x) then
+      this%max_x = new_right + this%padding
     end if
 
-    if (new_top > this%canvas_height) then
-      this%canvas_height = new_top + this%padding
+    if (new_top > this%max_y) then
+      this%max_y = new_top + this%padding
     end if
   end subroutine
 
