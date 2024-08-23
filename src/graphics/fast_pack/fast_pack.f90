@@ -75,12 +75,24 @@ module fast_pack
 
 
   interface fast_packer
-    module procedure :: constructor_fast_packer
+    module procedure :: constructor_fast_packer, constructor_fast_packer_blank
   end interface fast_packer
 
 
 contains
 
+
+  function constructor_fast_packer_blank() result(new_fast_packer)
+    implicit none
+
+    type(fast_packer_config) :: config
+    type(fast_packer) :: new_fast_packer
+
+    ! Config gets generated with it's defaults, hooray!
+
+    ! Now chain to the constructor with a config.
+    new_fast_packer = constructor_fast_packer(config)
+  end function constructor_fast_packer_blank
 
 
   function constructor_fast_packer(config) result(new_fast_packer)
