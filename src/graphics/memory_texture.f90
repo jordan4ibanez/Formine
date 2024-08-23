@@ -133,11 +133,10 @@ contains
     type(memory_texture) :: new_rgba_texture
     integer(c_int) :: pixel_array_length
 
-    new_rgba_texture%width = width
-    new_rgba_texture%height = height
-
     pixel_array_length = width * height
 
+    new_rgba_texture%width = width
+    new_rgba_texture%height = height
     new_rgba_texture%pixel_array_length = pixel_array_length
 
     ! Pretty simple.
