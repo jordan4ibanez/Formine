@@ -116,12 +116,11 @@ contains
   end function stbi_load
 
 
-  function stbi_write_png(file_name, w, h, comp, data) result(status)
+  function stbi_write_png(file_name, w, h, data) result(status)
     use :: string
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: file_name
-    integer(c_int), intent(in), value :: w, h, comp
     integer(1), dimension(:), intent(in), target:: data
     integer(c_int) :: status
     character(len = :, kind = c_char), allocatable :: c_string
