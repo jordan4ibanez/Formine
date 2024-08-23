@@ -10,6 +10,11 @@ module fast_pack
   private
 
 
+  public :: texture_rectangle
+  public :: fast_packer_config
+  public :: fast_packer
+
+
   !* Represents a texture size.
   type :: texture_rectangle
     real(c_float) :: min_x = 0.0
