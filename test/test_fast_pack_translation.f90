@@ -1,4 +1,5 @@
 module test_fast_pack_suite
+  use :: fast_pack
   implicit none
 
 
@@ -13,12 +14,13 @@ contains
     implicit none
 
     ! type(texture_packer_conf) :: config
-    ! type(texture_packer) :: packer
+    type(fast_packer) :: packer
     integer :: i
     character(len = :, kind = c_char), allocatable :: root_path, temp_path
-    integer(1), dimension(:), allocatable :: raw_image_data
-    integer(c_int) :: width, height, channels, result
-    type(memory_texture) :: rgba_image_data
+
+    ! integer(1), dimension(:), allocatable :: raw_image_data
+    ! integer(c_int) :: width, height, channels, result
+    ! type(memory_texture) :: rgba_image_data
 
 
     ! config%max_width = 400
@@ -31,15 +33,16 @@ contains
 
     ! packer = texture_packer(config)
 
-    ! root_path = "./test/textures/"
+    root_path = "./test/textures/"
 
     do i = 1,10
 
       ! print*,size(packer%packer%skylines)
 
       ! print*,"----[NEW PACK]----"
-      ! temp_path = root_path//int_to_string(i)//".png"
-      ! print*,temp_path
+      temp_path = root_path//int_to_string(i)//".png"
+
+      call packer%pack(temp_path)
 
       ! raw_image_data = stbi_load(temp_path, width, height, channels, 4)
 
