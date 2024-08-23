@@ -126,6 +126,10 @@ contains
     character(len = *, kind = c_char), intent(in) :: texture_key, file_path
     integer(c_int) :: current_index
 
+    if (.not. this%allocated) then
+      error stop "[Fast Pack] Error: Fast Packer not allocated! Please use the constructor."
+    end if
+
     current_index = this%upload_texture_path(texture_key, file_path)
 
     call this%internal_pack(current_index)
@@ -140,6 +144,10 @@ contains
     character(len = *, kind = c_char), intent(in) :: texture_key
     type(memory_texture), intent(in) :: mem_texture
     integer(c_int) :: current_index
+
+    if (.not. this%allocated) then
+      error stop "[Fast Pack] Error: Fast Packer not allocated! Please use the constructor."
+    end if
 
     current_index = this%upload_texture_memory(texture_key, mem_texture)
 
