@@ -52,8 +52,6 @@ module fast_pack
     type(pixel) :: blank_color
     integer(c_int) :: canvas_expansion_amount = 100
     logical(c_bool) :: debug_edge = .false.
-    integer(c_int) :: new_canvas_width = 0
-    integer(c_int) :: new_canvas_height = 0
     integer(c_int) :: canvas_width = 0
     integer(c_int) :: canvas_height = 0
     logical(c_bool) :: allocated = .false.
@@ -117,8 +115,6 @@ contains
     new_fast_packer%debug_edge = config%debug_edge
     new_fast_packer%canvas_width = config%width
     new_fast_packer%canvas_height = config%height
-    new_fast_packer%new_canvas_width = config%width
-    new_fast_packer%new_canvas_height = config%height
 
     ! Allocate
     call new_fast_packer%keys%allocate()
@@ -181,18 +177,14 @@ contains
     class(fast_packer), intent(inout) :: this
     integer(c_int), intent(in) :: current_index
 
-    this%new_canvas_width = this%canvas_width
-    this%new_canvas_height = this%canvas_height
-
     do while(.not. this%tetris_pack(current_index))
-      !! fixme: this might be HORRIBLY wrong.
-      !? I think this is allowing the tetris algorithm to create fake space.
-      this%new_canvas_width = this%new_canvas_width + this%canvas_expansion_amount
-      this%new_canvas_height = this%new_canvas_height + this%canvas_expansion_amount
+      ! Reallocate space if cannot fit.
+      this%canvas_width = this%canvas_width + this%canvas_expansion_amount
+      this%canvas_height = this%canvas_height + this%canvas_expansion_amount
     end do
 
     ! Finally, update the canvas's size in memory.
-    call this%update_canvas_size(current_index)
+    ! call this%update_canvas_size(current_index)
   end subroutine fast_packer_internal_pack
 
 
@@ -211,8 +203,8 @@ contains
     found = .false.
     padding = this%padding
     score = C_INT_MAX
-    max_x = this%new_canvas_width
-    max_y = this%new_canvas_height
+    max_x = this%canvas_width
+    max_y = this%canvas_height
     best_x = padding
     best_y = padding
     this_width = this%box_width(current_index)
@@ -252,9 +244,9 @@ contains
 
               ! If it hit something, we'll try the next position.
               if (other_x + other_width + padding > x .and. &
-                other_x <= x + this_width + padding .and. &
+                other_x < x + this_width + padding .and. &
                 other_y + other_height + padding > y .and. &
-                other_y <= y + this_height + padding) then
+                other_y < y + this_height + padding) then
 
                 failed = .true.
                 exit inner_iter
@@ -304,8 +296,6 @@ contains
 
     raw_texture_data = new_memory_texture%get_raw_data()
 
-
-    print*,"writing"
     status = stbi_write_png(file_path, new_memory_texture%width, new_memory_texture%height, raw_texture_data)
     if (status == 0) then
       error stop "[Fast Pack] Error: Failed to write png image to ["//file_path//"] status: ["//int_to_string(status)//"]"
@@ -327,8 +317,6 @@ contains
 
     ! Iterate through each texture and copy the data into the new memory texture.
     do i = 1,this%current_id - 1
-
-      print*,"ITERATING:",i
 
       this_x = this%position_x(i)
       this_y = this%position_y(i)
@@ -360,17 +348,17 @@ contains
 
     class(fast_packer), intent(inout) :: this
     integer(c_int), intent(in) :: current_index
-    integer(c_int) :: new_right, new_top, padding
+    integer(c_int) :: new_right, new_top
 
     new_right = this%position_x(current_index) + this%box_width(current_index)
     new_top = this%position_y(current_index) + this%box_height(current_index)
 
     if (new_right > this%canvas_width) then
-      this%canvas_width = new_right + padding
+      this%canvas_width = new_right + this%padding
     end if
 
     if (new_top > this%canvas_height) then
-      this%canvas_height = new_top + padding
+      this%canvas_height = new_top + this%padding
     end if
   end subroutine
 
