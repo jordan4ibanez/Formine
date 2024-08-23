@@ -41,6 +41,16 @@ module stb_image
     end subroutine stbi_set_flip_vertically_on_load
 
 
+    function internal_stbi_write_png(file_name, w, h, comp, data, stride_in_bytes) result(status) bind(c, name = "stbi_write_png")
+      use, intrinsic :: iso_c_binding
+
+      character(len = 1, kind = c_char), intent(in) :: file_name
+      integer(c_int), intent(inout) :: w, h, comp, stride_in_bytes
+      type(c_ptr), intent(in), value :: data
+      integer(c_int) :: status
+    end function internal_stbi_write_png
+
+
   end interface
 
 
