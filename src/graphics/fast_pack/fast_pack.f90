@@ -67,6 +67,7 @@ module fast_pack
     procedure :: pack => fast_packer_pack_from_file_path, fast_packer_pack_from_memory
     procedure, private :: internal_pack => fast_packer_internal_pack
     procedure, private :: tetris_pack => fast_packer_tetris_pack
+    procedure :: save_to_memory_texture => fast_packer_save_to_memory_texture
     procedure, private :: update_canvas_size => fast_packer_update_canvas_size
     procedure, private :: upload_texture_path => fast_packer_upload_texture_from_file_path
     procedure, private :: upload_texture_memory => fast_packer_upload_texture_from_memory
@@ -276,6 +277,34 @@ contains
 
     pack_success = .true.
   end function fast_packer_tetris_pack
+
+
+  !* Write the texture packer's data to a memory_texture.
+  function fast_packer_save_to_memory_texture(this) result(new_memory_texture)
+    implicit none
+
+    class(fast_packer), intent(in) :: this
+    type(memory_texture) :: new_memory_texture
+    integer(c_int) :: i, this_x, this_y, this_width, this_height, x, y
+
+    ! Create a new memory texture the size of the canvas.
+    new_memory_texture = memory_texture(this%canvas_width, this%canvas_height)
+
+    ! Iterate through each texture and copy the data into the new memory texture.
+    do i = 1,this%current_id - 1
+      this_x = this%position_x(i)
+      this_y = this%position_y(i)
+      this_width = this%box_width(i)
+      this_height = this%box_height(i)
+
+      ! Iterate the pixel. We're doing it this way so it's linear in memory.
+      do y = 1, this_height
+        do x = 1, this_width
+          call new_memory_texture%set_pixel(x + this_x, y + this_y, this%textures(i)%get_pixel(x, y))
+        end do
+      end do
+    end do
+  end function fast_packer_save_to_memory_texture
 
 
   !* Update the size of the texture packer's canvas.
