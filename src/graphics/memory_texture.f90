@@ -42,7 +42,7 @@ module memory_texture_module
 
 
   interface memory_texture
-    module procedure :: rgba8_texture_constructor
+    module procedure :: rgba8_texture_constructor, blank_memory_texture_constructor
   end interface memory_texture
 
 
@@ -78,6 +78,7 @@ contains
   end function pixel_constructor
 
 
+  !* Constructor for raw rgba8 data.
   function rgba8_texture_constructor(raw_texture_memory_u8, width, height) result(new_rgba_texture)
     use :: string
     use :: math_helpers
@@ -122,6 +123,18 @@ contains
 
     new_rgba_texture%pixel_array_length = pixel_array_length
   end function rgba8_texture_constructor
+
+
+  !* Constructor for a blank memory texture with a size.
+  function blank_memory_texture_constructor(width, height) result(new_rgba_texture)
+    implicit none
+
+    integer(c_int), intent(in), value :: width, height
+    type(memory_texture) :: new_rgba_texture
+
+    ! Pretty simple.
+    allocate(new_rgba_texture%pixels(width * height))
+  end function blank_memory_texture_constructor
 
 
   !* Get the RGBA of an index.
