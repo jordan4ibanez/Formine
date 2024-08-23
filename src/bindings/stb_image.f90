@@ -121,7 +121,8 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: file_name
-    integer(1), dimension(:), intent(in), target:: data
+    integer(c_int), intent(in), value :: w, h
+    integer(1), dimension(:), intent(in), target :: data
     integer(c_int) :: status
     character(len = :, kind = c_char), allocatable :: c_string
 
