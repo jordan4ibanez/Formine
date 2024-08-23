@@ -234,7 +234,7 @@ contains
             ! Collided with other box failure.
             ! Index each collision box to check if within.
 
-            inner_iter: do i = 1,current_index
+            inner_iter: do i = 1,current_index - 1
 
               other_x = this%position_x(i)
               other_y = this%position_y(i)
