@@ -37,6 +37,7 @@ module memory_texture_module
     procedure :: index_get_pixel => memory_texture_index_get_pixel
     procedure :: get_pixel => memory_texture_get_pixel
     procedure :: set_pixel => memory_texture_set_pixel
+    procedure :: get_raw_data => memory_texture_get_raw_data
     procedure :: position_to_index => memory_texture_internal_position_to_index
   end type memory_texture
 
@@ -190,6 +191,40 @@ contains
 
     this%pixels(i) = new_pixel
   end subroutine memory_texture_set_pixel
+
+
+  !* Will extract the workable pixel data into a uint8 array which should never be modified.
+  function memory_texture_get_raw_data(this) result(new_raw_texture_data)
+    use :: math_helpers, only: int_to_c_uchar_array
+    implicit none
+
+    class(memory_texture), intent(in) :: this
+    integer(c_int), dimension(:), allocatable :: temporary_integer_data
+    integer(1), dimension(:), allocatable :: new_raw_texture_data
+    integer(c_int) :: raw_size, i, current_raw_index
+    type(pixel) :: current_pixel
+
+    raw_size = this%pixel_array_length * 4
+
+    allocate(temporary_integer_data(raw_size))
+
+    ! Collect all the pixels into the temporary array.
+    do i = 1,this%pixel_array_length
+
+      ! Shift into offset then back into index because math.
+      current_raw_index = ((i - 1) * 4) + 1
+
+      current_pixel = this%pixels(i)
+
+      temporary_integer_data(current_raw_index) = current_pixel%r
+      temporary_integer_data(current_raw_index + 1) = current_pixel%g
+      temporary_integer_data(current_raw_index + 2) = current_pixel%b
+      temporary_integer_data(current_raw_index + 3) = current_pixel%a
+    end do
+
+    ! Finally, transmute it into uint_8_t.
+    new_raw_texture_data = int_to_c_uchar_array(temporary_integer_data)
+  end function memory_texture_get_raw_data
 
 
   !* Position (in pixels) to the index in the texture array.
