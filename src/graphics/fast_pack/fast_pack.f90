@@ -439,20 +439,19 @@ contains
     type(memory_texture), intent(in) :: input
     type(memory_texture) :: output
     integer(c_int) :: texture_width, texture_height, min_x, min_y, x, y, max_x, max_y
-    logical(c_bool) :: found
     type(pixel) :: current_pixel
 
-
-    min_x = 1;
+    min_x = 0
+    max_x = 0
+    min_y = 0
+    max_y = 0
 
     ! MIN_X: Scan rows for alpha.
     iterator_min_x: do x = 1,texture_width
-      found = .false.
       do y = 1, texture_height
         current_pixel = input%get_pixel(x,y)
         if (current_pixel%a > 0) then
           min_x = x;
-          found = .true.
           exit iterator_min_x
         end if
       end do
@@ -461,12 +460,10 @@ contains
 
     ! MAX_X: Scan rows for alpha in reverse.
     iterator_max_x: do x = texture_width,1,-1
-      found = .false.
       do y = 1, texture_height
         current_pixel = input%get_pixel(x,y)
         if (current_pixel%a > 0) then
           max_x = x;
-          found = .true.
           exit iterator_max_x
         end if
       end do
@@ -475,12 +472,10 @@ contains
 
     ! MIN_Y: Scan columns for alpha.
     iterator_min_y: do y = 1, texture_height
-      found = .false.
       do x = 1,texture_width
         current_pixel = input%get_pixel(x,y)
         if (current_pixel%a > 0) then
           min_y = y;
-          found = .true.
           exit iterator_min_y
         end if
       end do
@@ -489,12 +484,10 @@ contains
 
     ! MAX_Y: Scan columns for alpha in reverse.
     iterator_max_y: do y = texture_height,1,-1
-      found = .false.
       do x = 1,texture_width
         current_pixel = input%get_pixel(x,y)
         if (current_pixel%a > 0) then
           max_y = y;
-          found = .true.
           exit iterator_max_y
         end if
       end do
