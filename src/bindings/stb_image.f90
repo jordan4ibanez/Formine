@@ -46,7 +46,7 @@ module stb_image
       use, intrinsic :: iso_c_binding
 
       character(len = 1, kind = c_char), intent(in) :: file_name
-      integer(c_int), intent(in) :: w, h, comp, stride_in_bytes
+      integer(c_int), intent(in), value :: w, h, comp, stride_in_bytes
       type(c_ptr), intent(in), value :: data
       integer(c_int) :: status
     end function internal_stbi_write_png
