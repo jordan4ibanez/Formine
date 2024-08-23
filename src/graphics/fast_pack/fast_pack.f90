@@ -282,16 +282,26 @@ contains
 
   !* Write the texture packer's data to a png file.
   subroutine fast_packer_save_to_png(this, file_path)
+    use :: stb_image, only: stbi_write_png
+    use :: string, only: int_to_string
     implicit none
 
     class(fast_packer), intent(in) :: this
     character(len = *, kind = c_char), intent(in) :: file_path
     type(memory_texture) :: new_memory_texture
+    integer(1), dimension(:), allocatable :: raw_texture_data
+    integer(c_int) :: status
 
     new_memory_texture = this%save_to_memory_texture()
 
-    ! todo: make this write to disk using stb image.
+    raw_texture_data = new_memory_texture%get_raw_data()
 
+
+    print*,"writing"
+    status = stbi_write_png(file_path, new_memory_texture%width, new_memory_texture%height, raw_texture_data)
+    if (status == 0) then
+      error stop "[Fast Pack] Error: Failed to write png image to ["//file_path//"] status: ["//int_to_string(status)//"]"
+    end if
   end subroutine
 
 
