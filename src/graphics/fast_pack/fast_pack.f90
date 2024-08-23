@@ -175,6 +175,7 @@ contains
     integer(c_int), intent(in) :: current_index
 
     do while(.not. this%tetris_pack(current_index))
+      print*,"looop"
       !! fixme: this might be HORRIBLY wrong.
       this%new_canvas_width = this%new_canvas_width + this%canvas_expansion_amount
       this%new_canvas_height = this%new_canvas_height + this%canvas_expansion_amount
