@@ -75,7 +75,6 @@ module fast_pack
     procedure, private :: upload_texture_path => fast_packer_upload_texture_from_file_path
     procedure, private :: upload_texture_memory => fast_packer_upload_texture_from_memory
     procedure, private :: trim_and_sort_available_slots => fast_packer_trim_and_sort_available_slots
-    procedure, private :: trim_texture => fast_packer_trim_texture
   end type fast_packer
 
 
@@ -432,13 +431,12 @@ contains
   end subroutine fast_packer_trim_and_sort_available_slots
 
 
-  function fast_packer_trim_texture(this, input) result(output)
+  function fast_pack_trim_texture(input) result(output)
     implicit none
 
-    class(fast_packer), intent(in) :: this
     type(memory_texture), intent(in) :: input
     type(memory_texture) :: output
-    integer(c_int) :: texture_width, texture_height, min_x, min_y, x, y, max_x, max_y
+    integer(c_int) :: texture_width, texture_height, min_x, min_y, x, y, max_x, max_y, new_size_x, new_size_y
     type(pixel) :: current_pixel
 
     min_x = 0
@@ -493,9 +491,18 @@ contains
       end do
     end do iterator_max_y
 
+    new_size_x = max_x - min_x
+    new_size_y = max_y - min_y
 
+    output = memory_texture(new_size_x, new_size_y)
 
-  end function fast_packer_trim_texture
+    do x = 1, new_size_x
+      do y = 1, new_size_y
+        call output%set_pixel(x, y, input%get_pixel(x + min_x, y + min_y))
+      end do
+    end do
+
+  end function fast_pack_trim_texture
 
 
 end module fast_pack
