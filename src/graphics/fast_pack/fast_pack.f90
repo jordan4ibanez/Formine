@@ -494,6 +494,12 @@ contains
     new_size_x = max_x - min_x
     new_size_y = max_y - min_y
 
+    ! It's the same size, just return the same memory.
+    if (new_size_x == input%width .and. new_size_y == input%height) then
+      output = input
+      return
+    end if
+
     output = memory_texture(new_size_x, new_size_y)
 
     do x = 1, new_size_x
