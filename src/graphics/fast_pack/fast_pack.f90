@@ -176,6 +176,7 @@ contains
 
     do while(.not. this%tetris_pack(current_index))
       !! fixme: this might be HORRIBLY wrong.
+      !? I think this is allowing the tetris algorithm to create fake space.
       this%new_canvas_width = this%new_canvas_width + this%canvas_expansion_amount
       this%new_canvas_height = this%new_canvas_height + this%canvas_expansion_amount
     end do
