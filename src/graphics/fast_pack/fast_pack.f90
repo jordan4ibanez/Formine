@@ -301,7 +301,7 @@ contains
 
     class(fast_packer), intent(in) :: this
     type(memory_texture) :: new_memory_texture
-    integer(c_int) :: i, this_x, this_y, this_width, this_height, x, y
+    integer(c_int) :: i, this_x, this_y, this_width, this_height, x, y, canvas_pixel_x, canvas_pixel_y, texture_pixel_x, texture_pixel_y
 
     ! Create a new memory texture the size of the canvas.
     new_memory_texture = memory_texture(this%canvas_width, this%canvas_height)
@@ -316,7 +316,14 @@ contains
       ! Iterate the pixel. We're doing it this way so it's linear in memory.
       do y = 1, this_height
         do x = 1, this_width
-          call new_memory_texture%set_pixel(x + this_x, y + this_y, this%textures(i)%get_pixel(x, y))
+
+          canvas_pixel_x = x + this_x
+          canvas_pixel_y = y + this_y
+
+          texture_pixel_x = x
+          texture_pixel_y = y
+
+          call new_memory_texture%set_pixel(canvas_pixel_x, canvas_pixel_y, this%textures(i)%get_pixel(texture_pixel_x, texture_pixel_y))
         end do
       end do
     end do
