@@ -67,6 +67,7 @@ module fast_pack
     procedure :: pack => fast_packer_pack_from_file_path, fast_packer_pack_from_memory
     procedure, private :: internal_pack => fast_packer_internal_pack
     procedure, private :: tetris_pack => fast_packer_tetris_pack
+    procedure :: save_to_png => fast_packer_save_to_png
     procedure :: save_to_memory_texture => fast_packer_save_to_memory_texture
     procedure, private :: update_canvas_size => fast_packer_update_canvas_size
     procedure, private :: upload_texture_path => fast_packer_upload_texture_from_file_path
@@ -277,6 +278,21 @@ contains
 
     pack_success = .true.
   end function fast_packer_tetris_pack
+
+
+  !* Write the texture packer's data to a png file.
+  subroutine fast_packer_save_to_png(this, file_path)
+    implicit none
+
+    class(fast_packer), intent(in) :: this
+    character(len = *, kind = c_char), intent(in) :: file_path
+    type(memory_texture) :: new_memory_texture
+
+    new_memory_texture = this%save_to_memory_texture()
+
+    ! todo: make this write to disk using stb image.
+
+  end subroutine
 
 
   !* Write the texture packer's data to a memory_texture.
