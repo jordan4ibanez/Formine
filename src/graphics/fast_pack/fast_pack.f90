@@ -1,10 +1,12 @@
 module fast_pack
   use :: memory_texture_module
-  ! use :: texture
   use :: stb_image
   use :: fhash, only: fhash_tbl_t, key => fhash_key
   use, intrinsic :: iso_c_binding
   implicit none
+
+
+  !* Despite it's name, it's probably not very fast. :P
 
 
   private
@@ -125,8 +127,8 @@ contains
     allocate(new_fast_packer%available_x(1))
     allocate(new_fast_packer%available_y(1))
 
-    new_fast_packer%available_x(1) = 0
-    new_fast_packer%available_y(1) = 0
+    new_fast_packer%available_x(1) = config%padding
+    new_fast_packer%available_y(1) = config%padding
 
     new_fast_packer%allocated = .true.
   end function constructor_fast_packer
@@ -175,6 +177,9 @@ contains
 
     class(fast_packer), intent(inout) :: this
     integer(c_int), intent(in) :: current_index
+
+    this%new_canvas_width = this%canvas_width
+    this%new_canvas_height = this%canvas_height
 
     do while(.not. this%tetris_pack(current_index))
       !! fixme: this might be HORRIBLY wrong.
