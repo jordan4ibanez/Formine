@@ -36,8 +36,8 @@ contains
       call packer%pack(temp_key, temp_path)
     end do
 
-    testing =  packer%save_to_memory_texture()
-    ! call packer%save_to_png("debug.png")
+    ! testing =  packer%save_to_memory_texture()
+    call packer%save_to_png("debug.png")
 
   end subroutine
 
