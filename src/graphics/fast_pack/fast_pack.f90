@@ -119,24 +119,31 @@ contains
 
 
   !* Pack a texture located on disk.
-  subroutine fast_packer_pack_from_file_path(this, file_path)
+  subroutine fast_packer_pack_from_file_path(this, texture_key, file_path)
     implicit none
 
     class(fast_packer), intent(inout) :: this
-    character(len = *, kind = c_char), intent(in) :: file_path
+    character(len = *, kind = c_char), intent(in) :: texture_key, file_path
+    integer(c_int) :: current_index
 
-    ! todo: implementation.
+    current_index = this%upload_texture_path(texture_key, file_path)
+
+    call this%internal_pack(current_index)
   end subroutine fast_packer_pack_from_file_path
 
 
   !* Pack a texture located in memory.
-  subroutine fast_packer_pack_from_memory(this, mem_texture)
+  subroutine fast_packer_pack_from_memory(this, texture_key, mem_texture)
     implicit none
 
     class(fast_packer), intent(inout) :: this
+    character(len = *, kind = c_char), intent(in) :: texture_key
     type(memory_texture), intent(in) :: mem_texture
+    integer(c_int) :: current_index
 
-    ! todo: implementation.
+    current_index = this%upload_texture_memory(texture_key, mem_texture)
+
+    call this%internal_pack(current_index)
   end subroutine fast_packer_pack_from_memory
 
 
