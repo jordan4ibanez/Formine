@@ -302,6 +302,7 @@ contains
     class(fast_packer), intent(in) :: this
     type(memory_texture) :: new_memory_texture
     integer(c_int) :: i, this_x, this_y, this_width, this_height, x, y, canvas_pixel_x, canvas_pixel_y, texture_pixel_x, texture_pixel_y
+    type(pixel) :: current_pixel
 
     ! Create a new memory texture the size of the canvas.
     new_memory_texture = memory_texture(this%canvas_width, this%canvas_height)
@@ -326,9 +327,9 @@ contains
           texture_pixel_x = x
           texture_pixel_y = y
 
-          print*,canvas_pixel_x, canvas_pixel_y, texture_pixel_x, texture_pixel_y
+          current_pixel = this%textures(i)%get_pixel(texture_pixel_x, texture_pixel_y)
 
-          call new_memory_texture%set_pixel(canvas_pixel_x, canvas_pixel_y, this%textures(i)%get_pixel(texture_pixel_x, texture_pixel_y))
+          call new_memory_texture%set_pixel(canvas_pixel_x, canvas_pixel_y, current_pixel)
         end do
       end do
     end do
