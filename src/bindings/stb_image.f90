@@ -130,7 +130,7 @@ contains
 
     ! stride_in_bytes will always be 4 * width.
     ! In this game, we only use RGBA8 cause I'm lazy.
-    status = internal_stbi_write_png(c_string, w, h, comp, c_loc(data), w * 4)
+    status = internal_stbi_write_png(c_string, w, h, 4, c_loc(data), 4 * w)
   end function stbi_write_png
 
 end module stb_image
