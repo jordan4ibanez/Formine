@@ -74,7 +74,7 @@ contains
     use :: string
     implicit none
 
-    character(len = 1, kind = c_char), intent(in) :: file_name
+    character(len = *, kind = c_char), intent(in) :: file_name
     integer(c_int), intent(inout) :: x, y, channels_in_file
     integer(c_int), intent(in), value :: desired_channels
     integer(1), dimension(:), allocatable :: raw_image_data
