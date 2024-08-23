@@ -18,12 +18,17 @@ contains
     integer :: i
     character(len = :, kind = c_char), allocatable :: root_path, temp_path, temp_key
 
+    packer = fast_packer()
 
     root_path = "./test/textures/"
+
+    print*,"begin fast packer test"
 
     do i = 1,10
 
       temp_path = root_path//int_to_string(i)//".png"
+
+      print*,temp_path
 
       temp_key = string_get_file_name(temp_path)
 
