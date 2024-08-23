@@ -29,6 +29,7 @@ module fast_pack
   !* Configure the fast packer.
   type :: fast_packer_config
     logical(c_bool) :: fast_canvas_export = .true.
+    logical(c_bool) :: enable_trimming = .false.
     integer(c_int) :: padding = 1
     type(pixel) :: edge_color
     type(pixel) :: blank_color
@@ -45,6 +46,7 @@ module fast_pack
 
     integer(c_int) :: current_id = 1
     logical(c_bool) :: fast_canvas_export = .true.
+    logical(c_bool) :: enable_trimming = .false.
     integer(c_int) :: padding = 1
     type(pixel) :: edge_color
     type(pixel) :: blank_color
@@ -107,6 +109,7 @@ contains
 
     ! Assign from config.
     new_fast_packer%fast_canvas_export = config%fast_canvas_export
+    new_fast_packer%enable_trimming = config%enable_trimming
     new_fast_packer%padding = config%padding
     new_fast_packer%edge_color = config%edge_color
     new_fast_packer%blank_color = config%blank_color
@@ -399,21 +402,27 @@ contains
     class(fast_packer), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: texture_key
     type(memory_texture), intent(in) :: mem_texture
+    type(memory_texture) :: trimmed_texture
     integer(c_int) :: new_index
 
-    ! todo: implement trimming maybe
+    ! Slap on trimming in the least efficient manor.
+    if (this%enable_trimming) then
+      trimmed_texture = fast_pack_trim_texture(mem_texture)
+    else
+      trimmed_texture = mem_texture
+    end if
 
     new_index = this%current_id
 
     this%current_id = this%current_id + 1
 
     ! Add data.
-    call this%keys%set(key(texture_key), mem_texture)
+    call this%keys%set(key(texture_key), trimmed_texture)
     this%position_x = [this%position_x, 0]
     this%position_y = [this%position_y, 0]
-    this%box_width = [this%box_width, mem_texture%width]
-    this%box_height = [this%box_height, mem_texture%height]
-    this%textures = [this%textures, mem_texture]
+    this%box_width = [this%box_width, trimmed_texture%width]
+    this%box_height = [this%box_height, trimmed_texture%height]
+    this%textures = [this%textures, trimmed_texture]
 
     call this%trim_and_sort_available_slots()
   end function fast_packer_upload_texture_from_memory
@@ -444,12 +453,15 @@ contains
     min_y = 0
     max_y = 0
 
+    texture_width = input%width
+    texture_height = input%height
+
     ! MIN_X: Scan rows for alpha.
     iterator_min_x: do x = 1,texture_width
       do y = 1, texture_height
         current_pixel = input%get_pixel(x,y)
         if (current_pixel%a > 0) then
-          min_x = x;
+          min_x = x - 1;
           exit iterator_min_x
         end if
       end do
@@ -473,7 +485,7 @@ contains
       do x = 1,texture_width
         current_pixel = input%get_pixel(x,y)
         if (current_pixel%a > 0) then
-          min_y = y;
+          min_y = y - 1;
           exit iterator_min_y
         end if
       end do
