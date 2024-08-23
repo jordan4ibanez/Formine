@@ -35,17 +35,14 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: texture_file_path
     integer(c_int) :: x, y, channels, desired_channels
-    character(len = :, kind = c_char), allocatable :: c_file_path
     integer(1), dimension(:), allocatable :: image_data
     integer(c_int) :: texture_id
     character(len = :, kind = c_char), allocatable :: file_name
 
-    c_file_path = into_c_string(texture_file_path)
-
     ! We always want 4 channels.
     desired_channels = 4
 
-    image_data = stbi_load(c_file_path, x, y, channels, desired_channels)
+    image_data = stbi_load(texture_file_path, x, y, channels, desired_channels)
 
     if (x + y + channels == 0) then
       error stop "[Texture] Error: Could not load texture. File specified from file path ["//texture_file_path//"] does not exist."
