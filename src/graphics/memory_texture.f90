@@ -131,9 +131,17 @@ contains
 
     integer(c_int), intent(in), value :: width, height
     type(memory_texture) :: new_rgba_texture
+    integer(c_int) :: pixel_array_length
+
+    new_rgba_texture%width = width
+    new_rgba_texture%height = height
+
+    pixel_array_length = width * height
+
+    new_rgba_texture%pixel_array_length = pixel_array_length
 
     ! Pretty simple.
-    allocate(new_rgba_texture%pixels(width * height))
+    allocate(new_rgba_texture%pixels(pixel_array_length))
   end function blank_memory_texture_constructor
 
 
