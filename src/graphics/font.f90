@@ -259,7 +259,6 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: font_texture_file_path
     integer(c_int) :: image_width, image_height, channels, desired_channels
-    character(len = :, kind = c_char), allocatable :: c_file_path
     character(len = :), allocatable :: font_data_file_name
     character(len = :), allocatable :: font_config_file_path
     integer(1), dimension(:), allocatable :: raw_image_data
@@ -276,12 +275,11 @@ contains
     call process_font_configuration(font_config_file_path, character_database_integral)
 
     ! Now load up the font.
-    c_file_path = into_c_string(font_texture_file_path)
 
     ! We always want 4 channels.
     desired_channels = 4
 
-    raw_image_data = stbi_load(c_file_path, image_width, image_height, channels, desired_channels)
+    raw_image_data = stbi_load(font_texture_file_path, image_width, image_height, channels, desired_channels)
 
     ! Let's check if the configuration file is correct.
     if (image_width /= font_texture_width) then
