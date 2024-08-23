@@ -315,7 +315,7 @@ contains
     type(pixel) :: current_pixel
 
     ! Create a new memory texture the size of the canvas.
-    new_memory_texture = memory_texture(this%canvas_width, this%canvas_height)
+    new_memory_texture = memory_texture(this%max_x, this%max_y)
 
     ! Iterate through each texture and copy the data into the new memory texture.
     do i = 1,this%current_id - 1
