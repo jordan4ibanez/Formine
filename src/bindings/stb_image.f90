@@ -116,19 +116,21 @@ contains
   end function stbi_load
 
 
-  function stbi_write_png(file_name, w, h, comp, data, stride_in_bytes) result(status)
+  function stbi_write_png(file_name, w, h, comp, data) result(status)
     use :: string
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: file_name
-    integer(c_int), intent(in), value :: w, h, comp, stride_in_bytes
+    integer(c_int), intent(in), value :: w, h, comp
     integer(1), dimension(:), intent(in), target:: data
     integer(c_int) :: status
     character(len = :, kind = c_char), allocatable :: c_string
 
     c_string = into_c_string(file_name)
 
-    status = internal_stbi_write_png(c_string, w, h, comp, c_loc(data), stride_in_bytes)
+    ! stride_in_bytes will always be 4 * width.
+    ! In this game, we only use RGBA8 cause I'm lazy.
+    status = internal_stbi_write_png(c_string, w, h, comp, c_loc(data), w * 4)
   end function stbi_write_png
 
 end module stb_image
