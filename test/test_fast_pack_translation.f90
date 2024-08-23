@@ -17,6 +17,7 @@ contains
     type(fast_packer) :: packer
     integer :: i
     character(len = :, kind = c_char), allocatable :: root_path, temp_path, temp_key
+    type(memory_texture) :: testing
 
     packer = fast_packer()
 
@@ -34,6 +35,9 @@ contains
 
       call packer%pack(temp_key, temp_path)
     end do
+
+    testing =  packer%save_to_memory_texture()
+    ! call packer%save_to_png("debug.png")
 
   end subroutine
 
