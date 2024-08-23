@@ -308,6 +308,9 @@ contains
 
     ! Iterate through each texture and copy the data into the new memory texture.
     do i = 1,this%current_id - 1
+
+      print*,"ITERATING:",i
+
       this_x = this%position_x(i)
       this_y = this%position_y(i)
       this_width = this%box_width(i)
@@ -322,6 +325,8 @@ contains
 
           texture_pixel_x = x
           texture_pixel_y = y
+
+          print*,canvas_pixel_x, canvas_pixel_y, texture_pixel_x, texture_pixel_y
 
           call new_memory_texture%set_pixel(canvas_pixel_x, canvas_pixel_y, this%textures(i)%get_pixel(texture_pixel_x, texture_pixel_y))
         end do
