@@ -18,8 +18,10 @@ contains
     integer :: i
     character(len = :, kind = c_char), allocatable :: root_path, temp_path, temp_key
     type(memory_texture) :: testing
+    type(fast_packer_config) :: config
 
-    packer = fast_packer()
+    config%padding = 1
+    packer = fast_packer(config)
 
     root_path = "./test/textures/"
 
