@@ -73,7 +73,7 @@ module fast_pack
     procedure, private :: tetris_pack => fast_packer_tetris_pack
     procedure :: save_to_png => fast_packer_save_to_png
     procedure :: save_to_memory_texture => fast_packer_save_to_memory_texture
-    procedure, private :: update_canvas_size => fast_packer_update_canvas_size
+    procedure, private :: update_max_size => fast_packer_update_max_size
     procedure, private :: upload_texture_path => fast_packer_upload_texture_from_file_path
     procedure, private :: upload_texture_memory => fast_packer_upload_texture_from_memory
     procedure, private :: trim_and_sort_available_slots => fast_packer_trim_and_sort_available_slots
@@ -186,7 +186,7 @@ contains
     end do
 
     ! Finally, update the canvas's size in memory.
-    ! call this%update_canvas_size(current_index)
+    call this%update_max_size(current_index)
   end subroutine fast_packer_internal_pack
 
 
@@ -345,7 +345,7 @@ contains
 
 
   !* Update the size of the texture packer's canvas.
-  subroutine fast_packer_update_canvas_size(this, current_index)
+  subroutine fast_packer_update_max_size(this, current_index)
     implicit none
 
     class(fast_packer), intent(inout) :: this
