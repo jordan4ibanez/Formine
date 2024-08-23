@@ -21,6 +21,8 @@ contains
     type(fast_packer_config) :: config
 
     config%padding = 1
+    config%width = 100
+    config%height = 100
     config%enable_trimming = .true.
     packer = fast_packer(config)
 
