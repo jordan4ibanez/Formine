@@ -43,7 +43,7 @@ contains
 
     ! testing = packer%save_to_memory_texture()
 
-    call packer%save_to_png("debug.png")
+    call packer%save_to_png("./test/textures/packer_test_result.png")
 
   end subroutine
 
