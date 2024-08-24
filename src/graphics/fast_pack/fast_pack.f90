@@ -60,6 +60,7 @@ module fast_pack
     logical(c_bool) :: locked_out = .false.
     ! Everything below this is allocated in the constructor.
     type(fhash_tbl_t) :: keys
+    type(fhash_tbl_t) :: texture_coordinates
     integer(c_int), dimension(:), allocatable :: position_x
     integer(c_int), dimension(:), allocatable :: position_y
     integer(c_int), dimension(:), allocatable :: box_width
@@ -67,7 +68,6 @@ module fast_pack
     type(memory_texture), dimension(:), allocatable :: textures
     integer(c_int), dimension(:), allocatable :: available_x
     integer(c_int), dimension(:), allocatable :: available_y
-    type(texture_rectangle), dimension(:), allocatable :: texture_coordinates
 
   contains
     procedure :: pack => fast_packer_pack_from_file_path, fast_packer_pack_from_memory
@@ -122,6 +122,7 @@ contains
 
     ! Allocate
     call new_fast_packer%keys%allocate()
+    call new_fast_packer%texture_coordinates%allocate()
     allocate(new_fast_packer%position_x(0))
     allocate(new_fast_packer%position_y(0))
     allocate(new_fast_packer%box_width(0))
@@ -129,7 +130,6 @@ contains
     allocate(new_fast_packer%textures(0))
     allocate(new_fast_packer%available_x(1))
     allocate(new_fast_packer%available_y(1))
-    allocate(new_fast_packer%texture_coordinates(0))
 
     new_fast_packer%available_x(1) = config%padding
     new_fast_packer%available_y(1) = config%padding
