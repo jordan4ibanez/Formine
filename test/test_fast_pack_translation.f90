@@ -17,7 +17,6 @@ contains
     type(fast_packer) :: packer
     integer :: i
     character(len = :, kind = c_char), allocatable :: root_path, temp_path, temp_key
-    type(memory_texture) :: testing
     type(fast_packer_config) :: config
 
     config%padding = 1

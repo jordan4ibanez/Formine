@@ -430,6 +430,7 @@ contains
   end subroutine fast_packer_trim_and_sort_available_slots
 
 
+  !* Trims blank space off a texture.
   function fast_pack_trim_texture(input) result(output)
     implicit none
 
