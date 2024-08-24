@@ -73,6 +73,7 @@ module fast_pack
     procedure :: pack => fast_packer_pack_from_file_path, fast_packer_pack_from_memory
     procedure, private :: internal_pack => fast_packer_internal_pack
     procedure, private :: tetris_pack => fast_packer_tetris_pack
+    procedure :: get_texture_coordinates => fast_packer_get_texture_coordinates
     procedure :: save_to_png => fast_packer_save_to_png
     procedure :: save_to_memory_texture => fast_packer_save_to_memory_texture
     procedure, private :: update_max_size => fast_packer_update_max_size
@@ -291,6 +292,18 @@ contains
 
     pack_success = .true.
   end function fast_packer_tetris_pack
+
+
+  !* Get texture coordinates for the texture key in the API.
+  function fast_packer_get_texture_coordinates(this, texture_key) result(coordinates)
+    implicit none
+
+    class(fast_packer), intent(in) :: this
+    character(len = *, kind = c_char), intent(in) :: texture_key
+    type(texture_rectangle) :: coordinates
+
+    ! todo: make this read from the database.
+  end function fast_packer_get_texture_coordinates
 
 
   !* Write the texture packer's data to a png file.
