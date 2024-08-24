@@ -314,7 +314,7 @@ contains
   end subroutine
 
 
-  !* Write the texture packer's data to a memory_texture. This essentially locks out the fast packer.
+  !* Write the texture packer's data to a memory_texture. This locks out the fast packer.
   function fast_packer_save_to_memory_texture(this) result(new_memory_texture)
     implicit none
 
