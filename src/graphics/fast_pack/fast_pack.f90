@@ -67,6 +67,7 @@ module fast_pack
     type(memory_texture), dimension(:), allocatable :: textures
     integer(c_int), dimension(:), allocatable :: available_x
     integer(c_int), dimension(:), allocatable :: available_y
+    type(texture_rectangle), dimension(:), allocatable :: texture_coordinates
 
   contains
     procedure :: pack => fast_packer_pack_from_file_path, fast_packer_pack_from_memory
@@ -128,6 +129,7 @@ contains
     allocate(new_fast_packer%textures(0))
     allocate(new_fast_packer%available_x(1))
     allocate(new_fast_packer%available_y(1))
+    allocate(new_fast_packer%texture_coordinates(0))
 
     new_fast_packer%available_x(1) = config%padding
     new_fast_packer%available_y(1) = config%padding
