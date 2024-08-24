@@ -76,6 +76,7 @@ module fast_pack
     procedure :: get_texture_coordinates => fast_packer_get_texture_coordinates
     procedure :: save_to_png => fast_packer_save_to_png
     procedure :: save_to_memory_texture => fast_packer_save_to_memory_texture
+    procedure, private :: create_texture_rectangles => fast_packer_create_texture_rectangles
     procedure, private :: update_max_size => fast_packer_update_max_size
     procedure, private :: upload_texture_path => fast_packer_upload_texture_from_file_path
     procedure, private :: upload_texture_memory => fast_packer_upload_texture_from_memory
@@ -372,7 +373,18 @@ contains
         end do
       end do
     end do
+
+    call this%create_texture_rectangles()
   end function fast_packer_save_to_memory_texture
+
+
+  subroutine fast_packer_create_texture_rectangles(this)
+    implicit none
+
+    class(fast_packer), intent(inout) :: this
+
+    ! todo: iterate everything and create the elements in the database
+  end subroutine fast_packer_create_texture_rectangles
 
 
   !* Update the size of the texture packer's canvas.
