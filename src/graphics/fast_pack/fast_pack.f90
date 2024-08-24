@@ -57,6 +57,7 @@ module fast_pack
     logical(c_bool) :: allocated = .false.
     integer(c_int) :: max_x = 0
     integer(c_int) :: max_y = 0
+    logical(c_bool) :: locked_out = .false.
     ! Everything below this is allocated in the constructor.
     type(fhash_tbl_t) :: keys
     integer(c_int), dimension(:), allocatable :: position_x
@@ -143,6 +144,10 @@ contains
     character(len = *, kind = c_char), intent(in) :: texture_key, file_path
     integer(c_int) :: current_index
 
+    if (this%locked_out) then
+      error stop "[Fast Pack] Error: Fast Packer has already processed it's data. It is locked."
+    end if
+
     if (.not. this%allocated) then
       error stop "[Fast Pack] Error: Fast Packer not allocated! Please use the constructor."
     end if
@@ -161,6 +166,10 @@ contains
     character(len = *, kind = c_char), intent(in) :: texture_key
     type(memory_texture), intent(in) :: mem_texture
     integer(c_int) :: current_index
+
+    if (this%locked_out) then
+      error stop "[Fast Pack] Error: Fast Packer has already processed it's data. It is locked."
+    end if
 
     if (.not. this%allocated) then
       error stop "[Fast Pack] Error: Fast Packer not allocated! Please use the constructor."
@@ -288,7 +297,7 @@ contains
     use :: string, only: int_to_string
     implicit none
 
-    class(fast_packer), intent(in) :: this
+    class(fast_packer), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: file_path
     type(memory_texture) :: new_memory_texture
     integer(1), dimension(:), allocatable :: raw_texture_data
@@ -305,17 +314,24 @@ contains
   end subroutine
 
 
-  !* Write the texture packer's data to a memory_texture.
+  !* Write the texture packer's data to a memory_texture. This essentially locks out the fast packer.
   function fast_packer_save_to_memory_texture(this) result(new_memory_texture)
     implicit none
 
-    class(fast_packer), intent(in) :: this
+    class(fast_packer), intent(inout) :: this
     type(memory_texture) :: new_memory_texture
     integer(c_int) :: i, this_x, this_y, this_width, this_height, x, y, canvas_pixel_x, canvas_pixel_y, texture_pixel_x, texture_pixel_y
     type(pixel) :: current_pixel
 
+    if (this%locked_out) then
+      error stop "[Fast Pack] Error: Fast Packer has already processed it's data. It is locked."
+    end if
+
+    this%canvas_width = this%max_x
+    this%canvas_height = this%max_y
+
     ! Create a new memory texture the size of the canvas.
-    new_memory_texture = memory_texture(this%max_x, this%max_y)
+    new_memory_texture = memory_texture(this%canvas_width, this%canvas_height)
 
     ! Iterate through each texture and copy the data into the new memory texture.
     do i = 1,this%current_id - 1
