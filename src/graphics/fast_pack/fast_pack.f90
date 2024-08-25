@@ -531,8 +531,7 @@ contains
     implicit none
 
     class(fast_packer), intent(inout) :: this
-    integer(c_int), dimension(:), allocatable :: temp_x
-    integer(c_int), dimension(:), allocatable :: temp_y
+    integer(c_int), dimension(:), allocatable :: temp_x, temp_y
 
     temp_x = array_i32_small_to_large_unique(this%available_x)
     temp_y = array_i32_small_to_large_unique(this%available_y)
