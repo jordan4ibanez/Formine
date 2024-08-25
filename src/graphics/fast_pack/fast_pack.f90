@@ -82,6 +82,7 @@ module fast_pack
     procedure, private :: upload_texture_path => fast_packer_upload_texture_from_file_path
     procedure, private :: upload_texture_memory => fast_packer_upload_texture_from_memory
     procedure, private :: trim_and_sort_available_slots => fast_packer_trim_and_sort_available_slots
+    procedure, private :: deallocate => fast_packer_deallocate
   end type fast_packer
 
 
@@ -301,10 +302,14 @@ contains
   function fast_packer_get_texture_coordinates_database(this) result(new_database)
     implicit none
 
-    class(fast_packer), intent(in) :: this
+    class(fast_packer), intent(inout) :: this
     type(fhash_tbl_t) :: new_database
 
     new_database = this%texture_coordinates
+
+    ! The texture packer becomes unusable after this.
+    ! Create a new one.
+    call this%deallocate()
   end function fast_packer_get_texture_coordinates_database
 
 
@@ -599,6 +604,55 @@ contains
     end do
 
   end function fast_pack_trim_texture
+
+
+  !* The final cleanup of the fast packer.
+  !* This also unlocks the fast packer.
+  subroutine fast_packer_deallocate(this)
+    use :: fhash, only: fhash_iter_t, fhash_key_t
+    use :: array, only: string_array
+    implicit none
+
+    class(fast_packer), intent(inout) :: this
+    type(string_array) :: key_array
+    type(fhash_iter_t) :: iterator
+    class(fhash_key_t), allocatable :: generic_key
+    class(*), allocatable :: generic_data
+    integer(c_int) :: i
+
+    if (.not. this%allocated) then
+      error stop "[Fast Packer] Error: Cannot deallocate, not allocated."
+    end if
+
+    ! Start with a size of 0.
+    allocate(key_array%data(0))
+
+    ! Create the iterator.
+    iterator = fhash_iter_t(this%texture_coordinates)
+
+    ! Now we will collect the keys from the iterator.
+    do while(iterator%next(generic_key, generic_data))
+      ! Appending. Allocatable will clean up the old data.
+      key_array%data = [key_array%data, heap_string(generic_key%to_string())]
+    end do
+
+    ! Now clear the database out.
+    do i = 1,size(key_array%data)
+      call this%texture_coordinates%unset(key(key_array%data(i)%get()))
+    end do
+
+    ! Finally, remove everything else.
+    deallocate(this%keys_array)
+    deallocate(this%position_x)
+    deallocate(this%position_y)
+    deallocate(this%box_width)
+    deallocate(this%box_height)
+    deallocate(this%textures)
+    deallocate(this%available_x)
+    deallocate(this%available_y)
+
+    this%allocated = .false.
+  end subroutine fast_packer_deallocate
 
 
 end module fast_pack
