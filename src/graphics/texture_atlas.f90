@@ -2,6 +2,8 @@ module texture_atlas
   use :: string
   use :: vector_2i
   use :: fast_pack
+  use :: memory_texture_module
+  use :: texture
   use :: fhash, only: fhash_tbl_t, key => fhash_key
   use, intrinsic :: iso_c_binding
   implicit none
@@ -66,6 +68,9 @@ contains
     type(fast_packer_config) :: config
     integer(c_int) :: i
     type(texture_pack_element) :: element
+    type(memory_texture) :: texture_data
+    integer(1), dimension(:), allocatable :: raw_texture_atlas_data
+    type(vec2i) :: canvas_size
 
 
     config%canvas_expansion_amount = 1000
@@ -84,6 +89,13 @@ contains
     deallocate(textures_to_pack)
 
     call packer%save_to_png("./testing2.png")
+    texture_data = packer%save_to_memory_texture()
+    raw_texture_atlas_data = texture_data%get_raw_data()
+
+    canvas_size = packer%get_canvas_size()
+
+    call texture_create_from_memory("TEXTURE_ATLAS", raw_texture_atlas_data, canvas_size%x, canvas_size%y)
+
 
     ! texture_coordinates = packer%get_texture_coordinates_database()
 
