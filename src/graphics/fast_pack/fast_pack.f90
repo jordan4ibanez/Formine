@@ -375,6 +375,8 @@ contains
       end do
     end do
 
+    this%locked_out = .true.
+
     ! Now that we have everything iterated, the canvas is locked.
     ! We can create the locations of each texture in OpenGL/Vulkan space.
     call this%create_texture_rectangles()
