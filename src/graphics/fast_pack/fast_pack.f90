@@ -1,6 +1,7 @@
 module fast_pack
   use :: memory_texture_module
   use :: stb_image
+  use :: string
   use :: fhash, only: fhash_tbl_t, key => fhash_key
   use, intrinsic :: iso_c_binding
   implicit none
@@ -61,6 +62,7 @@ module fast_pack
     ! Everything below this is allocated in the constructor.
     type(fhash_tbl_t) :: keys
     type(fhash_tbl_t) :: texture_coordinates
+    type(heap_string), dimension(:), allocatable :: keys_array
     integer(c_int), dimension(:), allocatable :: position_x
     integer(c_int), dimension(:), allocatable :: position_y
     integer(c_int), dimension(:), allocatable :: box_width
@@ -125,6 +127,7 @@ contains
     ! Allocate
     call new_fast_packer%keys%allocate()
     call new_fast_packer%texture_coordinates%allocate()
+    allocate(new_fast_packer%keys_array(0))
     allocate(new_fast_packer%position_x(0))
     allocate(new_fast_packer%position_y(0))
     allocate(new_fast_packer%box_width(0))
@@ -471,6 +474,7 @@ contains
 
     ! Add data.
     call this%keys%set(key(texture_key), trimmed_texture)
+    this%keys_array = [this%keys_array, heap_string(texture_key)]
     this%position_x = [this%position_x, 0]
     this%position_y = [this%position_y, 0]
     this%box_width = [this%box_width, trimmed_texture%width]
