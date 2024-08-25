@@ -223,7 +223,7 @@ contains
     use :: fhash, only: fhash_iter_t, fhash_key_t
     use :: opengl
     use :: string
-    use :: array, only: string_array
+    use :: array, only: string_array, array_string_insert
     use :: terminal
     implicit none
 
@@ -232,6 +232,7 @@ contains
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     integer(c_int) :: i, remaining_size
+    type(heap_string), dimension(:), allocatable :: temp_string_array
 
     !* We must check that there is anything in the database before we iterate.
     call shader_database%stats(num_items = remaining_size)
@@ -261,8 +262,9 @@ contains
        class default
         error stop "[Shader] Error: The wrong type was inserted for shader ["//generic_key%to_string()//"]"
       end select
-      ! Appending. Allocatable will clean up the old data.
-      key_array%data = [key_array%data, heap_string(generic_key%to_string())]
+      ! Appending.
+      temp_string_array = array_string_insert(key_array%data, heap_string(generic_key%to_string()))
+      call move_alloc(temp_string_array, key_array%data)
     end do
 
     ! Now clear the database out.
