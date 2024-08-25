@@ -94,10 +94,10 @@ program main
   !* If we cannot initalize the API properly, we give up.
   call api_initialize()
 
-  min_x = 0.00170648458
-  min_y = 0.11559803038
-  max_x = 0.02901023812
-  max_y = 0.12053021043
+  min_x = 0.0017064846
+  min_y = 0.1575215757
+  max_x = 0.0290102381
+  max_y = 0.1624537557
 
   call mesh_create_3d( &
     "debug", &
