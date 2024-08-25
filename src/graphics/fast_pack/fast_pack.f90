@@ -348,9 +348,9 @@ contains
     integer(c_int) :: i, this_x, this_y, this_width, this_height, x, y, canvas_pixel_x, canvas_pixel_y, texture_pixel_x, texture_pixel_y
     type(pixel) :: current_pixel
 
-    if (this%locked_out) then
-      error stop "[Fast Pack] Error: Fast Packer has already processed it's data. It is locked."
-    end if
+    ! if (this%locked_out) then
+    !   error stop "[Fast Pack] Error: Fast Packer has already processed it's data. It is locked."
+    ! end if
 
     this%canvas_width = this%max_x
     this%canvas_height = this%max_y
