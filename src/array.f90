@@ -19,6 +19,9 @@ module array
   public :: array_i32_unique
   public :: array_i32_small_to_large_unique
   public :: array_i32_remove
+  public :: array_i32_insert
+  public :: array_string_insert
+  public :: array_memory_texture_insert
 
 
   type :: int_array
@@ -725,5 +728,70 @@ contains
       old_index = old_index + 1
     end do
   end function array_i32_remove
+
+
+  !* Insert a value at the end of an i32 array.
+  function array_i32_insert(input, new_value) result(output)
+    implicit none
+
+    integer(c_int), dimension(:), intent(in) :: input
+    integer(c_int), intent(in), value :: new_value
+    integer(c_int), dimension(:), allocatable :: output
+    integer(c_int) :: old_size, i
+
+    old_size = size(input)
+
+    allocate(output(old_size + 1))
+
+    do i = 1,old_size
+      output(i) = input(i)
+    end do
+
+    output(old_size + 1) = new_value
+  end function array_i32_insert
+
+
+  !* Insert a value at the end of a heap string array.
+  function array_string_insert(input, new_value) result(output)
+    implicit none
+
+    type(heap_string), dimension(:), intent(in) :: input
+    type(heap_string), intent(in), value :: new_value
+    type(heap_string), dimension(:), allocatable :: output
+    integer(c_int) :: old_size, i
+
+    old_size = size(input)
+
+    allocate(output(old_size + 1))
+
+    do i = 1,old_size
+      output(i) = input(i)
+    end do
+
+    output(old_size + 1) = new_value
+  end function array_string_insert
+
+
+  !* Insert a value at the end of a memory texture array.
+  function array_memory_texture_insert(input, new_value) result(output)
+    use :: memory_texture_module
+    implicit none
+
+    type(memory_texture), dimension(:), intent(in) :: input
+    type(memory_texture), intent(in), value :: new_value
+    type(memory_texture), dimension(:), allocatable :: output
+    integer(c_int) :: old_size, i
+
+    old_size = size(input)
+
+    allocate(output(old_size + 1))
+
+    do i = 1,old_size
+      output(i) = input(i)
+    end do
+
+    output(old_size + 1) = new_value
+  end function array_memory_texture_insert
+
 
 end module array
