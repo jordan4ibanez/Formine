@@ -21,6 +21,10 @@ test:
 test_gdb:
 	@MALLOC_CHECK_=2 fpm test --flag   -g \
 	                          --c-flag -g
+.PHONY: test_valgrind
+test_valgrind:
+	@valgrind --trace-children=yes --leak-check=full fpm test --flag   -g \
+	                                                          --c-flag -g
 
 #! BUILD COMMANDS.
 .PHONY: build
