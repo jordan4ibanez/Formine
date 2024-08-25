@@ -24,27 +24,21 @@ contains
     config%height = 400
     config%enable_trimming = .true.
     packer = fast_packer(config)
-
     root_path = "./test/textures/"
-
     print*,"begin fast packer test"
-
     do i = 1,10
-
       temp_path = root_path//int_to_string(i)//".png"
-
       print*,temp_path
-
       temp_key = string_get_file_name(temp_path)
-
       call packer%pack(temp_key, temp_path)
     end do
-
     ! testing = packer%save_to_memory_texture()
-
     call packer%save_to_png("./test/textures/packer_test_result.png")
+  end subroutine begin_test
 
-  end subroutine
+
+
+  
 
 
 end module test_fast_pack_suite
