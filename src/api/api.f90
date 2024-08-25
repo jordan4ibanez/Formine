@@ -46,21 +46,24 @@ contains
     use :: texture_atlas
     implicit none
 
+    integer(c_int) :: status
+
     call luajit_initialize(lua_state)
 
-    associate (status => luajit_run_file(lua_state, "./api/init.lua"))
-      if (status /= LUAJIT_RUN_FILE_OK) then
-        select case(status)
-         case (LUAJIT_RUN_FILE_FAILURE)
-          error stop "[API] Error: Failed to load the API init file. Execution error."
-         case (LUAJIT_RUN_FILE_MISSING)
-          ! Someone removed the api init file, eh?
-          error stop "[API] Error: Failed to load the API init file. It's missing."
-         case default
-          error stop "[API] Error: Failed to load the API init file. UNIMPLEMENTED ERROR!"
-        end select
-      end if
-    end associate
+    status = luajit_run_file(lua_state, "./api/init.lua")
+
+    status = luajit_run_file(lua_state, "./api/init.lua")
+    if (status /= LUAJIT_RUN_FILE_OK) then
+      select case(status)
+       case (LUAJIT_RUN_FILE_FAILURE)
+        error stop "[API] Error: Failed to load the API init file. Execution error."
+       case (LUAJIT_RUN_FILE_MISSING)
+        ! Someone removed the api init file, eh?
+        error stop "[API] Error: Failed to load the API init file. It's missing."
+       case default
+        error stop "[API] Error: Failed to load the API init file. UNIMPLEMENTED ERROR!"
+      end select
+    end if
 
     ! Initialize LuaJIT compatible modules.
     call block_repo_deploy_lua_api(lua_state)
