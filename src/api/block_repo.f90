@@ -205,7 +205,7 @@ contains
     call definition_database_string%set(key(definition_smart_pointer%name), definition_smart_pointer)
 
     ! Copy the definition into the block array.
-    temp_definition_array = array_block_definition_insert(temp_definition_array, definition_smart_pointer)
+    temp_definition_array = array_block_definition_insert(definition_array, definition_smart_pointer)
     call move_alloc(temp_definition_array, definition_array)
 
     definition_array_length = definition_array_length + 1
