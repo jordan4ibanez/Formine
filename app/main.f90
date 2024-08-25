@@ -16,7 +16,7 @@ program main
   use, intrinsic ::  iso_c_binding
   implicit none
 
-  real(c_float) :: rotation
+  real(c_float) :: rotation, min_x, min_y, max_x, max_y
   type(vec2f) :: text_size
   integer(c_int) :: new_fps, old_fps
 
@@ -94,19 +94,24 @@ program main
   !* If we cannot initalize the API properly, we give up.
   call api_initialize()
 
+  min_x = 0.00170648458
+  min_y = 0.11559803038
+  max_x = 0.02901023812
+  max_y = 0.12053021043
+
   call mesh_create_3d( &
     "debug", &
     [ &
-    -0.75,  0.5, 0.0, &
-    -0.75, -0.5, 0.0, &
-    0.75,  -0.5, 0.0, &
-    0.75,   0.5, 0.0 &
+    -0.5,  0.5, 0.0, &
+    -0.5, -0.5, 0.0, &
+    0.5,  -0.5, 0.0, &
+    0.5,   0.5, 0.0 &
     ], &
     [ &
-    0.0, 0.0, &
-    0.0, 1.0, &
-    1.0, 1.0, &
-    1.0, 0.0 &
+    min_x, min_y, &
+    min_x, max_y, &
+    max_x, max_y, &
+    max_x, min_y &
     ], &
     [ &
     1.0, 1.0, 1.0, &

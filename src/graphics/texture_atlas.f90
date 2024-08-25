@@ -124,6 +124,13 @@ contains
 
     print*,output
 
+    ! Make this actually readable
+    print*,"BEGIN OUTPUT"
+    print"(f0.32)",output%min_x ! .00170648458 ! Chop
+    print"(f0.32)",output%min_y ! .11559803038
+    print"(f0.32)",output%max_x ! .02901023812
+    print"(f0.32)",output%max_y ! .12053021043
+
   end subroutine texture_atlas_debug
 
 
