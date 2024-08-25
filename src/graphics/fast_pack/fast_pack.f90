@@ -392,6 +392,7 @@ contains
     class(fast_packer), intent(inout) :: this
     character(len = :, kind = c_char), allocatable :: temp_key
     integer(c_int) :: keys_array_size, i
+    real(c_double) :: d_min_x, d_min_y, d_max_x, d_max_y, d_canvas_width, d_canvas_height
     type(texture_rectangle) :: new_texture_rectangle
 
     ! We use a hash table to store the texture_rectangles.
@@ -405,15 +406,27 @@ contains
       return
     end if
 
+    !? We are doing the calculation in double precision then cutting it into float.
+
+    d_canvas_width = real(this%canvas_width, kind = c_double)
+    d_canvas_height = real(this%canvas_height, kind = c_double)
+
     do i = 1,keys_array_size
       temp_key = this%keys_array(i)%get()
 
-      new_texture_rectangle%min_x = this%position_x(i)
-      new_texture_rectangle%min_y = this%position_y(i)
-
+      ! First, put the raw data into the stack double floating point variables.
+      d_min_x = real(this%position_x(i), kind = c_double)
+      d_min_y = real(this%position_y(i), kind = c_double)
       !! fixme: might need to -1
-      new_texture_rectangle%max_x = this%position_x(i) + this%box_width(i)
-      new_texture_rectangle%max_y = this%position_y(i) + this%box_height(i)
+      d_max_x = real(this%position_x(i) + this%box_width(i), kind = c_double)
+      d_max_y = real(this%position_y(i) + this%box_height(i), kind = c_double)
+
+      ! Next, create the floating point position in OpenGL/Vulkan memory.
+      ! We are chopping the precision to single floating point.
+      new_texture_rectangle%min_x = real(d_min_x / d_canvas_width, kind = c_float)
+      new_texture_rectangle%min_y = real(d_min_y / d_canvas_height, kind = c_float)
+      new_texture_rectangle%max_x = real(d_max_x / d_canvas_width, kind = c_float)
+      new_texture_rectangle%max_y = real(d_max_y / d_canvas_height, kind = c_float)
 
       ! Now put it into the database.
       call this%texture_coordinates%set(key(temp_key), new_texture_rectangle)
