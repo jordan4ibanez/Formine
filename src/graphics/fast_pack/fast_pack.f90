@@ -327,13 +327,14 @@ contains
 
   !* Pull the texture coordinates database out of the fast packer for use without the fast packer.
   !* This allows the fast packer to go out of scope and be cleaned up.
-  function fast_packer_get_texture_coordinates_database(this) result(new_database)
+  !* This is returning a pointer.
+  function fast_packer_get_texture_coordinates_database(this) result(database_pointer)
     implicit none
 
     class(fast_packer), intent(inout) :: this
-    type(fhash_tbl_t) :: new_database
+    type(fhash_tbl_t), pointer :: database_pointer
 
-    new_database = this%texture_coordinates
+    database_pointer => this%texture_coordinates
   end function fast_packer_get_texture_coordinates_database
 
 
