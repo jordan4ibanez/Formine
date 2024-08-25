@@ -209,6 +209,7 @@ contains
   !* This algorithm is HORRIBLE.
   function fast_packer_tetris_pack(this, current_index) result(pack_success)
     use :: constants, only: C_INT_MAX
+    use :: array, only: array_i32_insert
     implicit none
 
     class(fast_packer), intent(inout) :: this
@@ -216,6 +217,7 @@ contains
     logical(c_bool) :: pack_success, found, failed
     integer(c_int) :: padding, score, max_x, max_y, best_x, best_y, this_width, this_height
     integer(c_int) :: y_index, x_index, y, x, new_score, i, other_x, other_y, other_width, other_height
+    integer(c_int), dimension(:), allocatable :: temp_x_array, temp_y_array
 
     found = .false.
     padding = this%padding
@@ -290,8 +292,11 @@ contains
     this%position_x(current_index) = best_x
     this%position_y(current_index) = best_y
 
-    this%available_x = [this%available_x, best_x + this_width + padding]
-    this%available_y = [this%available_y, best_y + this_height + padding]
+    temp_x_array = array_i32_insert(this%available_x, best_x + this_width + padding)
+    call move_alloc(temp_x_array, this%available_x)
+
+    temp_y_array = array_i32_insert(this%available_y, best_y + this_height + padding)
+    call move_alloc(temp_y_array, this%available_y)
 
     pack_success = .true.
   end function fast_packer_tetris_pack
