@@ -1269,18 +1269,24 @@ contains
     call lua_pushnil(state)
 
     ! Now iterate through the table and collect the strings.
+    ! You can thank: finnw for this https://stackoverflow.com/a/6142700
     do i = 1, table_size
       if (lua_next(state,-2) /= 0) then
+
+        call lua_pushvalue(state, -1)
+
         !* If it's not a string, unwind everything and give up.
         if (.not. lua_isstring(state, -1)) then
           print"(A)", "[LuaJIT] Error: Non-string element at index ["//int_to_string(i)//"] in array table."
           status = LUAJIT_GET_WRONG_TYPE
           deallocate(target_array%data)
-          call lua_pop(state, 1)
+          call lua_pop(state, 2)
           return
         end if
+
         target_array%data(i) = lua_tostring(state, -1)
-        call lua_pop(state, 1)
+
+        call lua_pop(state, 2)
       end if
     end do
 
@@ -1408,9 +1414,9 @@ contains
       generic_data = lua_toboolean(state, index)
       ! print*, "get c_bool, convert to c_bool"
 
-     type is (string_array)
-      ! print*,"hit string array, copying"
-      status = luajit_copy_string_array_from_table(state, generic_data)
+      !  type is (string_array)
+      !   ! print*,"hit string array, copying"
+      !   status = luajit_copy_string_array_from_table(state, generic_data)
 
       !? Now we get into the interesting part.
       !* Function pointer. Aka, "closure".
