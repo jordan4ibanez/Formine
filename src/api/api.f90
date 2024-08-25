@@ -154,18 +154,17 @@ contains
         error stop "[API] error: There is already a mod named ["//mod_config_struct%name%get()//"]. Culprit: ["//mod_path_string//"]"
       end if
 
-      associate (status => api_run_file(init_path_string))
-        if (status /= LUAJIT_RUN_FILE_OK) then
-          select case (status)
-           case (LUAJIT_RUN_FILE_FAILURE)
-            error stop "[API] error: Failed to run the mod ["//mod_config_struct%name%get()//"]. Execution error."
-           case (LUAJIT_RUN_FILE_MISSING)
-            error stop "[API] error: Failed to run the mod ["//mod_config_struct%name%get()//"]. Missing init.lua"
-           case default
-            error stop "[API] error: Failed to run the mod ["//mod_config_struct%name%get()//"]. UNIMPLEMENTED ERROR!"
-          end select
-        end if
-      end associate
+      status = api_run_file(init_path_string)
+      if (status /= LUAJIT_RUN_FILE_OK) then
+        select case (status)
+         case (LUAJIT_RUN_FILE_FAILURE)
+          error stop "[API] error: Failed to run the mod ["//mod_config_struct%name%get()//"]. Execution error."
+         case (LUAJIT_RUN_FILE_MISSING)
+          error stop "[API] error: Failed to run the mod ["//mod_config_struct%name%get()//"]. Missing init.lua"
+         case default
+          error stop "[API] error: Failed to run the mod ["//mod_config_struct%name%get()//"]. UNIMPLEMENTED ERROR!"
+        end select
+      end if
 
       ! If the mod loaded up properly, we can store the configuration.
       call mod_database%set(key(mod_config_struct%name%get()), mod_config_struct)
