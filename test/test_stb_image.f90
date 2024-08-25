@@ -1,5 +1,6 @@
 module test_stb_image_suite
   use :: stb_image
+  use :: memory_texture_module
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -35,6 +36,21 @@ contains
     end if
   end subroutine test_it
 
+
+  subroutine test_loading_memory_leak()
+    implicit none
+
+    integer(1), dimension(:), allocatable :: testing
+    integer(c_int) :: x, y, channels
+
+    print*, "BEGIN TESTING STB IMAGE MEMORY LEAK"
+    do
+      testing = stbi_load("./test/textures/1.png", x, y, channels, 4)
+    end do
+
+
+  end subroutine test_loading_memory_leak
+
 end module test_stb_image_suite
 
 program test_stb_image
@@ -42,5 +58,7 @@ program test_stb_image
   implicit none
 
   call test_it()
+
+  ! call test_loading_memory_leak()
 
 end program test_stb_image
