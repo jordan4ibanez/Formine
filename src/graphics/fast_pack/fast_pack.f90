@@ -60,7 +60,6 @@ module fast_pack
     integer(c_int) :: max_y = 0
     logical(c_bool) :: locked_out = .false.
     ! Everything below this is allocated in the constructor.
-    type(fhash_tbl_t) :: keys
     type(fhash_tbl_t) :: texture_coordinates
     type(heap_string), dimension(:), allocatable :: keys_array
     integer(c_int), dimension(:), allocatable :: position_x
@@ -125,7 +124,6 @@ contains
     new_fast_packer%canvas_height = config%height
 
     ! Allocate
-    call new_fast_packer%keys%allocate()
     call new_fast_packer%texture_coordinates%allocate()
     allocate(new_fast_packer%keys_array(0))
     allocate(new_fast_packer%position_x(0))
@@ -494,7 +492,6 @@ contains
     this%current_id = this%current_id + 1
 
     ! Add data.
-    call this%keys%set(key(texture_key), trimmed_texture)
     this%keys_array = [this%keys_array, heap_string(texture_key)]
     this%position_x = [this%position_x, 0]
     this%position_y = [this%position_y, 0]
