@@ -94,10 +94,10 @@ program main
   !* If we cannot initalize the API properly, we give up.
   call api_initialize()
 
-  min_x = 0.0017064846
-  min_y = 0.1575215757
-  max_x = 0.0290102381
-  max_y = 0.1624537557
+  min_x = 0.1450511962
+  min_y = 0.0317509249
+  max_x = 0.1723549515
+  max_y = 0.0366831087
 
   call mesh_create_3d( &
     "debug", &
@@ -152,7 +152,7 @@ program main
 
 
 
-      call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, rotation, 0.0, 7.0, 7.0, 7.0)
+      call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
 
       call texture_use("TEXTURE_ATLAS")
 

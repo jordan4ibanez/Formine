@@ -109,7 +109,7 @@ contains
     integer(c_int) :: status
     type(texture_rectangle) :: output
 
-    call texture_coordinates_pointer%get_raw(key("debug_texture.png"), generic_data, stat = status)
+    call texture_coordinates_pointer%get_raw(key("default_furnace_front_active.png"), generic_data, stat = status)
 
     if (status /= 0) then
       error stop "Debug failed, it doesn't exist"
