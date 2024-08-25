@@ -531,9 +531,13 @@ contains
     implicit none
 
     class(fast_packer), intent(inout) :: this
+    integer(c_int), dimension(:), allocatable :: temp_x, temp_y
 
-    this%available_x = array_i32_small_to_large_unique(this%available_x)
-    this%available_y = array_i32_small_to_large_unique(this%available_y)
+    temp_x = array_i32_small_to_large_unique(this%available_x)
+    temp_y = array_i32_small_to_large_unique(this%available_y)
+
+    call move_alloc(temp_x, this%available_x)
+    call move_alloc(temp_y, this%available_y)
   end subroutine fast_packer_trim_and_sort_available_slots
 
 
