@@ -158,15 +158,16 @@ contains
     ! Now we need to get the table which contains the textures.
     call luajit_put_table_in_table_on_stack_required(state, module_name, "definition", "textures", "Array<string>")
 
-    associate(value => luajit_get_generic(state, -1, textures))
-      if (value /= LUAJIT_GET_OK) then
-        if (value == LUAJIT_GET_MISSING) then
-          call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] is missing.")
-        else
-          call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] has a non-string element.")
-        end if
+    status = luajit_get_generic(state, -1, textures)
+
+    if (status /= LUAJIT_GET_OK) then
+      if (status == LUAJIT_GET_MISSING) then
+        call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] is missing.")
+      else
+        call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] has a non-string element.")
       end if
-    end associate
+    end if
+
 
     ! Now we get rid of the string table.
     call lua_pop(state, 1)
