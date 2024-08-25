@@ -1,6 +1,7 @@
 module texture_atlas
   use :: string
   use :: vector_2i
+  use :: fast_pack
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -14,6 +15,7 @@ module texture_atlas
 
   public :: texture_atlas_initialize
   public :: texture_atlas_add_texture_to_pack
+  public :: texture_atlas_pack
 
 
   type :: texture_pack_element
@@ -52,6 +54,13 @@ contains
     temp_string_array = array_texture_pack_element_insert(textures_to_pack, new_element)
     call move_alloc(temp_string_array, textures_to_pack)
   end subroutine texture_atlas_add_texture_to_pack
+
+
+  !* The final step of the texture atlas.
+  subroutine texture_atlas_pack()
+    implicit none
+
+  end subroutine texture_atlas_pack
 
 
   !* Insert a value at the end of a memory texture array.

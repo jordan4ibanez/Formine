@@ -43,6 +43,7 @@ contains
 
   !* Initialize the API.
   subroutine api_initialize()
+    use :: texture_atlas
     implicit none
 
     call luajit_initialize(lua_state)
@@ -66,6 +67,9 @@ contains
 
     ! Load up all mods.
     call load_all_mods()
+
+    ! Pack the loaded texture data.
+    call texture_atlas_pack()
   end subroutine api_initialize
 
 
