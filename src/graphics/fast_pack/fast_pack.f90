@@ -374,16 +374,34 @@ contains
       end do
     end do
 
+    ! Now that we have everything iterated, the canvas is locked.
+    ! We can create the locations of each texture in OpenGL/Vulkan space.
     call this%create_texture_rectangles()
   end function fast_packer_save_to_memory_texture
 
 
+  !* The final step in the fast packer.
+  !* Creates OpenGL/Vulkan space coordinates to be queried.
   subroutine fast_packer_create_texture_rectangles(this)
+    use :: fhash, only: fhash_iter_t, fhash_key_t
     implicit none
 
     class(fast_packer), intent(inout) :: this
+    type(fhash_iter_t) :: iterator
+    class(fhash_key_t), allocatable :: generic_key
+    class(*), allocatable :: generic_data
+    integer(c_int) :: number_of_keys
+
+    !? There is nothing to do, which can be very bad.
+    call this%keys%stats(num_items = number_of_keys)
+    if (number_of_keys <= 0) then
+      print*,"[Fast Pack] Warning: Canvas is blank. This might cause issues."
+      return
+    end if
+    
 
     ! todo: iterate everything and create the elements in the database
+
   end subroutine fast_packer_create_texture_rectangles
 
 
