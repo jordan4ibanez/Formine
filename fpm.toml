@@ -1,6 +1,6 @@
 name = "formine"
 description = "A test of learning modern fortran through game dev."
-version = "0.1.3"
+version = "0.2.0"
 license = "MPL-2.0"
 author = "jordan4ibanez"
 maintainer = "jordan4ibanez"
