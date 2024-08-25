@@ -420,18 +420,17 @@ contains
     implicit none
 
     class(fast_packer), intent(inout) :: this
-    integer(c_int) :: keys_array_size, i, status
+    integer(c_int) :: keys_array_size, i, status, length, w
     real(c_double) :: d_min_x, d_min_y, d_max_x, d_max_y, d_canvas_width, d_canvas_height
     type(texture_rectangle), allocatable :: new_texture_rectangle
+    character(len = :, kind = c_char), allocatable :: temp_key, other_temp_key
 
     ! We use a hash table to store the texture_rectangles.
     ! Ideally, access time will be n(1). Hopefully.
 
-    print*,"testing"
 
     keys_array_size = size(this%keys_array)
 
-    print*,"testing 2"
 
     !? There is nothing to do, which can be very bad.
     if (keys_array_size <= 0) then
@@ -445,7 +444,7 @@ contains
     d_canvas_height = real(this%canvas_height, kind = c_double)
 
     do i = 1,keys_array_size
-      print*,1
+
       ! First, put the raw data into the stack double floating point variables.
       d_min_x = real(this%position_x(i), kind = c_double)
       d_min_y = real(this%position_y(i), kind = c_double)
@@ -453,31 +452,39 @@ contains
       d_max_x = real(this%position_x(i) + this%box_width(i), kind = c_double)
       d_max_y = real(this%position_y(i) + this%box_height(i), kind = c_double)
 
-      print*,2
-      !? !? !?
       ! Next, create the floating point position in OpenGL/Vulkan memory.
       ! We are chopping the precision to single floating point.
+      allocate(new_texture_rectangle)
       new_texture_rectangle%min_x = real(d_min_x / d_canvas_width, kind = c_float)
       new_texture_rectangle%min_y = real(d_min_y / d_canvas_height, kind = c_float)
       new_texture_rectangle%max_x = real(d_max_x / d_canvas_width, kind = c_float)
       new_texture_rectangle%max_y = real(d_max_y / d_canvas_height, kind = c_float)
 
-      print*,3
-
       ! Now put it into the database.
       ! print*,"failure 1"
-      ! print*,this%keys_array(i)%get()
+      other_temp_key = this%keys_array(i)%get()
+      length = len(other_temp_key)
+
+      allocate(character(len = length, kind = c_char) :: temp_key)
+
+      do w = 1, length
+        temp_key(w:w) = other_temp_key(w:w)
+      end do
 
       ! print*,"failure 2"
-      ! call this%texture_coordinates%set(key(this%keys_array(i)%get()), new_texture_rectangle)
+      call this%texture_coordinates%set(key(temp_key), new_texture_rectangle)
 
-      ! call this%texture_coordinates%check_key(key(this%keys_array(i)%get()), stat = status)
+      call this%texture_coordinates%check_key(key(temp_key), stat = status)
 
-      ! if (status /= 0) then
-      !   error stop "corruption"
-      ! else
-      !   print*,this%keys_array(i)%get()//" is okay"
-      ! end if
+      if (status /= 0) then
+        error stop "corruption"
+      else
+        print*,this%keys_array(i)%get()//" is okay"
+      end if
+
+
+      deallocate(new_texture_rectangle)
+      deallocate(temp_key)
     end do
   end subroutine fast_packer_create_texture_rectangles
 
