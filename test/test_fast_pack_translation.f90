@@ -74,7 +74,7 @@ contains
   subroutine call_in()
     implicit none
 
-    integer :: i, z
+    integer :: z
 
     z = 0
 
@@ -105,7 +105,7 @@ program test_fast_pack
   implicit none
 
 
-  ! call begin_test()
+  call begin_test()
 
-  call call_in()
+  ! call call_in()
 end program test_fast_pack
