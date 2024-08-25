@@ -8,7 +8,7 @@ contains
   subroutine testing()
     implicit none
 
-    integer(c_int), dimension(:), allocatable :: unit_1, unit_2, unit_3
+    integer(c_int), dimension(:), allocatable :: unit_1
 
     unit_1 = (/5,2,3,4,5,5,1,2,7,42,5,1,2/)
 
