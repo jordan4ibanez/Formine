@@ -65,8 +65,10 @@ contains
         temp_key = string_get_file_name(temp_path)
         call packer%pack(temp_key, temp_path)
       end do
-      testing = packer%save_to_memory_texture()
+      ! testing = packer%save_to_memory_texture()
       ! call packer%save_to_png("./test/textures/packer_test_result.png")
+
+      call packer%deallocate()
     end do
   end subroutine test_memory_leak
 

@@ -82,7 +82,7 @@ module fast_pack
     procedure, private :: upload_texture_path => fast_packer_upload_texture_from_file_path
     procedure, private :: upload_texture_memory => fast_packer_upload_texture_from_memory
     procedure, private :: trim_and_sort_available_slots => fast_packer_trim_and_sort_available_slots
-    procedure, private :: deallocate => fast_packer_deallocate
+    procedure :: deallocate => fast_packer_deallocate
   end type fast_packer
 
 
