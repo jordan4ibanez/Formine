@@ -654,7 +654,7 @@ contains
       if (current_index /= 0) then
         ! We want to ensure that the values do not repeat.
         if (output(current_index) /= temp(input_index)) then
-          output = [output, temp(input_index)]
+          output = array_i32_insert(output, temp(input_index))
           current_index = current_index + 1
         end if
       else
