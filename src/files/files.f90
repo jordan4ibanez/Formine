@@ -63,14 +63,16 @@ contains
 
   !* Read a file into an array of heap_strings.
   subroutine file_reader_read_file_into_lines(this, file_path)
+    use :: array, only: array_string_insert
     implicit none
 
     class(file_reader), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: file_path
     !! This is testing debugging
-    character(len = :), allocatable :: temporary_container
+    character(len = :, kind = c_char), allocatable :: temporary_container
     integer(c_int) :: found_newline_index
     integer(c_int) :: length_of_buffer
+    type(heap_string), dimension(:), allocatable :: temp_string_array
 
     ! I can't figure out how to make the io operation read line by line so we're going to
     ! use the internal file_string component as a temp buffer.
@@ -99,7 +101,8 @@ contains
         ! Tick up the number of lines.
         this%line_count = this%line_count + 1
         ! Dump it in.
-        this%lines = [this%lines, heap_string(this%file_string)]
+        temp_string_array = array_string_insert(this%lines, heap_string(this%file_string))
+        call move_alloc(temp_string_array, this%lines)
         ! And remove residual memory.
         deallocate(this%file_string)
         exit
@@ -109,7 +112,8 @@ contains
         ! We're just going to continuously roll a bigger array with new elements.
         temporary_container = this%file_string(1:found_newline_index - 1)
         ! Append it.
-        this%lines = [this%lines, heap_string(temporary_container)]
+        temp_string_array = array_string_insert(this%lines, heap_string(temporary_container))
+        call move_alloc(temp_string_array, this%lines)
         ! Find the new total length of the string buffer.
         length_of_buffer = len(this%file_string)
         ! Step it over the \n and cut out the beginning.
