@@ -98,7 +98,7 @@ program main
 
 
   !! This is debugging for functions!
-  if (.false.) then
+  if (.true.) then
     do while(.not. glfw_window_should_close())
 
       call delta_tick()
