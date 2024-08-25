@@ -12,6 +12,7 @@ program main
   use :: vector_2f
   use :: api
   use :: texture_atlas
+  use :: texture_atlas
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -116,6 +117,8 @@ program main
     [0,1,2, 2,3,0] &
     )
 
+
+  call texture_atlas_debug()
   rotation = 0.0
 
 

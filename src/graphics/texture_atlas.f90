@@ -19,6 +19,7 @@ module texture_atlas
   public :: texture_atlas_initialize
   public :: texture_atlas_add_texture_to_pack
   public :: texture_atlas_pack
+  public :: texture_atlas_debug
 
 
   type :: texture_pack_element
@@ -99,6 +100,31 @@ contains
     ! Now we attach the coordinates pointer to be used for the lifetime of the game.
     texture_coordinates_pointer => packer%get_texture_coordinates_database()
   end subroutine texture_atlas_pack
+
+
+  subroutine texture_atlas_debug()
+    implicit none
+
+    class(*), allocatable :: generic_data
+    integer(c_int) :: status
+    type(texture_rectangle) :: output
+
+    call texture_coordinates_pointer%get_raw(key("default_stone.png"), generic_data, stat = status)
+
+    if (status /= 0) then
+      error stop "Debug failed, it doesn't exist"
+    end if
+
+    select type (generic_data)
+     type is (texture_rectangle)
+      output = generic_data
+     class default
+      error stop "How, did this even get in here?!"
+    end select
+
+    print*,output
+
+  end subroutine texture_atlas_debug
 
 
   !* Insert a value at the end of a memory texture array.
