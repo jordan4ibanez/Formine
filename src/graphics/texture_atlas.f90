@@ -28,7 +28,7 @@ module texture_atlas
 
 
   type(texture_pack_element), dimension(:), allocatable :: textures_to_pack
-  type(fhash_tbl_t) :: texture_coordinates
+  type(fhash_tbl_t), pointer :: texture_coordinates_pointer
 
 
 contains
@@ -88,7 +88,7 @@ contains
 
     deallocate(textures_to_pack)
 
-    call packer%save_to_png("./testing2.png")
+    ! call packer%save_to_png("./testing2.png")
     texture_data = packer%save_to_memory_texture()
     raw_texture_atlas_data = texture_data%get_raw_data()
 
@@ -97,7 +97,7 @@ contains
     call texture_create_from_memory("TEXTURE_ATLAS", raw_texture_atlas_data, canvas_size%x, canvas_size%y)
 
 
-    texture_coordinates = packer%get_texture_coordinates_database()
+    texture_coordinates_pointer => packer%get_texture_coordinates_database()
 
 
     call testing()
@@ -114,7 +114,7 @@ contains
     type(heap_string), dimension(:), allocatable :: temp_string_array
 
 
-    iterator = fhash_iter_t(texture_coordinates)
+    iterator = fhash_iter_t(texture_coordinates_pointer)
 
     do while(iterator%next(generic_key, generic_data))
       print*,generic_key%to_string()
