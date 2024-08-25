@@ -51,19 +51,23 @@ contains
     type(fast_packer_config) :: config
     type(memory_texture) :: testing
 
-    config%padding = 1
-    config%width = 400
-    config%height = 400
-    config%enable_trimming = .true.
-    packer = fast_packer(config)
-    root_path = "./test/textures/"
-    do i = 1,10
-      temp_path = root_path//int_to_string(i)//".png"
-      temp_key = string_get_file_name(temp_path)
-      call packer%pack(temp_key, temp_path)
+    print*,"BEGIN TESTING MEMORY LEAK FOR FAST PACKER"
+
+    do
+      config%padding = 1
+      config%width = 400
+      config%height = 400
+      config%enable_trimming = .true.
+      packer = fast_packer(config)
+      root_path = "./test/textures/"
+      do i = 1,10
+        temp_path = root_path//int_to_string(i)//".png"
+        temp_key = string_get_file_name(temp_path)
+        call packer%pack(temp_key, temp_path)
+      end do
+      testing = packer%save_to_memory_texture()
+      ! call packer%save_to_png("./test/textures/packer_test_result.png")
     end do
-    testing = packer%save_to_memory_texture()
-    ! call packer%save_to_png("./test/textures/packer_test_result.png")
   end subroutine test_memory_leak
 
 
@@ -78,5 +82,5 @@ program test_fast_pack
 
   call begin_test()
 
-
+  call test_memory_leak()
 end program test_fast_pack
