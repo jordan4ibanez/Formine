@@ -212,25 +212,4 @@ contains
   end subroutine register_block
 
 
-  !* Insert a value at the end of a block definition array.
-  function array_block_definition_insert(input, new_value) result(output)
-    use :: memory_texture_module
-    implicit none
-
-    type(block_definition), dimension(:), intent(in) :: input
-    type(block_definition), intent(in), value :: new_value
-    type(block_definition), dimension(:), allocatable :: output
-    integer(c_int) :: old_size, i
-
-    old_size = size(input)
-
-    allocate(output(old_size + 1))
-
-    do i = 1,old_size
-      output(i) = input(i)
-    end do
-
-    output(old_size + 1) = new_value
-  end function array_block_definition_insert
-
 end module block_repo
