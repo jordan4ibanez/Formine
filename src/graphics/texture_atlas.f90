@@ -96,30 +96,9 @@ contains
 
     call texture_create_from_memory("TEXTURE_ATLAS", raw_texture_atlas_data, canvas_size%x, canvas_size%y)
 
-
+    ! Now we attach the coordinates pointer to be used for the lifetime of the game.
     texture_coordinates_pointer => packer%get_texture_coordinates_database()
-
-
-    call testing()
   end subroutine texture_atlas_pack
-
-  subroutine testing()
-    use :: fhash, only: fhash_iter_t, fhash_key_t
-    implicit none
-
-    type(fhash_iter_t) :: iterator
-    class(fhash_key_t), allocatable :: generic_key
-    class(*), allocatable :: generic_data
-    integer(c_int) :: i, remaining_size
-    type(heap_string), dimension(:), allocatable :: temp_string_array
-
-
-    iterator = fhash_iter_t(texture_coordinates_pointer)
-
-    do while(iterator%next(generic_key, generic_data))
-      print*,generic_key%to_string()
-    end do
-  end subroutine testing
 
 
   !* Insert a value at the end of a memory texture array.
