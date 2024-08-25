@@ -876,19 +876,12 @@ contains
     integer(c_int), intent(in), value :: index
     character(len = :, kind = c_char), allocatable :: new_string
     integer(c_size_t) :: lua_string_length
-    integer(c_int) :: casted_size, i
+    integer(c_int) :: casted_size
     type(c_ptr) :: c_string_pointer
-    character(len = 1, kind = c_char), dimension(:), pointer :: temp
 
     c_string_pointer = lua_tolstring(state, index, lua_string_length)
     casted_size = int(lua_string_length, kind = c_int)
-    call c_f_pointer(c_string_pointer, temp, [lua_string_length])
-
-    allocate(character(len = lua_string_length, kind = c_char) :: new_string)
-
-    do i = 1,lua_string_length
-      new_string(i:i) = temp(i)
-    end do
+    new_string = string_from_c(c_string_pointer, casted_size + 1)
     !? c_string_pointer is not done with malloc. No need to free. (tested)
   end function lua_tostring
 
