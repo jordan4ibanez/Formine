@@ -16,6 +16,7 @@ module texture_atlas
   private
 
 
+  public :: texture_rectangle
   public :: texture_atlas_initialize
   public :: texture_atlas_add_texture_to_pack
   public :: texture_atlas_pack
@@ -30,6 +31,8 @@ module texture_atlas
 
   type(texture_pack_element), dimension(:), allocatable :: textures_to_pack
   type(fhash_tbl_t), pointer :: texture_coordinates_pointer
+  type(heap_string), dimension(:), allocatable :: showcase_array
+  integer(c_int) :: current_index, showcase_length
 
 
 contains
@@ -99,17 +102,22 @@ contains
 
     ! Now we attach the coordinates pointer to be used for the lifetime of the game.
     texture_coordinates_pointer => packer%get_texture_coordinates_database()
+
+    showcase_array = packer%get_keys()
+
+    current_index = 1
+    showcase_length = size(showcase_array)
   end subroutine texture_atlas_pack
 
 
-  subroutine texture_atlas_debug()
+  function texture_atlas_debug() result(texture_location)
     implicit none
 
     class(*), allocatable :: generic_data
     integer(c_int) :: status
-    type(texture_rectangle) :: output
+    type(texture_rectangle) :: texture_location
 
-    call texture_coordinates_pointer%get_raw(key("default_furnace_front_active.png"), generic_data, stat = status)
+    call texture_coordinates_pointer%get_raw(key(showcase_array(current_index)%get()), generic_data, stat = status)
 
     if (status /= 0) then
       error stop "Debug failed, it doesn't exist"
@@ -117,25 +125,30 @@ contains
 
     select type (generic_data)
      type is (texture_rectangle)
-      output = generic_data
+      texture_location = generic_data
      class default
       error stop "How, did this even get in here?!"
     end select
 
-    print*,output
+    current_index = current_index + 1
+    if (current_index > showcase_length) then
+      current_index = 1
+    end if
+
+    ! print*,output
 
     ! Make this actually readable
-    print*,"BEGIN OUTPUT"
+    ! print*,"BEGIN OUTPUT"
 
-    write(*,"(A f0.10)") "min_x = 0", output%min_x
+    ! write(*,"(A f0.10)") "min_x = 0", output%min_x
 
-    write(*,"(A f0.10)") "min_y = 0", output%min_y
+    ! write(*,"(A f0.10)") "min_y = 0", output%min_y
 
-    write(*,"(A f0.10)") "max_x = 0", output%max_x
+    ! write(*,"(A f0.10)") "max_x = 0", output%max_x
 
-    write(*,"(A f0.10)") "max_y = 0", output%max_y
+    ! write(*,"(A f0.10)") "max_y = 0", output%max_y
 
-  end subroutine texture_atlas_debug
+  end function texture_atlas_debug
 
 
   !* Insert a value at the end of a memory texture array.

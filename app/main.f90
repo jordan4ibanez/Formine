@@ -19,6 +19,7 @@ program main
   real(c_float) :: rotation, min_x, min_y, max_x, max_y
   type(vec2f) :: text_size
   integer(c_int) :: new_fps, old_fps
+  type(texture_rectangle) :: tex_rect
 
   new_fps = 0
   old_fps = -1
@@ -94,36 +95,7 @@ program main
   !* If we cannot initalize the API properly, we give up.
   call api_initialize()
 
-  min_x = 0.1450511962
-  min_y = 0.0317509249
-  max_x = 0.1723549515
-  max_y = 0.0366831087
 
-  call mesh_create_3d( &
-    "debug", &
-    [ &
-    -0.5,  0.5, 0.0, &
-    -0.5, -0.5, 0.0, &
-    0.5,  -0.5, 0.0, &
-    0.5,   0.5, 0.0 &
-    ], &
-    [ &
-    min_x, min_y, &
-    min_x, max_y, &
-    max_x, max_y, &
-    max_x, min_y &
-    ], &
-    [ &
-    1.0, 1.0, 1.0, &
-    1.0, 1.0, 1.0, &
-    1.0, 1.0, 1.0, &
-    1.0, 1.0, 1.0 &
-    ], &
-    [0,1,2, 2,3,0] &
-    )
-
-
-  call texture_atlas_debug()
   rotation = 0.0
 
 
@@ -154,9 +126,43 @@ program main
 
       call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
 
+      tex_rect = texture_atlas_debug()
+
+
+      min_x = tex_rect%min_x
+      min_y = tex_rect%min_y
+      max_x = tex_rect%max_x
+      max_y = tex_rect%max_y
+
+
+      call mesh_create_3d( &
+        "debug", &
+        [ &
+        -0.5,  0.5, 0.0, &
+        -0.5, -0.5, 0.0, &
+        0.5,  -0.5, 0.0, &
+        0.5,   0.5, 0.0 &
+        ], &
+        [ &
+        min_x, min_y, &
+        min_x, max_y, &
+        max_x, max_y, &
+        max_x, min_y &
+        ], &
+        [ &
+        1.0, 1.0, 1.0, &
+        1.0, 1.0, 1.0, &
+        1.0, 1.0, 1.0, &
+        1.0, 1.0, 1.0 &
+        ], &
+        [0,1,2, 2,3,0] &
+        )
+
       call texture_use("TEXTURE_ATLAS")
 
       call mesh_draw("debug")
+
+      call mesh_delete("debug")
 
 
       !* Move into "2D mode"
