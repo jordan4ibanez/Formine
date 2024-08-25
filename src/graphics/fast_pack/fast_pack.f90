@@ -450,9 +450,19 @@ contains
       ! First, put the raw data into the stack double floating point variables.
       d_min_x = real(this%position_x(i), kind = c_double)
       d_min_y = real(this%position_y(i), kind = c_double)
-      !! fixme: might need to -1
       d_max_x = real(this%position_x(i) + this%box_width(i), kind = c_double)
       d_max_y = real(this%position_y(i) + this%box_height(i), kind = c_double)
+
+      ! if (this%keys_array(i)%get() == "debug_texture.png") then
+      !   print*,"-----------------------"
+      !   print*,this%position_x(i)
+      !   print*,this%position_y(i)
+      !   print*,this%box_width(i)
+      !   print*,this%box_height(i)
+      !   print*,d_min_x
+      !   print*,d_max_x
+      !   print*,d_canvas_width
+      ! end if
 
       ! Next, create the floating point position in OpenGL/Vulkan memory.
       ! We are chopping the precision to single floating point.
