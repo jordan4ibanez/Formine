@@ -97,7 +97,9 @@ contains
     call texture_create_from_memory("TEXTURE_ATLAS", raw_texture_atlas_data, canvas_size%x, canvas_size%y)
 
 
-    ! texture_coordinates = packer%get_texture_coordinates_database()
+    texture_coordinates = packer%get_texture_coordinates_database()
+
+    call packer%deallocate()
 
   end subroutine texture_atlas_pack
 
