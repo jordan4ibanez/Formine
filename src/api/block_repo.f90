@@ -131,7 +131,7 @@ contains
     integer(c_int) :: draw_type
     !* The smart pointer where we will store the block definiton.
     !* We will only allocate this after a successful data query from LuaJIT.
-    type(block_definition), allocatable :: definition_smart_pointer
+    type(block_definition) :: definition_smart_pointer
     type(block_definition), dimension(:), allocatable :: temp_definition_array
 
 
@@ -158,7 +158,7 @@ contains
     ! Now we need to get the table which contains the textures.
     call luajit_put_table_in_table_on_stack_required(state, module_name, "definition", "textures", "Array<string>")
 
-    status = luajit_get_generic(state, -1, textures)
+    status = luajit_copy_string_array_from_table(state, textures)
 
     if (status /= LUAJIT_GET_OK) then
       if (status == LUAJIT_GET_MISSING) then
@@ -187,9 +187,9 @@ contains
     call lua_pop(state, lua_gettop(state))
 
 
+
     ! We have completed a successful query of the definition table from LuaJIT.
     ! Put all the data into the fortran database.
-    allocate(definition_smart_pointer)
 
     definition_smart_pointer%name = name%get()
     definition_smart_pointer%description = description%get()
@@ -205,9 +205,7 @@ contains
     ! Copy the definition into the string based database.
     call definition_database_string%set(key(definition_smart_pointer%name), definition_smart_pointer)
 
-    ! Copy the definition into the block array.
-    temp_definition_array = array_block_definition_insert(definition_array, definition_smart_pointer)
-    call move_alloc(temp_definition_array, definition_array)
+    definition_array = [definition_array, definition_smart_pointer]
 
     definition_array_length = definition_array_length + 1
     current_id = current_id + 1
