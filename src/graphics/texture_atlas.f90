@@ -42,14 +42,38 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: full_path, file_name
     type(texture_pack_element), allocatable :: new_element
+    type(texture_pack_element), dimension(:), allocatable :: temp_string_array
 
     allocate(new_element)
 
     new_element%full_path = full_path
     new_element%file_name = file_name
 
-    textures_to_pack = [textures_to_pack, new_element]
+    temp_string_array = array_texture_pack_element_insert(textures_to_pack, new_element)
+    call move_alloc(temp_string_array, textures_to_pack)
   end subroutine texture_atlas_add_texture_to_pack
+
+
+  !* Insert a value at the end of a memory texture array.
+  function array_texture_pack_element_insert(input, new_value) result(output)
+    use :: memory_texture_module
+    implicit none
+
+    type(texture_pack_element), dimension(:), intent(in) :: input
+    type(texture_pack_element), intent(in), value :: new_value
+    type(texture_pack_element), dimension(:), allocatable :: output
+    integer(c_int) :: old_size, i
+
+    old_size = size(input)
+
+    allocate(output(old_size + 1))
+
+    do i = 1,old_size
+      output(i) = input(i)
+    end do
+
+    output(old_size + 1) = new_value
+  end function array_texture_pack_element_insert
 
 
 end module texture_atlas
