@@ -9,6 +9,7 @@ module block_repo
   private
 
 
+  public :: block_definition
   public :: block_repo_deploy_lua_api
   public :: register_block
 
@@ -131,6 +132,8 @@ contains
     !* The smart pointer where we will store the block definiton.
     !* We will only allocate this after a successful data query from LuaJIT.
     type(block_definition), allocatable :: definition_smart_pointer
+    type(block_definition), dimension(:), allocatable :: temp_definition_array
+
 
     status = LUAJIT_GET_OK
 
@@ -202,10 +205,33 @@ contains
     call definition_database_string%set(key(definition_smart_pointer%name), definition_smart_pointer)
 
     ! Copy the definition into the block array.
-    definition_array = [definition_array, definition_smart_pointer]
+    temp_definition_array = array_block_definition_insert(temp_definition_array, definition_smart_pointer)
+    call move_alloc(temp_definition_array, definition_array)
+
     definition_array_length = definition_array_length + 1
     current_id = current_id + 1
   end subroutine register_block
 
+
+  !* Insert a value at the end of a block definition array.
+  function array_block_definition_insert(input, new_value) result(output)
+    use :: memory_texture_module
+    implicit none
+
+    type(block_definition), dimension(:), intent(in) :: input
+    type(block_definition), intent(in), value :: new_value
+    type(block_definition), dimension(:), allocatable :: output
+    integer(c_int) :: old_size, i
+
+    old_size = size(input)
+
+    allocate(output(old_size + 1))
+
+    do i = 1,old_size
+      output(i) = input(i)
+    end do
+
+    output(old_size + 1) = new_value
+  end function array_block_definition_insert
 
 end module block_repo
