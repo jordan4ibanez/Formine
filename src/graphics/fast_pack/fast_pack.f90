@@ -323,10 +323,6 @@ contains
     type(fhash_tbl_t) :: new_database
 
     new_database = this%texture_coordinates
-
-    ! The texture packer becomes unusable after this.
-    ! Create a new one.
-    call this%deallocate()
   end function fast_packer_get_texture_coordinates_database
 
 
