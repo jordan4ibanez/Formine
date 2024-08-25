@@ -46,7 +46,7 @@ contains
 
     ! type(texture_packer_conf) :: config
     type(fast_packer) :: packer
-    integer :: i, z
+    integer :: i
     character(len = :, kind = c_char), allocatable :: root_path, temp_path, temp_key
     type(fast_packer_config) :: config
     type(memory_texture) :: testing
