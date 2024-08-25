@@ -109,7 +109,7 @@ contains
     integer(c_int) :: status
     type(texture_rectangle) :: output
 
-    call texture_coordinates_pointer%get_raw(key("default_stone.png"), generic_data, stat = status)
+    call texture_coordinates_pointer%get_raw(key("debug_texture.png"), generic_data, stat = status)
 
     if (status /= 0) then
       error stop "Debug failed, it doesn't exist"
@@ -126,10 +126,14 @@ contains
 
     ! Make this actually readable
     print*,"BEGIN OUTPUT"
-    print"(f0.32)",output%min_x ! .00170648458 ! Chop
-    print"(f0.32)",output%min_y ! .11559803038
-    print"(f0.32)",output%max_x ! .02901023812
-    print"(f0.32)",output%max_y ! .12053021043
+    print*,"min_x = 0"
+    print"(f0.10)",output%min_x ! .00170648458 ! Chop
+    print*,"min_y = 0"
+    print"(f0.10)",output%min_y ! .11559803038
+    print*,"max_x = 0"
+    print"(f0.10)",output%max_x ! .02901023812
+    print*,"max_y = 0"
+    print"(f0.10)",output%max_y ! .12053021043
 
   end subroutine texture_atlas_debug
 
