@@ -99,7 +99,6 @@ contains
 
     texture_coordinates = packer%get_texture_coordinates_database()
 
-    call packer%deallocate()
 
   end subroutine texture_atlas_pack
 

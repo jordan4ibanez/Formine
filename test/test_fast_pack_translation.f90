@@ -66,8 +66,6 @@ contains
     testing = packer%save_to_memory_texture()
     ! call packer%save_to_png("./test/textures/packer_test_result.png")
 
-    call packer%deallocate()
-
   end subroutine test_memory_leak
 
 
@@ -81,8 +79,8 @@ contains
     do
       z = z + 1
 
-      if (z >= 2000000000) then
-        print*,"RESET"
+      if (z >= 0) then
+        ! print*,"RESET"
         z = 0
       end if
 
