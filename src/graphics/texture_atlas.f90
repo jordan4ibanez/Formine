@@ -126,14 +126,14 @@ contains
 
     ! Make this actually readable
     print*,"BEGIN OUTPUT"
-    print*,"min_x = 0"
-    print"(f0.10)",output%min_x ! .00170648458 ! Chop
-    print*,"min_y = 0"
-    print"(f0.10)",output%min_y ! .11559803038
-    print*,"max_x = 0"
-    print"(f0.10)",output%max_x ! .02901023812
-    print*,"max_y = 0"
-    print"(f0.10)",output%max_y ! .12053021043
+
+    write(*,"(A f0.10)") "min_x = 0", output%min_x
+
+    write(*,"(A f0.10)") "min_y = 0", output%min_y
+
+    write(*,"(A f0.10)") "max_x = 0", output%max_x
+
+    write(*,"(A f0.10)") "max_y = 0", output%max_y
 
   end subroutine texture_atlas_debug
 
