@@ -232,10 +232,6 @@ contains
     ! Iterate all available positions.
     y_iter: do y_index = 1,size(this%available_y)
 
-      if (found) then
-        exit
-      end if
-
       y = this%available_y(y_index)
 
       x_iter: do x_index = 1, size(this%available_x)
@@ -244,43 +240,45 @@ contains
 
         new_score = x + y
 
-        if (new_score < score) then
+        if (new_score >= score) then
+          exit x_iter
+        end if
 
-          ! Bounds check.
-          if (x + this_width + padding < max_x .and. y + this_height + padding < max_y) then
+        ! Bounds check.
+        if (x + this_width + padding < max_x .and. y + this_height + padding < max_y) then
 
-            failed = .false.
+          failed = .false.
 
-            ! Collided with other box failure.
-            ! Index each collision box to check if within.
+          ! Collided with other box failure.
+          ! Index each collision box to check if within.
 
-            inner_iter: do i = 1,current_index - 1
+          inner_iter: do i = 1,current_index - 1
 
-              other_x = this%position_x(i)
-              other_y = this%position_y(i)
-              other_width = this%box_width(i)
-              other_height = this%box_height(i)
+            other_x = this%position_x(i)
+            other_y = this%position_y(i)
+            other_width = this%box_width(i)
+            other_height = this%box_height(i)
 
-              ! If it hit something, we'll try the next position.
-              if (other_x + other_width + padding > x .and. &
-                other_x < x + this_width + padding .and. &
-                other_y + other_height + padding > y .and. &
-                other_y < y + this_height + padding) then
+            ! If it hit something, we'll try the next position.
+            if (other_x + other_width + padding > x .and. &
+              other_x < x + this_width + padding .and. &
+              other_y + other_height + padding > y .and. &
+              other_y < y + this_height + padding) then
 
-                failed = .true.
-                exit inner_iter
-              end if
-            end do inner_iter
-
-            if (.not. failed) then
-              found = .true.
-              best_x = x
-              best_y = y
-              score = new_score
-              exit x_iter
+              failed = .true.
+              exit inner_iter
             end if
+          end do inner_iter
+
+          if (.not. failed) then
+            found = .true.
+            best_x = x
+            best_y = y
+            score = new_score
+            exit x_iter
           end if
         end if
+
       end do x_iter
     end do y_iter
 
