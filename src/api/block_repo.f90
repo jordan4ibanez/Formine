@@ -87,6 +87,10 @@ contains
     type(c_ptr), intent(in), value :: state
 
 
+    !* Create the base smart pointer of the block array.
+    allocate(definition_array(0))
+
+
     ! Memory layout: (Stack grows down.)
     ! -1 - blocks = {}
     ! then moves to:
