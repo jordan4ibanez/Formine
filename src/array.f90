@@ -634,7 +634,7 @@ contains
     implicit none
 
     integer(c_int), dimension(:), intent(in) :: input
-    integer(c_int), dimension(:), allocatable :: output, temp
+    integer(c_int), dimension(:), allocatable :: output, temp, worker
 
     integer :: input_index, current_index
 
@@ -654,11 +654,13 @@ contains
       if (current_index /= 0) then
         ! We want to ensure that the values do not repeat.
         if (output(current_index) /= temp(input_index)) then
-          output = array_i32_insert(output, temp(input_index))
+          worker = array_i32_insert(output, temp(input_index))
+          call move_alloc(worker, output)
           current_index = current_index + 1
         end if
       else
-        output = [output, temp(input_index)]
+        worker = array_i32_insert(output, temp(input_index))
+        call move_alloc(worker, output)
         current_index = 1
       end if
 
