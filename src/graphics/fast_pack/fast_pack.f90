@@ -387,26 +387,37 @@ contains
   !* Creates OpenGL/Vulkan space coordinates to be queried.
   subroutine fast_packer_create_texture_rectangles(this)
     use :: terminal
-    use :: fhash, only: fhash_iter_t, fhash_key_t
     implicit none
 
     class(fast_packer), intent(inout) :: this
-    type(fhash_iter_t) :: iterator
-    class(fhash_key_t), allocatable :: generic_key
-    class(*), allocatable :: generic_data
-    integer(c_int) :: number_of_keys
+    character(len = :, kind = c_char), allocatable :: temp_key
+    integer(c_int) :: keys_array_size, i
+    type(texture_rectangle) :: new_texture_rectangle
 
     ! We use a hash table to store the texture_rectangles.
     ! Ideally, access time will be n(1). Hopefully.
 
+    keys_array_size = size(this%keys_array)
+
     !? There is nothing to do, which can be very bad.
-    call this%keys%stats(num_items = number_of_keys)
-    if (number_of_keys <= 0) then
+    if (keys_array_size <= 0) then
       print*,colorize_rgb("[Fast Pack] Warning: Canvas is blank. This might cause serious issues.", 255, 165, 0)
       return
     end if
 
+    do i = 1,keys_array_size
+      temp_key = this%keys_array(i)%get()
 
+      new_texture_rectangle%min_x = this%position_x(i)
+      new_texture_rectangle%min_y = this%position_y(i)
+
+      !! fixme: might need to -1
+      new_texture_rectangle%max_x = this%position_x(i) + this%box_width(i)
+      new_texture_rectangle%max_y = this%position_y(i) + this%box_height(i)
+
+      ! Now put it into the database.
+      call this%texture_coordinates%set(key(temp_key), new_texture_rectangle)
+    end do
   end subroutine fast_packer_create_texture_rectangles
 
 
