@@ -58,6 +58,16 @@ License: MIT
 
 Usage: Translated from D to Fortran.
 
+
+### Isabella II
+
+Link: https://content.minetest.net/packages/zayuim/isabellaii/
+
+License: CC-BY-3.0
+
+Usage: The texture pack of the game.
+
+
 -----
 
 ### Install dependencies on fedora:
