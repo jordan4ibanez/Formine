@@ -1,5 +1,5 @@
 module test_array_things_test_suite
-  use :: array, only: array_i32_unique, array_i32_small_to_large_unique
+  use :: array, only: array_i32_small_to_large_unique
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -14,7 +14,6 @@ contains
 
     unit_1 = array_i32_small_to_large_unique(unit_1)
     unit_1 = array_i32_small_to_large_unique(unit_3)
-    unit_2 = array_i32_unique(unit_1)
   end subroutine testing
 
 
