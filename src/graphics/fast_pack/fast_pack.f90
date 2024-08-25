@@ -479,6 +479,7 @@ contains
 
   !* Upload a memory_texture into the fast_packer.
   function fast_packer_upload_texture_from_memory(this, texture_key, mem_texture) result(new_index)
+    use :: array, only: array_i32_insert, array_string_insert, array_memory_texture_insert
     implicit none
 
     class(fast_packer), intent(inout) :: this
@@ -486,6 +487,9 @@ contains
     type(memory_texture), intent(in) :: mem_texture
     type(memory_texture) :: trimmed_texture
     integer(c_int) :: new_index
+    integer(c_int), dimension(:), allocatable :: temp_x, temp_y, temp_width, temp_height
+    type(heap_string), dimension(:), allocatable :: temp_keys
+    type(memory_texture), dimension(:), allocatable :: temp_textures
 
     ! Slap on trimming in the least efficient manor.
     if (this%enable_trimming) then
@@ -499,12 +503,23 @@ contains
     this%current_id = this%current_id + 1
 
     ! Add data.
-    this%keys_array = [this%keys_array, heap_string(texture_key)]
-    this%position_x = [this%position_x, 0]
-    this%position_y = [this%position_y, 0]
-    this%box_width = [this%box_width, trimmed_texture%width]
-    this%box_height = [this%box_height, trimmed_texture%height]
-    this%textures = [this%textures, trimmed_texture]
+    temp_keys = array_string_insert(this%keys_array, heap_string(texture_key))
+    call move_alloc(temp_keys, this%keys_array)
+
+    temp_x = array_i32_insert(this%position_x, 0)
+    call move_alloc(temp_x, this%position_x)
+
+    temp_y = array_i32_insert(this%position_y, 0)
+    call move_alloc(temp_y, this%position_y)
+
+    temp_width = array_i32_insert(this%box_width, trimmed_texture%width)
+    call move_alloc(temp_width, this%box_width)
+
+    temp_height = array_i32_insert(this%box_height, trimmed_texture%height)
+    call move_alloc(temp_height, this%box_height)
+
+    temp_textures = array_memory_texture_insert(this%textures, trimmed_texture)
+    call move_alloc(temp_textures, this%textures)
 
     call this%trim_and_sort_available_slots()
   end function fast_packer_upload_texture_from_memory
@@ -516,9 +531,14 @@ contains
     implicit none
 
     class(fast_packer), intent(inout) :: this
+    integer(c_int), dimension(:), allocatable :: temp_x
+    integer(c_int), dimension(:), allocatable :: temp_y
 
-    this%available_x = array_i32_small_to_large_unique(this%available_x)
-    this%available_y = array_i32_small_to_large_unique(this%available_y)
+    temp_x = array_i32_small_to_large_unique(this%available_x)
+    temp_y = array_i32_small_to_large_unique(this%available_y)
+
+    call move_alloc(temp_x, this%available_x)
+    call move_alloc(temp_y, this%available_y)
   end subroutine fast_packer_trim_and_sort_available_slots
 
 
