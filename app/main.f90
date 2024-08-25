@@ -93,6 +93,28 @@ program main
   !* If we cannot initalize the API properly, we give up.
   call api_initialize()
 
+  call mesh_create_3d( &
+    "debug", &
+    [ &
+    -0.75,  0.5, 0.0, &
+    -0.75, -0.5, 0.0, &
+    0.75,  -0.5, 0.0, &
+    0.75,   0.5, 0.0 &
+    ], &
+    [ &
+    0.0, 0.0, &
+    0.0, 1.0, &
+    1.0, 1.0, &
+    1.0, 0.0 &
+    ], &
+    [ &
+    1.0, 1.0, 1.0, &
+    1.0, 1.0, 1.0, &
+    1.0, 1.0, 1.0, &
+    1.0, 1.0, 1.0 &
+    ], &
+    [0,1,2, 2,3,0] &
+    )
 
   rotation = 0.0
 
@@ -122,11 +144,11 @@ program main
 
 
 
-      ! call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
+      call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
 
-      ! call texture_use("fortran_logo_512x512.png")
+      call texture_use("TEXTURE_ATLAS")
 
-      ! call mesh_draw("debug")
+      call mesh_draw("debug")
 
 
       !* Move into "2D mode"
