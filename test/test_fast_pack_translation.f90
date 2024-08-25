@@ -49,31 +49,21 @@ contains
     integer :: i
     character(len = :, kind = c_char), allocatable :: root_path, temp_path, temp_key
     type(fast_packer_config) :: config
+    type(memory_texture) :: testing
 
     config%padding = 1
     config%width = 400
     config%height = 400
     config%enable_trimming = .true.
     packer = fast_packer(config)
-
     root_path = "./test/textures/"
-
-    print*,"begin fast packer test"
-
     do i = 1,10
-
       temp_path = root_path//int_to_string(i)//".png"
-
-      print*,temp_path
-
       temp_key = string_get_file_name(temp_path)
-
       call packer%pack(temp_key, temp_path)
     end do
-
-    ! testing = packer%save_to_memory_texture()
-
-    call packer%save_to_png("./test/textures/packer_test_result.png")
+    testing = packer%save_to_memory_texture()
+    ! call packer%save_to_png("./test/textures/packer_test_result.png")
   end subroutine test_memory_leak
 
 
