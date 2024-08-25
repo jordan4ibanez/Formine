@@ -571,7 +571,7 @@ contains
   subroutine font_clear_database()
     use :: fhash, only: fhash_iter_t, fhash_key_t
     use :: string
-    use :: array, only: string_array
+    use :: array, only: string_array, array_string_insert
     use :: terminal
     implicit none
 
@@ -580,8 +580,9 @@ contains
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     class(*), pointer :: generic_pointer
-    integer(c_int) :: i
-    integer(c_int) :: remaining_size
+    integer(c_int) :: i, remaining_size
+    type(heap_string), dimension(:), allocatable :: temp_string_array
+
 
     !* We must check that there is anything in the database before we iterate.
     call character_database%stats(num_items = remaining_size)
@@ -598,8 +599,9 @@ contains
 
     ! Now we will collect the keys from the iterator.
     do while(iterator%next(generic_key, generic_data))
-      ! Appending. Allocatable will clean up the old data.
-      key_array%data = [key_array%data, heap_string(generic_key%to_string())]
+      ! Appending.
+      temp_string_array = array_string_insert(key_array%data, heap_string(generic_key%to_string()))
+      call move_alloc(temp_string_array, key_array%data)
     end do
 
     ! Now clear the database out.

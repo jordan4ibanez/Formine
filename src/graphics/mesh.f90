@@ -433,6 +433,7 @@ contains
   !* Completely wipe out all existing meshes. This might be slow.
   subroutine mesh_clear_database()
     use :: fhash, only: fhash_iter_t, fhash_key_t
+    use :: array, only: array_string_insert
     use :: string
     use :: array, only: string_array
     use :: terminal
@@ -442,8 +443,8 @@ contains
     type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
-    integer(c_int) :: i
-    integer(c_int) :: remaining_size
+    integer(c_int) :: i, remaining_size
+    type(heap_string), dimension(:), allocatable :: temp_string_array
 
     !* We must check that there is anything in the database before we iterate.
     call mesh_database%stats(num_items = remaining_size)
@@ -460,8 +461,9 @@ contains
 
     ! Now we will collect the keys from the iterator.
     do while(iterator%next(generic_key, generic_data))
-      ! Appending. Allocatable will clean up the old data.
-      key_array%data = [key_array%data, heap_string(generic_key%to_string())]
+      ! Appending.
+      temp_string_array = array_string_insert(key_array%data, heap_string(generic_key%to_string()))
+      call move_alloc(temp_string_array, key_array%data)
     end do
 
     ! Now clear the database out.
