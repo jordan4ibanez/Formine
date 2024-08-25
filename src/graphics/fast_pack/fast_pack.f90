@@ -60,7 +60,7 @@ module fast_pack
     integer(c_int) :: max_y = 0
     logical(c_bool) :: locked_out = .false.
     ! Everything below this is allocated in the constructor.
-    type(fhash_tbl_t) :: texture_coordinates
+    type(fhash_tbl_t), pointer :: texture_coordinates
     type(heap_string), dimension(:), allocatable :: keys_array
     integer(c_int), dimension(:), allocatable :: position_x
     integer(c_int), dimension(:), allocatable :: position_y
@@ -126,7 +126,6 @@ contains
     new_fast_packer%canvas_height = config%height
 
     ! Allocate
-    call new_fast_packer%texture_coordinates%allocate()
     allocate(new_fast_packer%keys_array(0))
     allocate(new_fast_packer%position_x(0))
     allocate(new_fast_packer%position_y(0))
@@ -370,9 +369,9 @@ contains
     integer(c_int) :: i, this_x, this_y, this_width, this_height, x, y, canvas_pixel_x, canvas_pixel_y, texture_pixel_x, texture_pixel_y
     type(pixel) :: current_pixel
 
-    ! if (this%locked_out) then
-    !   error stop "[Fast Pack] Error: Fast Packer has already processed it's data. It is locked."
-    ! end if
+    if (this%locked_out) then
+      error stop "[Fast Pack] Error: Fast Packer has already processed it's data. It is locked."
+    end if
 
     this%canvas_width = this%max_x
     this%canvas_height = this%max_y
@@ -420,10 +419,9 @@ contains
     implicit none
 
     class(fast_packer), intent(inout) :: this
-    integer(c_int) :: keys_array_size, i, status, length, w
+    integer(c_int) :: keys_array_size, i
     real(c_double) :: d_min_x, d_min_y, d_max_x, d_max_y, d_canvas_width, d_canvas_height
-    type(texture_rectangle), allocatable :: new_texture_rectangle
-    character(len = :, kind = c_char), allocatable :: temp_key, other_temp_key
+    type(texture_rectangle), pointer :: new_texture_rectangle
 
     ! We use a hash table to store the texture_rectangles.
     ! Ideally, access time will be n(1). Hopefully.
@@ -443,6 +441,9 @@ contains
     d_canvas_width = real(this%canvas_width, kind = c_double)
     d_canvas_height = real(this%canvas_height, kind = c_double)
 
+    allocate(this%texture_coordinates)
+    call this%texture_coordinates%allocate(size = size(this%keys_array))
+
     do i = 1,keys_array_size
 
       ! First, put the raw data into the stack double floating point variables.
@@ -455,36 +456,15 @@ contains
       ! Next, create the floating point position in OpenGL/Vulkan memory.
       ! We are chopping the precision to single floating point.
       allocate(new_texture_rectangle)
+      new_texture_rectangle = texture_rectangle()
+
       new_texture_rectangle%min_x = real(d_min_x / d_canvas_width, kind = c_float)
       new_texture_rectangle%min_y = real(d_min_y / d_canvas_height, kind = c_float)
       new_texture_rectangle%max_x = real(d_max_x / d_canvas_width, kind = c_float)
       new_texture_rectangle%max_y = real(d_max_y / d_canvas_height, kind = c_float)
 
       ! Now put it into the database.
-      ! print*,"failure 1"
-      other_temp_key = this%keys_array(i)%get()
-      length = len(other_temp_key)
-
-      allocate(character(len = length, kind = c_char) :: temp_key)
-
-      do w = 1, length
-        temp_key(w:w) = other_temp_key(w:w)
-      end do
-
-      ! print*,"failure 2"
-      call this%texture_coordinates%set(key(temp_key), new_texture_rectangle)
-
-      call this%texture_coordinates%check_key(key(temp_key), stat = status)
-
-      if (status /= 0) then
-        error stop "corruption"
-      else
-        print*,this%keys_array(i)%get()//" is okay"
-      end if
-
-
-      deallocate(new_texture_rectangle)
-      deallocate(temp_key)
+      call this%texture_coordinates%set_ptr(key(this%keys_array(i)%get()), new_texture_rectangle)
     end do
   end subroutine fast_packer_create_texture_rectangles
 
