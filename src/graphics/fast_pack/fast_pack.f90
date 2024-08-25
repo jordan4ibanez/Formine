@@ -383,6 +383,7 @@ contains
   !* The final step in the fast packer.
   !* Creates OpenGL/Vulkan space coordinates to be queried.
   subroutine fast_packer_create_texture_rectangles(this)
+    use :: terminal
     use :: fhash, only: fhash_iter_t, fhash_key_t
     implicit none
 
@@ -392,15 +393,16 @@ contains
     class(*), allocatable :: generic_data
     integer(c_int) :: number_of_keys
 
+    ! We use a hash table to store the texture_rectangles.
+    ! Ideally, access time will be n(1). Hopefully.
+
     !? There is nothing to do, which can be very bad.
     call this%keys%stats(num_items = number_of_keys)
     if (number_of_keys <= 0) then
-      print*,"[Fast Pack] Warning: Canvas is blank. This might cause issues."
+      print*,colorize_rgb("[Fast Pack] Warning: Canvas is blank. This might cause serious issues.", 255, 165, 0)
       return
     end if
-    
 
-    ! todo: iterate everything and create the elements in the database
 
   end subroutine fast_packer_create_texture_rectangles
 
