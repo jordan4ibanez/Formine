@@ -46,32 +46,55 @@ contains
 
     ! type(texture_packer_conf) :: config
     type(fast_packer) :: packer
-    integer :: i
+    integer :: i, z
     character(len = :, kind = c_char), allocatable :: root_path, temp_path, temp_key
     type(fast_packer_config) :: config
     type(memory_texture) :: testing
 
-    print*,"BEGIN TESTING MEMORY LEAK FOR FAST PACKER"
 
-    do
-      config%padding = 1
-      config%width = 400
-      config%height = 400
-      config%enable_trimming = .true.
-      packer = fast_packer(config)
-      root_path = "./test/textures/"
-      do i = 1,10
-        temp_path = root_path//int_to_string(i)//".png"
-        temp_key = string_get_file_name(temp_path)
-        call packer%pack(temp_key, temp_path)
-      end do
-      ! testing = packer%save_to_memory_texture()
-      ! call packer%save_to_png("./test/textures/packer_test_result.png")
-
-      call packer%deallocate()
+    config%padding = 1
+    config%width = 400
+    config%height = 400
+    config%enable_trimming = .true.
+    packer = fast_packer(config)
+    root_path = "./test/textures/"
+    do i = 1,10
+      temp_path = root_path//int_to_string(i)//".png"
+      temp_key = string_get_file_name(temp_path)
+      call packer%pack(temp_key, temp_path)
     end do
+    testing = packer%save_to_memory_texture()
+    ! call packer%save_to_png("./test/textures/packer_test_result.png")
+
+    call packer%deallocate()
+
   end subroutine test_memory_leak
 
+
+  subroutine call_in()
+    implicit none
+
+    integer :: i, z
+
+    z = 0
+
+    do
+      z = z + 1
+
+      if (z >= 2000000000) then
+        print*,"RESET"
+        z = 0
+      end if
+
+      if (z > 1) then
+        cycle
+      end if
+
+      call test_memory_leak()
+
+    end do
+
+  end subroutine call_in
 
 
 end module test_fast_pack_suite
@@ -84,5 +107,5 @@ program test_fast_pack
 
   ! call begin_test()
 
-  call test_memory_leak()
+  call call_in()
 end program test_fast_pack
