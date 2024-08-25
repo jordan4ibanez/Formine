@@ -2,6 +2,7 @@ module texture_atlas
   use :: string
   use :: vector_2i
   use :: fast_pack
+  use :: fhash, only: fhash_tbl_t, key => fhash_key
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -25,6 +26,7 @@ module texture_atlas
 
 
   type(texture_pack_element), dimension(:), allocatable :: textures_to_pack
+  type(fhash_tbl_t) :: texture_coordinates
 
 
 contains
@@ -59,6 +61,31 @@ contains
   !* The final step of the texture atlas.
   subroutine texture_atlas_pack()
     implicit none
+
+    type(fast_packer) :: packer
+    type(fast_packer_config) :: config
+    integer(c_int) :: i
+    type(texture_pack_element) :: element
+
+
+    config%canvas_expansion_amount = 1000
+    ! config%enable_trimming = .false.
+
+    packer = fast_packer(config)
+
+    print"(A)","[Texture Atlas]: Texture atlas construction START."
+
+    do i = 1,size(textures_to_pack)
+      element = textures_to_pack(i)
+
+      call packer%pack(element%file_name%get(), element%full_path%get())
+    end do
+
+    deallocate(textures_to_pack)
+
+    call packer%save_to_png("./testing2.png")
+
+    ! texture_coordinates = packer%get_texture_coordinates_database()
 
   end subroutine texture_atlas_pack
 
