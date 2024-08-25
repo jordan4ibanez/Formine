@@ -117,6 +117,7 @@ module luajit
   public :: lua_tostring
   public :: lua_typename
   public :: lua_setfield
+  public :: luajit_loadfile
   public :: luajit_error_stop
   public :: luajit_initialize
   public :: luajit_destroy
@@ -601,6 +602,17 @@ module luajit
     end function lual_loadstring
 
 
+    function luaL_loadfile(state, file_path) result(status) bind(c, name = "luaL_loadfile")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      character(len = 1, kind = c_char), intent(in) :: file_path
+      integer(c_int) :: status
+
+    end function luaL_loadfile
+
+
     function lua_call(state, number_of_args, number_of_results) result(status) bind(c, name = "lua_call")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -878,6 +890,21 @@ contains
 
 
 !* The rest is totally custom. =================================================================================
+
+
+  function luajit_loadfile(state, file_path) result(status)
+    use :: string
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    character(len = *, kind = c_char), intent(in) :: file_path
+    integer(c_int) :: status
+    character(len = :, kind = c_char), allocatable :: c_string
+
+    c_string = into_c_string(file_path)
+
+    status = luaL_loadfile(state, c_string)
+  end function luajit_loadfile
 
 
   !! BEGIN DEBUGGING LUAJIT CLOSURE !!
