@@ -120,6 +120,7 @@ module luajit
   public :: luajit_loadfile
   public :: luajit_error_stop
   public :: luajit_initialize
+  public :: luajit_copy_string_array_from_table
   public :: luajit_destroy
   public :: luajit_run_string
   public :: luajit_run_file
