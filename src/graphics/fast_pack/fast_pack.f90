@@ -634,7 +634,7 @@ contains
   !* This also unlocks the fast packer.
   subroutine fast_packer_deallocate(this)
     use :: fhash, only: fhash_iter_t, fhash_key_t
-    use :: array, only: string_array
+    use :: array, only: string_array, array_string_insert
     implicit none
 
     class(fast_packer), intent(inout) :: this
@@ -643,6 +643,7 @@ contains
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     integer(c_int) :: i
+    type(heap_string), dimension(:), allocatable :: temp_string_array
 
     if (.not. this%allocated) then
       error stop "[Fast Packer] Error: Cannot deallocate, not allocated."
@@ -656,8 +657,9 @@ contains
 
     ! Now we will collect the keys from the iterator.
     do while(iterator%next(generic_key, generic_data))
-      ! Appending. Allocatable will clean up the old data.
-      key_array%data = [key_array%data, heap_string(generic_key%to_string())]
+      ! Appending.
+      temp_string_array = array_string_insert(key_array%data, heap_string(generic_key%to_string()))
+      call move_alloc(temp_string_array, key_array%data)
     end do
 
     ! Now clear the database out.

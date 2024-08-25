@@ -97,7 +97,7 @@ contains
     array_length = x * y * desired_channels
 
     ! Pass it into fortran.
-    call c_f_pointer(c_pointer, passed_data_pointer, shape = [array_length])
+    call c_f_pointer(c_pointer, passed_data_pointer, [array_length])
 
     ! Initialize the raw image data with the raw pointer.
     raw_image_data = passed_data_pointer
