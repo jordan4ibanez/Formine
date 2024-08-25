@@ -406,8 +406,7 @@ module luajit
 
       type(c_ptr), intent(in), value :: state
       integer(c_int), intent(in), value :: index
-      !? This was originally c_size_t, but I don't think strings are going to go past 2 billion characters.
-      integer(c_int), intent(inout) :: length_of_returning_string
+      integer(c_size_t), intent(inout) :: length_of_returning_string
       type(c_ptr) :: new_string_pointer
     end function lua_tolstring
 
