@@ -72,6 +72,7 @@ module fast_pack
 
   contains
     procedure :: get_canvas_size => fast_packer_get_canvas_size
+    procedure :: get_keys => fast_packer_get_keys
     procedure :: pack => fast_packer_pack_from_file_path, fast_packer_pack_from_memory
     procedure, private :: internal_pack => fast_packer_internal_pack
     procedure, private :: tetris_pack => fast_packer_tetris_pack
@@ -153,6 +154,18 @@ contains
     size%x = this%canvas_width
     size%y = this%canvas_height
   end function fast_packer_get_canvas_size
+
+
+  !* Get the array of keys.
+  function fast_packer_get_keys(this) result(key_array)
+    use :: vector_2i
+    implicit none
+
+    class(fast_packer), intent(in) :: this
+    type(heap_string), dimension(:), allocatable :: key_array
+
+    key_array = this%keys_array
+  end function fast_packer_get_keys
 
 
   !* Pack a texture located on disk.
