@@ -78,55 +78,55 @@ contains
   !* Constructor.
 
 
-  type(vec3d) function constructor_scalar_f64(i) result(new_vec3d)
+  type(vec3d) function constructor_scalar_f64(i) result(vec3d_new)
     implicit none
     real(c_double), intent(in), value :: i
 
-    new_vec3d = i
+    vec3d_new = i
   end function constructor_scalar_f64
 
 
-  type(vec3d) function constructor_raw_f64(x,y,z) result(new_vec3d)
+  type(vec3d) function constructor_raw_f64(x,y,z) result(vec3d_new)
     implicit none
 
     real(c_double), intent(in), value :: x,y,z
 
-    new_vec3d = [x,y,z]
+    vec3d_new = [x,y,z]
   end function constructor_raw_f64
 
 
-  type(vec3d) function constructor_array_f64(xyz_array) result(new_vec3d)
+  type(vec3d) function constructor_array_f64(xyz_array) result(vec3d_new)
     implicit none
 
     real(c_double), dimension(3), intent(in) :: xyz_array
 
-    new_vec3d = xyz_array(1:3)
+    vec3d_new = xyz_array(1:3)
   end function constructor_array_f64
 
 
-  type(vec3d) function constructor_scalar_f32(i) result(new_vec3d)
+  type(vec3d) function constructor_scalar_f32(i) result(vec3d_new)
     implicit none
     real(c_float), intent(in), value :: i
 
-    new_vec3d = i
+    vec3d_new = i
   end function constructor_scalar_f32
 
 
-  type(vec3d) function constructor_raw_f32(x,y,z) result(new_vec3d)
+  type(vec3d) function constructor_raw_f32(x,y,z) result(vec3d_new)
     implicit none
 
     real(c_float), intent(in), value :: x,y,z
 
-    new_vec3d = [x,y,z]
+    vec3d_new = [x,y,z]
   end function constructor_raw_f32
 
 
-  type(vec3d) function constructor_array_f32(xyz_array) result(new_vec3d)
+  type(vec3d) function constructor_array_f32(xyz_array) result(vec3d_new)
     implicit none
 
     real(c_float), dimension(3), intent(in) :: xyz_array
 
-    new_vec3d = xyz_array(1:3)
+    vec3d_new = xyz_array(1:3)
   end function constructor_array_f32
 
 
@@ -232,262 +232,262 @@ contains
   !* Addition
 
 
-  type(vec3d) function add_scalar_f64(this, i) result(new_vec3d)
+  type(vec3d) function add_scalar_f64(this, i) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), intent(in), value :: i
 
-    new_vec3d%x = this%x + i
-    new_vec3d%y = this%y + i
-    new_vec3d%z = this%z + i
+    vec3d_new%x = this%x + i
+    vec3d_new%y = this%y + i
+    vec3d_new%z = this%z + i
   end function add_scalar_f64
 
 
-  type(vec3d) function add_array_f64(this, arr) result(new_vec3d)
+  type(vec3d) function add_array_f64(this, arr) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), dimension(3), intent(in) :: arr
 
-    new_vec3d%x = this%x + arr(1)
-    new_vec3d%y = this%y + arr(2)
-    new_vec3d%z = this%z + arr(3)
+    vec3d_new%x = this%x + arr(1)
+    vec3d_new%y = this%y + arr(2)
+    vec3d_new%z = this%z + arr(3)
   end function add_array_f64
 
 
-  type(vec3d) function add_vec3d(this, other) result(new_vec3d)
+  type(vec3d) function add_vec3d(this, other) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     type(vec3d), intent(in), value :: other
 
-    new_vec3d%x = this%x + other%x
-    new_vec3d%y = this%y + other%y
-    new_vec3d%z = this%z + other%z
+    vec3d_new%x = this%x + other%x
+    vec3d_new%y = this%y + other%y
+    vec3d_new%z = this%z + other%z
   end function add_vec3d
 
 
-  type(vec3d) function add_scalar_f32(this, i) result(new_vec3d)
+  type(vec3d) function add_scalar_f32(this, i) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_float), intent(in), value :: i
 
-    new_vec3d%x = this%x + i
-    new_vec3d%y = this%y + i
-    new_vec3d%z = this%z + i
+    vec3d_new%x = this%x + i
+    vec3d_new%y = this%y + i
+    vec3d_new%z = this%z + i
   end function add_scalar_f32
 
 
-  type(vec3d) function add_array_f32(this, arr) result(new_vec3d)
+  type(vec3d) function add_array_f32(this, arr) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_float), dimension(3), intent(in) :: arr
 
-    new_vec3d%x = this%x + arr(1)
-    new_vec3d%y = this%y + arr(2)
-    new_vec3d%z = this%z + arr(3)
+    vec3d_new%x = this%x + arr(1)
+    vec3d_new%y = this%y + arr(2)
+    vec3d_new%z = this%z + arr(3)
   end function add_array_f32
 
 
   !* Subtraction.
 
 
-  type(vec3d) function subtract_scalar_f64(this, i) result(new_vec3d)
+  type(vec3d) function subtract_scalar_f64(this, i) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), intent(in), value :: i
 
-    new_vec3d%x = this%x - i
-    new_vec3d%y = this%y - i
-    new_vec3d%z = this%z - i
+    vec3d_new%x = this%x - i
+    vec3d_new%y = this%y - i
+    vec3d_new%z = this%z - i
   end function subtract_scalar_f64
 
 
-  type(vec3d) function subtract_array_f64(this, arr) result(new_vec3d)
+  type(vec3d) function subtract_array_f64(this, arr) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), dimension(3), intent(in) :: arr
 
-    new_vec3d%x = this%x - arr(1)
-    new_vec3d%y = this%y - arr(2)
-    new_vec3d%z = this%z - arr(3)
+    vec3d_new%x = this%x - arr(1)
+    vec3d_new%y = this%y - arr(2)
+    vec3d_new%z = this%z - arr(3)
   end function subtract_array_f64
 
 
-  type(vec3d) function subtract_vec3d(this, other) result(new_vec3d)
+  type(vec3d) function subtract_vec3d(this, other) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     type(vec3d), intent(in), value :: other
 
-    new_vec3d%x = this%x - other%x
-    new_vec3d%y = this%y - other%y
-    new_vec3d%z = this%z - other%z
+    vec3d_new%x = this%x - other%x
+    vec3d_new%y = this%y - other%y
+    vec3d_new%z = this%z - other%z
   end function subtract_vec3d
 
 
-  type(vec3d) function subtract_scalar_f32(this, i) result(new_vec3d)
+  type(vec3d) function subtract_scalar_f32(this, i) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_float), intent(in), value :: i
 
-    new_vec3d%x = this%x - i
-    new_vec3d%y = this%y - i
-    new_vec3d%z = this%z - i
+    vec3d_new%x = this%x - i
+    vec3d_new%y = this%y - i
+    vec3d_new%z = this%z - i
   end function subtract_scalar_f32
 
 
-  type(vec3d) function subtract_array_f32(this, arr) result(new_vec3d)
+  type(vec3d) function subtract_array_f32(this, arr) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_float), dimension(3), intent(in) :: arr
 
-    new_vec3d%x = this%x - arr(1)
-    new_vec3d%y = this%y - arr(2)
-    new_vec3d%z = this%z - arr(3)
+    vec3d_new%x = this%x - arr(1)
+    vec3d_new%y = this%y - arr(2)
+    vec3d_new%z = this%z - arr(3)
   end function subtract_array_f32
 
 
   !* Multiplication.
 
 
-  type(vec3d) function multiply_scalar_f64(this, i) result(new_vec3d)
+  type(vec3d) function multiply_scalar_f64(this, i) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), intent(in), value :: i
 
-    new_vec3d%x = this%x * i
-    new_vec3d%y = this%y * i
-    new_vec3d%z = this%z * i
+    vec3d_new%x = this%x * i
+    vec3d_new%y = this%y * i
+    vec3d_new%z = this%z * i
   end function multiply_scalar_f64
 
 
-  type(vec3d) function multiply_array_f64(this, arr) result(new_vec3d)
+  type(vec3d) function multiply_array_f64(this, arr) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), dimension(3), intent(in) :: arr
 
-    new_vec3d%x = this%x * arr(1)
-    new_vec3d%y = this%y * arr(2)
-    new_vec3d%z = this%z * arr(3)
+    vec3d_new%x = this%x * arr(1)
+    vec3d_new%y = this%y * arr(2)
+    vec3d_new%z = this%z * arr(3)
   end function multiply_array_f64
 
 
-  type(vec3d) function multiply_vec3d(this, other) result(new_vec3d)
+  type(vec3d) function multiply_vec3d(this, other) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     type(vec3d), intent(in), value :: other
 
-    new_vec3d%x = this%x * other%x
-    new_vec3d%y = this%y * other%y
-    new_vec3d%z = this%z * other%z
+    vec3d_new%x = this%x * other%x
+    vec3d_new%y = this%y * other%y
+    vec3d_new%z = this%z * other%z
   end function multiply_vec3d
 
 
-  type(vec3d) function multiply_scalar_f32(this, i) result(new_vec3d)
+  type(vec3d) function multiply_scalar_f32(this, i) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_float), intent(in), value :: i
 
-    new_vec3d%x = this%x * i
-    new_vec3d%y = this%y * i
-    new_vec3d%z = this%z * i
+    vec3d_new%x = this%x * i
+    vec3d_new%y = this%y * i
+    vec3d_new%z = this%z * i
   end function multiply_scalar_f32
 
 
-  type(vec3d) function multiply_array_f32(this, arr) result(new_vec3d)
+  type(vec3d) function multiply_array_f32(this, arr) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_float), dimension(3), intent(in) :: arr
 
-    new_vec3d%x = this%x * arr(1)
-    new_vec3d%y = this%y * arr(2)
-    new_vec3d%z = this%z * arr(3)
+    vec3d_new%x = this%x * arr(1)
+    vec3d_new%y = this%y * arr(2)
+    vec3d_new%z = this%z * arr(3)
   end function multiply_array_f32
 
 
   !* Division.
 
 
-  type(vec3d) function divide_scalar_f64(this, i) result(new_vec3d)
+  type(vec3d) function divide_scalar_f64(this, i) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), intent(in), value :: i
 
-    new_vec3d%x = this%x / i
-    new_vec3d%y = this%y / i
-    new_vec3d%z = this%z / i
+    vec3d_new%x = this%x / i
+    vec3d_new%y = this%y / i
+    vec3d_new%z = this%z / i
   end function divide_scalar_f64
 
 
-  type(vec3d) function divide_array_f64(this, arr) result(new_vec3d)
+  type(vec3d) function divide_array_f64(this, arr) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_double), dimension(3), intent(in) :: arr
 
-    new_vec3d%x = this%x / arr(1)
-    new_vec3d%y = this%y / arr(2)
-    new_vec3d%z = this%z / arr(3)
+    vec3d_new%x = this%x / arr(1)
+    vec3d_new%y = this%y / arr(2)
+    vec3d_new%z = this%z / arr(3)
   end function divide_array_f64
 
 
-  type(vec3d) function divide_vec3d(this, other) result(new_vec3d)
+  type(vec3d) function divide_vec3d(this, other) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     type(vec3d), intent(in), value :: other
 
-    new_vec3d%x = this%x / other%x
-    new_vec3d%y = this%y / other%y
-    new_vec3d%z = this%z / other%z
+    vec3d_new%x = this%x / other%x
+    vec3d_new%y = this%y / other%y
+    vec3d_new%z = this%z / other%z
   end function divide_vec3d
 
 
-  type(vec3d) function divide_scalar_f32(this, i) result(new_vec3d)
+  type(vec3d) function divide_scalar_f32(this, i) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_float), intent(in), value :: i
 
-    new_vec3d%x = this%x / i
-    new_vec3d%y = this%y / i
-    new_vec3d%z = this%z / i
+    vec3d_new%x = this%x / i
+    vec3d_new%y = this%y / i
+    vec3d_new%z = this%z / i
   end function divide_scalar_f32
 
 
-  type(vec3d) function divide_array_f32(this, arr) result(new_vec3d)
+  type(vec3d) function divide_array_f32(this, arr) result(vec3d_new)
     implicit none
 
     class(vec3d), intent(in) :: this
     real(c_float), dimension(3), intent(in) :: arr
 
-    new_vec3d%x = this%x / arr(1)
-    new_vec3d%y = this%y / arr(2)
-    new_vec3d%z = this%z / arr(3)
+    vec3d_new%x = this%x / arr(1)
+    vec3d_new%y = this%y / arr(2)
+    vec3d_new%z = this%z / arr(3)
   end function divide_array_f32
 
 
-  function as_array(this) result(new_array)
+  function as_array(this) result(array_new)
     implicit none
 
     class(vec3d), intent(in) :: this
-    real(c_double), dimension(3) :: new_array
+    real(c_double), dimension(3) :: array_new
 
-    new_array = [this%x, this%y, this%z]
+    array_new = [this%x, this%y, this%z]
   end function
 
 

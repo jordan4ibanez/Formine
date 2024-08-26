@@ -51,12 +51,12 @@ contains
 
 
   !* Constructor for a pixel.
-  function pixel_constructor(r, g, b, a) result(new_pixel)
+  function pixel_constructor(r, g, b, a) result(pixel_new)
     use :: string
     implicit none
 
     integer(c_int), intent(in), value :: r, g, b, a
-    type(pixel) :: new_pixel
+    type(pixel) :: pixel_new
 
     ! Range checks for RGBA.
     if (r < 0 .or. r > 255) then
@@ -72,22 +72,22 @@ contains
       error stop "[RGBA Texture] Error: Alpha is out of range. Range: [0-255]. Received: ["//int_to_string(a)//"]"
     end if
 
-    new_pixel%r = r
-    new_pixel%g = g
-    new_pixel%b = b
-    new_pixel%a = a
+    pixel_new%r = r
+    pixel_new%g = g
+    pixel_new%b = b
+    pixel_new%a = a
   end function pixel_constructor
 
 
   !* Constructor for raw rgba8 data.
-  function rgba8_texture_constructor(raw_texture_memory_u8, width, height) result(new_rgba_texture)
+  function rgba8_texture_constructor(raw_texture_memory_u8, width, height) result(rgba_texture_new)
     use :: string
     use :: math_helpers
     implicit none
 
     integer(1), dimension(:) :: raw_texture_memory_u8
     integer(c_int), intent(in), value :: width, height
-    type(memory_texture) :: new_rgba_texture
+    type(memory_texture) :: rgba_texture_new
     integer(c_int) :: array_length, pixel_array_length, i, current_index
     integer(c_int), dimension(:), allocatable :: raw_texture_memory_i32
 
@@ -99,14 +99,14 @@ contains
       error stop "[RGBA Texture] Error: Received raw texture memory with assumed width ["//int_to_string(width)//"] | height ["//int_to_string(height)//"]. Assumed size is wrong."
     end if
 
-    new_rgba_texture%width = width
-    new_rgba_texture%height = height
+    rgba_texture_new%width = width
+    rgba_texture_new%height = height
 
     ! Shift this into a format we can use.
     raw_texture_memory_i32 = c_uchar_to_int_array(raw_texture_memory_u8)
 
     ! Allocate the array.
-    allocate(new_rgba_texture%pixels(pixel_array_length))
+    allocate(rgba_texture_new%pixels(pixel_array_length))
 
     do i = 1,pixel_array_length
 
@@ -114,7 +114,7 @@ contains
       current_index = ((i - 1) * 4) + 1
 
       ! Now we create the pixel.
-      new_rgba_texture%pixels(i) = pixel( &
+      rgba_texture_new%pixels(i) = pixel( &
         raw_texture_memory_i32(current_index), &
         raw_texture_memory_i32(current_index + 1), &
         raw_texture_memory_i32(current_index + 2), &
@@ -122,26 +122,26 @@ contains
         )
     end do
 
-    new_rgba_texture%pixel_array_length = pixel_array_length
+    rgba_texture_new%pixel_array_length = pixel_array_length
   end function rgba8_texture_constructor
 
 
   !* Constructor for a blank memory texture with a size.
-  function blank_memory_texture_constructor(width, height) result(new_rgba_texture)
+  function blank_memory_texture_constructor(width, height) result(rgba_texture_new)
     implicit none
 
     integer(c_int), intent(in), value :: width, height
-    type(memory_texture) :: new_rgba_texture
+    type(memory_texture) :: rgba_texture_new
     integer(c_int) :: pixel_array_length
 
     pixel_array_length = width * height
 
-    new_rgba_texture%width = width
-    new_rgba_texture%height = height
-    new_rgba_texture%pixel_array_length = pixel_array_length
+    rgba_texture_new%width = width
+    rgba_texture_new%height = height
+    rgba_texture_new%pixel_array_length = pixel_array_length
 
     ! Pretty simple.
-    allocate(new_rgba_texture%pixels(pixel_array_length))
+    allocate(rgba_texture_new%pixels(pixel_array_length))
   end function blank_memory_texture_constructor
 
 
@@ -179,28 +179,28 @@ contains
 
 
   !* Set the pixel of a texture.
-  subroutine memory_texture_set_pixel(this, x, y, new_pixel)
+  subroutine memory_texture_set_pixel(this, x, y, pixel_new)
     implicit none
 
     class(memory_texture), intent(inout) :: this
     integer(c_int), intent(in), value :: x, y
-    type(pixel), intent(in) :: new_pixel
+    type(pixel), intent(in) :: pixel_new
     integer(c_int) :: i
 
     i = this%position_to_index(x, y)
 
-    this%pixels(i) = new_pixel
+    this%pixels(i) = pixel_new
   end subroutine memory_texture_set_pixel
 
 
   !* Will extract the workable pixel data into a uint8 array which should never be modified.
-  function memory_texture_get_raw_data(this) result(new_raw_texture_data)
+  function memory_texture_get_raw_data(this) result(raw_texture_data_new)
     use :: math_helpers, only: int_to_c_uchar_array
     implicit none
 
     class(memory_texture), intent(in) :: this
     integer(c_int), dimension(:), allocatable :: temporary_integer_data
-    integer(1), dimension(:), allocatable :: new_raw_texture_data
+    integer(1), dimension(:), allocatable :: raw_texture_data_new
     integer(c_int) :: raw_size, i, current_raw_index
     type(pixel) :: current_pixel
 
@@ -223,7 +223,7 @@ contains
     end do
 
     ! Finally, transmute it into uint_8_t.
-    new_raw_texture_data = int_to_c_uchar_array(temporary_integer_data)
+    raw_texture_data_new = int_to_c_uchar_array(temporary_integer_data)
   end function memory_texture_get_raw_data
 
 

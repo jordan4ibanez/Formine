@@ -178,12 +178,12 @@ contains
 
 
   !* This will take the mod folder's conf file (if it exists) and parse it.
-  function construct_mod_config_from_file(path, mod_path) result(new_mod_config)
+  function construct_mod_config_from_file(path, mod_path) result(mod_config_new)
     use :: files
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: path, mod_path
-    type(mod_config) :: new_mod_config
+    type(mod_config) :: mod_config_new
     type(file_reader) :: reader
     character(len = :, kind = c_char), allocatable :: temp_string, value_string
     integer(c_int) :: i
@@ -207,17 +207,17 @@ contains
         if (value_string == "") then
           error stop "[API] error: Missing value for [mod.conf] key [name]."
         end if
-        new_mod_config%name = value_string
+        mod_config_new%name = value_string
       else if (string_starts_with(temp_string, "description = ")) then
         value_string = string_get_right_of_character(temp_string, "=")
         if (value_string == "") then
           error stop "[API] error: Missing value for [mod.conf] key [description]."
         end if
-        new_mod_config%description = value_string
+        mod_config_new%description = value_string
       end if
     end do
 
-    new_mod_config%path = mod_path
+    mod_config_new%path = mod_path
   end function construct_mod_config_from_file
 
 

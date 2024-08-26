@@ -49,12 +49,12 @@ contains
   end subroutine camera_set_position
 
 
-  subroutine camera_set_position_vec3d(new_position)
+  subroutine camera_set_position_vec3d(position_new)
     implicit none
 
-    type(vec3d), intent(in), value :: new_position
+    type(vec3d), intent(in), value :: position_new
 
-    camera_position = new_position
+    camera_position = position_new
   end subroutine camera_set_position_vec3d
 
 

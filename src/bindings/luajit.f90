@@ -196,11 +196,11 @@ module luajit
 !* STATE MANIPULATION. =================================================================================
 
 
-    function internal_lual_newstate() result(new_state) bind(c, name = "luaL_newstate")
+    function internal_lual_newstate() result(state_new) bind(c, name = "luaL_newstate")
       use, intrinsic :: iso_c_binding
       implicit none
 
-      type(c_ptr) :: new_state
+      type(c_ptr) :: state_new
     end function internal_lual_newstate
 
 
@@ -401,14 +401,14 @@ module luajit
     end function lua_toboolean
 
 
-    function lua_tolstring(state, index, length_of_returning_string) result(new_string_pointer) bind(c, name = "lua_tolstring")
+    function lua_tolstring(state, index, length_of_returning_string) result(string_pointer_new) bind(c, name = "lua_tolstring")
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr), intent(in), value :: state
       integer(c_int), intent(in), value :: index
       integer(c_size_t), intent(inout) :: length_of_returning_string
-      type(c_ptr) :: new_string_pointer
+      type(c_ptr) :: string_pointer_new
     end function lua_tolstring
 
 
@@ -868,20 +868,20 @@ contains
 
   !* Get a string from lua. This was a macro in LuaJIT.
   !* This has been reconfigured to work with Fortran.
-  function lua_tostring(state, index) result(new_string)
+  function lua_tostring(state, index) result(string_new)
     use :: string
     implicit none
 
     type(c_ptr), intent(in), value :: state
     integer(c_int), intent(in), value :: index
-    character(len = :, kind = c_char), allocatable :: new_string
+    character(len = :, kind = c_char), allocatable :: string_new
     integer(c_size_t) :: lua_string_length
     integer(c_int) :: casted_size
     type(c_ptr) :: c_string_pointer
 
     c_string_pointer = lua_tolstring(state, index, lua_string_length)
     casted_size = int(lua_string_length, kind = c_int)
-    new_string = string_from_c(c_string_pointer, casted_size + 1)
+    string_new = string_from_c(c_string_pointer, casted_size + 1)
     !? c_string_pointer is not done with malloc. No need to free. (tested)
   end function lua_tostring
 

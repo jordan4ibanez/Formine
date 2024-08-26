@@ -63,29 +63,29 @@ contains
   !* Constructor.
 
 
-  type(vec2f) function constructor_scalar_f32(i) result(new_vec2f)
+  type(vec2f) function constructor_scalar_f32(i) result(vec2f_new)
     implicit none
     real(c_float), intent(in), value :: i
 
-    new_vec2f = i
+    vec2f_new = i
   end function constructor_scalar_f32
 
 
-  type(vec2f) function constructor_raw_f32(x,y,z) result(new_vec2f)
+  type(vec2f) function constructor_raw_f32(x,y,z) result(vec2f_new)
     implicit none
 
     real(c_float), intent(in), value :: x,y,z
 
-    new_vec2f = [x,y,z]
+    vec2f_new = [x,y,z]
   end function constructor_raw_f32
 
 
-  type(vec2f) function constructor_array_f32(xyz_array) result(new_vec2f)
+  type(vec2f) function constructor_array_f32(xyz_array) result(vec2f_new)
     implicit none
 
     real(c_float), dimension(2), intent(in) :: xyz_array
 
-    new_vec2f = xyz_array(1:2)
+    vec2f_new = xyz_array(1:2)
   end function constructor_array_f32
 
 
@@ -164,154 +164,154 @@ contains
   !* Addition
 
 
-  type(vec2f) function add_scalar_f32(this, i) result(new_vec2f)
+  type(vec2f) function add_scalar_f32(this, i) result(vec2f_new)
     implicit none
 
     class(vec2f), intent(in) :: this
     real(c_float), intent(in), value :: i
 
-    new_vec2f%x = this%x + i
-    new_vec2f%y = this%y + i
+    vec2f_new%x = this%x + i
+    vec2f_new%y = this%y + i
   end function add_scalar_f32
 
 
-  type(vec2f) function add_array_f32(this, arr) result(new_vec2f)
+  type(vec2f) function add_array_f32(this, arr) result(vec2f_new)
     implicit none
 
     class(vec2f), intent(in) :: this
     real(c_float), dimension(2), intent(in) :: arr
 
-    new_vec2f%x = this%x + arr(1)
-    new_vec2f%y = this%y + arr(2)
+    vec2f_new%x = this%x + arr(1)
+    vec2f_new%y = this%y + arr(2)
   end function add_array_f32
 
 
-  type(vec2f) function add_vec2f(this, other) result(new_vec2f)
+  type(vec2f) function add_vec2f(this, other) result(vec2f_new)
     implicit none
 
     class(vec2f), intent(in) :: this
     type(vec2f), intent(in), value :: other
 
-    new_vec2f%x = this%x + other%x
-    new_vec2f%y = this%y + other%y
+    vec2f_new%x = this%x + other%x
+    vec2f_new%y = this%y + other%y
   end function add_vec2f
 
 
   !* Subtraction.
 
 
-  type(vec2f) function subtract_scalar_f32(this, i) result(new_vec2f)
+  type(vec2f) function subtract_scalar_f32(this, i) result(vec2f_new)
     implicit none
 
     class(vec2f), intent(in) :: this
     real(c_float), intent(in), value :: i
 
-    new_vec2f%x = this%x - i
-    new_vec2f%y = this%y - i
+    vec2f_new%x = this%x - i
+    vec2f_new%y = this%y - i
   end function subtract_scalar_f32
 
 
-  type(vec2f) function subtract_array_f32(this, arr) result(new_vec2f)
+  type(vec2f) function subtract_array_f32(this, arr) result(vec2f_new)
     implicit none
 
     class(vec2f), intent(in) :: this
     real(c_float), dimension(2), intent(in) :: arr
 
-    new_vec2f%x = this%x - arr(1)
-    new_vec2f%y = this%y - arr(2)
+    vec2f_new%x = this%x - arr(1)
+    vec2f_new%y = this%y - arr(2)
   end function subtract_array_f32
 
 
-  type(vec2f) function subtract_vec2f(this, other) result(new_vec2f)
+  type(vec2f) function subtract_vec2f(this, other) result(vec2f_new)
     implicit none
 
     class(vec2f), intent(in) :: this
     type(vec2f), intent(in), value :: other
 
-    new_vec2f%x = this%x - other%x
-    new_vec2f%y = this%y - other%y
+    vec2f_new%x = this%x - other%x
+    vec2f_new%y = this%y - other%y
   end function subtract_vec2f
 
 
   !* Multiplication.
 
 
-  type(vec2f) function multiply_scalar_f32(this, i) result(new_vec2f)
+  type(vec2f) function multiply_scalar_f32(this, i) result(vec2f_new)
     implicit none
 
     class(vec2f), intent(in) :: this
     real(c_float), intent(in), value :: i
 
-    new_vec2f%x = this%x * i
-    new_vec2f%y = this%y * i
+    vec2f_new%x = this%x * i
+    vec2f_new%y = this%y * i
   end function multiply_scalar_f32
 
 
-  type(vec2f) function multiply_array_f32(this, arr) result(new_vec2f)
+  type(vec2f) function multiply_array_f32(this, arr) result(vec2f_new)
     implicit none
 
     class(vec2f), intent(in) :: this
     real(c_float), dimension(2), intent(in) :: arr
 
-    new_vec2f%x = this%x * arr(1)
-    new_vec2f%y = this%y * arr(2)
+    vec2f_new%x = this%x * arr(1)
+    vec2f_new%y = this%y * arr(2)
   end function multiply_array_f32
 
 
-  type(vec2f) function multiply_vec2f(this, other) result(new_vec2f)
+  type(vec2f) function multiply_vec2f(this, other) result(vec2f_new)
     implicit none
 
     class(vec2f), intent(in) :: this
     type(vec2f), intent(in), value :: other
 
-    new_vec2f%x = this%x * other%x
-    new_vec2f%y = this%y * other%y
+    vec2f_new%x = this%x * other%x
+    vec2f_new%y = this%y * other%y
   end function multiply_vec2f
 
 
   !* Division.
 
 
-  type(vec2f) function divide_scalar_f32(this, i) result(new_vec2f)
+  type(vec2f) function divide_scalar_f32(this, i) result(vec2f_new)
     implicit none
 
     class(vec2f), intent(in) :: this
     real(c_float), intent(in), value :: i
 
-    new_vec2f%x = this%x / i
-    new_vec2f%y = this%y / i
+    vec2f_new%x = this%x / i
+    vec2f_new%y = this%y / i
   end function divide_scalar_f32
 
 
-  type(vec2f) function divide_array_f32(this, arr) result(new_vec2f)
+  type(vec2f) function divide_array_f32(this, arr) result(vec2f_new)
     implicit none
 
     class(vec2f), intent(in) :: this
     real(c_float), dimension(2), intent(in) :: arr
 
-    new_vec2f%x = this%x / arr(1)
-    new_vec2f%y = this%y / arr(2)
+    vec2f_new%x = this%x / arr(1)
+    vec2f_new%y = this%y / arr(2)
   end function divide_array_f32
 
 
-  type(vec2f) function divide_vec2f(this, other) result(new_vec2f)
+  type(vec2f) function divide_vec2f(this, other) result(vec2f_new)
     implicit none
 
     class(vec2f), intent(in) :: this
     type(vec2f), intent(in), value :: other
 
-    new_vec2f%x = this%x / other%x
-    new_vec2f%y = this%y / other%y
+    vec2f_new%x = this%x / other%x
+    vec2f_new%y = this%y / other%y
   end function divide_vec2f
 
 
-  function as_array(this) result(new_array)
+  function as_array(this) result(array_new)
     implicit none
 
     class(vec2f), intent(in) :: this
-    real(c_float), dimension(2) :: new_array
+    real(c_float), dimension(2) :: array_new
 
-    new_array = [this%x, this%y]
+    array_new = [this%x, this%y]
   end function
 
 

@@ -96,53 +96,53 @@ module array
 contains
 
 
-  subroutine assign_int(this, new_data)
+  subroutine assign_int(this, data_new)
     implicit none
 
     class(int_array), intent(inout) :: this
-    integer(c_int), dimension(:), intent(in) :: new_data
+    integer(c_int), dimension(:), intent(in) :: data_new
 
-    this%data = new_data
+    this%data = data_new
   end subroutine assign_int
 
 
-  subroutine assign_int64(this, new_data)
+  subroutine assign_int64(this, data_new)
     implicit none
 
     class(int64_array), intent(inout) :: this
-    integer(c_int64_t), dimension(:), intent(in) :: new_data
+    integer(c_int64_t), dimension(:), intent(in) :: data_new
 
-    this%data = new_data
+    this%data = data_new
   end subroutine assign_int64
 
 
-  subroutine assign_float(this, new_data)
+  subroutine assign_float(this, data_new)
     implicit none
 
     class(float_array), intent(inout) :: this
-    real(c_float), dimension(:), intent(in) :: new_data
+    real(c_float), dimension(:), intent(in) :: data_new
 
-    this%data = new_data
+    this%data = data_new
   end subroutine assign_float
 
 
-  subroutine assign_double(this, new_data)
+  subroutine assign_double(this, data_new)
     implicit none
 
     class(double_array), intent(inout) :: this
-    real(c_double), dimension(:), intent(in) :: new_data
+    real(c_double), dimension(:), intent(in) :: data_new
 
-    this%data = new_data
+    this%data = data_new
   end subroutine assign_double
 
 
-  subroutine assign_string(this, new_data)
+  subroutine assign_string(this, data_new)
     implicit none
 
     class(string_array), intent(inout) :: this
-    type(heap_string), dimension(:), intent(in) :: new_data
+    type(heap_string), dimension(:), intent(in) :: data_new
 
-    this%data = new_data
+    this%data = data_new
   end subroutine assign_string
 
 
@@ -163,468 +163,468 @@ contains
   end function ex
 
 
-  function constructor_int(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(new_int_array)
+  function constructor_int(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(int_array_new)
     implicit none
 
     integer(c_int), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
-    type(int_array) :: new_int_array
+    type(int_array) :: int_array_new
     integer(c_int) :: index, allocation_size
 
     allocation_size = ex(a)+ex(b)+ex(c)+ex(d)+ex(e)+ex(f)+ex(g)+ex(h)+ex(i)+ex(j)+ex(k)+ex(l)+ex(m)+ex(n)+ex(o)+ex(p)+ex(q)+ex(r)+ex(s)+ex(t)+ex(u)+ex(v)+ex(w)+ex(x)+ex(y)+ex(z)
 
-    allocate(new_int_array%data(allocation_size))
+    allocate(int_array_new%data(allocation_size))
 
     index = 1
 
     if (index > allocation_size) return
-    if (present(a)) new_int_array%data(index) = a
+    if (present(a)) int_array_new%data(index) = a
     index = index + 1
     if (index > allocation_size) return
-    if (present(b)) new_int_array%data(index) = b
+    if (present(b)) int_array_new%data(index) = b
     index = index + 1
     if (index > allocation_size) return
-    if (present(c)) new_int_array%data(index) = c
+    if (present(c)) int_array_new%data(index) = c
     index = index + 1
     if (index > allocation_size) return
-    if (present(d)) new_int_array%data(index) = d
+    if (present(d)) int_array_new%data(index) = d
     index = index + 1
     if (index > allocation_size) return
-    if (present(e)) new_int_array%data(index) = e
+    if (present(e)) int_array_new%data(index) = e
     index = index + 1
     if (index > allocation_size) return
-    if (present(f)) new_int_array%data(index) = f
+    if (present(f)) int_array_new%data(index) = f
     index = index + 1
     if (index > allocation_size) return
-    if (present(g)) new_int_array%data(index) = g
+    if (present(g)) int_array_new%data(index) = g
     index = index + 1
     if (index > allocation_size) return
-    if (present(h)) new_int_array%data(index) = h
+    if (present(h)) int_array_new%data(index) = h
     index = index + 1
     if (index > allocation_size) return
-    if (present(i)) new_int_array%data(index) = i
+    if (present(i)) int_array_new%data(index) = i
     index = index + 1
     if (index > allocation_size) return
-    if (present(j)) new_int_array%data(index) = j
+    if (present(j)) int_array_new%data(index) = j
     index = index + 1
     if (index > allocation_size) return
-    if (present(k)) new_int_array%data(index) = k
+    if (present(k)) int_array_new%data(index) = k
     index = index + 1
     if (index > allocation_size) return
-    if (present(l)) new_int_array%data(index) = l
+    if (present(l)) int_array_new%data(index) = l
     index = index + 1
     if (index > allocation_size) return
-    if (present(m)) new_int_array%data(index) = m
+    if (present(m)) int_array_new%data(index) = m
     index = index + 1
     if (index > allocation_size) return
-    if (present(n)) new_int_array%data(index) = n
+    if (present(n)) int_array_new%data(index) = n
     index = index + 1
     if (index > allocation_size) return
-    if (present(o)) new_int_array%data(index) = o
+    if (present(o)) int_array_new%data(index) = o
     index = index + 1
     if (index > allocation_size) return
-    if (present(p)) new_int_array%data(index) = p
+    if (present(p)) int_array_new%data(index) = p
     index = index + 1
     if (index > allocation_size) return
-    if (present(q)) new_int_array%data(index) = q
+    if (present(q)) int_array_new%data(index) = q
     index = index + 1
     if (index > allocation_size) return
-    if (present(r)) new_int_array%data(index) = r
+    if (present(r)) int_array_new%data(index) = r
     index = index + 1
     if (index > allocation_size) return
-    if (present(s)) new_int_array%data(index) = s
+    if (present(s)) int_array_new%data(index) = s
     index = index + 1
     if (index > allocation_size) return
-    if (present(t)) new_int_array%data(index) = t
+    if (present(t)) int_array_new%data(index) = t
     index = index + 1
     if (index > allocation_size) return
-    if (present(u)) new_int_array%data(index) = u
+    if (present(u)) int_array_new%data(index) = u
     index = index + 1
     if (index > allocation_size) return
-    if (present(v)) new_int_array%data(index) = v
+    if (present(v)) int_array_new%data(index) = v
     index = index + 1
     if (index > allocation_size) return
-    if (present(w)) new_int_array%data(index) = w
+    if (present(w)) int_array_new%data(index) = w
     index = index + 1
     if (index > allocation_size) return
-    if (present(x)) new_int_array%data(index) = x
+    if (present(x)) int_array_new%data(index) = x
     index = index + 1
     if (index > allocation_size) return
-    if (present(y)) new_int_array%data(index) = y
+    if (present(y)) int_array_new%data(index) = y
     index = index + 1
     if (index > allocation_size) return
-    if (present(z)) new_int_array%data(index) = z
+    if (present(z)) int_array_new%data(index) = z
   end function constructor_int
 
 
-  function constructor_int64(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(new_int64_array)
+  function constructor_int64(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(int64_array_new)
     implicit none
 
     integer(c_int64_t), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
-    type(int64_array) :: new_int64_array
+    type(int64_array) :: int64_array_new
     integer(c_int) :: index, allocation_size
 
     allocation_size = ex(a)+ex(b)+ex(c)+ex(d)+ex(e)+ex(f)+ex(g)+ex(h)+ex(i)+ex(j)+ex(k)+ex(l)+ex(m)+ex(n)+ex(o)+ex(p)+ex(q)+ex(r)+ex(s)+ex(t)+ex(u)+ex(v)+ex(w)+ex(x)+ex(y)+ex(z)
 
-    allocate(new_int64_array%data(allocation_size))
+    allocate(int64_array_new%data(allocation_size))
 
     index = 1
 
     if (index > allocation_size) return
-    if (present(a)) new_int64_array%data(index) = a
+    if (present(a)) int64_array_new%data(index) = a
     index = index + 1
     if (index > allocation_size) return
-    if (present(b)) new_int64_array%data(index) = b
+    if (present(b)) int64_array_new%data(index) = b
     index = index + 1
     if (index > allocation_size) return
-    if (present(c)) new_int64_array%data(index) = c
+    if (present(c)) int64_array_new%data(index) = c
     index = index + 1
     if (index > allocation_size) return
-    if (present(d)) new_int64_array%data(index) = d
+    if (present(d)) int64_array_new%data(index) = d
     index = index + 1
     if (index > allocation_size) return
-    if (present(e)) new_int64_array%data(index) = e
+    if (present(e)) int64_array_new%data(index) = e
     index = index + 1
     if (index > allocation_size) return
-    if (present(f)) new_int64_array%data(index) = f
+    if (present(f)) int64_array_new%data(index) = f
     index = index + 1
     if (index > allocation_size) return
-    if (present(g)) new_int64_array%data(index) = g
+    if (present(g)) int64_array_new%data(index) = g
     index = index + 1
     if (index > allocation_size) return
-    if (present(h)) new_int64_array%data(index) = h
+    if (present(h)) int64_array_new%data(index) = h
     index = index + 1
     if (index > allocation_size) return
-    if (present(i)) new_int64_array%data(index) = i
+    if (present(i)) int64_array_new%data(index) = i
     index = index + 1
     if (index > allocation_size) return
-    if (present(j)) new_int64_array%data(index) = j
+    if (present(j)) int64_array_new%data(index) = j
     index = index + 1
     if (index > allocation_size) return
-    if (present(k)) new_int64_array%data(index) = k
+    if (present(k)) int64_array_new%data(index) = k
     index = index + 1
     if (index > allocation_size) return
-    if (present(l)) new_int64_array%data(index) = l
+    if (present(l)) int64_array_new%data(index) = l
     index = index + 1
     if (index > allocation_size) return
-    if (present(m)) new_int64_array%data(index) = m
+    if (present(m)) int64_array_new%data(index) = m
     index = index + 1
     if (index > allocation_size) return
-    if (present(n)) new_int64_array%data(index) = n
+    if (present(n)) int64_array_new%data(index) = n
     index = index + 1
     if (index > allocation_size) return
-    if (present(o)) new_int64_array%data(index) = o
+    if (present(o)) int64_array_new%data(index) = o
     index = index + 1
     if (index > allocation_size) return
-    if (present(p)) new_int64_array%data(index) = p
+    if (present(p)) int64_array_new%data(index) = p
     index = index + 1
     if (index > allocation_size) return
-    if (present(q)) new_int64_array%data(index) = q
+    if (present(q)) int64_array_new%data(index) = q
     index = index + 1
     if (index > allocation_size) return
-    if (present(r)) new_int64_array%data(index) = r
+    if (present(r)) int64_array_new%data(index) = r
     index = index + 1
     if (index > allocation_size) return
-    if (present(s)) new_int64_array%data(index) = s
+    if (present(s)) int64_array_new%data(index) = s
     index = index + 1
     if (index > allocation_size) return
-    if (present(t)) new_int64_array%data(index) = t
+    if (present(t)) int64_array_new%data(index) = t
     index = index + 1
     if (index > allocation_size) return
-    if (present(u)) new_int64_array%data(index) = u
+    if (present(u)) int64_array_new%data(index) = u
     index = index + 1
     if (index > allocation_size) return
-    if (present(v)) new_int64_array%data(index) = v
+    if (present(v)) int64_array_new%data(index) = v
     index = index + 1
     if (index > allocation_size) return
-    if (present(w)) new_int64_array%data(index) = w
+    if (present(w)) int64_array_new%data(index) = w
     index = index + 1
     if (index > allocation_size) return
-    if (present(x)) new_int64_array%data(index) = x
+    if (present(x)) int64_array_new%data(index) = x
     index = index + 1
     if (index > allocation_size) return
-    if (present(y)) new_int64_array%data(index) = y
+    if (present(y)) int64_array_new%data(index) = y
     index = index + 1
     if (index > allocation_size) return
-    if (present(z)) new_int64_array%data(index) = z
+    if (present(z)) int64_array_new%data(index) = z
   end function constructor_int64
 
 
-  function constructor_float(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(new_float_array)
+  function constructor_float(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(float_array_new)
     implicit none
 
     real(c_float), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
-    type(float_array) :: new_float_array
+    type(float_array) :: float_array_new
     integer(c_int) :: index, allocation_size
 
     allocation_size = ex(a)+ex(b)+ex(c)+ex(d)+ex(e)+ex(f)+ex(g)+ex(h)+ex(i)+ex(j)+ex(k)+ex(l)+ex(m)+ex(n)+ex(o)+ex(p)+ex(q)+ex(r)+ex(s)+ex(t)+ex(u)+ex(v)+ex(w)+ex(x)+ex(y)+ex(z)
 
-    allocate(new_float_array%data(allocation_size))
+    allocate(float_array_new%data(allocation_size))
 
     index = 1
 
     if (index > allocation_size) return
-    if (present(a)) new_float_array%data(index) = a
+    if (present(a)) float_array_new%data(index) = a
     index = index + 1
     if (index > allocation_size) return
-    if (present(b)) new_float_array%data(index) = b
+    if (present(b)) float_array_new%data(index) = b
     index = index + 1
     if (index > allocation_size) return
-    if (present(c)) new_float_array%data(index) = c
+    if (present(c)) float_array_new%data(index) = c
     index = index + 1
     if (index > allocation_size) return
-    if (present(d)) new_float_array%data(index) = d
+    if (present(d)) float_array_new%data(index) = d
     index = index + 1
     if (index > allocation_size) return
-    if (present(e)) new_float_array%data(index) = e
+    if (present(e)) float_array_new%data(index) = e
     index = index + 1
     if (index > allocation_size) return
-    if (present(f)) new_float_array%data(index) = f
+    if (present(f)) float_array_new%data(index) = f
     index = index + 1
     if (index > allocation_size) return
-    if (present(g)) new_float_array%data(index) = g
+    if (present(g)) float_array_new%data(index) = g
     index = index + 1
     if (index > allocation_size) return
-    if (present(h)) new_float_array%data(index) = h
+    if (present(h)) float_array_new%data(index) = h
     index = index + 1
     if (index > allocation_size) return
-    if (present(i)) new_float_array%data(index) = i
+    if (present(i)) float_array_new%data(index) = i
     index = index + 1
     if (index > allocation_size) return
-    if (present(j)) new_float_array%data(index) = j
+    if (present(j)) float_array_new%data(index) = j
     index = index + 1
     if (index > allocation_size) return
-    if (present(k)) new_float_array%data(index) = k
+    if (present(k)) float_array_new%data(index) = k
     index = index + 1
     if (index > allocation_size) return
-    if (present(l)) new_float_array%data(index) = l
+    if (present(l)) float_array_new%data(index) = l
     index = index + 1
     if (index > allocation_size) return
-    if (present(m)) new_float_array%data(index) = m
+    if (present(m)) float_array_new%data(index) = m
     index = index + 1
     if (index > allocation_size) return
-    if (present(n)) new_float_array%data(index) = n
+    if (present(n)) float_array_new%data(index) = n
     index = index + 1
     if (index > allocation_size) return
-    if (present(o)) new_float_array%data(index) = o
+    if (present(o)) float_array_new%data(index) = o
     index = index + 1
     if (index > allocation_size) return
-    if (present(p)) new_float_array%data(index) = p
+    if (present(p)) float_array_new%data(index) = p
     index = index + 1
     if (index > allocation_size) return
-    if (present(q)) new_float_array%data(index) = q
+    if (present(q)) float_array_new%data(index) = q
     index = index + 1
     if (index > allocation_size) return
-    if (present(r)) new_float_array%data(index) = r
+    if (present(r)) float_array_new%data(index) = r
     index = index + 1
     if (index > allocation_size) return
-    if (present(s)) new_float_array%data(index) = s
+    if (present(s)) float_array_new%data(index) = s
     index = index + 1
     if (index > allocation_size) return
-    if (present(t)) new_float_array%data(index) = t
+    if (present(t)) float_array_new%data(index) = t
     index = index + 1
     if (index > allocation_size) return
-    if (present(u)) new_float_array%data(index) = u
+    if (present(u)) float_array_new%data(index) = u
     index = index + 1
     if (index > allocation_size) return
-    if (present(v)) new_float_array%data(index) = v
+    if (present(v)) float_array_new%data(index) = v
     index = index + 1
     if (index > allocation_size) return
-    if (present(w)) new_float_array%data(index) = w
+    if (present(w)) float_array_new%data(index) = w
     index = index + 1
     if (index > allocation_size) return
-    if (present(x)) new_float_array%data(index) = x
+    if (present(x)) float_array_new%data(index) = x
     index = index + 1
     if (index > allocation_size) return
-    if (present(y)) new_float_array%data(index) = y
+    if (present(y)) float_array_new%data(index) = y
     index = index + 1
     if (index > allocation_size) return
-    if (present(z)) new_float_array%data(index) = z
+    if (present(z)) float_array_new%data(index) = z
   end function constructor_float
 
 
-  function constructor_double(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(new_double_array)
+  function constructor_double(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(double_array_new)
     implicit none
 
     real(c_double), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
-    type(double_array) :: new_double_array
+    type(double_array) :: double_array_new
     integer(c_int) :: index, allocation_size
 
     allocation_size = ex(a)+ex(b)+ex(c)+ex(d)+ex(e)+ex(f)+ex(g)+ex(h)+ex(i)+ex(j)+ex(k)+ex(l)+ex(m)+ex(n)+ex(o)+ex(p)+ex(q)+ex(r)+ex(s)+ex(t)+ex(u)+ex(v)+ex(w)+ex(x)+ex(y)+ex(z)
 
-    allocate(new_double_array%data(allocation_size))
+    allocate(double_array_new%data(allocation_size))
 
     index = 1
 
     if (index > allocation_size) return
-    if (present(a)) new_double_array%data(index) = a
+    if (present(a)) double_array_new%data(index) = a
     index = index + 1
     if (index > allocation_size) return
-    if (present(b)) new_double_array%data(index) = b
+    if (present(b)) double_array_new%data(index) = b
     index = index + 1
     if (index > allocation_size) return
-    if (present(c)) new_double_array%data(index) = c
+    if (present(c)) double_array_new%data(index) = c
     index = index + 1
     if (index > allocation_size) return
-    if (present(d)) new_double_array%data(index) = d
+    if (present(d)) double_array_new%data(index) = d
     index = index + 1
     if (index > allocation_size) return
-    if (present(e)) new_double_array%data(index) = e
+    if (present(e)) double_array_new%data(index) = e
     index = index + 1
     if (index > allocation_size) return
-    if (present(f)) new_double_array%data(index) = f
+    if (present(f)) double_array_new%data(index) = f
     index = index + 1
     if (index > allocation_size) return
-    if (present(g)) new_double_array%data(index) = g
+    if (present(g)) double_array_new%data(index) = g
     index = index + 1
     if (index > allocation_size) return
-    if (present(h)) new_double_array%data(index) = h
+    if (present(h)) double_array_new%data(index) = h
     index = index + 1
     if (index > allocation_size) return
-    if (present(i)) new_double_array%data(index) = i
+    if (present(i)) double_array_new%data(index) = i
     index = index + 1
     if (index > allocation_size) return
-    if (present(j)) new_double_array%data(index) = j
+    if (present(j)) double_array_new%data(index) = j
     index = index + 1
     if (index > allocation_size) return
-    if (present(k)) new_double_array%data(index) = k
+    if (present(k)) double_array_new%data(index) = k
     index = index + 1
     if (index > allocation_size) return
-    if (present(l)) new_double_array%data(index) = l
+    if (present(l)) double_array_new%data(index) = l
     index = index + 1
     if (index > allocation_size) return
-    if (present(m)) new_double_array%data(index) = m
+    if (present(m)) double_array_new%data(index) = m
     index = index + 1
     if (index > allocation_size) return
-    if (present(n)) new_double_array%data(index) = n
+    if (present(n)) double_array_new%data(index) = n
     index = index + 1
     if (index > allocation_size) return
-    if (present(o)) new_double_array%data(index) = o
+    if (present(o)) double_array_new%data(index) = o
     index = index + 1
     if (index > allocation_size) return
-    if (present(p)) new_double_array%data(index) = p
+    if (present(p)) double_array_new%data(index) = p
     index = index + 1
     if (index > allocation_size) return
-    if (present(q)) new_double_array%data(index) = q
+    if (present(q)) double_array_new%data(index) = q
     index = index + 1
     if (index > allocation_size) return
-    if (present(r)) new_double_array%data(index) = r
+    if (present(r)) double_array_new%data(index) = r
     index = index + 1
     if (index > allocation_size) return
-    if (present(s)) new_double_array%data(index) = s
+    if (present(s)) double_array_new%data(index) = s
     index = index + 1
     if (index > allocation_size) return
-    if (present(t)) new_double_array%data(index) = t
+    if (present(t)) double_array_new%data(index) = t
     index = index + 1
     if (index > allocation_size) return
-    if (present(u)) new_double_array%data(index) = u
+    if (present(u)) double_array_new%data(index) = u
     index = index + 1
     if (index > allocation_size) return
-    if (present(v)) new_double_array%data(index) = v
+    if (present(v)) double_array_new%data(index) = v
     index = index + 1
     if (index > allocation_size) return
-    if (present(w)) new_double_array%data(index) = w
+    if (present(w)) double_array_new%data(index) = w
     index = index + 1
     if (index > allocation_size) return
-    if (present(x)) new_double_array%data(index) = x
+    if (present(x)) double_array_new%data(index) = x
     index = index + 1
     if (index > allocation_size) return
-    if (present(y)) new_double_array%data(index) = y
+    if (present(y)) double_array_new%data(index) = y
     index = index + 1
     if (index > allocation_size) return
-    if (present(z)) new_double_array%data(index) = z
+    if (present(z)) double_array_new%data(index) = z
   end function constructor_double
 
 
-  function constructor_string(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(new_string_array)
+  function constructor_string(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) result(string_array_new)
     implicit none
 
     character(len = *, kind = c_char), intent(in), optional :: a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
-    type(string_array) :: new_string_array
+    type(string_array) :: string_array_new
     integer(c_int) :: index, allocation_size
 
     allocation_size = ex(a)+ex(b)+ex(c)+ex(d)+ex(e)+ex(f)+ex(g)+ex(h)+ex(i)+ex(j)+ex(k)+ex(l)+ex(m)+ex(n)+ex(o)+ex(p)+ex(q)+ex(r)+ex(s)+ex(t)+ex(u)+ex(v)+ex(w)+ex(x)+ex(y)+ex(z)
 
-    allocate(new_string_array%data(allocation_size))
+    allocate(string_array_new%data(allocation_size))
 
     index = 1
 
     if (index > allocation_size) return
-    if (present(a)) new_string_array%data(index) = a
+    if (present(a)) string_array_new%data(index) = a
     index = index + 1
     if (index > allocation_size) return
-    if (present(b)) new_string_array%data(index) = b
+    if (present(b)) string_array_new%data(index) = b
     index = index + 1
     if (index > allocation_size) return
-    if (present(c)) new_string_array%data(index) = c
+    if (present(c)) string_array_new%data(index) = c
     index = index + 1
     if (index > allocation_size) return
-    if (present(d)) new_string_array%data(index) = d
+    if (present(d)) string_array_new%data(index) = d
     index = index + 1
     if (index > allocation_size) return
-    if (present(e)) new_string_array%data(index) = e
+    if (present(e)) string_array_new%data(index) = e
     index = index + 1
     if (index > allocation_size) return
-    if (present(f)) new_string_array%data(index) = f
+    if (present(f)) string_array_new%data(index) = f
     index = index + 1
     if (index > allocation_size) return
-    if (present(g)) new_string_array%data(index) = g
+    if (present(g)) string_array_new%data(index) = g
     index = index + 1
     if (index > allocation_size) return
-    if (present(h)) new_string_array%data(index) = h
+    if (present(h)) string_array_new%data(index) = h
     index = index + 1
     if (index > allocation_size) return
-    if (present(i)) new_string_array%data(index) = i
+    if (present(i)) string_array_new%data(index) = i
     index = index + 1
     if (index > allocation_size) return
-    if (present(j)) new_string_array%data(index) = j
+    if (present(j)) string_array_new%data(index) = j
     index = index + 1
     if (index > allocation_size) return
-    if (present(k)) new_string_array%data(index) = k
+    if (present(k)) string_array_new%data(index) = k
     index = index + 1
     if (index > allocation_size) return
-    if (present(l)) new_string_array%data(index) = l
+    if (present(l)) string_array_new%data(index) = l
     index = index + 1
     if (index > allocation_size) return
-    if (present(m)) new_string_array%data(index) = m
+    if (present(m)) string_array_new%data(index) = m
     index = index + 1
     if (index > allocation_size) return
-    if (present(n)) new_string_array%data(index) = n
+    if (present(n)) string_array_new%data(index) = n
     index = index + 1
     if (index > allocation_size) return
-    if (present(o)) new_string_array%data(index) = o
+    if (present(o)) string_array_new%data(index) = o
     index = index + 1
     if (index > allocation_size) return
-    if (present(p)) new_string_array%data(index) = p
+    if (present(p)) string_array_new%data(index) = p
     index = index + 1
     if (index > allocation_size) return
-    if (present(q)) new_string_array%data(index) = q
+    if (present(q)) string_array_new%data(index) = q
     index = index + 1
     if (index > allocation_size) return
-    if (present(r)) new_string_array%data(index) = r
+    if (present(r)) string_array_new%data(index) = r
     index = index + 1
     if (index > allocation_size) return
-    if (present(s)) new_string_array%data(index) = s
+    if (present(s)) string_array_new%data(index) = s
     index = index + 1
     if (index > allocation_size) return
-    if (present(t)) new_string_array%data(index) = t
+    if (present(t)) string_array_new%data(index) = t
     index = index + 1
     if (index > allocation_size) return
-    if (present(u)) new_string_array%data(index) = u
+    if (present(u)) string_array_new%data(index) = u
     index = index + 1
     if (index > allocation_size) return
-    if (present(v)) new_string_array%data(index) = v
+    if (present(v)) string_array_new%data(index) = v
     index = index + 1
     if (index > allocation_size) return
-    if (present(w)) new_string_array%data(index) = w
+    if (present(w)) string_array_new%data(index) = w
     index = index + 1
     if (index > allocation_size) return
-    if (present(x)) new_string_array%data(index) = x
+    if (present(x)) string_array_new%data(index) = x
     index = index + 1
     if (index > allocation_size) return
-    if (present(y)) new_string_array%data(index) = y
+    if (present(y)) string_array_new%data(index) = y
     index = index + 1
     if (index > allocation_size) return
-    if (present(z)) new_string_array%data(index) = z
+    if (present(z)) string_array_new%data(index) = z
   end function constructor_string
 
 
@@ -701,11 +701,11 @@ contains
 
 
   !* Insert a value at the end of an i32 array.
-  function array_i32_insert(input, new_value) result(output)
+  function array_i32_insert(input, value_new) result(output)
     implicit none
 
     integer(c_int), dimension(:), intent(in) :: input
-    integer(c_int), intent(in), value :: new_value
+    integer(c_int), intent(in), value :: value_new
     integer(c_int), dimension(:), allocatable :: output
     integer(c_int) :: old_size, i
 
@@ -717,16 +717,16 @@ contains
       output(i) = input(i)
     end do
 
-    output(old_size + 1) = new_value
+    output(old_size + 1) = value_new
   end function array_i32_insert
 
 
   !* Insert a value at the end of a heap string array.
-  function array_string_insert(input, new_value) result(output)
+  function array_string_insert(input, value_new) result(output)
     implicit none
 
     type(heap_string), dimension(:), intent(in) :: input
-    type(heap_string), intent(in), value :: new_value
+    type(heap_string), intent(in), value :: value_new
     type(heap_string), dimension(:), allocatable :: output
     integer(c_int) :: old_size, i
 
@@ -738,17 +738,17 @@ contains
       output(i) = input(i)
     end do
 
-    output(old_size + 1) = new_value
+    output(old_size + 1) = value_new
   end function array_string_insert
 
 
   !* Insert a value at the end of a memory texture array.
-  function array_memory_texture_insert(input, new_value) result(output)
+  function array_memory_texture_insert(input, value_new) result(output)
     use :: memory_texture_module
     implicit none
 
     type(memory_texture), dimension(:), intent(in) :: input
-    type(memory_texture), intent(in), value :: new_value
+    type(memory_texture), intent(in), value :: value_new
     type(memory_texture), dimension(:), allocatable :: output
     integer(c_int) :: old_size, i
 
@@ -760,7 +760,7 @@ contains
       output(i) = input(i)
     end do
 
-    output(old_size + 1) = new_value
+    output(old_size + 1) = value_new
   end function array_memory_texture_insert
 
 

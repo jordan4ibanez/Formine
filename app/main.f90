@@ -18,10 +18,10 @@ program main
 
   real(c_float) :: rotation, min_x, min_y, max_x, max_y
   type(vec2f) :: text_size
-  integer(c_int) :: new_fps, old_fps
+  integer(c_int) :: fps_new, old_fps
   type(texture_rectangle) :: tex_rect
 
-  new_fps = 0
+  fps_new = 0
   old_fps = -1
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
@@ -179,9 +179,9 @@ program main
 
       ! Process first text.
 
-      new_fps = get_fps()
+      fps_new = get_fps()
 
-      if (new_fps /= old_fps) then
+      if (fps_new /= old_fps) then
 
         call mesh_delete("fps_counter")
 

@@ -78,21 +78,21 @@ module glfw
     end subroutine internal_glfw_terminate
 
 
-    function internal_glfw_create_window(width, height, title, monitor, share) result(new_window_pointer) bind(c, name = "glfwCreateWindow")
+    function internal_glfw_create_window(width, height, title, monitor, share) result(window_pointer_new) bind(c, name = "glfwCreateWindow")
       use, intrinsic :: iso_c_binding
       implicit none
       integer(c_int), intent(in), value :: width, height
       character(len = 1, kind = c_char), intent(in), optional :: title
       type(c_ptr), intent(in), optional :: monitor, share
-      type(c_ptr) :: new_window_pointer
+      type(c_ptr) :: window_pointer_new
     end function internal_glfw_create_window
 
 
-    subroutine internal_glfw_make_context_current(new_window_pointer) bind(c, name = "glfwMakeContextCurrent")
+    subroutine internal_glfw_make_context_current(window_pointer_new) bind(c, name = "glfwMakeContextCurrent")
       use, intrinsic :: iso_c_binding
       implicit none
 
-      type(c_ptr), intent(in), value :: new_window_pointer
+      type(c_ptr), intent(in), value :: window_pointer_new
     end subroutine internal_glfw_make_context_current
 
 
