@@ -45,7 +45,7 @@ char *check_ends_with_forward_slash(const char *path)
 {
   int string_length;
   bool ends_with_slash;
-  char *new_string;
+  char *string_new;
   int file_count = 0;
   int folder_count = 0;
 
@@ -56,18 +56,18 @@ char *check_ends_with_forward_slash(const char *path)
   if (ends_with_slash)
   {
     // We're doing this so we can free it regardless.
-    new_string = malloc(sizeof(char[string_length]) + 1);
-    strncpy(new_string, path, string_length);
-    new_string[string_length] = '\0';
+    string_new = malloc(sizeof(char[string_length]) + 1);
+    strncpy(string_new, path, string_length);
+    string_new[string_length] = '\0';
   }
   else
   {
-    new_string = malloc(sizeof(char[string_length]) + 2);
-    strncpy(new_string, path, string_length);
-    new_string[string_length + 0] = '/';
-    new_string[string_length + 1] = '\0';
+    string_new = malloc(sizeof(char[string_length]) + 2);
+    strncpy(string_new, path, string_length);
+    string_new[string_length + 0] = '/';
+    string_new[string_length + 1] = '\0';
   }
-  return new_string;
+  return string_new;
 }
 
 //* This is POSIX only.
