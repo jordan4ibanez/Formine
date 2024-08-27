@@ -77,7 +77,6 @@ contains
     integer(1), dimension(:), allocatable :: raw_texture_atlas_data
     type(vec2i) :: canvas_size
 
-
     print"(A)","[Texture Atlas]: Stitching together the texture atlas."
 
     config%canvas_expansion_amount = 1000
@@ -113,6 +112,7 @@ contains
   end subroutine texture_atlas_pack
 
 
+  !* This is debug for selecting an atlas element.
   function texture_atlas_debug() result(texture_location)
     implicit none
 
@@ -176,6 +176,7 @@ contains
   end function array_texture_pack_element_insert
 
 
+  !* This frees any pointers used by the texture atlas module.
   subroutine texture_atlas_destroy()
     use :: terminal
     implicit none
