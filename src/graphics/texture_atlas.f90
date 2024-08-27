@@ -78,12 +78,12 @@ contains
     type(vec2i) :: canvas_size
 
 
+    print"(A)","[Texture Atlas]: Stitching together the texture atlas."
+
     config%canvas_expansion_amount = 1000
     ! config%enable_trimming = .false.
 
     packer = fast_packer(config)
-
-    print"(A)","[Texture Atlas]: Stitching together the texture atlas."
 
     do i = 1,size(textures_to_pack)
       element = textures_to_pack(i)
