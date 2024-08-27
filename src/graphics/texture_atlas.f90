@@ -21,6 +21,7 @@ module texture_atlas
   public :: texture_atlas_add_texture_to_pack
   public :: texture_atlas_pack
   public :: texture_atlas_debug
+  public :: texture_atlas_destroy
 
 
   type :: texture_pack_element
@@ -82,7 +83,7 @@ contains
 
     packer = fast_packer(config)
 
-    print"(A)","[Texture Atlas]: Texture atlas construction START."
+    print"(A)","[Texture Atlas]: Stitching together the texture atlas."
 
     do i = 1,size(textures_to_pack)
       element = textures_to_pack(i)
@@ -107,6 +108,8 @@ contains
 
     current_index = 1
     showcase_length = size(showcase_array)
+
+    print"(A)","[Texture Atlas]: Successfully stitched together the texture atlas."
   end subroutine texture_atlas_pack
 
 
@@ -171,6 +174,28 @@ contains
 
     output(old_size + 1) = value_new
   end function array_texture_pack_element_insert
+
+
+  subroutine texture_atlas_destroy()
+    use :: terminal
+    implicit none
+
+    ! Free the pointer.
+    if (associated(texture_coordinates_pointer)) then
+      deallocate(texture_coordinates_pointer)
+      ! Double check.
+      if (associated(texture_coordinates_pointer)) then
+        print"(A)",colorize_rgb("[Texture Atlas] Error: Failed to free the texture coordinates pointer.", 255, 0, 0)
+        return
+      end if
+    else
+      ! If this happens, something went very wrong.
+      print"(A)",colorize_rgb("[Texture Atlas] Error: Texture coordinates pointer is not associated.", 255, 0, 0)
+      return
+    end if
+    ! Everything is freed, hooray.
+    print"(A)", "[Texture Atlas]: Successfully destroyed texture atlas."
+  end subroutine
 
 
 end module texture_atlas

@@ -210,6 +210,8 @@ program main
     end do
   end if
 
+  call texture_atlas_destroy()
+
   call font_clear_database()
 
   call api_destroy()
