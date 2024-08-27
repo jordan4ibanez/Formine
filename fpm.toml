@@ -13,6 +13,11 @@ auto-tests = true
 auto-examples = true
 module-naming = false
 
+# Windows needs different linking flags.
+# STB becomes a blank export of a C file in the graphics folder.
+# link = ["glfw3", "opengl32", "luajit-5.1"]
+
+# Everything else (for now)
 link = ["glfw", "GL", "stb", "luajit-5.1"]
 
 [dependencies]

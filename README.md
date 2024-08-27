@@ -89,6 +89,16 @@ ln -s /usr/bin/gfortran-14 .local/bin/gfortran
 
 _Or_ you can just change the Makefile to use gfortran-14, but that's annoying.
 
+### Install dependencies on Windows 10/11 using MSYS2
+
+todo: finish this (and make a windows section for fpm)
+
+You need to be sure you open MSYS2 MINGW64 or else it will not work.
+
+```
+pacman -S git make mingw-w64-ucrt-x86_64-fpm mingw-w64-ucrt-x86_64-gcc-fortran mingw-w64-ucrt-x86_64-glib2 mingw-w64-ucrt-x86_64-glfw mingw-w64-ucrt-x86_64-luajit
+```
+
 
 ### fpm requirement:
 
