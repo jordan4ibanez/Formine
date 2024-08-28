@@ -1,6 +1,6 @@
-#ifdef _WIN32
-
-#include "stb_image.h"
-#include "stb_image_write.h"
-
-#endif // _WIN32
+#ifdef __MINGW32__
+#define STB_IMAGE_IMPLEMENTATION
+#include "/msys64/ucrt64/include/stb/stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "/msys64/ucrt64/include/stb/stb_image_write.h"
+#endif
