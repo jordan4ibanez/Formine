@@ -99,6 +99,9 @@ You need to be sure you open MSYS2 MINGW64 or else it will not work.
 pacman -S git make mingw-w64-ucrt-x86_64-fpm mingw-w64-ucrt-x86_64-gcc-fortran mingw-w64-ucrt-x86_64-glib2 mingw-w64-ucrt-x86_64-glfw mingw-w64-ucrt-x86_64-luajit
 ```
 
+### Windows install instructions
+
+todo: put the instructions link here.
 
 ### fpm requirement:
 
