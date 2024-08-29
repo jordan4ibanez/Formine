@@ -63,7 +63,7 @@ module forglad
       use, intrinsic :: iso_c_binding
       implicit none
 
-      !! This might cause problems, it's a uint.
+      !? This might cause problems, it's a uint.
       integer(c_int) :: program_id
     end function gl_create_program_c_interface
 
@@ -72,7 +72,7 @@ module forglad
       use, intrinsic :: iso_c_binding
       implicit none
 
-      !! This might cause problems, it's a uint.
+      !? This might cause problems, it's a uint.
       integer(c_int), intent(in), value :: program_id
     end subroutine gl_delete_program_c_interface
 
@@ -81,7 +81,7 @@ module forglad
       use, intrinsic :: iso_c_binding
       implicit none
 
-      !! This might cause problems, it's a uint.
+      !? This might cause problems, it's a uint.
       integer(c_int), intent(in), value :: program_id
       logical(c_bool) :: is_program
     end function gl_is_program_c_interface
@@ -91,7 +91,7 @@ module forglad
       use, intrinsic :: iso_c_binding
       implicit none
 
-      !! This might cause problems, it's a uint.
+      !? This might cause problems, it's a uint.
       integer(c_int), intent(in), value :: shader_type
       integer(c_int) :: shader_id
     end function gl_create_shader_c_interface
@@ -101,7 +101,7 @@ module forglad
       use, intrinsic :: iso_c_binding
       implicit none
 
-      !! This might cause problems, it's a uint.
+      !? This might cause problems, it's a uint.
       integer(c_int), intent(in), value :: shader
     end subroutine gl_delete_shader_c_interface
 
@@ -243,7 +243,7 @@ module forglad
       implicit none
 
       integer(c_int), intent(in), value :: n
-      !! This part is written wrong on purpose. I only want 1 not multiple.
+      !? This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(inout) :: arrays
     end subroutine gl_gen_vertex_arrays_c_interface
 
@@ -253,7 +253,7 @@ module forglad
       implicit none
 
       integer(c_int), intent(in), value :: n
-      !! This part is written wrong on purpose. I only want 1 not multiple.
+      !? This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(in) :: arrays
     end subroutine gl_delete_vertex_arrays_c_interface
 
@@ -271,7 +271,7 @@ module forglad
       implicit none
 
       integer(c_int), intent(in), value :: n
-      !! This part is written wrong on purpose. I only want 1 not multiple.
+      !? This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(inout) :: buffers
     end subroutine gl_gen_buffers_c_interface
 
@@ -281,7 +281,7 @@ module forglad
       implicit none
 
       integer(c_int), intent(in), value :: n
-      !! This part is written wrong on purpose. I only want 1 not multiple.
+      !? This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(in) :: buffers
     end subroutine gl_delete_buffers_c_interface
 
@@ -379,7 +379,7 @@ module forglad
       implicit none
 
       integer(c_int), intent(in), value :: n
-      !! This part is written wrong on purpose. I only want 1 not multiple.
+      !? This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(inout) :: textures
     end subroutine gl_gen_textures_c_interface
 
@@ -448,7 +448,7 @@ module forglad
       implicit none
 
       integer(c_int), intent(in), value :: n
-      !! This part is written wrong on purpose. I only want 1 not multiple.
+      !? This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(in) :: textures
     end subroutine gl_delete_textures_c_interface
 
