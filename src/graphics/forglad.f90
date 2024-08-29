@@ -10,6 +10,52 @@ module forglad
   public :: forglad_init
 
 
+  integer, parameter, public :: GL_VERSION = int(z"1f02")
+  integer, parameter, public :: GL_MAJOR_VERSION = int(z"821B")
+  integer, parameter, public :: GL_MINOR_VERSION = int(z"821C")
+  integer, parameter, public :: GL_TRUE = 1
+  integer, parameter, public :: GL_FALSE = 0
+  integer, parameter, public :: GL_FLOAT = int(z"1406")
+  integer, parameter, public :: GL_COLOR_BUFFER_BIT = int(z"00004000")
+  integer, parameter, public :: GL_DEBUG_OUTPUT_SYNCHRONOUS = int(z"8242")
+  integer, parameter, public :: GL_VERTEX_SHADER = int(z"8B31")
+  integer, parameter, public :: GL_FRAGMENT_SHADER = int(z"8B30")
+  integer, parameter, public :: GL_COMPILE_STATUS = int(z"8B81")
+  integer, parameter, public :: GL_LINK_STATUS = int(z"8B82")
+  integer, parameter, public :: GL_VALIDATE_STATUS = int(z"8B83")
+  integer, parameter, public :: GL_DEBUG_SEVERITY_NOTIFICATION = int(z"826B")
+  integer, parameter, public :: GL_DEBUG_SEVERITY_LOW = int(z"9148")
+  integer, parameter, public :: GL_DEBUG_SEVERITY_MEDIUM = int(z"9147")
+  integer, parameter, public :: GL_DEBUG_SEVERITY_HIGH = int(z"9146")
+  integer, parameter, public :: GL_STATIC_DRAW = int(z"88E4")
+  integer, parameter, public :: GL_ARRAY_BUFFER = int(z"8892")
+  integer, parameter, public :: GL_ELEMENT_ARRAY_BUFFER = int(z"8893")
+  integer, parameter, public :: GL_TRIANGLES = int(z"0004")
+  integer, parameter, public :: GL_UNSIGNED_INT = int(z"1405")
+  integer, parameter, public :: GL_TEXTURE_2D = int(z"0DE1")
+  integer, parameter, public :: GL_TEXTURE_WRAP_S = int(z"2802")
+  integer, parameter, public :: GL_TEXTURE_WRAP_T = int(z"2803")
+  integer, parameter, public :: GL_CLAMP_TO_BORDER = int(z"812D")
+  integer, parameter, public :: GL_TEXTURE_BORDER_COLOR = int(z"1004")
+  integer, parameter, public :: GL_NEAREST = int(z"2600")
+  integer, parameter, public :: GL_NEAREST_MIPMAP_LINEAR = int(z"2702")
+  integer, parameter, public :: GL_NEAREST_MIPMAP_NEAREST = int(z"2700")
+  integer, parameter, public :: GL_TEXTURE_MIN_FILTER = int(z"2801")
+  integer, parameter, public :: GL_TEXTURE_MAG_FILTER = int(z"2800")
+  integer, parameter, public :: GL_UNPACK_ALIGNMENT = int(z"0CF5")
+  integer, parameter, public :: GL_RGBA = int(z"1908")
+  integer, parameter, public :: GL_UNSIGNED_BYTE = int(z"1401")
+  integer, parameter, public :: GL_DEPTH_TEST = int(z"0B71")
+  integer, parameter, public :: GL_LESS = int(z"0201")
+  integer, parameter, public :: GL_CULL_FACE = int(z"0B44")
+  integer, parameter, public :: GL_DEPTH_BUFFER_BIT = int(z"00000100")
+  integer, parameter, public :: GL_BLEND = int(z"0BE2")
+  integer, parameter, public :: GL_FUNC_ADD = int(z"8006")
+  integer, parameter, public :: GL_SRC_ALPHA = int(z"0302")
+  integer, parameter, public :: GL_ONE_MINUS_SRC_ALPHA = int(z"0303")
+  integer, parameter, public :: GL_ONE = 1
+
+
   procedure(gl_clear_c_interface), public, pointer :: gl_clear
   procedure(gl_clear_color_c_interface), public, pointer :: gl_clear_color
   procedure(gl_enable_c_interface), public, pointer :: gl_enable
