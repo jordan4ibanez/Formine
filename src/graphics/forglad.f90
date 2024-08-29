@@ -14,6 +14,7 @@ module forglad
   procedure(gl_clear_color_c_interface), public, pointer :: gl_clear_color
   procedure(gl_enable_c_interface), public, pointer :: gl_enable
   procedure(gl_disable_c_interface), public, pointer :: gl_disable
+  procedure(gl_debug_message_callback_c_interface), public, pointer :: gl_debug_message_callback
 
 
   interface
@@ -46,6 +47,7 @@ module forglad
     end subroutine gl_enable_c_interface
 
 
+    !! DONE.
     subroutine gl_disable_c_interface(cap) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -518,18 +520,118 @@ contains
 
     ! todo: could make this a clone of glad in fortran, maybe.
 
-    function_pointer = glfw_get_proc_address(into_c_string("gloobale"))
+    
+
+    function_pointer = glfw_get_proc_address(into_c_string("glClear"))
     call c_f_procpointer(function_pointer, gl_clear)
 
     function_pointer = glfw_get_proc_address(into_c_string("glClearColor"))
     call c_f_procpointer(function_pointer, gl_clear_color)
 
     function_pointer = glfw_get_proc_address(into_c_string("glEnable"))
-    call c_f_procpointer(function_pointer, gl_clear_color)
+    call c_f_procpointer(function_pointer, gl_enable)
 
     function_pointer = glfw_get_proc_address(into_c_string("glDisable"))
-    call c_f_procpointer(function_pointer, gl_clear_color)
+    call c_f_procpointer(function_pointer, gl_disable)
 
+    function_pointer = glfw_get_proc_address(into_c_string("glDebugMessageCallback"))
+    call c_f_procpointer(function_pointer, gl_debug_message_callback)
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
+
+    function_pointer = glfw_get_proc_address(into_c_string(""))
+    call c_f_procpointer(function_pointer, )
   end subroutine forglad_init
 
 
