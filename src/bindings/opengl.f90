@@ -1,6 +1,6 @@
 module opengl
-  use, intrinsic :: iso_c_binding
   use :: forglad
+  use, intrinsic :: iso_c_binding
   implicit none
 
 
@@ -13,6 +13,7 @@ module opengl
 
   ! OpenGL function pointers.
 
+  public :: gl_get_string
   public :: gl_clear_color_buffer
   public :: gl_clear_depth_buffer
   public :: gl_clear_color_and_depth_buffer
