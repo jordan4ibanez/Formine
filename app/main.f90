@@ -51,6 +51,8 @@ program main
     return
   end if
 
+  call glfw_make_context_current()
+
   ! Get portable function pointers.
   gotten_gl_version = glad_load_gl(c_funloc(glfw_get_proc_address))
 
@@ -62,7 +64,7 @@ program main
 
   ! call glfw_set_window_size_callback()
 
-  ! call glfw_make_context_current()
+
 
   ! call gl_get_version()
 
