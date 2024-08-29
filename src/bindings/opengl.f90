@@ -11,68 +11,68 @@ module opengl
 
   public :: forglad_load_gl
 
-  ! public :: gl_clear_color_buffer
-  ! public :: gl_clear_depth_buffer
-  ! public :: gl_clear_color_and_depth_buffer
-  ! public :: gl_enable
-  ! public :: gl_disable
-  ! public :: gl_clear_color
-  ! public :: gl_clear_color_scalar
-  ! public :: gl_set_debug_message_callback
-  ! public :: gl_create_program
-  ! public :: gl_delete_program
-  ! public :: gl_is_program
-  ! public :: gl_create_shader
-  ! public :: gl_delete_shader
-  ! public :: gl_shader_source
-  ! public :: gl_compile_shader
-  ! public :: gl_is_shader
-  ! public :: gl_get_integer_v
-  ! public :: gl_get_version
-  ! public :: gl_attach_shader
-  ! public :: gl_detach_shader
-  ! public :: gl_link_program
-  ! public :: gl_get_error
-  ! public :: gl_clear_error_data
-  ! public :: gl_get_shader_iv
-  ! public :: gl_get_shader_info_log
-  ! public :: gl_get_program_iv
-  ! public :: gl_validate_program
-  ! public :: gl_get_uniform_location
-  ! public :: gl_get_attrib_location
-  ! public :: gl_use_program
-  ! public :: gl_gen_vertex_arrays
-  ! public :: gl_delete_vertex_arrays
-  ! public :: gl_bind_vertex_array
-  ! public :: gl_gen_buffers
-  ! public :: gl_delete_buffers
-  ! public :: gl_bind_buffer
-  ! public :: gl_buffer_float_array
-  ! public :: gl_buffer_vec3f_array
-  ! public :: gl_buffer_indices_array
-  ! public :: gl_enable_vertex_attrib_array
-  ! public :: gl_disable_vertex_attrib_array
-  ! public :: gl_vertex_attrib_pointer
-  ! public :: gl_draw_elements
-  ! public :: gl_uniform_mat4f
-  ! public :: gl_view_port
-  ! public :: gl_is_buffer
-  ! public :: gl_is_vertex_array
-  ! public :: gl_gen_textures
-  ! public :: gl_bind_texture
-  ! public :: gl_tex_parameter_i
-  ! public :: gl_tex_parameter_fv
-  ! public :: gl_pixel_store_i
-  ! public :: gl_tex_image_2d
-  ! public :: gl_is_texture
-  ! public :: gl_generate_mipmap
-  ! public :: gl_delete_textures
-  ! public :: gl_depth_mask
-  ! public :: gl_depth_func
-  ! public :: gl_depth_range_f
-  ! public :: gl_blend_equation
-  ! public :: gl_blend_func
-  ! public :: gl_blend_func_separate
+  public :: gl_clear_color_buffer
+  public :: gl_clear_depth_buffer
+  public :: gl_clear_color_and_depth_buffer
+  public :: gl_enable
+  public :: gl_disable
+  public :: gl_clear_color
+  public :: gl_clear_color_scalar
+  public :: gl_set_debug_message_callback
+  public :: gl_create_program
+  public :: gl_delete_program
+  public :: gl_is_program
+  public :: gl_create_shader
+  public :: gl_delete_shader
+  public :: gl_shader_source
+  public :: gl_compile_shader
+  public :: gl_is_shader
+  public :: gl_get_integer_v
+  public :: gl_get_version
+  public :: gl_attach_shader
+  public :: gl_detach_shader
+  public :: gl_link_program
+  public :: gl_get_error
+  public :: gl_clear_error_data
+  public :: gl_get_shader_iv
+  public :: gl_get_shader_info_log
+  public :: gl_get_program_iv
+  public :: gl_validate_program
+  public :: gl_get_uniform_location
+  public :: gl_get_attrib_location
+  public :: gl_use_program
+  public :: gl_gen_vertex_arrays
+  public :: gl_delete_vertex_arrays
+  public :: gl_bind_vertex_array
+  public :: gl_gen_buffers
+  public :: gl_delete_buffers
+  public :: gl_bind_buffer
+  public :: gl_buffer_float_array
+  public :: gl_buffer_vec3f_array
+  public :: gl_buffer_indices_array
+  public :: gl_enable_vertex_attrib_array
+  public :: gl_disable_vertex_attrib_array
+  public :: gl_vertex_attrib_pointer
+  public :: gl_draw_elements
+  public :: gl_uniform_mat4f
+  public :: gl_view_port
+  public :: gl_is_buffer
+  public :: gl_is_vertex_array
+  public :: gl_gen_textures
+  public :: gl_bind_texture
+  public :: gl_tex_parameter_i
+  public :: gl_tex_parameter_fv
+  public :: gl_pixel_store_i
+  public :: gl_tex_image_2d
+  public :: gl_is_texture
+  public :: gl_generate_mipmap
+  public :: gl_delete_textures
+  public :: gl_depth_mask
+  public :: gl_depth_func
+  public :: gl_depth_range_f
+  public :: gl_blend_equation
+  public :: gl_blend_func
+  public :: gl_blend_func_separate
 
 
   ! Here I'm binding to the C shared library.
