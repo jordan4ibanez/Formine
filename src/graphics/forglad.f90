@@ -547,7 +547,7 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: function_name
 
-    error stop "[Forglad] Critical Error: Failed to load OpenGL function pointer ["//function_name//"]. Does your GPU support OpenGL 4.2?"
+    error stop "[Forglad] Critical Error: Failed to load OpenGL function pointer ["//function_name//"]."
   end subroutine forglad_error_stop
 
 end module forglad
