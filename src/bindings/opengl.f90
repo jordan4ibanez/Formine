@@ -75,16 +75,6 @@ module opengl
   public :: gl_blend_func_separate
 
 
-  ! Here I'm binding to the C shared library.
-
-  interface
-
-
-
-
-  end interface
-
-
 contains
 
 
