@@ -1,6 +1,6 @@
 program main
   use :: glfw
-  use :: opengl
+  use :: opengl, only: glad_load_gl, GL_TRUE
   use :: string
   use :: shader
   use :: files
@@ -14,6 +14,7 @@ program main
   use :: texture_atlas
   use :: texture_atlas
   use, intrinsic ::  iso_c_binding
+  use :: forglad
   implicit none
 
   integer(c_int) :: gotten_gl_version
@@ -60,7 +61,11 @@ program main
     error stop "[Glad] Error: Failed to initialize OpenGL 4.2 context. Does your GPU support it?"
   end if
 
-  print*,c_funloc(gl_get_integer_v)
+  call forglad_init()
+
+  call gl_clear(2)
+
+
 
   ! call delta_initialize()
 
