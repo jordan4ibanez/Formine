@@ -674,10 +674,44 @@ contains
 
 
   !* This finds the base version of OpenGL that your GPU supports.
-  subroutine find_core_opengl()
+  !* Will check if it is greater than or equal to OpenGL 4.2.
+  function is_opengl_4_2_capable() result(success)
+    use :: string
     implicit none
 
-  end subroutine find_core_opengl
+    ! This was translated from GLAD.
+
+    logical(c_bool) :: success
+    type(c_ptr) :: string_pointer
+    character(len = :, kind = c_char), allocatable :: version_info_string
+    type(heap_string), dimension(4) :: prefixes
+    integer(c_int) :: i
+
+    success = .false.
+
+    string_pointer = gl_get_string(GL_VERSION)
+    version_info_string = string_from_c(string_pointer, 128)
+
+    if (version_info_string == "") then
+      return
+    end if
+
+    prefixes = (/ &
+      heap_string("OpenGL ES-CM "), &
+      heap_string("OpenGL ES-CL "), &
+      heap_string("OpenGL ES "), &
+      heap_string("") &
+      /)
+
+    do i = 1,size(prefixes)
+      if (string_starts_with(version_info_string, prefixes(i)%get())) then
+        print*,"found you", i
+      end if
+    end do
+
+    print*,version_info_string
+
+  end function is_opengl_4_2_capable
 
 
   !* Loads up the function pointers for OpenGL.
@@ -689,12 +723,15 @@ contains
 
     ! todo: could make this a clone of glad in fortran, maybe.
 
+
+
+
+    if (.not. is_opengl_4_2_capable()) then
+
+    end if
+
     function_pointer = glfw_get_proc_address("glGetString"//achar(0))
     call c_f_procpointer(function_pointer, gl_get_string)
-
-
-    call find_core_opengl()
-
 
     function_pointer = glfw_get_proc_address("glClear"//achar(0))
     call c_f_procpointer(function_pointer, internal_gl_clear)
