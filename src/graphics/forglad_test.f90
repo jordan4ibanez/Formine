@@ -497,7 +497,7 @@ module forglad
 contains
 
 
-  subroutine forglad_test_init()
+  subroutine forglad_init()
     use :: string
     implicit none
 
@@ -508,6 +508,6 @@ contains
     function_pointer = glfw_get_proc_address(function_name)
     call c_f_procpointer(function_pointer, gl_clear)
 
-  end subroutine forglad_test_init
+  end subroutine forglad_init
 
 end module forglad
