@@ -57,7 +57,7 @@ program main
   gotten_gl_version = glad_load_gl(c_funloc(glfw_get_proc_address))
 
   if (gotten_gl_version == 0) then
-    error stop "[Glad] Error: Failed to initialize OpenGL context."
+    error stop "[Glad] Error: Failed to initialize OpenGL 4.2 context. Does your GPU support it?"
   end if
 
   ! call delta_initialize()
