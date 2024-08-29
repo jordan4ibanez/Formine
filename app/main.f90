@@ -1,6 +1,6 @@
 program main
   use :: glfw
-  use :: opengl, only: GL_TRUE
+  use :: opengl
   use :: string
   ! use :: shader
   use :: files
@@ -14,7 +14,6 @@ program main
   ! use :: texture_atlas
   ! use :: texture_atlas
   use, intrinsic ::  iso_c_binding
-  use :: forglad
   implicit none
 
   integer(c_int) :: gotten_gl_version
@@ -63,7 +62,9 @@ program main
 
   call forglad_load_gl()
 
-  call gl_clear(2)
+  call gl_clear_color(1.,2.,3.)
+
+  call gl_clear_color_buffer()
 
 
 
