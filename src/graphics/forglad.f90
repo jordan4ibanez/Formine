@@ -17,29 +17,53 @@ module forglad
   procedure(gl_debug_message_callback_c_interface), public, pointer :: gl_debug_message_callback
   procedure(gl_create_program_c_interface), public, pointer :: gl_create_program
   procedure(gl_delete_program_c_interface), public, pointer :: gl_delete_program
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-  procedure(), public, pointer ::
-
+  procedure(gl_is_program_c_interface), public, pointer :: gl_is_program
+  procedure(gl_create_shader_c_interface), public, pointer :: gl_create_shader
+  procedure(gl_delete_shader_c_interface), public, pointer :: gl_delete_shader
+  procedure(gl_shader_source_c_interface), public, pointer :: gl_shader_source
+  procedure(gl_compile_shader_c_interface), public, pointer :: gl_compile_shader
+  procedure(gl_is_shader_c_interface), public, pointer :: gl_is_shader
+  procedure(gl_get_integer_v_c_interface), public, pointer :: gl_get_integer_v
+  procedure(gl_attach_shader_c_interface), public, pointer :: gl_attach_shader
+  procedure(gl_link_program_c_interface), public, pointer :: gl_link_program
+  procedure(gl_get_error_c_interface), public, pointer :: gl_get_error
+  procedure(gl_get_shader_iv_c_interface), public, pointer :: gl_get_shader_iv
+  procedure(gl_get_shader_info_log_c_interface), public, pointer :: gl_get_shader_info_log
+  procedure(gl_get_program_iv_c_interface), public, pointer :: gl_get_program_iv
+  procedure(gl_validate_program_c_interface), public, pointer :: gl_validate_program
+  procedure(gl_get_uniform_location_c_interface), public, pointer :: gl_get_uniform_location
+  procedure(gl_get_attrib_location_c_interface), public, pointer :: gl_get_attrib_location
+  procedure(gl_use_program_c_interface), public, pointer :: gl_use_program
+  procedure(gl_gen_vertex_arrays_c_interface), public, pointer :: gl_gen_vertex_arrays
+  procedure(gl_delete_vertex_arrays_c_interface), public, pointer :: gl_delete_vertex_arrays
+  procedure(gl_bind_vertex_array_c_interface), public, pointer :: gl_bind_vertex_array
+  procedure(gl_gen_buffers_c_interface), public, pointer :: gl_gen_buffers
+  procedure(gl_delete_buffers_c_interface), public, pointer :: gl_delete_buffers
+  procedure(gl_bind_buffer_c_interface), public, pointer :: gl_bind_buffer
+  procedure(gl_buffer_data_c_interface), public, pointer :: gl_buffer_data
+  procedure(gl_enable_vertex_attrib_array_c_interface), public, pointer :: gl_enable_vertex_attrib_array
+  procedure(gl_disable_vertex_attrib_array_c_interface), public, pointer :: gl_disable_vertex_attrib_array
+  procedure(gl_vertex_attrib_pointer_c_interface), public, pointer :: gl_vertex_attrib_pointer
+  procedure(gl_draw_elements_c_interface), public, pointer :: gl_draw_elements
+  procedure(gl_uniform_matrix_4_fv_c_interface), public, pointer :: gl_uniform_matrix_4_fv
+  procedure(gl_view_port_c_interface), public, pointer :: gl_view_port
+  procedure(gl_is_buffer_c_interface), public, pointer :: gl_is_buffer
+  procedure(gl_is_vertex_array_c_interface), public, pointer :: gl_is_vertex_array
+  procedure(gl_gen_textures_c_interface), public, pointer :: gl_gen_textures
+  procedure(gl_bind_texture_c_interface), public, pointer :: gl_bind_texture
+  procedure(gl_tex_parameter_i_c_interface), public, pointer :: gl_tex_parameter_i
+  procedure(gl_tex_parameter_fv_c_interface), public, pointer :: gl_tex_parameter_fv
+  procedure(gl_pixel_store_i_c_interface), public, pointer :: gl_pixel_store_i
+  procedure(gl_tex_image_2d_c_interface), public, pointer :: gl_tex_image_2d
+  procedure(gl_is_texture_c_interface), public, pointer :: gl_is_texture
+  procedure(gl_generate_mipmap_c_interface), public, pointer :: gl_generate_mipmap
+  procedure(gl_delete_textures_c_interface), public, pointer :: gl_delete_textures
+  procedure(gl_depth_mask_c_interface), public, pointer :: gl_depth_mask
+  procedure(gl_depth_func_c_interface), public, pointer :: gl_depth_func
+  procedure(gl_depth_range_f_c_interface), public, pointer :: gl_depth_range_f
+  procedure(gl_blend_equation_c_interface), public, pointer :: gl_blend_equation
+  procedure(gl_blend_func_c_interface), public, pointer :: gl_blend_func
+  procedure(gl_blend_func_separate_c_interface), public, pointer :: gl_blend_func_separate
 
 
   interface
@@ -109,7 +133,7 @@ module forglad
     end subroutine gl_delete_program_c_interface
 
 
-
+!! DONE.
     function gl_is_program_c_interface(program_id) result(is_program) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -120,7 +144,7 @@ module forglad
     end function gl_is_program_c_interface
 
 
-
+!! DONE.
     function gl_create_shader_c_interface(shader_type) result(shader_id) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -131,7 +155,7 @@ module forglad
     end function gl_create_shader_c_interface
 
 
-
+!! DONE.
     subroutine gl_delete_shader_c_interface(shader) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -141,7 +165,7 @@ module forglad
     end subroutine gl_delete_shader_c_interface
 
 
-
+!! DONE.
     subroutine gl_shader_source_c_interface(shader_id, count, source_code, string_length) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -154,7 +178,7 @@ module forglad
     end subroutine gl_shader_source_c_interface
 
 
-
+!! DONE.
     subroutine gl_compile_shader_c_interface(shader_id) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -163,7 +187,7 @@ module forglad
     end subroutine gl_compile_shader_c_interface
 
 
-
+!! DONE.
     function gl_is_shader_c_interface(shader_id) result(is_a_shader) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -173,7 +197,7 @@ module forglad
     end function gl_is_shader_c_interface
 
 
-
+!! DONE.
     subroutine gl_get_integer_v_c_interface(pname, data) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -183,7 +207,7 @@ module forglad
     end subroutine gl_get_integer_v_c_interface
 
 
-
+!! DONE.
     subroutine gl_attach_shader_c_interface(program, shader) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -192,7 +216,7 @@ module forglad
     end subroutine gl_attach_shader_c_interface
 
 
-
+!! DONE.
     subroutine gl_detach_shader_c_interface(program, shader) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -201,7 +225,7 @@ module forglad
     end subroutine gl_detach_shader_c_interface
 
 
-
+!! DONE.
     subroutine gl_link_program_c_interface(program) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -210,7 +234,7 @@ module forglad
     end subroutine gl_link_program_c_interface
 
 
-
+!! DONE.
     function gl_get_error_c_interface() result(error_code) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -219,7 +243,7 @@ module forglad
     end function gl_get_error_c_interface
 
 
-
+!! DONE.
     subroutine gl_get_shader_iv_c_interface(shader, pname, params) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -229,7 +253,7 @@ module forglad
     end subroutine gl_get_shader_iv_c_interface
 
 
-
+!! DONE.
     subroutine gl_get_shader_info_log_c_interface(shader, max_length, length, info_log) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -240,7 +264,7 @@ module forglad
     end subroutine gl_get_shader_info_log_c_interface
 
 
-
+!! DONE.
     subroutine gl_get_program_iv_c_interface(program, pname, params) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -250,7 +274,7 @@ module forglad
     end subroutine gl_get_program_iv_c_interface
 
 
-
+!! DONE.
     subroutine gl_validate_program_c_interface(program_id) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -259,7 +283,7 @@ module forglad
     end subroutine gl_validate_program_c_interface
 
 
-
+!! DONE.
     integer(c_int) function gl_get_uniform_location_c_interface(program_id, uniform_name) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -269,7 +293,7 @@ module forglad
     end function gl_get_uniform_location_c_interface
 
 
-
+!! DONE.
     integer(c_int) function gl_get_attrib_location_c_interface(program_id, attrib_name) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -279,7 +303,7 @@ module forglad
     end function gl_get_attrib_location_c_interface
 
 
-
+!! DONE.
     subroutine gl_use_program_c_interface(program_id) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -288,7 +312,7 @@ module forglad
     end subroutine gl_use_program_c_interface
 
 
-
+!! DONE.
     subroutine gl_gen_vertex_arrays_c_interface(n, arrays) bind(c)
       use,intrinsic :: iso_c_binding
       implicit none
@@ -299,7 +323,7 @@ module forglad
     end subroutine gl_gen_vertex_arrays_c_interface
 
 
-
+!! DONE.
     subroutine gl_delete_vertex_arrays_c_interface(n, arrays) bind(c)
       use,intrinsic :: iso_c_binding
       implicit none
@@ -310,7 +334,7 @@ module forglad
     end subroutine gl_delete_vertex_arrays_c_interface
 
 
-
+!! DONE.
     subroutine gl_bind_vertex_array_c_interface(array) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -319,7 +343,7 @@ module forglad
     end subroutine gl_bind_vertex_array_c_interface
 
 
-
+!! DONE.
     subroutine gl_gen_buffers_c_interface(n, buffers) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -330,7 +354,7 @@ module forglad
     end subroutine gl_gen_buffers_c_interface
 
 
-
+!! DONE.
     subroutine gl_delete_buffers_c_interface(n, buffers) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -341,7 +365,7 @@ module forglad
     end subroutine gl_delete_buffers_c_interface
 
 
-
+!! DONE.
     subroutine gl_bind_buffer_c_interface(target, buffer) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -350,7 +374,7 @@ module forglad
     end subroutine gl_bind_buffer_c_interface
 
 
-
+!! DONE.
     subroutine gl_buffer_data_c_interface(target, size, data, usage) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -360,7 +384,7 @@ module forglad
     end subroutine gl_buffer_data_c_interface
 
 
-
+!! DONE.
     subroutine gl_enable_vertex_attrib_array_c_interface(index) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -369,16 +393,16 @@ module forglad
     end subroutine gl_enable_vertex_attrib_array_c_interface
 
 
-
-    subroutine gl_disable_vertex_attrib_array(index) bind(c)
+!! DONE.
+    subroutine gl_disable_vertex_attrib_array_c_interface(index) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: index
-    end subroutine gl_disable_vertex_attrib_array
+    end subroutine gl_disable_vertex_attrib_array_c_interface
 
 
-
+!! DONE.
     subroutine gl_vertex_attrib_pointer_c_interface(index, size, type, normalized, stride, pointer) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -389,7 +413,7 @@ module forglad
     end subroutine gl_vertex_attrib_pointer_c_interface
 
 
-
+!! DONE.
     subroutine gl_draw_elements_c_interface(mode, count, type, indices) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -399,7 +423,7 @@ module forglad
     end subroutine gl_draw_elements_c_interface
 
 
-
+!! DONE.
     subroutine gl_uniform_matrix_4_fv_c_interface(location, count, transpose, value) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -410,7 +434,7 @@ module forglad
     end subroutine gl_uniform_matrix_4_fv_c_interface
 
 
-
+!! DONE.
     subroutine gl_view_port_c_interface(x, y, width, height) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -419,7 +443,7 @@ module forglad
     end subroutine gl_view_port_c_interface
 
 
-
+!! DONE.
     function gl_is_buffer_c_interface(buffer) result(is_buffer) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -429,7 +453,7 @@ module forglad
     end function gl_is_buffer_c_interface
 
 
-
+!! DONE.
     function gl_is_vertex_array_c_interface(array) result(is_array) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -439,7 +463,7 @@ module forglad
     end function gl_is_vertex_array_c_interface
 
 
-
+!! DONE.
     subroutine gl_gen_textures_c_interface(n, textures) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -450,7 +474,7 @@ module forglad
     end subroutine gl_gen_textures_c_interface
 
 
-
+!! DONE.
     subroutine gl_bind_texture_c_interface(target, texture) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -459,7 +483,7 @@ module forglad
     end subroutine gl_bind_texture_c_interface
 
 
-
+!! DONE.
     subroutine gl_tex_parameter_i_c_interface(target, pname, param) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -468,7 +492,7 @@ module forglad
     end subroutine gl_tex_parameter_i_c_interface
 
 
-
+!! DONE.
     subroutine gl_tex_parameter_fv_c_interface(target, pname, params) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -478,7 +502,7 @@ module forglad
     end subroutine gl_tex_parameter_fv_c_interface
 
 
-
+!! DONE.
     subroutine gl_pixel_store_i_c_interface(pname, param) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -487,7 +511,7 @@ module forglad
     end subroutine gl_pixel_store_i_c_interface
 
 
-
+!! DONE.
     subroutine gl_tex_image_2d_c_interface(target, level, internal_format, width, height, border, format, type, data) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -497,7 +521,7 @@ module forglad
     end subroutine gl_tex_image_2d_c_interface
 
 
-
+!! DONE.
     function gl_is_texture_c_interface(texture) result(is_texture) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -507,7 +531,7 @@ module forglad
     end function gl_is_texture_c_interface
 
 
-
+!! DONE.
     subroutine gl_generate_mipmap_c_interface(target) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -516,7 +540,7 @@ module forglad
     end subroutine gl_generate_mipmap_c_interface
 
 
-
+!! DONE.
     subroutine gl_delete_textures_c_interface(n, textures) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -527,7 +551,7 @@ module forglad
     end subroutine gl_delete_textures_c_interface
 
 
-
+!! DONE.
     subroutine gl_depth_mask_c_interface(flag) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -536,7 +560,7 @@ module forglad
     end subroutine gl_depth_mask_c_interface
 
 
-
+!! DONE.
     subroutine gl_depth_func_c_interface(func) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -545,7 +569,7 @@ module forglad
     end subroutine gl_depth_func_c_interface
 
 
-
+!! DONE.
     subroutine gl_depth_range_f_c_interface(near_val, far_val) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -554,7 +578,7 @@ module forglad
     end subroutine gl_depth_range_f_c_interface
 
 
-
+!! DONE.
     subroutine gl_blend_equation_c_interface(mode) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -563,7 +587,7 @@ module forglad
     end subroutine gl_blend_equation_c_interface
 
 
-
+!! DONE.
     subroutine gl_blend_func_c_interface(s_factor, d_factor) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -572,7 +596,7 @@ module forglad
     end subroutine gl_blend_func_c_interface
 
 
-
+!! DONE.
     subroutine gl_blend_func_separate_c_interface(src_rgb, dst_rgb, src_alpha, dst_alpha) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -582,6 +606,7 @@ module forglad
 
 
   end interface
+
 
 contains
 
@@ -593,6 +618,8 @@ contains
     type(c_funptr) :: function_pointer
 
     ! todo: could make this a clone of glad in fortran, maybe.
+
+    ! todo: just use achar(0) so this is more portable with less allocations.
 
 
 
@@ -617,95 +644,146 @@ contains
     function_pointer = glfw_get_proc_address(into_c_string("glDeleteProgram"))
     call c_f_procpointer(function_pointer, gl_delete_program)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glIsProgram"))
+    call c_f_procpointer(function_pointer, gl_is_program)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glCreateShader"))
+    call c_f_procpointer(function_pointer, gl_create_shader)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glDeleteShader"))
+    call c_f_procpointer(function_pointer, gl_delete_shader)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glShaderSource"))
+    call c_f_procpointer(function_pointer, gl_shader_source)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glCompileShader"))
+    call c_f_procpointer(function_pointer, gl_compile_shader)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glIsShader"))
+    call c_f_procpointer(function_pointer, gl_is_shader)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glGetIntegerv"))
+    call c_f_procpointer(function_pointer, gl_get_integer_v)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glAttachShader"))
+    call c_f_procpointer(function_pointer, gl_attach_shader)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glLinkProgram"))
+    call c_f_procpointer(function_pointer, gl_link_program)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glGetError"))
+    call c_f_procpointer(function_pointer, gl_get_error)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glGetShaderiv"))
+    call c_f_procpointer(function_pointer, gl_get_shader_iv)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glGetShaderInfoLog"))
+    call c_f_procpointer(function_pointer, gl_get_shader_info_log)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glGetProgramiv"))
+    call c_f_procpointer(function_pointer, gl_get_program_iv)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glValidateProgram"))
+    call c_f_procpointer(function_pointer, gl_validate_program)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glGetUniformLocation"))
+    call c_f_procpointer(function_pointer, gl_get_uniform_location)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glGetAttribLocation"))
+    call c_f_procpointer(function_pointer, gl_get_attrib_location)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glUseProgram"))
+    call c_f_procpointer(function_pointer, gl_use_program)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glGenVertexArrays"))
+    call c_f_procpointer(function_pointer, gl_gen_vertex_arrays)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glDeleteVertexArrays"))
+    call c_f_procpointer(function_pointer, gl_delete_vertex_arrays)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glBindVertexArray"))
+    call c_f_procpointer(function_pointer, gl_bind_vertex_array)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glGenBuffers"))
+    call c_f_procpointer(function_pointer, gl_gen_buffers)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glDeleteBuffers"))
+    call c_f_procpointer(function_pointer, gl_delete_buffers)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glBindBuffer"))
+    call c_f_procpointer(function_pointer, gl_bind_buffer)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glBufferData"))
+    call c_f_procpointer(function_pointer, gl_buffer_data)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glEnableVertexAttribArray"))
+    call c_f_procpointer(function_pointer, gl_enable_vertex_attrib_array)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glDisableVertexAttribArray"))
+    call c_f_procpointer(function_pointer, gl_disable_vertex_attrib_array)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glVertexAttribPointer"))
+    call c_f_procpointer(function_pointer, gl_vertex_attrib_pointer)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glDrawElements"))
+    call c_f_procpointer(function_pointer, gl_draw_elements)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glUniform4fv"))
+    call c_f_procpointer(function_pointer, gl_uniform_matrix_4_fv)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glViewport"))
+    call c_f_procpointer(function_pointer, gl_view_port)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glIsBuffer"))
+    call c_f_procpointer(function_pointer, gl_is_buffer)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glIsVertexArray"))
+    call c_f_procpointer(function_pointer, gl_is_vertex_array)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glGenTextures"))
+    call c_f_procpointer(function_pointer, gl_gen_textures)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glBindTexture"))
+    call c_f_procpointer(function_pointer, gl_bind_texture)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glTextureParameteri"))
+    call c_f_procpointer(function_pointer, gl_tex_parameter_i)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glTexParameterfv"))
+    call c_f_procpointer(function_pointer, gl_tex_parameter_fv)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glPixelStorei"))
+    call c_f_procpointer(function_pointer, gl_pixel_store_i)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glTexImage2D"))
+    call c_f_procpointer(function_pointer, gl_tex_image_2d)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glIsTexture"))
+    call c_f_procpointer(function_pointer, gl_is_texture)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glGenerateMipmap"))
+    call c_f_procpointer(function_pointer, gl_generate_mipmap)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glDeleteTextures"))
+    call c_f_procpointer(function_pointer, gl_delete_textures)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glDepthMask"))
+    call c_f_procpointer(function_pointer, gl_depth_mask)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glDepthFunc"))
+    call c_f_procpointer(function_pointer, gl_depth_func)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glDepthRangef"))
+    call c_f_procpointer(function_pointer, gl_depth_range_f)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glBlendEquation"))
+    call c_f_procpointer(function_pointer, gl_blend_equation)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glBlendFunc"))
+    call c_f_procpointer(function_pointer, gl_blend_func)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glBlendFuncSeparate"))
+    call c_f_procpointer(function_pointer, gl_blend_func_separate)
   end subroutine forglad_init
 
 
