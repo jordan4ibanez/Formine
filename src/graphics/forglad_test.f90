@@ -3,12 +3,18 @@ module forglad
   use, intrinsic :: iso_c_binding
   implicit none
 
-  procedure(gl_clear_c_interface), pointer :: gl_clear
+
+  private
+
+
+  procedure(gl_clear_c_interface), public, pointer :: gl_clear
+  procedure(gl_clear_color_c_interface), public, pointer :: gl_clear_color
 
 
   interface
 
 
+    !! DONE.
     subroutine gl_clear_c_interface(thing_to_clear) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -502,10 +508,8 @@ contains
     implicit none
 
     type(c_funptr) :: function_pointer
-    character(len = :, kind = c_char), allocatable :: function_name
 
-    function_name = into_c_string("glClear")
-    function_pointer = glfw_get_proc_address(function_name)
+    function_pointer = glfw_get_proc_address(into_c_string("glClear"))
     call c_f_procpointer(function_pointer, gl_clear)
 
   end subroutine forglad_init
