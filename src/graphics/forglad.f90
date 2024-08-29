@@ -10,6 +10,8 @@ module forglad
   public :: forglad_load_gl
 
 
+  ! These are OpenGL constants.
+
   integer, parameter, public :: GL_VERSION = int(z"1f02")
   integer, parameter, public :: GL_MAJOR_VERSION = int(z"821B")
   integer, parameter, public :: GL_MINOR_VERSION = int(z"821C")
@@ -56,6 +58,10 @@ module forglad
   integer, parameter, public :: GL_ONE = 1
 
 
+  ! These are the actual function pointers for OpenGL.
+  !? They start off as undefined.
+
+  procedure(gl_get_string_c_interface), public, pointer :: gl_get_string
   procedure(gl_clear_c_interface), public, pointer :: internal_gl_clear
   procedure(gl_clear_color_c_interface), public, pointer :: internal_gl_clear_color
   procedure(gl_enable_c_interface), public, pointer :: gl_enable
@@ -114,6 +120,15 @@ module forglad
 
 
   interface
+
+
+    function gl_get_string_c_interface(name) result(string_pointer)
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: name
+      type(c_ptr) :: string_pointer
+    end function gl_get_string_c_interface
 
 
 !! DONE.
@@ -658,6 +673,14 @@ module forglad
 contains
 
 
+  !* This finds the base version of OpenGL that your GPU supports.
+  subroutine find_core_opengl()
+    implicit none
+
+  end subroutine find_core_opengl
+
+
+  !* Loads up the function pointers for OpenGL.
   subroutine forglad_load_gl()
     use :: string
     implicit none
@@ -665,6 +688,13 @@ contains
     type(c_funptr) :: function_pointer
 
     ! todo: could make this a clone of glad in fortran, maybe.
+
+    function_pointer = glfw_get_proc_address("glGetString"//achar(0))
+    call c_f_procpointer(function_pointer, gl_get_string)
+
+
+    call find_core_opengl()
+
 
     function_pointer = glfw_get_proc_address("glClear"//achar(0))
     call c_f_procpointer(function_pointer, internal_gl_clear)
