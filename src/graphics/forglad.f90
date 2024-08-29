@@ -12,6 +12,8 @@ module forglad
 
   procedure(gl_clear_c_interface), public, pointer :: gl_clear
   procedure(gl_clear_color_c_interface), public, pointer :: gl_clear_color
+  procedure(gl_enable_c_interface), public, pointer :: gl_enable
+  procedure(gl_disable_c_interface), public, pointer :: gl_disable
 
 
   interface
@@ -26,6 +28,7 @@ module forglad
     end subroutine gl_clear_c_interface
 
 
+    !! DONE.
     subroutine gl_clear_color_c_interface(r,g,b,a) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -34,6 +37,7 @@ module forglad
     end subroutine gl_clear_color_c_interface
 
 
+    !! DONE.
     subroutine gl_enable_c_interface(cap) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -506,19 +510,37 @@ module forglad
 contains
 
 
-  subroutine forglad_init()
+  function forglad_init() result(success)
     use :: string
     implicit none
 
+    logical :: success
     type(c_funptr) :: function_pointer
 
+    success = .false.
+
+    ! todo: could make this a clone of glad in fortran, maybe.
+
     function_pointer = glfw_get_proc_address(into_c_string("glClear"))
+    if (.not. c_associated(function_pointer)) call forglad_error_stop("copy_function_name_here")
     call c_f_procpointer(function_pointer, gl_clear)
 
     function_pointer = glfw_get_proc_address(into_c_string("glClearColor"))
+    if (.not. c_associated(function_pointer)) call forglad_error_stop("copy_function_name_here")
     call c_f_procpointer(function_pointer, gl_clear_color)
 
-  end subroutine forglad_init
+    function_pointer = glfw_get_proc_address(into_c_string("glEnable"))
+    if (.not. c_associated(function_pointer)) call forglad_error_stop("copy_function_name_here")
+    call c_f_procpointer(function_pointer, gl_clear_color)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glDisable"))
+    if (.not. c_associated(function_pointer)) call forglad_error_stop("copy_function_name_here")
+    call c_f_procpointer(function_pointer, gl_clear_color)
+
+
+
+  end function forglad_init
+
   !* This function will help reduce the amount of static strings stored in the binary.
   subroutine forglad_error_stop(function_name)
     implicit none
