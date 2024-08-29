@@ -75,6 +75,50 @@ module opengl
   public :: gl_blend_func_separate
 
 
+  ! OpenGL Constants.
+
+  public :: GL_VERSION
+  public :: GL_MAJOR_VERSION
+  public :: GL_MINOR_VERSION
+  public :: GL_TRUE
+  public :: GL_FALSE
+  public :: GL_FLOAT
+  public :: GL_DEBUG_OUTPUT_SYNCHRONOUS
+  public :: GL_COLOR_BUFFER_BIT
+  public :: GL_VERTEX_SHADER
+  public :: GL_FRAGMENT_SHADER
+  public :: GL_COMPILE_STATUS
+  public :: GL_LINK_STATUS
+  public :: GL_VALIDATE_STATUS
+  public :: GL_STATIC_DRAW
+  public :: GL_ARRAY_BUFFER
+  public :: GL_ELEMENT_ARRAY_BUFFER
+  public :: GL_TRIANGLES
+  public :: GL_UNSIGNED_INT
+  public :: GL_TEXTURE_2D
+  public :: GL_TEXTURE_WRAP_S
+  public :: GL_TEXTURE_WRAP_T
+  public :: GL_CLAMP_TO_BORDER
+  public :: GL_TEXTURE_BORDER_COLOR
+  public :: GL_NEAREST
+  public :: GL_NEAREST_MIPMAP_LINEAR
+  public :: GL_NEAREST_MIPMAP_NEAREST
+  public :: GL_TEXTURE_MIN_FILTER
+  public :: GL_TEXTURE_MAG_FILTER
+  public :: GL_UNPACK_ALIGNMENT
+  public :: GL_RGBA
+  public :: GL_UNSIGNED_BYTE
+  public :: GL_DEPTH_TEST
+  public :: GL_LESS
+  public :: GL_CULL_FACE
+  public :: GL_DEPTH_BUFFER_BIT
+  public :: GL_BLEND
+  public :: GL_FUNC_ADD
+  public :: GL_SRC_ALPHA
+  public :: GL_ONE_MINUS_SRC_ALPHA
+  public :: GL_ONE
+
+
 contains
 
 
