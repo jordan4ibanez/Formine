@@ -70,7 +70,7 @@ module glfw
       implicit none
 
       character(len = 1, kind = c_char), intent(in), optional :: procname
-      type(c_ptr) :: address
+      type(c_funptr) :: address
     end function glfw_get_proc_address
 
 
