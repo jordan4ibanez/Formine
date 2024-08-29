@@ -4,24 +4,24 @@ program main
   use :: string
   ! use :: shader
   use :: files
-  use :: mesh
-  use :: camera
-  use :: delta_time
-  use :: texture
-  use :: font
-  use :: vector_2f
-  use :: api
-  use :: texture_atlas
-  use :: texture_atlas
+  ! use :: mesh
+  ! use :: camera
+  ! use :: delta_time
+  ! use :: texture
+  ! use :: font
+  ! use :: vector_2f
+  ! use :: api
+  ! use :: texture_atlas
+  ! use :: texture_atlas
   use, intrinsic ::  iso_c_binding
   use :: forglad
   implicit none
 
   integer(c_int) :: gotten_gl_version
   real(c_float) :: rotation, min_x, min_y, max_x, max_y
-  type(vec2f) :: text_size
+  ! type(vec2f) :: text_size
   integer(c_int) :: fps_new, old_fps
-  type(texture_rectangle) :: tex_rect
+  ! type(texture_rectangle) :: tex_rect
 
   fps_new = 0
   old_fps = -1
