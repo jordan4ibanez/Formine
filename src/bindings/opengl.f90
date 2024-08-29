@@ -7,9 +7,11 @@ module opengl
   private
 
 
-  ! Functions we want exposed.
+  ! OpenGL function pointer loader.
 
   public :: forglad_load_gl
+
+  ! OpenGL function pointers.
 
   public :: gl_clear_color_buffer
   public :: gl_clear_depth_buffer
