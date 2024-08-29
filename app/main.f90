@@ -16,6 +16,7 @@ program main
   use, intrinsic ::  iso_c_binding
   implicit none
 
+  integer(c_int) :: gotten_gl_version
   real(c_float) :: rotation, min_x, min_y, max_x, max_y
   type(vec2f) :: text_size
   integer(c_int) :: fps_new, old_fps
@@ -48,6 +49,13 @@ program main
   ! Try to initialize the Window.
   if (.not. glfw_create_window(640,480, "Fortran Game Engine")) then
     return
+  end if
+
+  ! Get portable function pointers.
+  gotten_gl_version = glad_load_gl(c_funloc(glfw_get_proc_address))
+
+  if (gotten_gl_version == 0) then
+    error stop "[Glad] Error: Failed to initialize OpenGL context."
   end if
 
   call delta_initialize()

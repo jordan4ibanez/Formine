@@ -38,7 +38,7 @@ module glfw
 
   ! What we want exposed.
 
-
+  public :: glfw_get_proc_address
   public :: glfw_init
   public :: glfw_terminate
   public :: glfw_create_window
@@ -62,6 +62,16 @@ module glfw
 
 
   interface
+
+
+    !! NEVER USE THIS OUTSIDE OF INITIALIZATION !!
+    function glfw_get_proc_address(procname) result(address) bind(c, name = "glfwGetProcAddress")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      character(len = 1, kind = c_char), intent(in), optional :: procname
+      type(c_ptr) :: address
+    end function glfw_get_proc_address
 
 
     logical(c_bool) function internal_glfw_init() result(success) bind(c, name="glfwInit")

@@ -99,6 +99,7 @@ module opengl
 
   ! Functions we want exposed.
 
+  public :: glad_load_gl
   public :: gl_clear_color_buffer
   public :: gl_clear_depth_buffer
   public :: gl_clear_color_and_depth_buffer
@@ -166,6 +167,15 @@ module opengl
   ! Here I'm binding to the C shared library.
 
   interface
+
+
+    function glad_load_gl(glfw_get_proc_address) result(version) bind(c, name = "gladLoadGL")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_funptr), intent(in), value :: glfw_get_proc_address
+      integer(c_int) :: version
+    end function glad_load_gl
 
 
     subroutine internal_gl_clear(thing_to_clear) bind(c, name = "glClear")
