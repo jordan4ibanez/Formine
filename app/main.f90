@@ -61,7 +61,7 @@ program main
   !   error stop "[Glad] Error: Failed to initialize OpenGL 4.2 context. Does your GPU support it?"
   ! end if
 
-  call forglad_load()
+  call forglad_load_gl()
 
   call gl_clear(2)
 
