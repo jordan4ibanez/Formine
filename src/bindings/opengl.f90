@@ -178,7 +178,7 @@ module opengl
     end function glad_load_gl
 
 
-    subroutine internal_gl_clear(thing_to_clear) bind(c, name = "glClear")
+    subroutine internal_gl_clear(thing_to_clear) bind(c, name = "glad_glClear")
       use, intrinsic :: iso_c_binding
       implicit none
 
