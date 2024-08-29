@@ -7,7 +7,7 @@ module forglad
   private
 
 
-  public :: forglad_init
+  public :: forglad_load
 
 
   integer, parameter, public :: GL_VERSION = int(z"1f02")
@@ -657,7 +657,7 @@ module forglad
 contains
 
 
-  subroutine forglad_init()
+  subroutine forglad_load()
     use :: string
     implicit none
 
@@ -826,7 +826,7 @@ contains
 
     function_pointer = glfw_get_proc_address("glBlendFuncSeparate"//achar(0))
     call c_f_procpointer(function_pointer, gl_blend_func_separate)
-  end subroutine forglad_init
+  end subroutine forglad_load
 
 
 end module forglad
