@@ -619,7 +619,6 @@ contains
 
     ! todo: could make this a clone of glad in fortran, maybe.
 
-
     function_pointer = glfw_get_proc_address("glClear"//achar(0))
     call c_f_procpointer(function_pointer, gl_clear)
 
