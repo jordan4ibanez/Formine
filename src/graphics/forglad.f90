@@ -823,7 +823,7 @@ contains
     function_pointer = glfw_get_proc_address("glDrawElements"//achar(0))
     call c_f_procpointer(function_pointer, internal_gl_draw_elements)
 
-    function_pointer = glfw_get_proc_address("glUniform4fv"//achar(0))
+    function_pointer = glfw_get_proc_address("glUniformMatrix4fv"//achar(0))
     call c_f_procpointer(function_pointer, internal_gl_uniform_matrix_4_fv)
 
     function_pointer = glfw_get_proc_address("glViewport"//achar(0))
@@ -841,7 +841,7 @@ contains
     function_pointer = glfw_get_proc_address("glBindTexture"//achar(0))
     call c_f_procpointer(function_pointer, gl_bind_texture)
 
-    function_pointer = glfw_get_proc_address("glTextureParameteri"//achar(0))
+    function_pointer = glfw_get_proc_address("glTexParameteri"//achar(0))
     call c_f_procpointer(function_pointer, gl_tex_parameter_i)
 
     function_pointer = glfw_get_proc_address("glTexParameterfv"//achar(0))
