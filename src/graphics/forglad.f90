@@ -679,38 +679,22 @@ contains
     use :: string
     implicit none
 
-    ! This was translated from GLAD.
-
+    integer(c_int) :: major, minor
     logical(c_bool) :: success
-    type(c_ptr) :: string_pointer
-    character(len = :, kind = c_char), allocatable :: version_info_string
-    type(heap_string), dimension(4) :: prefixes
-    integer(c_int) :: i
 
     success = .false.
 
-    string_pointer = gl_get_string(GL_VERSION)
-    version_info_string = string_from_c(string_pointer, 128)
+    call gl_get_integer_v(GL_MAJOR_VERSION, major)
+    call gl_get_integer_v(GL_MINOR_VERSION, minor)
 
-    if (version_info_string == "") then
+    if (major < 4) then
+      return
+    end if
+    if (minor < 2) then
       return
     end if
 
-    prefixes = (/ &
-      heap_string("OpenGL ES-CM "), &
-      heap_string("OpenGL ES-CL "), &
-      heap_string("OpenGL ES "), &
-      heap_string("") &
-      /)
-
-    do i = 1,size(prefixes)
-      if (string_starts_with(version_info_string, prefixes(i)%get())) then
-        print*,"found you", i
-      end if
-    end do
-
-    print*,version_info_string
-
+    success = .true.
   end function is_opengl_4_2_capable
 
 
@@ -726,9 +710,9 @@ contains
 
     function_pointer = glfw_get_proc_address("glGetIntegerv"//achar(0))
     call c_f_procpointer(function_pointer, gl_get_integer_v)
-    
-    if (.not. is_opengl_4_2_capable()) then
 
+    if (.not. is_opengl_4_2_capable()) then
+      error stop "[Forglad] Critical Error: GPU not capable of OpenGL 4.2 context."
     end if
 
     function_pointer = glfw_get_proc_address("glGetString"//achar(0))
