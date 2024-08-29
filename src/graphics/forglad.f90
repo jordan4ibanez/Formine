@@ -15,6 +15,31 @@ module forglad
   procedure(gl_enable_c_interface), public, pointer :: gl_enable
   procedure(gl_disable_c_interface), public, pointer :: gl_disable
   procedure(gl_debug_message_callback_c_interface), public, pointer :: gl_debug_message_callback
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  procedure(), public, pointer :: 
+  
 
 
   interface
