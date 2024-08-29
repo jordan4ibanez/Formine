@@ -56,55 +56,55 @@ module forglad
   integer, parameter, public :: GL_ONE = 1
 
 
-  procedure(gl_clear_c_interface), public, pointer :: gl_clear
-  procedure(gl_clear_color_c_interface), public, pointer :: gl_clear_color
+  procedure(gl_clear_c_interface), public, pointer :: internal_gl_clear
+  procedure(gl_clear_color_c_interface), public, pointer :: internal_gl_clear_color
   procedure(gl_enable_c_interface), public, pointer :: gl_enable
   procedure(gl_disable_c_interface), public, pointer :: gl_disable
-  procedure(gl_debug_message_callback_c_interface), public, pointer :: gl_debug_message_callback
-  procedure(gl_create_program_c_interface), public, pointer :: gl_create_program
+  procedure(gl_debug_message_callback_c_interface), public, pointer :: internal_gl_debug_message_callback
+  procedure(gl_create_program_c_interface), public, pointer :: internal_gl_create_program
   procedure(gl_delete_program_c_interface), public, pointer :: gl_delete_program
   procedure(gl_is_program_c_interface), public, pointer :: gl_is_program
-  procedure(gl_create_shader_c_interface), public, pointer :: gl_create_shader
+  procedure(gl_create_shader_c_interface), public, pointer :: internal_gl_create_shader
   procedure(gl_delete_shader_c_interface), public, pointer :: gl_delete_shader
-  procedure(gl_shader_source_c_interface), public, pointer :: gl_shader_source
+  procedure(gl_shader_source_c_interface), public, pointer :: internal_gl_shader_source
   procedure(gl_compile_shader_c_interface), public, pointer :: gl_compile_shader
   procedure(gl_is_shader_c_interface), public, pointer :: gl_is_shader
   procedure(gl_get_integer_v_c_interface), public, pointer :: gl_get_integer_v
   procedure(gl_attach_shader_c_interface), public, pointer :: gl_attach_shader
   procedure(gl_link_program_c_interface), public, pointer :: gl_link_program
   procedure(gl_get_error_c_interface), public, pointer :: gl_get_error
-  procedure(gl_get_shader_iv_c_interface), public, pointer :: gl_get_shader_iv
-  procedure(gl_get_shader_info_log_c_interface), public, pointer :: gl_get_shader_info_log
-  procedure(gl_get_program_iv_c_interface), public, pointer :: gl_get_program_iv
+  procedure(gl_get_shader_iv_c_interface), public, pointer :: internal_gl_get_shader_iv
+  procedure(gl_get_shader_info_log_c_interface), public, pointer :: internal_gl_get_shader_info_log
+  procedure(gl_get_program_iv_c_interface), public, pointer :: internal_gl_get_program_iv
   procedure(gl_validate_program_c_interface), public, pointer :: gl_validate_program
-  procedure(gl_get_uniform_location_c_interface), public, pointer :: gl_get_uniform_location
-  procedure(gl_get_attrib_location_c_interface), public, pointer :: gl_get_attrib_location
+  procedure(gl_get_uniform_location_c_interface), public, pointer :: internal_gl_get_uniform_location
+  procedure(gl_get_attrib_location_c_interface), public, pointer :: internal_gl_get_attrib_location
   procedure(gl_use_program_c_interface), public, pointer :: gl_use_program
-  procedure(gl_gen_vertex_arrays_c_interface), public, pointer :: gl_gen_vertex_arrays
-  procedure(gl_delete_vertex_arrays_c_interface), public, pointer :: gl_delete_vertex_arrays
+  procedure(gl_gen_vertex_arrays_c_interface), public, pointer :: internal_gl_gen_vertex_arrays
+  procedure(gl_delete_vertex_arrays_c_interface), public, pointer :: internal_gl_delete_vertex_arrays
   procedure(gl_bind_vertex_array_c_interface), public, pointer :: gl_bind_vertex_array
-  procedure(gl_gen_buffers_c_interface), public, pointer :: gl_gen_buffers
-  procedure(gl_delete_buffers_c_interface), public, pointer :: gl_delete_buffers
+  procedure(gl_gen_buffers_c_interface), public, pointer :: internal_gl_gen_buffers
+  procedure(gl_delete_buffers_c_interface), public, pointer :: internal_gl_delete_buffers
   procedure(gl_bind_buffer_c_interface), public, pointer :: gl_bind_buffer
-  procedure(gl_buffer_data_c_interface), public, pointer :: gl_buffer_data
+  procedure(gl_buffer_data_c_interface), public, pointer :: internal_gl_buffer_data
   procedure(gl_enable_vertex_attrib_array_c_interface), public, pointer :: gl_enable_vertex_attrib_array
   procedure(gl_disable_vertex_attrib_array_c_interface), public, pointer :: gl_disable_vertex_attrib_array
-  procedure(gl_vertex_attrib_pointer_c_interface), public, pointer :: gl_vertex_attrib_pointer
-  procedure(gl_draw_elements_c_interface), public, pointer :: gl_draw_elements
-  procedure(gl_uniform_matrix_4_fv_c_interface), public, pointer :: gl_uniform_matrix_4_fv
+  procedure(gl_vertex_attrib_pointer_c_interface), public, pointer :: internal_gl_vertex_attrib_pointer
+  procedure(gl_draw_elements_c_interface), public, pointer :: internal_gl_draw_elements
+  procedure(gl_uniform_matrix_4_fv_c_interface), public, pointer :: internal_gl_uniform_matrix_4_fv
   procedure(gl_view_port_c_interface), public, pointer :: gl_view_port
   procedure(gl_is_buffer_c_interface), public, pointer :: gl_is_buffer
   procedure(gl_is_vertex_array_c_interface), public, pointer :: gl_is_vertex_array
-  procedure(gl_gen_textures_c_interface), public, pointer :: gl_gen_textures
+  procedure(gl_gen_textures_c_interface), public, pointer :: internal_gl_gen_textures
   procedure(gl_bind_texture_c_interface), public, pointer :: gl_bind_texture
   procedure(gl_tex_parameter_i_c_interface), public, pointer :: gl_tex_parameter_i
   procedure(gl_tex_parameter_fv_c_interface), public, pointer :: gl_tex_parameter_fv
   procedure(gl_pixel_store_i_c_interface), public, pointer :: gl_pixel_store_i
-  procedure(gl_tex_image_2d_c_interface), public, pointer :: gl_tex_image_2d
+  procedure(gl_tex_image_2d_c_interface), public, pointer :: internal_gl_tex_image_2d
   procedure(gl_is_texture_c_interface), public, pointer :: gl_is_texture
   procedure(gl_generate_mipmap_c_interface), public, pointer :: gl_generate_mipmap
-  procedure(gl_delete_textures_c_interface), public, pointer :: gl_delete_textures
-  procedure(gl_depth_mask_c_interface), public, pointer :: gl_depth_mask
+  procedure(gl_delete_textures_c_interface), public, pointer :: internal_gl_delete_textures
+  procedure(gl_depth_mask_c_interface), public, pointer :: internal_gl_depth_mask
   procedure(gl_depth_func_c_interface), public, pointer :: gl_depth_func
   procedure(gl_depth_range_f_c_interface), public, pointer :: gl_depth_range_f
   procedure(gl_blend_equation_c_interface), public, pointer :: gl_blend_equation
@@ -666,10 +666,10 @@ contains
     ! todo: could make this a clone of glad in fortran, maybe.
 
     function_pointer = glfw_get_proc_address("glClear"//achar(0))
-    call c_f_procpointer(function_pointer, gl_clear)
+    call c_f_procpointer(function_pointer, internal_gl_clear)
 
     function_pointer = glfw_get_proc_address("glClearColor"//achar(0))
-    call c_f_procpointer(function_pointer, gl_clear_color)
+    call c_f_procpointer(function_pointer, internal_gl_clear_color)
 
     function_pointer = glfw_get_proc_address("glEnable"//achar(0))
     call c_f_procpointer(function_pointer, gl_enable)
@@ -678,10 +678,10 @@ contains
     call c_f_procpointer(function_pointer, gl_disable)
 
     function_pointer = glfw_get_proc_address("glDebugMessageCallback"//achar(0))
-    call c_f_procpointer(function_pointer, gl_debug_message_callback)
+    call c_f_procpointer(function_pointer, internal_gl_debug_message_callback)
 
     function_pointer = glfw_get_proc_address("glCreateProgram"//achar(0))
-    call c_f_procpointer(function_pointer, gl_create_program)
+    call c_f_procpointer(function_pointer, internal_gl_create_program)
 
     function_pointer = glfw_get_proc_address("glDeleteProgram"//achar(0))
     call c_f_procpointer(function_pointer, gl_delete_program)
@@ -690,13 +690,13 @@ contains
     call c_f_procpointer(function_pointer, gl_is_program)
 
     function_pointer = glfw_get_proc_address("glCreateShader"//achar(0))
-    call c_f_procpointer(function_pointer, gl_create_shader)
+    call c_f_procpointer(function_pointer, internal_gl_create_shader)
 
     function_pointer = glfw_get_proc_address("glDeleteShader"//achar(0))
     call c_f_procpointer(function_pointer, gl_delete_shader)
 
     function_pointer = glfw_get_proc_address("glShaderSource"//achar(0))
-    call c_f_procpointer(function_pointer, gl_shader_source)
+    call c_f_procpointer(function_pointer, internal_gl_shader_source)
 
     function_pointer = glfw_get_proc_address("glCompileShader"//achar(0))
     call c_f_procpointer(function_pointer, gl_compile_shader)
@@ -717,46 +717,46 @@ contains
     call c_f_procpointer(function_pointer, gl_get_error)
 
     function_pointer = glfw_get_proc_address("glGetShaderiv"//achar(0))
-    call c_f_procpointer(function_pointer, gl_get_shader_iv)
+    call c_f_procpointer(function_pointer, internal_gl_get_shader_iv)
 
     function_pointer = glfw_get_proc_address("glGetShaderInfoLog"//achar(0))
-    call c_f_procpointer(function_pointer, gl_get_shader_info_log)
+    call c_f_procpointer(function_pointer, internal_gl_get_shader_info_log)
 
     function_pointer = glfw_get_proc_address("glGetProgramiv"//achar(0))
-    call c_f_procpointer(function_pointer, gl_get_program_iv)
+    call c_f_procpointer(function_pointer, internal_gl_get_program_iv)
 
     function_pointer = glfw_get_proc_address("glValidateProgram"//achar(0))
     call c_f_procpointer(function_pointer, gl_validate_program)
 
     function_pointer = glfw_get_proc_address("glGetUniformLocation"//achar(0))
-    call c_f_procpointer(function_pointer, gl_get_uniform_location)
+    call c_f_procpointer(function_pointer, internal_gl_get_uniform_location)
 
     function_pointer = glfw_get_proc_address("glGetAttribLocation"//achar(0))
-    call c_f_procpointer(function_pointer, gl_get_attrib_location)
+    call c_f_procpointer(function_pointer, internal_gl_get_attrib_location)
 
     function_pointer = glfw_get_proc_address("glUseProgram"//achar(0))
     call c_f_procpointer(function_pointer, gl_use_program)
 
     function_pointer = glfw_get_proc_address("glGenVertexArrays"//achar(0))
-    call c_f_procpointer(function_pointer, gl_gen_vertex_arrays)
+    call c_f_procpointer(function_pointer, internal_gl_gen_vertex_arrays)
 
     function_pointer = glfw_get_proc_address("glDeleteVertexArrays"//achar(0))
-    call c_f_procpointer(function_pointer, gl_delete_vertex_arrays)
+    call c_f_procpointer(function_pointer, internal_gl_delete_vertex_arrays)
 
     function_pointer = glfw_get_proc_address("glBindVertexArray"//achar(0))
     call c_f_procpointer(function_pointer, gl_bind_vertex_array)
 
     function_pointer = glfw_get_proc_address("glGenBuffers"//achar(0))
-    call c_f_procpointer(function_pointer, gl_gen_buffers)
+    call c_f_procpointer(function_pointer, internal_gl_gen_buffers)
 
     function_pointer = glfw_get_proc_address("glDeleteBuffers"//achar(0))
-    call c_f_procpointer(function_pointer, gl_delete_buffers)
+    call c_f_procpointer(function_pointer, internal_gl_delete_buffers)
 
     function_pointer = glfw_get_proc_address("glBindBuffer"//achar(0))
     call c_f_procpointer(function_pointer, gl_bind_buffer)
 
     function_pointer = glfw_get_proc_address("glBufferData"//achar(0))
-    call c_f_procpointer(function_pointer, gl_buffer_data)
+    call c_f_procpointer(function_pointer, internal_gl_buffer_data)
 
     function_pointer = glfw_get_proc_address("glEnableVertexAttribArray"//achar(0))
     call c_f_procpointer(function_pointer, gl_enable_vertex_attrib_array)
@@ -765,13 +765,13 @@ contains
     call c_f_procpointer(function_pointer, gl_disable_vertex_attrib_array)
 
     function_pointer = glfw_get_proc_address("glVertexAttribPointer"//achar(0))
-    call c_f_procpointer(function_pointer, gl_vertex_attrib_pointer)
+    call c_f_procpointer(function_pointer, internal_gl_vertex_attrib_pointer)
 
     function_pointer = glfw_get_proc_address("glDrawElements"//achar(0))
-    call c_f_procpointer(function_pointer, gl_draw_elements)
+    call c_f_procpointer(function_pointer, internal_gl_draw_elements)
 
     function_pointer = glfw_get_proc_address("glUniform4fv"//achar(0))
-    call c_f_procpointer(function_pointer, gl_uniform_matrix_4_fv)
+    call c_f_procpointer(function_pointer, internal_gl_uniform_matrix_4_fv)
 
     function_pointer = glfw_get_proc_address("glViewport"//achar(0))
     call c_f_procpointer(function_pointer, gl_view_port)
@@ -783,7 +783,7 @@ contains
     call c_f_procpointer(function_pointer, gl_is_vertex_array)
 
     function_pointer = glfw_get_proc_address("glGenTextures"//achar(0))
-    call c_f_procpointer(function_pointer, gl_gen_textures)
+    call c_f_procpointer(function_pointer, internal_gl_gen_textures)
 
     function_pointer = glfw_get_proc_address("glBindTexture"//achar(0))
     call c_f_procpointer(function_pointer, gl_bind_texture)
@@ -798,7 +798,7 @@ contains
     call c_f_procpointer(function_pointer, gl_pixel_store_i)
 
     function_pointer = glfw_get_proc_address("glTexImage2D"//achar(0))
-    call c_f_procpointer(function_pointer, gl_tex_image_2d)
+    call c_f_procpointer(function_pointer, internal_gl_tex_image_2d)
 
     function_pointer = glfw_get_proc_address("glIsTexture"//achar(0))
     call c_f_procpointer(function_pointer, gl_is_texture)
@@ -807,10 +807,10 @@ contains
     call c_f_procpointer(function_pointer, gl_generate_mipmap)
 
     function_pointer = glfw_get_proc_address("glDeleteTextures"//achar(0))
-    call c_f_procpointer(function_pointer, gl_delete_textures)
+    call c_f_procpointer(function_pointer, internal_gl_delete_textures)
 
     function_pointer = glfw_get_proc_address("glDepthMask"//achar(0))
-    call c_f_procpointer(function_pointer, gl_depth_mask)
+    call c_f_procpointer(function_pointer, internal_gl_depth_mask)
 
     function_pointer = glfw_get_proc_address("glDepthFunc"//achar(0))
     call c_f_procpointer(function_pointer, gl_depth_func)
