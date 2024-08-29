@@ -518,32 +518,19 @@ contains
 
     ! todo: could make this a clone of glad in fortran, maybe.
 
-    function_pointer = glfw_get_proc_address(into_c_string("glClear"))
-    if (.not. c_associated(function_pointer)) call forglad_error_stop("copy_function_name_here")
+    function_pointer = glfw_get_proc_address(into_c_string("gloobale"))
     call c_f_procpointer(function_pointer, gl_clear)
 
     function_pointer = glfw_get_proc_address(into_c_string("glClearColor"))
-    if (.not. c_associated(function_pointer)) call forglad_error_stop("copy_function_name_here")
     call c_f_procpointer(function_pointer, gl_clear_color)
 
     function_pointer = glfw_get_proc_address(into_c_string("glEnable"))
-    if (.not. c_associated(function_pointer)) call forglad_error_stop("copy_function_name_here")
     call c_f_procpointer(function_pointer, gl_clear_color)
 
     function_pointer = glfw_get_proc_address(into_c_string("glDisable"))
-    if (.not. c_associated(function_pointer)) call forglad_error_stop("copy_function_name_here")
     call c_f_procpointer(function_pointer, gl_clear_color)
 
   end subroutine forglad_init
 
-
-  !* This function will help reduce the amount of static strings stored in the binary.
-  subroutine forglad_error_stop(function_name)
-    implicit none
-
-    character(len = *, kind = c_char), intent(in) :: function_name
-
-    error stop "[Forglad] Critical Error: Failed to load OpenGL function pointer ["//function_name//"]."
-  end subroutine forglad_error_stop
 
 end module forglad
