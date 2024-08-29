@@ -53,8 +53,7 @@ program main
   call glfw_make_context_current()
 
   ! Get portable function pointers.
-  call forglad_load_gl()
-
+  call forglad_load_gl(c_funloc(glfw_get_proc_address))
 
   call delta_initialize()
 
