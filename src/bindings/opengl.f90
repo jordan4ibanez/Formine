@@ -100,9 +100,9 @@ module opengl
   ! Functions we want exposed.
 
   public :: glad_load_gl
-  public :: gl_clear_color_buffer
-  public :: gl_clear_depth_buffer
-  public :: gl_clear_color_and_depth_buffer
+  ! public :: gl_clear_color_buffer
+  ! public :: gl_clear_depth_buffer
+  ! public :: gl_clear_color_and_depth_buffer
   public :: gl_enable
   public :: gl_disable
   public :: gl_clear_color
@@ -163,8 +163,8 @@ module opengl
   public :: gl_blend_func
   public :: gl_blend_func_separate
 
+  type(c_funptr) :: internal_gl_clear;
 
-  ! Here I'm binding to the C shared library.
 
   interface
 
@@ -178,12 +178,12 @@ module opengl
     end function glad_load_gl
 
 
-    subroutine internal_gl_clear(thing_to_clear) bind(c, name = "glClear")
-      use, intrinsic :: iso_c_binding
-      implicit none
+    ! subroutine internal_gl_clear(thing_to_clear) bind(c, name = "glClear")
+    !   use, intrinsic :: iso_c_binding
+    !   implicit none
 
-      integer(c_int), intent(in), value :: thing_to_clear
-    end subroutine internal_gl_clear
+    !   integer(c_int), intent(in), value :: thing_to_clear
+    ! end subroutine internal_gl_clear
 
 
     subroutine internal_gl_clear_color(r,g,b,a) bind(c, name = "glClearColor")
@@ -670,25 +670,25 @@ contains
   ! Here I'm just kind of using OpenGL the way I want to use it.
 
 
-  subroutine gl_clear_color_buffer()
-    implicit none
+  ! subroutine gl_clear_color_buffer()
+  !   implicit none
 
-    call internal_gl_clear(GL_COLOR_BUFFER_BIT)
-  end
-
-
-  subroutine gl_clear_depth_buffer()
-    implicit none
-
-    call internal_gl_clear(GL_DEPTH_BUFFER_BIT)
-  end subroutine gl_clear_depth_buffer
+  !   call internal_gl_clear(GL_COLOR_BUFFER_BIT)
+  ! end
 
 
-  subroutine gl_clear_color_and_depth_buffer()
-    implicit none
+  ! subroutine gl_clear_depth_buffer()
+  !   implicit none
 
-    call internal_gl_clear(ior(GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT))
-  end subroutine gl_clear_color_and_depth_buffer
+  !   call internal_gl_clear(GL_DEPTH_BUFFER_BIT)
+  ! end subroutine gl_clear_depth_buffer
+
+
+  ! subroutine gl_clear_color_and_depth_buffer()
+  !   implicit none
+
+  !   call internal_gl_clear(ior(GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT))
+  ! end subroutine gl_clear_color_and_depth_buffer
 
 
   subroutine gl_clear_color(r,g,b)
