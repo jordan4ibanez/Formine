@@ -519,5 +519,13 @@ contains
     call c_f_procpointer(function_pointer, gl_clear_color)
 
   end subroutine forglad_init
+  !* This function will help reduce the amount of static strings stored in the binary.
+  subroutine forglad_error_stop(function_name)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: function_name
+
+    error stop "[Forglad] Critical Error: Failed to load OpenGL function pointer ["//function_name//"]. Does your GPU support OpenGL 4.2?"
+  end subroutine forglad_error_stop
 
 end module forglad
