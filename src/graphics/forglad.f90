@@ -71,6 +71,7 @@ module forglad
   procedure(gl_is_shader_c_interface), public, pointer :: gl_is_shader
   procedure(gl_get_integer_v_c_interface), public, pointer :: gl_get_integer_v
   procedure(gl_attach_shader_c_interface), public, pointer :: gl_attach_shader
+  procedure(gl_detach_shader_c_interface), public, pointer :: gl_detach_shader
   procedure(gl_link_program_c_interface), public, pointer :: gl_link_program
   procedure(gl_get_error_c_interface), public, pointer :: gl_get_error
   procedure(gl_get_shader_iv_c_interface), public, pointer :: internal_gl_get_shader_iv
@@ -709,6 +710,9 @@ contains
 
     function_pointer = glfw_get_proc_address("glAttachShader"//achar(0))
     call c_f_procpointer(function_pointer, gl_attach_shader)
+
+    function_pointer = glfw_get_proc_address("glDetachShader"//achar(0))
+    call c_f_procpointer(function_pointer, gl_detach_shader)
 
     function_pointer = glfw_get_proc_address("glLinkProgram"//achar(0))
     call c_f_procpointer(function_pointer, gl_link_program)
