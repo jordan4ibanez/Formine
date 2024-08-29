@@ -93,15 +93,25 @@ _Or_ you can just change the Makefile to use gfortran-14, but that's annoying.
 
 todo: finish this (and make a windows section for fpm)
 
-You need to be sure you open MSYS2 MINGW64 or else it will not work.
+You need to be sure you open MSYS2 UCRT64 or else it will not work.
 
 ```
-pacman -S git make mingw-w64-ucrt-x86_64-fpm mingw-w64-ucrt-x86_64-gcc-fortran mingw-w64-ucrt-x86_64-glib2 mingw-w64-ucrt-x86_64-glfw mingw-w64-ucrt-x86_64-luajit
+pacman -S base-devel mingw-w64-ucrt-x86_64-fpm mingw-w64-ucrt-x86_64-gcc-fortran git mingw-w64-ucrt-x86_64-glfw mingw-w64-ucrt-x86_64-luajit mingw-w64-ucrt-x86_64-stb
 ```
 
-### Windows install instructions
+**Read this part please:** You must switch the ``link`` flags in the [fpm.toml](https://github.com/jordan4ibanez/Formine/blob/master/fpm.toml) to the windows one!
 
-todo: put the instructions link here.
+**Make sure you git clone the project into the root directory of MSYS2 or else this will not work!**
+
+```
+cd /
+
+git clone https://github.com/jordan4ibanez/Formine
+
+cd Formine/
+
+make windows
+```
 
 ### fpm requirement:
 
