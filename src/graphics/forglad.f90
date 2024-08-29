@@ -724,8 +724,9 @@ contains
     ! todo: could make this a clone of glad in fortran, maybe.
 
 
-
-
+    function_pointer = glfw_get_proc_address("glGetIntegerv"//achar(0))
+    call c_f_procpointer(function_pointer, gl_get_integer_v)
+    
     if (.not. is_opengl_4_2_capable()) then
 
     end if
@@ -771,9 +772,6 @@ contains
 
     function_pointer = glfw_get_proc_address("glIsShader"//achar(0))
     call c_f_procpointer(function_pointer, gl_is_shader)
-
-    function_pointer = glfw_get_proc_address("glGetIntegerv"//achar(0))
-    call c_f_procpointer(function_pointer, gl_get_integer_v)
 
     function_pointer = glfw_get_proc_address("glAttachShader"//achar(0))
     call c_f_procpointer(function_pointer, gl_attach_shader)
