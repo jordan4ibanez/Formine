@@ -54,17 +54,8 @@ program main
   call glfw_make_context_current()
 
   ! Get portable function pointers.
-  ! gotten_gl_version = glad_load_gl(c_funloc(glfw_get_proc_address))
-
-  ! if (gotten_gl_version == 0) then
-  !   error stop "[Glad] Error: Failed to initialize OpenGL 4.2 context. Does your GPU support it?"
-  ! end if
-
   call forglad_load_gl()
 
-  call gl_clear_color(1.,2.,3.)
-
-  call gl_clear_color_buffer()
 
 
 
