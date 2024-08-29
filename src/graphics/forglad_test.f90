@@ -7,6 +7,9 @@ module forglad
   private
 
 
+  public :: forglad_init
+
+
   procedure(gl_clear_c_interface), public, pointer :: gl_clear
   procedure(gl_clear_color_c_interface), public, pointer :: gl_clear_color
 
@@ -511,6 +514,9 @@ contains
 
     function_pointer = glfw_get_proc_address(into_c_string("glClear"))
     call c_f_procpointer(function_pointer, gl_clear)
+
+    function_pointer = glfw_get_proc_address(into_c_string("glClearColor"))
+    call c_f_procpointer(function_pointer, gl_clear_color)
 
   end subroutine forglad_init
 
