@@ -329,7 +329,7 @@ contains
   subroutine size_callback(window, width, height)
     use, intrinsic :: iso_c_binding
     use :: string, only: int_to_string
-    use :: opengl, only: gl_view_port
+    ! use :: opengl, only: gl_view_port
     implicit none
 
     type(c_ptr), intent(in), optional :: window
@@ -342,7 +342,7 @@ contains
     print"(A)", "[Window] Resize: ["//int_to_string(width)//", "//int_to_string(height)//"]"
     window_width = width
     window_height = height
-    call gl_view_port(0,0, width, height)
+    ! call gl_view_port(0,0, width, height)
   end subroutine size_callback
 
 
