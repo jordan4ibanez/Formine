@@ -510,14 +510,11 @@ module forglad
 contains
 
 
-  function forglad_init() result(success)
+  subroutine forglad_init()
     use :: string
     implicit none
 
-    logical :: success
     type(c_funptr) :: function_pointer
-
-    success = .false.
 
     ! todo: could make this a clone of glad in fortran, maybe.
 
@@ -537,9 +534,8 @@ contains
     if (.not. c_associated(function_pointer)) call forglad_error_stop("copy_function_name_here")
     call c_f_procpointer(function_pointer, gl_clear_color)
 
+  end subroutine forglad_init
 
-
-  end function forglad_init
 
   !* This function will help reduce the amount of static strings stored in the binary.
   subroutine forglad_error_stop(function_name)
