@@ -408,11 +408,11 @@ module forglad
     end subroutine gl_pixel_store_i_c_interface
 
 
-    subroutine gl_tex_image_2d_c_interface(target, level, format, width, height, border, format, type, data) bind(c)
+    subroutine gl_tex_image_2d_c_interface(target, level, internal_format, width, height, border, format, type, data) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: target, level, format, width, height, border, format, type
+      integer(c_int), intent(in), value :: target, level, format, width, height, border, internal_format, type
       type(c_ptr), intent(in), value :: data
     end subroutine gl_tex_image_2d_c_interface
 
