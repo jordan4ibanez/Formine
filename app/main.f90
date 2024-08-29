@@ -1,8 +1,8 @@
 program main
   use :: glfw
-  use :: opengl, only: glad_load_gl, GL_TRUE
+  use :: opengl, only: GL_TRUE
   use :: string
-  use :: shader
+  ! use :: shader
   use :: files
   use :: mesh
   use :: camera
@@ -55,11 +55,11 @@ program main
   call glfw_make_context_current()
 
   ! Get portable function pointers.
-  gotten_gl_version = glad_load_gl(c_funloc(glfw_get_proc_address))
+  ! gotten_gl_version = glad_load_gl(c_funloc(glfw_get_proc_address))
 
-  if (gotten_gl_version == 0) then
-    error stop "[Glad] Error: Failed to initialize OpenGL 4.2 context. Does your GPU support it?"
-  end if
+  ! if (gotten_gl_version == 0) then
+  !   error stop "[Glad] Error: Failed to initialize OpenGL 4.2 context. Does your GPU support it?"
+  ! end if
 
   call forglad_init()
 
