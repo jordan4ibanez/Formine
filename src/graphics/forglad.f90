@@ -724,7 +724,7 @@ contains
     call c_f_procpointer(proc_address_finder_raw, proc_address_finder)
 
     ! glGetIntegerv is supported in OpenGL 2.0.
-    ! If your machine is older than this, I'm surprised it was able to get this far.
+    ! If your machine is older than this, I'm surprised it was able to get this far in the program.
     function_pointer = proc_address_finder("glGetIntegerv"//achar(0))
     call c_f_procpointer(function_pointer, gl_get_integer_v)
 
