@@ -15,37 +15,37 @@ module forglad
   procedure(gl_enable_c_interface), public, pointer :: gl_enable
   procedure(gl_disable_c_interface), public, pointer :: gl_disable
   procedure(gl_debug_message_callback_c_interface), public, pointer :: gl_debug_message_callback
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  procedure(), public, pointer :: 
-  
+  procedure(gl_create_program_c_interface), public, pointer ::gl_create_program
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+  procedure(), public, pointer ::
+
 
 
   interface
 
 
-    !! DONE.
+!! DONE.
     subroutine gl_clear_c_interface(thing_to_clear) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -54,7 +54,7 @@ module forglad
     end subroutine gl_clear_c_interface
 
 
-    !! DONE.
+!! DONE.
     subroutine gl_clear_color_c_interface(r,g,b,a) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -63,7 +63,7 @@ module forglad
     end subroutine gl_clear_color_c_interface
 
 
-    !! DONE.
+!! DONE.
     subroutine gl_enable_c_interface(cap) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -72,7 +72,7 @@ module forglad
     end subroutine gl_enable_c_interface
 
 
-    !! DONE.
+!! DONE.
     subroutine gl_disable_c_interface(cap) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -80,7 +80,7 @@ module forglad
       integer(c_int), intent(in), value :: cap
     end subroutine gl_disable_c_interface
 
-
+!! DONE.
     subroutine gl_debug_message_callback_c_interface(callback, user_param) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -89,7 +89,7 @@ module forglad
       type(c_ptr), intent(in), optional :: user_param
     end subroutine gl_debug_message_callback_c_interface
 
-
+!! DONE.
     function gl_create_program_c_interface() result(program_id) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -545,7 +545,7 @@ contains
 
     ! todo: could make this a clone of glad in fortran, maybe.
 
-    
+
 
     function_pointer = glfw_get_proc_address(into_c_string("glClear"))
     call c_f_procpointer(function_pointer, gl_clear)
@@ -562,8 +562,8 @@ contains
     function_pointer = glfw_get_proc_address(into_c_string("glDebugMessageCallback"))
     call c_f_procpointer(function_pointer, gl_debug_message_callback)
 
-    function_pointer = glfw_get_proc_address(into_c_string(""))
-    call c_f_procpointer(function_pointer, )
+    function_pointer = glfw_get_proc_address(into_c_string("glCreateProgram"))
+    call c_f_procpointer(function_pointer, gl_create_program)
 
     function_pointer = glfw_get_proc_address(into_c_string(""))
     call c_f_procpointer(function_pointer, )
