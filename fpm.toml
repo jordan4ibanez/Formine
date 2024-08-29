@@ -18,7 +18,7 @@ module-naming = false
 # link = ["glfw3", "opengl32", "luajit-5.1"]
 
 # Everything else (for now)
-link = ["glfw", "GL", "stb", "luajit-5.1"]
+link = ["glfw", "stb", "luajit-5.1"]
 
 [dependencies]
 # stdlib = "*"
