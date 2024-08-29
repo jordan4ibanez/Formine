@@ -1,4 +1,4 @@
-module forglad
+module forglad_test
   use :: glfw
   use, intrinsic :: iso_c_binding
   implicit none
@@ -18,7 +18,9 @@ module forglad
 
 contains
 
-  subroutine forglad_init()
+
+
+  subroutine forglad_test_init()
     use :: string
     implicit none
 
@@ -31,4 +33,4 @@ contains
 
   end subroutine forglad_init
 
-end module forglad
+end module forglad_test
