@@ -1,28 +1,28 @@
-module forglad_test
+module forglad
   use :: glfw
   use, intrinsic :: iso_c_binding
   implicit none
 
-  procedure(gl_clear_c), pointer :: gl_clear
+  procedure(gl_clear_c_interface), pointer :: gl_clear
 
 
   interface
 
 
-    subroutine internal_gl_clear_c_interface(thing_to_clear) bind(c)
+    subroutine gl_clear_c_interface(thing_to_clear) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: thing_to_clear
-    end subroutine internal_gl_clear_c_interface
+    end subroutine gl_clear_c_interface
 
 
-    subroutine internal_gl_clear_color_c_interface(r,g,b,a) bind(c)
+    subroutine gl_clear_color_c_interface(r,g,b,a) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       real(c_float), intent(in), value :: r, g, b, a
-    end subroutine internal_gl_clear_color_c_interface
+    end subroutine gl_clear_color_c_interface
 
 
     subroutine gl_enable_c_interface(cap) bind(c)
@@ -41,22 +41,22 @@ module forglad_test
     end subroutine gl_disable_c_interface
 
 
-    subroutine internal_gl_debug_message_callback_c_interface(callback, user_param) bind(c)
+    subroutine gl_debug_message_callback_c_interface(callback, user_param) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_funptr), intent(in), value :: callback
       type(c_ptr), intent(in), optional :: user_param
-    end subroutine internal_gl_debug_message_callback_c_interface
+    end subroutine gl_debug_message_callback_c_interface
 
 
-    function internal_gl_create_program_c_interface() result(program_id) bind(c)
+    function gl_create_program_c_interface() result(program_id) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       !! This might cause problems, it's a uint.
       integer(c_int) :: program_id
-    end function internal_gl_create_program_c_interface
+    end function gl_create_program_c_interface
 
 
     subroutine gl_delete_program_c_interface(program_id) bind(c)
@@ -78,14 +78,14 @@ module forglad_test
     end function gl_is_program_c_interface
 
 
-    function internal_gl_create_shader_c_interface(shader_type) result(shader_id) bind(c)
+    function gl_create_shader_c_interface(shader_type) result(shader_id) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       !! This might cause problems, it's a uint.
       integer(c_int), intent(in), value :: shader_type
       integer(c_int) :: shader_id
-    end function internal_gl_create_shader_c_interface
+    end function gl_create_shader_c_interface
 
 
     subroutine gl_delete_shader_c_interface(shader) bind(c)
@@ -97,7 +97,7 @@ module forglad_test
     end subroutine gl_delete_shader_c_interface
 
 
-    subroutine internal_gl_shader_source_c_interface(shader_id, count, source_code, string_length) bind(c)
+    subroutine gl_shader_source_c_interface(shader_id, count, source_code, string_length) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
@@ -106,7 +106,7 @@ module forglad_test
       character(len = *, kind = c_char), intent(in) :: source_code
       !? Less than 0 represents that the string is null terminated. So use that only.
       type(c_ptr), intent(in), optional :: string_length
-    end subroutine internal_gl_shader_source_c_interface
+    end subroutine gl_shader_source_c_interface
 
 
     subroutine gl_compile_shader_c_interface(shader_id) bind(c)
@@ -167,32 +167,32 @@ module forglad_test
     end function gl_get_error_c_interface
 
 
-    subroutine internal_gl_get_shader_iv_c_interface(shader, pname, params) bind(c)
+    subroutine gl_get_shader_iv_c_interface(shader, pname, params) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: shader, pname
       integer(c_int), intent(in) :: params
-    end subroutine internal_gl_get_shader_iv_c_interface
+    end subroutine gl_get_shader_iv_c_interface
 
 
-    subroutine internal_gl_get_shader_info_log_c_interface(shader, max_length, length, info_log) bind(c)
+    subroutine gl_get_shader_info_log_c_interface(shader, max_length, length, info_log) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: shader, max_length
       integer(c_int), intent(in) :: length
       type(c_ptr), intent(in) :: info_log
-    end subroutine internal_gl_get_shader_info_log_c_interface
+    end subroutine gl_get_shader_info_log_c_interface
 
 
-    subroutine internal_gl_get_program_iv_c_interface(program, pname, params) bind(c)
+    subroutine gl_get_program_iv_c_interface(program, pname, params) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: program, pname
       integer(c_int), intent(in) :: params
-    end subroutine internal_gl_get_program_iv_c_interface
+    end subroutine gl_get_program_iv_c_interface
 
 
     subroutine gl_validate_program_c_interface(program_id) bind(c)
@@ -203,22 +203,22 @@ module forglad_test
     end subroutine gl_validate_program_c_interface
 
 
-    integer(c_int) function internal_gl_get_uniform_location_c_interface(program_id, uniform_name) bind(c)
+    integer(c_int) function gl_get_uniform_location_c_interface(program_id, uniform_name) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: program_id
       character(len = 1, kind = c_char), intent(in) :: uniform_name
-    end function internal_gl_get_uniform_location_c_interface
+    end function gl_get_uniform_location_c_interface
 
 
-    integer(c_int) function internal_gl_get_attrib_location_c_interface(program_id, attrib_name) bind(c)
+    integer(c_int) function gl_get_attrib_location_c_interface(program_id, attrib_name) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: program_id
       character(len = 1, kind = c_char), intent(in) :: attrib_name
-    end function internal_gl_get_attrib_location_c_interface
+    end function gl_get_attrib_location_c_interface
 
 
     subroutine gl_use_program_c_interface(program_id) bind(c)
@@ -229,24 +229,24 @@ module forglad_test
     end subroutine gl_use_program_c_interface
 
 
-    subroutine internal_gl_gen_vertex_arrays_c_interface(n, arrays) bind(c)
+    subroutine gl_gen_vertex_arrays_c_interface(n, arrays) bind(c)
       use,intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: n
       !! This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(inout) :: arrays
-    end subroutine internal_gl_gen_vertex_arrays_c_interface
+    end subroutine gl_gen_vertex_arrays_c_interface
 
 
-    subroutine internal_gl_delete_vertex_arrays_c_interface(n, arrays) bind(c)
+    subroutine gl_delete_vertex_arrays_c_interface(n, arrays) bind(c)
       use,intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: n
       !! This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(in) :: arrays
-    end subroutine internal_gl_delete_vertex_arrays_c_interface
+    end subroutine gl_delete_vertex_arrays_c_interface
 
 
     subroutine gl_bind_vertex_array_c_interface(array) bind(c)
@@ -257,24 +257,24 @@ module forglad_test
     end subroutine gl_bind_vertex_array_c_interface
 
 
-    subroutine internal_gl_gen_buffers_c_interface(n, buffers) bind(c)
+    subroutine gl_gen_buffers_c_interface(n, buffers) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: n
       !! This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(inout) :: buffers
-    end subroutine internal_gl_gen_buffers_c_interface
+    end subroutine gl_gen_buffers_c_interface
 
 
-    subroutine internal_gl_delete_buffers_c_interface(n, buffers) bind(c)
+    subroutine gl_delete_buffers_c_interface(n, buffers) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: n
       !! This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(in) :: buffers
-    end subroutine internal_gl_delete_buffers_c_interface
+    end subroutine gl_delete_buffers_c_interface
 
 
     subroutine gl_bind_buffer_c_interface(target, buffer) bind(c)
@@ -285,13 +285,13 @@ module forglad_test
     end subroutine gl_bind_buffer_c_interface
 
 
-    subroutine internal_gl_buffer_data_c_interface(target, size, data, usage) bind(c)
+    subroutine gl_buffer_data_c_interface(target, size, data, usage) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: target, size, usage
       type(c_ptr), intent(in), value :: data
-    end subroutine internal_gl_buffer_data_c_interface
+    end subroutine gl_buffer_data_c_interface
 
 
     subroutine gl_enable_vertex_attrib_array_c_interface(index) bind(c)
@@ -310,33 +310,33 @@ module forglad_test
     end subroutine gl_disable_vertex_attrib_array
 
 
-    subroutine internal_gl_vertex_attrib_pointer_c_interface(index, size, type, normalized, stride, pointer) bind(c)
+    subroutine gl_vertex_attrib_pointer_c_interface(index, size, type, normalized, stride, pointer) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: index, size, type, stride
       logical(c_bool), intent(in), value :: normalized
       type(c_ptr), intent(in), optional :: pointer
-    end subroutine internal_gl_vertex_attrib_pointer_c_interface
+    end subroutine gl_vertex_attrib_pointer_c_interface
 
 
-    subroutine internal_gl_draw_elements_c_interface(mode, count, type, indices) bind(c)
+    subroutine gl_draw_elements_c_interface(mode, count, type, indices) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: mode, count, type
       type(c_ptr), intent(in), optional :: indices
-    end subroutine internal_gl_draw_elements_c_interface
+    end subroutine gl_draw_elements_c_interface
 
 
-    subroutine internal_gl_uniform_matrix_4_fv_c_interface(location, count, transpose, value) bind(c)
+    subroutine gl_uniform_matrix_4_fv_c_interface(location, count, transpose, value) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: location, count
       logical(c_bool), intent(in), value :: transpose
       type(c_ptr), intent(in), value :: value
-    end subroutine internal_gl_uniform_matrix_4_fv_c_interface
+    end subroutine gl_uniform_matrix_4_fv_c_interface
 
 
     subroutine gl_view_port_c_interface(x, y, width, height) bind(c)
@@ -365,14 +365,14 @@ module forglad_test
     end function gl_is_vertex_array_c_interface
 
 
-    subroutine internal_gl_gen_textures_c_interface(n, textures) bind(c)
+    subroutine gl_gen_textures_c_interface(n, textures) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: n
       !! This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(inout) :: textures
-    end subroutine internal_gl_gen_textures_c_interface
+    end subroutine gl_gen_textures_c_interface
 
 
     subroutine gl_bind_texture_c_interface(target, texture) bind(c)
@@ -408,13 +408,13 @@ module forglad_test
     end subroutine gl_pixel_store_i_c_interface
 
 
-    subroutine internal_gl_tex_image_2d_c_interface(target, level, internal_format, width, height, border, format, type, data) bind(c)
+    subroutine gl_tex_image_2d_c_interface(target, level, format, width, height, border, format, type, data) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
-      integer(c_int), intent(in), value :: target, level, internal_format, width, height, border, format, type
+      integer(c_int), intent(in), value :: target, level, format, width, height, border, format, type
       type(c_ptr), intent(in), value :: data
-    end subroutine internal_gl_tex_image_2d_c_interface
+    end subroutine gl_tex_image_2d_c_interface
 
 
     function gl_is_texture_c_interface(texture) result(is_texture) bind(c)
@@ -434,22 +434,22 @@ module forglad_test
     end subroutine gl_generate_mipmap_c_interface
 
 
-    subroutine internal_gl_delete_textures_c_interface(n, textures) bind(c)
+    subroutine gl_delete_textures_c_interface(n, textures) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: n
       !! This part is written wrong on purpose. I only want 1 not multiple.
       integer(c_int), intent(in) :: textures
-    end subroutine internal_gl_delete_textures_c_interface
+    end subroutine gl_delete_textures_c_interface
 
 
-    subroutine internal_gl_depth_mask_c_interface(flag) bind(c)
+    subroutine gl_depth_mask_c_interface(flag) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       logical(c_bool), intent(in), value :: flag
-    end subroutine internal_gl_depth_mask_c_interface
+    end subroutine gl_depth_mask_c_interface
 
 
     subroutine gl_depth_func_c_interface(func) bind(c)
@@ -510,4 +510,4 @@ contains
 
   end subroutine forglad_test_init
 
-end module forglad_test
+end module forglad
