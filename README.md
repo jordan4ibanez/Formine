@@ -93,8 +93,6 @@ _Or_ you can just change the Makefile to use gfortran-14, but that's annoying.
 
 ### Install dependencies on Windows 10/11 using MSYS2
 
-todo: finish this (and make a windows section for fpm)
-
 You need to be sure you open MSYS2 UCRT64 or else it will not work.
 
 ```
