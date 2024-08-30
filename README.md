@@ -113,7 +113,7 @@ cd Formine/
 make windows
 ```
 
-### fpm requirement:
+### fpm requirement (Linux):
 
 This is an fpm (Fortran Package Manager) project. There is a good reason for this.
 fpm makes working with fortran extremely easy. Think cargo for rust, or deno for typescript.
