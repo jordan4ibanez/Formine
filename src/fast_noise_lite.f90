@@ -2207,11 +2207,11 @@ contains
 ! Domain Warp Basic Grid
 
 
-  subroutine internal_fnl_single_domain_warp_basic_grid_2d(seed, warpAmp, frequency, x, y, xp, yp)
+  subroutine internal_fnl_single_domain_warp_basic_grid_2d(seed, warp_amp, frequency, x, y, xp, yp)
     implicit none
 
     integer(c_int), intent(in), value :: seed
-    real(c_float), intent(in), value :: warpAmp, frequency
+    real(c_float), intent(in), value :: warp_amp, frequency
     real(fnl_float), intent(in), value :: x, y
     real(fnl_float), intent(inout) :: xp, yp
     real(fnl_float) :: xf, yf, xs, ys, lx0x, ly0x, lx1x, ly1x
@@ -2243,16 +2243,16 @@ contains
     lx1x = internal_fnl_lerp(RAND_VECS_2D(idx0 + 1), RAND_VECS_2D(idx1 + 1), xs)
     ly1x = internal_fnl_lerp(RAND_VECS_2D(ior(idx0, 1) + 1), RAND_VECS_2D(ior(idx1, 1) + 1), xs)
 
-    xp = xp + (internal_fnl_lerp(lx0x, lx1x, ys) * warpAmp)
-    yp = yp + (internal_fnl_lerp(ly0x, ly1x, ys) * warpAmp)
+    xp = xp + (internal_fnl_lerp(lx0x, lx1x, ys) * warp_amp)
+    yp = yp + (internal_fnl_lerp(ly0x, ly1x, ys) * warp_amp)
   end subroutine internal_fnl_single_domain_warp_basic_grid_2d
 
 
-  subroutine internal_fnl_single_domain_warp_basic_grid_3d(seed, warpAmp, frequency, x, y, z, xp, yp, zp)
+  subroutine internal_fnl_single_domain_warp_basic_grid_3d(seed, warp_amp, frequency, x, y, z, xp, yp, zp)
     implicit none
 
     integer(c_int), intent(in), value :: seed
-    real(c_float), intent(in), value :: warpAmp, frequency
+    real(c_float), intent(in), value :: warp_amp, frequency
     real(fnl_float), intent(in), value :: x, y, z
     real(fnl_float), intent(inout) :: xp, yp, zp
     real(fnl_float) :: xf, yf, zf, xs, ys, zs, lx0x, ly0x, lz0x, lx1x, ly1x, lz1x, lx0y, ly0y, lz0y
@@ -2309,20 +2309,20 @@ contains
     ly1x = internal_fnl_lerp(RAND_VECS_3D(ior(idx0, 1) + 1), RAND_VECS_3D(ior(idx1, 1) + 1), xs)
     lz1x = internal_fnl_lerp(RAND_VECS_3D(ior(idx0, 2) + 1), RAND_VECS_3D(ior(idx1, 2) + 1), xs)
 
-    xp = xp + (internal_fnl_lerp(lx0y, internal_fnl_lerp(lx0x, lx1x, ys), zs) * warpAmp)
-    yp = yp + (internal_fnl_lerp(ly0y, internal_fnl_lerp(ly0x, ly1x, ys), zs) * warpAmp)
-    zp = zp + (internal_fnl_lerp(lz0y, internal_fnl_lerp(lz0x, lz1x, ys), zs) * warpAmp)
+    xp = xp + (internal_fnl_lerp(lx0y, internal_fnl_lerp(lx0x, lx1x, ys), zs) * warp_amp)
+    yp = yp + (internal_fnl_lerp(ly0y, internal_fnl_lerp(ly0x, ly1x, ys), zs) * warp_amp)
+    zp = zp + (internal_fnl_lerp(lz0y, internal_fnl_lerp(lz0x, lz1x, ys), zs) * warp_amp)
   end subroutine internal_fnl_single_domain_warp_basic_grid_3d
 
 
 ! Domain Warp Simplex/OpenSimplex2
 
 
-  subroutine internal_fnl_single_domain_warp_simplex_gradient(seed, warpAmp, frequency, xx, yy, xr, yr, outGradOnly)
+  subroutine internal_fnl_single_domain_warp_simplex_gradient(seed, warp_amp, frequency, xx, yy, xr, yr, outGradOnly)
     implicit none
 
     integer(c_int), intent(in), value :: seed
-    real(c_float), intent(in), value :: warpAmp, frequency
+    real(c_float), intent(in), value :: warp_amp, frequency
     real(fnl_float), intent(in), value :: xx, yy
     real(fnl_float), intent(inout) :: xr, yr
     logical, intent(in), value :: outGradOnly
@@ -2417,14 +2417,14 @@ contains
       end if
     end if
 
-    xr = xr + (vx * warpAmp)
-    yr = yr + (vy * warpAmp)
+    xr = xr + (vx * warp_amp)
+    yr = yr + (vy * warp_amp)
   end subroutine internal_fnl_single_domain_warp_simplex_gradient
 
 
-  subroutine internal_fnl_single_domain_warp_open_simplex2_gradient(val_seed, warpAmp, frequency, xx, yy, zz, xr, yr, zr, outGradOnly)
+  subroutine internal_fnl_single_domain_warp_open_simplex2_gradient(val_seed, warp_amp, frequency, xx, yy, zz, xr, yr, zr, outGradOnly)
     integer(c_int), intent(in), value :: val_seed
-    real(c_float), intent(in), value :: warpAmp, frequency
+    real(c_float), intent(in), value :: warp_amp, frequency
     real(fnl_float), intent(in), value :: xx, yy, zz
     real(fnl_float), intent(inout) :: xr, yr, zr
     logical, intent(in), value :: outGradOnly
@@ -2539,9 +2539,9 @@ contains
       seed = seed + 1293373
     end do
 
-    xr = xr + (vx * warpAmp)
-    yr = yr + (vy * warpAmp)
-    zr = zr + (vz * warpAmp)
+    xr = xr + (vx * warp_amp)
+    yr = yr + (vy * warp_amp)
+    zr = zr + (vz * warp_amp)
   end subroutine internal_fnl_single_domain_warp_open_simplex2_gradient
 
 
