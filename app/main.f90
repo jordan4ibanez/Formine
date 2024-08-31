@@ -13,6 +13,7 @@ program main
   use :: api
   use :: texture_atlas
   use :: texture_atlas
+  use :: fast_noise_lite
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -25,9 +26,9 @@ program main
   old_fps = -1
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
-  ! if (.true.) then
-  !   return
-  ! end if
+  if (.true.) then
+    return
+  end if
   !! END WARNING.
 
 
