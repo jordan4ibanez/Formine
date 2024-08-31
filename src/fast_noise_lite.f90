@@ -1754,66 +1754,80 @@ contains
 ! Perlin Noise
 
 
-! static float internal_fnl_single_perlin_2d(int seed, FNLfloat x, FNLfloat y)
-! {
-!     int x0 = floor(x)
-!     int y0 = floor(y)
+  real(c_float) function internal_fnl_single_perlin_2d(seed, x, y) result(output)
+    implicit none
 
-!     float xd0 = (float)(x - x0)
-!     float yd0 = (float)(y - y0)
-!     float xd1 = xd0 - 1
-!     float yd1 = yd0 - 1
+    integer(c_int), intent(in), value :: seed
+    real(fnl_float), intent(in), value :: x, y
+    integer(c_int) :: x0, y0, x1, y1
+    real(c_float) :: xd0, yd0, xd1, yd1, xs, ys, xf0, xf1
 
-!     float xs = internal_fnl_interp_quintic(xd0)
-!     float ys = internal_fnl_interp_quintic(yd0)
+    x0 = floor(x)
+    y0 = floor(y)
 
-!     x0 *= PRIME_X
-!     y0 *= PRIME_Y
-!     int x1 = x0 + PRIME_X
-!     int y1 = y0 + PRIME_Y
+    xd0 = real(x - x0, c_float)
+    yd0 = real(y - y0, c_float)
+    xd1 = xd0 - 1
+    yd1 = yd0 - 1
 
-!     float xf0 = internal_fnl_lerp(internal_fnl_grad_coord_2d(seed, x0, y0, xd0, yd0), internal_fnl_grad_coord_2d(seed, x1, y0, xd1, yd0), xs)
-!     float xf1 = internal_fnl_lerp(internal_fnl_grad_coord_2d(seed, x0, y1, xd0, yd1), internal_fnl_grad_coord_2d(seed, x1, y1, xd1, yd1), xs)
+    xs = internal_fnl_interp_quintic(xd0)
+    ys = internal_fnl_interp_quintic(yd0)
 
-!     return internal_fnl_lerp(xf0, xf1, ys) * 1.4247691104677813f
-! }
+    x0 = x0 * PRIME_X
+    y0 = y0 * PRIME_Y
+    x1 = x0 + PRIME_X
+    y1 = y0 + PRIME_Y
 
-! static float internal_fnl_single_perlin_3d(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
-! {
-!     int x0 = floor(x)
-!     int y0 = floor(y)
-!     int z0 = floor(z)
+    xf0 = internal_fnl_lerp(internal_fnl_grad_coord_2d(seed, x0, y0, xd0, yd0), internal_fnl_grad_coord_2d(seed, x1, y0, xd1, yd0), xs)
+    xf1 = internal_fnl_lerp(internal_fnl_grad_coord_2d(seed, x0, y1, xd0, yd1), internal_fnl_grad_coord_2d(seed, x1, y1, xd1, yd1), xs)
 
-!     float xd0 = (float)(x - x0)
-!     float yd0 = (float)(y - y0)
-!     float zd0 = (float)(z - z0)
-!     float xd1 = xd0 - 1
-!     float yd1 = yd0 - 1
-!     float zd1 = zd0 - 1
+    output = internal_fnl_lerp(xf0, xf1, ys) * 1.4247691104677813
+  end function internal_fnl_single_perlin_2d
 
-!     float xs = internal_fnl_interp_quintic(xd0)
-!     float ys = internal_fnl_interp_quintic(yd0)
-!     float zs = internal_fnl_interp_quintic(zd0)
 
-!     x0 *= PRIME_X
-!     y0 *= PRIME_Y
-!     z0 *= PRIME_Z
-!     int x1 = x0 + PRIME_X
-!     int y1 = y0 + PRIME_Y
-!     int z1 = z0 + PRIME_Z
+  real(c_float) function internal_fnl_single_perlin_3d(seed, x, y, z) result(output)
+    implicit none
 
-!     float xf00 = internal_fnl_lerp(internal_fnl_grad_coord_3d(seed, x0, y0, z0, xd0, yd0, zd0), internal_fnl_grad_coord_3d(seed, x1, y0, z0, xd1, yd0, zd0), xs)
-!     float xf10 = internal_fnl_lerp(internal_fnl_grad_coord_3d(seed, x0, y1, z0, xd0, yd1, zd0), internal_fnl_grad_coord_3d(seed, x1, y1, z0, xd1, yd1, zd0), xs)
-!     float xf01 = internal_fnl_lerp(internal_fnl_grad_coord_3d(seed, x0, y0, z1, xd0, yd0, zd1), internal_fnl_grad_coord_3d(seed, x1, y0, z1, xd1, yd0, zd1), xs)
-!     float xf11 = internal_fnl_lerp(internal_fnl_grad_coord_3d(seed, x0, y1, z1, xd0, yd1, zd1), internal_fnl_grad_coord_3d(seed, x1, y1, z1, xd1, yd1, zd1), xs)
+    integer(c_int), intent(in), value :: seed
+    real(fnl_float), intent(in), value :: x, y, z
+    integer(c_int) :: x0, y0, z0, x1, y1, z1
+    real(c_float) :: xd0, yd0, zd0, xd1, yd1, zd1, xs, ys, zs, xf0, xf00, xf10, xf01, xf11, yf0, yf1
+    x0 = floor(x)
+    y0 = floor(y)
+    z0 = floor(z)
 
-!     float yf0 = internal_fnl_lerp(xf00, xf10, ys)
-!     float yf1 = internal_fnl_lerp(xf01, xf11, ys)
+    xd0 = real(x - x0, c_float)
+    yd0 = real(y - y0, c_float)
+    zd0 = real(z - z0, c_float)
+    xd1 = xd0 - 1
+    yd1 = yd0 - 1
+    zd1 = zd0 - 1
 
-!     return internal_fnl_lerp(yf0, yf1, zs) * 0.964921414852142333984375f
-! }
+    xs = internal_fnl_interp_quintic(xd0)
+    ys = internal_fnl_interp_quintic(yd0)
+    zs = internal_fnl_interp_quintic(zd0)
+
+    x0 = x0 * PRIME_X
+    y0 = y0 * PRIME_Y
+    z0 = z0 * PRIME_Z
+    x1 = x0 + PRIME_X
+    y1 = y0 + PRIME_Y
+    z1 = z0 + PRIME_Z
+
+    xf00 = internal_fnl_lerp(internal_fnl_grad_coord_3d(seed, x0, y0, z0, xd0, yd0, zd0), internal_fnl_grad_coord_3d(seed, x1, y0, z0, xd1, yd0, zd0), xs)
+    xf10 = internal_fnl_lerp(internal_fnl_grad_coord_3d(seed, x0, y1, z0, xd0, yd1, zd0), internal_fnl_grad_coord_3d(seed, x1, y1, z0, xd1, yd1, zd0), xs)
+    xf01 = internal_fnl_lerp(internal_fnl_grad_coord_3d(seed, x0, y0, z1, xd0, yd0, zd1), internal_fnl_grad_coord_3d(seed, x1, y0, z1, xd1, yd0, zd1), xs)
+    xf11 = internal_fnl_lerp(internal_fnl_grad_coord_3d(seed, x0, y1, z1, xd0, yd1, zd1), internal_fnl_grad_coord_3d(seed, x1, y1, z1, xd1, yd1, zd1), xs)
+
+    yf0 = internal_fnl_lerp(xf00, xf10, ys)
+    yf1 = internal_fnl_lerp(xf01, xf11, ys)
+
+    output = internal_fnl_lerp(yf0, yf1, zs) * 0.964921414852142333984375
+  end function internal_fnl_single_perlin_3d
+
 
 ! Value Cubic
+
 
 ! static float internal_fnl_single_value_cubic_2d(int seed, FNLfloat x, FNLfloat y)
 ! {
