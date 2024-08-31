@@ -2,10 +2,15 @@ module fast_noise_lite
   use :: iso_c_binding
   implicit none
 
+
+  private
+
+
   ! MIT License
   !
   ! Copyright(c) 2023 Jordan Peck (jordan.me2@gmail.com)
   ! Copyright(c) 2023 Contributors
+  ! Translated by jordan4ibanez: 2024
   !
   ! Permission is hereby granted, free of charge, to any person obtaining a copy
   ! of this software and associated documentation files(the "Software"), to deal
@@ -52,43 +57,42 @@ module fast_noise_lite
   ! https://github.com/Auburn/FastNoiseLite
 
 
-  private
+  ! Switch from f64 to f32 by changing kind(c_double) to: kind(c_float)
+  real, parameter :: fnl_float = kind(c_double)
+
+  ! Enums
+
+  public :: fnl_noise_type
+  public :: FNL_NOISE_OPENSIMPLEX2
+  public :: FNL_NOISE_OPENSIMPLEX2S
+  public :: FNL_NOISE_CELLULAR
+  public :: FNL_NOISE_PERLIN
+  public :: FNL_NOISE_VALUE_CUBIC
+  public :: FNL_NOISE_VALUE
+
+  enum, bind(c)
+    enumerator :: fnl_noise_type = 0
+    enumerator :: FNL_NOISE_OPENSIMPLEX2 = 1
+    enumerator :: FNL_NOISE_OPENSIMPLEX2S = 2
+    enumerator :: FNL_NOISE_CELLULAR = 3
+    enumerator :: FNL_NOISE_PERLIN = 4
+    enumerator :: FNL_NOISE_VALUE_CUBIC = 5
+    enumerator :: FNL_NOISE_VALUE = 6
+  end enum
 
 
-contains
+  public :: fnl_rotation_type_3d
+  public :: FNL_ROTATION_NONE
+  public :: FNL_ROTATION_IMPROVE_XY_PLANES
+  public :: FNL_ROTATION_IMPROVE_XZ_PLANES
 
+  enum, bind(c)
+    enumerator :: fnl_rotation_type_3d = 0
+    enumerator :: FNL_ROTATION_NONE = 1
+    enumerator :: FNL_ROTATION_IMPROVE_XY_PLANES = 2
+    enumerator :: FNL_ROTATION_IMPROVE_XZ_PLANES = 3
+  end enum
 
-
-! Switch between using floats or doubles for input position
-! typedef float FNLfloat;
-!typedef double FNLfloat;
-
-! #if defined(__cplusplus)
-! extern "C" {
-! #endif
-
-! #include <math.h>
-! #include <stdint.h>
-! #include <stdbool.h>
-! #include <float.h>
-
-! Enums
-! typedef enum
-! {
-!     FNL_NOISE_OPENSIMPLEX2,
-!     FNL_NOISE_OPENSIMPLEX2S,
-!     FNL_NOISE_CELLULAR,
-!     FNL_NOISE_PERLIN,
-!     FNL_NOISE_VALUE_CUBIC,
-!     FNL_NOISE_VALUE
-! } fnl_noise_type;
-
-! typedef enum
-! {
-!     FNL_ROTATION_NONE,
-!     FNL_ROTATION_IMPROVE_XY_PLANES,
-!     FNL_ROTATION_IMPROVE_XZ_PLANES
-! } fnl_rotation_type_3d;
 
 ! typedef enum
 ! {
@@ -225,6 +229,11 @@ contains
 !      */
 !     float domain_warp_amp;
 ! } fnl_state;
+
+
+
+contains
+
 
 ! /**
 !  * Creates a noise state with default values.
