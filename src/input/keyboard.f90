@@ -13,8 +13,13 @@ module keyboard
 contains
 
 
-  subroutine keyboard_input_callback()
+  subroutine keyboard_input_callback(window_pointer, key, scancode, action, mods)
     implicit none
+
+    type(c_ptr), intent(in), value :: window_pointer
+    integer(c_int), intent(in), value :: key, scancode, action, mods
+
+    print*, "hi"
 
 
   end subroutine keyboard_input_callback
