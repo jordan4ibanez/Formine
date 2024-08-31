@@ -2582,28 +2582,28 @@ contains
   !* 2D noise at given position using the state settings
   !* @returns Noise output bounded between -1 and 1.
   !*
-  real(c_float) function fnl_get_noise_2d(state, xx, yy) result(output)
+  real(c_float) function fnl_get_noise_2d(state, x, y) result(output)
     implicit none
 
     type(fnl_state), intent(in) :: state
-    real(fnl_float), intent(in), value :: xx, yy
-    real(fnl_float) :: x, y
+    real(fnl_float), intent(in), value :: x, y
+    real(fnl_float) :: xx, yy
 
     ! Use xx and so forth as mutable subroutine variables.
-    x = xx
-    y = yy
+    xx = x
+    yy = y
 
-    call internal_fnl_transform_noise_coordinate_2d(state, x, y)
+    call internal_fnl_transform_noise_coordinate_2d(state, xx, yy)
 
     select case (state%fractal_type)
      case (FNL_FRACTAL_FBM)
-      output = internal_fnl_gen_fraction_fbm_2d(state, x, y)
+      output = internal_fnl_gen_fraction_fbm_2d(state, xx, yy)
      case (FNL_FRACTAL_RIDGED)
-      output = internal_fnm_gen_fractal_ridged_2d(state, x, y)
+      output = internal_fnm_gen_fractal_ridged_2d(state, xx, yy)
      case (FNL_FRACTAL_PINGPONG)
-      output = internal_fnl_gen_fractal_ping_pong_2d(state, x, y)
+      output = internal_fnl_gen_fractal_ping_pong_2d(state, xx, yy)
      case default
-      output = internal_fnl_gen_noise_single_2d(state, state%seed, x, y)
+      output = internal_fnl_gen_noise_single_2d(state, state%seed, xx, yy)
     end select
   end function fnl_get_noise_2d
 
@@ -2612,30 +2612,30 @@ contains
   !* 3D noise at given position using the state settings
   !* @returns Noise output bounded between -1 and 1.
   !*
-  real(c_float) function fnl_get_noise_3d(state, xx, yy, zz) result(output)
+  real(c_float) function fnl_get_noise_3d(state, x, y, z) result(output)
     implicit none
 
     type(fnl_state), intent(in) :: state
-    real(fnl_float), intent(in), value :: xx, yy, zz
-    real(fnl_float) :: x, y, z
+    real(fnl_float), intent(in), value :: x, y, z
+    real(fnl_float) :: xx, yy, zz
 
     ! Use xx and so forth as mutable subroutine variables.
-    x = xx
-    y = yy
-    z = zz
+    xx = x
+    yy = y
+    zz = z
 
-    call internal_fnl_transform_noise_coordinates_3d(state, x, y, z)
+    call internal_fnl_transform_noise_coordinates_3d(state, xx, yy, zz)
 
     ! Select a noise type
     select case (state%fractal_type)
      case (FNL_FRACTAL_FBM)
-      output = internal_fnl_gen_fractal_fbm_3d(state, x, y, z)
+      output = internal_fnl_gen_fractal_fbm_3d(state, xx, yy, zz)
      case (FNL_FRACTAL_RIDGED)
-      output = internal_fnl_gen_fractal_ridged_3d(state, x, y, z)
+      output = internal_fnl_gen_fractal_ridged_3d(state, xx, yy, zz)
      case (FNL_FRACTAL_PINGPONG)
-      output = internal_fnl_gen_fractal_ping_pong_3d(state, x, y, z)
+      output = internal_fnl_gen_fractal_ping_pong_3d(state, xx, yy, zz)
      case default
-      output = internal_fnl_gen_noise_single_3d(state, state%seed, x, y, z)
+      output = internal_fnl_gen_noise_single_3d(state, state%seed, xx, yy, zz)
     end select
   end  function fnl_get_noise_3d
 
