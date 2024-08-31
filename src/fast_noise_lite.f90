@@ -1992,7 +1992,7 @@ contains
 ! Domain Warp
 
 
-! static inline void internal_fnl_do_single_domain_warp_2d(fnl_state *state, int seed, float amp, float freq, FNLfloat x, FNLfloat y, FNLfloat *xp, FNLfloat *yp)
+! subroutine internal_fnl_do_single_domain_warp_2d(fnl_state *state, int seed, float amp, float freq, FNLfloat x, FNLfloat y, FNLfloat *xp, FNLfloat *yp)
 ! {
 !     switch (state%domain_warp_type)
 !     {
@@ -2008,7 +2008,7 @@ contains
 !     }
 ! }
 
-! static inline void internal_fnl_do_single_domain_warp_3d(fnl_state *state, int seed, float amp, float freq, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xp, FNLfloat *yp, FNLfloat *zp)
+! subroutine internal_fnl_do_single_domain_warp_3d(fnl_state *state, int seed, float amp, float freq, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xp, FNLfloat *yp, FNLfloat *zp)
 ! {
 !     switch (state%domain_warp_type)
 !     {
@@ -2028,7 +2028,7 @@ contains
 ! Domain Warp Single Wrapper
 
 
-! static void internal_fnl_domain_warp_single_2d(fnl_state *state, FNLfloat *x, FNLfloat *y)
+! subroutine internal_fnl_domain_warp_single_2d(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
 !     int seed = state%seed
 !     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
@@ -2041,7 +2041,7 @@ contains
 !     internal_fnl_do_single_domain_warp_2d(state, seed, amp, freq, xs, ys, x, y)
 ! }
 
-! static void internal_fnl_domain_warp_single_3d(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
+! subroutine internal_fnl_domain_warp_single_3d(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 ! {
 !     int seed = state%seed
 !     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
@@ -2057,7 +2057,7 @@ contains
 
 ! Domain Warp Fractal Progressive
 
-! static void internal_fnl_domain_warp_fractal_progressive_2d(fnl_state *state, FNLfloat *x, FNLfloat *y)
+! subroutine internal_fnl_domain_warp_fractal_progressive_2d(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
 !     int seed = state%seed
 !     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
@@ -2077,7 +2077,7 @@ contains
 !     }
 ! }
 
-! static void internal_fnl_domain_warp_fractal_progressive_3d(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
+! subroutine internal_fnl_domain_warp_fractal_progressive_3d(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 ! {
 !     int seed = state%seed
 !     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
@@ -2100,7 +2100,7 @@ contains
 
 ! Domain Warp Fractal Independent
 
-! static void internal_dnl_domain_warp_fractal_independent_2d(fnl_state *state, FNLfloat *x, FNLfloat *y)
+! subroutine internal_dnl_domain_warp_fractal_independent_2d(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
 !     FNLfloat xs = *x
 !     FNLfloat ys = *y
@@ -2120,7 +2120,7 @@ contains
 !     }
 ! }
 
-! static void internal_dnl_domain_warp_fractal_independent_3d(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
+! subroutine internal_dnl_domain_warp_fractal_independent_3d(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 ! {
 !     FNLfloat xs = *x
 !     FNLfloat ys = *y
@@ -2143,7 +2143,7 @@ contains
 
 ! Domain Warp Basic Grid
 
-! static void internal_fnl_single_domain_warp_basic_grid_2d(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xp, FNLfloat *yp)
+! subroutine internal_fnl_single_domain_warp_basic_grid_2d(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xp, FNLfloat *yp)
 ! {
 !     FNLfloat xf = x * frequency
 !     FNLfloat yf = y * frequency
@@ -2175,7 +2175,7 @@ contains
 !     *yp += internal_fnl_lerp(ly0x, ly1x, ys) * warpAmp
 ! }
 
-! static void internal_fnl_single_domain_warp_basic_grid_3d(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xp, FNLfloat *yp, FNLfloat *zp)
+! subroutine internal_fnl_single_domain_warp_basic_grid_3d(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xp, FNLfloat *yp, FNLfloat *zp)
 ! {
 !     FNLfloat xf = x * frequency
 !     FNLfloat yf = y * frequency
@@ -2235,7 +2235,7 @@ contains
 
 ! Domain Warp Simplex/OpenSimplex2
 
-! static void internal_fnl_single_domain_warp_simplex_gradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xr, FNLfloat *yr, bool outGradOnly)
+! subroutine internal_fnl_single_domain_warp_simplex_gradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xr, FNLfloat *yr, bool outGradOnly)
 ! {
 !     const float SQRT3 = 1.7320508075688772935274463415059f
 !     const float G2 = (3 - SQRT3) / 6
@@ -2332,7 +2332,7 @@ contains
 !     *yr += vy * warpAmp
 ! }
 
-! static void internal_fnl_single_domain_warp_open_simplex2_gradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xr, FNLfloat *yr, FNLfloat *zr, bool outGradOnly)
+! subroutine internal_fnl_single_domain_warp_open_simplex2_gradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xr, FNLfloat *yr, FNLfloat *zr, bool outGradOnly)
 ! {
 !     x *= frequency
 !     y *= frequency
