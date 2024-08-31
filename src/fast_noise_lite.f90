@@ -742,15 +742,15 @@ contains
     type(fnl_state), intent(in) :: state
     real(fnl_float), intent(inout) :: x, y
     real(fnl_float) :: t
-    real(fnl_float), parameter :: sqrt_3 = real(1.7320508075688772935274463415059, fnl_float)
-    real(fnl_float), parameter :: f2 = 0.5 * (sqrt_3 - 1.0)
+    real(fnl_float), parameter :: SQRT_3 = real(1.7320508075688772935274463415059, fnl_float)
+    real(fnl_float), parameter :: F2 = 0.5 * (SQRT_3 - 1.0)
 
     x = x * state%frequency
     y = y * state%frequency
 
     select case(state%noise_type)
      case (FNL_NOISE_OPENSIMPLEX2, FNL_NOISE_OPENSIMPLEX2S)
-      t = (x + y) * f2
+      t = (x + y) * F2
       x = x + t
       y = y + t
      case default
@@ -811,12 +811,12 @@ contains
     type(fnl_state), intent(in) :: state
     real(fnl_float), intent(inout) :: x, y
     real(fnl_float) :: t
-    real(fnl_float), parameter :: sqrt_3 = real(1.7320508075688772935274463415059, fnl_float)
-    real(fnl_float), parameter :: f2 = 0.5 * (sqrt_3 - 1.0)
+    real(fnl_float), parameter :: SQRT_3 = real(1.7320508075688772935274463415059, fnl_float)
+    real(fnl_float), parameter :: F2 = 0.5 * (SQRT_3 - 1.0)
 
     select case (state%domain_warp_type)
      case (FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED, FNL_DOMAIN_WARP_OPENSIMPLEX2)
-      t = (x + y) * f2
+      t = (x + y) * F2
       x = x + t
       y = y + t
      case default
@@ -1055,7 +1055,6 @@ contains
     real(fnl_float), intent(in), value :: x, y
     real(c_float) :: xi, yi, t, x0, y0, n0, n1, n2, a, b, c, x2, y2, x1, y1
     integer(c_int):: i, j
-
     real(c_float), parameter :: SQRT_3 = 1.7320508075688772935274463415059
     real(c_float), parameter :: G2 = (3.0 - SQRT_3) / 6.0
 
@@ -1235,14 +1234,14 @@ contains
     real(fnl_float), intent(in), value :: x, y
     real(c_float) :: xi, yi, t, x0, y0, x2, y2, x1, y1, value, a0, a1, xmyi, a2, x3, y3, a3
     integer(c_int):: i, j, i1, j1
-    real(fnl_float), parameter :: sqrt_3 = real(1.7320508075688772935274463415059, fnl_float)
-    real(fnl_float), parameter :: g2 = (3.0 - sqrt_3) / 6.0
+    real(fnl_float), parameter :: SQRT_3 = real(1.7320508075688772935274463415059, fnl_float)
+    real(fnl_float), parameter :: G2 = (3.0 - SQRT_3) / 6.0
 
     ! 2D OpenSimplex2S case is a modified 2D simplex noise.
 
     !
     ! --- Skew moved to TransformNoiseCoordinate method ---
-    ! const FNLfloat F2 = 0.5f * (sqrt_3 - 1)
+    ! const FNLfloat F2 = 0.5f * (SQRT_3 - 1)
     ! FNLfloat s = (x + y) * F2
     ! x += s y += s
     !
@@ -1257,47 +1256,47 @@ contains
     i1 = i + PRIME_X
     j1 = j + PRIME_Y
 
-    t = (xi + yi) * real(g2, c_float)
+    t = (xi + yi) * real(G2, c_float)
     x0 = xi - t
     y0 = yi - t
 
     a0 = (2.0 / 3.0) - x0 * x0 - y0 * y0
     value = (a0 * a0) * (a0 * a0) * internal_fnl_grad_coord_2d(seed, i, j, x0, y0)
 
-    a1 = real(2 * (1.0 - 2.0 * g2) * (1.0 / g2 - 2.0), c_float) * t + (real(-2.0 * (1.0 - 2.0 * g2) * (1.0 - 2.0 * g2), c_float) + a0)
-    x1 = x0 - real(1.0 - 2.0 * g2, c_float)
-    y1 = y0 - real(1.0 - 2.0 * g2, c_float)
+    a1 = real(2 * (1.0 - 2.0 * G2) * (1.0 / G2 - 2.0), c_float) * t + (real(-2.0 * (1.0 - 2.0 * G2) * (1.0 - 2.0 * G2), c_float) + a0)
+    x1 = x0 - real(1.0 - 2.0 * G2, c_float)
+    y1 = y0 - real(1.0 - 2.0 * G2, c_float)
     value = value + ((a1 * a1) * (a1 * a1) * internal_fnl_grad_coord_2d(seed, i1, j1, x1, y1))
 
     ! Nested conditionals were faster than compact bit logic/arithmetic.
     xmyi = xi - yi
 
-    if (t > g2) then
+    if (t > G2) then
       if (xi + xmyi > 1) then
-        x2 = x0 + real(3.0 * g2 - 2.0, c_float)
-        y2 = y0 + real(3.0 * g2 - 1.0, c_float)
+        x2 = x0 + real(3.0 * G2 - 2.0, c_float)
+        y2 = y0 + real(3.0 * G2 - 1.0, c_float)
         a2 = (2.0 / 3.0) - x2 * x2 - y2 * y2
         if (a2 > 0) then
           value = value + ((a2 * a2) * (a2 * a2) * internal_fnl_grad_coord_2d(seed, i + shiftl(PRIME_X, 1), j + PRIME_Y, x2, y2))
         end if
       else
-        x2 = x0 + real(g2, c_float)
-        y2 = y0 + real(g2 - 1.0, c_float)
+        x2 = x0 + real(G2, c_float)
+        y2 = y0 + real(G2 - 1.0, c_float)
         a2 = (2.0 / 3.0) - x2 * x2 - y2 * y2
         if (a2 > 0) then
           value = value + ((a2 * a2) * (a2 * a2) * internal_fnl_grad_coord_2d(seed, i, j + PRIME_Y, x2, y2))
         end if
       end if
       if (yi - xmyi > 1) then
-        x3 = x0 + real(3.0 * g2 - 1.0, c_float)
-        y3 = y0 + real(3.0 * g2 - 2.0, c_float)
+        x3 = x0 + real(3.0 * G2 - 1.0, c_float)
+        y3 = y0 + real(3.0 * G2 - 2.0, c_float)
         a3 = (2.0 / 3.0) - x3 * x3 - y3 * y3
         if (a3 > 0) then
           value = value + ((a3 * a3) * (a3 * a3) * internal_fnl_grad_coord_2d(seed, i + PRIME_X, j + shiftl(PRIME_Y, 1), x3, y3))
         end if
       else
-        x3 = x0 + real(g2 - 1.0, c_float)
-        y3 = y0 + real(g2, c_float)
+        x3 = x0 + real(G2 - 1.0, c_float)
+        y3 = y0 + real(G2, c_float)
         a3 = (2.0 / 3.0) - x3 * x3 - y3 * y3
         if (a3 > 0) then
           value = value + ((a3 * a3) * (a3 * a3) * internal_fnl_grad_coord_2d(seed, i + PRIME_X, j, x3, y3))
@@ -1305,30 +1304,30 @@ contains
       end if
     else
       if (xi + xmyi < 0) then
-        x2 = x0 + real(1.0 - g2, c_float)
-        y2 = y0 - real(g2, c_float)
+        x2 = x0 + real(1.0 - G2, c_float)
+        y2 = y0 - real(G2, c_float)
         a2 = (2.0 / 3.0) - x2 * x2 - y2 * y2
         if (a2 > 0) then
           value = value + ((a2 * a2) * (a2 * a2) * internal_fnl_grad_coord_2d(seed, i - PRIME_X, j, x2, y2))
         end if
       else
-        x2 = x0 + real(g2 - 1.0, c_float)
-        y2 = y0 + real(g2, c_float)
+        x2 = x0 + real(G2 - 1.0, c_float)
+        y2 = y0 + real(G2, c_float)
         a2 = (2.0 / 3.0) - x2 * x2 - y2 * y2
         if (a2 > 0) then
           value = value + ((a2 * a2) * (a2 * a2) * internal_fnl_grad_coord_2d(seed, i + PRIME_X, j, x2, y2))
         end if
       end if
       if (yi < xmyi) then
-        x2 = x0 - real(g2, c_float)
-        y2 = y0 - real(g2 - 1.0, c_float)
+        x2 = x0 - real(G2, c_float)
+        y2 = y0 - real(G2 - 1.0, c_float)
         a2 = (2.0 / 3.0) - x2 * x2 - y2 * y2
         if (a2 > 0) then
           value = value + ((a2 * a2) * (a2 * a2) * internal_fnl_grad_coord_2d(seed, i, j - PRIME_Y, x2, y2))
         end if
       else
-        x2 = x0 + real(g2, c_float)
-        y2 = y0 + real(g2 - 1, c_float)
+        x2 = x0 + real(G2, c_float)
+        y2 = y0 + real(G2 - 1, c_float)
         a2 = (2.0 / 3.0) - x2 * x2 - y2 * y2
         if (a2 > 0) then
           value = value + ((a2 * a2) * (a2 * a2) * internal_fnl_grad_coord_2d(seed, i, j + PRIME_Y, x2, y2))
@@ -2328,8 +2327,8 @@ contains
     logical, intent(in), value :: outGradOnly
     real(c_float) ::  x, y, xi, yi, t, x0, y0, vx, vy, a, aaaa, xo, yo, b, c, bbbb, cccc, x1, y1, x2, y2
     integer(c_int) :: i, j
-    real(fnl_float), parameter :: sqrt_3 = 1.7320508075688772935274463415059
-    real(fnl_float), parameter :: g2 = (3.0 - sqrt_3) / 6.0
+    real(fnl_float), parameter :: SQRT_3 = 1.7320508075688772935274463415059
+    real(fnl_float), parameter :: G2 = (3.0 - SQRT_3) / 6.0
 
     ! Use xx and so forth as mutable subroutine variables.
     x = xx * frequency
@@ -2337,7 +2336,7 @@ contains
 
     !
     ! --- Skew moved to TransformNoiseCoordinate method ---
-    ! const FNLfloat F2 = 0.5f * (sqrt_3 - 1)
+    ! const FNLfloat F2 = 0.5f * (SQRT_3 - 1)
     ! FNLfloat s = (x + y) * F2
     ! x += s y += s
     !
@@ -2347,7 +2346,7 @@ contains
     xi = real(x - i, c_float)
     yi = real(y - j, c_float)
 
-    t = (xi + yi) * g2
+    t = (xi + yi) * G2
     x0 = real(xi - t, c_float)
     y0 = real(yi - t, c_float)
 
@@ -2371,10 +2370,10 @@ contains
       vy = vy + (aaaa * yo)
     end if
 
-    c = real(2 * (1 - 2 * g2) * (1 / g2 - 2), c_float) * t + (real(-2 * (1 - 2 * g2) * (1 - 2 * g2), c_float) + a)
+    c = real(2 * (1 - 2 * G2) * (1 / G2 - 2), c_float) * t + (real(-2 * (1 - 2 * G2) * (1 - 2 * G2), c_float) + a)
     if (c > 0) then
-      x2 = x0 + (2 * real(g2, c_float) - 1)
-      y2 = y0 + (2 * real(g2, c_float) - 1)
+      x2 = x0 + (2 * real(G2, c_float) - 1)
+      y2 = y0 + (2 * real(G2, c_float) - 1)
       cccc = (c * c) * (c * c)
       if (outGradOnly) then
         call internal_fnl_grad_coord_out_2d(seed, i + PRIME_X, j + PRIME_Y, xo, yo)
@@ -2386,8 +2385,8 @@ contains
     end if
 
     if (y0 > x0) then
-      x1 = x0 + real(g2, c_float)
-      y1 = y0 + (real(g2, c_float) - 1)
+      x1 = x0 + real(G2, c_float)
+      y1 = y0 + (real(G2, c_float) - 1)
       b = 0.5 - x1 * x1 - y1 * y1
       if (b > 0) then
         bbbb = (b * b) * (b * b)
@@ -2401,8 +2400,8 @@ contains
         vy = vy + (bbbb * yo)
       end if
     else
-      x1 = x0 + (real(g2, c_float) - 1)
-      y1 = y0 + real(g2, c_float)
+      x1 = x0 + (real(G2, c_float) - 1)
+      y1 = y0 + real(G2, c_float)
       b = 0.5 - x1 * x1 - y1 * y1
       if (b > 0) then
         bbbb = (b * b) * (b * b)
