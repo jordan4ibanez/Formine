@@ -666,52 +666,65 @@ contains
     zo = value * zgo
   end subroutine internal_fnl_grad_coord_dual_3d
 
+
 ! Generic Noise Gen
 
 
-! static float _fnlGenNoiseSingle2D(fnl_state *state, int seed, FNLfloat x, FNLfloat y)
-! {
-!     switch (state->noise_type)
-!     {
-!     case FNL_NOISE_OPENSIMPLEX2:
-!         return _fnlSingleSimplex2D(seed, x, y)
-!     case FNL_NOISE_OPENSIMPLEX2S:
-!         return _fnlSingleOpenSimplex2S2D(seed, x, y)
-!     case FNL_NOISE_CELLULAR:
-!         return _fnlSingleCellular2D(state, seed, x, y)
-!     case FNL_NOISE_PERLIN:
-!         return _fnlSinglePerlin2D(seed, x, y)
-!     case FNL_NOISE_VALUE_CUBIC:
-!         return _fnlSingleValueCubic2D(seed, x, y)
-!     case FNL_NOISE_VALUE:
-!         return _fnlSingleValue2D(seed, x, y)
-!     default:
-!         return 0
-!     }
-! }
+  real(c_float) function internal_fnl_gen_noise_single_2d(state, seed, x, y) result(output)
+    implicit none
 
-! static float _fnlGenNoiseSingle3D(fnl_state *state, int seed, FNLfloat x, FNLfloat y, FNLfloat z)
-! {
-!     switch (state->noise_type)
-!     {
-!     case FNL_NOISE_OPENSIMPLEX2:
-!         return _fnlSingleOpenSimplex23D(seed, x, y, z)
-!     case FNL_NOISE_OPENSIMPLEX2S:
-!         return _fnlSingleOpenSimplex2S3D(seed, x, y, z)
-!     case FNL_NOISE_CELLULAR:
-!         return _fnlSingleCellular3D(state, seed, x, y, z)
-!     case FNL_NOISE_PERLIN:
-!         return _fnlSinglePerlin3D(seed, x, y, z)
-!     case FNL_NOISE_VALUE_CUBIC:
-!         return _fnlSingleValueCubic3D(seed, x, y, z)
-!     case FNL_NOISE_VALUE:
-!         return _fnlSingleValue3D(seed, x, y, z)
-!     default:
-!         return 0
-!     }
-! }
+    type(fnl_state), intent(in) :: state
+    integer(c_int), intent(in), value :: seed
+    real(kind(fnl_float)), intent(in), value :: x, y
+
+    select case(state%noise_type)
+     case (FNL_NOISE_OPENSIMPLEX2)
+      output = internal_fnl_single_complex_2d(seed, x, y)
+     case (FNL_NOISE_OPENSIMPLEX2S)
+      output = internal_fnl_single_open_simplex_2s_2d(seed, x, y)
+     case (FNL_NOISE_CELLULAR)
+      output = internal_fnl_single_cellular_2d(state, seed, x, y)
+     case (FNL_NOISE_PERLIN)
+      output = internal_fnl_single_perlin_2d(seed, x, y)
+     case (FNL_NOISE_VALUE_CUBIC)
+      output = internal_fnl_single_value_cubic_2d(seed, x, y)
+     case (FNL_NOISE_VALUE)
+      output = internal_fnl_single_value_2d(seed, x, y)
+     case default
+      output = 0.0
+    end select
+  end function internal_fnl_gen_noise_single_2d
+
+
+  real(c_float) function internal_fnl_gen_noise_single_3d(state, seed, x, y, z) result(output)
+    implicit none
+
+    type(fnl_state), intent(in) :: state
+    integer(c_int), intent(in), value :: seed
+    real(kind(fnl_float)), intent(in), value :: x, y, z
+
+
+    select case (state%noise_type)
+     case (FNL_NOISE_OPENSIMPLEX2)
+      output = internal_fnl_single_open_simplex_2_3d(seed, x, y, z)
+     case (FNL_NOISE_OPENSIMPLEX2S)
+      output = internal_fnl_single_open_simplex_2d_3d(seed, x, y, z)
+     case (FNL_NOISE_CELLULAR)
+      output = internal_fnl_single_cellular_3d(state, seed, x, y, z)
+     case (FNL_NOISE_PERLIN)
+      output = internal_fnl_single_perlin_3d(seed, x, y, z)
+     case (FNL_NOISE_VALUE_CUBIC)
+      output = internal_fnl_single_value_cubic_3d(seed, x, y, z)
+     case (FNL_NOISE_VALUE)
+      output = internal_fnl_single_value_3d(seed, x, y, z)
+     case default
+      output = 0.0
+    end select
+  end function internal_fnl_gen_noise_single_3d
+
 
 ! Noise Coordinate Transforms (frequency, and possible skew or rotation)
+
 
 ! static void _fnlTransformNoiseCoordinate2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
@@ -855,7 +868,7 @@ contains
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = _fnlGenNoiseSingle2D(state, seed++, x, y)
+!         float noise = internal_fnl_gen_noise_single_2d(state, seed++, x, y)
 !         sum += noise * amp
 !         amp *= internal_fnl_lerp(1.0f, min(noise + 1, 2) * 0.5f, state->weighted_strength)
 
@@ -875,7 +888,7 @@ contains
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = _fnlGenNoiseSingle3D(state, seed++, x, y, z)
+!         float noise = internal_fnl_gen_noise_single_3d(state, seed++, x, y, z)
 !         sum += noise * amp
 !         amp *= internal_fnl_lerp(1.0f, (noise + 1) * 0.5f, state->weighted_strength)
 
@@ -898,7 +911,7 @@ contains
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = abs(_fnlGenNoiseSingle2D(state, seed++, x, y))
+!         float noise = abs(internal_fnl_gen_noise_single_2d(state, seed++, x, y))
 !         sum += (noise * -2 + 1) * amp
 !         amp *= internal_fnl_lerp(1.0f, 1 - noise, state->weighted_strength)
 
@@ -918,7 +931,7 @@ contains
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = abs(_fnlGenNoiseSingle3D(state, seed++, x, y, z))
+!         float noise = abs(internal_fnl_gen_noise_single_3d(state, seed++, x, y, z))
 !         sum += (noise * -2 + 1) * amp
 !         amp *= internal_fnl_lerp(1.0f, 1 - noise, state->weighted_strength)
 
@@ -941,7 +954,7 @@ contains
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = internal_fnl_ping_pong((_fnlGenNoiseSingle2D(state, seed++, x, y) + 1) * state->ping_pong_strength)
+!         float noise = internal_fnl_ping_pong((internal_fnl_gen_noise_single_2d(state, seed++, x, y) + 1) * state->ping_pong_strength)
 !         sum += (noise - 0.5f) * 2 * amp
 !         amp *= internal_fnl_lerp(1.0f, noise, state->weighted_strength)
 
@@ -961,7 +974,7 @@ contains
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = internal_fnl_ping_pong((_fnlGenNoiseSingle3D(state, seed++, x, y, z) + 1) * state->ping_pong_strength)
+!         float noise = internal_fnl_ping_pong((internal_fnl_gen_noise_single_3d(state, seed++, x, y, z) + 1) * state->ping_pong_strength)
 !         sum += (noise - 0.5f) * 2 * amp
 !         amp *= internal_fnl_lerp(1.0f, noise, state->weighted_strength)
 
@@ -976,7 +989,7 @@ contains
 
 ! Simplex/OpenSimplex2 Noise
 
-! static float _fnlSingleSimplex2D(int seed, FNLfloat x, FNLfloat y)
+! static float internal_fnl_single_complex_2d(int seed, FNLfloat x, FNLfloat y)
 ! {
 !     // 2D OpenSimplex2 case uses the same algorithm as ordinary Simplex.
 
@@ -1050,7 +1063,7 @@ contains
 !     return (n0 + n1 + n2) * 99.83685446303647f
 ! }
 
-! static float _fnlSingleOpenSimplex23D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
+! static float internal_fnl_single_open_simplex_2_3d(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
 !     // 3D OpenSimplex2 case uses two offset rotated cube grids.
 
@@ -1150,7 +1163,7 @@ contains
 
 ! OpenSimplex2S Noise
 
-! static float _fnlSingleOpenSimplex2S2D(int seed, FNLfloat x, FNLfloat y)
+! static float internal_fnl_single_open_simplex_2s_2d(int seed, FNLfloat x, FNLfloat y)
 ! {
 !     // 2D OpenSimplex2S case is a modified 2D simplex noise.
 
@@ -1280,7 +1293,7 @@ contains
 !     return value * 18.24196194486065f
 ! }
 
-! static float _fnlSingleOpenSimplex2S3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
+! static float internal_fnl_single_open_simplex_2d_3d(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
 !     // 3D OpenSimplex2S case uses two offset rotated cube grids.
 
@@ -1474,7 +1487,7 @@ contains
 
 ! Cellular Noise
 
-! static float _fnlSingleCellular2D(fnl_state *state, int seed, FNLfloat x, FNLfloat y)
+! static float internal_fnl_single_cellular_2d(fnl_state *state, int seed, FNLfloat x, FNLfloat y)
 ! {
 !     int xr = round(x)
 !     int yr = round(y)
@@ -1599,7 +1612,7 @@ contains
 !     }
 ! }
 
-! static float _fnlSingleCellular3D(fnl_state *state, int seed, FNLfloat x, FNLfloat y, FNLfloat z)
+! static float internal_fnl_single_cellular_3d(fnl_state *state, int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
 !     int xr = round(x)
 !     int yr = round(y)
@@ -1750,7 +1763,7 @@ contains
 
 ! Perlin Noise
 
-! static float _fnlSinglePerlin2D(int seed, FNLfloat x, FNLfloat y)
+! static float internal_fnl_single_perlin_2d(int seed, FNLfloat x, FNLfloat y)
 ! {
 !     int x0 = floor(x)
 !     int y0 = floor(y)
@@ -1774,7 +1787,7 @@ contains
 !     return internal_fnl_lerp(xf0, xf1, ys) * 1.4247691104677813f
 ! }
 
-! static float _fnlSinglePerlin3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
+! static float internal_fnl_single_perlin_3d(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
 !     int x0 = floor(x)
 !     int y0 = floor(y)
@@ -1811,7 +1824,7 @@ contains
 
 ! Value Cubic
 
-! static float _fnlSingleValueCubic2D(int seed, FNLfloat x, FNLfloat y)
+! static float internal_fnl_single_value_cubic_2d(int seed, FNLfloat x, FNLfloat y)
 ! {
 !     int x1 = floor(x)
 !     int y1 = floor(y)
@@ -1841,7 +1854,7 @@ contains
 !         ys) * (1 / (1.5f * 1.5f))
 ! }
 
-! static float _fnlSingleValueCubic3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
+! static float internal_fnl_single_value_cubic_3d(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
 !     int x1 = floor(x)
 !     int y1 = floor(y)
@@ -1895,7 +1908,7 @@ contains
 
 ! Value noise
 
-! static float _fnlSingleValue2D(int seed, FNLfloat x, FNLfloat y)
+! static float internal_fnl_single_value_2d(int seed, FNLfloat x, FNLfloat y)
 ! {
 !     int x0 = floor(x)
 !     int y0 = floor(y)
@@ -1914,7 +1927,7 @@ contains
 !     return internal_fnl_lerp(xf0, xf1, ys)
 ! }
 
-! static float _fnlSingleValue3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
+! static float internal_fnl_single_value_3d(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
 !     int x0 = floor(x)
 !     int y0 = floor(y)
@@ -2447,7 +2460,7 @@ contains
 !     switch (state->fractal_type)
 !     {
 !     default:
-!         return _fnlGenNoiseSingle2D(state, state->seed, x, y)
+!         return internal_fnl_gen_noise_single_2d(state, state->seed, x, y)
 !     case FNL_FRACTAL_FBM:
 !         return _fnlGenFractalFBM2D(state, x, y)
 !     case FNL_FRACTAL_RIDGED:
@@ -2469,7 +2482,7 @@ contains
 !     switch (state->fractal_type)
 !     {
 !     default:
-!         return _fnlGenNoiseSingle3D(state, state->seed, x, y, z)
+!         return internal_fnl_gen_noise_single_3d(state, state->seed, x, y, z)
 !     case FNL_FRACTAL_FBM:
 !         return _fnlGenFractalFBM3D(state, x, y, z)
 !     case FNL_FRACTAL_RIDGED:
