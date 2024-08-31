@@ -424,22 +424,22 @@ contains
 
   real(c_float) function internal_fnl_fast_abs(f) result(z)
     implicit none
+
     real(c_float), intent(in), value :: f
 
     z = merge(-f, f, f < 0)
   end function internal_fnl_fast_abs
 
 
-! static inline float _fnlCasti32Tof32(int i)
-! {
-!     union
-!     {
-!         float f
-!         int32_t i
-!     } u
-!     u.i = i
-!     return u.f
-! }
+  !! WARNING: The original was tested in a C compiler and always produced 0 !!
+  real(c_float) function internal_fnl_cast_i32_to_f32(i) result(z)
+    implicit none
+
+    integer(c_int), intent(in), value :: i
+
+    z = real(i, c_float)
+  end function internal_fnl_cast_i32_to_f32
+
 
 ! static inline int _fnlCastf32Toi32(float f)
 ! {
@@ -455,7 +455,7 @@ contains
 ! static inline float _fnlInvSqrt(float a)
 ! {
 !     float xhalf = 0.5f * a
-!     a = _fnlCasti32Tof32(0x5f3759df - (_fnlCastf32Toi32(a) >> 1))
+!     a = internal_fnl_cast_i32_to_f32(0x5f3759df - (_fnlCastf32Toi32(a) >> 1))
 !     a = a * (1.5f - xhalf * a * a)
 !     return a
 ! }
