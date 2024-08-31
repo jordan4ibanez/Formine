@@ -268,6 +268,10 @@ module fast_noise_lite
     real(c_float) :: domain_warp_amp = 1.0
   end type fnl_state
 
+  interface fnl_state
+    module procedure :: constructor_fnl_state
+  end interface
+
 
   ! =====================================
   ! Below this line is the implementation
@@ -2546,123 +2550,143 @@ contains
 ! ====================
 
 
-! /**
-!  * Creates a noise state with default values.
-!  * @param seed Optionally set the state seed.
-!  */
-! fnl_state fnlCreateState()
-! {
-!     fnl_state newState
-!     newState.seed = 1337
-!     newState.frequency = 0.01f
-!     newState.noise_type = FNL_NOISE_OPENSIMPLEX2
-!     newState.rotation_type_3d = FNL_ROTATION_NONE
-!     newState.fractal_type = FNL_FRACTAL_NONE
-!     newState.octaves = 3
-!     newState.lacunarity = 2.0f
-!     newState.gain = 0.5f
-!     newState.weighted_strength = 0.0f
-!     newState.ping_pong_strength = 2.0f
-!     newState.cellular_distance_func = FNL_CELLULAR_DISTANCE_EUCLIDEANSQ
-!     newState.cellular_return_type = FNL_CELLULAR_RETURN_TYPE_DISTANCE
-!     newState.cellular_jitter_mod = 1.0f
-!     newState.domain_warp_amp = 30.0f
-!     newState.domain_warp_type = FNL_DOMAIN_WARP_OPENSIMPLEX2
-!     return newState
-! }
+!*
+!* Creates a noise state with default values.
+!* @param seed Optionally set the state seed.
+!*
+  type(fnl_state) function constructor_fnl_state() result(state_new)
+    implicit none
 
-! /**
-!  * 2D noise at given position using the state settings
-!  * @returns Noise output bounded between -1 and 1.
-!  */
-! float fnlGetNoise2D(fnl_state *state, FNLfloat x, FNLfloat y)
-! {
-!     internal_fnl_transform_noise_coordinate_2d(state, &x, &y)
+    state_new%seed = 1337
+    state_new%frequency = 0.01
+    state_new%noise_type = FNL_NOISE_OPENSIMPLEX2
+    state_new%rotation_type_3d = FNL_ROTATION_NONE
+    state_new%fractal_type = FNL_FRACTAL_NONE
+    state_new%octaves = 3
+    state_new%lacunarity = 2.0
+    state_new%gain = 0.5
+    state_new%weighted_strength = 0.0
+    state_new%ping_pong_strength = 2.0
+    state_new%cellular_distance_func = FNL_CELLULAR_DISTANCE_EUCLIDEANSQ
+    state_new%cellular_return_type = FNL_CELLULAR_RETURN_TYPE_DISTANCE
+    state_new%cellular_jitter_mod = 1.0
+    state_new%domain_warp_amp = 30.0
+    state_new%domain_warp_type = FNL_DOMAIN_WARP_OPENSIMPLEX2
+  end function constructor_fnl_state
 
-!     switch (state%fractal_type)
-!     {
-!     default:
-!         return internal_fnl_gen_noise_single_2d(state, state%seed, x, y)
-!     case FNL_FRACTAL_FBM:
-!         return internal_fnl_gen_fraction_fbm_2d(state, x, y)
-!     case FNL_FRACTAL_RIDGED:
-!         return internal_fnm_gen_fractal_ridged_2d(state, x, y)
-!     case FNL_FRACTAL_PINGPONG:
-!         return internal_fnl_gen_fractal_ping_pong_2d(state, x, y)
-!     }
-! }
 
-! /**
-!  * 3D noise at given position using the state settings
-!  * @returns Noise output bounded between -1 and 1.
-!  */
-! float fnlGetNoise3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z)
-! {
-!     internal_fnl_transform_noise_coordinates_3d(state, &x, &y, &z)
+!*
+!* 2D noise at given position using the state settings
+!* @returns Noise output bounded between -1 and 1.
+!*
+  real(c_float) function fnl_get_noise_2d(state, xx, yy) result(output)
+    implicit none
 
-!     // Select a noise type
-!     switch (state%fractal_type)
-!     {
-!     default:
-!         return internal_fnl_gen_noise_single_3d(state, state%seed, x, y, z)
-!     case FNL_FRACTAL_FBM:
-!         return internal_fnl_gen_fractal_fbm_3d(state, x, y, z)
-!     case FNL_FRACTAL_RIDGED:
-!         return internal_fnl_gen_fractal_ridged_3d(state, x, y, z)
-!     case FNL_FRACTAL_PINGPONG:
-!         return internal_fnl_gen_fractal_ping_pong_3d(state, x, y, z)
-!     }
-! }
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(in), value :: xx, yy
+    real(fnl_float) :: x, y
 
-! /**
-!  * 2D warps the input position using current domain warp settings.
-!  *
-!  * Example usage with fnlGetNoise2D:
-!  * ```
-!  * fnlDomainWarp2D(&state, &x, &y)
-!  * noise = fnlGetNoise2D(&state, x, y)
-!  * ```
-!  */
-! void fnlDomainWarp2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
-! {
-!     switch (state%fractal_type)
-!     {
-!     default:
-!         internal_fnl_domain_warp_single_2d(state, x, y)
-!         break
-!     case FNL_FRACTAL_DOMAIN_WARP_PROGRESSIVE:
-!         internal_fnl_domain_warp_fractal_progressive_2d(state, x, y)
-!         break
-!     case FNL_FRACTAL_DOMAIN_WARP_INDEPENDENT:
-!         internal_dnl_domain_warp_fractal_independent_2d(state, x, y)
-!         break
-!     }
-! }
+    ! Use xx and so forth as mutable subroutine variables.
+    x = xx
+    y = yy
 
-! /**
-!  * 3D warps the input position using current domain warp settings.
-!  *
-!  * Example usage with fnlGetNoise3D:
-!  * ```
-!  * fnlDomainWarp3D(&state, &x, &y, &z)
-!  * noise = fnlGetNoise3D(&state, x, y, z)
-!  * ```
-!  */
-! void fnlDomainWarp3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
-! {
-!     switch (state%fractal_type)
-!     {
-!     default:
-!         internal_fnl_domain_warp_single_3d(state, x, y, z)
-!         break
-!     case FNL_FRACTAL_DOMAIN_WARP_PROGRESSIVE:
-!         internal_fnl_domain_warp_fractal_progressive_3d(state, x, y, z)
-!         break
-!     case FNL_FRACTAL_DOMAIN_WARP_INDEPENDENT:
-!         internal_dnl_domain_warp_fractal_independent_3d(state, x, y, z)
-!         break
-!     }
-! }
+    call internal_fnl_transform_noise_coordinate_2d(state, x, y)
+
+    select case (state%fractal_type)
+     case (FNL_FRACTAL_FBM)
+      output = internal_fnl_gen_fraction_fbm_2d(state, x, y)
+     case (FNL_FRACTAL_RIDGED)
+      output = internal_fnm_gen_fractal_ridged_2d(state, x, y)
+     case (FNL_FRACTAL_PINGPONG)
+      output = internal_fnl_gen_fractal_ping_pong_2d(state, x, y)
+     case default
+      output = internal_fnl_gen_noise_single_2d(state, state%seed, x, y)
+    end select
+  end function fnl_get_noise_2d
+
+
+!*
+!* 3D noise at given position using the state settings
+!* @returns Noise output bounded between -1 and 1.
+!*
+  real(c_float) function fnl_get_noise_3d(state, xx, yy, zz) result(output)
+    implicit none
+
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(in), value :: xx, yy, zz
+    real(fnl_float) :: x, y, z
+
+    ! Use xx and so forth as mutable subroutine variables.
+    x = xx
+    y = yy
+    z = zz
+
+    call internal_fnl_transform_noise_coordinates_3d(state, x, y, z)
+
+    ! Select a noise type
+    select case (state%fractal_type)
+     case (FNL_FRACTAL_FBM)
+      output = internal_fnl_gen_fractal_fbm_3d(state, x, y, z)
+     case (FNL_FRACTAL_RIDGED)
+      output = internal_fnl_gen_fractal_ridged_3d(state, x, y, z)
+     case (FNL_FRACTAL_PINGPONG)
+      output = internal_fnl_gen_fractal_ping_pong_3d(state, x, y, z)
+     case default
+      output = internal_fnl_gen_noise_single_3d(state, state%seed, x, y, z)
+    end select
+  end  function fnl_get_noise_3d
+
+
+!*
+!* 2D warps the input position using current domain warp settings.
+!*
+!* Example usage with fnl_get_noise_2d:
+!* ```
+!* fnlDomainWarp2D(&state, &x, &y)
+!* noise = fnl_get_noise_2d(&state, x, y)
+!* ```
+!*
+  subroutine fnl_domain_warp_2d(state, x, y)
+    implicit none
+
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(inout) :: x, y
+
+    select case (state%fractal_type)
+     case (FNL_FRACTAL_DOMAIN_WARP_PROGRESSIVE)
+      call internal_fnl_domain_warp_fractal_progressive_2d(state, x, y)
+     case (FNL_FRACTAL_DOMAIN_WARP_INDEPENDENT)
+      call internal_dnl_domain_warp_fractal_independent_2d(state, x, y)
+     case default
+      call internal_fnl_domain_warp_single_2d(state, x, y)
+    end select
+  end subroutine fnl_domain_warp_2d
+
+
+!*
+!* 3D warps the input position using current domain warp settings.
+!*
+!* Example usage with fnlGetNoise3D:
+!* ```
+!* fnlDomainWarp3D(&state, &x, &y, &z)
+!* noise = fnlGetNoise3D(&state, x, y, z)
+!* ```
+!*
+  subroutine fnlDomainWarp3D(state, x, y, z)
+    implicit none
+
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(inout) :: x, y, z
+    select case (state%fractal_type)
+
+     case (FNL_FRACTAL_DOMAIN_WARP_PROGRESSIVE)
+      call internal_fnl_domain_warp_fractal_progressive_3d(state, x, y, z)
+     case (FNL_FRACTAL_DOMAIN_WARP_INDEPENDENT)
+      call internal_dnl_domain_warp_fractal_independent_3d(state, x, y, z)
+     case default
+      call internal_fnl_domain_warp_single_3d(state, x, y, z)
+    end select
+  end subroutine fnlDomainWarp3D
 
 
 end module fast_noise_lite
