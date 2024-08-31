@@ -63,6 +63,9 @@ module fast_noise_lite
 
   integer, parameter :: fnl_float = kind(c_double)
 
+  real(fnl_float) :: f__
+  real(c_float), public, parameter :: FLT_MAX = huge(f__)
+
   ! Enums
 
   public :: fnl_noise_type
