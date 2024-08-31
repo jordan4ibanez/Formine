@@ -1063,7 +1063,7 @@ contains
 
     !
     ! --- Skew moved to TransformNoiseCoordinate method ---
-    ! const FNLfloat F2 = 0.5f * (SQRT3 - 1)
+    ! const FNLfloat F2 = 0.5f * (sqrt_3 - 1)
     ! FNLfloat s = (x + y) * F2
     ! x += s y += s
     !
@@ -1073,7 +1073,7 @@ contains
     xi = real(x - i, c_float)
     yi = real(y - j, c_float)
 
-    t = (xi + yi) * G2
+    t = (xi + yi) * g2
     x0 = real(xi - t, c_float)
     y0 = real(yi - t, c_float)
 
@@ -1087,18 +1087,18 @@ contains
       n0 = (a * a) * (a * a) * internal_fnl_grad_coord_2d(seed, i, j, x0, y0)
     end if
 
-    c = real(2.0 * (1.0 - 2.0 * G2) * (1.0 / G2 - 2.0), c_float) * t + (real(-2.0 * (1.0 - 2.0 * G2) * (1.0 - 2.0 * G2), c_float) + a)
+    c = real(2.0 * (1.0 - 2.0 * g2) * (1.0 / g2 - 2.0), c_float) * t + (real(-2.0 * (1.0 - 2.0 * g2) * (1.0 - 2.0 * g2), c_float) + a)
     if (c <= 0) then
       n2 = 0.0
     else
-      x2 = x0 + (2.0 * real(G2, c_float) - 1.0)
-      y2 = y0 + (2.0 * real(G2, c_float) - 1.0)
+      x2 = x0 + (2.0 * real(g2, c_float) - 1.0)
+      y2 = y0 + (2.0 * real(g2, c_float) - 1.0)
       n2 = (c * c) * (c * c) * internal_fnl_grad_coord_2d(seed, i + PRIME_X, j + PRIME_Y, x2, y2)
     end if
 
     if (y0 > x0) then
-      x1 = x0 + real(G2, c_float)
-      y1 = y0 + (real(G2, c_float) - 1.0)
+      x1 = x0 + real(g2, c_float)
+      y1 = y0 + (real(g2, c_float) - 1.0)
       b = 0.5 - x1 * x1 - y1 * y1
       if (b <= 0) then
         n1 = 0.0
@@ -1106,8 +1106,8 @@ contains
         n1 = (b * b) * (b * b) * internal_fnl_grad_coord_2d(seed, i, j + PRIME_Y, x1, y1)
       end if
     else
-      x1 = x0 + (real(G2, c_float) - 1.0)
-      y1 = y0 + real(G2, c_float)
+      x1 = x0 + (real(g2, c_float) - 1.0)
+      y1 = y0 + real(g2, c_float)
       b = 0.5 - x1 * x1 - y1 * y1
       if (b <= 0) then
         n1 = 0.0
@@ -1243,7 +1243,7 @@ contains
 
     !
     ! --- Skew moved to TransformNoiseCoordinate method ---
-    ! const FNLfloat F2 = 0.5f * (SQRT3 - 1)
+    ! const FNLfloat F2 = 0.5f * (sqrt_3 - 1)
     ! FNLfloat s = (x + y) * F2
     ! x += s y += s
     !
@@ -1258,47 +1258,47 @@ contains
     i1 = i + PRIME_X
     j1 = j + PRIME_Y
 
-    t = (xi + yi) * real(G2, c_float)
+    t = (xi + yi) * real(g2, c_float)
     x0 = xi - t
     y0 = yi - t
 
     a0 = (2.0 / 3.0) - x0 * x0 - y0 * y0
     value = (a0 * a0) * (a0 * a0) * internal_fnl_grad_coord_2d(seed, i, j, x0, y0)
 
-    a1 = real(2 * (1.0 - 2.0 * G2) * (1.0 / G2 - 2.0), c_float) * t + (real(-2.0 * (1.0 - 2.0 * G2) * (1.0 - 2.0 * G2), c_float) + a0)
-    x1 = x0 - real(1.0 - 2.0 * G2, c_float)
-    y1 = y0 - real(1.0 - 2.0 * G2, c_float)
+    a1 = real(2 * (1.0 - 2.0 * g2) * (1.0 / g2 - 2.0), c_float) * t + (real(-2.0 * (1.0 - 2.0 * g2) * (1.0 - 2.0 * g2), c_float) + a0)
+    x1 = x0 - real(1.0 - 2.0 * g2, c_float)
+    y1 = y0 - real(1.0 - 2.0 * g2, c_float)
     value = value + ((a1 * a1) * (a1 * a1) * internal_fnl_grad_coord_2d(seed, i1, j1, x1, y1))
 
     ! Nested conditionals were faster than compact bit logic/arithmetic.
     xmyi = xi - yi
 
-    if (t > G2) then
+    if (t > g2) then
       if (xi + xmyi > 1) then
-        x2 = x0 + real(3.0 * G2 - 2.0, c_float)
-        y2 = y0 + real(3.0 * G2 - 1.0, c_float)
+        x2 = x0 + real(3.0 * g2 - 2.0, c_float)
+        y2 = y0 + real(3.0 * g2 - 1.0, c_float)
         a2 = (2.0 / 3.0) - x2 * x2 - y2 * y2
         if (a2 > 0) then
           value = value + ((a2 * a2) * (a2 * a2) * internal_fnl_grad_coord_2d(seed, i + shiftl(PRIME_X, 1), j + PRIME_Y, x2, y2))
         end if
       else
-        x2 = x0 + real(G2, c_float)
-        y2 = y0 + real(G2 - 1.0, c_float)
+        x2 = x0 + real(g2, c_float)
+        y2 = y0 + real(g2 - 1.0, c_float)
         a2 = (2.0 / 3.0) - x2 * x2 - y2 * y2
         if (a2 > 0) then
           value = value + ((a2 * a2) * (a2 * a2) * internal_fnl_grad_coord_2d(seed, i, j + PRIME_Y, x2, y2))
         end if
       end if
       if (yi - xmyi > 1) then
-        x3 = x0 + real(3.0 * G2 - 1.0, c_float)
-        y3 = y0 + real(3.0 * G2 - 2.0, c_float)
+        x3 = x0 + real(3.0 * g2 - 1.0, c_float)
+        y3 = y0 + real(3.0 * g2 - 2.0, c_float)
         a3 = (2.0 / 3.0) - x3 * x3 - y3 * y3
         if (a3 > 0) then
           value = value + ((a3 * a3) * (a3 * a3) * internal_fnl_grad_coord_2d(seed, i + PRIME_X, j + shiftl(PRIME_Y, 1), x3, y3))
         end if
       else
-        x3 = x0 + real(G2 - 1.0, c_float)
-        y3 = y0 + real(G2, c_float)
+        x3 = x0 + real(g2 - 1.0, c_float)
+        y3 = y0 + real(g2, c_float)
         a3 = (2.0 / 3.0) - x3 * x3 - y3 * y3
         if (a3 > 0) then
           value = value + ((a3 * a3) * (a3 * a3) * internal_fnl_grad_coord_2d(seed, i + PRIME_X, j, x3, y3))
@@ -1306,30 +1306,30 @@ contains
       end if
     else
       if (xi + xmyi < 0) then
-        x2 = x0 + real(1.0 - G2, c_float)
-        y2 = y0 - real(G2, c_float)
+        x2 = x0 + real(1.0 - g2, c_float)
+        y2 = y0 - real(g2, c_float)
         a2 = (2.0 / 3.0) - x2 * x2 - y2 * y2
         if (a2 > 0) then
           value = value + ((a2 * a2) * (a2 * a2) * internal_fnl_grad_coord_2d(seed, i - PRIME_X, j, x2, y2))
         end if
       else
-        x2 = x0 + real(G2 - 1.0, c_float)
-        y2 = y0 + real(G2, c_float)
+        x2 = x0 + real(g2 - 1.0, c_float)
+        y2 = y0 + real(g2, c_float)
         a2 = (2.0 / 3.0) - x2 * x2 - y2 * y2
         if (a2 > 0) then
           value = value + ((a2 * a2) * (a2 * a2) * internal_fnl_grad_coord_2d(seed, i + PRIME_X, j, x2, y2))
         end if
       end if
       if (yi < xmyi) then
-        x2 = x0 - real(G2, c_float)
-        y2 = y0 - real(G2 - 1.0, c_float)
+        x2 = x0 - real(g2, c_float)
+        y2 = y0 - real(g2 - 1.0, c_float)
         a2 = (2.0 / 3.0) - x2 * x2 - y2 * y2
         if (a2 > 0) then
           value = value + ((a2 * a2) * (a2 * a2) * internal_fnl_grad_coord_2d(seed, i, j - PRIME_Y, x2, y2))
         end if
       else
-        x2 = x0 + real(G2, c_float)
-        y2 = y0 + real(G2 - 1, c_float)
+        x2 = x0 + real(g2, c_float)
+        y2 = y0 + real(g2 - 1, c_float)
         a2 = (2.0 / 3.0) - x2 * x2 - y2 * y2
         if (a2 > 0) then
           value = value + ((a2 * a2) * (a2 * a2) * internal_fnl_grad_coord_2d(seed, i, j + PRIME_Y, x2, y2))
@@ -1346,7 +1346,8 @@ contains
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y, z
     real(c_float) :: xi, yi, zi, x0, y0, z0,x2, y2, z2, x1, y1, z1, value, a0, a1, a2, x3, y3, z3, a3, &
-      xAFlipMask0, yAFlipMask0, zAFlipMask0, xAFlipMask1, yAFlipMask1, zAFlipMask1, a4, x4, y4, z4, a6, x6, y6, z6, x7, y7, z7, a7, a8, x8, y8, z8, aA, &
+      x_a_flip_mask_0, y_a_flip_mask_0, z_a_flip_mask_0, x_a_flip_mask_1, y_a_flip_mask_1, z_a_flip_mask_1, &
+      a4, x4, y4, z4, a6, x6, y6, z6, x7, y7, z7, a7, a8, x8, y8, z8, aA, &
       xA, yA, zA, xB, yB, zB, xC, yC, zC, aB, aC, a5, x5, y5, z5, a9, x9, y9, z9, aD, xD, yD, zD
     integer(c_int):: i, j, k, seed_2, x_n_mask, y_n_mask, z_n_mask
     logical(c_bool) :: skip5, skip9, skipD
@@ -1390,15 +1391,15 @@ contains
     value = value + ((a1 * a1) * (a1 * a1) * internal_fnl_grad_coord_3d(seed_2, &
       i + PRIME_X, j + PRIME_Y, k + PRIME_Z, x1, y1, z1))
 
-    xAFlipMask0 = shiftl(ior(x_n_mask, 1), 1) * x1
-    yAFlipMask0 = shiftl(ior(y_n_mask, 1), 1) * y1
-    zAFlipMask0 = shiftl(ior(z_n_mask, 1), 1) * z1
-    xAFlipMask1 = ((-2) - shiftl(x_n_mask, 2)) * x1 - 1.0
-    yAFlipMask1 = ((-2) - shiftl(y_n_mask, 2)) * y1 - 1.0
-    zAFlipMask1 = ((-2) - shiftl(z_n_mask, 2)) * z1 - 1.0
+    x_a_flip_mask_0 = shiftl(ior(x_n_mask, 1), 1) * x1
+    y_a_flip_mask_0 = shiftl(ior(y_n_mask, 1), 1) * y1
+    z_a_flip_mask_0 = shiftl(ior(z_n_mask, 1), 1) * z1
+    x_a_flip_mask_1 = ((-2) - shiftl(x_n_mask, 2)) * x1 - 1.0
+    y_a_flip_mask_1 = ((-2) - shiftl(y_n_mask, 2)) * y1 - 1.0
+    z_a_flip_mask_1 = ((-2) - shiftl(z_n_mask, 2)) * z1 - 1.0
 
     skip5 = .false.
-    a2 = xAFlipMask0 + a0
+    a2 = x_a_flip_mask_0 + a0
     if (a2 > 0) then
       x2 = x0 - ior(x_n_mask, 1)
       y2 = y0
@@ -1406,7 +1407,7 @@ contains
       value = value + ((a2 * a2) * (a2 * a2) * internal_fnl_grad_coord_3d(seed, &
         i + and(not(x_n_mask), PRIME_X), j + and(y_n_mask, PRIME_Y), k + and(z_n_mask, PRIME_Z), x2, y2, z2))
     else
-      a3 = yAFlipMask0 + zAFlipMask0 + a0
+      a3 = y_a_flip_mask_0 + z_a_flip_mask_0 + a0
       if (a3 > 0) then
         x3 = x0
         y3 = y0 - ior(y_n_mask, 1)
@@ -1414,7 +1415,7 @@ contains
         value = value + ((a3 * a3) * (a3 * a3) * internal_fnl_grad_coord_3d(seed, &
           i + and(x_n_mask, PRIME_X), j + and(not(y_n_mask), PRIME_Y), k + and(not(z_n_mask), PRIME_Z), x3, y3, z3))
       end if
-      a4 = xAFlipMask1 + a1
+      a4 = x_a_flip_mask_1 + a1
       if (a4 > 0) then
         x4 = ior(x_n_mask, 1) + x1
         y4 = y1
@@ -1426,7 +1427,7 @@ contains
     end if
 
     skip9 = .false.
-    a6 = yAFlipMask0 + a0
+    a6 = y_a_flip_mask_0 + a0
     if (a6 > 0) then
       x6 = x0
       y6 = y0 - ior(y_n_mask, 1)
@@ -1434,7 +1435,7 @@ contains
       value = value + ((a6 * a6) * (a6 * a6) * internal_fnl_grad_coord_3d(seed, &
         i + and(x_n_mask, PRIME_X), j + and(not(y_n_mask), PRIME_Y), k + and(z_n_mask, PRIME_Z), x6, y6, z6))
     else
-      a7 = xAFlipMask0 + zAFlipMask0 + a0
+      a7 = x_a_flip_mask_0 + z_a_flip_mask_0 + a0
       if (a7 > 0) then
         x7 = x0 - ior(x_n_mask, 1)
         y7 = y0
@@ -1442,7 +1443,7 @@ contains
         value = value + ((a7 * a7) * (a7 * a7) * internal_fnl_grad_coord_3d(seed, &
           i + and(not(x_n_mask), PRIME_X), j + and(y_n_mask, PRIME_Y), k + and(not(z_n_mask), PRIME_Z), x7, y7, z7))
       end if
-      a8 = yAFlipMask1 + a1
+      a8 = y_a_flip_mask_1 + a1
       if (a8 > 0) then
         x8 = x1
         y8 = ior(y_n_mask, 1) + y1
@@ -1454,7 +1455,7 @@ contains
     end if
 
     skipD = .false.
-    aA = zAFlipMask0 + a0
+    aA = z_a_flip_mask_0 + a0
     if (aA > 0) then
       xA = x0
       yA = y0
@@ -1462,7 +1463,7 @@ contains
       value = value + ((aA * aA) * (aA * aA) * internal_fnl_grad_coord_3d(seed, &
         i + and(x_n_mask, PRIME_X), j + and(y_n_mask, PRIME_Y), k + and(not(z_n_mask), PRIME_Z), xA, yA, zA))
     else
-      aB = xAFlipMask0 + yAFlipMask0 + a0
+      aB = x_a_flip_mask_0 + y_a_flip_mask_0 + a0
       if (aB > 0) then
         xB = x0 - ior(x_n_mask, 1)
         yB = y0 - ior(y_n_mask, 1)
@@ -1470,7 +1471,7 @@ contains
         value = value + ((aB * aB) * (aB * aB) * internal_fnl_grad_coord_3d(seed, &
           i + and(not(x_n_mask), PRIME_X), j + and(not(y_n_mask), PRIME_Y), k + and(z_n_mask, PRIME_Z), xB, yB, zB))
       end if
-      aC = zAFlipMask1 + a1
+      aC = z_a_flip_mask_1 + a1
       if (aC > 0) then
         xC = x1
         yC = y1
@@ -1482,7 +1483,7 @@ contains
     end if
 
     if (.not. skip5) then
-      a5 = yAFlipMask1 + zAFlipMask1 + a1
+      a5 = y_a_flip_mask_1 + z_a_flip_mask_1 + a1
       if (a5 > 0) then
         x5 = x1
         y5 = ior(y_n_mask, 1) + y1
@@ -1493,7 +1494,7 @@ contains
     end if
 
     if (.not. skip9) then
-      a9 = xAFlipMask1 + zAFlipMask1 + a1
+      a9 = x_a_flip_mask_1 + z_a_flip_mask_1 + a1
       if (a9 > 0) then
         x9 = ior(x_n_mask, 1) + x1
         y9 = y1
@@ -1504,7 +1505,7 @@ contains
     end if
 
     if (.not. skipD) then
-      aD = xAFlipMask1 + yAFlipMask1 + a1
+      aD = x_a_flip_mask_1 + y_a_flip_mask_1 + a1
       if (aD > 0) then
         xD = ior(x_n_mask, 1) + x1
         yD = ior(y_n_mask, 1) + y1
@@ -1528,14 +1529,14 @@ contains
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y
     integer(c_int) :: xr, yr, x_primed, y_primed, y_primedBase, xi, yi, hash, idx
-    real(c_float) :: distance_0, distance_1, cellular_jitter, vecX, vecY, newDistance, closestHash
+    real(c_float) :: distance_0, distance_1, cellular_jitter, vec_x, vec_y, new_distance, closest_hash
 
     xr = nint(x)
     yr = nint(y)
 
     distance_0 = FLT_MAX
     distance_1 = FLT_MAX
-    closestHash = 0
+    closest_hash = 0
 
     cellular_jitter = 0.43701595 * state%cellular_jitter_mod
 
@@ -1549,13 +1550,13 @@ contains
         do yi = yr - 1, yr + 1
           hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
           idx = and(hash, shiftl(255, 1))
-          vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellular_jitter
-          vecY = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1) + 1) * cellular_jitter
-          newDistance = vecX * vecX + vecY * vecY
-          distance_1 = max(min(distance_1, newDistance), distance_0)
-          if (newDistance < distance_0) then
-            distance_0 = newDistance
-            closestHash = hash
+          vec_x = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellular_jitter
+          vec_y = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1) + 1) * cellular_jitter
+          new_distance = vec_x * vec_x + vec_y * vec_y
+          distance_1 = max(min(distance_1, new_distance), distance_0)
+          if (new_distance < distance_0) then
+            distance_0 = new_distance
+            closest_hash = hash
           end if
           y_primed = y_primed + PRIME_Y
         end do
@@ -1567,13 +1568,13 @@ contains
         do yi = yr - 1, yr + 1
           hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
           idx = and(hash, shiftl(255, 1))
-          vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellular_jitter
-          vecY = real(yi - y, c_float) + RAND_VECS_2D(iand(idx, 1) + 1) * cellular_jitter
-          newDistance = abs(vecX) + abs(vecY)
-          distance_1 = max(min(distance_1, newDistance), distance_0)
-          if (newDistance < distance_0) then
-            distance_0 = newDistance
-            closestHash = hash
+          vec_x = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellular_jitter
+          vec_y = real(yi - y, c_float) + RAND_VECS_2D(iand(idx, 1) + 1) * cellular_jitter
+          new_distance = abs(vec_x) + abs(vec_y)
+          distance_1 = max(min(distance_1, new_distance), distance_0)
+          if (new_distance < distance_0) then
+            distance_0 = new_distance
+            closest_hash = hash
           end if
           y_primed = y_primed + PRIME_Y
         end do
@@ -1585,13 +1586,13 @@ contains
         do yi = yr - 1, yr + 1
           hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
           idx = and(hash, shiftl(255, 1))
-          vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellular_jitter
-          vecY = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1)) * cellular_jitter
-          newDistance = (abs(vecX) + abs(vecY)) + (vecX * vecX + vecY * vecY)
-          distance_1 = max(min(distance_1, newDistance), distance_0)
-          if (newDistance < distance_0) then
-            distance_0 = newDistance
-            closestHash = hash
+          vec_x = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellular_jitter
+          vec_y = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1)) * cellular_jitter
+          new_distance = (abs(vec_x) + abs(vec_y)) + (vec_x * vec_x + vec_y * vec_y)
+          distance_1 = max(min(distance_1, new_distance), distance_0)
+          if (new_distance < distance_0) then
+            distance_0 = new_distance
+            closest_hash = hash
           end if
           y_primed = y_primed + PRIME_Y
         end do
@@ -1610,7 +1611,7 @@ contains
 
     select case (state%cellular_return_type)
      case (FNL_CELLULAR_RETURN_TYPE_CELLVALUE)
-      output = closestHash * (1.0 / 2147483648.0)
+      output = closest_hash * (1.0 / 2147483648.0)
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE)
       output = distance_0 - 1.0
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
@@ -1635,8 +1636,8 @@ contains
     type(fnl_state), intent(in) :: state
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y, z
-    integer(c_int) :: xr, yr, zr, x_primed, y_primed, z_primed, y_primedBase, z_primedBase, xi, yi, zi, hash, idx
-    real(c_float) :: distance_0, distance_1, cellular_jitter, vecX, vecY, vecZ, newDistance, closestHash
+    integer(c_int) :: xr, yr, zr, x_primed, y_primed, z_primed, y_primed_base, z_primed_base, xi, yi, zi, hash, idx
+    real(c_float) :: distance_0, distance_1, cellular_jitter, vec_x, vec_y, vec_z, new_distance, closest_hash
 
     xr = nint(x)
     yr = nint(y)
@@ -1644,32 +1645,32 @@ contains
 
     distance_0 = FLT_MAX
     distance_1 = FLT_MAX
-    closestHash = 0
+    closest_hash = 0
 
     cellular_jitter = 0.39614353 * state%cellular_jitter_mod
 
     x_primed = (xr - 1) * PRIME_X
-    y_primedBase = (yr - 1) * PRIME_Y
-    z_primedBase = (zr - 1) * PRIME_Z
+    y_primed_base = (yr - 1) * PRIME_Y
+    z_primed_base = (zr - 1) * PRIME_Z
 
     select case (state%cellular_distance_func)
 
      case (FNL_CELLULAR_DISTANCE_EUCLIDEANSQ, FNL_CELLULAR_DISTANCE_EUCLIDEAN)
       do xi = xr - 1, xr + 1
-        y_primed = y_primedBase
+        y_primed = y_primed_base
         do yi = yr - 1, yr + 1
-          z_primed = z_primedBase
+          z_primed = z_primed_base
           do zi = zr - 1, zr + 1
             hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
             idx = and(hash, shiftl(255, 2))
-            vecX = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellular_jitter
-            vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellular_jitter
-            vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellular_jitter
-            newDistance = vecX * vecX + vecY * vecY + vecZ * vecZ
-            distance_1 = max(min(distance_1, newDistance), distance_0)
-            if (newDistance < distance_0) then
-              distance_0 = newDistance
-              closestHash = hash
+            vec_x = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellular_jitter
+            vec_y = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellular_jitter
+            vec_z = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellular_jitter
+            new_distance = vec_x * vec_x + vec_y * vec_y + vec_z * vec_z
+            distance_1 = max(min(distance_1, new_distance), distance_0)
+            if (new_distance < distance_0) then
+              distance_0 = new_distance
+              closest_hash = hash
             end if
             z_primed = z_primed + PRIME_Z
           end do
@@ -1679,20 +1680,20 @@ contains
       end do
      case (FNL_CELLULAR_DISTANCE_MANHATTAN)
       do xi = xr - 1, xr + 1
-        y_primed = y_primedBase
+        y_primed = y_primed_base
         do yi = yr - 1, yr + 1
-          z_primed = z_primedBase
+          z_primed = z_primed_base
           do zi = zr - 1, zr + 1
             hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
             idx = and(hash, shiftl(255, 2))
-            vecX = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellular_jitter
-            vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellular_jitter
-            vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellular_jitter
-            newDistance = abs(vecX) + abs(vecY) + abs(vecZ)
-            distance_1 = max(min(distance_1, newDistance), distance_0)
-            if (newDistance < distance_0) then
-              distance_0 = newDistance
-              closestHash = hash
+            vec_x = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellular_jitter
+            vec_y = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellular_jitter
+            vec_z = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellular_jitter
+            new_distance = abs(vec_x) + abs(vec_y) + abs(vec_z)
+            distance_1 = max(min(distance_1, new_distance), distance_0)
+            if (new_distance < distance_0) then
+              distance_0 = new_distance
+              closest_hash = hash
             end if
             z_primed = z_primed + PRIME_Z
           end do
@@ -1702,20 +1703,20 @@ contains
       end do
      case (FNL_CELLULAR_DISTANCE_HYBRID)
       do xi = xr - 1, xr + 1
-        y_primed = y_primedBase
+        y_primed = y_primed_base
         do yi = yr - 1, yr + 1
-          z_primed = z_primedBase
+          z_primed = z_primed_base
           do zi = zr - 1, zr + 1
             hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
             idx = and(hash, shiftl(255, 2))
-            vecX = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellular_jitter
-            vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellular_jitter
-            vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellular_jitter
-            newDistance = (abs(vecX) + abs(vecY) + abs(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ)
-            distance_1 = max(min(distance_1, newDistance), distance_0)
-            if (newDistance < distance_0) then
-              distance_0 = newDistance
-              closestHash = hash
+            vec_x = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellular_jitter
+            vec_y = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellular_jitter
+            vec_z = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellular_jitter
+            new_distance = (abs(vec_x) + abs(vec_y) + abs(vec_z)) + (vec_x * vec_x + vec_y * vec_y + vec_z * vec_z)
+            distance_1 = max(min(distance_1, new_distance), distance_0)
+            if (new_distance < distance_0) then
+              distance_0 = new_distance
+              closest_hash = hash
             end if
             z_primed = z_primed + PRIME_Z
           end do
@@ -1736,7 +1737,7 @@ contains
 
     select case (state%cellular_return_type)
      case (FNL_CELLULAR_RETURN_TYPE_CELLVALUE)
-      output = closestHash * (1 / 2147483648.0)
+      output = closest_hash * (1 / 2147483648.0)
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE)
       output = distance_0 - 1
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
@@ -2326,11 +2327,11 @@ contains
     real(fnl_float), intent(in), value :: xx, yy
     real(fnl_float), intent(inout) :: xr, yr
     logical, intent(in), value :: outGradOnly
-    real(c_float) :: SQRT3, g2, x, y, xi, yi, t, x0, y0, vx, vy, a, aaaa, xo, yo, b, c, bbbb, cccc, x1, y1, x2, y2
+    real(c_float) :: sqrt_3, g2, x, y, xi, yi, t, x0, y0, vx, vy, a, aaaa, xo, yo, b, c, bbbb, cccc, x1, y1, x2, y2
     integer(c_int) :: i, j
 
-    SQRT3 = 1.7320508075688772935274463415059
-    G2 = (3 - SQRT3) / 6
+    sqrt_3 = 1.7320508075688772935274463415059
+    g2 = (3 - sqrt_3) / 6
 
     ! Use xx and so forth as mutable subroutine variables.
     x = xx * frequency
@@ -2338,7 +2339,7 @@ contains
 
     !
     ! --- Skew moved to TransformNoiseCoordinate method ---
-    ! const FNLfloat F2 = 0.5f * (SQRT3 - 1)
+    ! const FNLfloat F2 = 0.5f * (sqrt_3 - 1)
     ! FNLfloat s = (x + y) * F2
     ! x += s y += s
     !
@@ -2348,7 +2349,7 @@ contains
     xi = real(x - i, c_float)
     yi = real(y - j, c_float)
 
-    t = (xi + yi) * G2
+    t = (xi + yi) * g2
     x0 = real(xi - t, c_float)
     y0 = real(yi - t, c_float)
 
@@ -2372,10 +2373,10 @@ contains
       vy = vy + (aaaa * yo)
     end if
 
-    c = real(2 * (1 - 2 * G2) * (1 / G2 - 2), c_float) * t + (real(-2 * (1 - 2 * G2) * (1 - 2 * G2), c_float) + a)
+    c = real(2 * (1 - 2 * g2) * (1 / g2 - 2), c_float) * t + (real(-2 * (1 - 2 * g2) * (1 - 2 * g2), c_float) + a)
     if (c > 0) then
-      x2 = x0 + (2 * real(G2, c_float) - 1)
-      y2 = y0 + (2 * real(G2, c_float) - 1)
+      x2 = x0 + (2 * real(g2, c_float) - 1)
+      y2 = y0 + (2 * real(g2, c_float) - 1)
       cccc = (c * c) * (c * c)
       if (outGradOnly) then
         call internal_fnl_grad_coord_out_2d(seed, i + PRIME_X, j + PRIME_Y, xo, yo)
@@ -2387,8 +2388,8 @@ contains
     end if
 
     if (y0 > x0) then
-      x1 = x0 + real(G2, c_float)
-      y1 = y0 + (real(G2, c_float) - 1)
+      x1 = x0 + real(g2, c_float)
+      y1 = y0 + (real(g2, c_float) - 1)
       b = 0.5 - x1 * x1 - y1 * y1
       if (b > 0) then
         bbbb = (b * b) * (b * b)
@@ -2402,8 +2403,8 @@ contains
         vy = vy + (bbbb * yo)
       end if
     else
-      x1 = x0 + (real(G2, c_float) - 1)
-      y1 = y0 + real(G2, c_float)
+      x1 = x0 + (real(g2, c_float) - 1)
+      y1 = y0 + real(g2, c_float)
       b = 0.5 - x1 * x1 - y1 * y1
       if (b > 0) then
         bbbb = (b * b) * (b * b)
