@@ -209,58 +209,58 @@ module fast_noise_lite
 !      * The octave lacunarity for all fractal noise types.
 !      * @remark Default: 2.0
 !      */
-!     float lacunarity;
+!     float lacunarity
 
 !     /**
 !      * The octave gain for all fractal noise types.
 !      * @remark Default: 0.5
 !      */
-!     float gain;
+!     float gain
 
 !     /**
 !      * The octave weighting for all none Domaain Warp fractal types.
 !      * @remark Default: 0.0
 !      * @remark
 !      */
-!     float weighted_strength;
+!     float weighted_strength
 
 !     /**
 !      * The strength of the fractal ping pong effect.
 !      * @remark Default: 2.0
 !      */
-!     float ping_pong_strength;
+!     float ping_pong_strength
 
 !     /**
 !      * The distance function used in cellular noise calculations.
 !      * @remark Default: FNL_CELLULAR_DISTANCE_EUCLIDEANSQ
 !      */
-!     fnl_cellular_distance_func cellular_distance_func;
+!     fnl_cellular_distance_func cellular_distance_func
 
 !     /**
 !      * The cellular return type from cellular noise calculations.
 !      * @remark Default: FNL_CELLULAR_RETURN_TYPE_DISTANCE
 !      */
-!     fnl_cellular_return_type cellular_return_type;
+!     fnl_cellular_return_type cellular_return_type
 
 !     /**
 !      * The maximum distance a cellular point can move from it's grid position.
 !      * @remark Default: 1.0
 !      * @note Setting this higher than 1 will cause artifacts.
 !      */
-!     float cellular_jitter_mod;
+!     float cellular_jitter_mod
 
 !     /**
 !      * The warp algorithm when using fnlDomainWarp...
 !      * @remark Default: OpenSimplex2
 !      */
-!     fnl_domain_warp_type domain_warp_type;
+!     fnl_domain_warp_type domain_warp_type
 
 !     /**
 !      * The maximum warp distance from original position when using fnlDomainWarp...
 !      * @remark Default: 1.0
 !      */
-!     float domain_warp_amp;
-! } fnl_state;
+!     float domain_warp_amp
+  end type fnl_state
 
 
 
@@ -271,41 +271,41 @@ contains
 !  * Creates a noise state with default values.
 !  * @param seed Optionally set the state seed.
 !  */
-! fnl_state fnlCreateState();
+! fnl_state fnlCreateState()
 
 ! /**
 !  * 2D noise at given position using the state settings
 !  * @returns Noise output bounded between -1 and 1.
 !  */
-! float fnlGetNoise2D(fnl_state *state, FNLfloat x, FNLfloat y);
+! float fnlGetNoise2D(fnl_state *state, FNLfloat x, FNLfloat y)
 
 ! /**
 !  * 3D noise at given position using the state settings
 !  * @returns Noise output bounded between -1 and 1.
 !  */
-! float fnlGetNoise3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z);
+! float fnlGetNoise3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z)
 
 ! /**
 !  * 2D warps the input position using current domain warp settings.
 !  *
 !  * Example usage with fnlGetNoise2D:
 !  * ```
-!  * fnlDomainWarp2D(&state, &x, &y);
-!  * noise = fnlGetNoise2D(&state, x, y);
+!  * fnlDomainWarp2D(&state, &x, &y)
+!  * noise = fnlGetNoise2D(&state, x, y)
 !  * ```
 !  */
-! void fnlDomainWarp2D(fnl_state *state, FNLfloat *x, FNLfloat *y);
+! void fnlDomainWarp2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 
 ! /**
 !  * 3D warps the input position using current domain warp settings.
 !  *
 !  * Example usage with fnlGetNoise3D:
 !  * ```
-!  * fnlDomainWarp3D(&state, &x, &y, &z);
-!  * noise = fnlGetNoise3D(&state, x, y, z);
+!  * fnlDomainWarp3D(&state, &x, &y, &z)
+!  * noise = fnlGetNoise3D(&state, x, y, z)
 !  * ```
 !  */
-! void fnlDomainWarp3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z);
+! void fnlDomainWarp3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 
 ! ====================
 ! Below this line is the implementation
@@ -347,7 +347,7 @@ contains
 !     -0.793353340291235f, 0.608761429008721f, -0.608761429008721f, 0.793353340291235f, -0.38268343236509f, 0.923879532511287f, -0.130526192220052f, 0.99144486137381f,
 !     0.38268343236509f, 0.923879532511287f, 0.923879532511287f, 0.38268343236509f, 0.923879532511287f, -0.38268343236509f, 0.38268343236509f, -0.923879532511287f,
 !     -0.38268343236509f, -0.923879532511287f, -0.923879532511287f, -0.38268343236509f, -0.923879532511287f, 0.38268343236509f, -0.38268343236509f, 0.923879532511287f,
-! };
+! }
 
 ! static const float RAND_VECS_2D[] =
 ! {
@@ -383,7 +383,7 @@ contains
 !     -0.9988770922f, -0.047376731f, -0.1250179027f, 0.992154486f, -0.8280133617f, 0.560708367f, 0.9324863769f, -0.3612051451f, 0.6394653183f, 0.7688199442f, -0.01623847064f, -0.9998681473f, -0.9955014666f, -0.09474613458f, -0.81453315f, 0.580117012f,
 !     0.4037327978f, -0.9148769469f, 0.9944263371f, 0.1054336766f, -0.1624711654f, 0.9867132919f, -0.9949487814f, -0.100383875f, -0.6995302564f, 0.7146029809f, 0.5263414922f, -0.85027327f, -0.5395221479f, 0.841971408f, 0.6579370318f, 0.7530729462f,
 !     0.01426758847f, -0.9998982128f, -0.6734383991f, 0.7392433447f, 0.639412098f, -0.7688642071f, 0.9211571421f, 0.3891908523f, -0.146637214f, -0.9891903394f, -0.782318098f, 0.6228791163f, -0.5039610839f, -0.8637263605f, -0.7743120191f, -0.6328039957f,
-! };
+! }
 
 ! static const float GRADIENTS_3D[] =
 ! {
@@ -403,7 +403,7 @@ contains
 !     1, 0, 1, 0, -1, 0, 1, 0,  1, 0,-1, 0, -1, 0,-1, 0,
 !     1, 1, 0, 0, -1, 1, 0, 0,  1,-1, 0, 0, -1,-1, 0, 0,
 !     1, 1, 0, 0,  0,-1, 1, 0, -1, 1, 0, 0,  0,-1,-1, 0
-! };
+! }
 
 ! static const float RAND_VECS_3D[] =
 ! {
@@ -439,225 +439,225 @@ contains
 !     0.9985120116f, 0.04659011161f, -0.02833944577f, 0, -0.3727687496f, -0.9082481361f, 0.1900757285f, 0, 0.91737377f, -0.3483642108f, 0.1925298489f, 0, 0.2714911074f, 0.4147529736f, -0.8684886582f, 0, 0.5131763485f, -0.7116334161f, 0.4798207128f, 0, -0.8737353606f, 0.18886992f, -0.4482350644f, 0, 0.8460043821f, -0.3725217914f, 0.3814499973f, 0, 0.8978727456f, -0.1780209141f, -0.4026575304f, 0,
 !     0.2178065647f, -0.9698322841f, -0.1094789531f, 0, -0.1518031304f, -0.7788918132f, -0.6085091231f, 0, -0.2600384876f, -0.4755398075f, -0.8403819825f, 0, 0.572313509f, -0.7474340931f, -0.3373418503f, 0, -0.7174141009f, 0.1699017182f, -0.6756111411f, 0, -0.684180784f, 0.02145707593f, -0.7289967412f, 0, -0.2007447902f, 0.06555605789f, -0.9774476623f, 0, -0.1148803697f, -0.8044887315f, 0.5827524187f, 0,
 !     -0.7870349638f, 0.03447489231f, 0.6159443543f, 0, -0.2015596421f, 0.6859872284f, 0.6991389226f, 0, -0.08581082512f, -0.10920836f, -0.9903080513f, 0, 0.5532693395f, 0.7325250401f, -0.396610771f, 0, -0.1842489331f, -0.9777375055f, -0.1004076743f, 0, 0.0775473789f, -0.9111505856f, 0.4047110257f, 0, 0.1399838409f, 0.7601631212f, -0.6344734459f, 0, 0.4484419361f, -0.845289248f, 0.2904925424f, 0
-! };
+! }
 
 ! Utilities
 
-! static inline float _fnlFastMin(float x, float y) { return x < y ? x : y; }
+! static inline float _fnlFastMin(float x, float y) { return x < y ? x : y }
 
-! static inline float _fnlFastMax(float x, float y) { return x > y ? x : y; }
+! static inline float _fnlFastMax(float x, float y) { return x > y ? x : y }
 
-! static inline float _fnlFastAbs(float f) { return f < 0 ? -f : f; }
+! static inline float _fnlFastAbs(float f) { return f < 0 ? -f : f }
 
 ! static inline float _fnlCasti32Tof32(int i)
 ! {
 !     union
 !     {
-!         float f;
-!         int32_t i;
-!     } u;
-!     u.i = i;
-!     return u.f;
+!         float f
+!         int32_t i
+!     } u
+!     u.i = i
+!     return u.f
 ! }
 
 ! static inline int _fnlCastf32Toi32(float f)
 ! {
 !     union
 !     {
-!         float f;
-!         int32_t i;
-!     } u;
-!     u.f = f;
-!     return u.i;
+!         float f
+!         int32_t i
+!     } u
+!     u.f = f
+!     return u.i
 ! }
 
 ! static inline float _fnlInvSqrt(float a)
 ! {
-!     float xhalf = 0.5f * a;
-!     a = _fnlCasti32Tof32(0x5f3759df - (_fnlCastf32Toi32(a) >> 1));
-!     a = a * (1.5f - xhalf * a * a);
-!     return a;
+!     float xhalf = 0.5f * a
+!     a = _fnlCasti32Tof32(0x5f3759df - (_fnlCastf32Toi32(a) >> 1))
+!     a = a * (1.5f - xhalf * a * a)
+!     return a
 ! }
 
 ! NOTE: If your language does not support this method (seen above), then simply use the native sqrt function.
-! static inline float _fnlFastSqrt(float a) { return a * _fnlInvSqrt(a); }
+! static inline float _fnlFastSqrt(float a) { return a * _fnlInvSqrt(a) }
 
-! static inline int _fnlFastFloor(FNLfloat f) { return (f >= 0 ? (int)f : (int)f - 1); }
+! static inline int _fnlFastFloor(FNLfloat f) { return (f >= 0 ? (int)f : (int)f - 1) }
 
-! static inline int _fnlFastRound(FNLfloat f) { return (f >= 0) ? (int)(f + 0.5f) : (int)(f - 0.5f); }
+! static inline int _fnlFastRound(FNLfloat f) { return (f >= 0) ? (int)(f + 0.5f) : (int)(f - 0.5f) }
 
-! static inline float _fnlLerp(float a, float b, float t) { return a + t * (b - a); }
+! static inline float _fnlLerp(float a, float b, float t) { return a + t * (b - a) }
 
-! static inline float _fnlInterpHermite(float t) { return t * t * (3 - 2 * t); }
+! static inline float _fnlInterpHermite(float t) { return t * t * (3 - 2 * t) }
 
-! static inline float _fnlInterpQuintic(float t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+! static inline float _fnlInterpQuintic(float t) { return t * t * t * (t * (t * 6 - 15) + 10) }
 
 ! static inline float _fnlCubicLerp(float a, float b, float c, float d, float t)
 ! {
-!     float p = (d - c) - (a - b);
-!     return t * t * t * p + t * t * ((a - b) - p) + t * (c - a) + b;
+!     float p = (d - c) - (a - b)
+!     return t * t * t * p + t * t * ((a - b) - p) + t * (c - a) + b
 ! }
 
 ! static inline float _fnlPingPong(float t)
 ! {
-!     t -= (int)(t * 0.5f) * 2;
-!     return t < 1 ? t : 2 - t;
+!     t -= (int)(t * 0.5f) * 2
+!     return t < 1 ? t : 2 - t
 ! }
 
 ! static float _fnlCalculateFractalBounding(fnl_state *state)
 ! {
-!     float gain = _fnlFastAbs(state->gain);
-!     float amp = gain;
-!     float ampFractal = 1.0f;
-!     for (int i = 1; i < state->octaves; i++)
+!     float gain = _fnlFastAbs(state->gain)
+!     float amp = gain
+!     float ampFractal = 1.0f
+!     for (int i = 1 i < state->octaves i++)
 !     {
-!         ampFractal += amp;
-!         amp *= gain;
+!         ampFractal += amp
+!         amp *= gain
 !     }
-!     return 1.0f / ampFractal;
+!     return 1.0f / ampFractal
 ! }
 
 ! Hashing
 
-! static const int PRIME_X = 501125321;
-! static const int PRIME_Y = 1136930381;
-! static const int PRIME_Z = 1720413743;
+! static const int PRIME_X = 501125321
+! static const int PRIME_Y = 1136930381
+! static const int PRIME_Z = 1720413743
 
 ! static inline int _fnlHash2D(int seed, int xPrimed, int yPrimed)
 ! {
-!     int hash = seed ^ xPrimed ^ yPrimed;
+!     int hash = seed ^ xPrimed ^ yPrimed
 
-!     hash *= 0x27d4eb2d;
-!     return hash;
+!     hash *= 0x27d4eb2d
+!     return hash
 ! }
 
 ! static inline int _fnlHash3D(int seed, int xPrimed, int yPrimed, int zPrimed)
 ! {
-!     int hash = seed ^ xPrimed ^ yPrimed ^ zPrimed;
+!     int hash = seed ^ xPrimed ^ yPrimed ^ zPrimed
 
-!     hash *= 0x27d4eb2d;
-!     return hash;
+!     hash *= 0x27d4eb2d
+!     return hash
 ! }
 
 ! static inline float _fnlValCoord2D(int seed, int xPrimed, int yPrimed)
 ! {
-!     int hash = _fnlHash2D(seed, xPrimed, yPrimed);
-!     hash *= hash;
-!     hash ^= hash << 19;
-!     return hash * (1 / 2147483648.0f);
+!     int hash = _fnlHash2D(seed, xPrimed, yPrimed)
+!     hash *= hash
+!     hash ^= hash << 19
+!     return hash * (1 / 2147483648.0f)
 ! }
 
 ! static inline float _fnlValCoord3D(int seed, int xPrimed, int yPrimed, int zPrimed)
 ! {
-!     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed);
-!     hash *= hash;
-!     hash ^= hash << 19;
-!     return hash * (1 / 2147483648.0f);
+!     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed)
+!     hash *= hash
+!     hash ^= hash << 19
+!     return hash * (1 / 2147483648.0f)
 ! }
 
 ! static inline float _fnlGradCoord2D(int seed, int xPrimed, int yPrimed, float xd, float yd)
 ! {
-!     int hash = _fnlHash2D(seed, xPrimed, yPrimed);
-!     hash ^= hash >> 15;
-!     hash &= 127 << 1;
-!     return xd * GRADIENTS_2D[hash] + yd * GRADIENTS_2D[hash | 1];
+!     int hash = _fnlHash2D(seed, xPrimed, yPrimed)
+!     hash ^= hash >> 15
+!     hash &= 127 << 1
+!     return xd * GRADIENTS_2D[hash] + yd * GRADIENTS_2D[hash | 1]
 ! }
 
 ! static inline float _fnlGradCoord3D(int seed, int xPrimed, int yPrimed, int zPrimed, float xd, float yd, float zd)
 ! {
-!     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed);
-!     hash ^= hash >> 15;
-!     hash &= 63 << 2;
-!     return xd * GRADIENTS_3D[hash] + yd * GRADIENTS_3D[hash | 1] + zd * GRADIENTS_3D[hash | 2];
+!     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed)
+!     hash ^= hash >> 15
+!     hash &= 63 << 2
+!     return xd * GRADIENTS_3D[hash] + yd * GRADIENTS_3D[hash | 1] + zd * GRADIENTS_3D[hash | 2]
 ! }
 
 ! static inline void _fnlGradCoordOut2D(int seed, int xPrimed, int yPrimed, float *xo, float *yo)
 ! {
-!     int hash = _fnlHash2D(seed, xPrimed, yPrimed) & (255 << 1);
+!     int hash = _fnlHash2D(seed, xPrimed, yPrimed) & (255 << 1)
 
-!     *xo = RAND_VECS_2D[hash];
-!     *yo = RAND_VECS_2D[hash | 1];
+!     *xo = RAND_VECS_2D[hash]
+!     *yo = RAND_VECS_2D[hash | 1]
 ! }
 
 ! static inline void _fnlGradCoordOut3D(int seed, int xPrimed, int yPrimed, int zPrimed, float *xo, float *yo, float *zo)
 ! {
-!     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed) & (255 << 2);
+!     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed) & (255 << 2)
 
-!     *xo = RAND_VECS_3D[hash];
-!     *yo = RAND_VECS_3D[hash | 1];
-!     *zo = RAND_VECS_3D[hash | 2];
+!     *xo = RAND_VECS_3D[hash]
+!     *yo = RAND_VECS_3D[hash | 1]
+!     *zo = RAND_VECS_3D[hash | 2]
 ! }
 
 ! static inline void _fnlGradCoordDual2D(int seed, int xPrimed, int yPrimed, float xd, float yd, float *xo, float *yo)
 ! {
-!     int hash = _fnlHash2D(seed, xPrimed, yPrimed);
-!     int index1 = hash & (127 << 1);
-!     int index2 = (hash >> 7) & (255 << 1);
+!     int hash = _fnlHash2D(seed, xPrimed, yPrimed)
+!     int index1 = hash & (127 << 1)
+!     int index2 = (hash >> 7) & (255 << 1)
 
-!     float xg = GRADIENTS_2D[index1];
-!     float yg = GRADIENTS_2D[index1 | 1];
-!     float value = xd * xg + yd * yg;
+!     float xg = GRADIENTS_2D[index1]
+!     float yg = GRADIENTS_2D[index1 | 1]
+!     float value = xd * xg + yd * yg
 
-!     float xgo = RAND_VECS_2D[index2];
-!     float ygo = RAND_VECS_2D[index2 | 1];
+!     float xgo = RAND_VECS_2D[index2]
+!     float ygo = RAND_VECS_2D[index2 | 1]
 
-!     *xo = value * xgo;
-!     *yo = value * ygo;
+!     *xo = value * xgo
+!     *yo = value * ygo
 ! }
 
 ! static inline void _fnlGradCoordDual3D(int seed, int xPrimed, int yPrimed, int zPrimed, float xd, float yd, float zd, float *xo, float *yo, float *zo)
 ! {
-!     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed);
-!     int index1 = hash & (63 << 2);
-!     int index2 = (hash >> 6) & (255 << 2);
+!     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed)
+!     int index1 = hash & (63 << 2)
+!     int index2 = (hash >> 6) & (255 << 2)
 
-!     float xg = GRADIENTS_3D[index1];
-!     float yg = GRADIENTS_3D[index1 | 1];
-!     float zg = GRADIENTS_3D[index1 | 2];
-!     float value = xd * xg + yd * yg + zd * zg;
+!     float xg = GRADIENTS_3D[index1]
+!     float yg = GRADIENTS_3D[index1 | 1]
+!     float zg = GRADIENTS_3D[index1 | 2]
+!     float value = xd * xg + yd * yg + zd * zg
 
-!     float xgo = RAND_VECS_3D[index2];
-!     float ygo = RAND_VECS_3D[index2 | 1];
-!     float zgo = RAND_VECS_3D[index2 | 2];
+!     float xgo = RAND_VECS_3D[index2]
+!     float ygo = RAND_VECS_3D[index2 | 1]
+!     float zgo = RAND_VECS_3D[index2 | 2]
 
-!     *xo = value * xgo;
-!     *yo = value * ygo;
-!     *zo = value * zgo;
+!     *xo = value * xgo
+!     *yo = value * ygo
+!     *zo = value * zgo
 ! }
 
 ! Generic Noise Gen
 
-! static float _fnlSingleSimplex2D(int seed, FNLfloat x, FNLfloat y);
-! static float _fnlSingleOpenSimplex23D(int seed, FNLfloat x, FNLfloat y, FNLfloat z);
-! static float _fnlSingleOpenSimplex2S2D(int seed, FNLfloat x, FNLfloat y);
-! static float _fnlSingleOpenSimplex2S3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z);
-! static float _fnlSingleCellular2D(fnl_state *state, int seed, FNLfloat x, FNLfloat y);
-! static float _fnlSingleCellular3D(fnl_state *state, int seed, FNLfloat x, FNLfloat y, FNLfloat z);
-! static float _fnlSinglePerlin2D(int seed, FNLfloat x, FNLfloat y);
-! static float _fnlSinglePerlin3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z);
-! static float _fnlSingleValueCubic2D(int seed, FNLfloat x, FNLfloat y);
-! static float _fnlSingleValueCubic3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z);
-! static float _fnlSingleValue2D(int seed, FNLfloat x, FNLfloat y);
-! static float _fnlSingleValue3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z);
+! static float _fnlSingleSimplex2D(int seed, FNLfloat x, FNLfloat y)
+! static float _fnlSingleOpenSimplex23D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
+! static float _fnlSingleOpenSimplex2S2D(int seed, FNLfloat x, FNLfloat y)
+! static float _fnlSingleOpenSimplex2S3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
+! static float _fnlSingleCellular2D(fnl_state *state, int seed, FNLfloat x, FNLfloat y)
+! static float _fnlSingleCellular3D(fnl_state *state, int seed, FNLfloat x, FNLfloat y, FNLfloat z)
+! static float _fnlSinglePerlin2D(int seed, FNLfloat x, FNLfloat y)
+! static float _fnlSinglePerlin3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
+! static float _fnlSingleValueCubic2D(int seed, FNLfloat x, FNLfloat y)
+! static float _fnlSingleValueCubic3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
+! static float _fnlSingleValue2D(int seed, FNLfloat x, FNLfloat y)
+! static float _fnlSingleValue3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 
 ! static float _fnlGenNoiseSingle2D(fnl_state *state, int seed, FNLfloat x, FNLfloat y)
 ! {
 !     switch (state->noise_type)
 !     {
 !     case FNL_NOISE_OPENSIMPLEX2:
-!         return _fnlSingleSimplex2D(seed, x, y);
+!         return _fnlSingleSimplex2D(seed, x, y)
 !     case FNL_NOISE_OPENSIMPLEX2S:
-!         return _fnlSingleOpenSimplex2S2D(seed, x, y);
+!         return _fnlSingleOpenSimplex2S2D(seed, x, y)
 !     case FNL_NOISE_CELLULAR:
-!         return _fnlSingleCellular2D(state, seed, x, y);
+!         return _fnlSingleCellular2D(state, seed, x, y)
 !     case FNL_NOISE_PERLIN:
-!         return _fnlSinglePerlin2D(seed, x, y);
+!         return _fnlSinglePerlin2D(seed, x, y)
 !     case FNL_NOISE_VALUE_CUBIC:
-!         return _fnlSingleValueCubic2D(seed, x, y);
+!         return _fnlSingleValueCubic2D(seed, x, y)
 !     case FNL_NOISE_VALUE:
-!         return _fnlSingleValue2D(seed, x, y);
+!         return _fnlSingleValue2D(seed, x, y)
 !     default:
-!         return 0;
+!         return 0
 !     }
 ! }
 
@@ -666,19 +666,19 @@ contains
 !     switch (state->noise_type)
 !     {
 !     case FNL_NOISE_OPENSIMPLEX2:
-!         return _fnlSingleOpenSimplex23D(seed, x, y, z);
+!         return _fnlSingleOpenSimplex23D(seed, x, y, z)
 !     case FNL_NOISE_OPENSIMPLEX2S:
-!         return _fnlSingleOpenSimplex2S3D(seed, x, y, z);
+!         return _fnlSingleOpenSimplex2S3D(seed, x, y, z)
 !     case FNL_NOISE_CELLULAR:
-!         return _fnlSingleCellular3D(state, seed, x, y, z);
+!         return _fnlSingleCellular3D(state, seed, x, y, z)
 !     case FNL_NOISE_PERLIN:
-!         return _fnlSinglePerlin3D(seed, x, y, z);
+!         return _fnlSinglePerlin3D(seed, x, y, z)
 !     case FNL_NOISE_VALUE_CUBIC:
-!         return _fnlSingleValueCubic3D(seed, x, y, z);
+!         return _fnlSingleValueCubic3D(seed, x, y, z)
 !     case FNL_NOISE_VALUE:
-!         return _fnlSingleValue3D(seed, x, y, z);
+!         return _fnlSingleValue3D(seed, x, y, z)
 !     default:
-!         return 0;
+!         return 0
 !     }
 ! }
 
@@ -686,69 +686,69 @@ contains
 
 ! static void _fnlTransformNoiseCoordinate2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
-!     *x *= state->frequency;
-!     *y *= state->frequency;
+!     *x *= state->frequency
+!     *y *= state->frequency
 
 !     switch (state->noise_type)
 !     {
 !     case FNL_NOISE_OPENSIMPLEX2:
 !     case FNL_NOISE_OPENSIMPLEX2S:
 !     {
-!         const FNLfloat SQRT3 = (FNLfloat)1.7320508075688772935274463415059;
-!         const FNLfloat F2 = 0.5f * (SQRT3 - 1);
-!         FNLfloat t = (*x + *y) * F2;
-!         *x += t;
-!         *y += t;
+!         const FNLfloat SQRT3 = (FNLfloat)1.7320508075688772935274463415059
+!         const FNLfloat F2 = 0.5f * (SQRT3 - 1)
+!         FNLfloat t = (*x + *y) * F2
+!         *x += t
+!         *y += t
 !     }
-!     break;
+!     break
 !     default:
-!         break;
+!         break
 !     }
 ! }
 
 ! static void _fnlTransformNoiseCoordinate3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 ! {
-!     *x *= state->frequency;
-!     *y *= state->frequency;
-!     *z *= state->frequency;
+!     *x *= state->frequency
+!     *y *= state->frequency
+!     *z *= state->frequency
 
 !     switch (state->rotation_type_3d)
 !     {
 !     case FNL_ROTATION_IMPROVE_XY_PLANES:
 !     {
-!         FNLfloat xy = *x + *y;
-!         FNLfloat s2 = xy * -(FNLfloat)0.211324865405187;
-!         *z *= (FNLfloat)0.577350269189626;
-!         *x += s2 - *z;
-!         *y = *y + s2 - *z;
-!         *z += xy * (FNLfloat)0.577350269189626;
+!         FNLfloat xy = *x + *y
+!         FNLfloat s2 = xy * -(FNLfloat)0.211324865405187
+!         *z *= (FNLfloat)0.577350269189626
+!         *x += s2 - *z
+!         *y = *y + s2 - *z
+!         *z += xy * (FNLfloat)0.577350269189626
 !     }
-!     break;
+!     break
 !     case FNL_ROTATION_IMPROVE_XZ_PLANES:
 !     {
-!         FNLfloat xz = *x + *z;
-!         FNLfloat s2 = xz * -(FNLfloat)0.211324865405187;
-!         *y *= (FNLfloat)0.577350269189626;
-!         *x += s2 - *y;
-!         *z += s2 - *y;
-!         *y += xz * (FNLfloat)0.577350269189626;
+!         FNLfloat xz = *x + *z
+!         FNLfloat s2 = xz * -(FNLfloat)0.211324865405187
+!         *y *= (FNLfloat)0.577350269189626
+!         *x += s2 - *y
+!         *z += s2 - *y
+!         *y += xz * (FNLfloat)0.577350269189626
 !     }
-!     break;
+!     break
 !     default:
 !         switch (state->noise_type)
 !         {
 !         case FNL_NOISE_OPENSIMPLEX2:
 !         case FNL_NOISE_OPENSIMPLEX2S:
 !         {
-!             const FNLfloat R3 = (FNLfloat)(2.0 / 3.0);
-!             FNLfloat r = (*x + *y + *z) * R3; // Rotation, not skew
-!             *x = r - *x;
-!             *y = r - *y;
-!             *z = r - *z;
+!             const FNLfloat R3 = (FNLfloat)(2.0 / 3.0)
+!             FNLfloat r = (*x + *y + *z) * R3 // Rotation, not skew
+!             *x = r - *x
+!             *y = r - *y
+!             *z = r - *z
 !         }
-!         break;
+!         break
 !         default:
-!             break;
+!             break
 !         }
 !     }
 ! }
@@ -762,15 +762,15 @@ contains
 !     case FNL_DOMAIN_WARP_OPENSIMPLEX2:
 !     case FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED:
 !     {
-!         const FNLfloat SQRT3 = (FNLfloat)1.7320508075688772935274463415059;
-!         const FNLfloat F2 = 0.5f * (SQRT3 - 1);
-!         FNLfloat t = (*x + *y) * F2;
-!         *x += t;
-!         *y += t;
+!         const FNLfloat SQRT3 = (FNLfloat)1.7320508075688772935274463415059
+!         const FNLfloat F2 = 0.5f * (SQRT3 - 1)
+!         FNLfloat t = (*x + *y) * F2
+!         *x += t
+!         *y += t
 !     }
-!     break;
+!     break
 !     default:
-!         break;
+!         break
 !     }
 ! }
 
@@ -780,39 +780,39 @@ contains
 !     {
 !     case FNL_ROTATION_IMPROVE_XY_PLANES:
 !     {
-!         FNLfloat xy = *x + *y;
-!         FNLfloat s2 = xy * -(FNLfloat)0.211324865405187;
-!         *z *= (FNLfloat)0.577350269189626;
-!         *x += s2 - *z;
-!         *y = *y + s2 - *z;
-!         *z += xy * (FNLfloat)0.577350269189626;
+!         FNLfloat xy = *x + *y
+!         FNLfloat s2 = xy * -(FNLfloat)0.211324865405187
+!         *z *= (FNLfloat)0.577350269189626
+!         *x += s2 - *z
+!         *y = *y + s2 - *z
+!         *z += xy * (FNLfloat)0.577350269189626
 !     }
-!     break;
+!     break
 !     case FNL_ROTATION_IMPROVE_XZ_PLANES:
 !     {
-!         FNLfloat xz = *x + *z;
-!         FNLfloat s2 = xz * -(FNLfloat)0.211324865405187;
-!         *y *= (FNLfloat)0.577350269189626;
-!         *x += s2 - *y;
-!         *z += s2 - *y;
-!         *y += xz * (FNLfloat)0.577350269189626;
+!         FNLfloat xz = *x + *z
+!         FNLfloat s2 = xz * -(FNLfloat)0.211324865405187
+!         *y *= (FNLfloat)0.577350269189626
+!         *x += s2 - *y
+!         *z += s2 - *y
+!         *y += xz * (FNLfloat)0.577350269189626
 !     }
-!     break;
+!     break
 !     default:
 !         switch (state->domain_warp_type)
 !         {
 !         case FNL_DOMAIN_WARP_OPENSIMPLEX2:
 !         case FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED:
 !         {
-!             const FNLfloat R3 = (FNLfloat)(2.0 / 3.0);
-!             FNLfloat r = (*x + *y + *z) * R3; // Rotation, not skew
-!             *x = r - *x;
-!             *y = r - *y;
-!             *z = r - *z;
+!             const FNLfloat R3 = (FNLfloat)(2.0 / 3.0)
+!             FNLfloat r = (*x + *y + *z) * R3 // Rotation, not skew
+!             *x = r - *x
+!             *y = r - *y
+!             *z = r - *z
 !         }
-!         break;
+!         break
 !         default:
-!             break;
+!             break
 !         }
 !     }
 ! }
@@ -820,129 +820,129 @@ contains
 ! Fractal FBm
 ! static float _fnlGenFractalFBM2D(fnl_state *state, FNLfloat x, FNLfloat y)
 ! {
-!     int seed = state->seed;
-!     float sum = 0;
-!     float amp = _fnlCalculateFractalBounding(state);
+!     int seed = state->seed
+!     float sum = 0
+!     float amp = _fnlCalculateFractalBounding(state)
 
-!     for (int i = 0; i < state->octaves; i++)
+!     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = _fnlGenNoiseSingle2D(state, seed++, x, y);
-!         sum += noise * amp;
-!         amp *= _fnlLerp(1.0f, _fnlFastMin(noise + 1, 2) * 0.5f, state->weighted_strength);
+!         float noise = _fnlGenNoiseSingle2D(state, seed++, x, y)
+!         sum += noise * amp
+!         amp *= _fnlLerp(1.0f, _fnlFastMin(noise + 1, 2) * 0.5f, state->weighted_strength)
 
-!         x *= state->lacunarity;
-!         y *= state->lacunarity;
-!         amp *= state->gain;
+!         x *= state->lacunarity
+!         y *= state->lacunarity
+!         amp *= state->gain
 !     }
 
-!     return sum;
+!     return sum
 ! }
 
 ! static float _fnlGenFractalFBM3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int seed = state->seed;
-!     float sum = 0;
-!     float amp = _fnlCalculateFractalBounding(state);
+!     int seed = state->seed
+!     float sum = 0
+!     float amp = _fnlCalculateFractalBounding(state)
 
-!     for (int i = 0; i < state->octaves; i++)
+!     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = _fnlGenNoiseSingle3D(state, seed++, x, y, z);
-!         sum += noise * amp;
-!         amp *= _fnlLerp(1.0f, (noise + 1) * 0.5f, state->weighted_strength);
+!         float noise = _fnlGenNoiseSingle3D(state, seed++, x, y, z)
+!         sum += noise * amp
+!         amp *= _fnlLerp(1.0f, (noise + 1) * 0.5f, state->weighted_strength)
 
-!         x *= state->lacunarity;
-!         y *= state->lacunarity;
-!         z *= state->lacunarity;
-!         amp *= state->gain;
+!         x *= state->lacunarity
+!         y *= state->lacunarity
+!         z *= state->lacunarity
+!         amp *= state->gain
 !     }
 
-!     return sum;
+!     return sum
 ! }
 
 ! Fractal Ridged
 
 ! static float _fnlGenFractalRidged2D(fnl_state *state, FNLfloat x, FNLfloat y)
 ! {
-!     int seed = state->seed;
-!     float sum = 0;
-!     float amp = _fnlCalculateFractalBounding(state);
+!     int seed = state->seed
+!     float sum = 0
+!     float amp = _fnlCalculateFractalBounding(state)
 
-!     for (int i = 0; i < state->octaves; i++)
+!     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = _fnlFastAbs(_fnlGenNoiseSingle2D(state, seed++, x, y));
-!         sum += (noise * -2 + 1) * amp;
-!         amp *= _fnlLerp(1.0f, 1 - noise, state->weighted_strength);
+!         float noise = _fnlFastAbs(_fnlGenNoiseSingle2D(state, seed++, x, y))
+!         sum += (noise * -2 + 1) * amp
+!         amp *= _fnlLerp(1.0f, 1 - noise, state->weighted_strength)
 
-!         x *= state->lacunarity;
-!         y *= state->lacunarity;
-!         amp *= state->gain;
+!         x *= state->lacunarity
+!         y *= state->lacunarity
+!         amp *= state->gain
 !     }
 
-!     return sum;
+!     return sum
 ! }
 
 ! static float _fnlGenFractalRidged3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int seed = state->seed;
-!     float sum = 0;
-!     float amp = _fnlCalculateFractalBounding(state);
+!     int seed = state->seed
+!     float sum = 0
+!     float amp = _fnlCalculateFractalBounding(state)
 
-!     for (int i = 0; i < state->octaves; i++)
+!     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = _fnlFastAbs(_fnlGenNoiseSingle3D(state, seed++, x, y, z));
-!         sum += (noise * -2 + 1) * amp;
-!         amp *= _fnlLerp(1.0f, 1 - noise, state->weighted_strength);
+!         float noise = _fnlFastAbs(_fnlGenNoiseSingle3D(state, seed++, x, y, z))
+!         sum += (noise * -2 + 1) * amp
+!         amp *= _fnlLerp(1.0f, 1 - noise, state->weighted_strength)
 
-!         x *= state->lacunarity;
-!         y *= state->lacunarity;
-!         z *= state->lacunarity;
-!         amp *= state->gain;
+!         x *= state->lacunarity
+!         y *= state->lacunarity
+!         z *= state->lacunarity
+!         amp *= state->gain
 !     }
 
-!     return sum;
+!     return sum
 ! }
 
 ! Fractal PingPong
 
 ! static float _fnlGenFractalPingPong2D(fnl_state *state, FNLfloat x, FNLfloat y)
 ! {
-!     int seed = state->seed;
-!     float sum = 0;
-!     float amp = _fnlCalculateFractalBounding(state);
+!     int seed = state->seed
+!     float sum = 0
+!     float amp = _fnlCalculateFractalBounding(state)
 
-!     for (int i = 0; i < state->octaves; i++)
+!     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = _fnlPingPong((_fnlGenNoiseSingle2D(state, seed++, x, y) + 1) * state->ping_pong_strength);
-!         sum += (noise - 0.5f) * 2 * amp;
-!         amp *= _fnlLerp(1.0f, noise, state->weighted_strength);
+!         float noise = _fnlPingPong((_fnlGenNoiseSingle2D(state, seed++, x, y) + 1) * state->ping_pong_strength)
+!         sum += (noise - 0.5f) * 2 * amp
+!         amp *= _fnlLerp(1.0f, noise, state->weighted_strength)
 
-!         x *= state->lacunarity;
-!         y *= state->lacunarity;
-!         amp *= state->gain;
+!         x *= state->lacunarity
+!         y *= state->lacunarity
+!         amp *= state->gain
 !     }
 
-!     return sum;
+!     return sum
 ! }
 
 ! static float _fnlGenFractalPingPong3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int seed = state->seed;
-!     float sum = 0;
-!     float amp = _fnlCalculateFractalBounding(state);
+!     int seed = state->seed
+!     float sum = 0
+!     float amp = _fnlCalculateFractalBounding(state)
 
-!     for (int i = 0; i < state->octaves; i++)
+!     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = _fnlPingPong((_fnlGenNoiseSingle3D(state, seed++, x, y, z) + 1) * state->ping_pong_strength);
-!         sum += (noise - 0.5f) * 2 * amp;
-!         amp *= _fnlLerp(1.0f, noise, state->weighted_strength);
+!         float noise = _fnlPingPong((_fnlGenNoiseSingle3D(state, seed++, x, y, z) + 1) * state->ping_pong_strength)
+!         sum += (noise - 0.5f) * 2 * amp
+!         amp *= _fnlLerp(1.0f, noise, state->weighted_strength)
 
-!         x *= state->lacunarity;
-!         y *= state->lacunarity;
-!         z *= state->lacunarity;
-!         amp *= state->gain;
+!         x *= state->lacunarity
+!         y *= state->lacunarity
+!         z *= state->lacunarity
+!         amp *= state->gain
 !     }
 
-!     return sum;
+!     return sum
 ! }
 
 ! Simplex/OpenSimplex2 Noise
@@ -951,74 +951,74 @@ contains
 ! {
 !     // 2D OpenSimplex2 case uses the same algorithm as ordinary Simplex.
 
-!     const float SQRT3 = 1.7320508075688772935274463415059f;
-!     const float G2 = (3 - SQRT3) / 6;
+!     const float SQRT3 = 1.7320508075688772935274463415059f
+!     const float G2 = (3 - SQRT3) / 6
 
 !     /*
 !      * --- Skew moved to TransformNoiseCoordinate method ---
-!      * const FNLfloat F2 = 0.5f * (SQRT3 - 1);
-!      * FNLfloat s = (x + y) * F2;
-!      * x += s; y += s;
+!      * const FNLfloat F2 = 0.5f * (SQRT3 - 1)
+!      * FNLfloat s = (x + y) * F2
+!      * x += s y += s
 !      */
 
-!     int i = _fnlFastFloor(x);
-!     int j = _fnlFastFloor(y);
-!     float xi = (float)(x - i);
-!     float yi = (float)(y - j);
+!     int i = _fnlFastFloor(x)
+!     int j = _fnlFastFloor(y)
+!     float xi = (float)(x - i)
+!     float yi = (float)(y - j)
 
-!     float t = (xi + yi) * G2;
-!     float x0 = (float)(xi - t);
-!     float y0 = (float)(yi - t);
+!     float t = (xi + yi) * G2
+!     float x0 = (float)(xi - t)
+!     float y0 = (float)(yi - t)
 
-!     i *= PRIME_X;
-!     j *= PRIME_Y;
+!     i *= PRIME_X
+!     j *= PRIME_Y
 
-!     float n0, n1, n2;
+!     float n0, n1, n2
 
-!     float a = 0.5f - x0 * x0 - y0 * y0;
+!     float a = 0.5f - x0 * x0 - y0 * y0
 !     if (a <= 0)
-!         n0 = 0;
+!         n0 = 0
 !     else
 !     {
-!         n0 = (a * a) * (a * a) * _fnlGradCoord2D(seed, i, j, x0, y0);
+!         n0 = (a * a) * (a * a) * _fnlGradCoord2D(seed, i, j, x0, y0)
 !     }
 
-!     float c = (float)(2 * (1 - 2 * G2) * (1 / G2 - 2)) * t + ((float)(-2 * (1 - 2 * G2) * (1 - 2 * G2)) + a);
+!     float c = (float)(2 * (1 - 2 * G2) * (1 / G2 - 2)) * t + ((float)(-2 * (1 - 2 * G2) * (1 - 2 * G2)) + a)
 !     if (c <= 0)
-!         n2 = 0;
+!         n2 = 0
 !     else
 !     {
-!         float x2 = x0 + (2 * (float)G2 - 1);
-!         float y2 = y0 + (2 * (float)G2 - 1);
-!         n2 = (c * c) * (c * c) * _fnlGradCoord2D(seed, i + PRIME_X, j + PRIME_Y, x2, y2);
+!         float x2 = x0 + (2 * (float)G2 - 1)
+!         float y2 = y0 + (2 * (float)G2 - 1)
+!         n2 = (c * c) * (c * c) * _fnlGradCoord2D(seed, i + PRIME_X, j + PRIME_Y, x2, y2)
 !     }
 
 !     if (y0 > x0)
 !     {
-!         float x1 = x0 + (float)G2;
-!         float y1 = y0 + ((float)G2 - 1);
-!         float b = 0.5f - x1 * x1 - y1 * y1;
+!         float x1 = x0 + (float)G2
+!         float y1 = y0 + ((float)G2 - 1)
+!         float b = 0.5f - x1 * x1 - y1 * y1
 !         if (b <= 0)
-!             n1 = 0;
+!             n1 = 0
 !         else
 !         {
-!             n1 = (b * b) * (b * b) * _fnlGradCoord2D(seed, i, j + PRIME_Y, x1, y1);
+!             n1 = (b * b) * (b * b) * _fnlGradCoord2D(seed, i, j + PRIME_Y, x1, y1)
 !         }
 !     }
 !     else
 !     {
-!         float x1 = x0 + ((float)G2 - 1);
-!         float y1 = y0 + (float)G2;
-!         float b = 0.5f - x1 * x1 - y1 * y1;
+!         float x1 = x0 + ((float)G2 - 1)
+!         float y1 = y0 + (float)G2
+!         float b = 0.5f - x1 * x1 - y1 * y1
 !         if (b <= 0)
-!             n1 = 0;
+!             n1 = 0
 !         else
 !         {
-!             n1 = (b * b) * (b * b) * _fnlGradCoord2D(seed, i + PRIME_X, j, x1, y1);
+!             n1 = (b * b) * (b * b) * _fnlGradCoord2D(seed, i + PRIME_X, j, x1, y1)
 !         }
 !     }
 
-!     return (n0 + n1 + n2) * 99.83685446303647f;
+!     return (n0 + n1 + n2) * 99.83685446303647f
 ! }
 
 ! static float _fnlSingleOpenSimplex23D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
@@ -1027,96 +1027,96 @@ contains
 
 !     /*
 !      * --- Rotation moved to TransformNoiseCoordinate method ---
-!      * const FNLfloat R3 = (FNLfloat)(2.0 / 3.0);
-!      * FNLfloat r = (x + y + z) * R3; // Rotation, not skew
-!      * x = r - x; y = r - y; z = r - z;
+!      * const FNLfloat R3 = (FNLfloat)(2.0 / 3.0)
+!      * FNLfloat r = (x + y + z) * R3 // Rotation, not skew
+!      * x = r - x y = r - y z = r - z
 !      */
 
-!     int i = _fnlFastRound(x);
-!     int j = _fnlFastRound(y);
-!     int k = _fnlFastRound(z);
-!     float x0 = (float)(x - i);
-!     float y0 = (float)(y - j);
-!     float z0 = (float)(z - k);
+!     int i = _fnlFastRound(x)
+!     int j = _fnlFastRound(y)
+!     int k = _fnlFastRound(z)
+!     float x0 = (float)(x - i)
+!     float y0 = (float)(y - j)
+!     float z0 = (float)(z - k)
 
-!     int xNSign = (int)(-1.0f - x0) | 1;
-!     int yNSign = (int)(-1.0f - y0) | 1;
-!     int zNSign = (int)(-1.0f - z0) | 1;
+!     int xNSign = (int)(-1.0f - x0) | 1
+!     int yNSign = (int)(-1.0f - y0) | 1
+!     int zNSign = (int)(-1.0f - z0) | 1
 
-!     float ax0 = xNSign * -x0;
-!     float ay0 = yNSign * -y0;
-!     float az0 = zNSign * -z0;
+!     float ax0 = xNSign * -x0
+!     float ay0 = yNSign * -y0
+!     float az0 = zNSign * -z0
 
-!     i *= PRIME_X;
-!     j *= PRIME_Y;
-!     k *= PRIME_Z;
+!     i *= PRIME_X
+!     j *= PRIME_Y
+!     k *= PRIME_Z
 
-!     float value = 0;
-!     float a = (0.6f - x0 * x0) - (y0 * y0 + z0 * z0);
+!     float value = 0
+!     float a = (0.6f - x0 * x0) - (y0 * y0 + z0 * z0)
 
-!     for (int l = 0; ; l++)
+!     for (int l = 0  l++)
 !     {
 !         if (a > 0)
 !         {
-!             value += (a * a) * (a * a) * _fnlGradCoord3D(seed, i, j, k, x0, y0, z0);
+!             value += (a * a) * (a * a) * _fnlGradCoord3D(seed, i, j, k, x0, y0, z0)
 !         }
 
-!         float b = a + 1;
-!         int i1 = i;
-!         int j1 = j;
-!         int k1 = k;
-!         float x1 = x0;
-!         float y1 = y0;
-!         float z1 = z0;
+!         float b = a + 1
+!         int i1 = i
+!         int j1 = j
+!         int k1 = k
+!         float x1 = x0
+!         float y1 = y0
+!         float z1 = z0
 !         if (ax0 >= ay0 && ax0 >= az0)
 !         {
-!             x1 += xNSign;
-!             b -= xNSign * 2 * x1;
-!             i1 -= xNSign * PRIME_X;
+!             x1 += xNSign
+!             b -= xNSign * 2 * x1
+!             i1 -= xNSign * PRIME_X
 !         }
 !         else if (ay0 > ax0 && ay0 >= az0)
 !         {
-!             y1 += yNSign;
-!             b -= yNSign * 2 * y1;
-!             j1 -= yNSign * PRIME_Y;
+!             y1 += yNSign
+!             b -= yNSign * 2 * y1
+!             j1 -= yNSign * PRIME_Y
 !         }
 !         else
 !         {
-!             z1 += zNSign;
-!             b -= zNSign * 2 * z1;
-!             k1 -= zNSign * PRIME_Z;
+!             z1 += zNSign
+!             b -= zNSign * 2 * z1
+!             k1 -= zNSign * PRIME_Z
 !         }
 
 !         if (b > 0)
 !         {
-!             value += (b * b) * (b * b) * _fnlGradCoord3D(seed, i1, j1, k1, x1, y1, z1);
+!             value += (b * b) * (b * b) * _fnlGradCoord3D(seed, i1, j1, k1, x1, y1, z1)
 !         }
 
 !         if (l == 1)
-!             break;
+!             break
 
-!         ax0 = 0.5f - ax0;
-!         ay0 = 0.5f - ay0;
-!         az0 = 0.5f - az0;
+!         ax0 = 0.5f - ax0
+!         ay0 = 0.5f - ay0
+!         az0 = 0.5f - az0
 
-!         x0 = xNSign * ax0;
-!         y0 = yNSign * ay0;
-!         z0 = zNSign * az0;
+!         x0 = xNSign * ax0
+!         y0 = yNSign * ay0
+!         z0 = zNSign * az0
 
-!         a += (0.75f - ax0) - (ay0 + az0);
+!         a += (0.75f - ax0) - (ay0 + az0)
 
-!         i += (xNSign >> 1) & PRIME_X;
-!         j += (yNSign >> 1) & PRIME_Y;
-!         k += (zNSign >> 1) & PRIME_Z;
+!         i += (xNSign >> 1) & PRIME_X
+!         j += (yNSign >> 1) & PRIME_Y
+!         k += (zNSign >> 1) & PRIME_Z
 
-!         xNSign = -xNSign;
-!         yNSign = -yNSign;
-!         zNSign = -zNSign;
+!         xNSign = -xNSign
+!         yNSign = -yNSign
+!         zNSign = -zNSign
 
-!         seed = ~seed;
+!         seed = ~seed
 !     }
 
-!     return value * 32.69428253173828125f;
+!     return value * 32.69428253173828125f
 ! }
 
 ! OpenSimplex2S Noise
@@ -1125,81 +1125,81 @@ contains
 ! {
 !     // 2D OpenSimplex2S case is a modified 2D simplex noise.
 
-!     const FNLfloat SQRT3 = (FNLfloat)1.7320508075688772935274463415059;
-!     const FNLfloat G2 = (3 - SQRT3) / 6;
+!     const FNLfloat SQRT3 = (FNLfloat)1.7320508075688772935274463415059
+!     const FNLfloat G2 = (3 - SQRT3) / 6
 
 !     /*
 !      * --- Skew moved to TransformNoiseCoordinate method ---
-!      * const FNLfloat F2 = 0.5f * (SQRT3 - 1);
-!      * FNLfloat s = (x + y) * F2;
-!      * x += s; y += s;
+!      * const FNLfloat F2 = 0.5f * (SQRT3 - 1)
+!      * FNLfloat s = (x + y) * F2
+!      * x += s y += s
 !     */
 
-!     int i = _fnlFastFloor(x);
-!     int j = _fnlFastFloor(y);
-!     float xi = (float)(x - i);
-!     float yi = (float)(y - j);
+!     int i = _fnlFastFloor(x)
+!     int j = _fnlFastFloor(y)
+!     float xi = (float)(x - i)
+!     float yi = (float)(y - j)
 
-!     i *= PRIME_X;
-!     j *= PRIME_Y;
-!     int i1 = i + PRIME_X;
-!     int j1 = j + PRIME_Y;
+!     i *= PRIME_X
+!     j *= PRIME_Y
+!     int i1 = i + PRIME_X
+!     int j1 = j + PRIME_Y
 
-!     float t = (xi + yi) * (float)G2;
-!     float x0 = xi - t;
-!     float y0 = yi - t;
+!     float t = (xi + yi) * (float)G2
+!     float x0 = xi - t
+!     float y0 = yi - t
 
-!     float a0 = (2.0f / 3.0f) - x0 * x0 - y0 * y0;
-!     float value = (a0 * a0) * (a0 * a0) * _fnlGradCoord2D(seed, i, j, x0, y0);
+!     float a0 = (2.0f / 3.0f) - x0 * x0 - y0 * y0
+!     float value = (a0 * a0) * (a0 * a0) * _fnlGradCoord2D(seed, i, j, x0, y0)
 
-!     float a1 = (float)(2 * (1 - 2 * G2) * (1 / G2 - 2)) * t + ((float)(-2 * (1 - 2 * G2) * (1 - 2 * G2)) + a0);
-!     float x1 = x0 - (float)(1 - 2 * G2);
-!     float y1 = y0 - (float)(1 - 2 * G2);
-!     value += (a1 * a1) * (a1 * a1) * _fnlGradCoord2D(seed, i1, j1, x1, y1);
+!     float a1 = (float)(2 * (1 - 2 * G2) * (1 / G2 - 2)) * t + ((float)(-2 * (1 - 2 * G2) * (1 - 2 * G2)) + a0)
+!     float x1 = x0 - (float)(1 - 2 * G2)
+!     float y1 = y0 - (float)(1 - 2 * G2)
+!     value += (a1 * a1) * (a1 * a1) * _fnlGradCoord2D(seed, i1, j1, x1, y1)
 
 !     // Nested conditionals were faster than compact bit logic/arithmetic.
-!     float xmyi = xi - yi;
+!     float xmyi = xi - yi
 !     if (t > G2)
 !     {
 !         if (xi + xmyi > 1)
 !         {
-!             float x2 = x0 + (float)(3 * G2 - 2);
-!             float y2 = y0 + (float)(3 * G2 - 1);
-!             float a2 = (2.0f / 3.0f) - x2 * x2 - y2 * y2;
+!             float x2 = x0 + (float)(3 * G2 - 2)
+!             float y2 = y0 + (float)(3 * G2 - 1)
+!             float a2 = (2.0f / 3.0f) - x2 * x2 - y2 * y2
 !             if (a2 > 0)
 !             {
-!                 value += (a2 * a2) * (a2 * a2) * _fnlGradCoord2D(seed, i + (PRIME_X << 1), j + PRIME_Y, x2, y2);
+!                 value += (a2 * a2) * (a2 * a2) * _fnlGradCoord2D(seed, i + (PRIME_X << 1), j + PRIME_Y, x2, y2)
 !             }
 !         }
 !         else
 !         {
-!             float x2 = x0 + (float)G2;
-!             float y2 = y0 + (float)(G2 - 1);
-!             float a2 = (2.0f / 3.0f) - x2 * x2 - y2 * y2;
+!             float x2 = x0 + (float)G2
+!             float y2 = y0 + (float)(G2 - 1)
+!             float a2 = (2.0f / 3.0f) - x2 * x2 - y2 * y2
 !             if (a2 > 0)
 !             {
-!                 value += (a2 * a2) * (a2 * a2) * _fnlGradCoord2D(seed, i, j + PRIME_Y, x2, y2);
+!                 value += (a2 * a2) * (a2 * a2) * _fnlGradCoord2D(seed, i, j + PRIME_Y, x2, y2)
 !             }
 !         }
 
 !         if (yi - xmyi > 1)
 !         {
-!             float x3 = x0 + (float)(3 * G2 - 1);
-!             float y3 = y0 + (float)(3 * G2 - 2);
-!             float a3 = (2.0f / 3.0f) - x3 * x3 - y3 * y3;
+!             float x3 = x0 + (float)(3 * G2 - 1)
+!             float y3 = y0 + (float)(3 * G2 - 2)
+!             float a3 = (2.0f / 3.0f) - x3 * x3 - y3 * y3
 !             if (a3 > 0)
 !             {
-!                 value += (a3 * a3) * (a3 * a3) * _fnlGradCoord2D(seed, i + PRIME_X, j + (PRIME_Y << 1), x3, y3);
+!                 value += (a3 * a3) * (a3 * a3) * _fnlGradCoord2D(seed, i + PRIME_X, j + (PRIME_Y << 1), x3, y3)
 !             }
 !         }
 !         else
 !         {
-!             float x3 = x0 + (float)(G2 - 1);
-!             float y3 = y0 + (float)G2;
-!             float a3 = (2.0f / 3.0f) - x3 * x3 - y3 * y3;
+!             float x3 = x0 + (float)(G2 - 1)
+!             float y3 = y0 + (float)G2
+!             float a3 = (2.0f / 3.0f) - x3 * x3 - y3 * y3
 !             if (a3 > 0)
 !             {
-!                 value += (a3 * a3) * (a3 * a3) * _fnlGradCoord2D(seed, i + PRIME_X, j, x3, y3);
+!                 value += (a3 * a3) * (a3 * a3) * _fnlGradCoord2D(seed, i + PRIME_X, j, x3, y3)
 !             }
 !         }
 !     }
@@ -1207,48 +1207,48 @@ contains
 !     {
 !         if (xi + xmyi < 0)
 !         {
-!             float x2 = x0 + (float)(1 - G2);
-!             float y2 = y0 - (float)G2;
-!             float a2 = (2.0f / 3.0f) - x2 * x2 - y2 * y2;
+!             float x2 = x0 + (float)(1 - G2)
+!             float y2 = y0 - (float)G2
+!             float a2 = (2.0f / 3.0f) - x2 * x2 - y2 * y2
 !             if (a2 > 0)
 !             {
-!                 value += (a2 * a2) * (a2 * a2) * _fnlGradCoord2D(seed, i - PRIME_X, j, x2, y2);
+!                 value += (a2 * a2) * (a2 * a2) * _fnlGradCoord2D(seed, i - PRIME_X, j, x2, y2)
 !             }
 !         }
 !         else
 !         {
-!             float x2 = x0 + (float)(G2 - 1);
-!             float y2 = y0 + (float)G2;
-!             float a2 = (2.0f / 3.0f) - x2 * x2 - y2 * y2;
+!             float x2 = x0 + (float)(G2 - 1)
+!             float y2 = y0 + (float)G2
+!             float a2 = (2.0f / 3.0f) - x2 * x2 - y2 * y2
 !             if (a2 > 0)
 !             {
-!                 value += (a2 * a2) * (a2 * a2) * _fnlGradCoord2D(seed, i + PRIME_X, j, x2, y2);
+!                 value += (a2 * a2) * (a2 * a2) * _fnlGradCoord2D(seed, i + PRIME_X, j, x2, y2)
 !             }
 !         }
 
 !         if (yi < xmyi)
 !         {
-!             float x2 = x0 - (float)G2;
-!             float y2 = y0 - (float)(G2 - 1);
-!             float a2 = (2.0f / 3.0f) - x2 * x2 - y2 * y2;
+!             float x2 = x0 - (float)G2
+!             float y2 = y0 - (float)(G2 - 1)
+!             float a2 = (2.0f / 3.0f) - x2 * x2 - y2 * y2
 !             if (a2 > 0)
 !             {
-!                 value += (a2 * a2) * (a2 * a2) * _fnlGradCoord2D(seed, i, j - PRIME_Y, x2, y2);
+!                 value += (a2 * a2) * (a2 * a2) * _fnlGradCoord2D(seed, i, j - PRIME_Y, x2, y2)
 !             }
 !         }
 !         else
 !         {
-!             float x2 = x0 + (float)G2;
-!             float y2 = y0 + (float)(G2 - 1);
-!             float a2 = (2.0f / 3.0f) - x2 * x2 - y2 * y2;
+!             float x2 = x0 + (float)G2
+!             float y2 = y0 + (float)(G2 - 1)
+!             float a2 = (2.0f / 3.0f) - x2 * x2 - y2 * y2
 !             if (a2 > 0)
 !             {
-!                 value += (a2 * a2) * (a2 * a2) * _fnlGradCoord2D(seed, i, j + PRIME_Y, x2, y2);
+!                 value += (a2 * a2) * (a2 * a2) * _fnlGradCoord2D(seed, i, j + PRIME_Y, x2, y2)
 !             }
 !         }
 !     }
 
-!     return value * 18.24196194486065f;
+!     return value * 18.24196194486065f
 ! }
 
 ! static float _fnlSingleOpenSimplex2S3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
@@ -1257,465 +1257,465 @@ contains
 
 !     /*
 !      * --- Rotation moved to TransformNoiseCoordinate method ---
-!      * const FNLfloat R3 = (FNLfloat)(2.0 / 3.0);
-!      * FNLfloat r = (x + y + z) * R3; // Rotation, not skew
-!      * x = r - x; y = r - y; z = r - z;
+!      * const FNLfloat R3 = (FNLfloat)(2.0 / 3.0)
+!      * FNLfloat r = (x + y + z) * R3 // Rotation, not skew
+!      * x = r - x y = r - y z = r - z
 !      */
 
-!     int i = _fnlFastFloor(x);
-!     int j = _fnlFastFloor(y);
-!     int k = _fnlFastFloor(z);
-!     float xi = (float)(x - i);
-!     float yi = (float)(y - j);
-!     float zi = (float)(z - k);
+!     int i = _fnlFastFloor(x)
+!     int j = _fnlFastFloor(y)
+!     int k = _fnlFastFloor(z)
+!     float xi = (float)(x - i)
+!     float yi = (float)(y - j)
+!     float zi = (float)(z - k)
 
-!     i *= PRIME_X;
-!     j *= PRIME_Y;
-!     k *= PRIME_Z;
-!     int seed2 = seed + 1293373;
+!     i *= PRIME_X
+!     j *= PRIME_Y
+!     k *= PRIME_Z
+!     int seed2 = seed + 1293373
 
-!     int xNMask = (int)(-0.5f - xi);
-!     int yNMask = (int)(-0.5f - yi);
-!     int zNMask = (int)(-0.5f - zi);
+!     int xNMask = (int)(-0.5f - xi)
+!     int yNMask = (int)(-0.5f - yi)
+!     int zNMask = (int)(-0.5f - zi)
 
-!     float x0 = xi + xNMask;
-!     float y0 = yi + yNMask;
-!     float z0 = zi + zNMask;
-!     float a0 = 0.75f - x0 * x0 - y0 * y0 - z0 * z0;
+!     float x0 = xi + xNMask
+!     float y0 = yi + yNMask
+!     float z0 = zi + zNMask
+!     float a0 = 0.75f - x0 * x0 - y0 * y0 - z0 * z0
 !     float value = (a0 * a0) * (a0 * a0) * _fnlGradCoord3D(seed,
-!                                                           i + (xNMask & PRIME_X), j + (yNMask & PRIME_Y), k + (zNMask & PRIME_Z), x0, y0, z0);
+!                                                           i + (xNMask & PRIME_X), j + (yNMask & PRIME_Y), k + (zNMask & PRIME_Z), x0, y0, z0)
 
-!     float x1 = xi - 0.5f;
-!     float y1 = yi - 0.5f;
-!     float z1 = zi - 0.5f;
-!     float a1 = 0.75f - x1 * x1 - y1 * y1 - z1 * z1;
+!     float x1 = xi - 0.5f
+!     float y1 = yi - 0.5f
+!     float z1 = zi - 0.5f
+!     float a1 = 0.75f - x1 * x1 - y1 * y1 - z1 * z1
 !     value += (a1 * a1) * (a1 * a1) * _fnlGradCoord3D(seed2,
-!                                                      i + PRIME_X, j + PRIME_Y, k + PRIME_Z, x1, y1, z1);
+!                                                      i + PRIME_X, j + PRIME_Y, k + PRIME_Z, x1, y1, z1)
 
-!     float xAFlipMask0 = ((xNMask | 1) << 1) * x1;
-!     float yAFlipMask0 = ((yNMask | 1) << 1) * y1;
-!     float zAFlipMask0 = ((zNMask | 1) << 1) * z1;
-!     float xAFlipMask1 = (-2 - (xNMask << 2)) * x1 - 1.0f;
-!     float yAFlipMask1 = (-2 - (yNMask << 2)) * y1 - 1.0f;
-!     float zAFlipMask1 = (-2 - (zNMask << 2)) * z1 - 1.0f;
+!     float xAFlipMask0 = ((xNMask | 1) << 1) * x1
+!     float yAFlipMask0 = ((yNMask | 1) << 1) * y1
+!     float zAFlipMask0 = ((zNMask | 1) << 1) * z1
+!     float xAFlipMask1 = (-2 - (xNMask << 2)) * x1 - 1.0f
+!     float yAFlipMask1 = (-2 - (yNMask << 2)) * y1 - 1.0f
+!     float zAFlipMask1 = (-2 - (zNMask << 2)) * z1 - 1.0f
 
-!     bool skip5 = false;
-!     float a2 = xAFlipMask0 + a0;
+!     bool skip5 = false
+!     float a2 = xAFlipMask0 + a0
 !     if (a2 > 0)
 !     {
-!         float x2 = x0 - (xNMask | 1);
-!         float y2 = y0;
-!         float z2 = z0;
+!         float x2 = x0 - (xNMask | 1)
+!         float y2 = y0
+!         float z2 = z0
 !         value += (a2 * a2) * (a2 * a2) * _fnlGradCoord3D(seed,
-!                                                          i + (~xNMask & PRIME_X), j + (yNMask & PRIME_Y), k + (zNMask & PRIME_Z), x2, y2, z2);
+!                                                          i + (~xNMask & PRIME_X), j + (yNMask & PRIME_Y), k + (zNMask & PRIME_Z), x2, y2, z2)
 !     }
 !     else
 !     {
-!         float a3 = yAFlipMask0 + zAFlipMask0 + a0;
+!         float a3 = yAFlipMask0 + zAFlipMask0 + a0
 !         if (a3 > 0)
 !         {
-!             float x3 = x0;
-!             float y3 = y0 - (yNMask | 1);
-!             float z3 = z0 - (zNMask | 1);
+!             float x3 = x0
+!             float y3 = y0 - (yNMask | 1)
+!             float z3 = z0 - (zNMask | 1)
 !             value += (a3 * a3) * (a3 * a3) * _fnlGradCoord3D(seed,
-!                                                              i + (xNMask & PRIME_X), j + (~yNMask & PRIME_Y), k + (~zNMask & PRIME_Z), x3, y3, z3);
+!                                                              i + (xNMask & PRIME_X), j + (~yNMask & PRIME_Y), k + (~zNMask & PRIME_Z), x3, y3, z3)
 !         }
 
-!         float a4 = xAFlipMask1 + a1;
+!         float a4 = xAFlipMask1 + a1
 !         if (a4 > 0)
 !         {
-!             float x4 = (xNMask | 1) + x1;
-!             float y4 = y1;
-!             float z4 = z1;
+!             float x4 = (xNMask | 1) + x1
+!             float y4 = y1
+!             float z4 = z1
 !             value += (a4 * a4) * (a4 * a4) * _fnlGradCoord3D(seed2,
-!                                                              i + (xNMask & (PRIME_X * 2)), j + PRIME_Y, k + PRIME_Z, x4, y4, z4);
-!             skip5 = true;
+!                                                              i + (xNMask & (PRIME_X * 2)), j + PRIME_Y, k + PRIME_Z, x4, y4, z4)
+!             skip5 = true
 !         }
 !     }
 
-!     bool skip9 = false;
-!     float a6 = yAFlipMask0 + a0;
+!     bool skip9 = false
+!     float a6 = yAFlipMask0 + a0
 !     if (a6 > 0)
 !     {
-!         float x6 = x0;
-!         float y6 = y0 - (yNMask | 1);
-!         float z6 = z0;
+!         float x6 = x0
+!         float y6 = y0 - (yNMask | 1)
+!         float z6 = z0
 !         value += (a6 * a6) * (a6 * a6) * _fnlGradCoord3D(seed,
-!                                                          i + (xNMask & PRIME_X), j + (~yNMask & PRIME_Y), k + (zNMask & PRIME_Z), x6, y6, z6);
+!                                                          i + (xNMask & PRIME_X), j + (~yNMask & PRIME_Y), k + (zNMask & PRIME_Z), x6, y6, z6)
 !     }
 !     else
 !     {
-!         float a7 = xAFlipMask0 + zAFlipMask0 + a0;
+!         float a7 = xAFlipMask0 + zAFlipMask0 + a0
 !         if (a7 > 0)
 !         {
-!             float x7 = x0 - (xNMask | 1);
-!             float y7 = y0;
-!             float z7 = z0 - (zNMask | 1);
+!             float x7 = x0 - (xNMask | 1)
+!             float y7 = y0
+!             float z7 = z0 - (zNMask | 1)
 !             value += (a7 * a7) * (a7 * a7) * _fnlGradCoord3D(seed,
-!                                                              i + (~xNMask & PRIME_X), j + (yNMask & PRIME_Y), k + (~zNMask & PRIME_Z), x7, y7, z7);
+!                                                              i + (~xNMask & PRIME_X), j + (yNMask & PRIME_Y), k + (~zNMask & PRIME_Z), x7, y7, z7)
 !         }
 
-!         float a8 = yAFlipMask1 + a1;
+!         float a8 = yAFlipMask1 + a1
 !         if (a8 > 0)
 !         {
-!             float x8 = x1;
-!             float y8 = (yNMask | 1) + y1;
-!             float z8 = z1;
+!             float x8 = x1
+!             float y8 = (yNMask | 1) + y1
+!             float z8 = z1
 !             value += (a8 * a8) * (a8 * a8) * _fnlGradCoord3D(seed2,
-!                                                              i + PRIME_X, j + (yNMask & (PRIME_Y << 1)), k + PRIME_Z, x8, y8, z8);
-!             skip9 = true;
+!                                                              i + PRIME_X, j + (yNMask & (PRIME_Y << 1)), k + PRIME_Z, x8, y8, z8)
+!             skip9 = true
 !         }
 !     }
 
-!     bool skipD = false;
-!     float aA = zAFlipMask0 + a0;
+!     bool skipD = false
+!     float aA = zAFlipMask0 + a0
 !     if (aA > 0)
 !     {
-!         float xA = x0;
-!         float yA = y0;
-!         float zA = z0 - (zNMask | 1);
+!         float xA = x0
+!         float yA = y0
+!         float zA = z0 - (zNMask | 1)
 !         value += (aA * aA) * (aA * aA) * _fnlGradCoord3D(seed,
-!                                                          i + (xNMask & PRIME_X), j + (yNMask & PRIME_Y), k + (~zNMask & PRIME_Z), xA, yA, zA);
+!                                                          i + (xNMask & PRIME_X), j + (yNMask & PRIME_Y), k + (~zNMask & PRIME_Z), xA, yA, zA)
 !     }
 !     else
 !     {
-!         float aB = xAFlipMask0 + yAFlipMask0 + a0;
+!         float aB = xAFlipMask0 + yAFlipMask0 + a0
 !         if (aB > 0)
 !         {
-!             float xB = x0 - (xNMask | 1);
-!             float yB = y0 - (yNMask | 1);
-!             float zB = z0;
+!             float xB = x0 - (xNMask | 1)
+!             float yB = y0 - (yNMask | 1)
+!             float zB = z0
 !             value += (aB * aB) * (aB * aB) * _fnlGradCoord3D(seed,
-!                                                              i + (~xNMask & PRIME_X), j + (~yNMask & PRIME_Y), k + (zNMask & PRIME_Z), xB, yB, zB);
+!                                                              i + (~xNMask & PRIME_X), j + (~yNMask & PRIME_Y), k + (zNMask & PRIME_Z), xB, yB, zB)
 !         }
 
-!         float aC = zAFlipMask1 + a1;
+!         float aC = zAFlipMask1 + a1
 !         if (aC > 0)
 !         {
-!             float xC = x1;
-!             float yC = y1;
-!             float zC = (zNMask | 1) + z1;
+!             float xC = x1
+!             float yC = y1
+!             float zC = (zNMask | 1) + z1
 !             value += (aC * aC) * (aC * aC) * _fnlGradCoord3D(seed2,
-!                                                              i + PRIME_X, j + PRIME_Y, k + (zNMask & (PRIME_Z << 1)), xC, yC, zC);
-!             skipD = true;
+!                                                              i + PRIME_X, j + PRIME_Y, k + (zNMask & (PRIME_Z << 1)), xC, yC, zC)
+!             skipD = true
 !         }
 !     }
 
 !     if (!skip5)
 !     {
-!         float a5 = yAFlipMask1 + zAFlipMask1 + a1;
+!         float a5 = yAFlipMask1 + zAFlipMask1 + a1
 !         if (a5 > 0)
 !         {
-!             float x5 = x1;
-!             float y5 = (yNMask | 1) + y1;
-!             float z5 = (zNMask | 1) + z1;
+!             float x5 = x1
+!             float y5 = (yNMask | 1) + y1
+!             float z5 = (zNMask | 1) + z1
 !             value += (a5 * a5) * (a5 * a5) * _fnlGradCoord3D(seed2,
-!                                                              i + PRIME_X, j + (yNMask & (PRIME_Y << 1)), k + (zNMask & (PRIME_Z << 1)), x5, y5, z5);
+!                                                              i + PRIME_X, j + (yNMask & (PRIME_Y << 1)), k + (zNMask & (PRIME_Z << 1)), x5, y5, z5)
 !         }
 !     }
 
 !     if (!skip9)
 !     {
-!         float a9 = xAFlipMask1 + zAFlipMask1 + a1;
+!         float a9 = xAFlipMask1 + zAFlipMask1 + a1
 !         if (a9 > 0)
 !         {
-!             float x9 = (xNMask | 1) + x1;
-!             float y9 = y1;
-!             float z9 = (zNMask | 1) + z1;
+!             float x9 = (xNMask | 1) + x1
+!             float y9 = y1
+!             float z9 = (zNMask | 1) + z1
 !             value += (a9 * a9) * (a9 * a9) * _fnlGradCoord3D(seed2,
-!                                                              i + (xNMask & (PRIME_X * 2)), j + PRIME_Y, k + (zNMask & (PRIME_Z << 1)), x9, y9, z9);
+!                                                              i + (xNMask & (PRIME_X * 2)), j + PRIME_Y, k + (zNMask & (PRIME_Z << 1)), x9, y9, z9)
 !         }
 !     }
 
 !     if (!skipD)
 !     {
-!         float aD = xAFlipMask1 + yAFlipMask1 + a1;
+!         float aD = xAFlipMask1 + yAFlipMask1 + a1
 !         if (aD > 0)
 !         {
-!             float xD = (xNMask | 1) + x1;
-!             float yD = (yNMask | 1) + y1;
-!             float zD = z1;
+!             float xD = (xNMask | 1) + x1
+!             float yD = (yNMask | 1) + y1
+!             float zD = z1
 !             value += (aD * aD) * (aD * aD) * _fnlGradCoord3D(seed2,
-!                                                              i + (xNMask & (PRIME_X << 1)), j + (yNMask & (PRIME_Y << 1)), k + PRIME_Z, xD, yD, zD);
+!                                                              i + (xNMask & (PRIME_X << 1)), j + (yNMask & (PRIME_Y << 1)), k + PRIME_Z, xD, yD, zD)
 !         }
 !     }
 
-!     return value * 9.046026385208288f;
+!     return value * 9.046026385208288f
 ! }
 
 ! Cellular Noise
 
 ! static float _fnlSingleCellular2D(fnl_state *state, int seed, FNLfloat x, FNLfloat y)
 ! {
-!     int xr = _fnlFastRound(x);
-!     int yr = _fnlFastRound(y);
+!     int xr = _fnlFastRound(x)
+!     int yr = _fnlFastRound(y)
 
-!     float distance0 = FLT_MAX;
-!     float distance1 = FLT_MAX;
-!     int closestHash = 0;
+!     float distance0 = FLT_MAX
+!     float distance1 = FLT_MAX
+!     int closestHash = 0
 
-!     float cellularJitter = 0.43701595f * state->cellular_jitter_mod;
+!     float cellularJitter = 0.43701595f * state->cellular_jitter_mod
 
-!     int xPrimed = (xr - 1) * PRIME_X;
-!     int yPrimedBase = (yr - 1) * PRIME_Y;
+!     int xPrimed = (xr - 1) * PRIME_X
+!     int yPrimedBase = (yr - 1) * PRIME_Y
 
 !     switch (state->cellular_distance_func)
 !     {
 !     default:
 !     case FNL_CELLULAR_DISTANCE_EUCLIDEAN:
 !     case FNL_CELLULAR_DISTANCE_EUCLIDEANSQ:
-!         for (int xi = xr - 1; xi <= xr + 1; xi++)
+!         for (int xi = xr - 1 xi <= xr + 1 xi++)
 !         {
-!             int yPrimed = yPrimedBase;
+!             int yPrimed = yPrimedBase
 
-!             for (int yi = yr - 1; yi <= yr + 1; yi++)
+!             for (int yi = yr - 1 yi <= yr + 1 yi++)
 !             {
-!                 int hash = _fnlHash2D(seed, xPrimed, yPrimed);
-!                 int idx = hash & (255 << 1);
+!                 int hash = _fnlHash2D(seed, xPrimed, yPrimed)
+!                 int idx = hash & (255 << 1)
 
-!                 float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter;
-!                 float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter;
+!                 float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter
+!                 float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter
 
-!                 float newDistance = vecX * vecX + vecY * vecY;
+!                 float newDistance = vecX * vecX + vecY * vecY
 
-!                 distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0);
+!                 distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0)
 !                 if (newDistance < distance0)
 !                 {
-!                     distance0 = newDistance;
-!                     closestHash = hash;
+!                     distance0 = newDistance
+!                     closestHash = hash
 !                 }
-!                 yPrimed += PRIME_Y;
+!                 yPrimed += PRIME_Y
 !             }
-!             xPrimed += PRIME_X;
+!             xPrimed += PRIME_X
 !         }
-!         break;
+!         break
 !     case FNL_CELLULAR_DISTANCE_MANHATTAN:
-!         for (int xi = xr - 1; xi <= xr + 1; xi++)
+!         for (int xi = xr - 1 xi <= xr + 1 xi++)
 !         {
-!             int yPrimed = yPrimedBase;
+!             int yPrimed = yPrimedBase
 
-!             for (int yi = yr - 1; yi <= yr + 1; yi++)
+!             for (int yi = yr - 1 yi <= yr + 1 yi++)
 !             {
-!                 int hash = _fnlHash2D(seed, xPrimed, yPrimed);
-!                 int idx = hash & (255 << 1);
+!                 int hash = _fnlHash2D(seed, xPrimed, yPrimed)
+!                 int idx = hash & (255 << 1)
 
-!                 float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter;
-!                 float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter;
+!                 float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter
+!                 float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter
 
-!                 float newDistance = _fnlFastAbs(vecX) + _fnlFastAbs(vecY);
+!                 float newDistance = _fnlFastAbs(vecX) + _fnlFastAbs(vecY)
 
-!                 distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0);
+!                 distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0)
 !                 if (newDistance < distance0)
 !                 {
-!                     distance0 = newDistance;
-!                     closestHash = hash;
+!                     distance0 = newDistance
+!                     closestHash = hash
 !                 }
-!                 yPrimed += PRIME_Y;
+!                 yPrimed += PRIME_Y
 !             }
-!             xPrimed += PRIME_X;
+!             xPrimed += PRIME_X
 !         }
-!         break;
+!         break
 !     case FNL_CELLULAR_DISTANCE_HYBRID:
-!         for (int xi = xr - 1; xi <= xr + 1; xi++)
+!         for (int xi = xr - 1 xi <= xr + 1 xi++)
 !         {
-!             int yPrimed = yPrimedBase;
-!             for (int yi = yr - 1; yi <= yr + 1; yi++)
+!             int yPrimed = yPrimedBase
+!             for (int yi = yr - 1 yi <= yr + 1 yi++)
 !             {
-!                 int hash = _fnlHash2D(seed, xPrimed, yPrimed);
-!                 int idx = hash & (255 << 1);
+!                 int hash = _fnlHash2D(seed, xPrimed, yPrimed)
+!                 int idx = hash & (255 << 1)
 
-!                 float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter;
-!                 float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter;
+!                 float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter
+!                 float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter
 
-!                 float newDistance = (_fnlFastAbs(vecX) + _fnlFastAbs(vecY)) + (vecX * vecX + vecY * vecY);
+!                 float newDistance = (_fnlFastAbs(vecX) + _fnlFastAbs(vecY)) + (vecX * vecX + vecY * vecY)
 
-!                 distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0);
+!                 distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0)
 !                 if (newDistance < distance0)
 !                 {
-!                     distance0 = newDistance;
-!                     closestHash = hash;
+!                     distance0 = newDistance
+!                     closestHash = hash
 !                 }
-!                 yPrimed += PRIME_Y;
+!                 yPrimed += PRIME_Y
 !             }
-!             xPrimed += PRIME_X;
+!             xPrimed += PRIME_X
 !         }
-!         break;
+!         break
 !     }
 
 !     if (state->cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN && state->cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE)
 !     {
-!         distance0 = _fnlFastSqrt(distance0);
+!         distance0 = _fnlFastSqrt(distance0)
 !         if (state->cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
-!             distance1 = _fnlFastSqrt(distance1);
+!             distance1 = _fnlFastSqrt(distance1)
 !     }
 
 !     switch (state->cellular_return_type)
 !     {
 !     case FNL_CELLULAR_RETURN_TYPE_CELLVALUE:
-!         return closestHash * (1 / 2147483648.0f);
+!         return closestHash * (1 / 2147483648.0f)
 !     case FNL_CELLULAR_RETURN_TYPE_DISTANCE:
-!         return distance0 - 1;
+!         return distance0 - 1
 !     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2:
-!         return distance1 - 1;
+!         return distance1 - 1
 !     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2ADD:
-!         return (distance1 + distance0) * 0.5f - 1;
+!         return (distance1 + distance0) * 0.5f - 1
 !     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2SUB:
-!         return distance1 - distance0 - 1;
+!         return distance1 - distance0 - 1
 !     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2MUL:
-!         return distance1 * distance0 * 0.5f - 1;
+!         return distance1 * distance0 * 0.5f - 1
 !     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2DIV:
-!         return distance0 / distance1 - 1;
+!         return distance0 / distance1 - 1
 !     default:
-!         return 0;
+!         return 0
 !     }
 ! }
 
 ! static float _fnlSingleCellular3D(fnl_state *state, int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int xr = _fnlFastRound(x);
-!     int yr = _fnlFastRound(y);
-!     int zr = _fnlFastRound(z);
+!     int xr = _fnlFastRound(x)
+!     int yr = _fnlFastRound(y)
+!     int zr = _fnlFastRound(z)
 
-!     float distance0 = FLT_MAX;
-!     float distance1 = FLT_MAX;
-!     int closestHash = 0;
+!     float distance0 = FLT_MAX
+!     float distance1 = FLT_MAX
+!     int closestHash = 0
 
-!     float cellularJitter = 0.39614353f * state->cellular_jitter_mod;
+!     float cellularJitter = 0.39614353f * state->cellular_jitter_mod
 
-!     int xPrimed = (xr - 1) * PRIME_X;
-!     int yPrimedBase = (yr - 1) * PRIME_Y;
-!     int zPrimedBase = (zr - 1) * PRIME_Z;
+!     int xPrimed = (xr - 1) * PRIME_X
+!     int yPrimedBase = (yr - 1) * PRIME_Y
+!     int zPrimedBase = (zr - 1) * PRIME_Z
 
 !     switch (state->cellular_distance_func)
 !     {
 !     default:
 !     case FNL_CELLULAR_DISTANCE_EUCLIDEAN:
 !     case FNL_CELLULAR_DISTANCE_EUCLIDEANSQ:
-!         for (int xi = xr - 1; xi <= xr + 1; xi++)
+!         for (int xi = xr - 1 xi <= xr + 1 xi++)
 !         {
-!             int yPrimed = yPrimedBase;
+!             int yPrimed = yPrimedBase
 
-!             for (int yi = yr - 1; yi <= yr + 1; yi++)
+!             for (int yi = yr - 1 yi <= yr + 1 yi++)
 !             {
-!                 int zPrimed = zPrimedBase;
+!                 int zPrimed = zPrimedBase
 
-!                 for (int zi = zr - 1; zi <= zr + 1; zi++)
+!                 for (int zi = zr - 1 zi <= zr + 1 zi++)
 !                 {
-!                     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed);
-!                     int idx = hash & (255 << 2);
+!                     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed)
+!                     int idx = hash & (255 << 2)
 
-!                     float vecX = (float)(xi - x) + RAND_VECS_3D[idx] * cellularJitter;
-!                     float vecY = (float)(yi - y) + RAND_VECS_3D[idx | 1] * cellularJitter;
-!                     float vecZ = (float)(zi - z) + RAND_VECS_3D[idx | 2] * cellularJitter;
+!                     float vecX = (float)(xi - x) + RAND_VECS_3D[idx] * cellularJitter
+!                     float vecY = (float)(yi - y) + RAND_VECS_3D[idx | 1] * cellularJitter
+!                     float vecZ = (float)(zi - z) + RAND_VECS_3D[idx | 2] * cellularJitter
 
-!                     float newDistance = vecX * vecX + vecY * vecY + vecZ * vecZ;
+!                     float newDistance = vecX * vecX + vecY * vecY + vecZ * vecZ
 
-!                     distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0);
+!                     distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0)
 !                     if (newDistance < distance0)
 !                     {
-!                         distance0 = newDistance;
-!                         closestHash = hash;
+!                         distance0 = newDistance
+!                         closestHash = hash
 !                     }
-!                     zPrimed += PRIME_Z;
+!                     zPrimed += PRIME_Z
 !                 }
-!                 yPrimed += PRIME_Y;
+!                 yPrimed += PRIME_Y
 !             }
-!             xPrimed += PRIME_X;
+!             xPrimed += PRIME_X
 !         }
-!         break;
+!         break
 !     case FNL_CELLULAR_DISTANCE_MANHATTAN:
-!         for (int xi = xr - 1; xi <= xr + 1; xi++)
+!         for (int xi = xr - 1 xi <= xr + 1 xi++)
 !         {
-!             int yPrimed = yPrimedBase;
+!             int yPrimed = yPrimedBase
 
-!             for (int yi = yr - 1; yi <= yr + 1; yi++)
+!             for (int yi = yr - 1 yi <= yr + 1 yi++)
 !             {
-!                 int zPrimed = zPrimedBase;
+!                 int zPrimed = zPrimedBase
 
-!                 for (int zi = zr - 1; zi <= zr + 1; zi++)
+!                 for (int zi = zr - 1 zi <= zr + 1 zi++)
 !                 {
-!                     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed);
-!                     int idx = hash & (255 << 2);
+!                     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed)
+!                     int idx = hash & (255 << 2)
 
-!                     float vecX = (float)(xi - x) + RAND_VECS_3D[idx] * cellularJitter;
-!                     float vecY = (float)(yi - y) + RAND_VECS_3D[idx | 1] * cellularJitter;
-!                     float vecZ = (float)(zi - z) + RAND_VECS_3D[idx | 2] * cellularJitter;
+!                     float vecX = (float)(xi - x) + RAND_VECS_3D[idx] * cellularJitter
+!                     float vecY = (float)(yi - y) + RAND_VECS_3D[idx | 1] * cellularJitter
+!                     float vecZ = (float)(zi - z) + RAND_VECS_3D[idx | 2] * cellularJitter
 
-!                     float newDistance = _fnlFastAbs(vecX) + _fnlFastAbs(vecY) + _fnlFastAbs(vecZ);
+!                     float newDistance = _fnlFastAbs(vecX) + _fnlFastAbs(vecY) + _fnlFastAbs(vecZ)
 
-!                     distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0);
+!                     distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0)
 !                     if (newDistance < distance0)
 !                     {
-!                         distance0 = newDistance;
-!                         closestHash = hash;
+!                         distance0 = newDistance
+!                         closestHash = hash
 !                     }
-!                     zPrimed += PRIME_Z;
+!                     zPrimed += PRIME_Z
 !                 }
-!                 yPrimed += PRIME_Y;
+!                 yPrimed += PRIME_Y
 !             }
-!             xPrimed += PRIME_X;
+!             xPrimed += PRIME_X
 !         }
-!         break;
+!         break
 !     case FNL_CELLULAR_DISTANCE_HYBRID:
-!         for (int xi = xr - 1; xi <= xr + 1; xi++)
+!         for (int xi = xr - 1 xi <= xr + 1 xi++)
 !         {
-!             int yPrimed = yPrimedBase;
+!             int yPrimed = yPrimedBase
 
-!             for (int yi = yr - 1; yi <= yr + 1; yi++)
+!             for (int yi = yr - 1 yi <= yr + 1 yi++)
 !             {
-!                 int zPrimed = zPrimedBase;
+!                 int zPrimed = zPrimedBase
 
-!                 for (int zi = zr - 1; zi <= zr + 1; zi++)
+!                 for (int zi = zr - 1 zi <= zr + 1 zi++)
 !                 {
-!                     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed);
-!                     int idx = hash & (255 << 2);
+!                     int hash = _fnlHash3D(seed, xPrimed, yPrimed, zPrimed)
+!                     int idx = hash & (255 << 2)
 
-!                     float vecX = (float)(xi - x) + RAND_VECS_3D[idx] * cellularJitter;
-!                     float vecY = (float)(yi - y) + RAND_VECS_3D[idx | 1] * cellularJitter;
-!                     float vecZ = (float)(zi - z) + RAND_VECS_3D[idx | 2] * cellularJitter;
+!                     float vecX = (float)(xi - x) + RAND_VECS_3D[idx] * cellularJitter
+!                     float vecY = (float)(yi - y) + RAND_VECS_3D[idx | 1] * cellularJitter
+!                     float vecZ = (float)(zi - z) + RAND_VECS_3D[idx | 2] * cellularJitter
 
-!                     float newDistance = (_fnlFastAbs(vecX) + _fnlFastAbs(vecY) + _fnlFastAbs(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ);
+!                     float newDistance = (_fnlFastAbs(vecX) + _fnlFastAbs(vecY) + _fnlFastAbs(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ)
 
-!                     distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0);
+!                     distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0)
 !                     if (newDistance < distance0)
 !                     {
-!                         distance0 = newDistance;
-!                         closestHash = hash;
+!                         distance0 = newDistance
+!                         closestHash = hash
 !                     }
-!                     zPrimed += PRIME_Z;
+!                     zPrimed += PRIME_Z
 !                 }
-!                 yPrimed += PRIME_Y;
+!                 yPrimed += PRIME_Y
 !             }
-!             xPrimed += PRIME_X;
+!             xPrimed += PRIME_X
 !         }
-!         break;
+!         break
 !     }
 
 !     if (state->cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN && state->cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE)
 !     {
-!         distance0 = _fnlFastSqrt(distance0);
+!         distance0 = _fnlFastSqrt(distance0)
 !         if (state->cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
-!             distance1 = _fnlFastSqrt(distance1);
+!             distance1 = _fnlFastSqrt(distance1)
 !     }
 
 !     switch (state->cellular_return_type)
 !     {
 !     case FNL_CELLULAR_RETURN_TYPE_CELLVALUE:
-!         return closestHash * (1 / 2147483648.0f);
+!         return closestHash * (1 / 2147483648.0f)
 !     case FNL_CELLULAR_RETURN_TYPE_DISTANCE:
-!         return distance0 - 1;
+!         return distance0 - 1
 !     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2:
-!         return distance1 - 1;
+!         return distance1 - 1
 !     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2ADD:
-!         return (distance1 + distance0) * 0.5f - 1;
+!         return (distance1 + distance0) * 0.5f - 1
 !     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2SUB:
-!         return distance1 - distance0 - 1;
+!         return distance1 - distance0 - 1
 !     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2MUL:
-!         return distance1 * distance0 * 0.5f - 1;
+!         return distance1 * distance0 * 0.5f - 1
 !     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2DIV:
-!         return distance0 / distance1 - 1;
+!         return distance0 / distance1 - 1
 !     default:
-!         return 0;
+!         return 0
 !     }
 ! }
 
@@ -1723,82 +1723,82 @@ contains
 
 ! static float _fnlSinglePerlin2D(int seed, FNLfloat x, FNLfloat y)
 ! {
-!     int x0 = _fnlFastFloor(x);
-!     int y0 = _fnlFastFloor(y);
+!     int x0 = _fnlFastFloor(x)
+!     int y0 = _fnlFastFloor(y)
 
-!     float xd0 = (float)(x - x0);
-!     float yd0 = (float)(y - y0);
-!     float xd1 = xd0 - 1;
-!     float yd1 = yd0 - 1;
+!     float xd0 = (float)(x - x0)
+!     float yd0 = (float)(y - y0)
+!     float xd1 = xd0 - 1
+!     float yd1 = yd0 - 1
 
-!     float xs = _fnlInterpQuintic(xd0);
-!     float ys = _fnlInterpQuintic(yd0);
+!     float xs = _fnlInterpQuintic(xd0)
+!     float ys = _fnlInterpQuintic(yd0)
 
-!     x0 *= PRIME_X;
-!     y0 *= PRIME_Y;
-!     int x1 = x0 + PRIME_X;
-!     int y1 = y0 + PRIME_Y;
+!     x0 *= PRIME_X
+!     y0 *= PRIME_Y
+!     int x1 = x0 + PRIME_X
+!     int y1 = y0 + PRIME_Y
 
-!     float xf0 = _fnlLerp(_fnlGradCoord2D(seed, x0, y0, xd0, yd0), _fnlGradCoord2D(seed, x1, y0, xd1, yd0), xs);
-!     float xf1 = _fnlLerp(_fnlGradCoord2D(seed, x0, y1, xd0, yd1), _fnlGradCoord2D(seed, x1, y1, xd1, yd1), xs);
+!     float xf0 = _fnlLerp(_fnlGradCoord2D(seed, x0, y0, xd0, yd0), _fnlGradCoord2D(seed, x1, y0, xd1, yd0), xs)
+!     float xf1 = _fnlLerp(_fnlGradCoord2D(seed, x0, y1, xd0, yd1), _fnlGradCoord2D(seed, x1, y1, xd1, yd1), xs)
 
-!     return _fnlLerp(xf0, xf1, ys) * 1.4247691104677813f;
+!     return _fnlLerp(xf0, xf1, ys) * 1.4247691104677813f
 ! }
 
 ! static float _fnlSinglePerlin3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int x0 = _fnlFastFloor(x);
-!     int y0 = _fnlFastFloor(y);
-!     int z0 = _fnlFastFloor(z);
+!     int x0 = _fnlFastFloor(x)
+!     int y0 = _fnlFastFloor(y)
+!     int z0 = _fnlFastFloor(z)
 
-!     float xd0 = (float)(x - x0);
-!     float yd0 = (float)(y - y0);
-!     float zd0 = (float)(z - z0);
-!     float xd1 = xd0 - 1;
-!     float yd1 = yd0 - 1;
-!     float zd1 = zd0 - 1;
+!     float xd0 = (float)(x - x0)
+!     float yd0 = (float)(y - y0)
+!     float zd0 = (float)(z - z0)
+!     float xd1 = xd0 - 1
+!     float yd1 = yd0 - 1
+!     float zd1 = zd0 - 1
 
-!     float xs = _fnlInterpQuintic(xd0);
-!     float ys = _fnlInterpQuintic(yd0);
-!     float zs = _fnlInterpQuintic(zd0);
+!     float xs = _fnlInterpQuintic(xd0)
+!     float ys = _fnlInterpQuintic(yd0)
+!     float zs = _fnlInterpQuintic(zd0)
 
-!     x0 *= PRIME_X;
-!     y0 *= PRIME_Y;
-!     z0 *= PRIME_Z;
-!     int x1 = x0 + PRIME_X;
-!     int y1 = y0 + PRIME_Y;
-!     int z1 = z0 + PRIME_Z;
+!     x0 *= PRIME_X
+!     y0 *= PRIME_Y
+!     z0 *= PRIME_Z
+!     int x1 = x0 + PRIME_X
+!     int y1 = y0 + PRIME_Y
+!     int z1 = z0 + PRIME_Z
 
-!     float xf00 = _fnlLerp(_fnlGradCoord3D(seed, x0, y0, z0, xd0, yd0, zd0), _fnlGradCoord3D(seed, x1, y0, z0, xd1, yd0, zd0), xs);
-!     float xf10 = _fnlLerp(_fnlGradCoord3D(seed, x0, y1, z0, xd0, yd1, zd0), _fnlGradCoord3D(seed, x1, y1, z0, xd1, yd1, zd0), xs);
-!     float xf01 = _fnlLerp(_fnlGradCoord3D(seed, x0, y0, z1, xd0, yd0, zd1), _fnlGradCoord3D(seed, x1, y0, z1, xd1, yd0, zd1), xs);
-!     float xf11 = _fnlLerp(_fnlGradCoord3D(seed, x0, y1, z1, xd0, yd1, zd1), _fnlGradCoord3D(seed, x1, y1, z1, xd1, yd1, zd1), xs);
+!     float xf00 = _fnlLerp(_fnlGradCoord3D(seed, x0, y0, z0, xd0, yd0, zd0), _fnlGradCoord3D(seed, x1, y0, z0, xd1, yd0, zd0), xs)
+!     float xf10 = _fnlLerp(_fnlGradCoord3D(seed, x0, y1, z0, xd0, yd1, zd0), _fnlGradCoord3D(seed, x1, y1, z0, xd1, yd1, zd0), xs)
+!     float xf01 = _fnlLerp(_fnlGradCoord3D(seed, x0, y0, z1, xd0, yd0, zd1), _fnlGradCoord3D(seed, x1, y0, z1, xd1, yd0, zd1), xs)
+!     float xf11 = _fnlLerp(_fnlGradCoord3D(seed, x0, y1, z1, xd0, yd1, zd1), _fnlGradCoord3D(seed, x1, y1, z1, xd1, yd1, zd1), xs)
 
-!     float yf0 = _fnlLerp(xf00, xf10, ys);
-!     float yf1 = _fnlLerp(xf01, xf11, ys);
+!     float yf0 = _fnlLerp(xf00, xf10, ys)
+!     float yf1 = _fnlLerp(xf01, xf11, ys)
 
-!     return _fnlLerp(yf0, yf1, zs) * 0.964921414852142333984375f;
+!     return _fnlLerp(yf0, yf1, zs) * 0.964921414852142333984375f
 ! }
 
 ! Value Cubic
 
 ! static float _fnlSingleValueCubic2D(int seed, FNLfloat x, FNLfloat y)
 ! {
-!     int x1 = _fnlFastFloor(x);
-!     int y1 = _fnlFastFloor(y);
+!     int x1 = _fnlFastFloor(x)
+!     int y1 = _fnlFastFloor(y)
 
-!     float xs = x - (float)x1;
-!     float ys = y - (float)y1;
+!     float xs = x - (float)x1
+!     float ys = y - (float)y1
 
-!     x1 *= PRIME_X;
-!     y1 *= PRIME_Y;
+!     x1 *= PRIME_X
+!     y1 *= PRIME_Y
 
-!     int x0 = x1 - PRIME_X;
-!     int y0 = y1 - PRIME_Y;
-!     int x2 = x1 + PRIME_X;
-!     int y2 = y1 + PRIME_Y;
-!     int x3 = x1 + (int)((long)PRIME_X << 1);
-!     int y3 = y1 + (int)((long)PRIME_Y << 1);
+!     int x0 = x1 - PRIME_X
+!     int y0 = y1 - PRIME_Y
+!     int x2 = x1 + PRIME_X
+!     int y2 = y1 + PRIME_Y
+!     int x3 = x1 + (int)((long)PRIME_X << 1)
+!     int y3 = y1 + (int)((long)PRIME_Y << 1)
 
 !     return _fnlCubicLerp(
 !         _fnlCubicLerp(_fnlValCoord2D(seed, x0, y0), _fnlValCoord2D(seed, x1, y0), _fnlValCoord2D(seed, x2, y0), _fnlValCoord2D(seed, x3, y0),
@@ -1809,32 +1809,32 @@ contains
 !                       xs),
 !         _fnlCubicLerp(_fnlValCoord2D(seed, x0, y3), _fnlValCoord2D(seed, x1, y3), _fnlValCoord2D(seed, x2, y3), _fnlValCoord2D(seed, x3, y3),
 !                       xs),
-!         ys) * (1 / (1.5f * 1.5f));
+!         ys) * (1 / (1.5f * 1.5f))
 ! }
 
 ! static float _fnlSingleValueCubic3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int x1 = _fnlFastFloor(x);
-!     int y1 = _fnlFastFloor(y);
-!     int z1 = _fnlFastFloor(z);
+!     int x1 = _fnlFastFloor(x)
+!     int y1 = _fnlFastFloor(y)
+!     int z1 = _fnlFastFloor(z)
 
-!     float xs = x - (float)x1;
-!     float ys = y - (float)y1;
-!     float zs = z - (float)z1;
+!     float xs = x - (float)x1
+!     float ys = y - (float)y1
+!     float zs = z - (float)z1
 
-!     x1 *= PRIME_X;
-!     y1 *= PRIME_Y;
-!     z1 *= PRIME_Z;
+!     x1 *= PRIME_X
+!     y1 *= PRIME_Y
+!     z1 *= PRIME_Z
 
-!     int x0 = x1 - PRIME_X;
-!     int y0 = y1 - PRIME_Y;
-!     int z0 = z1 - PRIME_Z;
-!     int x2 = x1 + PRIME_X;
-!     int y2 = y1 + PRIME_Y;
-!     int z2 = z1 + PRIME_Z;
-!     int x3 = x1 + (int)((long)PRIME_X << 1);
-!     int y3 = y1 + (int)((long)PRIME_Y << 1);
-!     int z3 = z1 + (int)((long)PRIME_Z << 1);
+!     int x0 = x1 - PRIME_X
+!     int y0 = y1 - PRIME_Y
+!     int z0 = z1 - PRIME_Z
+!     int x2 = x1 + PRIME_X
+!     int y2 = y1 + PRIME_Y
+!     int z2 = z1 + PRIME_Z
+!     int x3 = x1 + (int)((long)PRIME_X << 1)
+!     int y3 = y1 + (int)((long)PRIME_Y << 1)
+!     int z3 = z1 + (int)((long)PRIME_Z << 1)
 
 !     return _fnlCubicLerp(
 !         _fnlCubicLerp(
@@ -1861,79 +1861,79 @@ contains
 !             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y2, z3), _fnlValCoord3D(seed, x1, y2, z3), _fnlValCoord3D(seed, x2, y2, z3), _fnlValCoord3D(seed, x3, y2, z3), xs),
 !             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y3, z3), _fnlValCoord3D(seed, x1, y3, z3), _fnlValCoord3D(seed, x2, y3, z3), _fnlValCoord3D(seed, x3, y3, z3), xs),
 !             ys),
-!         zs) * (1 / 1.5f * 1.5f * 1.5f);
+!         zs) * (1 / 1.5f * 1.5f * 1.5f)
 ! }
 
 ! Value noise
 
 ! static float _fnlSingleValue2D(int seed, FNLfloat x, FNLfloat y)
 ! {
-!     int x0 = _fnlFastFloor(x);
-!     int y0 = _fnlFastFloor(y);
+!     int x0 = _fnlFastFloor(x)
+!     int y0 = _fnlFastFloor(y)
 
-!     float xs = _fnlInterpHermite((float)(x - x0));
-!     float ys = _fnlInterpHermite((float)(y - y0));
+!     float xs = _fnlInterpHermite((float)(x - x0))
+!     float ys = _fnlInterpHermite((float)(y - y0))
 
-!     x0 *= PRIME_X;
-!     y0 *= PRIME_Y;
-!     int x1 = x0 + PRIME_X;
-!     int y1 = y0 + PRIME_Y;
+!     x0 *= PRIME_X
+!     y0 *= PRIME_Y
+!     int x1 = x0 + PRIME_X
+!     int y1 = y0 + PRIME_Y
 
-!     float xf0 = _fnlLerp(_fnlValCoord2D(seed, x0, y0), _fnlValCoord2D(seed, x1, y0), xs);
-!     float xf1 = _fnlLerp(_fnlValCoord2D(seed, x0, y1), _fnlValCoord2D(seed, x1, y1), xs);
+!     float xf0 = _fnlLerp(_fnlValCoord2D(seed, x0, y0), _fnlValCoord2D(seed, x1, y0), xs)
+!     float xf1 = _fnlLerp(_fnlValCoord2D(seed, x0, y1), _fnlValCoord2D(seed, x1, y1), xs)
 
-!     return _fnlLerp(xf0, xf1, ys);
+!     return _fnlLerp(xf0, xf1, ys)
 ! }
 
 ! static float _fnlSingleValue3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int x0 = _fnlFastFloor(x);
-!     int y0 = _fnlFastFloor(y);
-!     int z0 = _fnlFastFloor(z);
+!     int x0 = _fnlFastFloor(x)
+!     int y0 = _fnlFastFloor(y)
+!     int z0 = _fnlFastFloor(z)
 
-!     float xs = _fnlInterpHermite((float)(x - x0));
-!     float ys = _fnlInterpHermite((float)(y - y0));
-!     float zs = _fnlInterpHermite((float)(z - z0));
+!     float xs = _fnlInterpHermite((float)(x - x0))
+!     float ys = _fnlInterpHermite((float)(y - y0))
+!     float zs = _fnlInterpHermite((float)(z - z0))
 
-!     x0 *= PRIME_X;
-!     y0 *= PRIME_Y;
-!     z0 *= PRIME_Z;
-!     int x1 = x0 + PRIME_X;
-!     int y1 = y0 + PRIME_Y;
-!     int z1 = z0 + PRIME_Z;
+!     x0 *= PRIME_X
+!     y0 *= PRIME_Y
+!     z0 *= PRIME_Z
+!     int x1 = x0 + PRIME_X
+!     int y1 = y0 + PRIME_Y
+!     int z1 = z0 + PRIME_Z
 
-!     float xf00 = _fnlLerp(_fnlValCoord3D(seed, x0, y0, z0), _fnlValCoord3D(seed, x1, y0, z0), xs);
-!     float xf10 = _fnlLerp(_fnlValCoord3D(seed, x0, y1, z0), _fnlValCoord3D(seed, x1, y1, z0), xs);
-!     float xf01 = _fnlLerp(_fnlValCoord3D(seed, x0, y0, z1), _fnlValCoord3D(seed, x1, y0, z1), xs);
-!     float xf11 = _fnlLerp(_fnlValCoord3D(seed, x0, y1, z1), _fnlValCoord3D(seed, x1, y1, z1), xs);
+!     float xf00 = _fnlLerp(_fnlValCoord3D(seed, x0, y0, z0), _fnlValCoord3D(seed, x1, y0, z0), xs)
+!     float xf10 = _fnlLerp(_fnlValCoord3D(seed, x0, y1, z0), _fnlValCoord3D(seed, x1, y1, z0), xs)
+!     float xf01 = _fnlLerp(_fnlValCoord3D(seed, x0, y0, z1), _fnlValCoord3D(seed, x1, y0, z1), xs)
+!     float xf11 = _fnlLerp(_fnlValCoord3D(seed, x0, y1, z1), _fnlValCoord3D(seed, x1, y1, z1), xs)
 
-!     float yf0 = _fnlLerp(xf00, xf10, ys);
-!     float yf1 = _fnlLerp(xf01, xf11, ys);
+!     float yf0 = _fnlLerp(xf00, xf10, ys)
+!     float yf1 = _fnlLerp(xf01, xf11, ys)
 
-!     return _fnlLerp(yf0, yf1, zs);
+!     return _fnlLerp(yf0, yf1, zs)
 ! }
 
 ! Domain Warp
 
 ! Forward declare
-! static void _fnlSingleDomainWarpBasicGrid2D(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xp, FNLfloat *yp);
-! static void _fnlSingleDomainWarpBasicGrid3D(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xp, FNLfloat *yp, FNLfloat *zp);
-! static void _fnlSingleDomainWarpSimplexGradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xr, FNLfloat *yr, bool outGradOnly);
-! static void _fnlSingleDomainWarpOpenSimplex2Gradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xr, FNLfloat *yr, FNLfloat *zr, bool outGradOnly);
+! static void _fnlSingleDomainWarpBasicGrid2D(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xp, FNLfloat *yp)
+! static void _fnlSingleDomainWarpBasicGrid3D(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xp, FNLfloat *yp, FNLfloat *zp)
+! static void _fnlSingleDomainWarpSimplexGradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xr, FNLfloat *yr, bool outGradOnly)
+! static void _fnlSingleDomainWarpOpenSimplex2Gradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xr, FNLfloat *yr, FNLfloat *zr, bool outGradOnly)
 
 ! static inline void _fnlDoSingleDomainWarp2D(fnl_state *state, int seed, float amp, float freq, FNLfloat x, FNLfloat y, FNLfloat *xp, FNLfloat *yp)
 ! {
 !     switch (state->domain_warp_type)
 !     {
 !     case FNL_DOMAIN_WARP_OPENSIMPLEX2:
-!         _fnlSingleDomainWarpSimplexGradient(seed, amp * 38.283687591552734375f, freq, x, y, xp, yp, false);
-!         break;
+!         _fnlSingleDomainWarpSimplexGradient(seed, amp * 38.283687591552734375f, freq, x, y, xp, yp, false)
+!         break
 !     case FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED:
-!         _fnlSingleDomainWarpSimplexGradient(seed, amp * 16.0f, freq, x, y, xp, yp, true);
-!         break;
+!         _fnlSingleDomainWarpSimplexGradient(seed, amp * 16.0f, freq, x, y, xp, yp, true)
+!         break
 !     case FNL_DOMAIN_WARP_BASICGRID:
-!         _fnlSingleDomainWarpBasicGrid2D(seed, amp, freq, x, y, xp, yp);
-!         break;
+!         _fnlSingleDomainWarpBasicGrid2D(seed, amp, freq, x, y, xp, yp)
+!         break
 !     }
 ! }
 
@@ -1942,14 +1942,14 @@ contains
 !     switch (state->domain_warp_type)
 !     {
 !     case FNL_DOMAIN_WARP_OPENSIMPLEX2:
-!         _fnlSingleDomainWarpOpenSimplex2Gradient(seed, amp * 32.69428253173828125f, freq, x, y, z, xp, yp, zp, false);
-!         break;
+!         _fnlSingleDomainWarpOpenSimplex2Gradient(seed, amp * 32.69428253173828125f, freq, x, y, z, xp, yp, zp, false)
+!         break
 !     case FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED:
-!         _fnlSingleDomainWarpOpenSimplex2Gradient(seed, amp * 7.71604938271605f, freq, x, y, z, xp, yp, zp, true);
-!         break;
+!         _fnlSingleDomainWarpOpenSimplex2Gradient(seed, amp * 7.71604938271605f, freq, x, y, z, xp, yp, zp, true)
+!         break
 !     case FNL_DOMAIN_WARP_BASICGRID:
-!         _fnlSingleDomainWarpBasicGrid3D(seed, amp, freq, x, y, z, xp, yp, zp);
-!         break;
+!         _fnlSingleDomainWarpBasicGrid3D(seed, amp, freq, x, y, z, xp, yp, zp)
+!         break
 !     }
 ! }
 
@@ -1957,71 +1957,71 @@ contains
 
 ! static void _fnlDomainWarpSingle2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
-!     int seed = state->seed;
-!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state);
-!     float freq = state->frequency;
+!     int seed = state->seed
+!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state)
+!     float freq = state->frequency
 
-!     FNLfloat xs = *x;
-!     FNLfloat ys = *y;
-!     _fnlTransformDomainWarpCoordinate2D(state, &xs, &ys);
+!     FNLfloat xs = *x
+!     FNLfloat ys = *y
+!     _fnlTransformDomainWarpCoordinate2D(state, &xs, &ys)
 
-!     _fnlDoSingleDomainWarp2D(state, seed, amp, freq, xs, ys, x, y);
+!     _fnlDoSingleDomainWarp2D(state, seed, amp, freq, xs, ys, x, y)
 ! }
 
 ! static void _fnlDomainWarpSingle3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 ! {
-!     int seed = state->seed;
-!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state);
-!     float freq = state->frequency;
+!     int seed = state->seed
+!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state)
+!     float freq = state->frequency
 
-!     FNLfloat xs = *x;
-!     FNLfloat ys = *y;
-!     FNLfloat zs = *z;
-!     _fnlTransformDomainWarpCoordinate3D(state, &xs, &ys, &zs);
+!     FNLfloat xs = *x
+!     FNLfloat ys = *y
+!     FNLfloat zs = *z
+!     _fnlTransformDomainWarpCoordinate3D(state, &xs, &ys, &zs)
 
-!     _fnlDoSingleDomainWarp3D(state, seed, amp, freq, xs, ys, zs, x, y, z);
+!     _fnlDoSingleDomainWarp3D(state, seed, amp, freq, xs, ys, zs, x, y, z)
 ! }
 
 ! Domain Warp Fractal Progressive
 
 ! static void _fnlDomainWarpFractalProgressive2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
-!     int seed = state->seed;
-!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state);
-!     float freq = state->frequency;
+!     int seed = state->seed
+!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state)
+!     float freq = state->frequency
 
-!     for (int i = 0; i < state->octaves; i++)
+!     for (int i = 0 i < state->octaves i++)
 !     {
-!         FNLfloat xs = *x;
-!         FNLfloat ys = *y;
-!         _fnlTransformDomainWarpCoordinate2D(state, &xs, &ys);
+!         FNLfloat xs = *x
+!         FNLfloat ys = *y
+!         _fnlTransformDomainWarpCoordinate2D(state, &xs, &ys)
 
-!         _fnlDoSingleDomainWarp2D(state, seed, amp, freq, xs, ys, x, y);
+!         _fnlDoSingleDomainWarp2D(state, seed, amp, freq, xs, ys, x, y)
 
-!         seed++;
-!         amp *= state->gain;
-!         freq *= state->lacunarity;
+!         seed++
+!         amp *= state->gain
+!         freq *= state->lacunarity
 !     }
 ! }
 
 ! static void _fnlDomainWarpFractalProgressive3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 ! {
-!     int seed = state->seed;
-!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state);
-!     float freq = state->frequency;
+!     int seed = state->seed
+!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state)
+!     float freq = state->frequency
 
-!     for (int i = 0; i < state->octaves; i++)
+!     for (int i = 0 i < state->octaves i++)
 !     {
-!         FNLfloat xs = *x;
-!         FNLfloat ys = *y;
-!         FNLfloat zs = *z;
-!         _fnlTransformDomainWarpCoordinate3D(state, &xs, &ys, &zs);
+!         FNLfloat xs = *x
+!         FNLfloat ys = *y
+!         FNLfloat zs = *z
+!         _fnlTransformDomainWarpCoordinate3D(state, &xs, &ys, &zs)
 
-!         _fnlDoSingleDomainWarp3D(state, seed, amp, freq, xs, ys, zs, x, y, z);
+!         _fnlDoSingleDomainWarp3D(state, seed, amp, freq, xs, ys, zs, x, y, z)
 
-!         seed++;
-!         amp *= state->gain;
-!         freq *= state->lacunarity;
+!         seed++
+!         amp *= state->gain
+!         freq *= state->lacunarity
 !     }
 ! }
 
@@ -2029,42 +2029,42 @@ contains
 
 ! static void _fnlDomainWarpFractalIndependent2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
-!     FNLfloat xs = *x;
-!     FNLfloat ys = *y;
-!     _fnlTransformDomainWarpCoordinate2D(state, &xs, &ys);
+!     FNLfloat xs = *x
+!     FNLfloat ys = *y
+!     _fnlTransformDomainWarpCoordinate2D(state, &xs, &ys)
 
-!     int seed = state->seed;
-!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state);
-!     float freq = state->frequency;
+!     int seed = state->seed
+!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state)
+!     float freq = state->frequency
 
-!     for (int i = 0; i < state->octaves; i++)
+!     for (int i = 0 i < state->octaves i++)
 !     {
-!         _fnlDoSingleDomainWarp2D(state, seed, amp, freq, xs, ys, x, y);
+!         _fnlDoSingleDomainWarp2D(state, seed, amp, freq, xs, ys, x, y)
 
-!         seed++;
-!         amp *= state->gain;
-!         freq *= state->lacunarity;
+!         seed++
+!         amp *= state->gain
+!         freq *= state->lacunarity
 !     }
 ! }
 
 ! static void _fnlDomainWarpFractalIndependent3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 ! {
-!     FNLfloat xs = *x;
-!     FNLfloat ys = *y;
-!     FNLfloat zs = *z;
-!     _fnlTransformDomainWarpCoordinate3D(state, &xs, &ys, &zs);
+!     FNLfloat xs = *x
+!     FNLfloat ys = *y
+!     FNLfloat zs = *z
+!     _fnlTransformDomainWarpCoordinate3D(state, &xs, &ys, &zs)
 
-!     int seed = state->seed;
-!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state);
-!     float freq = state->frequency;
+!     int seed = state->seed
+!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state)
+!     float freq = state->frequency
 
-!     for (int i = 0; i < state->octaves; i++)
+!     for (int i = 0 i < state->octaves i++)
 !     {
-!         _fnlDoSingleDomainWarp3D(state, seed, amp, freq, xs, ys, zs, x, y, z);
+!         _fnlDoSingleDomainWarp3D(state, seed, amp, freq, xs, ys, zs, x, y, z)
 
-!         seed++;
-!         amp *= state->gain;
-!         freq *= state->lacunarity;
+!         seed++
+!         amp *= state->gain
+!         freq *= state->lacunarity
 !     }
 ! }
 
@@ -2072,310 +2072,310 @@ contains
 
 ! static void _fnlSingleDomainWarpBasicGrid2D(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xp, FNLfloat *yp)
 ! {
-!     FNLfloat xf = x * frequency;
-!     FNLfloat yf = y * frequency;
+!     FNLfloat xf = x * frequency
+!     FNLfloat yf = y * frequency
 
-!     int x0 = _fnlFastFloor(xf);
-!     int y0 = _fnlFastFloor(yf);
+!     int x0 = _fnlFastFloor(xf)
+!     int y0 = _fnlFastFloor(yf)
 
-!     float xs = _fnlInterpHermite((float)(xf - x0));
-!     float ys = _fnlInterpHermite((float)(yf - y0));
+!     float xs = _fnlInterpHermite((float)(xf - x0))
+!     float ys = _fnlInterpHermite((float)(yf - y0))
 
-!     x0 *= PRIME_X;
-!     y0 *= PRIME_Y;
-!     int x1 = x0 + PRIME_X;
-!     int y1 = y0 + PRIME_Y;
+!     x0 *= PRIME_X
+!     y0 *= PRIME_Y
+!     int x1 = x0 + PRIME_X
+!     int y1 = y0 + PRIME_Y
 
-!     int idx0 = _fnlHash2D(seed, x0, y0) & (255 << 1);
-!     int idx1 = _fnlHash2D(seed, x1, y0) & (255 << 1);
+!     int idx0 = _fnlHash2D(seed, x0, y0) & (255 << 1)
+!     int idx1 = _fnlHash2D(seed, x1, y0) & (255 << 1)
 
-!     float lx0x = _fnlLerp(RAND_VECS_2D[idx0], RAND_VECS_2D[idx1], xs);
-!     float ly0x = _fnlLerp(RAND_VECS_2D[idx0 | 1], RAND_VECS_2D[idx1 | 1], xs);
+!     float lx0x = _fnlLerp(RAND_VECS_2D[idx0], RAND_VECS_2D[idx1], xs)
+!     float ly0x = _fnlLerp(RAND_VECS_2D[idx0 | 1], RAND_VECS_2D[idx1 | 1], xs)
 
-!     idx0 = _fnlHash2D(seed, x0, y1) & (255 << 1);
-!     idx1 = _fnlHash2D(seed, x1, y1) & (255 << 1);
+!     idx0 = _fnlHash2D(seed, x0, y1) & (255 << 1)
+!     idx1 = _fnlHash2D(seed, x1, y1) & (255 << 1)
 
-!     float lx1x = _fnlLerp(RAND_VECS_2D[idx0], RAND_VECS_2D[idx1], xs);
-!     float ly1x = _fnlLerp(RAND_VECS_2D[idx0 | 1], RAND_VECS_2D[idx1 | 1], xs);
+!     float lx1x = _fnlLerp(RAND_VECS_2D[idx0], RAND_VECS_2D[idx1], xs)
+!     float ly1x = _fnlLerp(RAND_VECS_2D[idx0 | 1], RAND_VECS_2D[idx1 | 1], xs)
 
-!     *xp += _fnlLerp(lx0x, lx1x, ys) * warpAmp;
-!     *yp += _fnlLerp(ly0x, ly1x, ys) * warpAmp;
+!     *xp += _fnlLerp(lx0x, lx1x, ys) * warpAmp
+!     *yp += _fnlLerp(ly0x, ly1x, ys) * warpAmp
 ! }
 
 ! static void _fnlSingleDomainWarpBasicGrid3D(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xp, FNLfloat *yp, FNLfloat *zp)
 ! {
-!     FNLfloat xf = x * frequency;
-!     FNLfloat yf = y * frequency;
-!     FNLfloat zf = z * frequency;
+!     FNLfloat xf = x * frequency
+!     FNLfloat yf = y * frequency
+!     FNLfloat zf = z * frequency
 
-!     int x0 = _fnlFastFloor(xf);
-!     int y0 = _fnlFastFloor(yf);
-!     int z0 = _fnlFastFloor(zf);
+!     int x0 = _fnlFastFloor(xf)
+!     int y0 = _fnlFastFloor(yf)
+!     int z0 = _fnlFastFloor(zf)
 
-!     float xs = _fnlInterpHermite((float)(xf - x0));
-!     float ys = _fnlInterpHermite((float)(yf - y0));
-!     float zs = _fnlInterpHermite((float)(zf - z0));
+!     float xs = _fnlInterpHermite((float)(xf - x0))
+!     float ys = _fnlInterpHermite((float)(yf - y0))
+!     float zs = _fnlInterpHermite((float)(zf - z0))
 
-!     x0 *= PRIME_X;
-!     y0 *= PRIME_Y;
-!     z0 *= PRIME_Z;
-!     int x1 = x0 + PRIME_X;
-!     int y1 = y0 + PRIME_Y;
-!     int z1 = z0 + PRIME_Z;
+!     x0 *= PRIME_X
+!     y0 *= PRIME_Y
+!     z0 *= PRIME_Z
+!     int x1 = x0 + PRIME_X
+!     int y1 = y0 + PRIME_Y
+!     int z1 = z0 + PRIME_Z
 
-!     int idx0 = _fnlHash3D(seed, x0, y0, z0) & (255 << 2);
-!     int idx1 = _fnlHash3D(seed, x1, y0, z0) & (255 << 2);
+!     int idx0 = _fnlHash3D(seed, x0, y0, z0) & (255 << 2)
+!     int idx1 = _fnlHash3D(seed, x1, y0, z0) & (255 << 2)
 
-!     float lx0x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs);
-!     float ly0x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs);
-!     float lz0x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs);
+!     float lx0x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
+!     float ly0x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
+!     float lz0x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
 
-!     idx0 = _fnlHash3D(seed, x0, y1, z0) & (255 << 2);
-!     idx1 = _fnlHash3D(seed, x1, y1, z0) & (255 << 2);
+!     idx0 = _fnlHash3D(seed, x0, y1, z0) & (255 << 2)
+!     idx1 = _fnlHash3D(seed, x1, y1, z0) & (255 << 2)
 
-!     float lx1x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs);
-!     float ly1x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs);
-!     float lz1x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs);
+!     float lx1x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
+!     float ly1x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
+!     float lz1x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
 
-!     float lx0y = _fnlLerp(lx0x, lx1x, ys);
-!     float ly0y = _fnlLerp(ly0x, ly1x, ys);
-!     float lz0y = _fnlLerp(lz0x, lz1x, ys);
+!     float lx0y = _fnlLerp(lx0x, lx1x, ys)
+!     float ly0y = _fnlLerp(ly0x, ly1x, ys)
+!     float lz0y = _fnlLerp(lz0x, lz1x, ys)
 
-!     idx0 = _fnlHash3D(seed, x0, y0, z1) & (255 << 2);
-!     idx1 = _fnlHash3D(seed, x1, y0, z1) & (255 << 2);
+!     idx0 = _fnlHash3D(seed, x0, y0, z1) & (255 << 2)
+!     idx1 = _fnlHash3D(seed, x1, y0, z1) & (255 << 2)
 
-!     lx0x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs);
-!     ly0x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs);
-!     lz0x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs);
+!     lx0x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
+!     ly0x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
+!     lz0x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
 
-!     idx0 = _fnlHash3D(seed, x0, y1, z1) & (255 << 2);
-!     idx1 = _fnlHash3D(seed, x1, y1, z1) & (255 << 2);
+!     idx0 = _fnlHash3D(seed, x0, y1, z1) & (255 << 2)
+!     idx1 = _fnlHash3D(seed, x1, y1, z1) & (255 << 2)
 
-!     lx1x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs);
-!     ly1x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs);
-!     lz1x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs);
+!     lx1x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
+!     ly1x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
+!     lz1x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
 
-!     *xp += _fnlLerp(lx0y, _fnlLerp(lx0x, lx1x, ys), zs) * warpAmp;
-!     *yp += _fnlLerp(ly0y, _fnlLerp(ly0x, ly1x, ys), zs) * warpAmp;
-!     *zp += _fnlLerp(lz0y, _fnlLerp(lz0x, lz1x, ys), zs) * warpAmp;
+!     *xp += _fnlLerp(lx0y, _fnlLerp(lx0x, lx1x, ys), zs) * warpAmp
+!     *yp += _fnlLerp(ly0y, _fnlLerp(ly0x, ly1x, ys), zs) * warpAmp
+!     *zp += _fnlLerp(lz0y, _fnlLerp(lz0x, lz1x, ys), zs) * warpAmp
 ! }
 
 ! Domain Warp Simplex/OpenSimplex2
 
 ! static void _fnlSingleDomainWarpSimplexGradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xr, FNLfloat *yr, bool outGradOnly)
 ! {
-!     const float SQRT3 = 1.7320508075688772935274463415059f;
-!     const float G2 = (3 - SQRT3) / 6;
+!     const float SQRT3 = 1.7320508075688772935274463415059f
+!     const float G2 = (3 - SQRT3) / 6
 
-!     x *= frequency;
-!     y *= frequency;
+!     x *= frequency
+!     y *= frequency
 
 !     /*
 !      * --- Skew moved to TransformNoiseCoordinate method ---
-!      * const FNLfloat F2 = 0.5f * (SQRT3 - 1);
-!      * FNLfloat s = (x + y) * F2;
-!      * x += s; y += s;
+!      * const FNLfloat F2 = 0.5f * (SQRT3 - 1)
+!      * FNLfloat s = (x + y) * F2
+!      * x += s y += s
 !      */
 
-!     int i = _fnlFastFloor(x);
-!     int j = _fnlFastFloor(y);
-!     float xi = (float)(x - i);
-!     float yi = (float)(y - j);
+!     int i = _fnlFastFloor(x)
+!     int j = _fnlFastFloor(y)
+!     float xi = (float)(x - i)
+!     float yi = (float)(y - j)
 
-!     float t = (xi + yi) * G2;
-!     float x0 = (float)(xi - t);
-!     float y0 = (float)(yi - t);
+!     float t = (xi + yi) * G2
+!     float x0 = (float)(xi - t)
+!     float y0 = (float)(yi - t)
 
-!     i *= PRIME_X;
-!     j *= PRIME_Y;
+!     i *= PRIME_X
+!     j *= PRIME_Y
 
-!     float vx, vy;
-!     vx = vy = 0;
+!     float vx, vy
+!     vx = vy = 0
 
-!     float a = 0.5f - x0 * x0 - y0 * y0;
+!     float a = 0.5f - x0 * x0 - y0 * y0
 !     if (a > 0)
 !     {
-!         float aaaa = (a * a) * (a * a);
-!         float xo, yo;
+!         float aaaa = (a * a) * (a * a)
+!         float xo, yo
 !         if (outGradOnly)
-!             _fnlGradCoordOut2D(seed, i, j, &xo, &yo);
+!             _fnlGradCoordOut2D(seed, i, j, &xo, &yo)
 !         else
-!             _fnlGradCoordDual2D(seed, i, j, x0, y0, &xo, &yo);
-!         vx += aaaa * xo;
-!         vy += aaaa * yo;
+!             _fnlGradCoordDual2D(seed, i, j, x0, y0, &xo, &yo)
+!         vx += aaaa * xo
+!         vy += aaaa * yo
 !     }
 
-!     float c = (float)(2 * (1 - 2 * G2) * (1 / G2 - 2)) * t + ((float)(-2 * (1 - 2 * G2) * (1 - 2 * G2)) + a);
+!     float c = (float)(2 * (1 - 2 * G2) * (1 / G2 - 2)) * t + ((float)(-2 * (1 - 2 * G2) * (1 - 2 * G2)) + a)
 !     if (c > 0)
 !     {
-!         float x2 = x0 + (2 * (float)G2 - 1);
-!         float y2 = y0 + (2 * (float)G2 - 1);
-!         float cccc = (c * c) * (c * c);
-!         float xo, yo;
+!         float x2 = x0 + (2 * (float)G2 - 1)
+!         float y2 = y0 + (2 * (float)G2 - 1)
+!         float cccc = (c * c) * (c * c)
+!         float xo, yo
 !         if (outGradOnly)
-!             _fnlGradCoordOut2D(seed, i + PRIME_X, j + PRIME_Y, &xo, &yo);
+!             _fnlGradCoordOut2D(seed, i + PRIME_X, j + PRIME_Y, &xo, &yo)
 !         else
-!             _fnlGradCoordDual2D(seed, i + PRIME_X, j + PRIME_Y, x2, y2, &xo, &yo);
-!         vx += cccc * xo;
-!         vy += cccc * yo;
+!             _fnlGradCoordDual2D(seed, i + PRIME_X, j + PRIME_Y, x2, y2, &xo, &yo)
+!         vx += cccc * xo
+!         vy += cccc * yo
 !     }
 
 !     if (y0 > x0)
 !     {
-!         float x1 = x0 + (float)G2;
-!         float y1 = y0 + ((float)G2 - 1);
-!         float b = 0.5f - x1 * x1 - y1 * y1;
+!         float x1 = x0 + (float)G2
+!         float y1 = y0 + ((float)G2 - 1)
+!         float b = 0.5f - x1 * x1 - y1 * y1
 !         if (b > 0)
 !         {
-!             float bbbb = (b * b) * (b * b);
-!             float xo, yo;
+!             float bbbb = (b * b) * (b * b)
+!             float xo, yo
 !             if (outGradOnly)
-!                 _fnlGradCoordOut2D(seed, i, j + PRIME_Y, &xo, &yo);
+!                 _fnlGradCoordOut2D(seed, i, j + PRIME_Y, &xo, &yo)
 !             else
-!                 _fnlGradCoordDual2D(seed, i, j + PRIME_Y, x1, y1, &xo, &yo);
-!             vx += bbbb * xo;
-!             vy += bbbb * yo;
+!                 _fnlGradCoordDual2D(seed, i, j + PRIME_Y, x1, y1, &xo, &yo)
+!             vx += bbbb * xo
+!             vy += bbbb * yo
 !         }
 !     }
 !     else
 !     {
-!         float x1 = x0 + ((float)G2 - 1);
-!         float y1 = y0 + (float)G2;
-!         float b = 0.5f - x1 * x1 - y1 * y1;
+!         float x1 = x0 + ((float)G2 - 1)
+!         float y1 = y0 + (float)G2
+!         float b = 0.5f - x1 * x1 - y1 * y1
 !         if (b > 0)
 !         {
-!             float bbbb = (b * b) * (b * b);
-!             float xo, yo;
+!             float bbbb = (b * b) * (b * b)
+!             float xo, yo
 !             if (outGradOnly)
-!                 _fnlGradCoordOut2D(seed, i + PRIME_X, j, &xo, &yo);
+!                 _fnlGradCoordOut2D(seed, i + PRIME_X, j, &xo, &yo)
 !             else
-!                 _fnlGradCoordDual2D(seed, i + PRIME_X, j, x1, y1, &xo, &yo);
-!             vx += bbbb * xo;
-!             vy += bbbb * yo;
+!                 _fnlGradCoordDual2D(seed, i + PRIME_X, j, x1, y1, &xo, &yo)
+!             vx += bbbb * xo
+!             vy += bbbb * yo
 !         }
 !     }
 
-!     *xr += vx * warpAmp;
-!     *yr += vy * warpAmp;
+!     *xr += vx * warpAmp
+!     *yr += vy * warpAmp
 ! }
 
 ! static void _fnlSingleDomainWarpOpenSimplex2Gradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xr, FNLfloat *yr, FNLfloat *zr, bool outGradOnly)
 ! {
-!     x *= frequency;
-!     y *= frequency;
-!     z *= frequency;
+!     x *= frequency
+!     y *= frequency
+!     z *= frequency
 
 !     /*
 !      * --- Rotation moved to TransformDomainWarpCoordinate method ---
-!      * const FNLfloat R3 = (FNLfloat)(2.0 / 3.0);
-!      * FNLfloat r = (x + y + z) * R3; // Rotation, not skew
-!      * x = r - x; y = r - y; z = r - z;
+!      * const FNLfloat R3 = (FNLfloat)(2.0 / 3.0)
+!      * FNLfloat r = (x + y + z) * R3 // Rotation, not skew
+!      * x = r - x y = r - y z = r - z
 !      */
 
-!     int i = _fnlFastRound(x);
-!     int j = _fnlFastRound(y);
-!     int k = _fnlFastRound(z);
-!     float x0 = (float)x - i;
-!     float y0 = (float)y - j;
-!     float z0 = (float)z - k;
+!     int i = _fnlFastRound(x)
+!     int j = _fnlFastRound(y)
+!     int k = _fnlFastRound(z)
+!     float x0 = (float)x - i
+!     float y0 = (float)y - j
+!     float z0 = (float)z - k
 
-!     int xNSign = (int)(-x0 - 1.0f) | 1;
-!     int yNSign = (int)(-y0 - 1.0f) | 1;
-!     int zNSign = (int)(-z0 - 1.0f) | 1;
+!     int xNSign = (int)(-x0 - 1.0f) | 1
+!     int yNSign = (int)(-y0 - 1.0f) | 1
+!     int zNSign = (int)(-z0 - 1.0f) | 1
 
-!     float ax0 = xNSign * -x0;
-!     float ay0 = yNSign * -y0;
-!     float az0 = zNSign * -z0;
+!     float ax0 = xNSign * -x0
+!     float ay0 = yNSign * -y0
+!     float az0 = zNSign * -z0
 
-!     i *= PRIME_X;
-!     j *= PRIME_Y;
-!     k *= PRIME_Z;
+!     i *= PRIME_X
+!     j *= PRIME_Y
+!     k *= PRIME_Z
 
-!     float vx, vy, vz;
-!     vx = vy = vz = 0;
+!     float vx, vy, vz
+!     vx = vy = vz = 0
 
-!     float a = (0.6f - x0 * x0) - (y0 * y0 + z0 * z0);
-!     for (int l = 0; l < 2; l++)
+!     float a = (0.6f - x0 * x0) - (y0 * y0 + z0 * z0)
+!     for (int l = 0 l < 2 l++)
 !     {
 !         if (a > 0)
 !         {
-!             float aaaa = (a * a) * (a * a);
-!             float xo, yo, zo;
+!             float aaaa = (a * a) * (a * a)
+!             float xo, yo, zo
 !             if (outGradOnly)
-!                 _fnlGradCoordOut3D(seed, i, j, k, &xo, &yo, &zo);
+!                 _fnlGradCoordOut3D(seed, i, j, k, &xo, &yo, &zo)
 !             else
-!                 _fnlGradCoordDual3D(seed, i, j, k, x0, y0, z0, &xo, &yo, &zo);
-!             vx += aaaa * xo;
-!             vy += aaaa * yo;
-!             vz += aaaa * zo;
+!                 _fnlGradCoordDual3D(seed, i, j, k, x0, y0, z0, &xo, &yo, &zo)
+!             vx += aaaa * xo
+!             vy += aaaa * yo
+!             vz += aaaa * zo
 !         }
 
-!         float b = a + 1;
-!         int i1 = i;
-!         int j1 = j;
-!         int k1 = k;
-!         float x1 = x0;
-!         float y1 = y0;
-!         float z1 = z0;
+!         float b = a + 1
+!         int i1 = i
+!         int j1 = j
+!         int k1 = k
+!         float x1 = x0
+!         float y1 = y0
+!         float z1 = z0
 !         if (ax0 >= ay0 && ax0 >= az0)
 !         {
-!             x1 += xNSign;
-!             b -= xNSign * 2 * x1;
-!             i1 -= xNSign * PRIME_X;
+!             x1 += xNSign
+!             b -= xNSign * 2 * x1
+!             i1 -= xNSign * PRIME_X
 !         }
 !         else if (ay0 > ax0 && ay0 >= az0)
 !         {
-!             y1 += yNSign;
-!             b -= yNSign * 2 * y1;
-!             j1 -= yNSign * PRIME_Y;
+!             y1 += yNSign
+!             b -= yNSign * 2 * y1
+!             j1 -= yNSign * PRIME_Y
 !         }
 !         else
 !         {
-!             z1 += zNSign;
-!             b -= zNSign * 2 * z1;
-!             k1 -= zNSign * PRIME_Z;
+!             z1 += zNSign
+!             b -= zNSign * 2 * z1
+!             k1 -= zNSign * PRIME_Z
 !         }
 
 !         if (b > 0)
 !         {
-!             float bbbb = (b * b) * (b * b);
-!             float xo, yo, zo;
+!             float bbbb = (b * b) * (b * b)
+!             float xo, yo, zo
 !             if (outGradOnly)
-!                 _fnlGradCoordOut3D(seed, i1, j1, k1, &xo, &yo, &zo);
+!                 _fnlGradCoordOut3D(seed, i1, j1, k1, &xo, &yo, &zo)
 !             else
-!                 _fnlGradCoordDual3D(seed, i1, j1, k1, x1, y1, z1, &xo, &yo, &zo);
-!             vx += bbbb * xo;
-!             vy += bbbb * yo;
-!             vz += bbbb * zo;
+!                 _fnlGradCoordDual3D(seed, i1, j1, k1, x1, y1, z1, &xo, &yo, &zo)
+!             vx += bbbb * xo
+!             vy += bbbb * yo
+!             vz += bbbb * zo
 !         }
 
 !         if (l == 1)
-!             break;
+!             break
 
-!         ax0 = 0.5f - ax0;
-!         ay0 = 0.5f - ay0;
-!         az0 = 0.5f - az0;
+!         ax0 = 0.5f - ax0
+!         ay0 = 0.5f - ay0
+!         az0 = 0.5f - az0
 
-!         x0 = xNSign * ax0;
-!         y0 = yNSign * ay0;
-!         z0 = zNSign * az0;
+!         x0 = xNSign * ax0
+!         y0 = yNSign * ay0
+!         z0 = zNSign * az0
 
-!         a += (0.75f - ax0) - (ay0 + az0);
+!         a += (0.75f - ax0) - (ay0 + az0)
 
-!         i += (xNSign >> 1) & PRIME_X;
-!         j += (yNSign >> 1) & PRIME_Y;
-!         k += (zNSign >> 1) & PRIME_Z;
+!         i += (xNSign >> 1) & PRIME_X
+!         j += (yNSign >> 1) & PRIME_Y
+!         k += (zNSign >> 1) & PRIME_Z
 
-!         xNSign = -xNSign;
-!         yNSign = -yNSign;
-!         zNSign = -zNSign;
+!         xNSign = -xNSign
+!         yNSign = -yNSign
+!         zNSign = -zNSign
 
-!         seed += 1293373;
+!         seed += 1293373
 !     }
 
-!     *xr += vx * warpAmp;
-!     *yr += vy * warpAmp;
-!     *zr += vz * warpAmp;
+!     *xr += vx * warpAmp
+!     *yr += vy * warpAmp
+!     *zr += vz * warpAmp
 ! }
 
 ! ====================
@@ -2384,57 +2384,57 @@ contains
 
 ! fnl_state fnlCreateState()
 ! {
-!     fnl_state newState;
-!     newState.seed = 1337;
-!     newState.frequency = 0.01f;
-!     newState.noise_type = FNL_NOISE_OPENSIMPLEX2;
-!     newState.rotation_type_3d = FNL_ROTATION_NONE;
-!     newState.fractal_type = FNL_FRACTAL_NONE;
-!     newState.octaves = 3;
-!     newState.lacunarity = 2.0f;
-!     newState.gain = 0.5f;
-!     newState.weighted_strength = 0.0f;
-!     newState.ping_pong_strength = 2.0f;
-!     newState.cellular_distance_func = FNL_CELLULAR_DISTANCE_EUCLIDEANSQ;
-!     newState.cellular_return_type = FNL_CELLULAR_RETURN_TYPE_DISTANCE;
-!     newState.cellular_jitter_mod = 1.0f;
-!     newState.domain_warp_amp = 30.0f;
-!     newState.domain_warp_type = FNL_DOMAIN_WARP_OPENSIMPLEX2;
-!     return newState;
+!     fnl_state newState
+!     newState.seed = 1337
+!     newState.frequency = 0.01f
+!     newState.noise_type = FNL_NOISE_OPENSIMPLEX2
+!     newState.rotation_type_3d = FNL_ROTATION_NONE
+!     newState.fractal_type = FNL_FRACTAL_NONE
+!     newState.octaves = 3
+!     newState.lacunarity = 2.0f
+!     newState.gain = 0.5f
+!     newState.weighted_strength = 0.0f
+!     newState.ping_pong_strength = 2.0f
+!     newState.cellular_distance_func = FNL_CELLULAR_DISTANCE_EUCLIDEANSQ
+!     newState.cellular_return_type = FNL_CELLULAR_RETURN_TYPE_DISTANCE
+!     newState.cellular_jitter_mod = 1.0f
+!     newState.domain_warp_amp = 30.0f
+!     newState.domain_warp_type = FNL_DOMAIN_WARP_OPENSIMPLEX2
+!     return newState
 ! }
 
 ! float fnlGetNoise2D(fnl_state *state, FNLfloat x, FNLfloat y)
 ! {
-!     _fnlTransformNoiseCoordinate2D(state, &x, &y);
+!     _fnlTransformNoiseCoordinate2D(state, &x, &y)
 
 !     switch (state->fractal_type)
 !     {
 !     default:
-!         return _fnlGenNoiseSingle2D(state, state->seed, x, y);
+!         return _fnlGenNoiseSingle2D(state, state->seed, x, y)
 !     case FNL_FRACTAL_FBM:
-!         return _fnlGenFractalFBM2D(state, x, y);
+!         return _fnlGenFractalFBM2D(state, x, y)
 !     case FNL_FRACTAL_RIDGED:
-!         return _fnlGenFractalRidged2D(state, x, y);
+!         return _fnlGenFractalRidged2D(state, x, y)
 !     case FNL_FRACTAL_PINGPONG:
-!         return _fnlGenFractalPingPong2D(state, x, y);
+!         return _fnlGenFractalPingPong2D(state, x, y)
 !     }
 ! }
 
 ! float fnlGetNoise3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     _fnlTransformNoiseCoordinate3D(state, &x, &y, &z);
+!     _fnlTransformNoiseCoordinate3D(state, &x, &y, &z)
 
 !     // Select a noise type
 !     switch (state->fractal_type)
 !     {
 !     default:
-!         return _fnlGenNoiseSingle3D(state, state->seed, x, y, z);
+!         return _fnlGenNoiseSingle3D(state, state->seed, x, y, z)
 !     case FNL_FRACTAL_FBM:
-!         return _fnlGenFractalFBM3D(state, x, y, z);
+!         return _fnlGenFractalFBM3D(state, x, y, z)
 !     case FNL_FRACTAL_RIDGED:
-!         return _fnlGenFractalRidged3D(state, x, y, z);
+!         return _fnlGenFractalRidged3D(state, x, y, z)
 !     case FNL_FRACTAL_PINGPONG:
-!         return _fnlGenFractalPingPong3D(state, x, y, z);
+!         return _fnlGenFractalPingPong3D(state, x, y, z)
 !     }
 ! }
 
@@ -2443,14 +2443,14 @@ contains
 !     switch (state->fractal_type)
 !     {
 !     default:
-!         _fnlDomainWarpSingle2D(state, x, y);
-!         break;
+!         _fnlDomainWarpSingle2D(state, x, y)
+!         break
 !     case FNL_FRACTAL_DOMAIN_WARP_PROGRESSIVE:
-!         _fnlDomainWarpFractalProgressive2D(state, x, y);
-!         break;
+!         _fnlDomainWarpFractalProgressive2D(state, x, y)
+!         break
 !     case FNL_FRACTAL_DOMAIN_WARP_INDEPENDENT:
-!         _fnlDomainWarpFractalIndependent2D(state, x, y);
-!         break;
+!         _fnlDomainWarpFractalIndependent2D(state, x, y)
+!         break
 !     }
 ! }
 
@@ -2459,14 +2459,14 @@ contains
 !     switch (state->fractal_type)
 !     {
 !     default:
-!         _fnlDomainWarpSingle3D(state, x, y, z);
-!         break;
+!         _fnlDomainWarpSingle3D(state, x, y, z)
+!         break
 !     case FNL_FRACTAL_DOMAIN_WARP_PROGRESSIVE:
-!         _fnlDomainWarpFractalProgressive3D(state, x, y, z);
-!         break;
+!         _fnlDomainWarpFractalProgressive3D(state, x, y, z)
+!         break
 !     case FNL_FRACTAL_DOMAIN_WARP_INDEPENDENT:
-!         _fnlDomainWarpFractalIndependent3D(state, x, y, z);
-!         break;
+!         _fnlDomainWarpFractalIndependent3D(state, x, y, z)
+!         break
 !     }
 ! }
 
