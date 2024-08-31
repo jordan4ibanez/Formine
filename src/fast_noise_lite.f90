@@ -57,8 +57,11 @@ module fast_noise_lite
   ! https://github.com/Auburn/FastNoiseLite
 
 
-  ! Switch from f64 to f32 by changing kind(c_double) to: kind(c_float)
-  real, parameter :: fnl_float = kind(c_double)
+  ! Allow switching from f64 to f32 by changing kind with comment swap.
+  ! real(c_double), parameter :: data_sample = 0.0d0
+  real(c_float), parameter :: data_sample = 0.0
+
+  integer, parameter :: fnl_float = kind(c_double)
 
   ! Enums
 
@@ -675,7 +678,7 @@ contains
 
     type(fnl_state), intent(in) :: state
     integer(c_int), intent(in), value :: seed
-    real(kind(fnl_float)), intent(in), value :: x, y
+    real(fnl_float), intent(in), value :: x, y
 
     select case(state%noise_type)
      case (FNL_NOISE_OPENSIMPLEX2)
@@ -701,7 +704,7 @@ contains
 
     type(fnl_state), intent(in) :: state
     integer(c_int), intent(in), value :: seed
-    real(kind(fnl_float)), intent(in), value :: x, y, z
+    real(fnl_float), intent(in), value :: x, y, z
 
 
     select case (state%noise_type)
@@ -730,15 +733,15 @@ contains
     implicit none
 
     type(fnl_state), intent(in) :: state
-    real(kind(fnl_float)), intent(inout) :: x, y
-    real(kind(fnl_float)) sqrt_3, f2, t
+    real(fnl_float), intent(inout) :: x, y
+    real(fnl_float) sqrt_3, f2, t
 
     x = x * state%frequency
     y = y * state%frequency
 
     select case(state%noise_type)
      case (FNL_NOISE_OPENSIMPLEX2, FNL_NOISE_OPENSIMPLEX2S)
-      sqrt_3 = real(1.7320508075688772935274463415059, kind(fnl_float))
+      sqrt_3 = real(1.7320508075688772935274463415059, fnl_float)
       f2 = 0.5 * (sqrt_3 - 1.0)
       t = (x + y) * f2
       x = x + t
@@ -752,8 +755,8 @@ contains
     implicit none
 
     type(fnl_state), intent(in) :: state
-    real(kind(fnl_float)), intent(inout) :: x, y, z
-    real(kind(fnl_float)) sqrt_3, xy, s2, xz, r3, r
+    real(fnl_float), intent(inout) :: x, y, z
+    real(fnl_float) sqrt_3, xy, s2, xz, r3, r
 
     x = x * state%frequency
     y = y * state%frequency
@@ -762,25 +765,25 @@ contains
     select case (state%rotation_type_3d)
      case (FNL_ROTATION_IMPROVE_XY_PLANES)
       xy = x + y
-      s2 = xy * (-real(0.211324865405187, kind(fnl_float)))
-      z = z * real(0.577350269189626, kind(fnl_float))
+      s2 = xy * (-real(0.211324865405187, fnl_float))
+      z = z * real(0.577350269189626, fnl_float)
       x = x + (s2 - z)
       y = y + s2 - z
-      z = z + (xy * real(0.577350269189626, kind(fnl_float)))
+      z = z + (xy * real(0.577350269189626, fnl_float))
 
      case (FNL_ROTATION_IMPROVE_XZ_PLANES)
       xz = x + z
-      s2 = xz * (-real(0.211324865405187, kind(fnl_float)))
-      y = y * real(0.577350269189626, kind(fnl_float))
+      s2 = xz * (-real(0.211324865405187, fnl_float))
+      y = y * real(0.577350269189626, fnl_float)
       x = x + (s2 - y)
       z = z + (s2 - y)
-      y = y + (xz * real(0.577350269189626, kind(fnl_float)))
+      y = y + (xz * real(0.577350269189626, fnl_float))
 
      case default
       select case (state%noise_type)
        case (FNL_NOISE_OPENSIMPLEX2S, FNL_NOISE_OPENSIMPLEX2)
 
-        r3 = real((2.0 / 3.0), kind(fnl_float))
+        r3 = real((2.0 / 3.0), fnl_float)
         r = (x + y + z) * r3 ! Rotation, not skew
         x = r - x
         y = r - y
