@@ -9,7 +9,7 @@ module glfw
   ! C side.
 
 
-  type(c_ptr) :: c_window_pointer
+  type(c_ptr) :: window_pointer
 
 
   ! Fortran side.
@@ -254,10 +254,10 @@ contains
 
     window_title = into_c_string(title)
 
-    c_window_pointer = internal_glfw_create_window(width, height, window_title, null(), null())
+    window_pointer = internal_glfw_create_window(width, height, window_title, null(), null())
 
     ! Then we check if the window pointer is null.
-    success = c_associated(c_window_pointer)
+    success = c_associated(window_pointer)
 
     ! Finally, output information on this and automatically terminate this if it fails.
     if (success) then
@@ -274,35 +274,35 @@ contains
   subroutine glfw_make_context_current()
     implicit none
 
-    call internal_glfw_make_context_current(c_window_pointer)
+    call internal_glfw_make_context_current(window_pointer)
   end subroutine glfw_make_context_current
 
 
   logical function glfw_window_should_close() result(should_close)
     implicit none
 
-    should_close = internal_glfw_window_should_close(c_window_pointer) .eqv. .true.
+    should_close = internal_glfw_window_should_close(window_pointer) .eqv. .true.
   end function glfw_window_should_close
 
 
   subroutine glfw_swap_buffers()
     implicit none
 
-    call internal_glfw_swap_buffers(c_window_pointer)
+    call internal_glfw_swap_buffers(window_pointer)
   end subroutine glfw_swap_buffers
 
 
   subroutine glfw_poll_events()
     implicit none
 
-    call internal_glfw_poll_events(c_window_pointer)
+    call internal_glfw_poll_events(window_pointer)
   end
 
 
   subroutine glfw_destroy_window()
     implicit none
 
-    call internal_glfw_destroy_window(c_window_pointer)
+    call internal_glfw_destroy_window(window_pointer)
     print"(A)","[GLFW]: Window destroyed successfully."
   end subroutine glfw_destroy_window
 
@@ -359,7 +359,7 @@ contains
   subroutine glfw_set_window_size_callback()
     implicit none
 
-    call internal_glfw_set_window_size_callback(c_window_pointer, c_funloc(size_callback))
+    call internal_glfw_set_window_size_callback(window_pointer, c_funloc(size_callback))
   end subroutine glfw_set_window_size_callback
 
 
