@@ -1650,30 +1650,6 @@ contains
     z_primed_base = (zr - 1) * PRIME_Z
 
     select case (state%cellular_distance_func)
-
-     case (FNL_CELLULAR_DISTANCE_EUCLIDEANSQ, FNL_CELLULAR_DISTANCE_EUCLIDEAN)
-      do xi = xr - 1, xr + 1
-        y_primed = y_primed_base
-        do yi = yr - 1, yr + 1
-          z_primed = z_primed_base
-          do zi = zr - 1, zr + 1
-            hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
-            idx = and(hash, shiftl(255, 2))
-            vec_x = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellular_jitter
-            vec_y = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellular_jitter
-            vec_z = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellular_jitter
-            new_distance = vec_x * vec_x + vec_y * vec_y + vec_z * vec_z
-            distance_1 = max(min(distance_1, new_distance), distance_0)
-            if (new_distance < distance_0) then
-              distance_0 = new_distance
-              closest_hash = hash
-            end if
-            z_primed = z_primed + PRIME_Z
-          end do
-          y_primed = y_primed + PRIME_Y
-        end do
-        x_primed = x_primed + PRIME_X
-      end do
      case (FNL_CELLULAR_DISTANCE_MANHATTAN)
       do xi = xr - 1, xr + 1
         y_primed = y_primed_base
@@ -1721,7 +1697,28 @@ contains
         x_primed = x_primed + PRIME_X
       end do
      case default
-      error stop "[internal_fnl_single_cellular_3d] Error: Not found."
+      do xi = xr - 1, xr + 1
+        y_primed = y_primed_base
+        do yi = yr - 1, yr + 1
+          z_primed = z_primed_base
+          do zi = zr - 1, zr + 1
+            hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
+            idx = and(hash, shiftl(255, 2))
+            vec_x = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellular_jitter
+            vec_y = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellular_jitter
+            vec_z = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellular_jitter
+            new_distance = vec_x * vec_x + vec_y * vec_y + vec_z * vec_z
+            distance_1 = max(min(distance_1, new_distance), distance_0)
+            if (new_distance < distance_0) then
+              distance_0 = new_distance
+              closest_hash = hash
+            end if
+            z_primed = z_primed + PRIME_Z
+          end do
+          y_primed = y_primed + PRIME_Y
+        end do
+        x_primed = x_primed + PRIME_X
+      end do
     end select
 
     if (state%cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN .and. state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE) then
