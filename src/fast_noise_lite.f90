@@ -404,53 +404,6 @@ contains
 ! Utilities
 
 
-  real(c_float) function internal_fnl_fast_min(x, y) result(z)
-    implicit none
-
-    real(c_float), intent(in), value :: x, y
-
-    z = merge(x, y, x < y)
-  end function internal_fnl_fast_min
-
-
-  real(c_float) function internal_fnl_fast_max(x, y) result(z)
-    implicit none
-
-    real(c_float), intent(in), value :: x, y
-
-    z = merge(x, y, x > y)
-  end function internal_fnl_fast_max
-
-
-  real(c_float) function internal_fnl_fast_abs(f) result(z)
-    implicit none
-
-    real(c_float), intent(in), value :: f
-
-    z = merge(-f, f, f < 0)
-  end function internal_fnl_fast_abs
-
-
-  !! WARNING: The original was tested in a C compiler and always produced 0 !!
-  real(c_float) function internal_fnl_cast_i32_to_f32(i) result(z)
-    implicit none
-
-    integer(c_int), intent(in), value :: i
-
-    z = real(i, c_float)
-  end function internal_fnl_cast_i32_to_f32
-
-
-  !! WARNING: The original was tested in a C compiler and always produced a wrong value !!
-  integer(c_int) function internal_fnl_cast_f32_to_i32(f) result(z)
-    implicit none
-
-    real(c_float), intent(in), value :: f
-
-    z = int(f, c_int)
-  end function internal_fnl_cast_f32_to_i32
-
-
   real(c_float) function internal_fnl_inv_sqrt(a) result(out)
     implicit none
 
@@ -459,16 +412,10 @@ contains
     integer(c_int), parameter :: magic = int(z"5f3759df", c_int)
 
     xhalf = 0.5 * a
-    out = internal_fnl_cast_i32_to_f32(magic - (rshift(internal_fnl_cast_f32_to_i32(a), 1)))
+    out = real(magic - (rshift(int(a), 1)))
     out = out * (1.5 - xhalf * a * a)
   end function internal_fnl_inv_sqrt
 
-! NOTE: If your language does not support this method (seen above), then simply use the native sqrt function.
-! static inline float _fnlFastSqrt(float a) { return a * internal_fnl_inv_sqrt(a) }
-
-! static inline int _fnlFastFloor(FNLfloat f) { return (f >= 0 ? (int)f : (int)f - 1) }
-
-! static inline int _fnlFastRound(FNLfloat f) { return (f >= 0) ? (int)(f + 0.5f) : (int)(f - 0.5f) }
 
 ! static inline float _fnlLerp(float a, float b, float t) { return a + t * (b - a) }
 
@@ -490,7 +437,7 @@ contains
 
 ! static float _fnlCalculateFractalBounding(fnl_state *state)
 ! {
-!     float gain = internal_fnl_fast_abs(state->gain)
+!     float gain = abs(state->gain)
 !     float amp = gain
 !     float ampFractal = 1.0f
 !     for (int i = 1 i < state->octaves i++)
@@ -812,7 +759,7 @@ contains
 !     {
 !         float noise = _fnlGenNoiseSingle2D(state, seed++, x, y)
 !         sum += noise * amp
-!         amp *= _fnlLerp(1.0f, internal_fnl_fast_min(noise + 1, 2) * 0.5f, state->weighted_strength)
+!         amp *= _fnlLerp(1.0f, min(noise + 1, 2) * 0.5f, state->weighted_strength)
 
 !         x *= state->lacunarity
 !         y *= state->lacunarity
@@ -853,7 +800,7 @@ contains
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = internal_fnl_fast_abs(_fnlGenNoiseSingle2D(state, seed++, x, y))
+!         float noise = abs(_fnlGenNoiseSingle2D(state, seed++, x, y))
 !         sum += (noise * -2 + 1) * amp
 !         amp *= _fnlLerp(1.0f, 1 - noise, state->weighted_strength)
 
@@ -873,7 +820,7 @@ contains
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = internal_fnl_fast_abs(_fnlGenNoiseSingle3D(state, seed++, x, y, z))
+!         float noise = abs(_fnlGenNoiseSingle3D(state, seed++, x, y, z))
 !         sum += (noise * -2 + 1) * amp
 !         amp *= _fnlLerp(1.0f, 1 - noise, state->weighted_strength)
 
@@ -945,8 +892,8 @@ contains
 !      * x += s y += s
 !      */
 
-!     int i = _fnlFastFloor(x)
-!     int j = _fnlFastFloor(y)
+!     int i = floor(x)
+!     int j = floor(y)
 !     float xi = (float)(x - i)
 !     float yi = (float)(y - j)
 
@@ -1016,9 +963,9 @@ contains
 !      * x = r - x y = r - y z = r - z
 !      */
 
-!     int i = _fnlFastRound(x)
-!     int j = _fnlFastRound(y)
-!     int k = _fnlFastRound(z)
+!     int i = round(x)
+!     int j = round(y)
+!     int k = round(z)
 !     float x0 = (float)(x - i)
 !     float y0 = (float)(y - j)
 !     float z0 = (float)(z - k)
@@ -1119,8 +1066,8 @@ contains
 !      * x += s y += s
 !     */
 
-!     int i = _fnlFastFloor(x)
-!     int j = _fnlFastFloor(y)
+!     int i = floor(x)
+!     int j = floor(y)
 !     float xi = (float)(x - i)
 !     float yi = (float)(y - j)
 
@@ -1246,9 +1193,9 @@ contains
 !      * x = r - x y = r - y z = r - z
 !      */
 
-!     int i = _fnlFastFloor(x)
-!     int j = _fnlFastFloor(y)
-!     int k = _fnlFastFloor(z)
+!     int i = floor(x)
+!     int j = floor(y)
+!     int k = floor(z)
 !     float xi = (float)(x - i)
 !     float yi = (float)(y - j)
 !     float zi = (float)(z - k)
@@ -1431,8 +1378,8 @@ contains
 
 ! static float _fnlSingleCellular2D(fnl_state *state, int seed, FNLfloat x, FNLfloat y)
 ! {
-!     int xr = _fnlFastRound(x)
-!     int yr = _fnlFastRound(y)
+!     int xr = round(x)
+!     int yr = round(y)
 
 !     float distance0 = FLT_MAX
 !     float distance1 = FLT_MAX
@@ -1462,7 +1409,7 @@ contains
 
 !                 float newDistance = vecX * vecX + vecY * vecY
 
-!                 distance1 = internal_fnl_fast_max(internal_fnl_fast_min(distance1, newDistance), distance0)
+!                 distance1 = max(min(distance1, newDistance), distance0)
 !                 if (newDistance < distance0)
 !                 {
 !                     distance0 = newDistance
@@ -1486,9 +1433,9 @@ contains
 !                 float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter
 !                 float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter
 
-!                 float newDistance = internal_fnl_fast_abs(vecX) + internal_fnl_fast_abs(vecY)
+!                 float newDistance = abs(vecX) + abs(vecY)
 
-!                 distance1 = internal_fnl_fast_max(internal_fnl_fast_min(distance1, newDistance), distance0)
+!                 distance1 = max(min(distance1, newDistance), distance0)
 !                 if (newDistance < distance0)
 !                 {
 !                     distance0 = newDistance
@@ -1511,9 +1458,9 @@ contains
 !                 float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter
 !                 float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter
 
-!                 float newDistance = (internal_fnl_fast_abs(vecX) + internal_fnl_fast_abs(vecY)) + (vecX * vecX + vecY * vecY)
+!                 float newDistance = (abs(vecX) + abs(vecY)) + (vecX * vecX + vecY * vecY)
 
-!                 distance1 = internal_fnl_fast_max(internal_fnl_fast_min(distance1, newDistance), distance0)
+!                 distance1 = max(min(distance1, newDistance), distance0)
 !                 if (newDistance < distance0)
 !                 {
 !                     distance0 = newDistance
@@ -1528,9 +1475,9 @@ contains
 
 !     if (state->cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN && state->cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE)
 !     {
-!         distance0 = _fnlFastSqrt(distance0)
+!         distance0 = sqrt(distance0)
 !         if (state->cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
-!             distance1 = _fnlFastSqrt(distance1)
+!             distance1 = sqrt(distance1)
 !     }
 
 !     switch (state->cellular_return_type)
@@ -1556,9 +1503,9 @@ contains
 
 ! static float _fnlSingleCellular3D(fnl_state *state, int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int xr = _fnlFastRound(x)
-!     int yr = _fnlFastRound(y)
-!     int zr = _fnlFastRound(z)
+!     int xr = round(x)
+!     int yr = round(y)
+!     int zr = round(z)
 
 !     float distance0 = FLT_MAX
 !     float distance1 = FLT_MAX
@@ -1594,7 +1541,7 @@ contains
 
 !                     float newDistance = vecX * vecX + vecY * vecY + vecZ * vecZ
 
-!                     distance1 = internal_fnl_fast_max(internal_fnl_fast_min(distance1, newDistance), distance0)
+!                     distance1 = max(min(distance1, newDistance), distance0)
 !                     if (newDistance < distance0)
 !                     {
 !                         distance0 = newDistance
@@ -1625,9 +1572,9 @@ contains
 !                     float vecY = (float)(yi - y) + RAND_VECS_3D[idx | 1] * cellularJitter
 !                     float vecZ = (float)(zi - z) + RAND_VECS_3D[idx | 2] * cellularJitter
 
-!                     float newDistance = internal_fnl_fast_abs(vecX) + internal_fnl_fast_abs(vecY) + internal_fnl_fast_abs(vecZ)
+!                     float newDistance = abs(vecX) + abs(vecY) + abs(vecZ)
 
-!                     distance1 = internal_fnl_fast_max(internal_fnl_fast_min(distance1, newDistance), distance0)
+!                     distance1 = max(min(distance1, newDistance), distance0)
 !                     if (newDistance < distance0)
 !                     {
 !                         distance0 = newDistance
@@ -1658,9 +1605,9 @@ contains
 !                     float vecY = (float)(yi - y) + RAND_VECS_3D[idx | 1] * cellularJitter
 !                     float vecZ = (float)(zi - z) + RAND_VECS_3D[idx | 2] * cellularJitter
 
-!                     float newDistance = (internal_fnl_fast_abs(vecX) + internal_fnl_fast_abs(vecY) + internal_fnl_fast_abs(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ)
+!                     float newDistance = (abs(vecX) + abs(vecY) + abs(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ)
 
-!                     distance1 = internal_fnl_fast_max(internal_fnl_fast_min(distance1, newDistance), distance0)
+!                     distance1 = max(min(distance1, newDistance), distance0)
 !                     if (newDistance < distance0)
 !                     {
 !                         distance0 = newDistance
@@ -1677,9 +1624,9 @@ contains
 
 !     if (state->cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN && state->cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE)
 !     {
-!         distance0 = _fnlFastSqrt(distance0)
+!         distance0 = sqrt(distance0)
 !         if (state->cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
-!             distance1 = _fnlFastSqrt(distance1)
+!             distance1 = sqrt(distance1)
 !     }
 
 !     switch (state->cellular_return_type)
@@ -1707,8 +1654,8 @@ contains
 
 ! static float _fnlSinglePerlin2D(int seed, FNLfloat x, FNLfloat y)
 ! {
-!     int x0 = _fnlFastFloor(x)
-!     int y0 = _fnlFastFloor(y)
+!     int x0 = floor(x)
+!     int y0 = floor(y)
 
 !     float xd0 = (float)(x - x0)
 !     float yd0 = (float)(y - y0)
@@ -1731,9 +1678,9 @@ contains
 
 ! static float _fnlSinglePerlin3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int x0 = _fnlFastFloor(x)
-!     int y0 = _fnlFastFloor(y)
-!     int z0 = _fnlFastFloor(z)
+!     int x0 = floor(x)
+!     int y0 = floor(y)
+!     int z0 = floor(z)
 
 !     float xd0 = (float)(x - x0)
 !     float yd0 = (float)(y - y0)
@@ -1768,8 +1715,8 @@ contains
 
 ! static float _fnlSingleValueCubic2D(int seed, FNLfloat x, FNLfloat y)
 ! {
-!     int x1 = _fnlFastFloor(x)
-!     int y1 = _fnlFastFloor(y)
+!     int x1 = floor(x)
+!     int y1 = floor(y)
 
 !     float xs = x - (float)x1
 !     float ys = y - (float)y1
@@ -1798,9 +1745,9 @@ contains
 
 ! static float _fnlSingleValueCubic3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int x1 = _fnlFastFloor(x)
-!     int y1 = _fnlFastFloor(y)
-!     int z1 = _fnlFastFloor(z)
+!     int x1 = floor(x)
+!     int y1 = floor(y)
+!     int z1 = floor(z)
 
 !     float xs = x - (float)x1
 !     float ys = y - (float)y1
@@ -1852,8 +1799,8 @@ contains
 
 ! static float _fnlSingleValue2D(int seed, FNLfloat x, FNLfloat y)
 ! {
-!     int x0 = _fnlFastFloor(x)
-!     int y0 = _fnlFastFloor(y)
+!     int x0 = floor(x)
+!     int y0 = floor(y)
 
 !     float xs = _fnlInterpHermite((float)(x - x0))
 !     float ys = _fnlInterpHermite((float)(y - y0))
@@ -1871,9 +1818,9 @@ contains
 
 ! static float _fnlSingleValue3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int x0 = _fnlFastFloor(x)
-!     int y0 = _fnlFastFloor(y)
-!     int z0 = _fnlFastFloor(z)
+!     int x0 = floor(x)
+!     int y0 = floor(y)
+!     int z0 = floor(z)
 
 !     float xs = _fnlInterpHermite((float)(x - x0))
 !     float ys = _fnlInterpHermite((float)(y - y0))
@@ -2059,8 +2006,8 @@ contains
 !     FNLfloat xf = x * frequency
 !     FNLfloat yf = y * frequency
 
-!     int x0 = _fnlFastFloor(xf)
-!     int y0 = _fnlFastFloor(yf)
+!     int x0 = floor(xf)
+!     int y0 = floor(yf)
 
 !     float xs = _fnlInterpHermite((float)(xf - x0))
 !     float ys = _fnlInterpHermite((float)(yf - y0))
@@ -2092,9 +2039,9 @@ contains
 !     FNLfloat yf = y * frequency
 !     FNLfloat zf = z * frequency
 
-!     int x0 = _fnlFastFloor(xf)
-!     int y0 = _fnlFastFloor(yf)
-!     int z0 = _fnlFastFloor(zf)
+!     int x0 = floor(xf)
+!     int y0 = floor(yf)
+!     int z0 = floor(zf)
 
 !     float xs = _fnlInterpHermite((float)(xf - x0))
 !     float ys = _fnlInterpHermite((float)(yf - y0))
@@ -2161,8 +2108,8 @@ contains
 !      * x += s y += s
 !      */
 
-!     int i = _fnlFastFloor(x)
-!     int j = _fnlFastFloor(y)
+!     int i = floor(x)
+!     int j = floor(y)
 !     float xi = (float)(x - i)
 !     float yi = (float)(y - j)
 
@@ -2256,9 +2203,9 @@ contains
 !      * x = r - x y = r - y z = r - z
 !      */
 
-!     int i = _fnlFastRound(x)
-!     int j = _fnlFastRound(y)
-!     int k = _fnlFastRound(z)
+!     int i = round(x)
+!     int j = round(y)
+!     int k = round(z)
 !     float x0 = (float)x - i
 !     float y0 = (float)y - j
 !     float z0 = (float)z - k
