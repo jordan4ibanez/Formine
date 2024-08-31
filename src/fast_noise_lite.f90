@@ -1039,181 +1039,187 @@ contains
 
 
 ! Simplex/OpenSimplex2 Noise
-  
 
-! static float internal_fnl_single_complex_2d(int seed, FNLfloat x, FNLfloat y)
-! {
-!     // 2D OpenSimplex2 case uses the same algorithm as ordinary Simplex.
 
-!     const float SQRT3 = 1.7320508075688772935274463415059f
-!     const float G2 = (3 - SQRT3) / 6
+  real(c_float) function internal_fnl_single_complex_2d(seed, x, y) result(output)
+    implicit none
 
-!     /*
-!      * --- Skew moved to TransformNoiseCoordinate method ---
-!      * const FNLfloat F2 = 0.5f * (SQRT3 - 1)
-!      * FNLfloat s = (x + y) * F2
-!      * x += s y += s
-!      */
+    integer(c_int), intent(in), value :: seed
+    real(fnl_float), intent(in), value :: x, y
+    real(c_float) :: sqrt_3, g2, xi, yi, t, x0, y0, n0, n1, n2, a, b, c, x2, y2, x1, y1
+    integer(c_int):: i, j
 
-!     int i = floor(x)
-!     int j = floor(y)
-!     float xi = (float)(x - i)
-!     float yi = (float)(y - j)
+    ! 2D OpenSimplex2 case uses the same algorithm as ordinary Simplex.
 
-!     float t = (xi + yi) * G2
-!     float x0 = (float)(xi - t)
-!     float y0 = (float)(yi - t)
+    sqrt_3 = 1.7320508075688772935274463415059
+    g2 = (3.0 - sqrt_3) / 6.0
 
-!     i *= PRIME_X
-!     j *= PRIME_Y
+    !
+    ! --- Skew moved to TransformNoiseCoordinate method ---
+    ! const FNLfloat F2 = 0.5f * (SQRT3 - 1)
+    ! FNLfloat s = (x + y) * F2
+    ! x += s y += s
+    !
 
-!     float n0, n1, n2
+    i = floor(x)
+    j = floor(y)
+    xi = real(x - i, c_float)
+    yi = real(y - j, c_float)
 
-!     float a = 0.5f - x0 * x0 - y0 * y0
-!     if (a <= 0)
-!         n0 = 0
-!     else
-!     {
-!         n0 = (a * a) * (a * a) * internal_fnl_grad_coord_2d(seed, i, j, x0, y0)
-!     }
+    t = (xi + yi) * G2
+    x0 = real(xi - t, c_float)
+    y0 = real(yi - t, c_float)
 
-!     float c = (float)(2 * (1 - 2 * G2) * (1 / G2 - 2)) * t + ((float)(-2 * (1 - 2 * G2) * (1 - 2 * G2)) + a)
-!     if (c <= 0)
-!         n2 = 0
-!     else
-!     {
-!         float x2 = x0 + (2 * (float)G2 - 1)
-!         float y2 = y0 + (2 * (float)G2 - 1)
-!         n2 = (c * c) * (c * c) * internal_fnl_grad_coord_2d(seed, i + PRIME_X, j + PRIME_Y, x2, y2)
-!     }
+    i = i * PRIME_X
+    j = j * PRIME_Y
 
-!     if (y0 > x0)
-!     {
-!         float x1 = x0 + (float)G2
-!         float y1 = y0 + ((float)G2 - 1)
-!         float b = 0.5f - x1 * x1 - y1 * y1
-!         if (b <= 0)
-!             n1 = 0
-!         else
-!         {
-!             n1 = (b * b) * (b * b) * internal_fnl_grad_coord_2d(seed, i, j + PRIME_Y, x1, y1)
-!         }
-!     }
-!     else
-!     {
-!         float x1 = x0 + ((float)G2 - 1)
-!         float y1 = y0 + (float)G2
-!         float b = 0.5f - x1 * x1 - y1 * y1
-!         if (b <= 0)
-!             n1 = 0
-!         else
-!         {
-!             n1 = (b * b) * (b * b) * internal_fnl_grad_coord_2d(seed, i + PRIME_X, j, x1, y1)
-!         }
-!     }
+    a = 0.5 - x0 * x0 - y0 * y0
+    if (a <= 0) then
+      n0 = 0.0
+    else
+      n0 = (a * a) * (a * a) * internal_fnl_grad_coord_2d(seed, i, j, x0, y0)
+    end if
 
-!     return (n0 + n1 + n2) * 99.83685446303647f
-! }
+    c = real(2.0 * (1.0 - 2.0 * G2) * (1.0 / G2 - 2.0), c_float) * t + (real(-2.0 * (1.0 - 2.0 * G2) * (1.0 - 2.0 * G2), c_float) + a)
+    if (c <= 0) then
+      n2 = 0.0
+    else
+      x2 = x0 + (2.0 * real(G2, c_float) - 1.0)
+      y2 = y0 + (2.0 * real(G2, c_float) - 1.0)
+      n2 = (c * c) * (c * c) * internal_fnl_grad_coord_2d(seed, i + PRIME_X, j + PRIME_Y, x2, y2)
+    end if
 
-! static float internal_fnl_single_open_simplex_2_3d(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
-! {
-!     // 3D OpenSimplex2 case uses two offset rotated cube grids.
+    if (y0 > x0) then
+      x1 = x0 + real(G2, c_float)
+      y1 = y0 + (real(G2, c_float) - 1.0)
+      b = 0.5 - x1 * x1 - y1 * y1
+      if (b <= 0) then
+        n1 = 0.0
+      else
+        n1 = (b * b) * (b * b) * internal_fnl_grad_coord_2d(seed, i, j + PRIME_Y, x1, y1)
+      end if
+    else
+      x1 = x0 + (real(G2, c_float) - 1.0)
+      y1 = y0 + real(G2, c_float)
+      b = 0.5 - x1 * x1 - y1 * y1
+      if (b <= 0) then
+        n1 = 0.0
+      else
+        n1 = (b * b) * (b * b) * internal_fnl_grad_coord_2d(seed, i + PRIME_X, j, x1, y1)
+      end if
+    end if
 
-!     /*
-!      * --- Rotation moved to TransformNoiseCoordinate method ---
-!      * const FNLfloat R3 = (FNLfloat)(2.0 / 3.0)
-!      * FNLfloat r = (x + y + z) * R3 // Rotation, not skew
-!      * x = r - x y = r - y z = r - z
-!      */
+    output = (n0 + n1 + n2) * 99.83685446303647
+  end function internal_fnl_single_complex_2d
 
-!     int i = round(x)
-!     int j = round(y)
-!     int k = round(z)
-!     float x0 = (float)(x - i)
-!     float y0 = (float)(y - j)
-!     float z0 = (float)(z - k)
 
-!     int xNSign = (int)(-1.0f - x0) | 1
-!     int yNSign = (int)(-1.0f - y0) | 1
-!     int zNSign = (int)(-1.0f - z0) | 1
+  real(c_float) function internal_fnl_single_open_simplex_2_3d(seed, x, y, z) result(output)
+    implicit none
 
-!     float ax0 = xNSign * -x0
-!     float ay0 = yNSign * -y0
-!     float az0 = zNSign * -z0
+    integer(c_int), intent(in), value :: seed
+    real(fnl_float), intent(in), value :: x, y, z
+    real(c_float) :: sqrt_3, g2, xi, yi, t, x0, y0, z0, n0, n1, n2, a, b, c, x2, y2, x1, y1, z1, ax0, az0, ay0, value
+    integer(c_int):: mutable_seed, i, j, k, x_n_sign, y_n_sign, z_n_sign, l, i1, j1, k1
 
-!     i *= PRIME_X
-!     j *= PRIME_Y
-!     k *= PRIME_Z
+    ! 3D OpenSimplex2 case uses two offset rotated cube grids.
 
-!     float value = 0
-!     float a = (0.6f - x0 * x0) - (y0 * y0 + z0 * z0)
+    !
+    ! --- Rotation moved to TransformNoiseCoordinate method ---
+    ! const FNLfloat R3 = (FNLfloat)(2.0 / 3.0)
+    ! FNLfloat r = (x + y + z) * R3 // Rotation, not skew
+    ! x = r - x y = r - y z = r - z
+    !
 
-!     for (int l = 0  l++)
-!     {
-!         if (a > 0)
-!         {
-!             value += (a * a) * (a * a) * internal_fnl_grad_coord_3d(seed, i, j, k, x0, y0, z0)
-!         }
+    mutable_seed = seed
 
-!         float b = a + 1
-!         int i1 = i
-!         int j1 = j
-!         int k1 = k
-!         float x1 = x0
-!         float y1 = y0
-!         float z1 = z0
-!         if (ax0 >= ay0 && ax0 >= az0)
-!         {
-!             x1 += xNSign
-!             b -= xNSign * 2 * x1
-!             i1 -= xNSign * PRIME_X
-!         }
-!         else if (ay0 > ax0 && ay0 >= az0)
-!         {
-!             y1 += yNSign
-!             b -= yNSign * 2 * y1
-!             j1 -= yNSign * PRIME_Y
-!         }
-!         else
-!         {
-!             z1 += zNSign
-!             b -= zNSign * 2 * z1
-!             k1 -= zNSign * PRIME_Z
-!         }
+    i = nint(x)
+    j = nint(y)
+    k = nint(z)
+    x0 = real(x - i, c_float)
+    y0 = real(y - j, c_float)
+    z0 = real(z - k, c_float)
 
-!         if (b > 0)
-!         {
-!             value += (b * b) * (b * b) * internal_fnl_grad_coord_3d(seed, i1, j1, k1, x1, y1, z1)
-!         }
+    x_n_sign = ior(int((-1.0) - x0, c_int), 1)
+    y_n_sign = ior(int((-1.0) - y0, c_int), 1)
+    z_n_sign = ior(int((-1.0) - z0, c_int), 1)
 
-!         if (l == 1)
-!             break
+    ax0 = x_n_sign * (-x0)
+    ay0 = y_n_sign * (-y0)
+    az0 = z_n_sign * (-z0)
 
-!         ax0 = 0.5f - ax0
-!         ay0 = 0.5f - ay0
-!         az0 = 0.5f - az0
+    i = i * PRIME_X
+    j = j * PRIME_Y
+    k = k * PRIME_Z
 
-!         x0 = xNSign * ax0
-!         y0 = yNSign * ay0
-!         z0 = zNSign * az0
+    value = 0
+    a = (0.6 - x0 * x0) - (y0 * y0 + z0 * z0)
 
-!         a += (0.75f - ax0) - (ay0 + az0)
+    l = 0
+    do
+      l = l + 1
 
-!         i += (xNSign >> 1) & PRIME_X
-!         j += (yNSign >> 1) & PRIME_Y
-!         k += (zNSign >> 1) & PRIME_Z
+      if (a > 0) then
+        value = value + ((a * a) * (a * a) * internal_fnl_grad_coord_3d(mutable_seed, i, j, k, x0, y0, z0))
+      end if
 
-!         xNSign = -xNSign
-!         yNSign = -yNSign
-!         zNSign = -zNSign
+      b = a + 1
+      i1 = i
+      j1 = j
+      k1 = k
+      x1 = x0
+      y1 = y0
+      z1 = z0
 
-!         seed = ~seed
-!     }
+      if (ax0 >= ay0 .and. ax0 >= az0) then
+        x1 = x1 + x_n_sign
+        b = b - (x_n_sign * 2 * x1)
+        i1 = i1 - (x_n_sign * PRIME_X)
+      else if (ay0 > ax0 .and. ay0 >= az0) then
 
-!     return value * 32.69428253173828125f
-! }
+        y1 = y1 + y_n_sign
+        b = b - (y_n_sign * 2 * y1)
+        j1 = j1 - (y_n_sign * PRIME_Y)
+      else
+        z1 = z1 + z_n_sign
+        b = b - (z_n_sign * 2 * z1)
+        k1 = k1 - (z_n_sign * PRIME_Z)
+      end if
+
+      if (b > 0) then
+        value = value + ((b * b) * (b * b) * internal_fnl_grad_coord_3d(mutable_seed, i1, j1, k1, x1, y1, z1))
+      end if
+
+      if (l == 1) then
+        exit
+      end if
+
+      ax0 = 0.5 - ax0
+      ay0 = 0.5 - ay0
+      az0 = 0.5 - az0
+
+      x0 = x_n_sign * ax0
+      y0 = y_n_sign * ay0
+      z0 = z_n_sign * az0
+
+      a = a + ((0.75 - ax0) - (ay0 + az0))
+
+      i = i + and(shiftr(x_n_sign, 1), PRIME_X)
+      j = j + and(shiftr(y_n_sign, 1), PRIME_Y)
+      k = k + and(shiftr(z_n_sign, 1), PRIME_Z)
+
+      x_n_sign = -x_n_sign
+      y_n_sign = -y_n_sign
+      z_n_sign = -z_n_sign
+
+      mutable_seed = not(mutable_seed)
+    end do
+
+    output = value * 32.69428253173828125
+  end function internal_fnl_single_open_simplex_2_3d
+
 
 ! OpenSimplex2S Noise
+  
 
 ! static float internal_fnl_single_open_simplex_2s_2d(int seed, FNLfloat x, FNLfloat y)
 ! {
@@ -1541,8 +1547,8 @@ contains
 
 ! static float internal_fnl_single_cellular_2d(fnl_state *state, int seed, FNLfloat x, FNLfloat y)
 ! {
-!     int xr = round(x)
-!     int yr = round(y)
+!     int xr = nint(x)
+!     int yr = nint(y)
 
 !     float distance0 = FLT_MAX
 !     float distance1 = FLT_MAX
@@ -1666,9 +1672,9 @@ contains
 
 ! static float internal_fnl_single_cellular_3d(fnl_state *state, int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int xr = round(x)
-!     int yr = round(y)
-!     int zr = round(z)
+!     int xr = nint(x)
+!     int yr = nint(y)
+!     int zr = nint(z)
 
 !     float distance0 = FLT_MAX
 !     float distance1 = FLT_MAX
@@ -2366,20 +2372,20 @@ contains
 !      * x = r - x y = r - y z = r - z
 !      */
 
-!     int i = round(x)
-!     int j = round(y)
-!     int k = round(z)
+!     int i = nint(x)
+!     int j = nint(y)
+!     int k = nint(z)
 !     float x0 = (float)x - i
 !     float y0 = (float)y - j
 !     float z0 = (float)z - k
 
-!     int xNSign = (int)(-x0 - 1.0f) | 1
-!     int yNSign = (int)(-y0 - 1.0f) | 1
-!     int zNSign = (int)(-z0 - 1.0f) | 1
+!     int x_n_sign = (int)(-x0 - 1.0f) | 1
+!     int y_n_sign = (int)(-y0 - 1.0f) | 1
+!     int z_n_sign = (int)(-z0 - 1.0f) | 1
 
-!     float ax0 = xNSign * -x0
-!     float ay0 = yNSign * -y0
-!     float az0 = zNSign * -z0
+!     float ax0 = x_n_sign * -x0
+!     float ay0 = y_n_sign * -y0
+!     float az0 = z_n_sign * -z0
 
 !     i *= PRIME_X
 !     j *= PRIME_Y
@@ -2413,21 +2419,21 @@ contains
 !         float z1 = z0
 !         if (ax0 >= ay0 && ax0 >= az0)
 !         {
-!             x1 += xNSign
-!             b -= xNSign * 2 * x1
-!             i1 -= xNSign * PRIME_X
+!             x1 += x_n_sign
+!             b -= x_n_sign * 2 * x1
+!             i1 -= x_n_sign * PRIME_X
 !         }
 !         else if (ay0 > ax0 && ay0 >= az0)
 !         {
-!             y1 += yNSign
-!             b -= yNSign * 2 * y1
-!             j1 -= yNSign * PRIME_Y
+!             y1 += y_n_sign
+!             b -= y_n_sign * 2 * y1
+!             j1 -= y_n_sign * PRIME_Y
 !         }
 !         else
 !         {
-!             z1 += zNSign
-!             b -= zNSign * 2 * z1
-!             k1 -= zNSign * PRIME_Z
+!             z1 += z_n_sign
+!             b -= z_n_sign * 2 * z1
+!             k1 -= z_n_sign * PRIME_Z
 !         }
 
 !         if (b > 0)
@@ -2450,19 +2456,19 @@ contains
 !         ay0 = 0.5f - ay0
 !         az0 = 0.5f - az0
 
-!         x0 = xNSign * ax0
-!         y0 = yNSign * ay0
-!         z0 = zNSign * az0
+!         x0 = x_n_sign * ax0
+!         y0 = y_n_sign * ay0
+!         z0 = z_n_sign * az0
 
 !         a += (0.75f - ax0) - (ay0 + az0)
 
-!         i += (xNSign >> 1) & PRIME_X
-!         j += (yNSign >> 1) & PRIME_Y
-!         k += (zNSign >> 1) & PRIME_Z
+!         i += (x_n_sign >> 1) & PRIME_X
+!         j += (y_n_sign >> 1) & PRIME_Y
+!         k += (z_n_sign >> 1) & PRIME_Z
 
-!         xNSign = -xNSign
-!         yNSign = -yNSign
-!         zNSign = -zNSign
+!         x_n_sign = -x_n_sign
+!         y_n_sign = -y_n_sign
+!         z_n_sign = -z_n_sign
 
 !         seed += 1293373
 !     }
