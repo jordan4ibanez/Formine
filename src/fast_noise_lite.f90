@@ -726,76 +726,74 @@ contains
 ! Noise Coordinate Transforms (frequency, and possible skew or rotation)
 
 
-! static void _fnlTransformNoiseCoordinate2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
-! {
-!     *x *= state->frequency
-!     *y *= state->frequency
+  subroutine internal_fnl_transform_noise_coordinate_2d(state, x, y)
+    implicit none
 
-!     switch (state->noise_type)
-!     {
-!     case FNL_NOISE_OPENSIMPLEX2:
-!     case FNL_NOISE_OPENSIMPLEX2S:
-!     {
-!         const FNLfloat SQRT3 = (FNLfloat)1.7320508075688772935274463415059
-!         const FNLfloat F2 = 0.5f * (SQRT3 - 1)
-!         FNLfloat t = (*x + *y) * F2
-!         *x += t
-!         *y += t
-!     }
-!     break
-!     default:
-!         break
-!     }
-! }
+    type(fnl_state), intent(in) :: state
+    real(kind(fnl_float)), intent(inout) :: x, y
+    real(kind(fnl_float)) sqrt_3, f2, t
 
-! static void _fnlTransformNoiseCoordinate3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
-! {
-!     *x *= state->frequency
-!     *y *= state->frequency
-!     *z *= state->frequency
+    x = x * state%frequency
+    y = y * state%frequency
 
-!     switch (state->rotation_type_3d)
-!     {
-!     case FNL_ROTATION_IMPROVE_XY_PLANES:
-!     {
-!         FNLfloat xy = *x + *y
-!         FNLfloat s2 = xy * -(FNLfloat)0.211324865405187
-!         *z *= (FNLfloat)0.577350269189626
-!         *x += s2 - *z
-!         *y = *y + s2 - *z
-!         *z += xy * (FNLfloat)0.577350269189626
-!     }
-!     break
-!     case FNL_ROTATION_IMPROVE_XZ_PLANES:
-!     {
-!         FNLfloat xz = *x + *z
-!         FNLfloat s2 = xz * -(FNLfloat)0.211324865405187
-!         *y *= (FNLfloat)0.577350269189626
-!         *x += s2 - *y
-!         *z += s2 - *y
-!         *y += xz * (FNLfloat)0.577350269189626
-!     }
-!     break
-!     default:
-!         switch (state->noise_type)
-!         {
-!         case FNL_NOISE_OPENSIMPLEX2:
-!         case FNL_NOISE_OPENSIMPLEX2S:
-!         {
-!             const FNLfloat R3 = (FNLfloat)(2.0 / 3.0)
-!             FNLfloat r = (*x + *y + *z) * R3 // Rotation, not skew
-!             *x = r - *x
-!             *y = r - *y
-!             *z = r - *z
-!         }
-!         break
-!         default:
-!             break
-!         }
-!     }
-! }
+    select case(state%noise_type)
+     case (FNL_NOISE_OPENSIMPLEX2, FNL_NOISE_OPENSIMPLEX2S)
+      sqrt_3 = real(1.7320508075688772935274463415059, kind(fnl_float))
+      f2 = 0.5 * (sqrt_3 - 1.0)
+      t = (x + y) * f2
+      x = x + t
+      y = y + t
+     case default
+    end select
+  end subroutine internal_fnl_transform_noise_coordinate_2d
+
+
+  subroutine internal_fnl_transform_noise_coordinates_3d(state, x, y, z)
+    implicit none
+
+    type(fnl_state), intent(in) :: state
+    real(kind(fnl_float)), intent(inout) :: x, y, z
+    real(kind(fnl_float)) sqrt_3, xy, s2, xz, r3, r
+
+    x = x * state%frequency
+    y = y * state%frequency
+    z = z * state%frequency
+
+    select case (state%rotation_type_3d)
+     case (FNL_ROTATION_IMPROVE_XY_PLANES)
+      xy = x + y
+      s2 = xy * (-real(0.211324865405187, kind(fnl_float)))
+      z = z * real(0.577350269189626, kind(fnl_float))
+      x = x + (s2 - z)
+      y = y + s2 - z
+      z = z + (xy * real(0.577350269189626, kind(fnl_float)))
+
+     case (FNL_ROTATION_IMPROVE_XZ_PLANES)
+      xz = x + z
+      s2 = xz * (-real(0.211324865405187, kind(fnl_float)))
+      y = y * real(0.577350269189626, kind(fnl_float))
+      x = x + (s2 - y)
+      z = z + (s2 - y)
+      y = y + (xz * real(0.577350269189626, kind(fnl_float)))
+
+     case default
+      select case (state%noise_type)
+       case (FNL_NOISE_OPENSIMPLEX2S, FNL_NOISE_OPENSIMPLEX2)
+
+        r3 = real((2.0 / 3.0), kind(fnl_float))
+        r = (x + y + z) * r3 ! Rotation, not skew
+        x = r - x
+        y = r - y
+        z = r - z
+
+       case default
+      end select
+    end select ! state%rotation_type_3d
+  end subroutine internal_fnl_transform_noise_coordinates_3d
+
 
 ! Domain Warp Coordinate Transforms
+
 
 ! static void _fnlTransformDomainWarpCoordinate2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
@@ -2455,7 +2453,7 @@ contains
 !  */
 ! float fnlGetNoise2D(fnl_state *state, FNLfloat x, FNLfloat y)
 ! {
-!     _fnlTransformNoiseCoordinate2D(state, &x, &y)
+!     internal_fnl_transform_noise_coordinate_2d(state, &x, &y)
 
 !     switch (state->fractal_type)
 !     {
@@ -2476,7 +2474,7 @@ contains
 !  */
 ! float fnlGetNoise3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     _fnlTransformNoiseCoordinate3D(state, &x, &y, &z)
+!     internal_fnl_transform_noise_coordinates_3d(state, &x, &y, &z)
 
 !     // Select a noise type
 !     switch (state->fractal_type)
