@@ -403,4 +403,14 @@ contains
   end function glfw_get_window_height_f32
 
 
+  !* Set the key callback function pointer.
+  subroutine glfw_set_key_callback(callback_function_pointer)
+    implicit none
+
+    type(c_funptr), intent(in) :: callback_function_pointer
+
+    call internal_glfw_set_key_callback(window_pointer, callback_function_pointer)
+  end subroutine glfw_set_key_callback
+
+
 end module glfw
