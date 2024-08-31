@@ -16,13 +16,15 @@ contains
     integer(c_int) :: x, y
 
     noise_state = fnl_state()
+    noise_state%noise_type = FNL_NOISE_PERLIN
 
     print*,"BEGIN NOISE TEST"
     do x = -10000, 10000
       do y = -10000, 10000
         test_data = fnl_get_noise_2d(noise_state, real(x, c_float), real(y, c_float))
+        print"(f0.5)", test_data
         if (test_data < -1.00001 .or. test_data > 1.00001) then
-          print"(f0.5)",test_data
+          ! print"(f0.5)",test_data
           error stop "walked out of bounds"
         end if
       end do
