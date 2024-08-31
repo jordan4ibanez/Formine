@@ -267,9 +267,9 @@ module fast_noise_lite
 contains
 
 
-! ====================
+! =====================================
 ! Below this line is the implementation
-! ====================
+! =====================================
 
 ! Constants
 
