@@ -417,36 +417,73 @@ contains
   end function internal_fnl_inv_sqrt
 
 
-! static inline float _fnlLerp(float a, float b, float t) { return a + t * (b - a) }
+  real(c_float) function internal_fnl_lerp(a, b, t) result(output)
+    implicit none
 
-! static inline float _fnlInterpHermite(float t) { return t * t * (3 - 2 * t) }
+    real(c_float), intent(in), value :: a, b, t
 
-! static inline float _fnlInterpQuintic(float t) { return t * t * t * (t * (t * 6 - 15) + 10) }
+    output =  a + t * (b - a)
+  end function internal_fnl_lerp
 
-! static inline float _fnlCubicLerp(float a, float b, float c, float d, float t)
-! {
-!     float p = (d - c) - (a - b)
-!     return t * t * t * p + t * t * ((a - b) - p) + t * (c - a) + b
-! }
 
-! static inline float _fnlPingPong(float t)
-! {
-!     t -= (int)(t * 0.5f) * 2
-!     return t < 1 ? t : 2 - t
-! }
+  real(c_float) function internal_fnl_interp_hermite(t) result(output)
+    implicit none
 
-! static float _fnlCalculateFractalBounding(fnl_state *state)
-! {
-!     float gain = abs(state->gain)
-!     float amp = gain
-!     float ampFractal = 1.0f
-!     for (int i = 1 i < state->octaves i++)
-!     {
-!         ampFractal += amp
-!         amp *= gain
-!     }
-!     return 1.0f / ampFractal
-! }
+    real(c_float), intent(in), value :: t
+
+    output = t * t * (3 - 2 * t)
+  end function internal_fnl_interp_hermite
+
+
+  real(c_float) function internal_fnl_interp_quintic(t) result(output)
+    implicit none
+
+    real(c_float), intent(in), value :: t
+
+    output = t * t * t * (t * (t * 6 - 15) + 10)
+  end function internal_fnl_interp_quintic
+
+
+  real(c_float) function internal_fnl_cubic_lerp(a, b, c, d, t) result(output)
+    implicit none
+
+    real(c_float), intent(in), value :: a, b, c, d, t
+    real(c_float) :: p
+
+    p = (d - c) - (a - b)
+    output = t * t * t * p + t * t * ((a - b) - p) + t * (c - a) + b
+  end function internal_fnl_cubic_lerp
+
+
+  real(c_float) function internal_fnl_ping_pong(t) result(output)
+    implicit none
+
+    real(c_float), intent(in), value :: t
+    real(c_float) :: i
+
+    i = i - (int(t * 0.5) * 2)
+
+    output = merge(t, 2 - t, i < 1)
+  end function internal_fnl_ping_pong
+
+
+  real(c_float) function internal_fnl_calculate_fractal_bounding(state) result(output)
+    implicit none
+
+    type(fnl_state), intent(in) :: state
+    real(c_float) :: gain, amp, amp_fractal
+    integer(c_int) :: i
+
+    gain = abs(state%gain)
+    amp = gain
+    amp_fractal = 1.0
+
+    do i = 1,state%octaves - 1
+      amp_fractal = amp_fractal + amp
+      amp = amp * gain
+    end do
+    output = 1.0 / amp_fractal
+  end function internal_fnl_calculate_fractal_bounding
 
 ! Hashing
 
@@ -753,13 +790,13 @@ contains
 ! {
 !     int seed = state->seed
 !     float sum = 0
-!     float amp = _fnlCalculateFractalBounding(state)
+!     float amp = internal_fnl_calculate_fractal_bounding(state)
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
 !         float noise = _fnlGenNoiseSingle2D(state, seed++, x, y)
 !         sum += noise * amp
-!         amp *= _fnlLerp(1.0f, min(noise + 1, 2) * 0.5f, state->weighted_strength)
+!         amp *= internal_fnl_lerp(1.0f, min(noise + 1, 2) * 0.5f, state->weighted_strength)
 
 !         x *= state->lacunarity
 !         y *= state->lacunarity
@@ -773,13 +810,13 @@ contains
 ! {
 !     int seed = state->seed
 !     float sum = 0
-!     float amp = _fnlCalculateFractalBounding(state)
+!     float amp = internal_fnl_calculate_fractal_bounding(state)
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
 !         float noise = _fnlGenNoiseSingle3D(state, seed++, x, y, z)
 !         sum += noise * amp
-!         amp *= _fnlLerp(1.0f, (noise + 1) * 0.5f, state->weighted_strength)
+!         amp *= internal_fnl_lerp(1.0f, (noise + 1) * 0.5f, state->weighted_strength)
 
 !         x *= state->lacunarity
 !         y *= state->lacunarity
@@ -796,13 +833,13 @@ contains
 ! {
 !     int seed = state->seed
 !     float sum = 0
-!     float amp = _fnlCalculateFractalBounding(state)
+!     float amp = internal_fnl_calculate_fractal_bounding(state)
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
 !         float noise = abs(_fnlGenNoiseSingle2D(state, seed++, x, y))
 !         sum += (noise * -2 + 1) * amp
-!         amp *= _fnlLerp(1.0f, 1 - noise, state->weighted_strength)
+!         amp *= internal_fnl_lerp(1.0f, 1 - noise, state->weighted_strength)
 
 !         x *= state->lacunarity
 !         y *= state->lacunarity
@@ -816,13 +853,13 @@ contains
 ! {
 !     int seed = state->seed
 !     float sum = 0
-!     float amp = _fnlCalculateFractalBounding(state)
+!     float amp = internal_fnl_calculate_fractal_bounding(state)
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
 !         float noise = abs(_fnlGenNoiseSingle3D(state, seed++, x, y, z))
 !         sum += (noise * -2 + 1) * amp
-!         amp *= _fnlLerp(1.0f, 1 - noise, state->weighted_strength)
+!         amp *= internal_fnl_lerp(1.0f, 1 - noise, state->weighted_strength)
 
 !         x *= state->lacunarity
 !         y *= state->lacunarity
@@ -839,13 +876,13 @@ contains
 ! {
 !     int seed = state->seed
 !     float sum = 0
-!     float amp = _fnlCalculateFractalBounding(state)
+!     float amp = internal_fnl_calculate_fractal_bounding(state)
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = _fnlPingPong((_fnlGenNoiseSingle2D(state, seed++, x, y) + 1) * state->ping_pong_strength)
+!         float noise = internal_fnl_ping_pong((_fnlGenNoiseSingle2D(state, seed++, x, y) + 1) * state->ping_pong_strength)
 !         sum += (noise - 0.5f) * 2 * amp
-!         amp *= _fnlLerp(1.0f, noise, state->weighted_strength)
+!         amp *= internal_fnl_lerp(1.0f, noise, state->weighted_strength)
 
 !         x *= state->lacunarity
 !         y *= state->lacunarity
@@ -859,13 +896,13 @@ contains
 ! {
 !     int seed = state->seed
 !     float sum = 0
-!     float amp = _fnlCalculateFractalBounding(state)
+!     float amp = internal_fnl_calculate_fractal_bounding(state)
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = _fnlPingPong((_fnlGenNoiseSingle3D(state, seed++, x, y, z) + 1) * state->ping_pong_strength)
+!         float noise = internal_fnl_ping_pong((_fnlGenNoiseSingle3D(state, seed++, x, y, z) + 1) * state->ping_pong_strength)
 !         sum += (noise - 0.5f) * 2 * amp
-!         amp *= _fnlLerp(1.0f, noise, state->weighted_strength)
+!         amp *= internal_fnl_lerp(1.0f, noise, state->weighted_strength)
 
 !         x *= state->lacunarity
 !         y *= state->lacunarity
@@ -1662,18 +1699,18 @@ contains
 !     float xd1 = xd0 - 1
 !     float yd1 = yd0 - 1
 
-!     float xs = _fnlInterpQuintic(xd0)
-!     float ys = _fnlInterpQuintic(yd0)
+!     float xs = internal_fnl_interp_quintic(xd0)
+!     float ys = internal_fnl_interp_quintic(yd0)
 
 !     x0 *= PRIME_X
 !     y0 *= PRIME_Y
 !     int x1 = x0 + PRIME_X
 !     int y1 = y0 + PRIME_Y
 
-!     float xf0 = _fnlLerp(_fnlGradCoord2D(seed, x0, y0, xd0, yd0), _fnlGradCoord2D(seed, x1, y0, xd1, yd0), xs)
-!     float xf1 = _fnlLerp(_fnlGradCoord2D(seed, x0, y1, xd0, yd1), _fnlGradCoord2D(seed, x1, y1, xd1, yd1), xs)
+!     float xf0 = internal_fnl_lerp(_fnlGradCoord2D(seed, x0, y0, xd0, yd0), _fnlGradCoord2D(seed, x1, y0, xd1, yd0), xs)
+!     float xf1 = internal_fnl_lerp(_fnlGradCoord2D(seed, x0, y1, xd0, yd1), _fnlGradCoord2D(seed, x1, y1, xd1, yd1), xs)
 
-!     return _fnlLerp(xf0, xf1, ys) * 1.4247691104677813f
+!     return internal_fnl_lerp(xf0, xf1, ys) * 1.4247691104677813f
 ! }
 
 ! static float _fnlSinglePerlin3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
@@ -1689,9 +1726,9 @@ contains
 !     float yd1 = yd0 - 1
 !     float zd1 = zd0 - 1
 
-!     float xs = _fnlInterpQuintic(xd0)
-!     float ys = _fnlInterpQuintic(yd0)
-!     float zs = _fnlInterpQuintic(zd0)
+!     float xs = internal_fnl_interp_quintic(xd0)
+!     float ys = internal_fnl_interp_quintic(yd0)
+!     float zs = internal_fnl_interp_quintic(zd0)
 
 !     x0 *= PRIME_X
 !     y0 *= PRIME_Y
@@ -1700,15 +1737,15 @@ contains
 !     int y1 = y0 + PRIME_Y
 !     int z1 = z0 + PRIME_Z
 
-!     float xf00 = _fnlLerp(_fnlGradCoord3D(seed, x0, y0, z0, xd0, yd0, zd0), _fnlGradCoord3D(seed, x1, y0, z0, xd1, yd0, zd0), xs)
-!     float xf10 = _fnlLerp(_fnlGradCoord3D(seed, x0, y1, z0, xd0, yd1, zd0), _fnlGradCoord3D(seed, x1, y1, z0, xd1, yd1, zd0), xs)
-!     float xf01 = _fnlLerp(_fnlGradCoord3D(seed, x0, y0, z1, xd0, yd0, zd1), _fnlGradCoord3D(seed, x1, y0, z1, xd1, yd0, zd1), xs)
-!     float xf11 = _fnlLerp(_fnlGradCoord3D(seed, x0, y1, z1, xd0, yd1, zd1), _fnlGradCoord3D(seed, x1, y1, z1, xd1, yd1, zd1), xs)
+!     float xf00 = internal_fnl_lerp(_fnlGradCoord3D(seed, x0, y0, z0, xd0, yd0, zd0), _fnlGradCoord3D(seed, x1, y0, z0, xd1, yd0, zd0), xs)
+!     float xf10 = internal_fnl_lerp(_fnlGradCoord3D(seed, x0, y1, z0, xd0, yd1, zd0), _fnlGradCoord3D(seed, x1, y1, z0, xd1, yd1, zd0), xs)
+!     float xf01 = internal_fnl_lerp(_fnlGradCoord3D(seed, x0, y0, z1, xd0, yd0, zd1), _fnlGradCoord3D(seed, x1, y0, z1, xd1, yd0, zd1), xs)
+!     float xf11 = internal_fnl_lerp(_fnlGradCoord3D(seed, x0, y1, z1, xd0, yd1, zd1), _fnlGradCoord3D(seed, x1, y1, z1, xd1, yd1, zd1), xs)
 
-!     float yf0 = _fnlLerp(xf00, xf10, ys)
-!     float yf1 = _fnlLerp(xf01, xf11, ys)
+!     float yf0 = internal_fnl_lerp(xf00, xf10, ys)
+!     float yf1 = internal_fnl_lerp(xf01, xf11, ys)
 
-!     return _fnlLerp(yf0, yf1, zs) * 0.964921414852142333984375f
+!     return internal_fnl_lerp(yf0, yf1, zs) * 0.964921414852142333984375f
 ! }
 
 ! Value Cubic
@@ -1731,14 +1768,14 @@ contains
 !     int x3 = x1 + (int)((long)PRIME_X << 1)
 !     int y3 = y1 + (int)((long)PRIME_Y << 1)
 
-!     return _fnlCubicLerp(
-!         _fnlCubicLerp(_fnlValCoord2D(seed, x0, y0), _fnlValCoord2D(seed, x1, y0), _fnlValCoord2D(seed, x2, y0), _fnlValCoord2D(seed, x3, y0),
+!     return internal_fnl_cubic_lerp(
+!         internal_fnl_cubic_lerp(_fnlValCoord2D(seed, x0, y0), _fnlValCoord2D(seed, x1, y0), _fnlValCoord2D(seed, x2, y0), _fnlValCoord2D(seed, x3, y0),
 !                       xs),
-!         _fnlCubicLerp(_fnlValCoord2D(seed, x0, y1), _fnlValCoord2D(seed, x1, y1), _fnlValCoord2D(seed, x2, y1), _fnlValCoord2D(seed, x3, y1),
+!         internal_fnl_cubic_lerp(_fnlValCoord2D(seed, x0, y1), _fnlValCoord2D(seed, x1, y1), _fnlValCoord2D(seed, x2, y1), _fnlValCoord2D(seed, x3, y1),
 !                       xs),
-!         _fnlCubicLerp(_fnlValCoord2D(seed, x0, y2), _fnlValCoord2D(seed, x1, y2), _fnlValCoord2D(seed, x2, y2), _fnlValCoord2D(seed, x3, y2),
+!         internal_fnl_cubic_lerp(_fnlValCoord2D(seed, x0, y2), _fnlValCoord2D(seed, x1, y2), _fnlValCoord2D(seed, x2, y2), _fnlValCoord2D(seed, x3, y2),
 !                       xs),
-!         _fnlCubicLerp(_fnlValCoord2D(seed, x0, y3), _fnlValCoord2D(seed, x1, y3), _fnlValCoord2D(seed, x2, y3), _fnlValCoord2D(seed, x3, y3),
+!         internal_fnl_cubic_lerp(_fnlValCoord2D(seed, x0, y3), _fnlValCoord2D(seed, x1, y3), _fnlValCoord2D(seed, x2, y3), _fnlValCoord2D(seed, x3, y3),
 !                       xs),
 !         ys) * (1 / (1.5f * 1.5f))
 ! }
@@ -1767,30 +1804,30 @@ contains
 !     int y3 = y1 + (int)((long)PRIME_Y << 1)
 !     int z3 = z1 + (int)((long)PRIME_Z << 1)
 
-!     return _fnlCubicLerp(
-!         _fnlCubicLerp(
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y0, z0), _fnlValCoord3D(seed, x1, y0, z0), _fnlValCoord3D(seed, x2, y0, z0), _fnlValCoord3D(seed, x3, y0, z0), xs),
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y1, z0), _fnlValCoord3D(seed, x1, y1, z0), _fnlValCoord3D(seed, x2, y1, z0), _fnlValCoord3D(seed, x3, y1, z0), xs),
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y2, z0), _fnlValCoord3D(seed, x1, y2, z0), _fnlValCoord3D(seed, x2, y2, z0), _fnlValCoord3D(seed, x3, y2, z0), xs),
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y3, z0), _fnlValCoord3D(seed, x1, y3, z0), _fnlValCoord3D(seed, x2, y3, z0), _fnlValCoord3D(seed, x3, y3, z0), xs),
+!     return internal_fnl_cubic_lerp(
+!         internal_fnl_cubic_lerp(
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y0, z0), _fnlValCoord3D(seed, x1, y0, z0), _fnlValCoord3D(seed, x2, y0, z0), _fnlValCoord3D(seed, x3, y0, z0), xs),
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y1, z0), _fnlValCoord3D(seed, x1, y1, z0), _fnlValCoord3D(seed, x2, y1, z0), _fnlValCoord3D(seed, x3, y1, z0), xs),
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y2, z0), _fnlValCoord3D(seed, x1, y2, z0), _fnlValCoord3D(seed, x2, y2, z0), _fnlValCoord3D(seed, x3, y2, z0), xs),
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y3, z0), _fnlValCoord3D(seed, x1, y3, z0), _fnlValCoord3D(seed, x2, y3, z0), _fnlValCoord3D(seed, x3, y3, z0), xs),
 !             ys),
-!         _fnlCubicLerp(
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y0, z1), _fnlValCoord3D(seed, x1, y0, z1), _fnlValCoord3D(seed, x2, y0, z1), _fnlValCoord3D(seed, x3, y0, z1), xs),
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y1, z1), _fnlValCoord3D(seed, x1, y1, z1), _fnlValCoord3D(seed, x2, y1, z1), _fnlValCoord3D(seed, x3, y1, z1), xs),
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y2, z1), _fnlValCoord3D(seed, x1, y2, z1), _fnlValCoord3D(seed, x2, y2, z1), _fnlValCoord3D(seed, x3, y2, z1), xs),
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y3, z1), _fnlValCoord3D(seed, x1, y3, z1), _fnlValCoord3D(seed, x2, y3, z1), _fnlValCoord3D(seed, x3, y3, z1), xs),
+!         internal_fnl_cubic_lerp(
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y0, z1), _fnlValCoord3D(seed, x1, y0, z1), _fnlValCoord3D(seed, x2, y0, z1), _fnlValCoord3D(seed, x3, y0, z1), xs),
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y1, z1), _fnlValCoord3D(seed, x1, y1, z1), _fnlValCoord3D(seed, x2, y1, z1), _fnlValCoord3D(seed, x3, y1, z1), xs),
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y2, z1), _fnlValCoord3D(seed, x1, y2, z1), _fnlValCoord3D(seed, x2, y2, z1), _fnlValCoord3D(seed, x3, y2, z1), xs),
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y3, z1), _fnlValCoord3D(seed, x1, y3, z1), _fnlValCoord3D(seed, x2, y3, z1), _fnlValCoord3D(seed, x3, y3, z1), xs),
 !             ys),
-!         _fnlCubicLerp(
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y0, z2), _fnlValCoord3D(seed, x1, y0, z2), _fnlValCoord3D(seed, x2, y0, z2), _fnlValCoord3D(seed, x3, y0, z2), xs),
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y1, z2), _fnlValCoord3D(seed, x1, y1, z2), _fnlValCoord3D(seed, x2, y1, z2), _fnlValCoord3D(seed, x3, y1, z2), xs),
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y2, z2), _fnlValCoord3D(seed, x1, y2, z2), _fnlValCoord3D(seed, x2, y2, z2), _fnlValCoord3D(seed, x3, y2, z2), xs),
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y3, z2), _fnlValCoord3D(seed, x1, y3, z2), _fnlValCoord3D(seed, x2, y3, z2), _fnlValCoord3D(seed, x3, y3, z2), xs),
+!         internal_fnl_cubic_lerp(
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y0, z2), _fnlValCoord3D(seed, x1, y0, z2), _fnlValCoord3D(seed, x2, y0, z2), _fnlValCoord3D(seed, x3, y0, z2), xs),
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y1, z2), _fnlValCoord3D(seed, x1, y1, z2), _fnlValCoord3D(seed, x2, y1, z2), _fnlValCoord3D(seed, x3, y1, z2), xs),
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y2, z2), _fnlValCoord3D(seed, x1, y2, z2), _fnlValCoord3D(seed, x2, y2, z2), _fnlValCoord3D(seed, x3, y2, z2), xs),
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y3, z2), _fnlValCoord3D(seed, x1, y3, z2), _fnlValCoord3D(seed, x2, y3, z2), _fnlValCoord3D(seed, x3, y3, z2), xs),
 !             ys),
-!         _fnlCubicLerp(
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y0, z3), _fnlValCoord3D(seed, x1, y0, z3), _fnlValCoord3D(seed, x2, y0, z3), _fnlValCoord3D(seed, x3, y0, z3), xs),
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y1, z3), _fnlValCoord3D(seed, x1, y1, z3), _fnlValCoord3D(seed, x2, y1, z3), _fnlValCoord3D(seed, x3, y1, z3), xs),
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y2, z3), _fnlValCoord3D(seed, x1, y2, z3), _fnlValCoord3D(seed, x2, y2, z3), _fnlValCoord3D(seed, x3, y2, z3), xs),
-!             _fnlCubicLerp(_fnlValCoord3D(seed, x0, y3, z3), _fnlValCoord3D(seed, x1, y3, z3), _fnlValCoord3D(seed, x2, y3, z3), _fnlValCoord3D(seed, x3, y3, z3), xs),
+!         internal_fnl_cubic_lerp(
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y0, z3), _fnlValCoord3D(seed, x1, y0, z3), _fnlValCoord3D(seed, x2, y0, z3), _fnlValCoord3D(seed, x3, y0, z3), xs),
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y1, z3), _fnlValCoord3D(seed, x1, y1, z3), _fnlValCoord3D(seed, x2, y1, z3), _fnlValCoord3D(seed, x3, y1, z3), xs),
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y2, z3), _fnlValCoord3D(seed, x1, y2, z3), _fnlValCoord3D(seed, x2, y2, z3), _fnlValCoord3D(seed, x3, y2, z3), xs),
+!             internal_fnl_cubic_lerp(_fnlValCoord3D(seed, x0, y3, z3), _fnlValCoord3D(seed, x1, y3, z3), _fnlValCoord3D(seed, x2, y3, z3), _fnlValCoord3D(seed, x3, y3, z3), xs),
 !             ys),
 !         zs) * (1 / 1.5f * 1.5f * 1.5f)
 ! }
@@ -1810,10 +1847,10 @@ contains
 !     int x1 = x0 + PRIME_X
 !     int y1 = y0 + PRIME_Y
 
-!     float xf0 = _fnlLerp(_fnlValCoord2D(seed, x0, y0), _fnlValCoord2D(seed, x1, y0), xs)
-!     float xf1 = _fnlLerp(_fnlValCoord2D(seed, x0, y1), _fnlValCoord2D(seed, x1, y1), xs)
+!     float xf0 = internal_fnl_lerp(_fnlValCoord2D(seed, x0, y0), _fnlValCoord2D(seed, x1, y0), xs)
+!     float xf1 = internal_fnl_lerp(_fnlValCoord2D(seed, x0, y1), _fnlValCoord2D(seed, x1, y1), xs)
 
-!     return _fnlLerp(xf0, xf1, ys)
+!     return internal_fnl_lerp(xf0, xf1, ys)
 ! }
 
 ! static float _fnlSingleValue3D(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
@@ -1833,15 +1870,15 @@ contains
 !     int y1 = y0 + PRIME_Y
 !     int z1 = z0 + PRIME_Z
 
-!     float xf00 = _fnlLerp(_fnlValCoord3D(seed, x0, y0, z0), _fnlValCoord3D(seed, x1, y0, z0), xs)
-!     float xf10 = _fnlLerp(_fnlValCoord3D(seed, x0, y1, z0), _fnlValCoord3D(seed, x1, y1, z0), xs)
-!     float xf01 = _fnlLerp(_fnlValCoord3D(seed, x0, y0, z1), _fnlValCoord3D(seed, x1, y0, z1), xs)
-!     float xf11 = _fnlLerp(_fnlValCoord3D(seed, x0, y1, z1), _fnlValCoord3D(seed, x1, y1, z1), xs)
+!     float xf00 = internal_fnl_lerp(_fnlValCoord3D(seed, x0, y0, z0), _fnlValCoord3D(seed, x1, y0, z0), xs)
+!     float xf10 = internal_fnl_lerp(_fnlValCoord3D(seed, x0, y1, z0), _fnlValCoord3D(seed, x1, y1, z0), xs)
+!     float xf01 = internal_fnl_lerp(_fnlValCoord3D(seed, x0, y0, z1), _fnlValCoord3D(seed, x1, y0, z1), xs)
+!     float xf11 = internal_fnl_lerp(_fnlValCoord3D(seed, x0, y1, z1), _fnlValCoord3D(seed, x1, y1, z1), xs)
 
-!     float yf0 = _fnlLerp(xf00, xf10, ys)
-!     float yf1 = _fnlLerp(xf01, xf11, ys)
+!     float yf0 = internal_fnl_lerp(xf00, xf10, ys)
+!     float yf1 = internal_fnl_lerp(xf01, xf11, ys)
 
-!     return _fnlLerp(yf0, yf1, zs)
+!     return internal_fnl_lerp(yf0, yf1, zs)
 ! }
 
 ! Domain Warp
@@ -1889,7 +1926,7 @@ contains
 ! static void _fnlDomainWarpSingle2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
 !     int seed = state->seed
-!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state)
+!     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
 !     float freq = state->frequency
 
 !     FNLfloat xs = *x
@@ -1902,7 +1939,7 @@ contains
 ! static void _fnlDomainWarpSingle3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 ! {
 !     int seed = state->seed
-!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state)
+!     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
 !     float freq = state->frequency
 
 !     FNLfloat xs = *x
@@ -1918,7 +1955,7 @@ contains
 ! static void _fnlDomainWarpFractalProgressive2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
 !     int seed = state->seed
-!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state)
+!     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
 !     float freq = state->frequency
 
 !     for (int i = 0 i < state->octaves i++)
@@ -1938,7 +1975,7 @@ contains
 ! static void _fnlDomainWarpFractalProgressive3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 ! {
 !     int seed = state->seed
-!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state)
+!     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
 !     float freq = state->frequency
 
 !     for (int i = 0 i < state->octaves i++)
@@ -1965,7 +2002,7 @@ contains
 !     _fnlTransformDomainWarpCoordinate2D(state, &xs, &ys)
 
 !     int seed = state->seed
-!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state)
+!     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
 !     float freq = state->frequency
 
 !     for (int i = 0 i < state->octaves i++)
@@ -1986,7 +2023,7 @@ contains
 !     _fnlTransformDomainWarpCoordinate3D(state, &xs, &ys, &zs)
 
 !     int seed = state->seed
-!     float amp = state->domain_warp_amp * _fnlCalculateFractalBounding(state)
+!     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
 !     float freq = state->frequency
 
 !     for (int i = 0 i < state->octaves i++)
@@ -2020,17 +2057,17 @@ contains
 !     int idx0 = _fnlHash2D(seed, x0, y0) & (255 << 1)
 !     int idx1 = _fnlHash2D(seed, x1, y0) & (255 << 1)
 
-!     float lx0x = _fnlLerp(RAND_VECS_2D[idx0], RAND_VECS_2D[idx1], xs)
-!     float ly0x = _fnlLerp(RAND_VECS_2D[idx0 | 1], RAND_VECS_2D[idx1 | 1], xs)
+!     float lx0x = internal_fnl_lerp(RAND_VECS_2D[idx0], RAND_VECS_2D[idx1], xs)
+!     float ly0x = internal_fnl_lerp(RAND_VECS_2D[idx0 | 1], RAND_VECS_2D[idx1 | 1], xs)
 
 !     idx0 = _fnlHash2D(seed, x0, y1) & (255 << 1)
 !     idx1 = _fnlHash2D(seed, x1, y1) & (255 << 1)
 
-!     float lx1x = _fnlLerp(RAND_VECS_2D[idx0], RAND_VECS_2D[idx1], xs)
-!     float ly1x = _fnlLerp(RAND_VECS_2D[idx0 | 1], RAND_VECS_2D[idx1 | 1], xs)
+!     float lx1x = internal_fnl_lerp(RAND_VECS_2D[idx0], RAND_VECS_2D[idx1], xs)
+!     float ly1x = internal_fnl_lerp(RAND_VECS_2D[idx0 | 1], RAND_VECS_2D[idx1 | 1], xs)
 
-!     *xp += _fnlLerp(lx0x, lx1x, ys) * warpAmp
-!     *yp += _fnlLerp(ly0x, ly1x, ys) * warpAmp
+!     *xp += internal_fnl_lerp(lx0x, lx1x, ys) * warpAmp
+!     *yp += internal_fnl_lerp(ly0x, ly1x, ys) * warpAmp
 ! }
 
 ! static void _fnlSingleDomainWarpBasicGrid3D(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xp, FNLfloat *yp, FNLfloat *zp)
@@ -2057,38 +2094,38 @@ contains
 !     int idx0 = _fnlHash3D(seed, x0, y0, z0) & (255 << 2)
 !     int idx1 = _fnlHash3D(seed, x1, y0, z0) & (255 << 2)
 
-!     float lx0x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
-!     float ly0x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
-!     float lz0x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
+!     float lx0x = internal_fnl_lerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
+!     float ly0x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
+!     float lz0x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
 
 !     idx0 = _fnlHash3D(seed, x0, y1, z0) & (255 << 2)
 !     idx1 = _fnlHash3D(seed, x1, y1, z0) & (255 << 2)
 
-!     float lx1x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
-!     float ly1x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
-!     float lz1x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
+!     float lx1x = internal_fnl_lerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
+!     float ly1x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
+!     float lz1x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
 
-!     float lx0y = _fnlLerp(lx0x, lx1x, ys)
-!     float ly0y = _fnlLerp(ly0x, ly1x, ys)
-!     float lz0y = _fnlLerp(lz0x, lz1x, ys)
+!     float lx0y = internal_fnl_lerp(lx0x, lx1x, ys)
+!     float ly0y = internal_fnl_lerp(ly0x, ly1x, ys)
+!     float lz0y = internal_fnl_lerp(lz0x, lz1x, ys)
 
 !     idx0 = _fnlHash3D(seed, x0, y0, z1) & (255 << 2)
 !     idx1 = _fnlHash3D(seed, x1, y0, z1) & (255 << 2)
 
-!     lx0x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
-!     ly0x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
-!     lz0x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
+!     lx0x = internal_fnl_lerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
+!     ly0x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
+!     lz0x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
 
 !     idx0 = _fnlHash3D(seed, x0, y1, z1) & (255 << 2)
 !     idx1 = _fnlHash3D(seed, x1, y1, z1) & (255 << 2)
 
-!     lx1x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
-!     ly1x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
-!     lz1x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
+!     lx1x = internal_fnl_lerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
+!     ly1x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
+!     lz1x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
 
-!     *xp += _fnlLerp(lx0y, _fnlLerp(lx0x, lx1x, ys), zs) * warpAmp
-!     *yp += _fnlLerp(ly0y, _fnlLerp(ly0x, ly1x, ys), zs) * warpAmp
-!     *zp += _fnlLerp(lz0y, _fnlLerp(lz0x, lz1x, ys), zs) * warpAmp
+!     *xp += internal_fnl_lerp(lx0y, internal_fnl_lerp(lx0x, lx1x, ys), zs) * warpAmp
+!     *yp += internal_fnl_lerp(ly0y, internal_fnl_lerp(ly0x, ly1x, ys), zs) * warpAmp
+!     *zp += internal_fnl_lerp(lz0y, internal_fnl_lerp(lz0x, lz1x, ys), zs) * warpAmp
 ! }
 
 ! Domain Warp Simplex/OpenSimplex2
