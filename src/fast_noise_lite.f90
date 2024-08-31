@@ -2548,10 +2548,10 @@ contains
 ! ====================
 
 
-!*
-!* Creates a noise state with default values.
-!* @param seed Optionally set the state seed.
-!*
+  !*
+  !* Creates a noise state with default values.
+  !* @param seed Optionally set the state seed.
+  !*
   type(fnl_state) function constructor_fnl_state() result(state_new)
     implicit none
 
@@ -2573,10 +2573,10 @@ contains
   end function constructor_fnl_state
 
 
-!*
-!* 2D noise at given position using the state settings
-!* @returns Noise output bounded between -1 and 1.
-!*
+  !*
+  !* 2D noise at given position using the state settings
+  !* @returns Noise output bounded between -1 and 1.
+  !*
   real(c_float) function fnl_get_noise_2d(state, xx, yy) result(output)
     implicit none
 
@@ -2603,10 +2603,10 @@ contains
   end function fnl_get_noise_2d
 
 
-!*
-!* 3D noise at given position using the state settings
-!* @returns Noise output bounded between -1 and 1.
-!*
+  !*
+  !* 3D noise at given position using the state settings
+  !* @returns Noise output bounded between -1 and 1.
+  !*
   real(c_float) function fnl_get_noise_3d(state, xx, yy, zz) result(output)
     implicit none
 
@@ -2635,15 +2635,15 @@ contains
   end  function fnl_get_noise_3d
 
 
-!*
-!* 2D warps the input position using current domain warp settings.
-!*
-!* Example usage with fnl_get_noise_2d:
-!* ```
-!* fnlDomainWarp2D(&state, &x, &y)
-!* noise = fnl_get_noise_2d(&state, x, y)
-!* ```
-!*
+  !*
+  !* 2D warps the input position using current domain warp settings.
+  !*
+  !* Example usage with fnl_get_noise_2d:
+  !* ```
+  !* fnlDomainWarp2D(&state, &x, &y)
+  !* noise = fnl_get_noise_2d(&state, x, y)
+  !* ```
+  !*
   subroutine fnl_domain_warp_2d(state, x, y)
     implicit none
 
@@ -2661,15 +2661,15 @@ contains
   end subroutine fnl_domain_warp_2d
 
 
-!*
-!* 3D warps the input position using current domain warp settings.
-!*
-!* Example usage with fnlGetNoise3D:
-!* ```
-!* fnlDomainWarp3D(&state, &x, &y, &z)
-!* noise = fnlGetNoise3D(&state, x, y, z)
-!* ```
-!*
+  !*
+  !* 3D warps the input position using current domain warp settings.
+  !*
+  !* Example usage with fnlGetNoise3D:
+  !* ```
+  !* fnlDomainWarp3D(&state, &x, &y, &z)
+  !* noise = fnlGetNoise3D(&state, x, y, z)
+  !* ```
+  !*
   subroutine fnlDomainWarp3D(state, x, y, z)
     implicit none
 
