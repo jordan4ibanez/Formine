@@ -180,6 +180,15 @@ module glfw
     end subroutine glfw_swap_interval
 
 
+    subroutine internal_glfw_set_key_callback(window, callback) bind(c, name = "glfwSetKeyCallback")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: window
+      type(c_funptr), intent(in), value :: callback
+    end subroutine internal_glfw_set_key_callback
+
+
   end interface
 
 
