@@ -59,12 +59,6 @@ contains
 
 
 
-
-! In *one* C or C++ file, use #define FNL_IMPL to generate implementation
-
-! #ifndef FASTNOISELITE_H
-! #define FASTNOISELITE_H
-
 ! Switch between using floats or doubles for input position
 ! typedef float FNLfloat;
 !typedef double FNLfloat;
@@ -275,8 +269,6 @@ contains
 ! ====================
 ! Below this line is the implementation
 ! ====================
-
-! #if defined(FNL_IMPL)
 
 ! Constants
 
@@ -2436,16 +2428,6 @@ contains
 !         break;
 !     }
 ! }
-
-! #endif // FNL_IMPL
-
-! #if defined(__cplusplus)
-! }
-! #endif
-
-! #endif // FASTNOISELITE_H
-
-
 
 
 end module fast_noise_lite
