@@ -441,27 +441,30 @@ contains
   end function internal_fnl_cast_i32_to_f32
 
 
-! static inline int _fnlCastf32Toi32(float f)
-! {
-!     union
-!     {
-!         float f
-!         int32_t i
-!     } u
-!     u.f = f
-!     return u.i
-! }
+  !! WARNING: The original was tested in a C compiler and always produced a wrong value !!
+  integer(c_int) function internal_fnl_cast_f32_to_i32(f) result(z)
+    implicit none
 
-! static inline float _fnlInvSqrt(float a)
-! {
-!     float xhalf = 0.5f * a
-!     a = internal_fnl_cast_i32_to_f32(0x5f3759df - (_fnlCastf32Toi32(a) >> 1))
-!     a = a * (1.5f - xhalf * a * a)
-!     return a
-! }
+    real(c_float), intent(in), value :: f
+
+    z = int(f, c_int)
+  end function internal_fnl_cast_f32_to_i32
+
+
+  real(c_float) function internal_fnl_inv_sqrt(a) result(out)
+    implicit none
+
+    real(c_float), intent(in), value :: a
+    real(c_float) :: xhalf
+    integer(c_int), parameter :: magic = int(z"5f3759df", c_int)
+
+    xhalf = 0.5 * a
+    out = internal_fnl_cast_i32_to_f32(magic - (rshift(internal_fnl_cast_f32_to_i32(a), 1)))
+    out = out * (1.5 - xhalf * a * a)
+  end function internal_fnl_inv_sqrt
 
 ! NOTE: If your language does not support this method (seen above), then simply use the native sqrt function.
-! static inline float _fnlFastSqrt(float a) { return a * _fnlInvSqrt(a) }
+! static inline float _fnlFastSqrt(float a) { return a * internal_fnl_inv_sqrt(a) }
 
 ! static inline int _fnlFastFloor(FNLfloat f) { return (f >= 0 ? (int)f : (int)f - 1) }
 
