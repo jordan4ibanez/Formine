@@ -13,11 +13,18 @@ module constants
   integer(c_int64_t) :: int__64__
 
 
-  !* Integral in.
+  !* Integral min.
   !? 32 bits. 4 bytes.
   integer(c_int), public, parameter :: C_INT_MIN = -huge(int__32__)-1
   !? 64 bits. 8 bytes.
   integer(c_int64_t), public, parameter :: C_INT64_MIN = -huge(int__64__)-1
+
+  !* Floating point min.
+  !? 32 bits. 4 bytes.
+  real(c_float), public, parameter :: C_F32_MIN = -huge(int__32__)-1
+  !? 64 bits. 8 bytes.
+  real(c_double), public, parameter :: C_F64_MIN = -huge(int__64__)-1
+
 
   !* Integral max.
   !? 32 bits. 4 bytes.
@@ -25,22 +32,26 @@ module constants
   !? 64 bits. 8 bytes.
   integer(c_int64_t), public, parameter :: C_INT64_MAX = huge(int__64__)
 
+  !* Floating point max.
+  !? 32 bits. 4 bytes.
+  real(c_float), public, parameter :: C_F32_MAX = huge(f__32__)
+  !? 64 bits. 8 bytes.
+  real(c_double), public, parameter :: C_F64_MAX = huge(f__64__)
 
-  !* Floating point.
+
+  !* Floating point data width.
   !? 32 bits. 4 bytes.
   integer(c_int), public, parameter :: F32_SIZE = sizeof(f__32__)
   !? 64 bits. 8 bytes.
   integer(c_int), public, parameter :: F64_SIZE = sizeof(f__64__)
 
-
-  !* Integral
+  !* Integral data width.
   !? 32 bits. 4 bytes.
   integer(c_int), public, parameter :: I32_SIZE = sizeof(int__32__)
   !? 64 bits. 8 bytes.
   integer(c_int), public, parameter :: I64_SIZE = sizeof(int__64__)
 
-
-  !* Unsigned Integral
+  !* Unsigned Integral data width.
   !? 32 bits. 4 bytes.
   integer(c_int), public, parameter :: U32_SIZE = sizeof(int__32__)
   !? 64 bits. 8 bytes.
