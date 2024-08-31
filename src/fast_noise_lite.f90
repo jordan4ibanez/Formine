@@ -1862,7 +1862,7 @@ contains
       xs), &
       internal_fnl_cubic_lerp(internal_fnl_val_coord_2d(seed, x0, y3), internal_fnl_val_coord_2d(seed, x1, y3), internal_fnl_val_coord_2d(seed, x2, y3), internal_fnl_val_coord_2d(seed, x3, y3), &
       xs), &
-      ys) * (1 / (1.5 * 1.5))
+      ys) * (1.0 / (1.5 * 1.5))
   end function internal_fnl_single_value_cubic_2d
 
 
@@ -1921,59 +1921,73 @@ contains
       internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y2, z3), internal_fnl_val_coord_3d(seed, x1, y2, z3), internal_fnl_val_coord_3d(seed, x2, y2, z3), internal_fnl_val_coord_3d(seed, x3, y2, z3), xs), &
       internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y3, z3), internal_fnl_val_coord_3d(seed, x1, y3, z3), internal_fnl_val_coord_3d(seed, x2, y3, z3), internal_fnl_val_coord_3d(seed, x3, y3, z3), xs), &
       ys), &
-      zs) * (1 / 1.5 * 1.5 * 1.5)
+      zs) * (1.0 / 1.5 * 1.5 * 1.5)
   end function internal_fnl_single_value_cubic_3d
 
 
 ! Value noise
 
 
-! real(c_float) function internal_fnl_single_value_2d(int seed, FNLfloat x, FNLfloat y)
-! {
-!     int x0 = floor(x)
-!     int y0 = floor(y)
+  real(c_float) function internal_fnl_single_value_2d(seed, x, y) result(output)
+    implicit none
 
-!     float xs = _fnlInterpHermite((float)(x - x0))
-!     float ys = _fnlInterpHermite((float)(y - y0))
+    integer(c_int), intent(in), value :: seed
+    real(fnl_float), intent(in), value :: x, y
+    integer(c_int) :: x0, y0, x1, y1
+    real(c_float) :: xs, ys, xf0, xf1
 
-!     x0 *= PRIME_X
-!     y0 *= PRIME_Y
-!     int x1 = x0 + PRIME_X
-!     int y1 = y0 + PRIME_Y
+    x0 = floor(x)
+    y0 = floor(y)
 
-!     float xf0 = internal_fnl_lerp(internal_fnl_val_coord_2d(seed, x0, y0), internal_fnl_val_coord_2d(seed, x1, y0), xs)
-!     float xf1 = internal_fnl_lerp(internal_fnl_val_coord_2d(seed, x0, y1), internal_fnl_val_coord_2d(seed, x1, y1), xs)
+    xs = internal_fnl_interp_hermite(real(x - x0, c_float))
+    ys = internal_fnl_interp_hermite(real(y - y0, c_float))
 
-!     return internal_fnl_lerp(xf0, xf1, ys)
-! }
+    x0 = x0 * PRIME_X
+    y0 = y0 * PRIME_Y
+    x1 = x0 + PRIME_X
+    y1 = y0 + PRIME_Y
 
-! real(c_float) function internal_fnl_single_value_3d(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
-! {
-!     int x0 = floor(x)
-!     int y0 = floor(y)
-!     int z0 = floor(z)
+    xf0 = internal_fnl_lerp(internal_fnl_val_coord_2d(seed, x0, y0), internal_fnl_val_coord_2d(seed, x1, y0), xs)
+    xf1 = internal_fnl_lerp(internal_fnl_val_coord_2d(seed, x0, y1), internal_fnl_val_coord_2d(seed, x1, y1), xs)
 
-!     float xs = _fnlInterpHermite((float)(x - x0))
-!     float ys = _fnlInterpHermite((float)(y - y0))
-!     float zs = _fnlInterpHermite((float)(z - z0))
+    output = internal_fnl_lerp(xf0, xf1, ys)
+  end function internal_fnl_single_value_2d
 
-!     x0 *= PRIME_X
-!     y0 *= PRIME_Y
-!     z0 *= PRIME_Z
-!     int x1 = x0 + PRIME_X
-!     int y1 = y0 + PRIME_Y
-!     int z1 = z0 + PRIME_Z
 
-!     float xf00 = internal_fnl_lerp(internal_fnl_val_coord_3d(seed, x0, y0, z0), internal_fnl_val_coord_3d(seed, x1, y0, z0), xs)
-!     float xf10 = internal_fnl_lerp(internal_fnl_val_coord_3d(seed, x0, y1, z0), internal_fnl_val_coord_3d(seed, x1, y1, z0), xs)
-!     float xf01 = internal_fnl_lerp(internal_fnl_val_coord_3d(seed, x0, y0, z1), internal_fnl_val_coord_3d(seed, x1, y0, z1), xs)
-!     float xf11 = internal_fnl_lerp(internal_fnl_val_coord_3d(seed, x0, y1, z1), internal_fnl_val_coord_3d(seed, x1, y1, z1), xs)
+  real(c_float) function internal_fnl_single_value_3d(seed, x, y, z) result(output)
+    implicit none
 
-!     float yf0 = internal_fnl_lerp(xf00, xf10, ys)
-!     float yf1 = internal_fnl_lerp(xf01, xf11, ys)
+    integer(c_int), intent(in), value :: seed
+    real(fnl_float), intent(in), value :: x, y, z
+    integer(c_int) :: x0, y0, z0, x1, y1, z1
+    real(c_float) :: xs, ys, zs, xf00, xf10, xf01, xf11, yf0, yf1
 
-!     return internal_fnl_lerp(yf0, yf1, zs)
-! }
+    x0 = floor(x)
+    y0 = floor(y)
+    z0 = floor(z)
+
+    xs = internal_fnl_interp_hermite(real(x - x0, c_float))
+    ys = internal_fnl_interp_hermite(real(y - y0, c_float))
+    zs = internal_fnl_interp_hermite(real(z - z0, c_float))
+
+    x0 = x0 * PRIME_X
+    y0 = y0 * PRIME_Y
+    z0 = z0 *PRIME_Z
+    x1 = x0 + PRIME_X
+    y1 = y0 + PRIME_Y
+    z1 = z0 + PRIME_Z
+
+    xf00 = internal_fnl_lerp(internal_fnl_val_coord_3d(seed, x0, y0, z0), internal_fnl_val_coord_3d(seed, x1, y0, z0), xs)
+    xf10 = internal_fnl_lerp(internal_fnl_val_coord_3d(seed, x0, y1, z0), internal_fnl_val_coord_3d(seed, x1, y1, z0), xs)
+    xf01 = internal_fnl_lerp(internal_fnl_val_coord_3d(seed, x0, y0, z1), internal_fnl_val_coord_3d(seed, x1, y0, z1), xs)
+    xf11 = internal_fnl_lerp(internal_fnl_val_coord_3d(seed, x0, y1, z1), internal_fnl_val_coord_3d(seed, x1, y1, z1), xs)
+
+    yf0 = internal_fnl_lerp(xf00, xf10, ys)
+    yf1 = internal_fnl_lerp(xf01, xf11, ys)
+
+    output = internal_fnl_lerp(yf0, yf1, zs)
+  end function internal_fnl_single_value_3d
+
 
 ! Domain Warp
 
@@ -2140,8 +2154,8 @@ contains
 !     int x0 = floor(xf)
 !     int y0 = floor(yf)
 
-!     float xs = _fnlInterpHermite((float)(xf - x0))
-!     float ys = _fnlInterpHermite((float)(yf - y0))
+!     float xs = internal_fnl_interp_hermite((float)(xf - x0))
+!     float ys = internal_fnl_interp_hermite((float)(yf - y0))
 
 !     x0 *= PRIME_X
 !     y0 *= PRIME_Y
@@ -2174,9 +2188,9 @@ contains
 !     int y0 = floor(yf)
 !     int z0 = floor(zf)
 
-!     float xs = _fnlInterpHermite((float)(xf - x0))
-!     float ys = _fnlInterpHermite((float)(yf - y0))
-!     float zs = _fnlInterpHermite((float)(zf - z0))
+!     float xs = internal_fnl_interp_hermite((float)(xf - x0))
+!     float ys = internal_fnl_interp_hermite((float)(yf - y0))
+!     float zs = internal_fnl_interp_hermite((float)(zf - z0))
 
 !     x0 *= PRIME_X
 !     y0 *= PRIME_Y
