@@ -268,9 +268,12 @@ module fast_noise_lite
     real(c_float) :: domain_warp_amp = 1.0
   end type fnl_state
 
+
   interface fnl_state
     module procedure :: constructor_fnl_state
   end interface
+
+  ! Expose public api.
 
 
   ! =====================================
@@ -2665,7 +2668,7 @@ contains
   !* noise = fnlGetNoise3D(&state, x, y, z)
   !* ```
   !*
-  subroutine fnlDomainWarp3D(state, x, y, z)
+  subroutine fnl_domain_warp_3d(state, x, y, z)
     implicit none
 
     type(fnl_state), intent(in) :: state
@@ -2679,7 +2682,7 @@ contains
      case default
       call internal_fnl_domain_warp_single_3d(state, x, y, z)
     end select
-  end subroutine fnlDomainWarp3D
+  end subroutine fnl_domain_warp_3d
 
 
 end module fast_noise_lite
