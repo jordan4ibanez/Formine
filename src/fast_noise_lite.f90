@@ -1992,37 +1992,44 @@ contains
 ! Domain Warp
 
 
-! subroutine internal_fnl_do_single_domain_warp_2d(fnl_state *state, int seed, float amp, float freq, FNLfloat x, FNLfloat y, FNLfloat *xp, FNLfloat *yp)
-! {
-!     switch (state%domain_warp_type)
-!     {
-!     case FNL_DOMAIN_WARP_OPENSIMPLEX2:
-!         internal_fnl_single_domain_warp_simplex_gradient(seed, amp * 38.283687591552734375f, freq, x, y, xp, yp, false)
-!         break
-!     case FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED:
-!         internal_fnl_single_domain_warp_simplex_gradient(seed, amp * 16.0f, freq, x, y, xp, yp, true)
-!         break
-!     case FNL_DOMAIN_WARP_BASICGRID:
-!         internal_fnl_single_domain_warp_basic_grid_2d(seed, amp, freq, x, y, xp, yp)
-!         break
-!     }
-! }
+  subroutine internal_fnl_do_single_domain_warp_2d(state, seed, amp, freq, x, y, xp, yp)
+    implicit none
 
-! subroutine internal_fnl_do_single_domain_warp_3d(fnl_state *state, int seed, float amp, float freq, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xp, FNLfloat *yp, FNLfloat *zp)
-! {
-!     switch (state%domain_warp_type)
-!     {
-!     case FNL_DOMAIN_WARP_OPENSIMPLEX2:
-!         internal_fnl_single_domain_warp_open_simplex2_gradient(seed, amp * 32.69428253173828125f, freq, x, y, z, xp, yp, zp, false)
-!         break
-!     case FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED:
-!         internal_fnl_single_domain_warp_open_simplex2_gradient(seed, amp * 7.71604938271605f, freq, x, y, z, xp, yp, zp, true)
-!         break
-!     case FNL_DOMAIN_WARP_BASICGRID:
-!         internal_fnl_single_domain_warp_basic_grid_3d(seed, amp, freq, x, y, z, xp, yp, zp)
-!         break
-!     }
-! }
+    type(fnl_state), intent(in) :: state
+    integer(c_int), intent(in), value :: seed
+    real(c_float), intent(in), value :: amp, freq
+    real(fnl_float), intent(in), value :: x, y
+    real(fnl_float), intent(inout) :: xp, yp
+
+    select case (state%domain_warp_type)
+     case (FNL_DOMAIN_WARP_OPENSIMPLEX2)
+      call internal_fnl_single_domain_warp_simplex_gradient(seed, amp * 38.283687591552734375, freq, x, y, xp, yp, .false.)
+     case (FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED)
+      call internal_fnl_single_domain_warp_simplex_gradient(seed, amp * 16.0, freq, x, y, xp, yp, .true.)
+     case (FNL_DOMAIN_WARP_BASICGRID)
+      call internal_fnl_single_domain_warp_basic_grid_2d(seed, amp, freq, x, y, xp, yp)
+    end select
+  end subroutine internal_fnl_do_single_domain_warp_2d
+
+
+  subroutine internal_fnl_do_single_domain_warp_3d(state, seed, amp, freq, x, y, z, xp, yp, zp)
+    implicit none
+
+    type(fnl_state), intent(in) :: state
+    integer(c_int), intent(in), value :: seed
+    real(c_float), intent(in), value :: amp, freq
+    real(fnl_float), intent(in), value :: x, y, z
+    real(fnl_float), intent(inout) :: xp, yp, zp
+
+    select case (state%domain_warp_type)
+     case (FNL_DOMAIN_WARP_OPENSIMPLEX2)
+      call internal_fnl_single_domain_warp_open_simplex2_gradient(seed, amp * 32.69428253173828125, freq, x, y, z, xp, yp, zp, .false.)
+     case (FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED)
+      call internal_fnl_single_domain_warp_open_simplex2_gradient(seed, amp * 7.71604938271605, freq, x, y, z, xp, yp, zp, .true.)
+     case (FNL_DOMAIN_WARP_BASICGRID)
+      call internal_fnl_single_domain_warp_basic_grid_3d(seed, amp, freq, x, y, z, xp, yp, zp)
+    end select
+  end subroutine internal_fnl_do_single_domain_warp_3d
 
 
 ! Domain Warp Single Wrapper
