@@ -689,7 +689,7 @@ contains
 
     select case(state%noise_type)
      case (FNL_NOISE_OPENSIMPLEX2)
-      output = internal_fnl_single_complex_2d(seed, x, y)
+      output = internal_fnl_single_simplex_2d(seed, x, y)
      case (FNL_NOISE_OPENSIMPLEX2S)
       output = internal_fnl_single_open_simplex_2s_2d(seed, x, y)
      case (FNL_NOISE_CELLULAR)
@@ -741,15 +741,15 @@ contains
 
     type(fnl_state), intent(in) :: state
     real(fnl_float), intent(inout) :: x, y
-    real(fnl_float) sqrt_3, f2, t
+    real(fnl_float) :: t
+    real(fnl_float), parameter :: sqrt_3 = real(1.7320508075688772935274463415059, fnl_float)
+    real(fnl_float), parameter :: f2 = 0.5 * (sqrt_3 - 1.0)
 
     x = x * state%frequency
     y = y * state%frequency
 
     select case(state%noise_type)
      case (FNL_NOISE_OPENSIMPLEX2, FNL_NOISE_OPENSIMPLEX2S)
-      sqrt_3 = real(1.7320508075688772935274463415059, fnl_float)
-      f2 = 0.5 * (sqrt_3 - 1.0)
       t = (x + y) * f2
       x = x + t
       y = y + t
@@ -810,12 +810,12 @@ contains
 
     type(fnl_state), intent(in) :: state
     real(fnl_float), intent(inout) :: x, y
-    real(fnl_float) :: sqrt_3, f2, t
+    real(fnl_float) :: t
+    real(fnl_float), parameter :: sqrt_3 = real(1.7320508075688772935274463415059, fnl_float)
+    real(fnl_float), parameter :: f2 = 0.5 * (sqrt_3 - 1.0)
 
     select case (state%domain_warp_type)
      case (FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED, FNL_DOMAIN_WARP_OPENSIMPLEX2)
-      sqrt_3 = real(1.7320508075688772935274463415059, fnl_float)
-      f2 = 0.5 * (sqrt_3 - 1.0)
       t = (x + y) * f2
       x = x + t
       y = y + t
@@ -1048,22 +1048,22 @@ contains
 ! Simplex/OpenSimplex2 Noise
 
 
-  real(c_float) function internal_fnl_single_complex_2d(seed, x, y) result(output)
+  real(c_float) function internal_fnl_single_simplex_2d(seed, x, y) result(output)
     implicit none
 
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y
-    real(c_float) :: sqrt_3, g2, xi, yi, t, x0, y0, n0, n1, n2, a, b, c, x2, y2, x1, y1
+    real(c_float) :: xi, yi, t, x0, y0, n0, n1, n2, a, b, c, x2, y2, x1, y1
     integer(c_int):: i, j
+
+    real(c_float), parameter :: SQRT_3 = 1.7320508075688772935274463415059
+    real(c_float), parameter :: G2 = (3.0 - SQRT_3) / 6.0
 
     ! 2D OpenSimplex2 case uses the same algorithm as ordinary Simplex.
 
-    sqrt_3 = 1.7320508075688772935274463415059
-    g2 = (3.0 - sqrt_3) / 6.0
-
     !
     ! --- Skew moved to TransformNoiseCoordinate method ---
-    ! const FNLfloat F2 = 0.5f * (sqrt_3 - 1)
+    ! const FNLfloat F2 = 0.5f * (SQRT_3 - 1)
     ! FNLfloat s = (x + y) * F2
     ! x += s y += s
     !
@@ -1073,7 +1073,7 @@ contains
     xi = real(x - i, c_float)
     yi = real(y - j, c_float)
 
-    t = (xi + yi) * g2
+    t = (xi + yi) * G2
     x0 = real(xi - t, c_float)
     y0 = real(yi - t, c_float)
 
@@ -1087,18 +1087,18 @@ contains
       n0 = (a * a) * (a * a) * internal_fnl_grad_coord_2d(seed, i, j, x0, y0)
     end if
 
-    c = real(2.0 * (1.0 - 2.0 * g2) * (1.0 / g2 - 2.0), c_float) * t + (real(-2.0 * (1.0 - 2.0 * g2) * (1.0 - 2.0 * g2), c_float) + a)
+    c = real(2.0 * (1.0 - 2.0 * G2) * (1.0 / G2 - 2.0), c_float) * t + (real(-2.0 * (1.0 - 2.0 * G2) * (1.0 - 2.0 * G2), c_float) + a)
     if (c <= 0) then
       n2 = 0.0
     else
-      x2 = x0 + (2.0 * real(g2, c_float) - 1.0)
-      y2 = y0 + (2.0 * real(g2, c_float) - 1.0)
+      x2 = x0 + (2.0 * real(G2, c_float) - 1.0)
+      y2 = y0 + (2.0 * real(G2, c_float) - 1.0)
       n2 = (c * c) * (c * c) * internal_fnl_grad_coord_2d(seed, i + PRIME_X, j + PRIME_Y, x2, y2)
     end if
 
     if (y0 > x0) then
-      x1 = x0 + real(g2, c_float)
-      y1 = y0 + (real(g2, c_float) - 1.0)
+      x1 = x0 + real(G2, c_float)
+      y1 = y0 + (real(G2, c_float) - 1.0)
       b = 0.5 - x1 * x1 - y1 * y1
       if (b <= 0) then
         n1 = 0.0
@@ -1106,8 +1106,8 @@ contains
         n1 = (b * b) * (b * b) * internal_fnl_grad_coord_2d(seed, i, j + PRIME_Y, x1, y1)
       end if
     else
-      x1 = x0 + (real(g2, c_float) - 1.0)
-      y1 = y0 + real(g2, c_float)
+      x1 = x0 + (real(G2, c_float) - 1.0)
+      y1 = y0 + real(G2, c_float)
       b = 0.5 - x1 * x1 - y1 * y1
       if (b <= 0) then
         n1 = 0.0
@@ -1117,7 +1117,7 @@ contains
     end if
 
     output = (n0 + n1 + n2) * 99.83685446303647
-  end function internal_fnl_single_complex_2d
+  end function internal_fnl_single_simplex_2d
 
 
   real(c_float) function internal_fnl_single_open_simplex_2_3d(seed, x, y, z) result(output)
@@ -1233,13 +1233,12 @@ contains
 
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y
-    real(c_float) :: sqrt_3, g2, xi, yi, t, x0, y0, x2, y2, x1, y1, value, a0, a1, xmyi, a2, x3, y3, a3
+    real(c_float) :: xi, yi, t, x0, y0, x2, y2, x1, y1, value, a0, a1, xmyi, a2, x3, y3, a3
     integer(c_int):: i, j, i1, j1
+    real(fnl_float), parameter :: sqrt_3 = real(1.7320508075688772935274463415059, fnl_float)
+    real(fnl_float), parameter :: g2 = (3.0 - sqrt_3) / 6.0
 
     ! 2D OpenSimplex2S case is a modified 2D simplex noise.
-
-    sqrt_3 = real(1.7320508075688772935274463415059, fnl_float)
-    g2 = (3.0 - sqrt_3) / 6.0
 
     !
     ! --- Skew moved to TransformNoiseCoordinate method ---
@@ -2327,11 +2326,10 @@ contains
     real(fnl_float), intent(in), value :: xx, yy
     real(fnl_float), intent(inout) :: xr, yr
     logical, intent(in), value :: outGradOnly
-    real(c_float) :: sqrt_3, g2, x, y, xi, yi, t, x0, y0, vx, vy, a, aaaa, xo, yo, b, c, bbbb, cccc, x1, y1, x2, y2
+    real(c_float) ::  x, y, xi, yi, t, x0, y0, vx, vy, a, aaaa, xo, yo, b, c, bbbb, cccc, x1, y1, x2, y2
     integer(c_int) :: i, j
-
-    sqrt_3 = 1.7320508075688772935274463415059
-    g2 = (3 - sqrt_3) / 6
+    real(fnl_float), parameter :: sqrt_3 = 1.7320508075688772935274463415059
+    real(fnl_float), parameter :: g2 = (3.0 - sqrt_3) / 6.0
 
     ! Use xx and so forth as mutable subroutine variables.
     x = xx * frequency
