@@ -35,6 +35,12 @@ module glfw
   integer, parameter :: GLFW_CONTEXT_VERSION_MINOR = int(z"00022003")
   integer, parameter :: GLFW_OPENGL_FORWARD_COMPAT = int(z"00022006")
 
+  ! Key actions.
+
+  integer(c_int), parameter, public :: GLFW_RELEASE = 0
+  integer(c_int), parameter, public :: GLFW_PRESS = 1
+  integer(c_int), parameter, public :: GLFW_REPEAT = 2
+
   ! Printable keys.
   integer(c_int), parameter, public :: GLFW_KEY_SPACE = 32
   integer(c_int), parameter, public :: GLFW_KEY_APOSTROPHE = 39  ! '
