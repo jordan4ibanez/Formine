@@ -2203,97 +2203,116 @@ contains
 ! Domain Warp Basic Grid
 
 
-! subroutine internal_fnl_single_domain_warp_basic_grid_2d(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xp, FNLfloat *yp)
-! {
-!     FNLfloat xf = x * frequency
-!     FNLfloat yf = y * frequency
+  subroutine internal_fnl_single_domain_warp_basic_grid_2d(seed, warpAmp, frequency, x, y, xp, yp)
+    implicit none
 
-!     int x0 = floor(xf)
-!     int y0 = floor(yf)
+    integer(c_int), intent(in), value :: seed
+    real(c_float), intent(in), value :: warpAmp, frequency
+    real(fnl_float), intent(in), value :: x, y
+    real(fnl_float), intent(inout) :: xp, yp
+    real(fnl_float) :: xf, yf, xs, ys, lx0x, ly0x, lx1x, ly1x
+    integer(c_int) :: x0, y0, x1, y1, idx0, idx1
 
-!     float xs = internal_fnl_interp_hermite((float)(xf - x0))
-!     float ys = internal_fnl_interp_hermite((float)(yf - y0))
+    xf = x * frequency
+    yf = y * frequency
 
-!     x0 *= PRIME_X
-!     y0 *= PRIME_Y
-!     int x1 = x0 + PRIME_X
-!     int y1 = y0 + PRIME_Y
+    x0 = floor(xf)
+    y0 = floor(yf)
 
-!     int idx0 = internal_fnl_hash_2d(seed, x0, y0) & (255 << 1)
-!     int idx1 = internal_fnl_hash_2d(seed, x1, y0) & (255 << 1)
+    xs = internal_fnl_interp_hermite(real(xf - x0, c_float))
+    ys = internal_fnl_interp_hermite(real(yf - y0, c_float))
 
-!     float lx0x = internal_fnl_lerp(RAND_VECS_2D[idx0], RAND_VECS_2D[idx1], xs)
-!     float ly0x = internal_fnl_lerp(RAND_VECS_2D[idx0 | 1], RAND_VECS_2D[idx1 | 1], xs)
+    x0 = x0 * PRIME_X
+    y0 = y0 * PRIME_Y
+    x1 = x0 + PRIME_X
+    y1 = y0 + PRIME_Y
 
-!     idx0 = internal_fnl_hash_2d(seed, x0, y1) & (255 << 1)
-!     idx1 = internal_fnl_hash_2d(seed, x1, y1) & (255 << 1)
+    idx0 = and(internal_fnl_hash_2d(seed, x0, y0), shiftl(255, 1))
+    idx1 = and(internal_fnl_hash_2d(seed, x1, y0), shiftl(255, 1))
 
-!     float lx1x = internal_fnl_lerp(RAND_VECS_2D[idx0], RAND_VECS_2D[idx1], xs)
-!     float ly1x = internal_fnl_lerp(RAND_VECS_2D[idx0 | 1], RAND_VECS_2D[idx1 | 1], xs)
+    lx0x = internal_fnl_lerp(RAND_VECS_2D(idx0 + 1), RAND_VECS_2D(idx1 + 1), xs)
+    ly0x = internal_fnl_lerp(RAND_VECS_2D(ior(idx0, 1) + 1), RAND_VECS_2D(ior(idx1, 1) + 1), xs)
 
-!     *xp += internal_fnl_lerp(lx0x, lx1x, ys) * warpAmp
-!     *yp += internal_fnl_lerp(ly0x, ly1x, ys) * warpAmp
-! }
+    idx0 = and(internal_fnl_hash_2d(seed, x0, y1), shiftl(255, 1))
+    idx1 = and(internal_fnl_hash_2d(seed, x1, y1), shiftl(255, 1))
 
-! subroutine internal_fnl_single_domain_warp_basic_grid_3d(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xp, FNLfloat *yp, FNLfloat *zp)
-! {
-!     FNLfloat xf = x * frequency
-!     FNLfloat yf = y * frequency
-!     FNLfloat zf = z * frequency
+    lx1x = internal_fnl_lerp(RAND_VECS_2D(idx0 + 1), RAND_VECS_2D(idx1 + 1), xs)
+    ly1x = internal_fnl_lerp(RAND_VECS_2D(ior(idx0, 1) + 1), RAND_VECS_2D(ior(idx1, 1) + 1), xs)
 
-!     int x0 = floor(xf)
-!     int y0 = floor(yf)
-!     int z0 = floor(zf)
+    xp = xp + (internal_fnl_lerp(lx0x, lx1x, ys) * warpAmp)
+    yp = yp + (internal_fnl_lerp(ly0x, ly1x, ys) * warpAmp)
+  end subroutine internal_fnl_single_domain_warp_basic_grid_2d
 
-!     float xs = internal_fnl_interp_hermite((float)(xf - x0))
-!     float ys = internal_fnl_interp_hermite((float)(yf - y0))
-!     float zs = internal_fnl_interp_hermite((float)(zf - z0))
 
-!     x0 *= PRIME_X
-!     y0 *= PRIME_Y
-!     z0 *= PRIME_Z
-!     int x1 = x0 + PRIME_X
-!     int y1 = y0 + PRIME_Y
-!     int z1 = z0 + PRIME_Z
+  subroutine internal_fnl_single_domain_warp_basic_grid_3d(seed, warpAmp, frequency, x, y, z, xp, yp, zp)
+    implicit none
 
-!     int idx0 = internal_fnl_hash_3d(seed, x0, y0, z0) & (255 << 2)
-!     int idx1 = internal_fnl_hash_3d(seed, x1, y0, z0) & (255 << 2)
+    integer(c_int), intent(in), value :: seed
+    real(c_float), intent(in), value :: warpAmp, frequency
+    real(fnl_float), intent(in), value :: x, y, z
+    real(fnl_float), intent(inout) :: xp, yp, zp
+    real(fnl_float) :: xf, yf, zf, xs, ys, zs, lx0x, ly0x, lz0x, lx1x, ly1x, lz1x, lx0y, ly0y, lz0y
+    integer(c_int) :: x0, y0, z0, x1, y1, z1, idx0, idx1
 
-!     float lx0x = internal_fnl_lerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
-!     float ly0x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
-!     float lz0x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
+    xf = x * frequency
+    yf = y * frequency
+    zf = z * frequency
 
-!     idx0 = internal_fnl_hash_3d(seed, x0, y1, z0) & (255 << 2)
-!     idx1 = internal_fnl_hash_3d(seed, x1, y1, z0) & (255 << 2)
+    x0 = floor(xf)
+    y0 = floor(yf)
+    z0 = floor(zf)
 
-!     float lx1x = internal_fnl_lerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
-!     float ly1x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
-!     float lz1x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
+    xs = internal_fnl_interp_hermite(real(xf - x0, c_float))
+    ys = internal_fnl_interp_hermite(real(yf - y0, c_float))
+    zs = internal_fnl_interp_hermite(real(zf - z0, c_float))
 
-!     float lx0y = internal_fnl_lerp(lx0x, lx1x, ys)
-!     float ly0y = internal_fnl_lerp(ly0x, ly1x, ys)
-!     float lz0y = internal_fnl_lerp(lz0x, lz1x, ys)
+    x0 = x0 * PRIME_X
+    y0 = y0 * PRIME_Y
+    z0 = z0 * PRIME_Z
+    x1 = x0 + PRIME_X
+    y1 = y0 + PRIME_Y
+    z1 = z0 + PRIME_Z
 
-!     idx0 = internal_fnl_hash_3d(seed, x0, y0, z1) & (255 << 2)
-!     idx1 = internal_fnl_hash_3d(seed, x1, y0, z1) & (255 << 2)
+    idx0 = and(internal_fnl_hash_3d(seed, x0, y0, z0), shiftl(255, 2))
+    idx1 = and(internal_fnl_hash_3d(seed, x1, y0, z0), shiftl(255, 2))
 
-!     lx0x = internal_fnl_lerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
-!     ly0x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
-!     lz0x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
+    lx0x = internal_fnl_lerp(RAND_VECS_3D(idx0 + 1), RAND_VECS_3D(idx1 + 1), xs)
+    ly0x = internal_fnl_lerp(RAND_VECS_3D(ior(idx0, 1) + 1), RAND_VECS_3D(ior(idx1, 1) + 1), xs)
+    lz0x = internal_fnl_lerp(RAND_VECS_3D(ior(idx0, 2) + 1), RAND_VECS_3D(ior(idx1, 2) + 1), xs)
 
-!     idx0 = internal_fnl_hash_3d(seed, x0, y1, z1) & (255 << 2)
-!     idx1 = internal_fnl_hash_3d(seed, x1, y1, z1) & (255 << 2)
+    idx0 = and(internal_fnl_hash_3d(seed, x0, y1, z0), shiftl(255, 2))
+    idx1 = and(internal_fnl_hash_3d(seed, x1, y1, z0), shiftl(255, 2))
 
-!     lx1x = internal_fnl_lerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs)
-!     ly1x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs)
-!     lz1x = internal_fnl_lerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs)
+    lx1x = internal_fnl_lerp(RAND_VECS_3D(idx0 + 1), RAND_VECS_3D(idx1 + 1), xs)
+    ly1x = internal_fnl_lerp(RAND_VECS_3D(ior(idx0, 1) + 1), RAND_VECS_3D(ior(idx1, 1) + 1), xs)
+    lz1x = internal_fnl_lerp(RAND_VECS_3D(ior(idx0, 2) + 1), RAND_VECS_3D(ior(idx1, 2) + 1), xs)
 
-!     *xp += internal_fnl_lerp(lx0y, internal_fnl_lerp(lx0x, lx1x, ys), zs) * warpAmp
-!     *yp += internal_fnl_lerp(ly0y, internal_fnl_lerp(ly0x, ly1x, ys), zs) * warpAmp
-!     *zp += internal_fnl_lerp(lz0y, internal_fnl_lerp(lz0x, lz1x, ys), zs) * warpAmp
-! }
+    lx0y = internal_fnl_lerp(lx0x, lx1x, ys)
+    ly0y = internal_fnl_lerp(ly0x, ly1x, ys)
+    lz0y = internal_fnl_lerp(lz0x, lz1x, ys)
+
+    idx0 = and(internal_fnl_hash_3d(seed, x0, y0, z1), shiftl(255, 2))
+    idx1 = and(internal_fnl_hash_3d(seed, x1, y0, z1), shiftl(255, 2))
+
+    lx0x = internal_fnl_lerp(RAND_VECS_3D(idx0 + 1), RAND_VECS_3D(idx1 + 1), xs)
+    ly0x = internal_fnl_lerp(RAND_VECS_3D(ior(idx0, 1) + 1), RAND_VECS_3D(ior(idx1, 1) + 1), xs)
+    lz0x = internal_fnl_lerp(RAND_VECS_3D(ior(idx0, 2) + 1), RAND_VECS_3D(ior(idx1, 2) + 1), xs)
+
+    idx0 = and(internal_fnl_hash_3d(seed, x0, y1, z1), shiftl(255, 2))
+    idx1 = and(internal_fnl_hash_3d(seed, x1, y1, z1), shiftl(255, 2))
+
+    lx1x = internal_fnl_lerp(RAND_VECS_3D(idx0 + 1), RAND_VECS_3D(idx1 + 1), xs)
+    ly1x = internal_fnl_lerp(RAND_VECS_3D(ior(idx0, 1) + 1), RAND_VECS_3D(ior(idx1, 1) + 1), xs)
+    lz1x = internal_fnl_lerp(RAND_VECS_3D(ior(idx0, 2) + 1), RAND_VECS_3D(ior(idx1, 2) + 1), xs)
+
+    xp = xp + (internal_fnl_lerp(lx0y, internal_fnl_lerp(lx0x, lx1x, ys), zs) * warpAmp)
+    yp = yp + (internal_fnl_lerp(ly0y, internal_fnl_lerp(ly0x, ly1x, ys), zs) * warpAmp)
+    zp = zp + (internal_fnl_lerp(lz0y, internal_fnl_lerp(lz0x, lz1x, ys), zs) * warpAmp)
+  end subroutine internal_fnl_single_domain_warp_basic_grid_3d
+
 
 ! Domain Warp Simplex/OpenSimplex2
+
 
 ! subroutine internal_fnl_single_domain_warp_simplex_gradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xr, FNLfloat *yr, bool outGradOnly)
 ! {
