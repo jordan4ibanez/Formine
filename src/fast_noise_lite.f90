@@ -856,48 +856,66 @@ contains
 ! Fractal FBm
 
 
-! static float _fnlGenFractalFBM2D(fnl_state *state, FNLfloat x, FNLfloat y)
-! {
-!     int seed = state->seed
-!     float sum = 0
-!     float amp = internal_fnl_calculate_fractal_bounding(state)
+  real(c_float) function internal_fnl_gen_fraction_fbm_2d(state, x, y) result(sum)
+    implicit none
 
-!     for (int i = 0 i < state->octaves i++)
-!     {
-!         float noise = internal_fnl_gen_noise_single_2d(state, seed++, x, y)
-!         sum += noise * amp
-!         amp *= internal_fnl_lerp(1.0f, min(noise + 1, 2) * 0.5f, state->weighted_strength)
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(in), value :: x, y
+    integer(c_int) :: seed, i
+    real(c_float) :: amp, noise
+    real(fnl_float) :: xx, yy
 
-!         x *= state->lacunarity
-!         y *= state->lacunarity
-!         amp *= state->gain
-!     }
+    xx = x
+    yy = y
+    seed = state%seed
+    sum = 0
+    amp = internal_fnl_calculate_fractal_bounding(state)
 
-!     return sum
-! }
+    do i = 1,state%octaves
+      seed = seed + 1
+      noise = internal_fnl_gen_noise_single_2d(state, seed, xx, yy)
+      sum = sum + (noise * amp)
+      amp = amp * (internal_fnl_lerp(1.0, min(noise + 1.0, 2.0) * 0.5, state%weighted_strength))
 
-! static float _fnlGenFractalFBM3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z)
-! {
-!     int seed = state->seed
-!     float sum = 0
-!     float amp = internal_fnl_calculate_fractal_bounding(state)
+      xx = xx * state%lacunarity
+      yy = yy * state%lacunarity
+      amp = amp * state%gain
+    end do
+  end function internal_fnl_gen_fraction_fbm_2d
 
-!     for (int i = 0 i < state->octaves i++)
-!     {
-!         float noise = internal_fnl_gen_noise_single_3d(state, seed++, x, y, z)
-!         sum += noise * amp
-!         amp *= internal_fnl_lerp(1.0f, (noise + 1) * 0.5f, state->weighted_strength)
 
-!         x *= state->lacunarity
-!         y *= state->lacunarity
-!         z *= state->lacunarity
-!         amp *= state->gain
-!     }
+  real(c_float) function internal_fnl_gen_fractal_fbm_3d(state, x, y, z) result(sum)
+    implicit none
 
-!     return sum
-! }
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(in), value :: x, y, z
+    integer(c_int) :: seed, i
+    real(c_float) :: amp, noise
+    real(fnl_float) :: xx, yy, zz
+
+    xx = x
+    yy = y
+    zz = z
+    seed = state%seed
+    sum = 0
+    amp = internal_fnl_calculate_fractal_bounding(state)
+
+    do i = 1, state%octaves
+      seed = seed + 1
+      noise = internal_fnl_gen_noise_single_3d(state, seed, xx, yy, zz)
+      sum = sum + (noise * amp)
+      amp = amp * (internal_fnl_lerp(1.0, (noise + 1.0) * 0.5, state%weighted_strength))
+
+      xx = xx * state%lacunarity
+      yy = yy * state%lacunarity
+      zz = zz * state%lacunarity
+      amp = amp * state%gain
+    end do
+  end function internal_fnl_gen_fractal_fbm_3d
+
 
 ! Fractal Ridged
+
 
 ! static float _fnlGenFractalRidged2D(fnl_state *state, FNLfloat x, FNLfloat y)
 ! {
@@ -2458,7 +2476,7 @@ contains
 !     default:
 !         return internal_fnl_gen_noise_single_2d(state, state->seed, x, y)
 !     case FNL_FRACTAL_FBM:
-!         return _fnlGenFractalFBM2D(state, x, y)
+!         return internal_fnl_gen_fraction_fbm_2d(state, x, y)
 !     case FNL_FRACTAL_RIDGED:
 !         return _fnlGenFractalRidged2D(state, x, y)
 !     case FNL_FRACTAL_PINGPONG:
@@ -2480,7 +2498,7 @@ contains
 !     default:
 !         return internal_fnl_gen_noise_single_3d(state, state->seed, x, y, z)
 !     case FNL_FRACTAL_FBM:
-!         return _fnlGenFractalFBM3D(state, x, y, z)
+!         return internal_fnl_gen_fractal_fbm_3d(state, x, y, z)
 !     case FNL_FRACTAL_RIDGED:
 !         return _fnlGenFractalRidged3D(state, x, y, z)
 !     case FNL_FRACTAL_PINGPONG:
