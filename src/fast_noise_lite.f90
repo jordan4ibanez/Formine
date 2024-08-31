@@ -399,13 +399,36 @@ module fast_noise_lite
 
 
 contains
+
+
 ! Utilities
 
-! static inline float _fnlFastMin(float x, float y) { return x < y ? x : y }
 
-! static inline float _fnlFastMax(float x, float y) { return x > y ? x : y }
+  real(c_float) function internal_fnl_fast_min(x, y) result(z)
+    implicit none
 
-! static inline float _fnlFastAbs(float f) { return f < 0 ? -f : f }
+    real(c_float), intent(in), value :: x, y
+
+    z = merge(x, y, x < y)
+  end function internal_fnl_fast_min
+
+
+  real(c_float) function internal_fnl_fast_max(x, y) result(z)
+    implicit none
+
+    real(c_float), intent(in), value :: x, y
+
+    z = merge(x, y, x > y)
+  end function internal_fnl_fast_max
+
+
+  real(c_float) function internal_fnl_fast_abs(f) result(z)
+    implicit none
+    real(c_float), intent(in), value :: f
+
+    z = merge(-f, f, f < 0)
+  end function internal_fnl_fast_abs
+
 
 ! static inline float _fnlCasti32Tof32(int i)
 ! {
@@ -464,7 +487,7 @@ contains
 
 ! static float _fnlCalculateFractalBounding(fnl_state *state)
 ! {
-!     float gain = _fnlFastAbs(state->gain)
+!     float gain = internal_fnl_fast_abs(state->gain)
 !     float amp = gain
 !     float ampFractal = 1.0f
 !     for (int i = 1 i < state->octaves i++)
@@ -786,7 +809,7 @@ contains
 !     {
 !         float noise = _fnlGenNoiseSingle2D(state, seed++, x, y)
 !         sum += noise * amp
-!         amp *= _fnlLerp(1.0f, _fnlFastMin(noise + 1, 2) * 0.5f, state->weighted_strength)
+!         amp *= _fnlLerp(1.0f, internal_fnl_fast_min(noise + 1, 2) * 0.5f, state->weighted_strength)
 
 !         x *= state->lacunarity
 !         y *= state->lacunarity
@@ -827,7 +850,7 @@ contains
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = _fnlFastAbs(_fnlGenNoiseSingle2D(state, seed++, x, y))
+!         float noise = internal_fnl_fast_abs(_fnlGenNoiseSingle2D(state, seed++, x, y))
 !         sum += (noise * -2 + 1) * amp
 !         amp *= _fnlLerp(1.0f, 1 - noise, state->weighted_strength)
 
@@ -847,7 +870,7 @@ contains
 
 !     for (int i = 0 i < state->octaves i++)
 !     {
-!         float noise = _fnlFastAbs(_fnlGenNoiseSingle3D(state, seed++, x, y, z))
+!         float noise = internal_fnl_fast_abs(_fnlGenNoiseSingle3D(state, seed++, x, y, z))
 !         sum += (noise * -2 + 1) * amp
 !         amp *= _fnlLerp(1.0f, 1 - noise, state->weighted_strength)
 
@@ -1436,7 +1459,7 @@ contains
 
 !                 float newDistance = vecX * vecX + vecY * vecY
 
-!                 distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0)
+!                 distance1 = internal_fnl_fast_max(internal_fnl_fast_min(distance1, newDistance), distance0)
 !                 if (newDistance < distance0)
 !                 {
 !                     distance0 = newDistance
@@ -1460,9 +1483,9 @@ contains
 !                 float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter
 !                 float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter
 
-!                 float newDistance = _fnlFastAbs(vecX) + _fnlFastAbs(vecY)
+!                 float newDistance = internal_fnl_fast_abs(vecX) + internal_fnl_fast_abs(vecY)
 
-!                 distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0)
+!                 distance1 = internal_fnl_fast_max(internal_fnl_fast_min(distance1, newDistance), distance0)
 !                 if (newDistance < distance0)
 !                 {
 !                     distance0 = newDistance
@@ -1485,9 +1508,9 @@ contains
 !                 float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter
 !                 float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter
 
-!                 float newDistance = (_fnlFastAbs(vecX) + _fnlFastAbs(vecY)) + (vecX * vecX + vecY * vecY)
+!                 float newDistance = (internal_fnl_fast_abs(vecX) + internal_fnl_fast_abs(vecY)) + (vecX * vecX + vecY * vecY)
 
-!                 distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0)
+!                 distance1 = internal_fnl_fast_max(internal_fnl_fast_min(distance1, newDistance), distance0)
 !                 if (newDistance < distance0)
 !                 {
 !                     distance0 = newDistance
@@ -1568,7 +1591,7 @@ contains
 
 !                     float newDistance = vecX * vecX + vecY * vecY + vecZ * vecZ
 
-!                     distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0)
+!                     distance1 = internal_fnl_fast_max(internal_fnl_fast_min(distance1, newDistance), distance0)
 !                     if (newDistance < distance0)
 !                     {
 !                         distance0 = newDistance
@@ -1599,9 +1622,9 @@ contains
 !                     float vecY = (float)(yi - y) + RAND_VECS_3D[idx | 1] * cellularJitter
 !                     float vecZ = (float)(zi - z) + RAND_VECS_3D[idx | 2] * cellularJitter
 
-!                     float newDistance = _fnlFastAbs(vecX) + _fnlFastAbs(vecY) + _fnlFastAbs(vecZ)
+!                     float newDistance = internal_fnl_fast_abs(vecX) + internal_fnl_fast_abs(vecY) + internal_fnl_fast_abs(vecZ)
 
-!                     distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0)
+!                     distance1 = internal_fnl_fast_max(internal_fnl_fast_min(distance1, newDistance), distance0)
 !                     if (newDistance < distance0)
 !                     {
 !                         distance0 = newDistance
@@ -1632,9 +1655,9 @@ contains
 !                     float vecY = (float)(yi - y) + RAND_VECS_3D[idx | 1] * cellularJitter
 !                     float vecZ = (float)(zi - z) + RAND_VECS_3D[idx | 2] * cellularJitter
 
-!                     float newDistance = (_fnlFastAbs(vecX) + _fnlFastAbs(vecY) + _fnlFastAbs(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ)
+!                     float newDistance = (internal_fnl_fast_abs(vecX) + internal_fnl_fast_abs(vecY) + internal_fnl_fast_abs(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ)
 
-!                     distance1 = _fnlFastMax(_fnlFastMin(distance1, newDistance), distance0)
+!                     distance1 = internal_fnl_fast_max(internal_fnl_fast_min(distance1, newDistance), distance0)
 !                     if (newDistance < distance0)
 !                     {
 !                         distance0 = newDistance
