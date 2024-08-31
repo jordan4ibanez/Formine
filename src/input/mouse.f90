@@ -6,6 +6,7 @@ module mouse
 
   private
 
+  ! todo: do mousey things.
 
 contains
 
