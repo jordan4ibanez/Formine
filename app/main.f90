@@ -15,6 +15,7 @@ program main
   use :: texture_atlas
   use :: fast_noise_lite
   use :: chunk
+  use :: keyboard
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -26,12 +27,11 @@ program main
   fps_new = 0
   old_fps = -1
 
-  call debug_generate_chunk(0,0)
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
-  if (.true.) then
-    return
-  end if
+  ! if (.true.) then
+  !   return
+  ! end if
   !! END WARNING.
 
 
@@ -59,11 +59,11 @@ program main
   ! Get portable function pointers.
   call forglad_load_gl(c_funloc(glfw_get_proc_address))
 
+  call keyboard_initialize()
+
   call delta_initialize()
 
   call glfw_set_window_size_callback()
-
-
 
   call gl_get_version()
 
