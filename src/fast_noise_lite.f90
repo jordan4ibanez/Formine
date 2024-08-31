@@ -2079,50 +2079,68 @@ contains
 
 
 ! Domain Warp Fractal Progressive
-  
 
-! subroutine internal_fnl_domain_warp_fractal_progressive_2d(fnl_state *state, FNLfloat *x, FNLfloat *y)
-! {
-!     int seed = state%seed
-!     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
-!     float freq = state%frequency
 
-!     for (int i = 0 i < state%octaves i++)
-!     {
-!         FNLfloat xs = *x
-!         FNLfloat ys = *y
-!         internal_fnl_transform_domain_warp_coordinate_2d(state, &xs, &ys)
+  subroutine internal_fnl_domain_warp_fractal_progressive_2d(state, x, y)
+    implicit none
 
-!         internal_fnl_do_single_domain_warp_2d(state, seed, amp, freq, xs, ys, x, y)
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(inout) :: x, y
+    integer(c_int) :: seed, i
+    real(c_float) :: amp, freq
+    real(fnl_float) :: xs, ys
 
-!         seed++
-!         amp *= state%gain
-!         freq *= state%lacunarity
-!     }
-! }
+    seed = state%seed
+    amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
+    freq = state%frequency
 
-! subroutine internal_fnl_domain_warp_fractal_progressive_3d(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
-! {
-!     int seed = state%seed
-!     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
-!     float freq = state%frequency
+    do i = 1, state%octaves
 
-!     for (int i = 0 i < state%octaves i++)
-!     {
-!         FNLfloat xs = *x
-!         FNLfloat ys = *y
-!         FNLfloat zs = *z
-!         internal_fnl_transform_domain_warp_coordinate_3d(state, &xs, &ys, &zs)
+      xs = x
+      ys = y
+      call internal_fnl_transform_domain_warp_coordinate_2d(state, xs, ys)
 
-!         internal_fnl_do_single_domain_warp_3d(state, seed, amp, freq, xs, ys, zs, x, y, z)
+      call internal_fnl_do_single_domain_warp_2d(state, seed, amp, freq, xs, ys, x, y)
 
-!         seed++
-!         amp *= state%gain
-!         freq *= state%lacunarity
-!     }
-! }
+      seed = seed + 1
+
+      amp = amp * state%gain
+      freq = freq * state%lacunarity
+    end do
+  end subroutine internal_fnl_domain_warp_fractal_progressive_2d
+
+
+  subroutine internal_fnl_domain_warp_fractal_progressive_3d(state, x, y, z)
+    implicit none
+
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(inout) :: x, y, z
+    integer(c_int) :: seed, i
+    real(c_float) :: amp, freq
+    real(fnl_float) :: xs, ys, zs
+
+    seed = state%seed
+    amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
+    freq = state%frequency
+
+    do i = 1, state%octaves
+
+      xs = x
+      ys = y
+      zs = z
+      call internal_fnl_transform_domain_warp_coordinate_3d(state, xs, ys, zs)
+
+      call internal_fnl_do_single_domain_warp_3d(state, seed, amp, freq, xs, ys, zs, x, y, z)
+
+      seed = seed + 1
+      amp = amp * state%gain
+      freq = freq * state%lacunarity
+    end do
+  end subroutine internal_fnl_domain_warp_fractal_progressive_3d
+
 
 ! Domain Warp Fractal Independent
+  
 
 ! subroutine internal_dnl_domain_warp_fractal_independent_2d(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
