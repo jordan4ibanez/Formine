@@ -172,7 +172,7 @@ module fast_noise_lite
   !* Structure containing entire noise system state.
   !* @note Must only be created using fnlCreateState(optional: seed). To ensure defaults are set.
   !*
-  type :: fnl_state
+  type, public :: fnl_state
 
     !
     ! Seed used for all noise types.
@@ -273,7 +273,14 @@ module fast_noise_lite
     module procedure :: constructor_fnl_state
   end interface
 
+
   ! Expose public api.
+
+
+  public :: fnl_get_noise_2d
+  public :: fnl_get_noise_3d
+  public :: fnl_domain_warp_2d
+  public :: fnl_domain_warp_3d
 
 
   ! =====================================
