@@ -398,6 +398,11 @@ module fast_noise_lite
     /)
 
 
+  integer(c_int), parameter :: PRIME_X = 501125321
+  integer(c_int), parameter :: PRIME_Y = 1136930381
+  integer(c_int), parameter :: PRIME_Z = 1720413743
+
+
 contains
 
 
@@ -485,11 +490,9 @@ contains
     output = 1.0 / amp_fractal
   end function internal_fnl_calculate_fractal_bounding
 
+
 ! Hashing
 
-! static const int PRIME_X = 501125321
-! static const int PRIME_Y = 1136930381
-! static const int PRIME_Z = 1720413743
 
 ! static inline int _fnlHash2D(int seed, int xPrimed, int yPrimed)
 ! {
