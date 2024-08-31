@@ -1829,91 +1829,106 @@ contains
 ! Value Cubic
 
 
-! static float internal_fnl_single_value_cubic_2d(int seed, FNLfloat x, FNLfloat y)
-! {
-!     int x1 = floor(x)
-!     int y1 = floor(y)
+  real(c_float) function internal_fnl_single_value_cubic_2d(seed, x, y) result(output)
+    implicit none
 
-!     float xs = x - (float)x1
-!     float ys = y - (float)y1
+    integer(c_int), intent(in), value :: seed
+    real(fnl_float), intent(in), value :: x, y
+    integer(c_int) :: x1, y1, x0, y0, x2, y2, x3, y3
+    real(c_float) :: xs, ys
 
-!     x1 *= PRIME_X
-!     y1 *= PRIME_Y
+    x1 = floor(x)
+    y1 = floor(y)
 
-!     int x0 = x1 - PRIME_X
-!     int y0 = y1 - PRIME_Y
-!     int x2 = x1 + PRIME_X
-!     int y2 = y1 + PRIME_Y
-!     int x3 = x1 + (int)((long)PRIME_X << 1)
-!     int y3 = y1 + (int)((long)PRIME_Y << 1)
+    xs = x - real(x1, c_float)
+    ys = y - real(y1, c_float)
 
-!     return internal_fnl_cubic_lerp(
-!         internal_fnl_cubic_lerp(internal_fnl_val_coord_2d(seed, x0, y0), internal_fnl_val_coord_2d(seed, x1, y0), internal_fnl_val_coord_2d(seed, x2, y0), internal_fnl_val_coord_2d(seed, x3, y0),
-!                       xs),
-!         internal_fnl_cubic_lerp(internal_fnl_val_coord_2d(seed, x0, y1), internal_fnl_val_coord_2d(seed, x1, y1), internal_fnl_val_coord_2d(seed, x2, y1), internal_fnl_val_coord_2d(seed, x3, y1),
-!                       xs),
-!         internal_fnl_cubic_lerp(internal_fnl_val_coord_2d(seed, x0, y2), internal_fnl_val_coord_2d(seed, x1, y2), internal_fnl_val_coord_2d(seed, x2, y2), internal_fnl_val_coord_2d(seed, x3, y2),
-!                       xs),
-!         internal_fnl_cubic_lerp(internal_fnl_val_coord_2d(seed, x0, y3), internal_fnl_val_coord_2d(seed, x1, y3), internal_fnl_val_coord_2d(seed, x2, y3), internal_fnl_val_coord_2d(seed, x3, y3),
-!                       xs),
-!         ys) * (1 / (1.5f * 1.5f))
-! }
+    x1 = x1 * PRIME_X
+    y1 = y1 * PRIME_Y
 
-! static float internal_fnl_single_value_cubic_3d(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
-! {
-!     int x1 = floor(x)
-!     int y1 = floor(y)
-!     int z1 = floor(z)
+    x0 = x1 - PRIME_X
+    y0 = y1 - PRIME_Y
+    x2 = x1 + PRIME_X
+    y2 = y1 + PRIME_Y
+    x3 = x1 + int(shiftl(PRIME_X, 1), c_int)
+    y3 = y1 + int(shiftl(PRIME_Y, 1), c_int)
 
-!     float xs = x - (float)x1
-!     float ys = y - (float)y1
-!     float zs = z - (float)z1
+    output = internal_fnl_cubic_lerp( &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_2d(seed, x0, y0), internal_fnl_val_coord_2d(seed, x1, y0), internal_fnl_val_coord_2d(seed, x2, y0), internal_fnl_val_coord_2d(seed, x3, y0), &
+      xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_2d(seed, x0, y1), internal_fnl_val_coord_2d(seed, x1, y1), internal_fnl_val_coord_2d(seed, x2, y1), internal_fnl_val_coord_2d(seed, x3, y1), &
+      xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_2d(seed, x0, y2), internal_fnl_val_coord_2d(seed, x1, y2), internal_fnl_val_coord_2d(seed, x2, y2), internal_fnl_val_coord_2d(seed, x3, y2), &
+      xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_2d(seed, x0, y3), internal_fnl_val_coord_2d(seed, x1, y3), internal_fnl_val_coord_2d(seed, x2, y3), internal_fnl_val_coord_2d(seed, x3, y3), &
+      xs), &
+      ys) * (1 / (1.5 * 1.5))
+  end function internal_fnl_single_value_cubic_2d
 
-!     x1 *= PRIME_X
-!     y1 *= PRIME_Y
-!     z1 *= PRIME_Z
 
-!     int x0 = x1 - PRIME_X
-!     int y0 = y1 - PRIME_Y
-!     int z0 = z1 - PRIME_Z
-!     int x2 = x1 + PRIME_X
-!     int y2 = y1 + PRIME_Y
-!     int z2 = z1 + PRIME_Z
-!     int x3 = x1 + (int)((long)PRIME_X << 1)
-!     int y3 = y1 + (int)((long)PRIME_Y << 1)
-!     int z3 = z1 + (int)((long)PRIME_Z << 1)
+  real(c_float) function internal_fnl_single_value_cubic_3d(seed, x, y, z) result(output)
+    implicit none
 
-!     return internal_fnl_cubic_lerp(
-!         internal_fnl_cubic_lerp(
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y0, z0), internal_fnl_val_coord_3d(seed, x1, y0, z0), internal_fnl_val_coord_3d(seed, x2, y0, z0), internal_fnl_val_coord_3d(seed, x3, y0, z0), xs),
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y1, z0), internal_fnl_val_coord_3d(seed, x1, y1, z0), internal_fnl_val_coord_3d(seed, x2, y1, z0), internal_fnl_val_coord_3d(seed, x3, y1, z0), xs),
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y2, z0), internal_fnl_val_coord_3d(seed, x1, y2, z0), internal_fnl_val_coord_3d(seed, x2, y2, z0), internal_fnl_val_coord_3d(seed, x3, y2, z0), xs),
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y3, z0), internal_fnl_val_coord_3d(seed, x1, y3, z0), internal_fnl_val_coord_3d(seed, x2, y3, z0), internal_fnl_val_coord_3d(seed, x3, y3, z0), xs),
-!             ys),
-!         internal_fnl_cubic_lerp(
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y0, z1), internal_fnl_val_coord_3d(seed, x1, y0, z1), internal_fnl_val_coord_3d(seed, x2, y0, z1), internal_fnl_val_coord_3d(seed, x3, y0, z1), xs),
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y1, z1), internal_fnl_val_coord_3d(seed, x1, y1, z1), internal_fnl_val_coord_3d(seed, x2, y1, z1), internal_fnl_val_coord_3d(seed, x3, y1, z1), xs),
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y2, z1), internal_fnl_val_coord_3d(seed, x1, y2, z1), internal_fnl_val_coord_3d(seed, x2, y2, z1), internal_fnl_val_coord_3d(seed, x3, y2, z1), xs),
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y3, z1), internal_fnl_val_coord_3d(seed, x1, y3, z1), internal_fnl_val_coord_3d(seed, x2, y3, z1), internal_fnl_val_coord_3d(seed, x3, y3, z1), xs),
-!             ys),
-!         internal_fnl_cubic_lerp(
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y0, z2), internal_fnl_val_coord_3d(seed, x1, y0, z2), internal_fnl_val_coord_3d(seed, x2, y0, z2), internal_fnl_val_coord_3d(seed, x3, y0, z2), xs),
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y1, z2), internal_fnl_val_coord_3d(seed, x1, y1, z2), internal_fnl_val_coord_3d(seed, x2, y1, z2), internal_fnl_val_coord_3d(seed, x3, y1, z2), xs),
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y2, z2), internal_fnl_val_coord_3d(seed, x1, y2, z2), internal_fnl_val_coord_3d(seed, x2, y2, z2), internal_fnl_val_coord_3d(seed, x3, y2, z2), xs),
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y3, z2), internal_fnl_val_coord_3d(seed, x1, y3, z2), internal_fnl_val_coord_3d(seed, x2, y3, z2), internal_fnl_val_coord_3d(seed, x3, y3, z2), xs),
-!             ys),
-!         internal_fnl_cubic_lerp(
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y0, z3), internal_fnl_val_coord_3d(seed, x1, y0, z3), internal_fnl_val_coord_3d(seed, x2, y0, z3), internal_fnl_val_coord_3d(seed, x3, y0, z3), xs),
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y1, z3), internal_fnl_val_coord_3d(seed, x1, y1, z3), internal_fnl_val_coord_3d(seed, x2, y1, z3), internal_fnl_val_coord_3d(seed, x3, y1, z3), xs),
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y2, z3), internal_fnl_val_coord_3d(seed, x1, y2, z3), internal_fnl_val_coord_3d(seed, x2, y2, z3), internal_fnl_val_coord_3d(seed, x3, y2, z3), xs),
-!             internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y3, z3), internal_fnl_val_coord_3d(seed, x1, y3, z3), internal_fnl_val_coord_3d(seed, x2, y3, z3), internal_fnl_val_coord_3d(seed, x3, y3, z3), xs),
-!             ys),
-!         zs) * (1 / 1.5f * 1.5f * 1.5f)
-! }
+    integer(c_int), intent(in), value :: seed
+    real(fnl_float), intent(in), value :: x, y, z
+    integer(c_int) :: x1, y1, z1, x0, y0, z0, x2, y2, z2, x3, y3, z3
+    real(c_float) :: xs, ys, zs
+
+    x1 = floor(x)
+    y1 = floor(y)
+    z1 = floor(z)
+
+    xs = x - real(x1, c_float)
+    ys = y - real(y1, c_float)
+    zs = z - real(z1, c_float)
+
+    x1 = x1 * PRIME_X
+    y1 = y1 * PRIME_Y
+    z1 = z1 * PRIME_Z
+
+    x0 = x1 - PRIME_X
+    y0 = y1 - PRIME_Y
+    z0 = z1 - PRIME_Z
+    x2 = x1 + PRIME_X
+    y2 = y1 + PRIME_Y
+    z2 = z1 + PRIME_Z
+    x3 = x1 + int(shiftl(PRIME_X, 1), c_int)
+    y3 = y1 + int(shiftl(PRIME_Y, 1), c_int)
+    z3 = z1 + int(shiftl(PRIME_Z, 1), c_int)
+
+    output = internal_fnl_cubic_lerp( &
+      internal_fnl_cubic_lerp( &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y0, z0), internal_fnl_val_coord_3d(seed, x1, y0, z0), internal_fnl_val_coord_3d(seed, x2, y0, z0), internal_fnl_val_coord_3d(seed, x3, y0, z0), xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y1, z0), internal_fnl_val_coord_3d(seed, x1, y1, z0), internal_fnl_val_coord_3d(seed, x2, y1, z0), internal_fnl_val_coord_3d(seed, x3, y1, z0), xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y2, z0), internal_fnl_val_coord_3d(seed, x1, y2, z0), internal_fnl_val_coord_3d(seed, x2, y2, z0), internal_fnl_val_coord_3d(seed, x3, y2, z0), xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y3, z0), internal_fnl_val_coord_3d(seed, x1, y3, z0), internal_fnl_val_coord_3d(seed, x2, y3, z0), internal_fnl_val_coord_3d(seed, x3, y3, z0), xs), &
+      ys), &
+      internal_fnl_cubic_lerp( &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y0, z1), internal_fnl_val_coord_3d(seed, x1, y0, z1), internal_fnl_val_coord_3d(seed, x2, y0, z1), internal_fnl_val_coord_3d(seed, x3, y0, z1), xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y1, z1), internal_fnl_val_coord_3d(seed, x1, y1, z1), internal_fnl_val_coord_3d(seed, x2, y1, z1), internal_fnl_val_coord_3d(seed, x3, y1, z1), xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y2, z1), internal_fnl_val_coord_3d(seed, x1, y2, z1), internal_fnl_val_coord_3d(seed, x2, y2, z1), internal_fnl_val_coord_3d(seed, x3, y2, z1), xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y3, z1), internal_fnl_val_coord_3d(seed, x1, y3, z1), internal_fnl_val_coord_3d(seed, x2, y3, z1), internal_fnl_val_coord_3d(seed, x3, y3, z1), xs), &
+      ys), &
+      internal_fnl_cubic_lerp( &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y0, z2), internal_fnl_val_coord_3d(seed, x1, y0, z2), internal_fnl_val_coord_3d(seed, x2, y0, z2), internal_fnl_val_coord_3d(seed, x3, y0, z2), xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y1, z2), internal_fnl_val_coord_3d(seed, x1, y1, z2), internal_fnl_val_coord_3d(seed, x2, y1, z2), internal_fnl_val_coord_3d(seed, x3, y1, z2), xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y2, z2), internal_fnl_val_coord_3d(seed, x1, y2, z2), internal_fnl_val_coord_3d(seed, x2, y2, z2), internal_fnl_val_coord_3d(seed, x3, y2, z2), xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y3, z2), internal_fnl_val_coord_3d(seed, x1, y3, z2), internal_fnl_val_coord_3d(seed, x2, y3, z2), internal_fnl_val_coord_3d(seed, x3, y3, z2), xs), &
+      ys), &
+      internal_fnl_cubic_lerp( &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y0, z3), internal_fnl_val_coord_3d(seed, x1, y0, z3), internal_fnl_val_coord_3d(seed, x2, y0, z3), internal_fnl_val_coord_3d(seed, x3, y0, z3), xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y1, z3), internal_fnl_val_coord_3d(seed, x1, y1, z3), internal_fnl_val_coord_3d(seed, x2, y1, z3), internal_fnl_val_coord_3d(seed, x3, y1, z3), xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y2, z3), internal_fnl_val_coord_3d(seed, x1, y2, z3), internal_fnl_val_coord_3d(seed, x2, y2, z3), internal_fnl_val_coord_3d(seed, x3, y2, z3), xs), &
+      internal_fnl_cubic_lerp(internal_fnl_val_coord_3d(seed, x0, y3, z3), internal_fnl_val_coord_3d(seed, x1, y3, z3), internal_fnl_val_coord_3d(seed, x2, y3, z3), internal_fnl_val_coord_3d(seed, x3, y3, z3), xs), &
+      ys), &
+      zs) * (1 / 1.5 * 1.5 * 1.5)
+  end function internal_fnl_single_value_cubic_3d
+
 
 ! Value noise
 
-! static float internal_fnl_single_value_2d(int seed, FNLfloat x, FNLfloat y)
+
+! real(c_float) function internal_fnl_single_value_2d(int seed, FNLfloat x, FNLfloat y)
 ! {
 !     int x0 = floor(x)
 !     int y0 = floor(y)
@@ -1932,7 +1947,7 @@ contains
 !     return internal_fnl_lerp(xf0, xf1, ys)
 ! }
 
-! static float internal_fnl_single_value_3d(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
+! real(c_float) function internal_fnl_single_value_3d(int seed, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
 !     int x0 = floor(x)
 !     int y0 = floor(y)
