@@ -2035,34 +2035,51 @@ contains
 ! Domain Warp Single Wrapper
 
 
-! subroutine internal_fnl_domain_warp_single_2d(fnl_state *state, FNLfloat *x, FNLfloat *y)
-! {
-!     int seed = state%seed
-!     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
-!     float freq = state%frequency
+  subroutine internal_fnl_domain_warp_single_2d(state, x, y)
+    implicit none
 
-!     FNLfloat xs = *x
-!     FNLfloat ys = *y
-!     internal_fnl_transform_domain_warp_coordinate_2d(state, &xs, &ys)
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(inout) :: x, y
+    integer(c_int) :: seed
+    real(c_float) :: amp, freq
+    real(fnl_float) :: xs, ys
 
-!     internal_fnl_do_single_domain_warp_2d(state, seed, amp, freq, xs, ys, x, y)
-! }
+    seed = state%seed
+    amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
+    freq = state%frequency
 
-! subroutine internal_fnl_domain_warp_single_3d(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
-! {
-!     int seed = state%seed
-!     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
-!     float freq = state%frequency
+    xs = x
+    ys = y
+    call internal_fnl_transform_domain_warp_coordinate_2d(state, xs, ys)
 
-!     FNLfloat xs = *x
-!     FNLfloat ys = *y
-!     FNLfloat zs = *z
-!     internal_fnl_transform_domain_warp_coordinate_3d(state, &xs, &ys, &zs)
+    call internal_fnl_do_single_domain_warp_2d(state, seed, amp, freq, xs, ys, x, y)
+  end subroutine internal_fnl_domain_warp_single_2d
 
-!     internal_fnl_do_single_domain_warp_3d(state, seed, amp, freq, xs, ys, zs, x, y, z)
-! }
+
+  subroutine internal_fnl_domain_warp_single_3d(state, x, y, z)
+    implicit none
+
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(inout) :: x, y, z
+    integer(c_int) :: seed
+    real(c_float) :: amp, freq
+    real(fnl_float) :: xs, ys, zs
+
+    seed = state%seed
+    amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
+    freq = state%frequency
+
+    xs = x
+    ys = y
+    zs = z
+    call internal_fnl_transform_domain_warp_coordinate_3d(state, xs, ys, zs)
+
+    call internal_fnl_do_single_domain_warp_3d(state, seed, amp, freq, xs, ys, zs, x, y, z)
+  end subroutine internal_fnl_domain_warp_single_3d
+
 
 ! Domain Warp Fractal Progressive
+  
 
 ! subroutine internal_fnl_domain_warp_fractal_progressive_2d(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
