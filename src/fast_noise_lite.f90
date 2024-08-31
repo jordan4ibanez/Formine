@@ -1528,13 +1528,13 @@ contains
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y
     integer(c_int) :: xr, yr, x_primed, y_primed, y_primedBase, xi, yi, hash, idx
-    real(c_float) :: distance0, distance1, cellularJitter, vecX, vecY, newDistance, closestHash
+    real(c_float) :: distance_0, distance_1, cellularJitter, vecX, vecY, newDistance, closestHash
 
     xr = nint(x)
     yr = nint(y)
 
-    distance0 = FLT_MAX
-    distance1 = FLT_MAX
+    distance_0 = FLT_MAX
+    distance_1 = FLT_MAX
     closestHash = 0
 
     cellularJitter = 0.43701595 * state%cellular_jitter_mod
@@ -1552,9 +1552,9 @@ contains
           vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellularJitter
           vecY = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1) + 1) * cellularJitter
           newDistance = vecX * vecX + vecY * vecY
-          distance1 = max(min(distance1, newDistance), distance0)
-          if (newDistance < distance0) then
-            distance0 = newDistance
+          distance_1 = max(min(distance_1, newDistance), distance_0)
+          if (newDistance < distance_0) then
+            distance_0 = newDistance
             closestHash = hash
           end if
           y_primed = y_primed + PRIME_Y
@@ -1570,9 +1570,9 @@ contains
           vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellularJitter
           vecY = real(yi - y, c_float) + RAND_VECS_2D(iand(idx, 1) + 1) * cellularJitter
           newDistance = abs(vecX) + abs(vecY)
-          distance1 = max(min(distance1, newDistance), distance0)
-          if (newDistance < distance0) then
-            distance0 = newDistance
+          distance_1 = max(min(distance_1, newDistance), distance_0)
+          if (newDistance < distance_0) then
+            distance_0 = newDistance
             closestHash = hash
           end if
           y_primed = y_primed + PRIME_Y
@@ -1588,9 +1588,9 @@ contains
           vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellularJitter
           vecY = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1)) * cellularJitter
           newDistance = (abs(vecX) + abs(vecY)) + (vecX * vecX + vecY * vecY)
-          distance1 = max(min(distance1, newDistance), distance0)
-          if (newDistance < distance0) then
-            distance0 = newDistance
+          distance_1 = max(min(distance_1, newDistance), distance_0)
+          if (newDistance < distance_0) then
+            distance_0 = newDistance
             closestHash = hash
           end if
           y_primed = y_primed + PRIME_Y
@@ -1602,9 +1602,9 @@ contains
     end select
 
     if (state%cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN .and. state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE) then
-      distance0 = sqrt(distance0)
+      distance_0 = sqrt(distance_0)
       if (state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2) then
-        distance1 = sqrt(distance1)
+        distance_1 = sqrt(distance_1)
       end if
     end if
 
@@ -1612,17 +1612,17 @@ contains
      case (FNL_CELLULAR_RETURN_TYPE_CELLVALUE)
       output = closestHash * (1.0 / 2147483648.0)
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE)
-      output = distance0 - 1.0
+      output = distance_0 - 1.0
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
-      output = distance1 - 1.0
+      output = distance_1 - 1.0
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2ADD)
-      output = (distance1 + distance0) * 0.5 - 1.0
+      output = (distance_1 + distance_0) * 0.5 - 1.0
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2SUB)
-      output = distance1 - distance0 - 1.0
+      output = distance_1 - distance_0 - 1.0
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2MUL)
-      output = distance1 * distance0 * 0.5 - 1.0
+      output = distance_1 * distance_0 * 0.5 - 1.0
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2DIV)
-      output = distance0 / distance1 - 1.0
+      output = distance_0 / distance_1 - 1.0
      case default
       output = 0.0
     end select
@@ -1636,14 +1636,14 @@ contains
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y, z
     integer(c_int) :: xr, yr, zr, x_primed, y_primed, z_primed, y_primedBase, z_primedBase, xi, yi, zi, hash, idx
-    real(c_float) :: distance0, distance1, cellularJitter, vecX, vecY, vecZ, newDistance, closestHash
+    real(c_float) :: distance_0, distance_1, cellularJitter, vecX, vecY, vecZ, newDistance, closestHash
 
     xr = nint(x)
     yr = nint(y)
     zr = nint(z)
 
-    distance0 = FLT_MAX
-    distance1 = FLT_MAX
+    distance_0 = FLT_MAX
+    distance_1 = FLT_MAX
     closestHash = 0
 
     cellularJitter = 0.39614353 * state%cellular_jitter_mod
@@ -1666,9 +1666,9 @@ contains
             vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellularJitter
             vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellularJitter
             newDistance = vecX * vecX + vecY * vecY + vecZ * vecZ
-            distance1 = max(min(distance1, newDistance), distance0)
-            if (newDistance < distance0) then
-              distance0 = newDistance
+            distance_1 = max(min(distance_1, newDistance), distance_0)
+            if (newDistance < distance_0) then
+              distance_0 = newDistance
               closestHash = hash
             end if
             z_primed = z_primed + PRIME_Z
@@ -1689,9 +1689,9 @@ contains
             vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellularJitter
             vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellularJitter
             newDistance = abs(vecX) + abs(vecY) + abs(vecZ)
-            distance1 = max(min(distance1, newDistance), distance0)
-            if (newDistance < distance0) then
-              distance0 = newDistance
+            distance_1 = max(min(distance_1, newDistance), distance_0)
+            if (newDistance < distance_0) then
+              distance_0 = newDistance
               closestHash = hash
             end if
             z_primed = z_primed + PRIME_Z
@@ -1712,9 +1712,9 @@ contains
             vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellularJitter
             vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellularJitter
             newDistance = (abs(vecX) + abs(vecY) + abs(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ)
-            distance1 = max(min(distance1, newDistance), distance0)
-            if (newDistance < distance0) then
-              distance0 = newDistance
+            distance_1 = max(min(distance_1, newDistance), distance_0)
+            if (newDistance < distance_0) then
+              distance_0 = newDistance
               closestHash = hash
             end if
             z_primed = z_primed + PRIME_Z
@@ -1728,9 +1728,9 @@ contains
     end select
 
     if (state%cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN .and. state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE) then
-      distance0 = sqrt(distance0)
+      distance_0 = sqrt(distance_0)
       if (state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2) then
-        distance1 = sqrt(distance1)
+        distance_1 = sqrt(distance_1)
       end if
     end if
 
@@ -1738,17 +1738,17 @@ contains
      case (FNL_CELLULAR_RETURN_TYPE_CELLVALUE)
       output = closestHash * (1 / 2147483648.0)
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE)
-      output = distance0 - 1
+      output = distance_0 - 1
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
-      output = distance1 - 1
+      output = distance_1 - 1
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2ADD)
-      output = (distance1 + distance0) * 0.5 - 1.0
+      output = (distance_1 + distance_0) * 0.5 - 1.0
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2SUB)
-      output = distance1 - distance0 - 1.0
+      output = distance_1 - distance_0 - 1.0
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2MUL)
-      output = distance1 * distance0 * 0.5 - 1.0
+      output = distance_1 * distance_0 * 0.5 - 1.0
      case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2DIV)
-      output = distance0 / distance1 - 1.0
+      output = distance_0 / distance_1 - 1.0
      case default
       output = 0.0
     end select
