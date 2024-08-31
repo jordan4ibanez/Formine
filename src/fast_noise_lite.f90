@@ -1517,281 +1517,242 @@ contains
 ! Cellular Noise
 
 
-! static float internal_fnl_single_cellular_2d(fnl_state *state, int seed, FNLfloat x, FNLfloat y)
-! {
-!     int xr = nint(x)
-!     int yr = nint(y)
+  real(c_float) function internal_fnl_single_cellular_2d(state, seed, x, y) result(output)
+    implicit none
 
-!     float distance0 = FLT_MAX
-!     float distance1 = FLT_MAX
-!     int closestHash = 0
+    type(fnl_state), intent(in) :: state
+    integer(c_int), intent(in), value :: seed
+    real(fnl_float), intent(in), value :: x, y
+    integer(c_int) :: xr, yr, x_primed, y_primed, y_primedBase, xi, yi, zi, hash, idx
+    real(c_float) :: distance0, distance1, cellularJitter, vecX, vecY, newDistance, closestHash
 
-!     float cellularJitter = 0.43701595f * state%cellular_jitter_mod
+    xr = nint(x)
+    yr = nint(y)
 
-!     int x_primed = (xr - 1) * PRIME_X
-!     int y_primedBase = (yr - 1) * PRIME_Y
+    distance0 = FLT_MAX
+    distance1 = FLT_MAX
+    closestHash = 0
 
-!     switch (state%cellular_distance_func)
-!     {
-!     default:
-!     case FNL_CELLULAR_DISTANCE_EUCLIDEAN:
-!     case FNL_CELLULAR_DISTANCE_EUCLIDEANSQ:
-!         for (int xi = xr - 1 xi <= xr + 1 xi++)
-!         {
-!             int y_primed = y_primedBase
+    cellularJitter = 0.43701595 * state%cellular_jitter_mod
 
-!             for (int yi = yr - 1 yi <= yr + 1 yi++)
-!             {
-!                 int hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
-!                 int idx = hash & (255 << 1)
+    x_primed = (xr - 1) * PRIME_X
+    y_primedBase = (yr - 1) * PRIME_Y
 
-!                 float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter
-!                 float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter
+    select case (state%cellular_distance_func)
+     case (FNL_CELLULAR_DISTANCE_EUCLIDEAN, FNL_CELLULAR_DISTANCE_EUCLIDEANSQ)
+      do xi = xr - 1, xr + 1
+        y_primed = y_primedBase
+        do yi = yr - 1, yr + 1
+          hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
+          idx = and(hash, shiftl(255, 1))
+          vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellularJitter
+          vecY = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1) + 1) * cellularJitter
+          newDistance = vecX * vecX + vecY * vecY
+          distance1 = max(min(distance1, newDistance), distance0)
+          if (newDistance < distance0) then
+            distance0 = newDistance
+            closestHash = hash
+          end if
+          y_primed = y_primed + PRIME_Y
+        end do
+        x_primed = x_primed + PRIME_X
+      end do
+     case (FNL_CELLULAR_DISTANCE_MANHATTAN)
+      do xi = xr - 1, xr + 1
+        y_primed = y_primedBase
+        do yi = yr - 1, yr + 1
+          hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
+          idx = and(hash, shiftl(255, 1))
+          vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellularJitter
+          vecY = real(yi - y, c_float) + RAND_VECS_2D(iand(idx, 1) + 1) * cellularJitter
+          newDistance = abs(vecX) + abs(vecY)
+          distance1 = max(min(distance1, newDistance), distance0)
+          if (newDistance < distance0) then
+            distance0 = newDistance
+            closestHash = hash
+          end if
+          y_primed = y_primed + PRIME_Y
+        end do
+        x_primed = x_primed + PRIME_X
+      end do
+     case (FNL_CELLULAR_DISTANCE_HYBRID)
+      do xi = xr - 1, xr + 1
+        y_primed = y_primedBase
+        do yi = yr - 1, yr + 1
+          hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
+          idx = and(hash, shiftl(255, 1))
+          vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellularJitter
+          vecY = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1)) * cellularJitter
+          newDistance = (abs(vecX) + abs(vecY)) + (vecX * vecX + vecY * vecY)
+          distance1 = max(min(distance1, newDistance), distance0)
+          if (newDistance < distance0) then
+            distance0 = newDistance
+            closestHash = hash
+          end if
+          y_primed = y_primed + PRIME_Y
+        end do
+        x_primed = x_primed + PRIME_X
+      end do
+     case default
+      error stop "[internal_fnl_single_cellular_2d] Error: Not found."
+    end select
 
-!                 float newDistance = vecX * vecX + vecY * vecY
+    if (state%cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN .and. state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE) then
+      distance0 = sqrt(distance0)
+      if (state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2) then
+        distance1 = sqrt(distance1)
+      end if
+    end if
 
-!                 distance1 = max(min(distance1, newDistance), distance0)
-!                 if (newDistance < distance0)
-!                 {
-!                     distance0 = newDistance
-!                     closestHash = hash
-!                 }
-!                 y_primed += PRIME_Y
-!             }
-!             x_primed += PRIME_X
-!         }
-!         break
-!     case FNL_CELLULAR_DISTANCE_MANHATTAN:
-!         for (int xi = xr - 1 xi <= xr + 1 xi++)
-!         {
-!             int y_primed = y_primedBase
+    select case (state%cellular_return_type)
+     case (FNL_CELLULAR_RETURN_TYPE_CELLVALUE)
+      output = closestHash * (1.0 / 2147483648.0)
+     case (FNL_CELLULAR_RETURN_TYPE_DISTANCE)
+      output = distance0 - 1.0
+     case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
+      output = distance1 - 1.0
+     case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2ADD)
+      output = (distance1 + distance0) * 0.5 - 1.0
+     case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2SUB)
+      output = distance1 - distance0 - 1.0
+     case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2MUL)
+      output = distance1 * distance0 * 0.5 - 1.0
+     case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2DIV)
+      output = distance0 / distance1 - 1.0
+     case default
+      output = 0.0
+    end select
+  end function internal_fnl_single_cellular_2d
 
-!             for (int yi = yr - 1 yi <= yr + 1 yi++)
-!             {
-!                 int hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
-!                 int idx = hash & (255 << 1)
 
-!                 float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter
-!                 float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter
+  real(c_float) function internal_fnl_single_cellular_3d(state, seed, x, y, z) result(output)
+    implicit none
 
-!                 float newDistance = abs(vecX) + abs(vecY)
+    type(fnl_state), intent(in) :: state
+    integer(c_int), intent(in), value :: seed
+    real(fnl_float), intent(in), value :: x, y, z
+    integer(c_int) :: xr, yr, zr, x_primed, y_primed, z_primed, y_primedBase, z_primedBase, xi, yi, zi, hash, idx
+    real(c_float) :: distance0, distance1, cellularJitter, vecX, vecY, vecZ, newDistance, closestHash
 
-!                 distance1 = max(min(distance1, newDistance), distance0)
-!                 if (newDistance < distance0)
-!                 {
-!                     distance0 = newDistance
-!                     closestHash = hash
-!                 }
-!                 y_primed += PRIME_Y
-!             }
-!             x_primed += PRIME_X
-!         }
-!         break
-!     case FNL_CELLULAR_DISTANCE_HYBRID:
-!         for (int xi = xr - 1 xi <= xr + 1 xi++)
-!         {
-!             int y_primed = y_primedBase
-!             for (int yi = yr - 1 yi <= yr + 1 yi++)
-!             {
-!                 int hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
-!                 int idx = hash & (255 << 1)
+    xr = nint(x)
+    yr = nint(y)
+    zr = nint(z)
 
-!                 float vecX = (float)(xi - x) + RAND_VECS_2D[idx] * cellularJitter
-!                 float vecY = (float)(yi - y) + RAND_VECS_2D[idx | 1] * cellularJitter
+    distance0 = FLT_MAX
+    distance1 = FLT_MAX
+    closestHash = 0
 
-!                 float newDistance = (abs(vecX) + abs(vecY)) + (vecX * vecX + vecY * vecY)
+    cellularJitter = 0.39614353 * state%cellular_jitter_mod
 
-!                 distance1 = max(min(distance1, newDistance), distance0)
-!                 if (newDistance < distance0)
-!                 {
-!                     distance0 = newDistance
-!                     closestHash = hash
-!                 }
-!                 y_primed += PRIME_Y
-!             }
-!             x_primed += PRIME_X
-!         }
-!         break
-!     }
+    x_primed = (xr - 1) * PRIME_X
+    y_primedBase = (yr - 1) * PRIME_Y
+    z_primedBase = (zr - 1) * PRIME_Z
 
-!     if (state%cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN && state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE)
-!     {
-!         distance0 = sqrt(distance0)
-!         if (state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
-!             distance1 = sqrt(distance1)
-!     }
+    select case (state%cellular_distance_func)
 
-!     switch (state%cellular_return_type)
-!     {
-!     case FNL_CELLULAR_RETURN_TYPE_CELLVALUE:
-!         return closestHash * (1 / 2147483648.0f)
-!     case FNL_CELLULAR_RETURN_TYPE_DISTANCE:
-!         return distance0 - 1
-!     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2:
-!         return distance1 - 1
-!     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2ADD:
-!         return (distance1 + distance0) * 0.5f - 1
-!     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2SUB:
-!         return distance1 - distance0 - 1
-!     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2MUL:
-!         return distance1 * distance0 * 0.5f - 1
-!     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2DIV:
-!         return distance0 / distance1 - 1
-!     default:
-!         return 0
-!     }
-! }
+     case (FNL_CELLULAR_DISTANCE_EUCLIDEANSQ, FNL_CELLULAR_DISTANCE_EUCLIDEAN)
+      do xi = xr - 1, xr + 1
+        y_primed = y_primedBase
+        do yi = yr - 1, yr + 1
+          z_primed = z_primedBase
+          do zi = zr - 1, zr + 1
+            hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
+            idx = and(hash, shiftl(255, 2))
+            vecX = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellularJitter
+            vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellularJitter
+            vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellularJitter
+            newDistance = vecX * vecX + vecY * vecY + vecZ * vecZ
+            distance1 = max(min(distance1, newDistance), distance0)
+            if (newDistance < distance0) then
+              distance0 = newDistance
+              closestHash = hash
+            end if
+            z_primed = z_primed + PRIME_Z
+          end do
+          y_primed = y_primed + PRIME_Y
+        end do
+        x_primed = x_primed + PRIME_X
+      end do
+     case (FNL_CELLULAR_DISTANCE_MANHATTAN)
+      do xi = xr - 1, xr + 1
+        y_primed = y_primedBase
+        do yi = yr - 1, yr + 1
+          z_primed = z_primedBase
+          do zi = zr - 1, zr + 1
+            hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
+            idx = and(hash, shiftl(255, 2))
+            vecX = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellularJitter
+            vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellularJitter
+            vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellularJitter
+            newDistance = abs(vecX) + abs(vecY) + abs(vecZ)
+            distance1 = max(min(distance1, newDistance), distance0)
+            if (newDistance < distance0) then
+              distance0 = newDistance
+              closestHash = hash
+            end if
+            z_primed = z_primed + PRIME_Z
+          end do
+          y_primed = y_primed + PRIME_Y
+        end do
+        x_primed = x_primed + PRIME_X
+      end do
+     case (FNL_CELLULAR_DISTANCE_HYBRID)
+      do xi = xr - 1, xr + 1
+        y_primed = y_primedBase
+        do yi = yr - 1, yr + 1
+          z_primed = z_primedBase
+          do zi = zr - 1, zr + 1
+            hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
+            idx = and(hash, shiftl(255, 2))
+            vecX = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellularJitter
+            vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellularJitter
+            vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellularJitter
+            newDistance = (abs(vecX) + abs(vecY) + abs(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ)
+            distance1 = max(min(distance1, newDistance), distance0)
+            if (newDistance < distance0) then
+              distance0 = newDistance
+              closestHash = hash
+            end if
+            z_primed = z_primed + PRIME_Z
+          end do
+          y_primed = y_primed + PRIME_Y
+        end do
+        x_primed = x_primed + PRIME_X
+      end do
+     case default
+      error stop "[internal_fnl_single_cellular_3d] Error: Not found."
+    end select
 
-! static float internal_fnl_single_cellular_3d(fnl_state *state, int seed, FNLfloat x, FNLfloat y, FNLfloat z)
-! {
-!     int xr = nint(x)
-!     int yr = nint(y)
-!     int zr = nint(z)
+    if (state%cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN .and. state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE) then
+      distance0 = sqrt(distance0)
+      if (state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2) then
+        distance1 = sqrt(distance1)
+      end if
+    end if
 
-!     float distance0 = FLT_MAX
-!     float distance1 = FLT_MAX
-!     int closestHash = 0
+    select case (state%cellular_return_type)
+     case (FNL_CELLULAR_RETURN_TYPE_CELLVALUE)
+      output = closestHash * (1 / 2147483648.0)
+     case (FNL_CELLULAR_RETURN_TYPE_DISTANCE)
+      output = distance0 - 1
+     case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
+      output = distance1 - 1
+     case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2ADD)
+      output = (distance1 + distance0) * 0.5 - 1.0
+     case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2SUB)
+      output = distance1 - distance0 - 1.0
+     case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2MUL)
+      output = distance1 * distance0 * 0.5 - 1.0
+     case (FNL_CELLULAR_RETURN_TYPE_DISTANCE2DIV)
+      output = distance0 / distance1 - 1.0
+     case default
+      output = 0.0
+    end select
+  end function internal_fnl_single_cellular_3d
 
-!     float cellularJitter = 0.39614353f * state%cellular_jitter_mod
-
-!     int x_primed = (xr - 1) * PRIME_X
-!     int y_primedBase = (yr - 1) * PRIME_Y
-!     int z_primedBase = (zr - 1) * PRIME_Z
-
-!     switch (state%cellular_distance_func)
-!     {
-!     default:
-!     case FNL_CELLULAR_DISTANCE_EUCLIDEAN:
-!     case FNL_CELLULAR_DISTANCE_EUCLIDEANSQ:
-!         for (int xi = xr - 1 xi <= xr + 1 xi++)
-!         {
-!             int y_primed = y_primedBase
-
-!             for (int yi = yr - 1 yi <= yr + 1 yi++)
-!             {
-!                 int z_primed = z_primedBase
-
-!                 for (int zi = zr - 1 zi <= zr + 1 zi++)
-!                 {
-!                     int hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
-!                     int idx = hash & (255 << 2)
-
-!                     float vecX = (float)(xi - x) + RAND_VECS_3D[idx] * cellularJitter
-!                     float vecY = (float)(yi - y) + RAND_VECS_3D[idx | 1] * cellularJitter
-!                     float vecZ = (float)(zi - z) + RAND_VECS_3D[idx | 2] * cellularJitter
-
-!                     float newDistance = vecX * vecX + vecY * vecY + vecZ * vecZ
-
-!                     distance1 = max(min(distance1, newDistance), distance0)
-!                     if (newDistance < distance0)
-!                     {
-!                         distance0 = newDistance
-!                         closestHash = hash
-!                     }
-!                     z_primed += PRIME_Z
-!                 }
-!                 y_primed += PRIME_Y
-!             }
-!             x_primed += PRIME_X
-!         }
-!         break
-!     case FNL_CELLULAR_DISTANCE_MANHATTAN:
-!         for (int xi = xr - 1 xi <= xr + 1 xi++)
-!         {
-!             int y_primed = y_primedBase
-
-!             for (int yi = yr - 1 yi <= yr + 1 yi++)
-!             {
-!                 int z_primed = z_primedBase
-
-!                 for (int zi = zr - 1 zi <= zr + 1 zi++)
-!                 {
-!                     int hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
-!                     int idx = hash & (255 << 2)
-
-!                     float vecX = (float)(xi - x) + RAND_VECS_3D[idx] * cellularJitter
-!                     float vecY = (float)(yi - y) + RAND_VECS_3D[idx | 1] * cellularJitter
-!                     float vecZ = (float)(zi - z) + RAND_VECS_3D[idx | 2] * cellularJitter
-
-!                     float newDistance = abs(vecX) + abs(vecY) + abs(vecZ)
-
-!                     distance1 = max(min(distance1, newDistance), distance0)
-!                     if (newDistance < distance0)
-!                     {
-!                         distance0 = newDistance
-!                         closestHash = hash
-!                     }
-!                     z_primed += PRIME_Z
-!                 }
-!                 y_primed += PRIME_Y
-!             }
-!             x_primed += PRIME_X
-!         }
-!         break
-!     case FNL_CELLULAR_DISTANCE_HYBRID:
-!         for (int xi = xr - 1 xi <= xr + 1 xi++)
-!         {
-!             int y_primed = y_primedBase
-
-!             for (int yi = yr - 1 yi <= yr + 1 yi++)
-!             {
-!                 int z_primed = z_primedBase
-
-!                 for (int zi = zr - 1 zi <= zr + 1 zi++)
-!                 {
-!                     int hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
-!                     int idx = hash & (255 << 2)
-
-!                     float vecX = (float)(xi - x) + RAND_VECS_3D[idx] * cellularJitter
-!                     float vecY = (float)(yi - y) + RAND_VECS_3D[idx | 1] * cellularJitter
-!                     float vecZ = (float)(zi - z) + RAND_VECS_3D[idx | 2] * cellularJitter
-
-!                     float newDistance = (abs(vecX) + abs(vecY) + abs(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ)
-
-!                     distance1 = max(min(distance1, newDistance), distance0)
-!                     if (newDistance < distance0)
-!                     {
-!                         distance0 = newDistance
-!                         closestHash = hash
-!                     }
-!                     z_primed += PRIME_Z
-!                 }
-!                 y_primed += PRIME_Y
-!             }
-!             x_primed += PRIME_X
-!         }
-!         break
-!     }
-
-!     if (state%cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN && state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE)
-!     {
-!         distance0 = sqrt(distance0)
-!         if (state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
-!             distance1 = sqrt(distance1)
-!     }
-
-!     switch (state%cellular_return_type)
-!     {
-!     case FNL_CELLULAR_RETURN_TYPE_CELLVALUE:
-!         return closestHash * (1 / 2147483648.0f)
-!     case FNL_CELLULAR_RETURN_TYPE_DISTANCE:
-!         return distance0 - 1
-!     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2:
-!         return distance1 - 1
-!     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2ADD:
-!         return (distance1 + distance0) * 0.5f - 1
-!     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2SUB:
-!         return distance1 - distance0 - 1
-!     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2MUL:
-!         return distance1 * distance0 * 0.5f - 1
-!     case FNL_CELLULAR_RETURN_TYPE_DISTANCE2DIV:
-!         return distance0 / distance1 - 1
-!     default:
-!         return 0
-!     }
-! }
 
 ! Perlin Noise
+
 
 ! static float internal_fnl_single_perlin_2d(int seed, FNLfloat x, FNLfloat y)
 ! {
