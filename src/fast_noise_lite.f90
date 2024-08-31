@@ -2,6 +2,55 @@ module fast_noise
   use :: iso_c_binding
   implicit none
 
+  ! MIT License
+  !
+  ! Copyright(c) 2023 Jordan Peck (jordan.me2@gmail.com)
+  ! Copyright(c) 2023 Contributors
+  !
+  ! Permission is hereby granted, free of charge, to any person obtaining a copy
+  ! of this software and associated documentation files(the "Software"), to deal
+  ! in the Software without restriction, including without limitation the rights
+  ! to use, copy, modify, merge, publish, distribute, sublicense, and / or sell
+  ! copies of the Software, and to permit persons to whom the Software is
+  ! furnished to do so, subject to the following conditions :
+  !
+  ! The above copyright notice and this permission notice shall be included in all
+  ! copies or substantial portions of the Software.
+  !
+  ! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ! IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ! FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+  ! AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ! LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ! OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ! SOFTWARE.
+  !
+  ! .'',;:cldxkO00KKXXNNWWWNNXKOkxdollcc::::::;:::ccllloooolllllllllooollc:,'...        ...........',;cldxkO000Okxdlc::;;;,,;;;::cclllllll
+  ! ..',;:ldxO0KXXNNNNNNNNXXK0kxdolcc::::::;;;,,,,,,;;;;;;;;;;:::cclllllc:;'....       ...........',;:ldxO0KXXXK0Okxdolc::;;;;::cllodddddo
+  ! ...',:loxO0KXNNNNNXXKK0Okxdolc::;::::::::;;;,,'''''.....''',;:clllllc:;,'............''''''''',;:loxO0KXNNNNNXK0Okxdollccccllodxxxxxxd
+  ! ....';:ldkO0KXXXKK00Okxdolcc:;;;;;::cclllcc:;;,''..... ....',;clooddolcc:;;;;,,;;;;;::::;;;;;;:cloxk0KXNWWWWWWNXKK0Okxddoooddxxkkkkkxx
+  ! .....';:ldxkOOOOOkxxdolcc:;;;,,,;;:cllooooolcc:;'...      ..,:codxkkkxddooollloooooooollcc:::::clodkO0KXNWWWWWWNNXK00Okxxxxxxxxkkkkxxx
+  ! . ....';:cloddddo___________,,,,;;:clooddddoolc:,...      ..,:ldx__00OOOkkk___kkkkkkxxdollc::::cclodkO0KXXNNNNNNXXK0OOkxxxxxxxxxxxxddd
+  ! .......',;:cccc:|           |,,,;;:cclooddddoll:;'..     ..';cox|  \KKK000|   |KK00OOkxdocc___;::clldxxkO0KKKKK00Okkxdddddddddddddddoo
+  ! .......'',,,,,''|   ________|',,;;::cclloooooolc:;'......___:ldk|   \KK000|   |XKKK0Okxolc|   |;;::cclodxxkkkkxxdoolllcclllooodddooooo
+  ! ''......''''....|   |  ....'',,,,;;;::cclloooollc:;,''.'|   |oxk|    \OOO0|   |KKK00Oxdoll|___|;;;;;::ccllllllcc::;;,,;;;:cclloooooooo
+  ! ;;,''.......... |   |_____',,;;;____:___cllo________.___|   |___|     \xkk|   |KK_______ool___:::;________;;;_______...'',;;:ccclllloo
+  ! c:;,''......... |         |:::/     '   |lo/        |           |      \dx|   |0/       \d|   |cc/        |'/       \......',,;;:ccllo
+  ! ol:;,'..........|    _____|ll/    __    |o/   ______|____    ___|   |   \o|   |/   ___   \|   |o/   ______|/   ___   \ .......'',;:clo
+  ! dlc;,...........|   |::clooo|    /  |   |x\___   \KXKKK0|   |dol|   |\   \|   |   |   |   |   |d\___   \..|   |  /   /       ....',:cl
+  ! xoc;'...  .....'|   |llodddd|    \__|   |_____\   \KKK0O|   |lc:|   |'\       |   |___|   |   |_____\   \.|   |_/___/...      ...',;:c
+  ! dlc;'... ....',;|   |oddddddo\          |          |Okkx|   |::;|   |..\      |\         /|   |          | \         |...    ....',;:c
+  ! ol:,'.......',:c|___|xxxddollc\_____,___|_________/ddoll|___|,,,|___|...\_____|:\ ______/l|___|_________/...\________|'........',;::cc
+  ! c:;'.......';:codxxkkkkxxolc::;::clodxkOO0OOkkxdollc::;;,,''''',,,,''''''''''',,'''''',;:loxkkOOkxol:;,'''',,;:ccllcc:;,'''''',;::ccll
+  ! ;,'.......',:codxkOO0OOkxdlc:;,,;;:cldxxkkxxdolc:;;,,''.....'',;;:::;;,,,'''''........,;cldkO0KK0Okdoc::;;::cloodddoolc:;;;;;::ccllooo
+  ! .........',;:lodxOO0000Okdoc:,,',,;:clloddoolc:;,''.......'',;:clooollc:;;,,''.......',:ldkOKXNNXX0Oxdolllloddxxxxxxdolccccccllooodddd
+  ! .    .....';:cldxkO0000Okxol:;,''',,;::cccc:;,,'.......'',;:cldxxkkxxdolc:;;,'.......';coxOKXNWWWNXKOkxddddxxkkkkkkxdoollllooddxxxxkkk
+  !       ....',;:codxkO000OOxdoc:;,''',,,;;;;,''.......',,;:clodkO00000Okxolc::;,,''..',;:ldxOKXNWWWNNK0OkkkkkkkkkkkxxddooooodxxkOOOOO000
+  !       ....',;;clodxkkOOOkkdolc:;,,,,,,,,'..........,;:clodxkO0KKXKK0Okxdolcc::;;,,,;;:codkO0XXNNNNXKK0OOOOOkkkkxxdoollloodxkO0KKKXXXXX
+  !
+  ! VERSION: 1.1.1
+  ! https://github.com/Auburn/FastNoiseLite
+
 
   private
 
@@ -9,63 +58,16 @@ module fast_noise
 contains
 
 
-! // MIT License
-! //
-! // Copyright(c) 2023 Jordan Peck (jordan.me2@gmail.com)
-! // Copyright(c) 2023 Contributors
-! //
-! // Permission is hereby granted, free of charge, to any person obtaining a copy
-! // of this software and associated documentation files(the "Software"), to deal
-! // in the Software without restriction, including without limitation the rights
-! // to use, copy, modify, merge, publish, distribute, sublicense, and / or sell
-! // copies of the Software, and to permit persons to whom the Software is
-! // furnished to do so, subject to the following conditions :
-! //
-! // The above copyright notice and this permission notice shall be included in all
-! // copies or substantial portions of the Software.
-! //
-! // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-! // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-! // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
-! // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-! // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-! // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-! // SOFTWARE.
-! //
-! // .'',;:cldxkO00KKXXNNWWWNNXKOkxdollcc::::::;:::ccllloooolllllllllooollc:,'...        ...........',;cldxkO000Okxdlc::;;;,,;;;::cclllllll
-! // ..',;:ldxO0KXXNNNNNNNNXXK0kxdolcc::::::;;;,,,,,,;;;;;;;;;;:::cclllllc:;'....       ...........',;:ldxO0KXXXK0Okxdolc::;;;;::cllodddddo
-! // ...',:loxO0KXNNNNNXXKK0Okxdolc::;::::::::;;;,,'''''.....''',;:clllllc:;,'............''''''''',;:loxO0KXNNNNNXK0Okxdollccccllodxxxxxxd
-! // ....';:ldkO0KXXXKK00Okxdolcc:;;;;;::cclllcc:;;,''..... ....',;clooddolcc:;;;;,,;;;;;::::;;;;;;:cloxk0KXNWWWWWWNXKK0Okxddoooddxxkkkkkxx
-! // .....';:ldxkOOOOOkxxdolcc:;;;,,,;;:cllooooolcc:;'...      ..,:codxkkkxddooollloooooooollcc:::::clodkO0KXNWWWWWWNNXK00Okxxxxxxxxkkkkxxx
-! // . ....';:cloddddo___________,,,,;;:clooddddoolc:,...      ..,:ldx__00OOOkkk___kkkkkkxxdollc::::cclodkO0KXXNNNNNNXXK0OOkxxxxxxxxxxxxddd
-! // .......',;:cccc:|           |,,,;;:cclooddddoll:;'..     ..';cox|  \KKK000|   |KK00OOkxdocc___;::clldxxkO0KKKKK00Okkxdddddddddddddddoo
-! // .......'',,,,,''|   ________|',,;;::cclloooooolc:;'......___:ldk|   \KK000|   |XKKK0Okxolc|   |;;::cclodxxkkkkxxdoolllcclllooodddooooo
-! // ''......''''....|   |  ....'',,,,;;;::cclloooollc:;,''.'|   |oxk|    \OOO0|   |KKK00Oxdoll|___|;;;;;::ccllllllcc::;;,,;;;:cclloooooooo
-! // ;;,''.......... |   |_____',,;;;____:___cllo________.___|   |___|     \xkk|   |KK_______ool___:::;________;;;_______...'',;;:ccclllloo
-! // c:;,''......... |         |:::/     '   |lo/        |           |      \dx|   |0/       \d|   |cc/        |'/       \......',,;;:ccllo
-! // ol:;,'..........|    _____|ll/    __    |o/   ______|____    ___|   |   \o|   |/   ___   \|   |o/   ______|/   ___   \ .......'',;:clo
-! // dlc;,...........|   |::clooo|    /  |   |x\___   \KXKKK0|   |dol|   |\   \|   |   |   |   |   |d\___   \..|   |  /   /       ....',:cl
-! // xoc;'...  .....'|   |llodddd|    \__|   |_____\   \KKK0O|   |lc:|   |'\       |   |___|   |   |_____\   \.|   |_/___/...      ...',;:c
-! // dlc;'... ....',;|   |oddddddo\          |          |Okkx|   |::;|   |..\      |\         /|   |          | \         |...    ....',;:c
-! // ol:,'.......',:c|___|xxxddollc\_____,___|_________/ddoll|___|,,,|___|...\_____|:\ ______/l|___|_________/...\________|'........',;::cc
-! // c:;'.......';:codxxkkkkxxolc::;::clodxkOO0OOkkxdollc::;;,,''''',,,,''''''''''',,'''''',;:loxkkOOkxol:;,'''',,;:ccllcc:;,'''''',;::ccll
-! // ;,'.......',:codxkOO0OOkxdlc:;,,;;:cldxxkkxxdolc:;;,,''.....'',;;:::;;,,,'''''........,;cldkO0KK0Okdoc::;;::cloodddoolc:;;;;;::ccllooo
-! // .........',;:lodxOO0000Okdoc:,,',,;:clloddoolc:;,''.......'',;:clooollc:;;,,''.......',:ldkOKXNNXX0Oxdolllloddxxxxxxdolccccccllooodddd
-! // .    .....';:cldxkO0000Okxol:;,''',,;::cccc:;,,'.......'',;:cldxxkkxxdolc:;;,'.......';coxOKXNWWWNXKOkxddddxxkkkkkkxdoollllooddxxxxkkk
-! //       ....',;:codxkO000OOxdoc:;,''',,,;;;;,''.......',,;:clodkO00000Okxolc::;,,''..',;:ldxOKXNWWWNNK0OkkkkkkkkkkkxxddooooodxxkOOOOO000
-! //       ....',;;clodxkkOOOkkdolc:;,,,,,,,,'..........,;:clodxkO0KKXKK0Okxdolcc::;;,,,;;:codkO0XXNNNNXKK0OOOOOkkkkxxdoollloodxkO0KKKXXXXX
-! //
-! // VERSION: 1.1.1
-! // https://github.com/Auburn/FastNoiseLite
 
-! // In *one* C or C++ file, use #define FNL_IMPL to generate implementation
+
+! In *one* C or C++ file, use #define FNL_IMPL to generate implementation
 
 ! #ifndef FASTNOISELITE_H
 ! #define FASTNOISELITE_H
 
-! // Switch between using floats or doubles for input position
+! Switch between using floats or doubles for input position
 ! typedef float FNLfloat;
-! //typedef double FNLfloat;
+!typedef double FNLfloat;
 
 ! #if defined(__cplusplus)
 ! extern "C" {
@@ -73,10 +75,10 @@ contains
 
 ! #include <math.h>
 ! #include <stdint.h>
-! #include <stdbool.h> 
+! #include <stdbool.h>
 ! #include <float.h>
 
-! // Enums
+! Enums
 ! typedef enum
 ! {
 !     FNL_NOISE_OPENSIMPLEX2,
@@ -188,7 +190,7 @@ contains
 !     /**
 !      * The octave weighting for all none Domaain Warp fractal types.
 !      * @remark Default: 0.0
-!      * @remark 
+!      * @remark
 !      */
 !     float weighted_strength;
 
@@ -250,7 +252,7 @@ contains
 
 ! /**
 !  * 2D warps the input position using current domain warp settings.
-!  * 
+!  *
 !  * Example usage with fnlGetNoise2D:
 !  * ```
 !  * fnlDomainWarp2D(&state, &x, &y);
@@ -261,7 +263,7 @@ contains
 
 ! /**
 !  * 3D warps the input position using current domain warp settings.
-!  * 
+!  *
 !  * Example usage with fnlGetNoise3D:
 !  * ```
 !  * fnlDomainWarp3D(&state, &x, &y, &z);
@@ -270,15 +272,15 @@ contains
 !  */
 ! void fnlDomainWarp3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z);
 
-! // ====================
-! // Below this line is the implementation
-! // ====================
+! ====================
+! Below this line is the implementation
+! ====================
 
 ! #if defined(FNL_IMPL)
 
-! // Constants
+! Constants
 
-! static const float GRADIENTS_2D[] = 
+! static const float GRADIENTS_2D[] =
 ! {
 !     0.130526192220052f, 0.99144486137381f, 0.38268343236509f, 0.923879532511287f, 0.608761429008721f, 0.793353340291235f, 0.793353340291235f, 0.608761429008721f,
 !     0.923879532511287f, 0.38268343236509f, 0.99144486137381f, 0.130526192220051f, 0.99144486137381f, -0.130526192220051f, 0.923879532511287f, -0.38268343236509f,
@@ -314,7 +316,7 @@ contains
 !     -0.38268343236509f, -0.923879532511287f, -0.923879532511287f, -0.38268343236509f, -0.923879532511287f, 0.38268343236509f, -0.38268343236509f, 0.923879532511287f,
 ! };
 
-! static const float RAND_VECS_2D[] = 
+! static const float RAND_VECS_2D[] =
 ! {
 !     -0.2700222198f, -0.9628540911f, 0.3863092627f, -0.9223693152f, 0.04444859006f, -0.999011673f, -0.5992523158f, -0.8005602176f, -0.7819280288f, 0.6233687174f, 0.9464672271f, 0.3227999196f, -0.6514146797f, -0.7587218957f, 0.9378472289f, 0.347048376f,
 !     -0.8497875957f, -0.5271252623f, -0.879042592f, 0.4767432447f, -0.892300288f, -0.4514423508f, -0.379844434f, -0.9250503802f, -0.9951650832f, 0.0982163789f, 0.7724397808f, -0.6350880136f, 0.7573283322f, -0.6530343002f, -0.9928004525f, -0.119780055f,
@@ -350,7 +352,7 @@ contains
 !     0.01426758847f, -0.9998982128f, -0.6734383991f, 0.7392433447f, 0.639412098f, -0.7688642071f, 0.9211571421f, 0.3891908523f, -0.146637214f, -0.9891903394f, -0.782318098f, 0.6228791163f, -0.5039610839f, -0.8637263605f, -0.7743120191f, -0.6328039957f,
 ! };
 
-! static const float GRADIENTS_3D[] = 
+! static const float GRADIENTS_3D[] =
 ! {
 !     0, 1, 1, 0,  0,-1, 1, 0,  0, 1,-1, 0,  0,-1,-1, 0,
 !     1, 0, 1, 0, -1, 0, 1, 0,  1, 0,-1, 0, -1, 0,-1, 0,
@@ -370,7 +372,7 @@ contains
 !     1, 1, 0, 0,  0,-1, 1, 0, -1, 1, 0, 0,  0,-1,-1, 0
 ! };
 
-! static const float RAND_VECS_3D[] = 
+! static const float RAND_VECS_3D[] =
 ! {
 !     -0.7292736885f, -0.6618439697f, 0.1735581948f, 0, 0.790292081f, -0.5480887466f, -0.2739291014f, 0, 0.7217578935f, 0.6226212466f, -0.3023380997f, 0, 0.565683137f, -0.8208298145f, -0.0790000257f, 0, 0.760049034f, -0.5555979497f, -0.3370999617f, 0, 0.3713945616f, 0.5011264475f, 0.7816254623f, 0, -0.1277062463f, -0.4254438999f, -0.8959289049f, 0, -0.2881560924f, -0.5815838982f, 0.7607405838f, 0,
 !     0.5849561111f, -0.662820239f, -0.4674352136f, 0, 0.3307171178f, 0.0391653737f, 0.94291689f, 0, 0.8712121778f, -0.4113374369f, -0.2679381538f, 0, 0.580981015f, 0.7021915846f, 0.4115677815f, 0, 0.503756873f, 0.6330056931f, -0.5878203852f, 0, 0.4493712205f, 0.601390195f, 0.6606022552f, 0, -0.6878403724f, 0.09018890807f, -0.7202371714f, 0, -0.5958956522f, -0.6469350577f, 0.475797649f, 0,
@@ -406,7 +408,7 @@ contains
 !     -0.7870349638f, 0.03447489231f, 0.6159443543f, 0, -0.2015596421f, 0.6859872284f, 0.6991389226f, 0, -0.08581082512f, -0.10920836f, -0.9903080513f, 0, 0.5532693395f, 0.7325250401f, -0.396610771f, 0, -0.1842489331f, -0.9777375055f, -0.1004076743f, 0, 0.0775473789f, -0.9111505856f, 0.4047110257f, 0, 0.1399838409f, 0.7601631212f, -0.6344734459f, 0, 0.4484419361f, -0.845289248f, 0.2904925424f, 0
 ! };
 
-! // Utilities
+! Utilities
 
 ! static inline float _fnlFastMin(float x, float y) { return x < y ? x : y; }
 
@@ -444,7 +446,7 @@ contains
 !     return a;
 ! }
 
-! // NOTE: If your language does not support this method (seen above), then simply use the native sqrt function.
+! NOTE: If your language does not support this method (seen above), then simply use the native sqrt function.
 ! static inline float _fnlFastSqrt(float a) { return a * _fnlInvSqrt(a); }
 
 ! static inline int _fnlFastFloor(FNLfloat f) { return (f >= 0 ? (int)f : (int)f - 1); }
@@ -482,7 +484,7 @@ contains
 !     return 1.0f / ampFractal;
 ! }
 
-! // Hashing
+! Hashing
 
 ! static const int PRIME_X = 501125321;
 ! static const int PRIME_Y = 1136930381;
@@ -590,7 +592,7 @@ contains
 !     *zo = value * zgo;
 ! }
 
-! // Generic Noise Gen
+! Generic Noise Gen
 
 ! static float _fnlSingleSimplex2D(int seed, FNLfloat x, FNLfloat y);
 ! static float _fnlSingleOpenSimplex23D(int seed, FNLfloat x, FNLfloat y, FNLfloat z);
@@ -647,7 +649,7 @@ contains
 !     }
 ! }
 
-! // Noise Coordinate Transforms (frequency, and possible skew or rotation)
+! Noise Coordinate Transforms (frequency, and possible skew or rotation)
 
 ! static void _fnlTransformNoiseCoordinate2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
@@ -718,7 +720,7 @@ contains
 !     }
 ! }
 
-! // Domain Warp Coordinate Transforms
+! Domain Warp Coordinate Transforms
 
 ! static void _fnlTransformDomainWarpCoordinate2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
@@ -782,7 +784,7 @@ contains
 !     }
 ! }
 
-! // Fractal FBm
+! Fractal FBm
 ! static float _fnlGenFractalFBM2D(fnl_state *state, FNLfloat x, FNLfloat y)
 ! {
 !     int seed = state->seed;
@@ -824,7 +826,7 @@ contains
 !     return sum;
 ! }
 
-! // Fractal Ridged
+! Fractal Ridged
 
 ! static float _fnlGenFractalRidged2D(fnl_state *state, FNLfloat x, FNLfloat y)
 ! {
@@ -867,7 +869,7 @@ contains
 !     return sum;
 ! }
 
-! // Fractal PingPong
+! Fractal PingPong
 
 ! static float _fnlGenFractalPingPong2D(fnl_state *state, FNLfloat x, FNLfloat y)
 ! {
@@ -910,7 +912,7 @@ contains
 !     return sum;
 ! }
 
-! // Simplex/OpenSimplex2 Noise
+! Simplex/OpenSimplex2 Noise
 
 ! static float _fnlSingleSimplex2D(int seed, FNLfloat x, FNLfloat y)
 ! {
@@ -1084,7 +1086,7 @@ contains
 !     return value * 32.69428253173828125f;
 ! }
 
-! // OpenSimplex2S Noise
+! OpenSimplex2S Noise
 
 ! static float _fnlSingleOpenSimplex2S2D(int seed, FNLfloat x, FNLfloat y)
 ! {
@@ -1408,7 +1410,7 @@ contains
 !     return value * 9.046026385208288f;
 ! }
 
-! // Cellular Noise
+! Cellular Noise
 
 ! static float _fnlSingleCellular2D(fnl_state *state, int seed, FNLfloat x, FNLfloat y)
 ! {
@@ -1684,7 +1686,7 @@ contains
 !     }
 ! }
 
-! // Perlin Noise
+! Perlin Noise
 
 ! static float _fnlSinglePerlin2D(int seed, FNLfloat x, FNLfloat y)
 ! {
@@ -1745,7 +1747,7 @@ contains
 !     return _fnlLerp(yf0, yf1, zs) * 0.964921414852142333984375f;
 ! }
 
-! // Value Cubic
+! Value Cubic
 
 ! static float _fnlSingleValueCubic2D(int seed, FNLfloat x, FNLfloat y)
 ! {
@@ -1799,7 +1801,7 @@ contains
 !     int z2 = z1 + PRIME_Z;
 !     int x3 = x1 + (int)((long)PRIME_X << 1);
 !     int y3 = y1 + (int)((long)PRIME_Y << 1);
-!     int z3 = z1 + (int)((long)PRIME_Z << 1);   
+!     int z3 = z1 + (int)((long)PRIME_Z << 1);
 
 !     return _fnlCubicLerp(
 !         _fnlCubicLerp(
@@ -1829,7 +1831,7 @@ contains
 !         zs) * (1 / 1.5f * 1.5f * 1.5f);
 ! }
 
-! // Value noise
+! Value noise
 
 ! static float _fnlSingleValue2D(int seed, FNLfloat x, FNLfloat y)
 ! {
@@ -1878,9 +1880,9 @@ contains
 !     return _fnlLerp(yf0, yf1, zs);
 ! }
 
-! // Domain Warp
+! Domain Warp
 
-! // Forward declare
+! Forward declare
 ! static void _fnlSingleDomainWarpBasicGrid2D(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xp, FNLfloat *yp);
 ! static void _fnlSingleDomainWarpBasicGrid3D(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xp, FNLfloat *yp, FNLfloat *zp);
 ! static void _fnlSingleDomainWarpSimplexGradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xr, FNLfloat *yr, bool outGradOnly);
@@ -1918,7 +1920,7 @@ contains
 !     }
 ! }
 
-! // Domain Warp Single Wrapper
+! Domain Warp Single Wrapper
 
 ! static void _fnlDomainWarpSingle2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
@@ -1947,7 +1949,7 @@ contains
 !     _fnlDoSingleDomainWarp3D(state, seed, amp, freq, xs, ys, zs, x, y, z);
 ! }
 
-! // Domain Warp Fractal Progressive
+! Domain Warp Fractal Progressive
 
 ! static void _fnlDomainWarpFractalProgressive2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
@@ -1990,7 +1992,7 @@ contains
 !     }
 ! }
 
-! // Domain Warp Fractal Independent
+! Domain Warp Fractal Independent
 
 ! static void _fnlDomainWarpFractalIndependent2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
@@ -2033,7 +2035,7 @@ contains
 !     }
 ! }
 
-! // Domain Warp Basic Grid
+! Domain Warp Basic Grid
 
 ! static void _fnlSingleDomainWarpBasicGrid2D(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xp, FNLfloat *yp)
 ! {
@@ -2125,7 +2127,7 @@ contains
 !     *zp += _fnlLerp(lz0y, _fnlLerp(lz0x, lz1x, ys), zs) * warpAmp;
 ! }
 
-! // Domain Warp Simplex/OpenSimplex2
+! Domain Warp Simplex/OpenSimplex2
 
 ! static void _fnlSingleDomainWarpSimplexGradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xr, FNLfloat *yr, bool outGradOnly)
 ! {
@@ -2343,9 +2345,9 @@ contains
 !     *zr += vz * warpAmp;
 ! }
 
-! // ====================
-! // Public API
-! // ====================
+! ====================
+! Public API
+! ====================
 
 ! fnl_state fnlCreateState()
 ! {
