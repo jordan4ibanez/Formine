@@ -197,6 +197,7 @@ module glfw
   public :: glfw_get_window_width_f32
   public :: glfw_get_window_height_f32
   public :: glfw_set_key_callback
+  public :: glfw_close_window
 
 
   ! Here I'm binding to the C glfw shared library.
@@ -561,5 +562,12 @@ contains
     call internal_glfw_set_key_callback(window_pointer, callback_function_pointer)
   end subroutine glfw_set_key_callback
 
+
+  !* Close the game's window.
+  subroutine glfw_close_window()
+    implicit none
+
+    call internal_glfw_set_window_should_close(window_pointer, GLFW_TRUE)
+  end subroutine glfw_close_window
 
 end module glfw
