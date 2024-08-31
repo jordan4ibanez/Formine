@@ -94,41 +94,72 @@ module fast_noise_lite
   end enum
 
 
+  public :: fnl_fractal_type
+  public :: FNL_FRACTAL_NONE
+  public :: FNL_FRACTAL_FBM
+  public :: FNL_FRACTAL_RIDGED
+  public :: FNL_FRACTAL_PINGPONG
+  public :: FNL_FRACTAL_DOMAIN_WARP_PROGRESSIVE
+  public :: FNL_FRACTAL_DOMAIN_WARP_INDEPENDENT
+
   enum, bind(c)
-    fnl_fractal_type
-    FNL_FRACTAL_NONE
-    FNL_FRACTAL_FBM
-    FNL_FRACTAL_RIDGED
-    FNL_FRACTAL_PINGPONG
-    FNL_FRACTAL_DOMAIN_WARP_PROGRESSIVE
-    FNL_FRACTAL_DOMAIN_WARP_INDEPENDENT
+    enumerator :: fnl_fractal_type = 0
+    enumerator :: FNL_FRACTAL_NONE = 1
+    enumerator :: FNL_FRACTAL_FBM = 2
+    enumerator :: FNL_FRACTAL_RIDGED = 3
+    enumerator :: FNL_FRACTAL_PINGPONG = 4
+    enumerator :: FNL_FRACTAL_DOMAIN_WARP_PROGRESSIVE = 5
+    enumerator :: FNL_FRACTAL_DOMAIN_WARP_INDEPENDENT = 6
   end enum
 
-! typedef enum
-! {
-!     FNL_CELLULAR_DISTANCE_EUCLIDEAN
-!     FNL_CELLULAR_DISTANCE_EUCLIDEANSQ
-!     FNL_CELLULAR_DISTANCE_MANHATTAN
-!     FNL_CELLULAR_DISTANCE_HYBRID
-! } fnl_cellular_distance_func;
 
-! typedef enum
-! {
-!     FNL_CELLULAR_RETURN_TYPE_CELLVALUE
-!     FNL_CELLULAR_RETURN_TYPE_DISTANCE
-!     FNL_CELLULAR_RETURN_TYPE_DISTANCE2
-!     FNL_CELLULAR_RETURN_TYPE_DISTANCE2ADD
-!     FNL_CELLULAR_RETURN_TYPE_DISTANCE2SUB
-!     FNL_CELLULAR_RETURN_TYPE_DISTANCE2MUL
-!     FNL_CELLULAR_RETURN_TYPE_DISTANCE2DIV
-! } fnl_cellular_return_type;
+  public :: fnl_cellular_distance_func
+  public :: FNL_CELLULAR_DISTANCE_EUCLIDEAN
+  public :: FNL_CELLULAR_DISTANCE_EUCLIDEANSQ
+  public :: FNL_CELLULAR_DISTANCE_MANHATTAN
+  public :: FNL_CELLULAR_DISTANCE_HYBRID
 
-! typedef enum
-! {
-!     FNL_DOMAIN_WARP_OPENSIMPLEX2
-!     FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED
-!     FNL_DOMAIN_WARP_BASICGRID
-! } fnl_domain_warp_type;
+  enum, bind(c)
+    enumerator :: fnl_cellular_distance_func = 0
+    enumerator :: FNL_CELLULAR_DISTANCE_EUCLIDEAN = 1
+    enumerator :: FNL_CELLULAR_DISTANCE_EUCLIDEANSQ = 2
+    enumerator :: FNL_CELLULAR_DISTANCE_MANHATTAN = 3
+    enumerator :: FNL_CELLULAR_DISTANCE_HYBRID = 4
+  end enum
+
+
+  public :: fnl_cellular_return_type
+  public :: FNL_CELLULAR_RETURN_TYPE_CELLVALUE
+  public :: FNL_CELLULAR_RETURN_TYPE_DISTANCE
+  public :: FNL_CELLULAR_RETURN_TYPE_DISTANCE2
+  public :: FNL_CELLULAR_RETURN_TYPE_DISTANCE2ADD
+  public :: FNL_CELLULAR_RETURN_TYPE_DISTANCE2SUB
+  public :: FNL_CELLULAR_RETURN_TYPE_DISTANCE2MUL
+  public :: FNL_CELLULAR_RETURN_TYPE_DISTANCE2DIV
+
+  enum, bind(c)
+    enumerator :: fnl_cellular_return_type = 0
+    enumerator :: FNL_CELLULAR_RETURN_TYPE_CELLVALUE = 1
+    enumerator :: FNL_CELLULAR_RETURN_TYPE_DISTANCE = 2
+    enumerator :: FNL_CELLULAR_RETURN_TYPE_DISTANCE2 = 3
+    enumerator :: FNL_CELLULAR_RETURN_TYPE_DISTANCE2ADD = 4
+    enumerator :: FNL_CELLULAR_RETURN_TYPE_DISTANCE2SUB = 5
+    enumerator :: FNL_CELLULAR_RETURN_TYPE_DISTANCE2MUL = 6
+    enumerator :: FNL_CELLULAR_RETURN_TYPE_DISTANCE2DIV = 7
+  end enum
+
+
+  public :: fnl_domain_warp_type
+  public :: FNL_DOMAIN_WARP_OPENSIMPLEX2
+  public :: FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED
+  public :: FNL_DOMAIN_WARP_BASICGRID
+
+  enum, bind(c)
+    enumerator :: fnl_domain_warp_type = 0
+    enumerator :: FNL_DOMAIN_WARP_OPENSIMPLEX2 = 1
+    enumerator :: FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED = 2
+    enumerator :: FNL_DOMAIN_WARP_BASICGRID = 3
+  end enum
 
 ! /**
 !  * Structure containing entire noise system state.
