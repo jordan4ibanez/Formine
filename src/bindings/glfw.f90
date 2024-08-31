@@ -570,4 +570,5 @@ contains
     call internal_glfw_set_window_should_close(window_pointer, GLFW_TRUE)
   end subroutine glfw_close_window
 
+
 end module glfw
