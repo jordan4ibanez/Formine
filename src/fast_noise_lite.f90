@@ -2314,225 +2314,237 @@ contains
 ! Domain Warp Simplex/OpenSimplex2
 
 
-! subroutine internal_fnl_single_domain_warp_simplex_gradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat *xr, FNLfloat *yr, bool outGradOnly)
-! {
-!     const float SQRT3 = 1.7320508075688772935274463415059f
-!     const float G2 = (3 - SQRT3) / 6
+  subroutine internal_fnl_single_domain_warp_simplex_gradient(seed, warpAmp, frequency, xx, yy, xr, yr, outGradOnly)
+    implicit none
 
-!     x *= frequency
-!     y *= frequency
+    integer(c_int), intent(in), value :: seed
+    real(c_float), intent(in), value :: warpAmp, frequency
+    real(fnl_float), intent(in), value :: xx, yy
+    real(fnl_float), intent(inout) :: xr, yr
+    logical, intent(in), value :: outGradOnly
+    real(c_float) :: SQRT3, g2, x, y, xi, yi, t, x0, y0, vx, vy, a, aaaa, xo, yo, b, c, bbbb, cccc, x1, y1, x2, y2
+    integer(c_int) :: i, j
 
-!     /*
-!      * --- Skew moved to TransformNoiseCoordinate method ---
-!      * const FNLfloat F2 = 0.5f * (SQRT3 - 1)
-!      * FNLfloat s = (x + y) * F2
-!      * x += s y += s
-!      */
+    SQRT3 = 1.7320508075688772935274463415059
+    G2 = (3 - SQRT3) / 6
 
-!     int i = floor(x)
-!     int j = floor(y)
-!     float xi = (float)(x - i)
-!     float yi = (float)(y - j)
+    ! Use xx and so forth as mutable subroutine variables.
+    x = xx * frequency
+    y = yy * frequency
 
-!     float t = (xi + yi) * G2
-!     float x0 = (float)(xi - t)
-!     float y0 = (float)(yi - t)
+    !
+    ! --- Skew moved to TransformNoiseCoordinate method ---
+    ! const FNLfloat F2 = 0.5f * (SQRT3 - 1)
+    ! FNLfloat s = (x + y) * F2
+    ! x += s y += s
+    !
 
-!     i *= PRIME_X
-!     j *= PRIME_Y
+    i = floor(x)
+    j = floor(y)
+    xi = real(x - i, c_float)
+    yi = real(y - j, c_float)
 
-!     float vx, vy
-!     vx = vy = 0
+    t = (xi + yi) * G2
+    x0 = real(xi - t, c_float)
+    y0 = real(yi - t, c_float)
 
-!     float a = 0.5f - x0 * x0 - y0 * y0
-!     if (a > 0)
-!     {
-!         float aaaa = (a * a) * (a * a)
-!         float xo, yo
-!         if (outGradOnly)
-!             internal_fnl_grad_coord_out_2d(seed, i, j, &xo, &yo)
-!         else
-!             internal_fnl_grad_coord_dual_2d(seed, i, j, x0, y0, &xo, &yo)
-!         vx += aaaa * xo
-!         vy += aaaa * yo
-!     }
+    i = i * PRIME_X
+    j = j * PRIME_Y
 
-!     float c = (float)(2 * (1 - 2 * G2) * (1 / G2 - 2)) * t + ((float)(-2 * (1 - 2 * G2) * (1 - 2 * G2)) + a)
-!     if (c > 0)
-!     {
-!         float x2 = x0 + (2 * (float)G2 - 1)
-!         float y2 = y0 + (2 * (float)G2 - 1)
-!         float cccc = (c * c) * (c * c)
-!         float xo, yo
-!         if (outGradOnly)
-!             internal_fnl_grad_coord_out_2d(seed, i + PRIME_X, j + PRIME_Y, &xo, &yo)
-!         else
-!             internal_fnl_grad_coord_dual_2d(seed, i + PRIME_X, j + PRIME_Y, x2, y2, &xo, &yo)
-!         vx += cccc * xo
-!         vy += cccc * yo
-!     }
+    vx = 0.0
+    vy = 0.0
 
-!     if (y0 > x0)
-!     {
-!         float x1 = x0 + (float)G2
-!         float y1 = y0 + ((float)G2 - 1)
-!         float b = 0.5f - x1 * x1 - y1 * y1
-!         if (b > 0)
-!         {
-!             float bbbb = (b * b) * (b * b)
-!             float xo, yo
-!             if (outGradOnly)
-!                 internal_fnl_grad_coord_out_2d(seed, i, j + PRIME_Y, &xo, &yo)
-!             else
-!                 internal_fnl_grad_coord_dual_2d(seed, i, j + PRIME_Y, x1, y1, &xo, &yo)
-!             vx += bbbb * xo
-!             vy += bbbb * yo
-!         }
-!     }
-!     else
-!     {
-!         float x1 = x0 + ((float)G2 - 1)
-!         float y1 = y0 + (float)G2
-!         float b = 0.5f - x1 * x1 - y1 * y1
-!         if (b > 0)
-!         {
-!             float bbbb = (b * b) * (b * b)
-!             float xo, yo
-!             if (outGradOnly)
-!                 internal_fnl_grad_coord_out_2d(seed, i + PRIME_X, j, &xo, &yo)
-!             else
-!                 internal_fnl_grad_coord_dual_2d(seed, i + PRIME_X, j, x1, y1, &xo, &yo)
-!             vx += bbbb * xo
-!             vy += bbbb * yo
-!         }
-!     }
+    a = 0.5 - x0 * x0 - y0 * y0
 
-!     *xr += vx * warpAmp
-!     *yr += vy * warpAmp
-! }
+    if (a > 0) then
+      aaaa = (a * a) * (a * a)
 
-! subroutine internal_fnl_single_domain_warp_open_simplex2_gradient(int seed, float warpAmp, float frequency, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xr, FNLfloat *yr, FNLfloat *zr, bool outGradOnly)
-! {
-!     x *= frequency
-!     y *= frequency
-!     z *= frequency
+      if (outGradOnly) then
+        call internal_fnl_grad_coord_out_2d(seed, i, j, xo, yo)
+      else
+        call internal_fnl_grad_coord_dual_2d(seed, i, j, x0, y0, xo, yo)
+      end if
+      vx = vx + (aaaa * xo)
+      vy = vy + (aaaa * yo)
+    end if
 
-!     /*
-!      * --- Rotation moved to TransformDomainWarpCoordinate method ---
-!      * const FNLfloat R3 = (FNLfloat)(2.0 / 3.0)
-!      * FNLfloat r = (x + y + z) * R3 // Rotation, not skew
-!      * x = r - x y = r - y z = r - z
-!      */
+    c = real(2 * (1 - 2 * G2) * (1 / G2 - 2), c_float) * t + (real(-2 * (1 - 2 * G2) * (1 - 2 * G2), c_float) + a)
+    if (c > 0) then
+      x2 = x0 + (2 * real(G2, c_float) - 1)
+      y2 = y0 + (2 * real(G2, c_float) - 1)
+      cccc = (c * c) * (c * c)
+      if (outGradOnly) then
+        call internal_fnl_grad_coord_out_2d(seed, i + PRIME_X, j + PRIME_Y, xo, yo)
+      else
+        call internal_fnl_grad_coord_dual_2d(seed, i + PRIME_X, j + PRIME_Y, x2, y2, xo, yo)
+      end if
+      vx = vx + (cccc * xo)
+      vy = vy + (cccc * yo)
+    end if
 
-!     int i = nint(x)
-!     int j = nint(y)
-!     int k = nint(z)
-!     float x0 = (float)x - i
-!     float y0 = (float)y - j
-!     float z0 = (float)z - k
+    if (y0 > x0) then
+      x1 = x0 + real(G2, c_float)
+      y1 = y0 + (real(G2, c_float) - 1)
+      b = 0.5 - x1 * x1 - y1 * y1
+      if (b > 0) then
+        bbbb = (b * b) * (b * b)
 
-!     int x_n_sign = (int)(-x0 - 1.0f) | 1
-!     int y_n_sign = (int)(-y0 - 1.0f) | 1
-!     int z_n_sign = (int)(-z0 - 1.0f) | 1
+        if (outGradOnly) then
+          call internal_fnl_grad_coord_out_2d(seed, i, j + PRIME_Y, xo, yo)
+        else
+          call internal_fnl_grad_coord_dual_2d(seed, i, j + PRIME_Y, x1, y1, xo, yo)
+        end if
+        vx = vx + (bbbb * xo)
+        vy = vy + (bbbb * yo)
+      end if
+    else
+      x1 = x0 + (real(G2, c_float) - 1)
+      y1 = y0 + real(G2, c_float)
+      b = 0.5 - x1 * x1 - y1 * y1
+      if (b > 0) then
+        bbbb = (b * b) * (b * b)
+        if (outGradOnly) then
+          call internal_fnl_grad_coord_out_2d(seed, i + PRIME_X, j, xo, yo)
+        else
+          call internal_fnl_grad_coord_dual_2d(seed, i + PRIME_X, j, x1, y1, xo, yo)
+        end if
+        vx = vx + (bbbb * xo)
+        vy = vy + (bbbb * yo)
+      end if
+    end if
 
-!     float ax0 = x_n_sign * -x0
-!     float ay0 = y_n_sign * -y0
-!     float az0 = z_n_sign * -z0
+    xr = xr + (vx * warpAmp)
+    yr = yr + (vy * warpAmp)
+  end subroutine internal_fnl_single_domain_warp_simplex_gradient
 
-!     i *= PRIME_X
-!     j *= PRIME_Y
-!     k *= PRIME_Z
 
-!     float vx, vy, vz
-!     vx = vy = vz = 0
+  subroutine internal_fnl_single_domain_warp_open_simplex2_gradient(val_seed, warpAmp, frequency, xx, yy, zz, xr, yr, zr, outGradOnly)
+    integer(c_int), intent(in), value :: val_seed
+    real(c_float), intent(in), value :: warpAmp, frequency
+    real(fnl_float), intent(in), value :: xx, yy, zz
+    real(fnl_float), intent(inout) :: xr, yr, zr
+    logical, intent(in), value :: outGradOnly
+    real(c_float) :: SQRT3, g2, x, y, z, xi, yi, zi, t, x0, y0, z0, vx, vy, vz, a, aaaa, xo, yo, zo, b, c, bbbb, cccc, x1, y1, z1, x2, y2, z2, ax0, ay0, az0
+    integer(c_int) :: seed, i, j, k, x_n_sign, y_n_sign, z_n_sign, l, i1, j1, k1
 
-!     float a = (0.6f - x0 * x0) - (y0 * y0 + z0 * z0)
-!     for (int l = 0 l < 2 l++)
-!     {
-!         if (a > 0)
-!         {
-!             float aaaa = (a * a) * (a * a)
-!             float xo, yo, zo
-!             if (outGradOnly)
-!                 internal_fnl_grad_coord_out_3d(seed, i, j, k, &xo, &yo, &zo)
-!             else
-!                 internal_fnl_grad_coord_dual_3d(seed, i, j, k, x0, y0, z0, &xo, &yo, &zo)
-!             vx += aaaa * xo
-!             vy += aaaa * yo
-!             vz += aaaa * zo
-!         }
+    ! Use xx and so forth as mutable subroutine variables.
+    x = xx * frequency
+    x = yy * frequency
+    z = zz * frequency
+    seed = val_seed
 
-!         float b = a + 1
-!         int i1 = i
-!         int j1 = j
-!         int k1 = k
-!         float x1 = x0
-!         float y1 = y0
-!         float z1 = z0
-!         if (ax0 >= ay0 && ax0 >= az0)
-!         {
-!             x1 += x_n_sign
-!             b -= x_n_sign * 2 * x1
-!             i1 -= x_n_sign * PRIME_X
-!         }
-!         else if (ay0 > ax0 && ay0 >= az0)
-!         {
-!             y1 += y_n_sign
-!             b -= y_n_sign * 2 * y1
-!             j1 -= y_n_sign * PRIME_Y
-!         }
-!         else
-!         {
-!             z1 += z_n_sign
-!             b -= z_n_sign * 2 * z1
-!             k1 -= z_n_sign * PRIME_Z
-!         }
+    !
+    ! --- Rotation moved to TransformDomainWarpCoordinate method ---
+    ! const FNLfloat R3 = (FNLfloat)(2.0 / 3.0)
+    ! FNLfloat r = (x + y + z) * R3 // Rotation, not skew
+    ! x = r - x y = r - y z = r - z
+    !
 
-!         if (b > 0)
-!         {
-!             float bbbb = (b * b) * (b * b)
-!             float xo, yo, zo
-!             if (outGradOnly)
-!                 internal_fnl_grad_coord_out_3d(seed, i1, j1, k1, &xo, &yo, &zo)
-!             else
-!                 internal_fnl_grad_coord_dual_3d(seed, i1, j1, k1, x1, y1, z1, &xo, &yo, &zo)
-!             vx += bbbb * xo
-!             vy += bbbb * yo
-!             vz += bbbb * zo
-!         }
+    i = nint(x)
+    j = nint(y)
+    k = nint(z)
+    x0 = real(x, c_float) - i
+    y0 = real(y, c_float) - j
+    z0 = real(z, c_float) - k
 
-!         if (l == 1)
-!             break
+    x_n_sign = ior(int(-x0 - 1.0, c_int), 1)
+    y_n_sign = ior(int(-y0 - 1.0, c_int), 1)
+    z_n_sign = ior(int(-z0 - 1.0, c_int), 1)
 
-!         ax0 = 0.5f - ax0
-!         ay0 = 0.5f - ay0
-!         az0 = 0.5f - az0
+    ax0 = x_n_sign * (-x0)
+    ay0 = y_n_sign * (-y0)
+    az0 = z_n_sign * (-z0)
 
-!         x0 = x_n_sign * ax0
-!         y0 = y_n_sign * ay0
-!         z0 = z_n_sign * az0
+    i = i * PRIME_X
+    j = j * PRIME_Y
+    k = k * PRIME_Z
 
-!         a += (0.75f - ax0) - (ay0 + az0)
+    vx = 0.0
+    vy = 0.0
+    vz = 0.0
 
-!         i += (x_n_sign >> 1) & PRIME_X
-!         j += (y_n_sign >> 1) & PRIME_Y
-!         k += (z_n_sign >> 1) & PRIME_Z
+    a = (0.6 - x0 * x0) - (y0 * y0 + z0 * z0)
 
-!         x_n_sign = -x_n_sign
-!         y_n_sign = -y_n_sign
-!         z_n_sign = -z_n_sign
+    do l = 1,2
+      if (a > 0) then
+        aaaa = (a * a) * (a * a)
+        if (outGradOnly) then
+          call internal_fnl_grad_coord_out_3d(seed, i, j, k, xo, yo, zo)
+        else
+          call internal_fnl_grad_coord_dual_3d(seed, i, j, k, x0, y0, z0, xo, yo, zo)
+        end if
+        vx = vx + (aaaa * xo)
+        vy = vy + (aaaa * yo)
+        vz = vz + (aaaa * zo)
+      end if
 
-!         seed += 1293373
-!     }
+      b = a + 1
+      i1 = i
+      j1 = j
+      k1 = k
+      x1 = x0
+      y1 = y0
+      z1 = z0
+      if (ax0 >= ay0 .and. ax0 >= az0) then
+        x1 = x1 + x_n_sign
+        b = b - (x_n_sign * 2 * x1)
+        i1 = i1 - (x_n_sign * PRIME_X)
+      else if (ay0 > ax0 .and. ay0 >= az0) then
+        y1 = y1 + y_n_sign
+        b = b - (y_n_sign * 2 * y1)
+        j1 = j1 - (y_n_sign * PRIME_Y)
+      else
+        z1 = z1 + z_n_sign
+        b = b - (z_n_sign * 2 * z1)
+        k1 = k1 - (z_n_sign * PRIME_Z)
+      end if
+      if (b > 0) then
+        bbbb = (b * b) * (b * b)
+        if (outGradOnly) then
+          call internal_fnl_grad_coord_out_3d(seed, i1, j1, k1, xo, yo, zo)
+        else
+          call internal_fnl_grad_coord_dual_3d(seed, i1, j1, k1, x1, y1, z1, xo, yo, zo)
+        end if
+        vx = vx + (bbbb * xo)
+        vy = vy + (bbbb * yo)
+        vz = vz + (bbbb * zo)
+      end if
 
-!     *xr += vx * warpAmp
-!     *yr += vy * warpAmp
-!     *zr += vz * warpAmp
-! }
+      if (l == 2) then
+        exit
+      end if
+
+      ax0 = 0.5 - ax0
+      ay0 = 0.5 - ay0
+      az0 = 0.5 - az0
+
+      x0 = x_n_sign * ax0
+      y0 = y_n_sign * ay0
+      z0 = z_n_sign * az0
+
+      a = a + ((0.75 - ax0) - (ay0 + az0))
+
+      i = i + and(shiftr(x_n_sign, 1), PRIME_X)
+      j = j + and(shiftr(y_n_sign, 1), PRIME_Y)
+      k = k + and(shiftr(z_n_sign, 1), PRIME_Z)
+
+      x_n_sign = -x_n_sign
+      y_n_sign = -y_n_sign
+      z_n_sign = -z_n_sign
+
+      seed = seed + 1293373
+    end do
+
+    xr = xr + (vx * warpAmp)
+    yr = yr + (vy * warpAmp)
+    zr = zr + (vz * warpAmp)
+  end subroutine internal_fnl_single_domain_warp_open_simplex2_gradient
+
 
 ! ====================
 ! Public API
 ! ====================
+
 
 ! /**
 !  * Creates a noise state with default values.
