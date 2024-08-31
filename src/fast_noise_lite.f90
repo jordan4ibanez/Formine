@@ -978,48 +978,68 @@ contains
 ! Fractal PingPong
 
 
-! static float _fnlGenFractalPingPong2D(fnl_state *state, FNLfloat x, FNLfloat y)
-! {
-!     int seed = state%seed
-!     float sum = 0
-!     float amp = internal_fnl_calculate_fractal_bounding(state)
+  real(c_float) function internal_fnl_gen_fractal_ping_pong_2d(state, x, y) result(sum)
+    implicit none
 
-!     for (int i = 0 i < state%octaves i++)
-!     {
-!         float noise = internal_fnl_ping_pong((internal_fnl_gen_noise_single_2d(state, seed++, x, y) + 1) * state%ping_pong_strength)
-!         sum += (noise - 0.5f) * 2 * amp
-!         amp *= internal_fnl_lerp(1.0f, noise, state%weighted_strength)
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(in), value :: x, y
+    integer(c_int) :: seed, i
+    real(c_float) :: amp, noise
+    real(fnl_float) :: xx, yy
 
-!         x *= state%lacunarity
-!         y *= state%lacunarity
-!         amp *= state%gain
-!     }
+    xx = x
+    yy = y
+    seed = state%seed
+    sum = 0
+    amp = internal_fnl_calculate_fractal_bounding(state)
 
-!     return sum
-! }
+    do i = 1, state%octaves
 
-! static float _fnlGenFractalPingPong3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z)
-! {
-!     int seed = state%seed
-!     float sum = 0
-!     float amp = internal_fnl_calculate_fractal_bounding(state)
+      seed = seed + 1
+      noise = internal_fnl_ping_pong((internal_fnl_gen_noise_single_2d(state, seed, xx, yy) + 1.0) * state%ping_pong_strength)
+      sum = sum + ((noise - 0.5) * 2.0 * amp)
+      amp = amp * (internal_fnl_lerp(1.0, noise, state%weighted_strength))
 
-!     for (int i = 0 i < state%octaves i++)
-!     {
-!         float noise = internal_fnl_ping_pong((internal_fnl_gen_noise_single_3d(state, seed++, x, y, z) + 1) * state%ping_pong_strength)
-!         sum += (noise - 0.5f) * 2 * amp
-!         amp *= internal_fnl_lerp(1.0f, noise, state%weighted_strength)
+      xx = xx * state%lacunarity
+      yy = yy * state%lacunarity
+      amp = amp * state%gain
+    end do
+  end function internal_fnl_gen_fractal_ping_pong_2d
 
-!         x *= state%lacunarity
-!         y *= state%lacunarity
-!         z *= state%lacunarity
-!         amp *= state%gain
-!     }
 
-!     return sum
-! }
+  real(c_float) function internal_fnl_gen_fractal_ping_pong_3d(state, x, y, z) result(sum)
+    implicit none
+
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(in), value :: x, y, z
+    integer(c_int) :: seed, i
+    real(c_float) :: amp, noise
+    real(fnl_float) :: xx, yy, zz
+
+    xx = x
+    yy = y
+    zz = z
+    seed = state%seed
+    sum = 0
+    amp = internal_fnl_calculate_fractal_bounding(state)
+
+    do i = 1, state%octaves
+      seed = seed + 1
+      noise = internal_fnl_ping_pong((internal_fnl_gen_noise_single_3d(state, seed, xx, yy, zz) + 1) * state%ping_pong_strength)
+      sum = sum + ((noise - 0.5) * 2.0 * amp)
+      amp = amp * (internal_fnl_lerp(1.0, noise, state%weighted_strength))
+
+      xx = xx * state%lacunarity
+      yy = yy * state%lacunarity
+      zz = zz * state%lacunarity
+      amp = amp * state%gain
+    end do
+
+  end  function internal_fnl_gen_fractal_ping_pong_3d
+
 
 ! Simplex/OpenSimplex2 Noise
+  
 
 ! static float internal_fnl_single_complex_2d(int seed, FNLfloat x, FNLfloat y)
 ! {
@@ -2498,7 +2518,7 @@ contains
 !     case FNL_FRACTAL_RIDGED:
 !         return internal_fnm_gen_fractal_ridged_2d(state, x, y)
 !     case FNL_FRACTAL_PINGPONG:
-!         return _fnlGenFractalPingPong2D(state, x, y)
+!         return internal_fnl_gen_fractal_ping_pong_2d(state, x, y)
 !     }
 ! }
 
@@ -2520,7 +2540,7 @@ contains
 !     case FNL_FRACTAL_RIDGED:
 !         return internal_fnl_gen_fractal_ridged_3d(state, x, y, z)
 !     case FNL_FRACTAL_PINGPONG:
-!         return _fnlGenFractalPingPong3D(state, x, y, z)
+!         return internal_fnl_gen_fractal_ping_pong_3d(state, x, y, z)
 !     }
 ! }
 
