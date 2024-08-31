@@ -57,6 +57,7 @@ module glfw
   public :: glfw_get_window_height
   public :: glfw_get_window_width_f32
   public :: glfw_get_window_height_f32
+  public :: glfw_set_key_callback
 
   ! Here I'm binding to the C glfw shared library.
 
