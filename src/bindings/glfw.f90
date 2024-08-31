@@ -326,6 +326,15 @@ module glfw
     end subroutine internal_glfw_set_key_callback
 
 
+    subroutine internal_glfw_set_window_should_close(window, value) bind(c, name = "glfwSetWindowShouldClose")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: window
+      integer(c_int), intent(in), value :: value
+    end subroutine internal_glfw_set_window_should_close
+
+
   end interface
 
 
