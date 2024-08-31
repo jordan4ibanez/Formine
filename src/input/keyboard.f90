@@ -21,6 +21,7 @@ contains
 
     if (key == GLFW_KEY_ESCAPE .and. action == GLFW_PRESS) then
       print*, "peace"
+      call glfw_close_window()
     end if
   end subroutine keyboard_input_callback
 
