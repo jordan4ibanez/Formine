@@ -917,42 +917,50 @@ contains
 ! Fractal Ridged
 
 
-! static float _fnlGenFractalRidged2D(fnl_state *state, FNLfloat x, FNLfloat y)
-! {
-!     int seed = state->seed
-!     float sum = 0
-!     float amp = internal_fnl_calculate_fractal_bounding(state)
+  real(c_float) function internal_fnm_gen_fractal_ridged_2d(state, x, y) result(sum)
+    implicit none
 
-!     for (int i = 0 i < state->octaves i++)
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(in), value :: x, y
+    real(c_float) :: amp, noise
+    real(fnl_float) :: xx, yy
+
+    xx = x
+    yy = y
+    seed = state%seed
+    float sum = 0
+    float amp = internal_fnl_calculate_fractal_bounding(state)
+
+!     for (int i = 0 i < state%octaves i++)
 !     {
 !         float noise = abs(internal_fnl_gen_noise_single_2d(state, seed++, x, y))
 !         sum += (noise * -2 + 1) * amp
-!         amp *= internal_fnl_lerp(1.0f, 1 - noise, state->weighted_strength)
+!         amp *= internal_fnl_lerp(1.0f, 1 - noise, state%weighted_strength)
 
-!         x *= state->lacunarity
-!         y *= state->lacunarity
-!         amp *= state->gain
+!         x *= state%lacunarity
+!         y *= state%lacunarity
+!         amp *= state%gain
 !     }
 
 !     return sum
-! }
+  end function internal_fnm_gen_fractal_ridged_2d
 
 ! static float _fnlGenFractalRidged3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int seed = state->seed
+!     int seed = state%seed
 !     float sum = 0
 !     float amp = internal_fnl_calculate_fractal_bounding(state)
 
-!     for (int i = 0 i < state->octaves i++)
+!     for (int i = 0 i < state%octaves i++)
 !     {
 !         float noise = abs(internal_fnl_gen_noise_single_3d(state, seed++, x, y, z))
 !         sum += (noise * -2 + 1) * amp
-!         amp *= internal_fnl_lerp(1.0f, 1 - noise, state->weighted_strength)
+!         amp *= internal_fnl_lerp(1.0f, 1 - noise, state%weighted_strength)
 
-!         x *= state->lacunarity
-!         y *= state->lacunarity
-!         z *= state->lacunarity
-!         amp *= state->gain
+!         x *= state%lacunarity
+!         y *= state%lacunarity
+!         z *= state%lacunarity
+!         amp *= state%gain
 !     }
 
 !     return sum
@@ -962,19 +970,19 @@ contains
 
 ! static float _fnlGenFractalPingPong2D(fnl_state *state, FNLfloat x, FNLfloat y)
 ! {
-!     int seed = state->seed
+!     int seed = state%seed
 !     float sum = 0
 !     float amp = internal_fnl_calculate_fractal_bounding(state)
 
-!     for (int i = 0 i < state->octaves i++)
+!     for (int i = 0 i < state%octaves i++)
 !     {
-!         float noise = internal_fnl_ping_pong((internal_fnl_gen_noise_single_2d(state, seed++, x, y) + 1) * state->ping_pong_strength)
+!         float noise = internal_fnl_ping_pong((internal_fnl_gen_noise_single_2d(state, seed++, x, y) + 1) * state%ping_pong_strength)
 !         sum += (noise - 0.5f) * 2 * amp
-!         amp *= internal_fnl_lerp(1.0f, noise, state->weighted_strength)
+!         amp *= internal_fnl_lerp(1.0f, noise, state%weighted_strength)
 
-!         x *= state->lacunarity
-!         y *= state->lacunarity
-!         amp *= state->gain
+!         x *= state%lacunarity
+!         y *= state%lacunarity
+!         amp *= state%gain
 !     }
 
 !     return sum
@@ -982,20 +990,20 @@ contains
 
 ! static float _fnlGenFractalPingPong3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
-!     int seed = state->seed
+!     int seed = state%seed
 !     float sum = 0
 !     float amp = internal_fnl_calculate_fractal_bounding(state)
 
-!     for (int i = 0 i < state->octaves i++)
+!     for (int i = 0 i < state%octaves i++)
 !     {
-!         float noise = internal_fnl_ping_pong((internal_fnl_gen_noise_single_3d(state, seed++, x, y, z) + 1) * state->ping_pong_strength)
+!         float noise = internal_fnl_ping_pong((internal_fnl_gen_noise_single_3d(state, seed++, x, y, z) + 1) * state%ping_pong_strength)
 !         sum += (noise - 0.5f) * 2 * amp
-!         amp *= internal_fnl_lerp(1.0f, noise, state->weighted_strength)
+!         amp *= internal_fnl_lerp(1.0f, noise, state%weighted_strength)
 
-!         x *= state->lacunarity
-!         y *= state->lacunarity
-!         z *= state->lacunarity
-!         amp *= state->gain
+!         x *= state%lacunarity
+!         y *= state%lacunarity
+!         z *= state%lacunarity
+!         amp *= state%gain
 !     }
 
 !     return sum
@@ -1510,12 +1518,12 @@ contains
 !     float distance1 = FLT_MAX
 !     int closestHash = 0
 
-!     float cellularJitter = 0.43701595f * state->cellular_jitter_mod
+!     float cellularJitter = 0.43701595f * state%cellular_jitter_mod
 
 !     int x_primed = (xr - 1) * PRIME_X
 !     int y_primedBase = (yr - 1) * PRIME_Y
 
-!     switch (state->cellular_distance_func)
+!     switch (state%cellular_distance_func)
 !     {
 !     default:
 !     case FNL_CELLULAR_DISTANCE_EUCLIDEAN:
@@ -1598,14 +1606,14 @@ contains
 !         break
 !     }
 
-!     if (state->cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN && state->cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE)
+!     if (state%cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN && state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE)
 !     {
 !         distance0 = sqrt(distance0)
-!         if (state->cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
+!         if (state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
 !             distance1 = sqrt(distance1)
 !     }
 
-!     switch (state->cellular_return_type)
+!     switch (state%cellular_return_type)
 !     {
 !     case FNL_CELLULAR_RETURN_TYPE_CELLVALUE:
 !         return closestHash * (1 / 2147483648.0f)
@@ -1636,13 +1644,13 @@ contains
 !     float distance1 = FLT_MAX
 !     int closestHash = 0
 
-!     float cellularJitter = 0.39614353f * state->cellular_jitter_mod
+!     float cellularJitter = 0.39614353f * state%cellular_jitter_mod
 
 !     int x_primed = (xr - 1) * PRIME_X
 !     int y_primedBase = (yr - 1) * PRIME_Y
 !     int z_primedBase = (zr - 1) * PRIME_Z
 
-!     switch (state->cellular_distance_func)
+!     switch (state%cellular_distance_func)
 !     {
 !     default:
 !     case FNL_CELLULAR_DISTANCE_EUCLIDEAN:
@@ -1747,14 +1755,14 @@ contains
 !         break
 !     }
 
-!     if (state->cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN && state->cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE)
+!     if (state%cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN && state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE)
 !     {
 !         distance0 = sqrt(distance0)
-!         if (state->cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
+!         if (state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE2)
 !             distance1 = sqrt(distance1)
 !     }
 
-!     switch (state->cellular_return_type)
+!     switch (state%cellular_return_type)
 !     {
 !     case FNL_CELLULAR_RETURN_TYPE_CELLVALUE:
 !         return closestHash * (1 / 2147483648.0f)
@@ -1979,7 +1987,7 @@ contains
 
 ! static inline void _fnlDoSingleDomainWarp2D(fnl_state *state, int seed, float amp, float freq, FNLfloat x, FNLfloat y, FNLfloat *xp, FNLfloat *yp)
 ! {
-!     switch (state->domain_warp_type)
+!     switch (state%domain_warp_type)
 !     {
 !     case FNL_DOMAIN_WARP_OPENSIMPLEX2:
 !         _fnlSingleDomainWarpSimplexGradient(seed, amp * 38.283687591552734375f, freq, x, y, xp, yp, false)
@@ -1995,7 +2003,7 @@ contains
 
 ! static inline void _fnlDoSingleDomainWarp3D(fnl_state *state, int seed, float amp, float freq, FNLfloat x, FNLfloat y, FNLfloat z, FNLfloat *xp, FNLfloat *yp, FNLfloat *zp)
 ! {
-!     switch (state->domain_warp_type)
+!     switch (state%domain_warp_type)
 !     {
 !     case FNL_DOMAIN_WARP_OPENSIMPLEX2:
 !         _fnlSingleDomainWarpOpenSimplex2Gradient(seed, amp * 32.69428253173828125f, freq, x, y, z, xp, yp, zp, false)
@@ -2013,9 +2021,9 @@ contains
 
 ! static void _fnlDomainWarpSingle2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
-!     int seed = state->seed
-!     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
-!     float freq = state->frequency
+!     int seed = state%seed
+!     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
+!     float freq = state%frequency
 
 !     FNLfloat xs = *x
 !     FNLfloat ys = *y
@@ -2026,9 +2034,9 @@ contains
 
 ! static void _fnlDomainWarpSingle3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 ! {
-!     int seed = state->seed
-!     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
-!     float freq = state->frequency
+!     int seed = state%seed
+!     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
+!     float freq = state%frequency
 
 !     FNLfloat xs = *x
 !     FNLfloat ys = *y
@@ -2042,11 +2050,11 @@ contains
 
 ! static void _fnlDomainWarpFractalProgressive2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
-!     int seed = state->seed
-!     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
-!     float freq = state->frequency
+!     int seed = state%seed
+!     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
+!     float freq = state%frequency
 
-!     for (int i = 0 i < state->octaves i++)
+!     for (int i = 0 i < state%octaves i++)
 !     {
 !         FNLfloat xs = *x
 !         FNLfloat ys = *y
@@ -2055,18 +2063,18 @@ contains
 !         _fnlDoSingleDomainWarp2D(state, seed, amp, freq, xs, ys, x, y)
 
 !         seed++
-!         amp *= state->gain
-!         freq *= state->lacunarity
+!         amp *= state%gain
+!         freq *= state%lacunarity
 !     }
 ! }
 
 ! static void _fnlDomainWarpFractalProgressive3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 ! {
-!     int seed = state->seed
-!     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
-!     float freq = state->frequency
+!     int seed = state%seed
+!     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
+!     float freq = state%frequency
 
-!     for (int i = 0 i < state->octaves i++)
+!     for (int i = 0 i < state%octaves i++)
 !     {
 !         FNLfloat xs = *x
 !         FNLfloat ys = *y
@@ -2076,8 +2084,8 @@ contains
 !         _fnlDoSingleDomainWarp3D(state, seed, amp, freq, xs, ys, zs, x, y, z)
 
 !         seed++
-!         amp *= state->gain
-!         freq *= state->lacunarity
+!         amp *= state%gain
+!         freq *= state%lacunarity
 !     }
 ! }
 
@@ -2089,17 +2097,17 @@ contains
 !     FNLfloat ys = *y
 !     internal_fnl_transform_domain_warp_coordinate_2d(state, &xs, &ys)
 
-!     int seed = state->seed
-!     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
-!     float freq = state->frequency
+!     int seed = state%seed
+!     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
+!     float freq = state%frequency
 
-!     for (int i = 0 i < state->octaves i++)
+!     for (int i = 0 i < state%octaves i++)
 !     {
 !         _fnlDoSingleDomainWarp2D(state, seed, amp, freq, xs, ys, x, y)
 
 !         seed++
-!         amp *= state->gain
-!         freq *= state->lacunarity
+!         amp *= state%gain
+!         freq *= state%lacunarity
 !     }
 ! }
 
@@ -2110,17 +2118,17 @@ contains
 !     FNLfloat zs = *z
 !     internal_fnl_transform_domain_warp_coordinate_3d(state, &xs, &ys, &zs)
 
-!     int seed = state->seed
-!     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
-!     float freq = state->frequency
+!     int seed = state%seed
+!     float amp = state%domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
+!     float freq = state%frequency
 
-!     for (int i = 0 i < state->octaves i++)
+!     for (int i = 0 i < state%octaves i++)
 !     {
 !         _fnlDoSingleDomainWarp3D(state, seed, amp, freq, xs, ys, zs, x, y, z)
 
 !         seed++
-!         amp *= state->gain
-!         freq *= state->lacunarity
+!         amp *= state%gain
+!         freq *= state%lacunarity
 !     }
 ! }
 
@@ -2471,14 +2479,14 @@ contains
 ! {
 !     internal_fnl_transform_noise_coordinate_2d(state, &x, &y)
 
-!     switch (state->fractal_type)
+!     switch (state%fractal_type)
 !     {
 !     default:
-!         return internal_fnl_gen_noise_single_2d(state, state->seed, x, y)
+!         return internal_fnl_gen_noise_single_2d(state, state%seed, x, y)
 !     case FNL_FRACTAL_FBM:
 !         return internal_fnl_gen_fraction_fbm_2d(state, x, y)
 !     case FNL_FRACTAL_RIDGED:
-!         return _fnlGenFractalRidged2D(state, x, y)
+!         return internal_fnm_gen_fractal_ridged_2d(state, x, y)
 !     case FNL_FRACTAL_PINGPONG:
 !         return _fnlGenFractalPingPong2D(state, x, y)
 !     }
@@ -2493,10 +2501,10 @@ contains
 !     internal_fnl_transform_noise_coordinates_3d(state, &x, &y, &z)
 
 !     // Select a noise type
-!     switch (state->fractal_type)
+!     switch (state%fractal_type)
 !     {
 !     default:
-!         return internal_fnl_gen_noise_single_3d(state, state->seed, x, y, z)
+!         return internal_fnl_gen_noise_single_3d(state, state%seed, x, y, z)
 !     case FNL_FRACTAL_FBM:
 !         return internal_fnl_gen_fractal_fbm_3d(state, x, y, z)
 !     case FNL_FRACTAL_RIDGED:
@@ -2517,7 +2525,7 @@ contains
 !  */
 ! void fnlDomainWarp2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
-!     switch (state->fractal_type)
+!     switch (state%fractal_type)
 !     {
 !     default:
 !         _fnlDomainWarpSingle2D(state, x, y)
@@ -2542,7 +2550,7 @@ contains
 !  */
 ! void fnlDomainWarp3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 ! {
-!     switch (state->fractal_type)
+!     switch (state%fractal_type)
 !     {
 !     default:
 !         _fnlDomainWarpSingle3D(state, x, y, z)
