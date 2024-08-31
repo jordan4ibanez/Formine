@@ -1528,7 +1528,7 @@ contains
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y
     integer(c_int) :: xr, yr, x_primed, y_primed, y_primedBase, xi, yi, hash, idx
-    real(c_float) :: distance_0, distance_1, cellularJitter, vecX, vecY, newDistance, closestHash
+    real(c_float) :: distance_0, distance_1, cellular_jitter, vecX, vecY, newDistance, closestHash
 
     xr = nint(x)
     yr = nint(y)
@@ -1537,7 +1537,7 @@ contains
     distance_1 = FLT_MAX
     closestHash = 0
 
-    cellularJitter = 0.43701595 * state%cellular_jitter_mod
+    cellular_jitter = 0.43701595 * state%cellular_jitter_mod
 
     x_primed = (xr - 1) * PRIME_X
     y_primedBase = (yr - 1) * PRIME_Y
@@ -1549,8 +1549,8 @@ contains
         do yi = yr - 1, yr + 1
           hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
           idx = and(hash, shiftl(255, 1))
-          vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellularJitter
-          vecY = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1) + 1) * cellularJitter
+          vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellular_jitter
+          vecY = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1) + 1) * cellular_jitter
           newDistance = vecX * vecX + vecY * vecY
           distance_1 = max(min(distance_1, newDistance), distance_0)
           if (newDistance < distance_0) then
@@ -1567,8 +1567,8 @@ contains
         do yi = yr - 1, yr + 1
           hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
           idx = and(hash, shiftl(255, 1))
-          vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellularJitter
-          vecY = real(yi - y, c_float) + RAND_VECS_2D(iand(idx, 1) + 1) * cellularJitter
+          vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellular_jitter
+          vecY = real(yi - y, c_float) + RAND_VECS_2D(iand(idx, 1) + 1) * cellular_jitter
           newDistance = abs(vecX) + abs(vecY)
           distance_1 = max(min(distance_1, newDistance), distance_0)
           if (newDistance < distance_0) then
@@ -1585,8 +1585,8 @@ contains
         do yi = yr - 1, yr + 1
           hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
           idx = and(hash, shiftl(255, 1))
-          vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellularJitter
-          vecY = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1)) * cellularJitter
+          vecX = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellular_jitter
+          vecY = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1)) * cellular_jitter
           newDistance = (abs(vecX) + abs(vecY)) + (vecX * vecX + vecY * vecY)
           distance_1 = max(min(distance_1, newDistance), distance_0)
           if (newDistance < distance_0) then
@@ -1636,7 +1636,7 @@ contains
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y, z
     integer(c_int) :: xr, yr, zr, x_primed, y_primed, z_primed, y_primedBase, z_primedBase, xi, yi, zi, hash, idx
-    real(c_float) :: distance_0, distance_1, cellularJitter, vecX, vecY, vecZ, newDistance, closestHash
+    real(c_float) :: distance_0, distance_1, cellular_jitter, vecX, vecY, vecZ, newDistance, closestHash
 
     xr = nint(x)
     yr = nint(y)
@@ -1646,7 +1646,7 @@ contains
     distance_1 = FLT_MAX
     closestHash = 0
 
-    cellularJitter = 0.39614353 * state%cellular_jitter_mod
+    cellular_jitter = 0.39614353 * state%cellular_jitter_mod
 
     x_primed = (xr - 1) * PRIME_X
     y_primedBase = (yr - 1) * PRIME_Y
@@ -1662,9 +1662,9 @@ contains
           do zi = zr - 1, zr + 1
             hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
             idx = and(hash, shiftl(255, 2))
-            vecX = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellularJitter
-            vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellularJitter
-            vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellularJitter
+            vecX = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellular_jitter
+            vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellular_jitter
+            vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellular_jitter
             newDistance = vecX * vecX + vecY * vecY + vecZ * vecZ
             distance_1 = max(min(distance_1, newDistance), distance_0)
             if (newDistance < distance_0) then
@@ -1685,9 +1685,9 @@ contains
           do zi = zr - 1, zr + 1
             hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
             idx = and(hash, shiftl(255, 2))
-            vecX = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellularJitter
-            vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellularJitter
-            vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellularJitter
+            vecX = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellular_jitter
+            vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellular_jitter
+            vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellular_jitter
             newDistance = abs(vecX) + abs(vecY) + abs(vecZ)
             distance_1 = max(min(distance_1, newDistance), distance_0)
             if (newDistance < distance_0) then
@@ -1708,9 +1708,9 @@ contains
           do zi = zr - 1, zr + 1
             hash = internal_fnl_hash_3d(seed, x_primed, y_primed, z_primed)
             idx = and(hash, shiftl(255, 2))
-            vecX = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellularJitter
-            vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellularJitter
-            vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellularJitter
+            vecX = real(xi - x, c_float) + RAND_VECS_3D(idx + 1) * cellular_jitter
+            vecY = real(yi - y, c_float) + RAND_VECS_3D(ior(idx, 1) + 1) * cellular_jitter
+            vecZ = real(zi - z, c_float) + RAND_VECS_3D(ior(idx, 2) + 1) * cellular_jitter
             newDistance = (abs(vecX) + abs(vecY) + abs(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ)
             distance_1 = max(min(distance_1, newDistance), distance_0)
             if (newDistance < distance_0) then
