@@ -14,6 +14,7 @@ program main
   use :: texture_atlas
   use :: texture_atlas
   use :: fast_noise_lite
+  use :: chunk
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -24,6 +25,8 @@ program main
 
   fps_new = 0
   old_fps = -1
+
+  call debug_generate_chunk(0,0)
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   if (.true.) then

@@ -43,11 +43,38 @@ module chunk
   end type chunk_data
 
 
-
+  public :: debug_generate_chunk
 
 contains
 
 
+  subroutine debug_generate_chunk(chunk_x, chunk_z)
+    use :: fast_noise_lite
+    implicit none
+
+    integer(c_int), intent(in), value :: chunk_x, chunk_z
+    type(fnl_state) :: noise_state
+
+    integer(c_int) :: x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height
+
+    base_x = chunk_x * CHUNK_WIDTH
+    base_y = 0
+    base_z = chunk_z * CHUNK_WIDTH
+
+    noise_state = fnl_state()
+
+    base_height = 70
+    noise_multiplier = 20
+
+    do x = 1, CHUNK_WIDTH
+      do z = 1, CHUNK_WIDTH
+        current_height = base_height + floor(fnl_get_noise_2d(noise_state, real(x), real(z)) * noise_multiplier)
+        do y = 1, CHUNK_HEIGHT
+          
+        end do
+      end do
+    end do
+  end subroutine
 
 
 end module chunk
