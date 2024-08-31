@@ -763,7 +763,7 @@ contains
 
     type(fnl_state), intent(in) :: state
     real(fnl_float), intent(inout) :: x, y, z
-    real(fnl_float) sqrt_3, xy, s2, xz, r3, r
+    real(fnl_float) xy, s2, xz, r3, r
 
     x = x * state%frequency
     y = y * state%frequency
@@ -829,7 +829,7 @@ contains
 
     type(fnl_state), intent(in) :: state
     real(fnl_float), intent(inout) :: x, y, z
-    real(fnl_float) :: sqrt_3, f2, t, xy, s2, xz, r3, r
+    real(fnl_float) :: xy, s2, xz, r3, r
 
     select case (state%rotation_type_3d)
      case (FNL_ROTATION_IMPROVE_XY_PLANES)
@@ -1125,7 +1125,7 @@ contains
 
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y, z
-    real(c_float) :: sqrt_3, g2, xi, yi, t, x0, y0, z0, n0, n1, n2, a, b, c, x2, y2, x1, y1, z1, ax0, az0, ay0, value
+    real(c_float) :: x0, y0, z0, a, b, x1, y1, z1, ax0, az0, ay0, value
     integer(c_int):: mutable_seed, i, j, k, x_n_sign, y_n_sign, z_n_sign, l, i1, j1, k1
 
     ! 3D OpenSimplex2 case uses two offset rotated cube grids.
@@ -1233,8 +1233,8 @@ contains
 
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y
-    real(c_float) :: sqrt_3, g2, xi, yi, t, x0, y0, z0, n0, n1, n2, a, b, c, x2, y2, x1, y1, z1, ax0, az0, ay0, value, a0, b0, c0, a1, b1, c1, xmyi, a2, b2, x3, y3, a3
-    integer(c_int):: mutable_seed, i, j, k, x_n_sign, y_n_sign, z_n_sign, l, i1, j1, k1
+    real(c_float) :: sqrt_3, g2, xi, yi, t, x0, y0, x2, y2, x1, y1, value, a0, a1, xmyi, a2, x3, y3, a3
+    integer(c_int):: i, j, i1, j1
 
     ! 2D OpenSimplex2S case is a modified 2D simplex noise.
 
@@ -1345,10 +1345,10 @@ contains
 
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y, z
-    real(c_float) :: sqrt_3, g2, xi, yi, zi, t, x0, y0, z0, n0, n1, n2, a, b, c, x2, y2, z2, x1, y1, z1, ax0, az0, ay0, value, a0, b0, c0, a1, b1, c1, xmyi, a2, b2, x3, y3, z3, a3, &
+    real(c_float) :: xi, yi, zi, x0, y0, z0,x2, y2, z2, x1, y1, z1, value, a0, a1, a2, x3, y3, z3, a3, &
       xAFlipMask0, yAFlipMask0, zAFlipMask0, xAFlipMask1, yAFlipMask1, zAFlipMask1, a4, x4, y4, z4, a6, x6, y6, z6, x7, y7, z7, a7, a8, x8, y8, z8, aA, &
       xA, yA, zA, xB, yB, zB, xC, yC, zC, aB, aC, a5, x5, y5, z5, a9, x9, y9, z9, aD, xD, yD, zD
-    integer(c_int):: mutable_seed, i, j, k, x_n_sign, y_n_sign, z_n_sign, l, i1, j1, k1, seed_2, x_n_mask, y_n_mask, z_n_mask
+    integer(c_int):: i, j, k, seed_2, x_n_mask, y_n_mask, z_n_mask
     logical(c_bool) :: skip5, skip9, skipD
 
     ! 3D OpenSimplex2S case uses two offset rotated cube grids.
@@ -1527,7 +1527,7 @@ contains
     type(fnl_state), intent(in) :: state
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y
-    integer(c_int) :: xr, yr, x_primed, y_primed, y_primedBase, xi, yi, zi, hash, idx
+    integer(c_int) :: xr, yr, x_primed, y_primed, y_primedBase, xi, yi, hash, idx
     real(c_float) :: distance0, distance1, cellularJitter, vecX, vecY, newDistance, closestHash
 
     xr = nint(x)
@@ -1795,7 +1795,7 @@ contains
     integer(c_int), intent(in), value :: seed
     real(fnl_float), intent(in), value :: x, y, z
     integer(c_int) :: x0, y0, z0, x1, y1, z1
-    real(c_float) :: xd0, yd0, zd0, xd1, yd1, zd1, xs, ys, zs, xf0, xf00, xf10, xf01, xf11, yf0, yf1
+    real(c_float) :: xd0, yd0, zd0, xd1, yd1, zd1, xs, ys, zs, xf00, xf10, xf01, xf11, yf0, yf1
     x0 = floor(x)
     y0 = floor(y)
     z0 = floor(z)
@@ -2153,7 +2153,7 @@ contains
     real(fnl_float), intent(inout) :: x, y
     integer(c_int) :: seed, i
     real(c_float) :: amp, freq
-    real(fnl_float) :: xs, ys, zs
+    real(fnl_float) :: xs, ys
 
     xs = x
     ys = y
@@ -2428,7 +2428,7 @@ contains
     real(fnl_float), intent(in), value :: xx, yy, zz
     real(fnl_float), intent(inout) :: xr, yr, zr
     logical, intent(in), value :: outGradOnly
-    real(c_float) :: SQRT3, g2, x, y, z, xi, yi, zi, t, x0, y0, z0, vx, vy, vz, a, aaaa, xo, yo, zo, b, c, bbbb, cccc, x1, y1, z1, x2, y2, z2, ax0, ay0, az0
+    real(c_float) :: x, y, z, x0, y0, z0, vx, vy, vz, a, aaaa, xo, yo, zo, b, bbbb, x1, y1, z1, ax0, ay0, az0
     integer(c_int) :: seed, i, j, k, x_n_sign, y_n_sign, z_n_sign, l, i1, j1, k1
 
     ! Use xx and so forth as mutable subroutine variables.
