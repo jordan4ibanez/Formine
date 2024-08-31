@@ -798,69 +798,64 @@ contains
 ! Domain Warp Coordinate Transforms
 
 
-! static void _fnlTransformDomainWarpCoordinate2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
-! {
-!     switch (state->domain_warp_type)
-!     {
-!     case FNL_DOMAIN_WARP_OPENSIMPLEX2:
-!     case FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED:
-!     {
-!         const FNLfloat SQRT3 = (FNLfloat)1.7320508075688772935274463415059
-!         const FNLfloat F2 = 0.5f * (SQRT3 - 1)
-!         FNLfloat t = (*x + *y) * F2
-!         *x += t
-!         *y += t
-!     }
-!     break
-!     default:
-!         break
-!     }
-! }
+  subroutine internal_fnl_transform_domain_warp_coordinate_2d(state, x, y)
+    implicit none
 
-! static void _fnlTransformDomainWarpCoordinate3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
-! {
-!     switch (state->rotation_type_3d)
-!     {
-!     case FNL_ROTATION_IMPROVE_XY_PLANES:
-!     {
-!         FNLfloat xy = *x + *y
-!         FNLfloat s2 = xy * -(FNLfloat)0.211324865405187
-!         *z *= (FNLfloat)0.577350269189626
-!         *x += s2 - *z
-!         *y = *y + s2 - *z
-!         *z += xy * (FNLfloat)0.577350269189626
-!     }
-!     break
-!     case FNL_ROTATION_IMPROVE_XZ_PLANES:
-!     {
-!         FNLfloat xz = *x + *z
-!         FNLfloat s2 = xz * -(FNLfloat)0.211324865405187
-!         *y *= (FNLfloat)0.577350269189626
-!         *x += s2 - *y
-!         *z += s2 - *y
-!         *y += xz * (FNLfloat)0.577350269189626
-!     }
-!     break
-!     default:
-!         switch (state->domain_warp_type)
-!         {
-!         case FNL_DOMAIN_WARP_OPENSIMPLEX2:
-!         case FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED:
-!         {
-!             const FNLfloat R3 = (FNLfloat)(2.0 / 3.0)
-!             FNLfloat r = (*x + *y + *z) * R3 // Rotation, not skew
-!             *x = r - *x
-!             *y = r - *y
-!             *z = r - *z
-!         }
-!         break
-!         default:
-!             break
-!         }
-!     }
-! }
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(inout) :: x, y
+    real(fnl_float) :: sqrt_3, f2, t
+
+    select case (state%domain_warp_type)
+     case (FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED, FNL_DOMAIN_WARP_OPENSIMPLEX2)
+      sqrt_3 = real(1.7320508075688772935274463415059, fnl_float)
+      f2 = 0.5 * (sqrt_3 - 1.0)
+      t = (x + y) * f2
+      x = x + t
+      y = y + t
+     case default
+    end select
+  end subroutine internal_fnl_transform_domain_warp_coordinate_2d
+
+
+  subroutine internal_fnl_transform_domain_warp_coordinate_3d(state, x, y, z)
+    implicit none
+
+    type(fnl_state), intent(in) :: state
+    real(fnl_float), intent(inout) :: x, y, z
+    real(fnl_float) :: sqrt_3, f2, t, xy, s2, xz, r3, r
+
+    select case (state%rotation_type_3d)
+     case (FNL_ROTATION_IMPROVE_XY_PLANES)
+      xy = x + y
+      s2 = xy * (-real(0.211324865405187, fnl_float))
+      z = z * real(0.577350269189626, fnl_float)
+      x = x + (s2 - z)
+      y = y + s2 - z
+      z = z + (xy * real(0.577350269189626, fnl_float))
+     case (FNL_ROTATION_IMPROVE_XZ_PLANES)
+      xz = x + z
+      s2 = xz * (-real(0.211324865405187, fnl_float))
+      y = y * real(0.577350269189626, fnl_float)
+      x = x + (s2 - y)
+      z = z + (s2 - y)
+      y = y + (xz * real(0.577350269189626, fnl_float))
+     case default
+      select case (state%domain_warp_type)
+       case (FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED, FNL_DOMAIN_WARP_OPENSIMPLEX2)
+        r3 = real(2.0 / 3.0, fnl_float)
+        r = (x + y + z) * r3 ! Rotation, not skew
+        x = r - x
+        y = r - y
+        z = r - z
+       case default
+      end select
+    end select
+  end subroutine internal_fnl_transform_domain_warp_coordinate_3d
+
 
 ! Fractal FBm
+
+
 ! static float _fnlGenFractalFBM2D(fnl_state *state, FNLfloat x, FNLfloat y)
 ! {
 !     int seed = state->seed
@@ -2006,7 +2001,7 @@ contains
 
 !     FNLfloat xs = *x
 !     FNLfloat ys = *y
-!     _fnlTransformDomainWarpCoordinate2D(state, &xs, &ys)
+!     internal_fnl_transform_domain_warp_coordinate_2d(state, &xs, &ys)
 
 !     _fnlDoSingleDomainWarp2D(state, seed, amp, freq, xs, ys, x, y)
 ! }
@@ -2020,7 +2015,7 @@ contains
 !     FNLfloat xs = *x
 !     FNLfloat ys = *y
 !     FNLfloat zs = *z
-!     _fnlTransformDomainWarpCoordinate3D(state, &xs, &ys, &zs)
+!     internal_fnl_transform_domain_warp_coordinate_3d(state, &xs, &ys, &zs)
 
 !     _fnlDoSingleDomainWarp3D(state, seed, amp, freq, xs, ys, zs, x, y, z)
 ! }
@@ -2037,7 +2032,7 @@ contains
 !     {
 !         FNLfloat xs = *x
 !         FNLfloat ys = *y
-!         _fnlTransformDomainWarpCoordinate2D(state, &xs, &ys)
+!         internal_fnl_transform_domain_warp_coordinate_2d(state, &xs, &ys)
 
 !         _fnlDoSingleDomainWarp2D(state, seed, amp, freq, xs, ys, x, y)
 
@@ -2058,7 +2053,7 @@ contains
 !         FNLfloat xs = *x
 !         FNLfloat ys = *y
 !         FNLfloat zs = *z
-!         _fnlTransformDomainWarpCoordinate3D(state, &xs, &ys, &zs)
+!         internal_fnl_transform_domain_warp_coordinate_3d(state, &xs, &ys, &zs)
 
 !         _fnlDoSingleDomainWarp3D(state, seed, amp, freq, xs, ys, zs, x, y, z)
 
@@ -2074,7 +2069,7 @@ contains
 ! {
 !     FNLfloat xs = *x
 !     FNLfloat ys = *y
-!     _fnlTransformDomainWarpCoordinate2D(state, &xs, &ys)
+!     internal_fnl_transform_domain_warp_coordinate_2d(state, &xs, &ys)
 
 !     int seed = state->seed
 !     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
@@ -2095,7 +2090,7 @@ contains
 !     FNLfloat xs = *x
 !     FNLfloat ys = *y
 !     FNLfloat zs = *z
-!     _fnlTransformDomainWarpCoordinate3D(state, &xs, &ys, &zs)
+!     internal_fnl_transform_domain_warp_coordinate_3d(state, &xs, &ys, &zs)
 
 !     int seed = state->seed
 !     float amp = state->domain_warp_amp * internal_fnl_calculate_fractal_bounding(state)
