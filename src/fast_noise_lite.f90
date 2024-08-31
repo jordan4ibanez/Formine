@@ -161,48 +161,49 @@ module fast_noise_lite
     enumerator :: FNL_DOMAIN_WARP_BASICGRID = 34
   end enum
 
-! /**
-!  * Structure containing entire noise system state.
-!  * @note Must only be created using fnlCreateState(optional: seed). To ensure defaults are set.
-!  */
-! typedef struct fnl_state
-! {
-!     /**
-!      * Seed used for all noise types.
-!      * @remark Default: 1337
-!      */
-!     int seed;
 
-!     /**
-!      * The frequency for all noise types.
-!      * @remark Default: 0.01
-!      */
-!     float frequency;
+  !*
+  !* Structure containing entire noise system state.
+  !* @note Must only be created using fnlCreateState(optional: seed). To ensure defaults are set.
+  !*
+  type :: fnl_state
 
-!     /**
-!      * The noise algorithm to be used by GetNoise(...).
-!      * @remark Default: FNL_NOISE_OPENSIMPLEX2
-!      */
-!     fnl_noise_type noise_type;
+    !
+    ! Seed used for all noise types.
+    ! @remark Default: 1337
+    !
+    integer(c_int) :: seed = 1337
 
-!     /**
-!      * Sets noise rotation type for 3D.
-!      * @remark Default: FNL_ROTATION_NONE
-!      */
-!     fnl_rotation_type_3d rotation_type_3d;
+    !
+    ! The frequency for all noise types.
+    ! @remark Default: 0.01
+    !
+    real(c_float) :: frequency = 0.01
 
-!     /**
-!      * The method used for combining octaves for all fractal noise types.
-!      * @remark Default: None
-!      * @remark FNL_FRACTAL_DOMAIN_WARP_... only effects fnlDomainWarp...
-!      */
-!     fnl_fractal_type fractal_type;
+    !
+    ! The noise algorithm to be used by GetNoise(...).
+    ! @remark Default: FNL_NOISE_OPENSIMPLEX2
+    !
+    integer(kind(fnl_noise_type)) :: noise_type = FNL_NOISE_OPENSIMPLEX2
 
-!     /**
-!      * The octave count for all fractal noise types.
-!      * @remark Default: 3
-!      */
-!     int octaves;
+    !
+    ! Sets noise rotation type for 3D.
+    ! @remark Default: FNL_ROTATION_NONE
+    !
+    integer(kind(fnl_rotation_type_3d)) :: rotation_type_3d = FNL_NOISE_OPENSIMPLEX2
+
+    !
+    ! The method used for combining octaves for all fractal noise types.
+    ! @remark Default: FNL_FRACTAL_NONE
+    ! @remark FNL_FRACTAL_DOMAIN_WARP_... only effects fnlDomainWarp...
+    !
+    integer(kind(fnl_fractal_type)) :: fractal_type = FNL_FRACTAL_NONE
+
+    !
+    ! The octave count for all fractal noise types.
+    ! @remark Default: 3
+    !
+    integer(c_int) :: octaves = 3
 
 !     /**
 !      * The octave lacunarity for all fractal noise types.
