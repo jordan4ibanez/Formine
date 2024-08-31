@@ -267,46 +267,6 @@ module fast_noise_lite
 contains
 
 
-! /**
-!  * Creates a noise state with default values.
-!  * @param seed Optionally set the state seed.
-!  */
-! fnl_state fnlCreateState()
-
-! /**
-!  * 2D noise at given position using the state settings
-!  * @returns Noise output bounded between -1 and 1.
-!  */
-! real(c_float) :: fnlGetNoise2D(fnl_state *state, FNLfloat x, FNLfloat y)
-
-! /**
-!  * 3D noise at given position using the state settings
-!  * @returns Noise output bounded between -1 and 1.
-!  */
-! real(c_float) :: fnlGetNoise3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z)
-
-! /**
-!  * 2D warps the input position using current domain warp settings.
-!  *
-!  * Example usage with fnlGetNoise2D:
-!  * ```
-!  * fnlDomainWarp2D(&state, &x, &y)
-!  * noise = fnlGetNoise2D(&state, x, y)
-!  * ```
-!  */
-! void fnlDomainWarp2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
-
-! /**
-!  * 3D warps the input position using current domain warp settings.
-!  *
-!  * Example usage with fnlGetNoise3D:
-!  * ```
-!  * fnlDomainWarp3D(&state, &x, &y, &z)
-!  * noise = fnlGetNoise3D(&state, x, y, z)
-!  * ```
-!  */
-! void fnlDomainWarp3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
-
 ! ====================
 ! Below this line is the implementation
 ! ====================
@@ -2382,6 +2342,10 @@ contains
 ! Public API
 ! ====================
 
+! /**
+!  * Creates a noise state with default values.
+!  * @param seed Optionally set the state seed.
+!  */
 ! fnl_state fnlCreateState()
 ! {
 !     fnl_state newState
@@ -2403,6 +2367,10 @@ contains
 !     return newState
 ! }
 
+! /**
+!  * 2D noise at given position using the state settings
+!  * @returns Noise output bounded between -1 and 1.
+!  */
 ! float fnlGetNoise2D(fnl_state *state, FNLfloat x, FNLfloat y)
 ! {
 !     _fnlTransformNoiseCoordinate2D(state, &x, &y)
@@ -2420,6 +2388,10 @@ contains
 !     }
 ! }
 
+! /**
+!  * 3D noise at given position using the state settings
+!  * @returns Noise output bounded between -1 and 1.
+!  */
 ! float fnlGetNoise3D(fnl_state *state, FNLfloat x, FNLfloat y, FNLfloat z)
 ! {
 !     _fnlTransformNoiseCoordinate3D(state, &x, &y, &z)
@@ -2438,6 +2410,15 @@ contains
 !     }
 ! }
 
+! /**
+!  * 2D warps the input position using current domain warp settings.
+!  *
+!  * Example usage with fnlGetNoise2D:
+!  * ```
+!  * fnlDomainWarp2D(&state, &x, &y)
+!  * noise = fnlGetNoise2D(&state, x, y)
+!  * ```
+!  */
 ! void fnlDomainWarp2D(fnl_state *state, FNLfloat *x, FNLfloat *y)
 ! {
 !     switch (state->fractal_type)
@@ -2454,6 +2435,15 @@ contains
 !     }
 ! }
 
+! /**
+!  * 3D warps the input position using current domain warp settings.
+!  *
+!  * Example usage with fnlGetNoise3D:
+!  * ```
+!  * fnlDomainWarp3D(&state, &x, &y, &z)
+!  * noise = fnlGetNoise3D(&state, x, y, z)
+!  * ```
+!  */
 ! void fnlDomainWarp3D(fnl_state *state, FNLfloat *x, FNLfloat *y, FNLfloat *z)
 ! {
 !     switch (state->fractal_type)
