@@ -35,6 +35,10 @@ module glfw
   integer, parameter :: GLFW_CONTEXT_VERSION_MINOR = int(z"00022003")
   integer, parameter :: GLFW_OPENGL_FORWARD_COMPAT = int(z"00022006")
 
+  ! Booleans.
+  integer(c_int), parameter, public :: GLFW_TRUE = 1
+  integer(c_int), parameter, public :: GLFW_FALSE = 0
+
 
   ! Key actions.
 
