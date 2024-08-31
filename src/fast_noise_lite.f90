@@ -1,4 +1,4 @@
-module fast_noise
+module fast_noise_lite
   use :: iso_c_binding
   implicit none
 
@@ -2448,4 +2448,4 @@ contains
 
 
 
-end module fast_noise
+end module fast_noise_lite
