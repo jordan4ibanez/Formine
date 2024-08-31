@@ -19,9 +19,9 @@ contains
     type(c_ptr), intent(in), value :: window_pointer
     integer(c_int), intent(in), value :: key, scancode, action, mods
 
-    print*, "hi"
-
-
+    if (key == GLFW_KEY_ESCAPE .and. action == GLFW_PRESS) then
+      print*, "peace"
+    end if
   end subroutine keyboard_input_callback
 
 
