@@ -1542,24 +1542,6 @@ contains
     y_primedBase = (yr - 1) * PRIME_Y
 
     select case (state%cellular_distance_func)
-     case (FNL_CELLULAR_DISTANCE_EUCLIDEAN, FNL_CELLULAR_DISTANCE_EUCLIDEANSQ)
-      do xi = xr - 1, xr + 1
-        y_primed = y_primedBase
-        do yi = yr - 1, yr + 1
-          hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
-          idx = and(hash, shiftl(255, 1))
-          vec_x = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellular_jitter
-          vec_y = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1) + 1) * cellular_jitter
-          new_distance = vec_x * vec_x + vec_y * vec_y
-          distance_1 = max(min(distance_1, new_distance), distance_0)
-          if (new_distance < distance_0) then
-            distance_0 = new_distance
-            closest_hash = hash
-          end if
-          y_primed = y_primed + PRIME_Y
-        end do
-        x_primed = x_primed + PRIME_X
-      end do
      case (FNL_CELLULAR_DISTANCE_MANHATTAN)
       do xi = xr - 1, xr + 1
         y_primed = y_primedBase
@@ -1597,7 +1579,23 @@ contains
         x_primed = x_primed + PRIME_X
       end do
      case default
-      error stop "[internal_fnl_single_cellular_2d] Error: Not found."
+      do xi = xr - 1, xr + 1
+        y_primed = y_primedBase
+        do yi = yr - 1, yr + 1
+          hash = internal_fnl_hash_2d(seed, x_primed, y_primed)
+          idx = and(hash, shiftl(255, 1))
+          vec_x = real(xi - x, c_float) + RAND_VECS_2D(idx + 1) * cellular_jitter
+          vec_y = real(yi - y, c_float) + RAND_VECS_2D(ior(idx, 1) + 1) * cellular_jitter
+          new_distance = vec_x * vec_x + vec_y * vec_y
+          distance_1 = max(min(distance_1, new_distance), distance_0)
+          if (new_distance < distance_0) then
+            distance_0 = new_distance
+            closest_hash = hash
+          end if
+          y_primed = y_primed + PRIME_Y
+        end do
+        x_primed = x_primed + PRIME_X
+      end do
     end select
 
     if (state%cellular_distance_func == FNL_CELLULAR_DISTANCE_EUCLIDEAN .and. state%cellular_return_type >= FNL_CELLULAR_RETURN_TYPE_DISTANCE) then
