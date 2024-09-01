@@ -42,8 +42,8 @@ module chunk
   !* Chunk data is the data for the entire chunk.
 
   type :: chunk_data
-    type(block_data), dimension(CHUNK_ARRAY_SIZE) :: data
-    type(heap_string), dimension(MESH_STACK_ARRAY_SIZE) :: mesh
+    type(block_data), dimension(CHUNK_ARRAY_SIZE), allocatable :: data(:)
+    type(heap_string), dimension(MESH_STACK_ARRAY_SIZE), allocatable :: mesh(:)
   end type chunk_data
 
 
