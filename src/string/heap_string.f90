@@ -12,8 +12,7 @@ module h_string
   !* A heap string is a container to allow strings to be put into arrays dynamically.
   !* The internal data must be gotten with %get() to prevent UB.
   type :: heap_string
-    private
-    character(len = :), allocatable :: data
+    character(len = :, kind = c_char), allocatable :: data
   contains
     !? Assignment.
     generic :: assignment(=) => assign
@@ -29,6 +28,8 @@ module h_string
     procedure :: is_allocated
     !? Get internal data.
     procedure :: get
+    !? Get pointer to internal data.
+    procedure :: get_pointer
   end type heap_string
 
 
@@ -126,4 +127,17 @@ contains
 
     data = this%data
   end function get
+
+
+  !* Get the pointer to the internal data of the heap string.
+  function get_pointer(this) result(data_pointer)
+    implicit none
+
+    class(heap_string), intent(in), target :: this
+    character(len = :), pointer :: data_pointer
+
+    data_pointer => this%data
+  end function get_pointer
+
+
 end module h_string
