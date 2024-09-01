@@ -13,6 +13,7 @@ module keyboard
 contains
 
 
+  !* Key press events.
   subroutine keyboard_input_callback(window_pointer, key, scancode, action, mods)
     implicit none
 
