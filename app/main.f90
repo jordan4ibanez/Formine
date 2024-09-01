@@ -23,6 +23,7 @@ program main
 
   real(c_float) :: rotation !, min_x, min_y, max_x, max_y
   type(vec2f) :: text_size
+  real(c_float), parameter :: FONT_SIZE = 50.0
   integer(c_int) :: fps_new, old_fps
   character(len = :, kind = c_char), allocatable :: position_text_debug
   !type(texture_rectangle) :: tex_rect
@@ -202,6 +203,7 @@ program main
       ! Process first text.
 
       fps_new = get_fps()
+
       call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - text_size%y) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
       if (fps_new /= old_fps) then
         call mesh_delete("fps_counter")
