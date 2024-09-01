@@ -37,7 +37,7 @@ module chunk_mesh
     /)
 
 
-  !? -Z (Facing camera at rotation 0.0)
+  !? -Z (Facing the camera at rotation 0.0)
   real(c_float), dimension(12), parameter :: BACK_FACE = (/ &
     0.0, 1.0, 0.0, & ! Top left.
     0.0, 0.0, 0.0, & ! Bottom Left.
@@ -53,7 +53,8 @@ module chunk_mesh
     0.0, 1.0, 1.0 &  ! Top left.
     /)
 
-  !? -X (Facing camera at rotation 0.0)
+
+  !? -X (Facing left at rotation 0.0)
   real(c_float), dimension(12), parameter :: LEFT_FACE = (/ &
     0.0, 1.0, 0.0, & ! Top left.
     0.0, 0.0, 0.0, & ! Bottom Left.
@@ -61,7 +62,7 @@ module chunk_mesh
     0.0, 1.0, 1.0 &  ! Top Right.
     /)
 
-  !? +X (Facing away from camera at rotation 0.0)
+  !? +X (Facing right at rotation 0.0)
   real(c_float), dimension(12), parameter :: RIGHT_FACE = (/ &
     1.0, 1.0, 1.0, & ! Top Right.
     1.0, 0.0, 1.0, & ! Bottom Right.
@@ -123,10 +124,10 @@ contains
 
     positions = BACK_FACE
     texture_coordinates = (/ &
-      tr_pointer%min_x,tr_pointer%max_y, &
       tr_pointer%min_x,tr_pointer%min_y, &
-      tr_pointer%max_x,tr_pointer%min_y, &
-      tr_pointer%max_x,tr_pointer%max_y &
+      tr_pointer%min_x,tr_pointer%max_y, &
+      tr_pointer%max_x,tr_pointer%max_y, &
+      tr_pointer%max_x,tr_pointer%min_y &
       /)
     colors = (/&
       1.0, 1.0, 1.0, &
@@ -145,10 +146,10 @@ contains
     positions = [positions, FRONT_FACE]
 
     texture_coordinates = [texture_coordinates, (/ &
-      tr_pointer%min_x,tr_pointer%max_y, &
       tr_pointer%min_x,tr_pointer%min_y, &
-      tr_pointer%max_x,tr_pointer%min_y, &
-      tr_pointer%max_x,tr_pointer%max_y &
+      tr_pointer%min_x,tr_pointer%max_y, &
+      tr_pointer%max_x,tr_pointer%max_y, &
+      tr_pointer%max_x,tr_pointer%min_y &
       /)]
 
     colors = [colors, (/&
@@ -168,10 +169,10 @@ contains
     positions = [positions, LEFT_FACE]
 
     texture_coordinates = [texture_coordinates, (/ &
-      tr_pointer%min_x,tr_pointer%max_y, &
       tr_pointer%min_x,tr_pointer%min_y, &
-      tr_pointer%max_x,tr_pointer%min_y, &
-      tr_pointer%max_x,tr_pointer%max_y &
+      tr_pointer%min_x,tr_pointer%max_y, &
+      tr_pointer%max_x,tr_pointer%max_y, &
+      tr_pointer%max_x,tr_pointer%min_y &
       /)]
 
     colors = [colors, (/&
@@ -191,10 +192,10 @@ contains
     positions = [positions, RIGHT_FACE]
 
     texture_coordinates = [texture_coordinates, (/ &
-      tr_pointer%min_x,tr_pointer%max_y, &
       tr_pointer%min_x,tr_pointer%min_y, &
-      tr_pointer%max_x,tr_pointer%min_y, &
-      tr_pointer%max_x,tr_pointer%max_y &
+      tr_pointer%min_x,tr_pointer%max_y, &
+      tr_pointer%max_x,tr_pointer%max_y, &
+      tr_pointer%max_x,tr_pointer%min_y &
       /)]
 
     colors = [colors, (/&
@@ -215,10 +216,10 @@ contains
     positions = [positions, BOTTOM_FACE]
 
     texture_coordinates = [texture_coordinates, (/ &
-      tr_pointer%min_x,tr_pointer%max_y, &
       tr_pointer%min_x,tr_pointer%min_y, &
-      tr_pointer%max_x,tr_pointer%min_y, &
-      tr_pointer%max_x,tr_pointer%max_y &
+      tr_pointer%min_x,tr_pointer%max_y, &
+      tr_pointer%max_x,tr_pointer%max_y, &
+      tr_pointer%max_x,tr_pointer%min_y &
       /)]
 
     colors = [colors, (/&
@@ -239,10 +240,10 @@ contains
     positions = [positions, TOP_FACE]
 
     texture_coordinates = [texture_coordinates, (/ &
-      tr_pointer%min_x,tr_pointer%max_y, &
       tr_pointer%min_x,tr_pointer%min_y, &
-      tr_pointer%max_x,tr_pointer%min_y, &
-      tr_pointer%max_x,tr_pointer%max_y &
+      tr_pointer%min_x,tr_pointer%max_y, &
+      tr_pointer%max_x,tr_pointer%max_y, &
+      tr_pointer%max_x,tr_pointer%min_y &
       /)]
 
     colors = [colors, (/&
