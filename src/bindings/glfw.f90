@@ -403,6 +403,16 @@ module glfw
     end subroutine internal_glfw_set_window_should_close
 
 
+    subroutine internal_glfw_set_cursor_pos_callback(window, callback) bind(c, name = "glfwSetCursorPosCallback")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: window
+      type(c_funptr), intent(in), value :: callback
+      !? This is written as a subroutine because I do not care about the previous callback.
+    end subroutine internal_glfw_set_cursor_pos_callback
+
+
   end interface
 
 
