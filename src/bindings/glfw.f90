@@ -39,6 +39,8 @@ module glfw
   public :: glfw_get_window_height
   public :: glfw_get_window_width_f32
   public :: glfw_get_window_height_f32
+  public :: glfw_get_window_width_f64
+  public :: glfw_get_window_height_f64
   public :: glfw_set_key_callback
   public :: glfw_close_window
   public :: glfw_set_cursor_pos_callback
@@ -643,6 +645,22 @@ contains
 
     height = real(window_height, kind = c_float)
   end function glfw_get_window_height_f32
+
+
+  !* Get the window width double floating point.
+  real(c_double) function glfw_get_window_width_f64() result(width)
+    implicit none
+
+    width = real(window_width, kind = c_double)
+  end function glfw_get_window_width_f64
+
+
+  !* Get the window height double floating point.
+  real(c_double) function glfw_get_window_height_f64() result(height)
+    implicit none
+
+    height = real(window_height, kind = c_double)
+  end function glfw_get_window_height_f64
 
 
   !* Set the key callback function pointer.
