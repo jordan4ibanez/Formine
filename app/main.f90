@@ -84,7 +84,7 @@ program main
   call gl_depth_func(GL_LESS)
 
   !! This enables backface culling.
-  call gl_enable(GL_CULL_FACE)
+  ! call gl_enable(GL_CULL_FACE)
 
   !! This enables alpha blending.
   call gl_enable(GL_BLEND)
