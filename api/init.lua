@@ -22,6 +22,10 @@ print("[LuaJIT API]: Initializing.")
 --- A block definition.
 ---
 --- The texture array must contains 6 elements.
+---
+--- Textures are in the array as follows:
+--- [-Z, +Z, -X, +X, -Y, +Y]
+---
 --- @class block_definition
 --- @field name string
 --- @field description string

@@ -25,8 +25,8 @@ module chunk_mesh
   !
   !
   ! Texture ordering: -Z, +Z, -X, +X, -Y, +Y
-  ! todo: document this in LuaJIT.
   !
+
 
   private
 
