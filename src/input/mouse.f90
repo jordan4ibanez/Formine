@@ -17,7 +17,7 @@ module mouse
 
   logical :: mouse_is_locked = .false.
   type(vec2d) :: mouse_delta
-  real(c_double) :: mouse_sensitivity = 0.25d0
+  real(c_double) :: mouse_sensitivity = 0.0025d0
 
 
 contains
