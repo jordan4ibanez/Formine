@@ -262,6 +262,7 @@ module glfw
   public :: glfw_set_key_callback
   public :: glfw_close_window
   public :: glfw_set_cursor_pos_callback
+  public :: glfw_set_input_mode
 
 
   ! Here I'm binding to the C glfw shared library.
@@ -662,6 +663,17 @@ contains
 
     call internal_glfw_set_cursor_pos_callback(window_pointer, callback_function_pointer)
   end subroutine glfw_set_cursor_pos_callback
+
+
+  !* Set an input mode.
+  subroutine glfw_set_input_mode(mode, value)
+    use, intrinsic :: iso_c_binding
+    implicit none
+
+    integer(c_int), intent(in), value :: mode, value
+
+    call internal_glfw_set_input_mode(window_pointer, mode, value)
+  end subroutine glfw_set_input_mode
 
 
 end module glfw
