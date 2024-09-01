@@ -235,8 +235,10 @@ contains
       camera_rotation%y = mod(camera_rotation%y, PI_TIMES_2_F64)
     end if
 
-    if (camera_rotation%z < 0.0d0 .or. camera_rotation%z > PI_TIMES_2_F64) then
-      camera_rotation%z = mod(camera_rotation%z, PI_TIMES_2_F64)
+    if (camera_rotation%z < -PI_OVER_2_F64) then
+      camera_rotation%z = -PI_OVER_2_F64
+    else if (camera_rotation%z > PI_OVER_2_F64) then
+      camera_rotation%z = PI_OVER_2_F64
     end if
   end subroutine wrap_camera_rotation
 
