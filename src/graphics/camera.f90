@@ -34,6 +34,9 @@ module camera
   !? Position is not translation, translation is the inverse of position!
   type(vec3d) :: camera_position
   type(vec3d) :: camera_rotation
+
+  type(vec3d) :: gui_camera_position
+  type(vec3d) :: gui_camera_rotation
   ! Camera is always at scale 1, 1, 1.
 
 
@@ -138,9 +141,9 @@ contains
 
     call camera_matrix%set_ortho_2d(-width, width, -height, height)
 
-    call camera_matrix%rotate_x(camera_rotation%x_f32())
-    call camera_matrix%rotate_y(camera_rotation%y_f32())
-    call camera_matrix%rotate_z(camera_rotation%z_f32())
+    call camera_matrix%rotate_x(gui_camera_rotation%x_f32())
+    call camera_matrix%rotate_y(gui_camera_rotation%y_f32())
+    call camera_matrix%rotate_z(gui_camera_rotation%z_f32())
 
     !* This synchronizes the camera's depth matrix with OpenGL.
     call gl_depth_range_f(z_near_2d, z_far_2d)
