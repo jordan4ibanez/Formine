@@ -28,6 +28,7 @@ program main
   fps_new = 0
   old_fps = -1
 
+
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
   !   return
@@ -108,6 +109,8 @@ program main
   !* If we cannot initalize the API properly, we give up.
   call api_initialize()
 
+
+  call debug_generate_chunk(0,0)
 
   rotation = 0.0
 
