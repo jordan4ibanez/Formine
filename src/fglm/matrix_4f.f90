@@ -205,8 +205,8 @@ contains
     ! I'm just using this like this so I can upload it straight into the GPU. (I am very lazy)
     real(c_float), intent(in), value :: fov_y_radians, aspect_ratio, z_near, z_far
     logical, intent(in), value :: z_zero_to_one
-    ! real(c_float), dimension(4) ::
-    real(c_float) :: r,h, nm20, nm21, nm22, nm23, rm00, rm11, rm22, rm32, e
+    real(c_float), dimension(4) :: nm
+    real(c_float) :: h, rm00, rm11, rm22, rm32, e
     logical :: far_infinite, near_infinite
     ! Cache.
     real(c_float), dimension(16) :: mat
@@ -234,39 +234,18 @@ contains
       rm32 = merge(z_far, z_far + z_far, z_zero_to_one) * z_near / (z_near - z_far);
     end if
 
-    !?-------------
-    !? | m00 | 1  |
-    !? | m01 | 2  |
-    !? | m02 | 3  |
-    !? | m03 | 4  |
-    !?-------------
-    !? | m10 | 5  |
-    !? | m11 | 6  |
-    !? | m12 | 7  |
-    !? | m13 | 8  |
-    !?-------------
-    !? | m20 | 9  |
-    !? | m21 | 10 |
-    !? | m22 | 11 |
-    !? | m23 | 12 |
-    !?-------------
-    !? | m30 | 13 |
-    !? | m31 | 14 |
-    !? | m32 | 15 |
-    !? | m33 | 16 |
-    !?-------------
-
 
     ! perform optimized matrix multiplication
-    nm20 = mat(9) *  rm22 + mat(13);
-    nm21 = mat(10) * rm22 + mat(14)
-    nm22 = mat(11) * rm22 + mat(15)
-    nm23 = mat(12) * rm22 + mat(16)
+    nm = [mat(9:12) * rm22 + mat(13:16)]
+    ! nm20 = mat(9) *  rm22 + mat(13);
+    ! nm21 = mat(10) * rm22 + mat(14)
+    ! nm22 = mat(11) * rm22 + mat(15)
+    ! nm23 = mat(12) * rm22 + mat(16)
 
     mat = [&
       mat(1:4) * rm00, &
       mat(5:8) * rm11, &
-      nm20, nm21, nm22, nm23, &
+      nm, &
       mat(9:12) * rm32 &
       ]
   end subroutine perspective_left_handed
