@@ -1,6 +1,7 @@
-module chunk
+module chunk_generator
   use :: string
   use :: chunk_mesh
+  use :: chunk_data
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -8,64 +9,10 @@ module chunk
   private
 
 
-  !* Width stands for X and Z. There is no sense in defining depth as they're equal sized.
-
-  integer(c_int), parameter :: CHUNK_WIDTH = 16
-  integer(c_int), parameter :: CHUNK_HEIGHT = 128
-
-  !* Then we can define it as a flat array for massive caching boost.
-
-  integer(c_int), parameter :: CHUNK_ARRAY_SIZE = CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_WIDTH
-
-  !* The chunk is divided up into 8 meshes with width, height, and depth of 16.
-  !* 1 is the bottom, 8 is the top.
-
-  integer(c_int), parameter :: MESH_STACK_ARRAY_SIZE = 8
-  integer(c_int), parameter :: MESH_STACK_HEIGHT = 16
-
-  !* The stride before we reach into actual data.
-  integer(c_int), parameter :: XY_STRIDE = CHUNK_WIDTH * CHUNK_HEIGHT
-
-
-  !* Block data is one element in a chunk.
-
-  type :: block_data
-    ! Starts off as air.
-    integer(c_int) :: id = 0
-    ! Starts off as pitch black. Range: 0-15
-    integer(1) :: light = 0
-    ! There is no use for state yet. So we're going to leave this disabled.
-    ! integer(c_int) :: state = 0
-  end type block_data
-
-
-  !* Chunk data is the data for the entire chunk.
-
-  type :: chunk_data
-    type(block_data), dimension(CHUNK_ARRAY_SIZE), allocatable :: data(:)
-    type(heap_string), dimension(MESH_STACK_ARRAY_SIZE), allocatable :: mesh(:)
-  end type chunk_data
-
-  interface chunk_data
-    module procedure :: chunk_data_constructor
-  end interface chunk_data
-
-
   public :: debug_generate_chunk
 
 
 contains
-
-
-  function chunk_data_constructor() result(chunk_data_new)
-    implicit none
-
-    type(chunk_data) :: chunk_data_new
-
-    allocate(chunk_data_new%data(CHUNK_ARRAY_SIZE))
-    allocate(chunk_data_new%mesh(MESH_STACK_ARRAY_SIZE))
-  end function chunk_data_constructor
-
 
   integer(c_int) function pos_to_index(x, y, z) result(index)
     implicit none
@@ -110,14 +57,14 @@ contains
     type(fnl_state) :: noise_state
 
     integer(c_int) :: x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height
-    type(chunk_data) :: current_chunk
+    type(memory_chunk) :: current_chunk
     type(block_data) :: current_block
     integer(c_int) :: current_index
     integer(c_int), dimension(3) :: back_to
 
     current_index = 1
 
-    current_chunk = chunk_data()
+    current_chunk = memory_chunk()
 
     base_x = chunk_x * CHUNK_WIDTH
     base_y = 0
@@ -144,8 +91,8 @@ contains
           if (x /= back_to(1) .or. y /= back_to(2) .or. z /= back_to(3)) then
             error stop
           end if
-
           current_index = current_index + 1
+
           if (y <= current_height) then
             current_block = block_data()
             current_block%id = 1
@@ -154,7 +101,9 @@ contains
         end do
       end do
     end do
+
+    current_chunk%mesh(1) = chunk_mesh_generate(current_chunk)
   end subroutine
 
 
-end module chunk
+end module chunk_generator

@@ -14,7 +14,7 @@ program main
   use :: texture_atlas
   use :: texture_atlas
   use :: fast_noise_lite
-  use :: chunk
+  use :: chunk_generator
   use :: mouse
   use :: keyboard
   use, intrinsic ::  iso_c_binding
