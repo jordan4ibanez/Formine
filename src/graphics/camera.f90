@@ -220,15 +220,21 @@ contains
 
 
   subroutine wrap_camera_rotation()
-    use :: constants, only: PI_TIMES_2_F64
+    use :: constants, only: PI_TIMES_2_F64, PI_OVER_2_F64
     implicit none
 
-    if (camera_rotation%x < 0.0d0 .or. camera_rotation%x > PI_TIMES_2_F64) then
-      camera_rotation%x = mod(camera_rotation%x, PI_TIMES_2_F64)
+    print*,camera_rotation%y
+
+    if (camera_rotation%x < -PI_OVER_2_F64) then
+      camera_rotation%x = -PI_OVER_2_F64
+    else if (camera_rotation%x > PI_OVER_2_F64) then
+      camera_rotation%x = PI_OVER_2_F64
     end if
+
     if (camera_rotation%y < 0.0d0 .or. camera_rotation%y > PI_TIMES_2_F64) then
       camera_rotation%y = mod(camera_rotation%y, PI_TIMES_2_F64)
     end if
+
     if (camera_rotation%z < 0.0d0 .or. camera_rotation%z > PI_TIMES_2_F64) then
       camera_rotation%z = mod(camera_rotation%z, PI_TIMES_2_F64)
     end if
