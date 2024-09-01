@@ -9,6 +9,8 @@ module keyboard
 
 
   public :: keyboard_initialize
+  public :: keyboard_key_down
+  public :: keyboard_key_up
 
 
   type(fhash_tbl_t) :: key_database
@@ -24,6 +26,8 @@ contains
 
     type(c_ptr), intent(in), value :: window_pointer
     integer(c_int), intent(in), value :: keyboard_key, scancode, action, mods
+
+    call process_key(keyboard_key, action)
 
     if (action == GLFW_PRESS) then
       select case (keyboard_key)
@@ -62,7 +66,7 @@ contains
       return
     end if
 
-    if (state == GLFW_PRESS) then
+    if (state == GLFW_PRESS .or. state == GLFW_REPEAT) then
       is_down = .true.
     end if
   end function keyboard_key_down
