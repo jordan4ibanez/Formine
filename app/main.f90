@@ -20,15 +20,13 @@ program main
   use, intrinsic ::  iso_c_binding
   implicit none
 
-  real(c_float) :: rotation, min_x, min_y, max_x, max_y
+  real(c_float) :: rotation !, min_x, min_y, max_x, max_y
   type(vec2f) :: text_size
   integer(c_int) :: fps_new, old_fps
-  type(texture_rectangle) :: tex_rect
+  !type(texture_rectangle) :: tex_rect
 
   fps_new = 0
   old_fps = -1
-
-
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
@@ -85,7 +83,7 @@ program main
   call gl_depth_func(GL_LESS)
 
   !! This enables backface culling.
-  call gl_enable(GL_CULL_FACE)
+  ! call gl_enable(GL_CULL_FACE)
 
   !! This enables alpha blending.
   call gl_enable(GL_BLEND)
@@ -143,43 +141,43 @@ program main
 
       call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
 
-      tex_rect = texture_atlas_debug()
+      ! tex_rect = texture_atlas_debug()
 
 
-      min_x = tex_rect%min_x
-      min_y = tex_rect%min_y
-      max_x = tex_rect%max_x
-      max_y = tex_rect%max_y
+      ! min_x = tex_rect%min_x
+      ! min_y = tex_rect%min_y
+      ! max_x = tex_rect%max_x
+      ! max_y = tex_rect%max_y
 
 
-      call mesh_create_3d( &
-        "debug", &
-        [ &
-        -0.5,  0.5, 0.0, &
-        -0.5, -0.5, 0.0, &
-        0.5,  -0.5, 0.0, &
-        0.5,   0.5, 0.0 &
-        ], &
-        [ &
-        min_x, min_y, &
-        min_x, max_y, &
-        max_x, max_y, &
-        max_x, min_y &
-        ], &
-        [ &
-        1.0, 1.0, 1.0, &
-        1.0, 1.0, 1.0, &
-        1.0, 1.0, 1.0, &
-        1.0, 1.0, 1.0 &
-        ], &
-        [0,1,2, 2,3,0] &
-        )
+      ! call mesh_create_3d( &
+      !   "debug", &
+      !   [ &
+      !   -0.5,  0.5, 0.0, &
+      !   -0.5, -0.5, 0.0, &
+      !   0.5,  -0.5, 0.0, &
+      !   0.5,   0.5, 0.0 &
+      !   ], &
+      !   [ &
+      !   min_x, min_y, &
+      !   min_x, max_y, &
+      !   max_x, max_y, &
+      !   max_x, min_y &
+      !   ], &
+      !   [ &
+      !   1.0, 1.0, 1.0, &
+      !   1.0, 1.0, 1.0, &
+      !   1.0, 1.0, 1.0, &
+      !   1.0, 1.0, 1.0 &
+      !   ], &
+      !   [0,1,2, 2,3,0] &
+      !   )
 
-      call texture_use("TEXTURE_ATLAS")
+      ! call texture_use("TEXTURE_ATLAS")
 
-      call mesh_draw("debug")
+      ! call mesh_draw("debug")
 
-      call mesh_delete("debug")
+      ! call mesh_delete("debug")
 
 
       !* Move into "2D mode"
