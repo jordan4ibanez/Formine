@@ -1,5 +1,6 @@
 module chunk
   use :: string
+  use :: chunk_mesh
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -21,6 +22,9 @@ module chunk
 
   integer(c_int), parameter :: MESH_STACK_ARRAY_SIZE = 8
   integer(c_int), parameter :: MESH_STACK_HEIGHT = 16
+
+  !* The stride before we reach into actual data.
+  integer(c_int), parameter :: XY_STRIDE = CHUNK_WIDTH * CHUNK_HEIGHT
 
 
   !* Block data is one element in a chunk.
@@ -45,7 +49,24 @@ module chunk
 
   public :: debug_generate_chunk
 
+
 contains
+
+
+  integer(c_int) function pos_to_index(x, y, z) result(index)
+    implicit none
+
+    integer(c_int), intent(in), value :: x, y, z
+    integer(c_int) :: i, j, k
+
+    ! Convert from index to offset.
+    i = x - 1
+    j = y - 1
+    k = z - 1
+
+    ! Convert back to index.
+    index = ((i * XY_STRIDE) + (k * CHUNK_HEIGHT) + j) + 1
+  end function pos_to_index
 
 
   subroutine debug_generate_chunk(chunk_x, chunk_z)
@@ -56,6 +77,12 @@ contains
     type(fnl_state) :: noise_state
 
     integer(c_int) :: x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height
+    type(chunk_data) :: data
+    integer(c_int) :: next_step
+
+    next_step = 1
+
+    data = chunk_data()
 
     base_x = chunk_x * CHUNK_WIDTH
     base_y = 0
@@ -73,6 +100,15 @@ contains
         do y = 1, CHUNK_HEIGHT
           ! todo: make this more complex with lua registered biomes.
 
+          if (pos_to_index(x,y,z) /= next_step) then
+            error stop "wrong"
+          end if
+
+          next_step = next_step + 1
+
+          if (y <= current_height) then
+
+          end if
         end do
       end do
     end do
