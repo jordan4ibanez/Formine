@@ -18,6 +18,9 @@ module camera
   public :: camera_set_object_matrix_f32
   public :: camera_set_object_matrix_f64
   public :: camera_set_gui_matrix_f32
+  public :: camera_get_pos_x
+  public :: camera_get_pos_y
+  public :: camera_get_pos_z
   public :: camera_freecam_hackjob
 
 
