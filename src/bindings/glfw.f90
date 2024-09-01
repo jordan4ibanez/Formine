@@ -740,8 +740,6 @@ contains
     else
       window_gui_scale = y
     end if
-
-    print*,"new GUI scale: ", window_gui_scale
   end subroutine glfw_update_window_gui_scale
 
 
