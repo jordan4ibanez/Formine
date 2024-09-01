@@ -79,6 +79,7 @@ contains
     ! Very pointy. =>
     definition_pointer => block_repo_get_definition_pointer_by_id(1)
 
+    !* Tested with debug_texture.png, it works in right handed.
     tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
 
     ! Now we assign.
