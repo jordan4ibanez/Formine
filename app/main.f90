@@ -63,6 +63,8 @@ program main
 
   call mouse_initialize()
 
+  call mouse_lock()
+
   call keyboard_initialize()
 
   call delta_initialize()

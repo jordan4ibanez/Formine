@@ -10,6 +10,8 @@ module mouse
   public :: mouse_initialize
   public :: mouse_lock
 
+  logical :: mouse_is_locked = .false.
+
 
 contains
 
@@ -37,7 +39,26 @@ contains
   subroutine mouse_lock()
     implicit none
 
+    if (mouse_is_locked) then
+      return
+    end if
+
+    call glfw_set_input_mode(GLFW_CURSOR, GLFW_CURSOR_DISABLED)
+    mouse_is_locked = .true.
   end subroutine mouse_lock
+
+
+  !* Unlock the mouse.
+  subroutine mouse_unlock()
+    implicit none
+
+    if (.not. mouse_is_locked) then
+      return
+    end if
+
+    call glfw_set_input_mode(GLFW_CURSOR, GLFW_CURSOR_NORMAL)
+    mouse_is_locked = .false.
+  end subroutine mouse_unlock
 
 
 end module mouse
