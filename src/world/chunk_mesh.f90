@@ -45,6 +45,13 @@ module chunk_mesh
     1.0, 1.0, 0.0 &  ! Top Right.
     /)
 
+  !? +Z (Facing away from camera at rotation 0.0)
+  real(c_float), dimension(12), parameter :: FRONT_FACE = (/ &
+    1.0, 1.0, 1.0, & ! Top Right.
+    1.0, 0.0, 1.0, & ! Bottom Right.
+    0.0, 0.0, 1.0, & ! Bottom Left.
+    0.0, 1.0, 1.0 &  ! Top left.
+    /)
 
   public :: chunk_mesh_generate
 
@@ -59,6 +66,7 @@ contains
     character(len = :, kind = c_char), allocatable :: mesh_id
     type(block_definition), pointer :: definition_pointer
     type(texture_rectangle), pointer :: tr_pointer
+    ! Written like this to denote the multiplicative each should have.
     real(c_float), dimension(12), allocatable :: positions(:)
     real(c_float), dimension(8), allocatable :: texture_coordinates(:)
     real(c_float), dimension(12), allocatable :: colors(:)
@@ -75,23 +83,43 @@ contains
 
     ! Now we assign.
 
+    !? -Z
     positions = BACK_FACE
-
     texture_coordinates = (/ &
       tr_pointer%min_x,tr_pointer%max_y, &
       tr_pointer%min_x,tr_pointer%min_y, &
       tr_pointer%max_x,tr_pointer%min_y, &
       tr_pointer%max_x,tr_pointer%max_y &
       /)
-
     colors = (/&
       1.0, 1.0, 1.0, &
       1.0, 1.0, 1.0, &
       1.0, 1.0, 1.0, &
       1.0, 1.0, 1.0 &
       /)
-
     indices = BASE_INDICES
+
+    !? +Z
+
+    !! this causes a memory leak!
+    positions = [positions, FRONT_FACE]
+
+    texture_coordinates = [texture_coordinates, (/ &
+      tr_pointer%min_x,tr_pointer%max_y, &
+      tr_pointer%min_x,tr_pointer%min_y, &
+      tr_pointer%max_x,tr_pointer%min_y, &
+      tr_pointer%max_x,tr_pointer%max_y &
+      /)]
+
+    colors = [colors, (/&
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0 &
+      /)]
+    indices = [indices, (BASE_INDICES + 4)]
+
+
 
     call mesh_create_3d("debug_block", positions, texture_coordinates, colors, indices)
 

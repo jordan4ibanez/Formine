@@ -142,7 +142,7 @@ program main
 
 
 
-      call camera_set_object_matrix_f32(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
+      call camera_set_object_matrix_f32(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
 
       ! tex_rect = texture_atlas_debug()
 
