@@ -217,6 +217,7 @@ program main
 
       !? END DRAW TEST ?!
 
+      call mouse_update()
 
       call glfw_swap_buffers()
 
