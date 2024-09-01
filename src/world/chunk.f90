@@ -110,13 +110,14 @@ contains
     type(fnl_state) :: noise_state
 
     integer(c_int) :: x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height
-    type(chunk_data) :: data
+    type(chunk_data) :: current_chunk
+    type(block_data) :: current_block
     integer(c_int) :: current_index
     integer(c_int), dimension(3) :: back_to
 
     current_index = 1
 
-    data = chunk_data()
+    current_chunk = chunk_data()
 
     base_x = chunk_x * CHUNK_WIDTH
     base_y = 0
@@ -145,9 +146,10 @@ contains
           end if
 
           current_index = current_index + 1
-
           if (y <= current_height) then
-
+            current_block = block_data()
+            current_block%id = 1
+            current_chunk%data(pos_to_index(x, y, z)) = current_block
           end if
         end do
       end do
