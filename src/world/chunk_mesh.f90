@@ -15,9 +15,9 @@ module chunk_mesh
   ! Negatives will be root. (0.0, 0.0, 0.0)
   !
   ! 1 _______ 4
-  !  |\      |
-  !  |  \    | <= Counter-clockwise.
-  !  |    \  |
+  !  |\      | <= Counter-clockwise.
+  !  |  \    |
+  !  |    \  | <= 1,2,3,3,4,1 improves cachiness.
   !  |______\|
   ! 2         3
   private
