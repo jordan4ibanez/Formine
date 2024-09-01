@@ -1,5 +1,6 @@
 module mouse
   use :: glfw
+  use :: vector_2d
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -9,9 +10,14 @@ module mouse
 
   public :: mouse_initialize
   public :: mouse_lock
+  public :: mouse_get_delta
+  public :: mouse_update
   public :: mouse_debug_lock_toggle
 
+
   logical :: mouse_is_locked = .false.
+  type(vec2d) :: mouse_delta
+  real(c_double) :: mouse_sensitivity = 0.25d0
 
 
 contains
@@ -24,12 +30,23 @@ contains
     type(c_ptr), intent(in), value :: window_pointer
     real(c_double), intent(in), value :: x_pos, y_pos
 
-    print*, x_pos, y_pos
-
     if (mouse_is_locked) then
+      call calculate_mouse_delta(x_pos, y_pos)
+
       call glfw_set_cursor_pos(0.0d0, 0.0d0)
     end if
   end subroutine mouse_position_callback
+
+
+  !* Calculate the mouse delta for camera movement.
+  subroutine calculate_mouse_delta(x_pos, y_pos)
+    implicit none
+
+    real(c_double), intent(in), value :: x_pos, y_pos
+
+    mouse_delta%x = x_pos * mouse_sensitivity
+    mouse_delta%y = y_pos * mouse_sensitivity
+  end subroutine calculate_mouse_delta
 
 
   !* This initializes the keyboard callback function.
@@ -54,6 +71,9 @@ contains
 
     call glfw_set_input_mode(GLFW_CURSOR, GLFW_CURSOR_DISABLED)
     mouse_is_locked = .true.
+
+    ! Rest the mouse delta.
+    call delta_reset()
   end subroutine mouse_lock
 
 
@@ -75,7 +95,26 @@ contains
     window_height = glfw_get_window_height_f64()
 
     call glfw_set_cursor_pos(window_width / 2.0d0, window_height / 2.0d0)
+
+    ! Reset the mouse delta.
+    call delta_reset()
   end subroutine mouse_unlock
+
+
+  !* Get the delta of the mouse.
+  type(vec2d) function mouse_get_delta() result(delta)
+    implicit none
+
+    delta = mouse_delta
+  end function mouse_get_delta
+
+
+  !* Update the mouse state.
+  subroutine mouse_update()
+    implicit none
+
+    call delta_reset()
+  end subroutine mouse_update
 
 
   !! DEBUG PROTOTYPING ONLY !!
@@ -89,6 +128,14 @@ contains
       call mouse_lock()
     end if
   end subroutine mouse_debug_lock_toggle
+
+
+  subroutine delta_reset()
+    implicit none
+
+    mouse_delta%x = 0.0d0
+    mouse_delta%y = 0.0d0
+  end subroutine delta_reset
 
 
 end module mouse
