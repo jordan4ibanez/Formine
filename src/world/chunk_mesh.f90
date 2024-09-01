@@ -1,6 +1,8 @@
 module chunk_mesh
   use :: mesh
   use :: chunk_data
+  use :: block_repo
+  use :: texture_atlas
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -19,6 +21,8 @@ contains
 
     type(memory_chunk), intent(in) :: input_chunk
     character(len = :, kind = c_char), allocatable :: mesh_id
+
+    !! debugging one block
 
   end function chunk_mesh_generate
 
