@@ -20,6 +20,7 @@ module texture_atlas
   public :: texture_atlas_initialize
   public :: texture_atlas_add_texture_to_pack
   public :: texture_atlas_pack
+  public :: texture_atlas_get_texture_rectangle_pointer
   public :: texture_atlas_debug
   public :: texture_atlas_destroy
 
