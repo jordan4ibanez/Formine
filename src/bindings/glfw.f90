@@ -414,6 +414,15 @@ module glfw
     end subroutine internal_glfw_set_cursor_pos_callback
 
 
+    subroutine internal_glfw_set_input_mode(window, mode, value) bind(c, name = "glfwSetInputMode")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: window
+      integer(c_int), intent(in), value :: mode, value
+    end subroutine internal_glfw_set_input_mode
+
+
   end interface
 
 
