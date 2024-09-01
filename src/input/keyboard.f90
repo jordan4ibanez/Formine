@@ -29,6 +29,7 @@ contains
 
     call process_key(keyboard_key, action)
 
+    !! This is for debugging.
     if (action == GLFW_PRESS) then
       select case (keyboard_key)
        case (GLFW_KEY_ESCAPE)
