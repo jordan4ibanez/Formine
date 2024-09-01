@@ -108,15 +108,10 @@ contains
 
     !! debugging one block, ID 1 (Stone)
 
-    !! Face 1 -Z
-
     ! Very pointy. =>
     definition_pointer => block_repo_get_definition_pointer_by_id(1)
 
-
     ! Now we assign.
-
-
 
     !? -Z
     !* Tested with debug_texture.png, it works in right handed.
