@@ -72,7 +72,7 @@ module opengl
   public :: gl_delete_textures
   public :: gl_depth_mask
   public :: gl_depth_func
-  public :: gl_depth_range_f
+  public :: gl_depth_range
   public :: gl_blend_equation
   public :: gl_blend_func
   public :: gl_blend_func_separate
