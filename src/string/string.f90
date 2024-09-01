@@ -209,6 +209,8 @@ contains
 
     if (string_starts_with(output, ".")) then
       output = "0"//output
+    else if (string_starts_with(output, "-.")) then
+      output = "-0"//output(2:len(output))
     end if
   end function f32_to_string
 
@@ -229,6 +231,8 @@ contains
 
     if (string_starts_with(output, ".")) then
       output = "0"//output
+    else if (string_starts_with(output, "-.")) then
+      output = "-0"//output(2:len(output))
     end if
   end function f64_to_string
 
