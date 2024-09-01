@@ -19,7 +19,7 @@ module glfw
 
 
   ! Base on standard HD resolution.
-  
+
   real(c_double), parameter :: STANDARD_WINDOW_WIDTH = 1920.0d0
   real(c_double), parameter :: STANDARD_WINDOW_HEIGHT = 1080.0d0
 
@@ -54,6 +54,7 @@ module glfw
   public :: glfw_set_cursor_pos_callback
   public :: glfw_set_input_mode
   public :: glfw_set_cursor_pos
+  public :: glfw_get_window_gui_scale
 
 
   ! Constants.
