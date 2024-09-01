@@ -15,14 +15,22 @@ contains
 
   !* Key press events.
   subroutine keyboard_input_callback(window_pointer, key, scancode, action, mods)
+    use :: mouse
     implicit none
 
     type(c_ptr), intent(in), value :: window_pointer
     integer(c_int), intent(in), value :: key, scancode, action, mods
 
-    if (key == GLFW_KEY_ESCAPE .and. action == GLFW_PRESS) then
-      print*, "peace"
-      call glfw_close_window()
+    if (action == GLFW_PRESS) then
+
+      select case (key)
+       case (GLFW_KEY_ESCAPE)
+        print*, "peace"
+        call glfw_close_window()
+       case (GLFW_KEY_F1)
+        call mouse_debug_lock_toggle()
+
+      end select
     end if
   end subroutine keyboard_input_callback
 
