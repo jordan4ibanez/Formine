@@ -17,12 +17,14 @@ program main
   use :: chunk_generator
   use :: mouse
   use :: keyboard
+  use :: camera
   use, intrinsic ::  iso_c_binding
   implicit none
 
   real(c_float) :: rotation !, min_x, min_y, max_x, max_y
   type(vec2f) :: text_size
   integer(c_int) :: fps_new, old_fps
+  character(len = :, kind = c_char), allocatable :: position_text_debug
   !type(texture_rectangle) :: tex_rect
 
   fps_new = 0
@@ -200,18 +202,34 @@ program main
       ! Process first text.
 
       fps_new = get_fps()
-
       call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - text_size%y) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
-
       if (fps_new /= old_fps) then
-
         call mesh_delete("fps_counter")
-
         call font_generate_text("fps_counter", 50.0, "FPS: "//int_to_string(get_fps()), center = .false., size = text_size)
-
       end if
 
       call mesh_draw("fps_counter")
+
+      ! XYZ TEXT.
+
+      call mesh_delete("x_pos")
+      position_text_debug = f32_to_string(camera_get_pos_x())
+      call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - (text_size%y * 2.5)) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+      call font_generate_text("x_pos", 50.0, "X: "//position_text_debug, size = text_size)
+      call mesh_draw("x_pos")
+
+      call mesh_delete("y_pos")
+      position_text_debug = f32_to_string(camera_get_pos_y())
+      call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - (text_size%y * 4.0)) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+      call font_generate_text("y_pos", 50.0, "Y: "//position_text_debug, size = text_size)
+      call mesh_draw("y_pos")
+
+      call mesh_delete("z_pos")
+      position_text_debug = f32_to_string(camera_get_pos_z())
+      call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - (text_size%y * 5.5)) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+      call font_generate_text("z_pos", 50.0, "Z: "//position_text_debug, size = text_size)
+      call mesh_draw("z_pos")
+
 
       ! Process second text.
 
