@@ -8,20 +8,44 @@ module glfw
 
   ! C side.
 
-
   type(c_ptr) :: window_pointer
 
 
   ! Fortran side.
-
 
   character(len = :), allocatable :: window_title
   integer(c_int) :: window_width
   integer(c_int) :: window_height
 
 
-  ! Constants.
+  ! What we want exposed.
 
+  public :: glfw_get_proc_address
+  public :: glfw_init
+  public :: glfw_terminate
+  public :: glfw_create_window
+  public :: glfw_make_context_current
+  public :: glfw_get_error
+  public :: glfw_window_should_close
+  public :: glfw_swap_buffers
+  public :: glfw_poll_events
+  public :: glfw_destroy_window
+  public :: glfw_set_error_callback
+  public :: glfw_window_hint
+  public :: glfw_set_window_size_callback
+  public :: glfw_get_aspect_ratio
+  public :: glfw_swap_interval
+  public :: glfw_get_window_width
+  public :: glfw_get_window_height
+  public :: glfw_get_window_width_f32
+  public :: glfw_get_window_height_f32
+  public :: glfw_set_key_callback
+  public :: glfw_close_window
+  public :: glfw_set_cursor_pos_callback
+  public :: glfw_set_input_mode
+
+
+  ! Constants.
 
   public :: GLFW_CONTEXT_DEBUG
   public :: GLFW_OPENGL_DEBUG_CONTEXT
@@ -36,6 +60,7 @@ module glfw
   integer, parameter :: GLFW_OPENGL_FORWARD_COMPAT = int(z"00022006")
 
   ! Booleans.
+
   integer(c_int), parameter, public :: GLFW_TRUE = 1
   integer(c_int), parameter, public :: GLFW_FALSE = 0
 
@@ -236,33 +261,6 @@ module glfw
 
   integer(c_int), parameter, public :: GLFW_CONNECTED = int(z"00040001")
   integer(c_int), parameter, public ::  GLFW_DISCONNECTED = int(z"00040002")
-
-
-  ! What we want exposed.
-
-  public :: glfw_get_proc_address
-  public :: glfw_init
-  public :: glfw_terminate
-  public :: glfw_create_window
-  public :: glfw_make_context_current
-  public :: glfw_get_error
-  public :: glfw_window_should_close
-  public :: glfw_swap_buffers
-  public :: glfw_poll_events
-  public :: glfw_destroy_window
-  public :: glfw_set_error_callback
-  public :: glfw_window_hint
-  public :: glfw_set_window_size_callback
-  public :: glfw_get_aspect_ratio
-  public :: glfw_swap_interval
-  public :: glfw_get_window_width
-  public :: glfw_get_window_height
-  public :: glfw_get_window_width_f32
-  public :: glfw_get_window_height_f32
-  public :: glfw_set_key_callback
-  public :: glfw_close_window
-  public :: glfw_set_cursor_pos_callback
-  public :: glfw_set_input_mode
 
 
   ! Here I'm binding to the C glfw shared library.
