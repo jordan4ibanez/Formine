@@ -66,6 +66,7 @@ module matrix_4f
     !* General methods.
     procedure :: identity
     procedure :: perspective
+    procedure :: perspective_left_handed
     procedure :: set_ortho_2d
 
     !* Spacial methods.
@@ -192,6 +193,83 @@ contains
       mat(9:12) * r(4) &
       ]
   end subroutine perspective
+
+
+  !* Translated from JOML. Original method: "perspectiveLHGeneric"
+  subroutine perspective_left_handed(this, fov_y_radians, aspect_ratio, z_near, z_far, z_zero_to_one)
+    use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+    implicit none
+
+    class(mat4f), intent(inout) :: this
+    ! Very poor accuracy, if you're copying this in the future, first of all: Hi, I hope you're doing well. Second of all: You should use c_double or real64.
+    ! I'm just using this like this so I can upload it straight into the GPU. (I am very lazy)
+    real(c_float), intent(in), value :: fov_y_radians, aspect_ratio, z_near, z_far
+    logical, intent(in), value :: z_zero_to_one
+    ! real(c_float), dimension(4) ::
+    real(c_float) :: r,h, nm20, nm21, nm22, nm23, rm00, rm11, rm22, rm32, e
+    logical :: far_infinite, near_infinite
+    ! Cache.
+    real(c_float), dimension(16) :: mat
+
+    mat = this%data
+
+    h = tan(fov_y_radians * 0.5);
+
+    rm00 = 1.0 / (h * aspect_ratio);
+    rm11 = 1.0 / h;
+
+    far_infinite = (z_far > 0.0) .and. (.not. ieee_is_finite(z_far))
+    near_infinite = (z_near > 0.0) .and. (.not. ieee_is_finite(z_near))
+
+    if (far_infinite) then
+      e = 1E-6;
+      rm22 = 1.0 - e;
+      rm32 = (e - merge(1.0, 2.0, z_zero_to_one)) * z_near;
+    else if (near_infinite) then
+      e = 1E-6
+      rm22 = merge(0.0, 1.0, z_zero_to_one) - e;
+      rm32 = (merge(1.0, 2.0, z_zero_to_one) - e) * z_far;
+    else
+      rm22 = merge(z_far, z_far + z_near, z_zero_to_one) / (z_far - z_near);
+      rm32 = merge(z_far, z_far + z_far, z_zero_to_one) * z_near / (z_near - z_far);
+    end if
+
+    !?-------------
+    !? | m00 | 1  |
+    !? | m01 | 2  |
+    !? | m02 | 3  |
+    !? | m03 | 4  |
+    !?-------------
+    !? | m10 | 5  |
+    !? | m11 | 6  |
+    !? | m12 | 7  |
+    !? | m13 | 8  |
+    !?-------------
+    !? | m20 | 9  |
+    !? | m21 | 10 |
+    !? | m22 | 11 |
+    !? | m23 | 12 |
+    !?-------------
+    !? | m30 | 13 |
+    !? | m31 | 14 |
+    !? | m32 | 15 |
+    !? | m33 | 16 |
+    !?-------------
+
+
+    ! perform optimized matrix multiplication
+    nm20 = mat(9) *  rm22 + mat(13);
+    nm21 = mat(10) * rm22 + mat(14)
+    nm22 = mat(11) * rm22 + mat(15)
+    nm23 = mat(12) * rm22 + mat(16)
+
+    mat = [&
+      mat(1:4) * rm00, &
+      mat(5:8) * rm11, &
+      nm20, nm21, nm22, nm23, &
+      mat(9:12) * rm32 &
+      ]
+  end subroutine perspective_left_handed
 
 
   !* Translated from JOML. Original method: "setOrtho2D"
