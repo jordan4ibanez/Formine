@@ -105,8 +105,8 @@ contains
 
     call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), z_near_3d, z_far_3d)
 
-    call camera_matrix%rotate_y(camera_rotation%y_f32())
     call camera_matrix%rotate_x(camera_rotation%x_f32())
+    call camera_matrix%rotate_y(camera_rotation%y_f32())
     call camera_matrix%rotate_z(camera_rotation%z_f32())
 
     !* This synchronizes the camera's depth matrix with OpenGL.
@@ -138,8 +138,8 @@ contains
 
     call camera_matrix%set_ortho_2d(-width, width, -height, height)
 
-    call camera_matrix%rotate_y(camera_rotation%y_f32())
     call camera_matrix%rotate_x(camera_rotation%x_f32())
+    call camera_matrix%rotate_y(camera_rotation%y_f32())
     call camera_matrix%rotate_z(camera_rotation%z_f32())
 
     !* This synchronizes the camera's depth matrix with OpenGL.
