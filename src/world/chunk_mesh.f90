@@ -6,8 +6,29 @@ module chunk_mesh
   use, intrinsic :: iso_c_binding
   implicit none
 
-
+  ! +X RIGHT
+  !
+  ! +Y UP
+  !
+  ! +Z FORWARD (maybe)
+  !
+  ! Negatives will be root. (0.0, 0.0, 0.0)
+  !
+  ! 1 _______ 4
+  !  |\      |
+  !  |  \    | <= Counter-clockwise.
+  !  |    \  |
+  !  |______\|
+  ! 2         3
   private
+
+  !? -Z
+  real(c_float), dimension(12) :: BACK_FACE = (/ &
+    0.0, 1.0, 0.0, & ! Top left.
+    0.0, 0.0, 0.0, & ! Bottom Left.
+    1.0, 0.0, 0.0, & ! Bottom Right.
+    1.0, 1.0, 0.0 &  ! Top Right.
+    /)
 
 
   public :: chunk_mesh_generate
