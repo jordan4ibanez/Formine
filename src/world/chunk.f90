@@ -46,11 +46,25 @@ module chunk
     type(heap_string), dimension(MESH_STACK_ARRAY_SIZE), allocatable :: mesh(:)
   end type chunk_data
 
+  interface chunk_data
+    module procedure :: chunk_data_constructor
+  end interface chunk_data
+
 
   public :: debug_generate_chunk
 
 
 contains
+
+
+  function chunk_data_constructor() result(chunk_data_new)
+    implicit none
+
+    type(chunk_data) :: chunk_data_new
+
+    allocate(chunk_data_new%data(CHUNK_ARRAY_SIZE))
+    allocate(chunk_data_new%mesh(MESH_STACK_ARRAY_SIZE))
+  end function chunk_data_constructor
 
 
   integer(c_int) function pos_to_index(x, y, z) result(index)
