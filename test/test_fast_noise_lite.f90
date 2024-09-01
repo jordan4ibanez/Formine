@@ -61,7 +61,7 @@ program test_fast_noise
   integer(c_int) :: x, y
 
   noise_state = fnl_state()
-  noise_state%noise_type = FNL_NOISE_OPENSIMPLEX2
+  noise_state%noise_type = FNL_NOISE_OPENSIMPLEX2S
 
   do y = 1,128
     do x = 1,128
