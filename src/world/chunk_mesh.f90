@@ -31,8 +31,9 @@ module chunk_mesh
   private
 
 
+  ! In offset for OpenGL/Vulkan.
   integer(c_int), dimension(6), parameter :: BASE_INDICES = (/ &
-    1,2,3,3,4,1 &
+    0,1,2,2,3,0 &
     /)
 
 
@@ -57,7 +58,11 @@ contains
     type(memory_chunk), intent(in) :: input_chunk
     character(len = :, kind = c_char), allocatable :: mesh_id
     type(block_definition), pointer :: definition_pointer
-    type(texture_rectangle), pointer :: texture_rectangle_pointer
+    type(texture_rectangle), pointer :: tr_pointer
+    real(c_float), dimension(12), allocatable :: positions(:)
+    real(c_float), dimension(8), allocatable :: texture_coordinates(:)
+    real(c_float), dimension(12), allocatable :: colors(:)
+    integer(c_int), dimension(6), allocatable :: indices(:)
 
     !! debugging one block, ID 1 (Stone)
 
@@ -66,11 +71,31 @@ contains
     ! Very pointy. =>
     definition_pointer => block_repo_get_definition_pointer_by_id(1)
 
-    texture_rectangle_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
+    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
 
+    ! Now we assign.
 
+    positions = BACK_FACE
 
+    texture_coordinates = (/ &
+      tr_pointer%min_x,tr_pointer%max_y, &
+      tr_pointer%min_x,tr_pointer%min_y, &
+      tr_pointer%max_x,tr_pointer%min_y, &
+      tr_pointer%max_x,tr_pointer%max_y &
+      /)
 
+    colors = (/&
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0 &
+      /)
+
+    indices = BASE_INDICES
+
+    call mesh_create_3d("debug_block", positions, texture_coordinates, colors, indices)
+
+    mesh_id = "debug_block"
   end function chunk_mesh_generate
 
 

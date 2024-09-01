@@ -176,9 +176,9 @@ program main
       !   [0,1,2, 2,3,0] &
       !   )
 
-      ! call texture_use("TEXTURE_ATLAS")
+      call texture_use("TEXTURE_ATLAS")
 
-      ! call mesh_draw("debug")
+      call mesh_draw("debug_block")
 
       ! call mesh_delete("debug")
 
