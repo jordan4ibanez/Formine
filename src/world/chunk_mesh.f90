@@ -22,7 +22,7 @@ module chunk_mesh
   ! 2         3
   private
 
-  !? -Z
+  !? -Z (Facing camera at rotation 0.0)
   real(c_float), dimension(12), parameter :: BACK_FACE = (/ &
     0.0, 1.0, 0.0, & ! Top left.
     0.0, 0.0, 0.0, & ! Bottom Left.
