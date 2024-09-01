@@ -35,7 +35,7 @@ module camera
   type(vec3d) :: camera_position
   type(vec3d) :: camera_rotation
 
-  type(vec3d) :: gui_camera_position
+  ! type(vec3d) :: gui_camera_position
   type(vec3d) :: gui_camera_rotation
   ! Camera is always at scale 1, 1, 1.
 
