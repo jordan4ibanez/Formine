@@ -262,6 +262,27 @@ contains
   end subroutine camera_set_gui_matrix_f32
 
 
+  real(c_float) function camera_get_pos_x() result(x)
+    implicit none
+
+    x = real(camera_position%x, c_float)
+  end function camera_get_pos_x
+
+
+  real(c_float) function camera_get_pos_y() result(y)
+    implicit none
+
+    y = real(camera_position%y, c_float)
+  end function camera_get_pos_y
+
+
+  real(c_float) function camera_get_pos_z() result(z)
+    implicit none
+
+    z = real(camera_position%z, c_float)
+  end function camera_get_pos_z
+
+
   !* Internal only.
 
 
@@ -344,5 +365,6 @@ contains
       camera_position%y = camera_position%y - movement_speed
     end if
   end subroutine camera_freecam_hackjob
+
 
 end module camera
