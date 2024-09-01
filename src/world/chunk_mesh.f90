@@ -23,6 +23,10 @@ module chunk_mesh
   !  |______\|
   ! 2         3
   !
+  !
+  ! Texture ordering: -Z, +Z, -X, +X, -Y, +Y
+  ! todo: document this in LuaJIT.
+  !
 
   private
 
@@ -53,7 +57,9 @@ contains
     type(memory_chunk), intent(in) :: input_chunk
     character(len = :, kind = c_char), allocatable :: mesh_id
 
-    !! debugging one block
+    !! debugging one block, ID 1
+
+
 
   end function chunk_mesh_generate
 
