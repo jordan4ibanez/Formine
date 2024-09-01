@@ -223,14 +223,14 @@ contains
     use :: constants, only: PI_TIMES_2_F64
     implicit none
 
-    if (camera_position%x < 0.0d0 .or. camera_position%x > PI_TIMES_2_F64) then
-      camera_position%x = mod(camera_position%x, PI_TIMES_2_F64)
+    if (camera_rotation%x < 0.0d0 .or. camera_rotation%x > PI_TIMES_2_F64) then
+      camera_rotation%x = mod(camera_rotation%x, PI_TIMES_2_F64)
     end if
-    if (camera_position%y < 0.0d0 .or. camera_position%y > PI_TIMES_2_F64) then
-      camera_position%y = mod(camera_position%y, PI_TIMES_2_F64)
+    if (camera_rotation%y < 0.0d0 .or. camera_rotation%y > PI_TIMES_2_F64) then
+      camera_rotation%y = mod(camera_rotation%y, PI_TIMES_2_F64)
     end if
-    if (camera_position%z < 0.0d0 .or. camera_position%z > PI_TIMES_2_F64) then
-      camera_position%z = mod(camera_position%z, PI_TIMES_2_F64)
+    if (camera_rotation%z < 0.0d0 .or. camera_rotation%z > PI_TIMES_2_F64) then
+      camera_rotation%z = mod(camera_rotation%z, PI_TIMES_2_F64)
     end if
   end subroutine wrap_camera_rotation
 
