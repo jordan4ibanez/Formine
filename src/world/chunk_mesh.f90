@@ -102,7 +102,7 @@ contains
 
     !? +Z
 
-    !! this causes a memory leak!
+    !! this causes a memory leak! (probably)
     positions = [positions, FRONT_FACE]
 
     texture_coordinates = [texture_coordinates, (/ &
