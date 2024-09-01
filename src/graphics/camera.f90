@@ -284,6 +284,14 @@ contains
 
       camera_position = camera_position + movement
     end if
+
+    if (keyboard_key_down(GLFW_KEY_SPACE)) then
+      camera_position%y = camera_position%y + movement_speed
+    end if
+
+    if (keyboard_key_down(GLFW_KEY_LEFT_SHIFT)) then
+      camera_position%y = camera_position%y - movement_speed
+    end if
   end subroutine camera_freecam_hackjob
 
 end module camera
