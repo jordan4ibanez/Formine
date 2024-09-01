@@ -13,6 +13,8 @@ module string
   !* Casting to/from string.
   public :: int_to_string
   public :: long_to_string
+  public :: f32_to_string
+  public :: f64_to_string
   public :: bool_to_string
   public :: string_to_int
   public :: string_to_int64
@@ -189,6 +191,46 @@ contains
     ! print"(A)","len: "//int_to_string(len(output))
     ! print"(A)","-----"
   end function long_to_string
+
+
+  !* Convert an f32 to a string.
+  function f32_to_string(i) result(output)
+    implicit none
+
+    real(c_float), intent(in), value :: i
+    character(len = :, kind = c_char), allocatable :: output
+
+    allocate(character(len = 64) :: output)
+
+    ! This is going to act weird cause of the mantissa, too bad.
+    write(output, "(f0.7)") i
+
+    output = string_trim_white_space(output)
+
+    if (string_starts_with(output, ".")) then
+      output = "0"//output
+    end if
+  end function f32_to_string
+
+
+  !* Convert an f64 to a string.
+  function f64_to_string(i) result(output)
+    implicit none
+
+    real(c_double), intent(in), value :: i
+    character(len = :, kind = c_char), allocatable :: output
+
+    allocate(character(len = 64) :: output)
+
+    ! This is going to act weird cause of the mantissa, too bad.
+    write(output, "(f0.7)") i
+
+    output = string_trim_white_space(output)
+
+    if (string_starts_with(output, ".")) then
+      output = "0"//output
+    end if
+  end function f64_to_string
 
 
   ! Convert a logical into an allocated string.
