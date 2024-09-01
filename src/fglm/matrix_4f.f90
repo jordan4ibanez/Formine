@@ -205,8 +205,8 @@ contains
     ! I'm just using this like this so I can upload it straight into the GPU. (I am very lazy)
     real(c_float), intent(in), value :: fov_y_radians, aspect_ratio, z_near, z_far
     logical, intent(in), value :: z_zero_to_one
-    real(c_float), dimension(4) :: nm
-    real(c_float) :: h, rm00, rm11, rm22, rm32, e
+    real(c_float), dimension(4) :: rm
+    real(c_float) :: h, e
     logical :: far_infinite, near_infinite
     ! Cache.
     real(c_float), dimension(16) :: mat
@@ -215,38 +215,31 @@ contains
 
     h = tan(fov_y_radians * 0.5);
 
-    rm00 = 1.0 / (h * aspect_ratio);
-    rm11 = 1.0 / h;
+    rm(1) = 1.0 / (h * aspect_ratio);
+    rm(2) = 1.0 / h;
 
     far_infinite = (z_far > 0.0) .and. (.not. ieee_is_finite(z_far))
     near_infinite = (z_near > 0.0) .and. (.not. ieee_is_finite(z_near))
 
     if (far_infinite) then
       e = 1E-6;
-      rm22 = 1.0 - e;
-      rm32 = (e - merge(1.0, 2.0, z_zero_to_one)) * z_near;
+      rm(3) = 1.0 - e;
+      rm(4) = (e - merge(1.0, 2.0, z_zero_to_one)) * z_near;
     else if (near_infinite) then
       e = 1E-6
-      rm22 = merge(0.0, 1.0, z_zero_to_one) - e;
-      rm32 = (merge(1.0, 2.0, z_zero_to_one) - e) * z_far;
+      rm(3) = merge(0.0, 1.0, z_zero_to_one) - e;
+      rm(4) = (merge(1.0, 2.0, z_zero_to_one) - e) * z_far;
     else
-      rm22 = merge(z_far, z_far + z_near, z_zero_to_one) / (z_far - z_near);
-      rm32 = merge(z_far, z_far + z_far, z_zero_to_one) * z_near / (z_near - z_far);
+      rm(3) = merge(z_far, z_far + z_near, z_zero_to_one) / (z_far - z_near);
+      rm(4) = merge(z_far, z_far + z_far, z_zero_to_one) * z_near / (z_near - z_far);
     end if
 
-
-    ! perform optimized matrix multiplication
-    nm = [mat(9:12) * rm22 + mat(13:16)]
-    ! nm20 = mat(9) *  rm22 + mat(13);
-    ! nm21 = mat(10) * rm22 + mat(14)
-    ! nm22 = mat(11) * rm22 + mat(15)
-    ! nm23 = mat(12) * rm22 + mat(16)
-
+    ! perform optimized matrix multiplication.
     mat = [&
-      mat(1:4) * rm00, &
-      mat(5:8) * rm11, &
-      nm, &
-      mat(9:12) * rm32 &
+      mat(1:4) * rm(1), &
+      mat(5:8) * rm(2), &
+      mat(9:12) * rm(3) + mat(13:16), &
+      mat(9:12) * rm(4) &
       ]
   end subroutine perspective_left_handed
 
