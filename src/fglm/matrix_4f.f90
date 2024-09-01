@@ -230,7 +230,7 @@ contains
       rm(4) = merge(z_far, z_far + z_far, z_zero_to_one) * z_near / (z_near - z_far)
     end if
 
-    mat = [&
+    this%data = [&
       mat(1:4) * rm(1), &
       mat(5:8) * rm(2), &
       (mat(9:12) * rm(3) + mat(13:16)), &
