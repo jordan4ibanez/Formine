@@ -16,6 +16,7 @@ module mouse
 
 contains
 
+
   !* Mouse movement events.
   subroutine mouse_position_callback(window_pointer, x_pos, y_pos)
     implicit none
@@ -60,12 +61,20 @@ contains
   subroutine mouse_unlock()
     implicit none
 
+    real(c_double) window_width, window_height
+
     if (.not. mouse_is_locked) then
       return
     end if
 
     call glfw_set_input_mode(GLFW_CURSOR, GLFW_CURSOR_NORMAL)
     mouse_is_locked = .false.
+
+    ! Set the mouse to the center of the window when unlocking.
+    window_width = glfw_get_window_width_f64()
+    window_height = glfw_get_window_height_f64()
+
+    call glfw_set_cursor_pos(window_width / 2.0d0, window_height / 2.0d0)
   end subroutine mouse_unlock
 
 
