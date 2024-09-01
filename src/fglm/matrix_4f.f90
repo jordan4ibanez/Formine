@@ -233,7 +233,7 @@ contains
     mat = [&
       mat(1:4) * rm(1), &
       mat(5:8) * rm(2), &
-      mat(9:12) * rm(3) + mat(13:16), &
+      (mat(9:12) * rm(3) + mat(13:16)), &
       mat(9:12) * rm(4) &
       ]
   end subroutine perspective_left_handed
