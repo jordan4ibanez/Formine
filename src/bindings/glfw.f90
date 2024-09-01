@@ -43,6 +43,7 @@ module glfw
   public :: glfw_close_window
   public :: glfw_set_cursor_pos_callback
   public :: glfw_set_input_mode
+  public :: glfw_set_cursor_pos
 
 
   ! Constants.
@@ -674,13 +675,22 @@ contains
 
   !* Set an input mode.
   subroutine glfw_set_input_mode(mode, value)
-    use, intrinsic :: iso_c_binding
     implicit none
 
     integer(c_int), intent(in), value :: mode, value
 
     call internal_glfw_set_input_mode(window_pointer, mode, value)
   end subroutine glfw_set_input_mode
+
+
+  !* Set the cursor position.
+  subroutine glfw_set_cursor_pos(x_pos, y_pos)
+    implicit none
+
+    real(c_double), intent(in), value :: x_pos, y_pos
+
+    call internal_glfw_set_cursor_pos(window_pointer, x_pos, y_pos)
+  end subroutine glfw_set_cursor_pos
 
 
 end module glfw
