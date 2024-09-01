@@ -219,6 +219,24 @@ module glfw
 
   integer(c_int), parameter, public :: GLFW_ANY_POSITION = int(z"80000000")
 
+  integer(c_int), parameter, public :: GLFW_ARROW_CURSOR = int(z"00036001")
+  integer(c_int), parameter, public :: GLFW_IBEAM_CURSOR = int(z"00036002")
+  integer(c_int), parameter, public :: GLFW_CROSSHAIR_CURSOR = int(z"00036003")
+  integer(c_int), parameter, public :: GLFW_POINTING_HAND_CURSOR = int(z"00036004")
+  
+  integer(c_int), parameter, public :: GLFW_RESIZE_EW_CURSOR = int(z"00036005")
+  integer(c_int), parameter, public :: GLFW_RESIZE_NS_CURSOR = int(z"00036006")
+  integer(c_int), parameter, public :: GLFW_RESIZE_NWSE_CURSOR = int(z"00036007")
+  integer(c_int), parameter, public :: GLFW_RESIZE_NESW_CURSOR = int(z"00036008")
+  integer(c_int), parameter, public :: GLFW_RESIZE_ALL_CURSOR = int(z"00036009")
+  integer(c_int), parameter, public :: GLFW_NOT_ALLOWED_CURSOR = int(z"0003600A")
+  integer(c_int), parameter, public :: GLFW_HRESIZE_CURSOR = GLFW_RESIZE_EW_CURSOR
+  integer(c_int), parameter, public :: GLFW_VRESIZE_CURSOR = GLFW_RESIZE_NS_CURSOR
+  integer(c_int), parameter, public :: GLFW_HAND_CURSOR = GLFW_POINTING_HAND_CURSOR
+
+  integer(c_int), parameter, public :: GLFW_CONNECTED = int(z"00040001")
+  integer(c_int), parameter, public ::  GLFW_DISCONNECTED = int(z"00040002")
+
 
   ! What we want exposed.
 
