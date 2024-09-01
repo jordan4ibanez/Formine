@@ -12,7 +12,8 @@ module camera
 
   public :: camera_update_3d
   public :: camera_update_2d
-  public :: camera_set_position
+  public :: camera_set_position_f32
+  public :: camera_set_position_f64
   public :: camera_set_position_vec3d
   public :: camera_set_object_matrix_f32
   public :: camera_set_object_matrix_f64
@@ -43,7 +44,19 @@ module camera
 
 contains
 
-  subroutine camera_set_position(x, y, z)
+
+  subroutine camera_set_position_f32(x, y, z)
+    implicit none
+
+    real(c_float), intent(in), value :: x, y, z
+
+    camera_position%x = x
+    camera_position%y = y
+    camera_position%z = z
+  end subroutine camera_set_position_f32
+
+
+  subroutine camera_set_position_f64(x, y, z)
     implicit none
 
     real(c_double), intent(in), value :: x, y, z
@@ -51,7 +64,7 @@ contains
     camera_position%x = x
     camera_position%y = y
     camera_position%z = z
-  end subroutine camera_set_position
+  end subroutine camera_set_position_f64
 
 
   subroutine camera_set_position_vec3d(position_new)
