@@ -23,6 +23,10 @@ contains
     real(c_double), intent(in), value :: x_pos, y_pos
 
     print*, x_pos, y_pos
+
+    if (mouse_is_locked) then
+      call glfw_set_cursor_pos(0.0d0, 0.0d0)
+    end if
   end subroutine mouse_position_callback
 
 
