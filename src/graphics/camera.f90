@@ -230,5 +230,17 @@ contains
     end if
   end subroutine wrap_camera_rotation
 
+  subroutine camera_freecam_hackjob()
+    use :: mouse
+    use :: keyboard
+    use :: vector_2d
+    implicit none
+
+    type(vec2d) :: mouse_delta
+
+    mouse_delta = mouse_get_delta()
+
+    call camera_rotate(mouse_delta%x, mouse_delta%y, 0.0d0)
+  end subroutine camera_freecam_hackjob
 
 end module camera
