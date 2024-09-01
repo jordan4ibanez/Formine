@@ -26,11 +26,11 @@ module camera
 
   real(c_float) :: fov_degrees = 72.0
 
-  real(c_float) :: z_near_3d = 0.01
-  real(c_float) :: z_far_3d = 100.0
+  real(c_double) :: z_near_3d = 0.01d0
+  real(c_double) :: z_far_3d = 100.0d0
 
-  real(c_float) :: z_near_2d = -1.0
-  real(c_float) :: z_far_2d = 1.0
+  real(c_double) :: z_near_2d = -1.0d0
+  real(c_double) :: z_far_2d = 1.0d0
 
 
   !? Position is not translation, translation is the inverse of position!
@@ -110,7 +110,7 @@ contains
     use :: glfw, only: glfw_get_aspect_ratio
     use :: math_helpers, only: to_radians_f32
     use :: shader
-    use :: opengl, only: gl_uniform_mat4f, gl_depth_range_f
+    use :: opengl, only: gl_uniform_mat4f, gl_depth_range
     implicit none
 
     !* So the trick is, the camera actually never moves, but the world moves around it.
@@ -120,14 +120,14 @@ contains
 
     call camera_matrix%identity()
 
-    call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), z_near_3d, z_far_3d)
+    call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), real(z_near_3d, c_float), real(z_far_3d, c_float))
 
     call camera_matrix%rotate_x(camera_rotation%x_f32())
     call camera_matrix%rotate_y(camera_rotation%y_f32())
     call camera_matrix%rotate_z(camera_rotation%z_f32())
 
     !* This synchronizes the camera's depth matrix with OpenGL.
-    call gl_depth_range_f(z_near_3d, z_far_3d)
+    call gl_depth_range(z_near_3d, z_far_3d)
 
     call gl_uniform_mat4f(UNIFORM_CAMERA_MATRIX, camera_matrix)
   end subroutine camera_update_3d
@@ -139,7 +139,7 @@ contains
     use :: glfw
     use :: math_helpers, only: to_radians_f32
     use :: shader
-    use :: opengl, only: gl_uniform_mat4f, gl_depth_range_f
+    use :: opengl, only: gl_uniform_mat4f, gl_depth_range
     implicit none
 
     type(mat4f) :: camera_matrix
@@ -160,7 +160,7 @@ contains
     call camera_matrix%rotate_z(gui_camera_rotation%z_f32())
 
     !* This synchronizes the camera's depth matrix with OpenGL.
-    call gl_depth_range_f(z_near_2d, z_far_2d)
+    call gl_depth_range(z_near_2d, z_far_2d)
 
     call gl_uniform_mat4f(UNIFORM_CAMERA_MATRIX, camera_matrix)
   end subroutine camera_update_2d
