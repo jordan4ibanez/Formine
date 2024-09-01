@@ -69,6 +69,25 @@ contains
   end function pos_to_index
 
 
+  function index_to_pos(index) result(temp_array)
+    implicit none
+
+    integer(c_int), intent(in), value :: index
+    integer(c_int), dimension(3) :: temp_array
+    integer(c_int) :: i
+
+    ! Convert from index to offset.
+    i = index - 1
+
+    ! Convert from offset to index with +1.
+    temp_array(1) = (i / XY_STRIDE) + 1
+    i = mod(i, XY_STRIDE)
+    temp_array(3) = (i / CHUNK_HEIGHT) + 1
+    i = mod(i, CHUNK_HEIGHT)
+    temp_array(2) = (i) + 1
+  end function index_to_pos
+
+
   subroutine debug_generate_chunk(chunk_x, chunk_z)
     use :: fast_noise_lite
     implicit none
@@ -78,9 +97,10 @@ contains
 
     integer(c_int) :: x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height
     type(chunk_data) :: data
-    integer(c_int) :: next_step
+    integer(c_int) :: current_index
+    integer(c_int), dimension(3) :: back_to
 
-    next_step = 1
+    current_index = 1
 
     data = chunk_data()
 
@@ -100,11 +120,17 @@ contains
         do y = 1, CHUNK_HEIGHT
           ! todo: make this more complex with lua registered biomes.
 
-          if (pos_to_index(x,y,z) /= next_step) then
+          if (pos_to_index(x,y,z) /= current_index) then
             error stop "wrong"
           end if
 
-          next_step = next_step + 1
+          back_to = index_to_pos(current_index)
+
+          if (x /= back_to(1) .or. y /= back_to(2) .or. z /= back_to(3)) then
+            error stop
+          end if
+
+          current_index = current_index + 1
 
           if (y <= current_height) then
 
