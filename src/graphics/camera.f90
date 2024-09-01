@@ -241,16 +241,43 @@ contains
     use :: keyboard
     use :: vector_2d
     use :: glfw
+    use :: delta_time
+    use :: constants, only: PI_OVER_2_F64, PI_F64
     implicit none
 
     type(vec2d) :: mouse_delta
+    real(c_double) :: delta
+    type(vec3d) :: movement
+    real(c_double), parameter :: movement_speed = 0.001d0
+
+    delta = delta_get_f64()
 
     mouse_delta = mouse_get_delta()
 
     call camera_rotate(mouse_delta%y, mouse_delta%x, 0.0d0)
 
+
     if (keyboard_key_down(GLFW_KEY_W)) then
+
+      movement%x = sin(camera_rotation%y) * movement_speed
+      movement%z = cos(camera_rotation%y + PI_F64) * movement_speed
+
+      camera_position = camera_position + movement
+
+      print"(f0.15)",camera_position%z
       print*,"forward"
+    end if
+
+    if (keyboard_key_down(GLFW_KEY_S)) then
+      print*,"backward"
+    end if
+
+    if (keyboard_key_down(GLFW_KEY_A)) then
+      print*,"left"
+    end if
+
+    if (keyboard_key_down(GLFW_KEY_D)) then
+      print*,"right"
     end if
   end subroutine camera_freecam_hackjob
 
