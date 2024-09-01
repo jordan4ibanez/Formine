@@ -258,26 +258,31 @@ contains
 
 
     if (keyboard_key_down(GLFW_KEY_W)) then
-
       movement%x = sin(camera_rotation%y) * movement_speed
       movement%z = cos(camera_rotation%y + PI_F64) * movement_speed
 
       camera_position = camera_position + movement
-
-      print"(f0.15)",camera_position%z
-      print*,"forward"
     end if
 
     if (keyboard_key_down(GLFW_KEY_S)) then
-      print*,"backward"
+      movement%x = sin(camera_rotation%y + PI_F64) * movement_speed
+      movement%z = cos(camera_rotation%y) * movement_speed
+
+      camera_position = camera_position + movement
     end if
 
     if (keyboard_key_down(GLFW_KEY_A)) then
-      print*,"left"
+      movement%x = sin(camera_rotation%y - PI_OVER_2_F64) * movement_speed
+      movement%z = cos(camera_rotation%y + PI_OVER_2_F64) * movement_speed
+
+      camera_position = camera_position + movement
     end if
 
     if (keyboard_key_down(GLFW_KEY_D)) then
-      print*,"right"
+      movement%x = sin(camera_rotation%y + PI_OVER_2_F64) * movement_speed
+      movement%z = cos(camera_rotation%y - PI_OVER_2_F64) * movement_speed
+
+      camera_position = camera_position + movement
     end if
   end subroutine camera_freecam_hackjob
 
