@@ -37,7 +37,7 @@ module camera
 
   ! type(vec3d) :: gui_camera_position
   type(vec3d) :: gui_camera_rotation
-  ! Camera is always at scale 1, 1, 1.
+  ! Camera is always at scale 1, 1, -1.
 
 
 contains
@@ -112,6 +112,8 @@ contains
     call camera_matrix%rotate_y(camera_rotation%y_f32())
     call camera_matrix%rotate_z(camera_rotation%z_f32())
 
+    call camera_matrix%scale(1.0, 1.0, -1.0)
+
     !* This synchronizes the camera's depth matrix with OpenGL.
     call gl_depth_range_f(z_near_3d, z_far_3d)
 
@@ -147,6 +149,7 @@ contains
 
     !* This synchronizes the camera's depth matrix with OpenGL.
     call gl_depth_range_f(z_near_2d, z_far_2d)
+
 
     call gl_uniform_mat4f(UNIFORM_CAMERA_MATRIX, camera_matrix)
   end subroutine camera_update_2d
