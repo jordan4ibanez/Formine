@@ -122,6 +122,8 @@ program main
 
       rotation = rotation + delta_get_f32() * 3.0
 
+      call camera_freecam_hackjob()
+
 
       !? DRAW TEST ?!
 
