@@ -9,6 +9,7 @@ module mouse
 
   public :: mouse_initialize
   public :: mouse_lock
+  public :: mouse_debug_lock_toggle
 
   logical :: mouse_is_locked = .false.
 
@@ -47,7 +48,9 @@ contains
       return
     end if
 
+    ! Fixes the initial jolt.
     call glfw_set_cursor_pos(0.0d0, 0.0d0)
+
     call glfw_set_input_mode(GLFW_CURSOR, GLFW_CURSOR_DISABLED)
     mouse_is_locked = .true.
   end subroutine mouse_lock
@@ -64,6 +67,19 @@ contains
     call glfw_set_input_mode(GLFW_CURSOR, GLFW_CURSOR_NORMAL)
     mouse_is_locked = .false.
   end subroutine mouse_unlock
+
+
+  !! DEBUG PROTOTYPING ONLY !!
+  !! THIS CAN CAUSE CONFUSING ISSUES DOWN THE LINE !!
+  subroutine mouse_debug_lock_toggle()
+    implicit none
+
+    if (mouse_is_locked) then
+      call mouse_unlock()
+    else
+      call mouse_lock()
+    end if
+  end subroutine mouse_debug_lock_toggle
 
 
 end module mouse
