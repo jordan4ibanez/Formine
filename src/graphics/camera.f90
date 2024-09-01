@@ -223,8 +223,6 @@ contains
     use :: constants, only: PI_TIMES_2_F64, PI_OVER_2_F64
     implicit none
 
-    print*,camera_rotation%y
-
     if (camera_rotation%x < -PI_OVER_2_F64) then
       camera_rotation%x = -PI_OVER_2_F64
     else if (camera_rotation%x > PI_OVER_2_F64) then
