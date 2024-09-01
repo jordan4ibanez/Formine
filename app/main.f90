@@ -15,6 +15,7 @@ program main
   use :: texture_atlas
   use :: fast_noise_lite
   use :: chunk
+  use :: mouse
   use :: keyboard
   use, intrinsic ::  iso_c_binding
   implicit none
@@ -59,6 +60,8 @@ program main
 
   ! Get portable function pointers.
   call forglad_load_gl(c_funloc(glfw_get_proc_address))
+
+  call mouse_initialize()
 
   call keyboard_initialize()
 
