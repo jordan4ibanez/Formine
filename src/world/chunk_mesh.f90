@@ -57,12 +57,18 @@ contains
     type(memory_chunk), intent(in) :: input_chunk
     character(len = :, kind = c_char), allocatable :: mesh_id
     type(block_definition), pointer :: definition_pointer
+    type(texture_rectangle), pointer :: texture_rectangle_pointer
 
     !! debugging one block, ID 1 (Stone)
 
+    !! Face 1 -Z
+
+    ! Very pointy. =>
     definition_pointer => block_repo_get_definition_pointer_by_id(1)
 
-    print*,definition_pointer%description
+    texture_rectangle_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
+
+
 
 
   end function chunk_mesh_generate
