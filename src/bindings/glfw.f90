@@ -17,6 +17,11 @@ module glfw
   integer(c_int) :: window_width
   integer(c_int) :: window_height
 
+  real(c_double), parameter :: STANDARD_WINDOW_WIDTH = 1920.0d0
+  real(c_double), parameter :: STANDARD_WINDOW_HEIGHT = 1080.0d0
+
+  real(c_double) :: window_gui_scale = 1.0d0
+
 
   ! What we want exposed.
 
@@ -512,6 +517,8 @@ contains
       print"(A)","[GLFW] Error: Failed to create window."
       call glfw_terminate()
     end if
+
+    call glfw_update_window_gui_scale()
   end function glfw_create_window
 
 
@@ -597,6 +604,8 @@ contains
     window_width = width
     window_height = height
     call gl_view_port(0,0, width, height)
+
+    call glfw_update_window_gui_scale()
   end subroutine size_callback
 
 
@@ -709,6 +718,33 @@ contains
 
     call internal_glfw_set_cursor_pos(window_pointer, x_pos, y_pos)
   end subroutine glfw_set_cursor_pos
+
+
+  !* Automatically updates the window GUI scale to match the window size.
+  subroutine glfw_update_window_gui_scale()
+    implicit none
+
+    real(c_double) :: x, y
+
+    x = window_width / STANDARD_WINDOW_WIDTH
+    y = window_height / STANDARD_WINDOW_HEIGHT
+
+    if (x < y) then
+      window_gui_scale = x
+    else
+      window_gui_scale = y
+    end if
+
+    print*,"new GUI scale: ", window_gui_scale
+  end subroutine glfw_update_window_gui_scale
+
+
+  !* Get the GUI scale of the window.
+  real(c_double) function glfw_get_window_gui_scale() result(gui_scale)
+    implicit none
+
+    gui_scale = window_gui_scale
+  end function glfw_get_window_gui_scale
 
 
 end module glfw
