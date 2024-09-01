@@ -23,7 +23,7 @@ module chunk_mesh
   private
 
   !? -Z
-  real(c_float), dimension(12) :: BACK_FACE = (/ &
+  real(c_float), dimension(12), parameter :: BACK_FACE = (/ &
     0.0, 1.0, 0.0, & ! Top left.
     0.0, 0.0, 0.0, & ! Bottom Left.
     1.0, 0.0, 0.0, & ! Bottom Right.
