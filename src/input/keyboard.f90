@@ -1,5 +1,6 @@
 module keyboard
   use :: glfw
+  use :: fhash, only: fhash_tbl_t, key => fhash_key
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -10,29 +11,60 @@ module keyboard
   public :: keyboard_initialize
 
 
+  type(fhash_tbl_t) :: key_database
+
+
 contains
 
 
   !* Key press events.
-  subroutine keyboard_input_callback(window_pointer, key, scancode, action, mods)
-    use :: mouse
+  subroutine keyboard_input_callback(window_pointer, keyboard_key, scancode, action, mods)
     implicit none
 
     type(c_ptr), intent(in), value :: window_pointer
-    integer(c_int), intent(in), value :: key, scancode, action, mods
+    integer(c_int), intent(in), value :: keyboard_key, scancode, action, mods
 
     if (action == GLFW_PRESS) then
-
-      select case (key)
+      select case (keyboard_key)
        case (GLFW_KEY_ESCAPE)
         print*, "peace"
         call glfw_close_window()
        case (GLFW_KEY_F1)
         call mouse_debug_lock_toggle()
-
       end select
     end if
   end subroutine keyboard_input_callback
+
+
+  !* Hold onto the memory of a key.
+  subroutine process_key(keyboard_key, action)
+    implicit none
+
+    integer(c_int), intent(in), value :: keyboard_key, action
+
+    call key_database%set(key(keyboard_key), action)
+  end subroutine process_key
+
+
+  !* Check if a keyboard key is down.
+  logical function keyboard_key_down(keyboard_key) result(is_down)
+    implicit none
+
+    integer(c_int), intent(in), value :: keyboard_key
+    integer(c_int) :: state, status
+
+    is_down = .false.
+
+    call key_database%get(key(keyboard_key), state, stat = status)
+
+    if (status /= 0) then
+      return
+    end if
+
+    if (state == GLFW_PRESS) then
+      is_down = .true.
+    end if
+  end function keyboard_key_down
 
 
   !* This initializes the keyboard callback function.
