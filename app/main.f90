@@ -114,6 +114,7 @@ program main
 
   rotation = 0.0
 
+  call camera_set_position_f32(0.0, 0.0, -3.0)
 
   !! This is debugging for functions!
   if (.true.) then
