@@ -209,25 +209,25 @@ contains
 
     mat = this%data
 
-    h = tan(fov_y_radians * 0.5);
+    h = tan(fov_y_radians * 0.5)
 
-    rm(1) = 1.0 / (h * aspect_ratio);
-    rm(2) = 1.0 / h;
+    rm(1) = 1.0 / (h * aspect_ratio)
+    rm(2) = 1.0 / h
 
     far_infinite = (z_far > 0.0) .and. (.not. ieee_is_finite(z_far))
     near_infinite = (z_near > 0.0) .and. (.not. ieee_is_finite(z_near))
 
     if (far_infinite) then
-      e = 1E-6;
-      rm(3) = 1.0 - e;
-      rm(4) = (e - merge(1.0, 2.0, z_zero_to_one)) * z_near;
+      e = 1E-6
+      rm(3) = 1.0 - e
+      rm(4) = (e - merge(1.0, 2.0, z_zero_to_one)) * z_near
     else if (near_infinite) then
       e = 1E-6
-      rm(3) = merge(0.0, 1.0, z_zero_to_one) - e;
-      rm(4) = (merge(1.0, 2.0, z_zero_to_one) - e) * z_far;
+      rm(3) = merge(0.0, 1.0, z_zero_to_one) - e
+      rm(4) = (merge(1.0, 2.0, z_zero_to_one) - e) * z_far
     else
-      rm(3) = merge(z_far, z_far + z_near, z_zero_to_one) / (z_far - z_near);
-      rm(4) = merge(z_far, z_far + z_far, z_zero_to_one) * z_near / (z_near - z_far);
+      rm(3) = merge(z_far, z_far + z_near, z_zero_to_one) / (z_far - z_near)
+      rm(4) = merge(z_far, z_far + z_far, z_zero_to_one) * z_near / (z_near - z_far)
     end if
 
     mat = [&
