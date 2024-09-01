@@ -8,7 +8,7 @@
 block.register({
   name = "stone",
   description = "Stone",
-  textures = { "default_stone.png", "default_stone.png", "default_stone.png", "default_stone.png", "default_stone.png", "default_stone.png" },
+  textures = { "debug_texture.png", "debug_texture.png", "debug_texture.png", "debug_texture.png", "debug_texture.png", "debug_texture.png" },
   draw_type = block.draw_type.normal,
 })
 
