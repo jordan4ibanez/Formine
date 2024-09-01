@@ -223,7 +223,7 @@ module glfw
   integer(c_int), parameter, public :: GLFW_IBEAM_CURSOR = int(z"00036002")
   integer(c_int), parameter, public :: GLFW_CROSSHAIR_CURSOR = int(z"00036003")
   integer(c_int), parameter, public :: GLFW_POINTING_HAND_CURSOR = int(z"00036004")
-  
+
   integer(c_int), parameter, public :: GLFW_RESIZE_EW_CURSOR = int(z"00036005")
   integer(c_int), parameter, public :: GLFW_RESIZE_NS_CURSOR = int(z"00036006")
   integer(c_int), parameter, public :: GLFW_RESIZE_NWSE_CURSOR = int(z"00036007")
@@ -261,6 +261,7 @@ module glfw
   public :: glfw_get_window_height_f32
   public :: glfw_set_key_callback
   public :: glfw_close_window
+  public :: glfw_set_cursor_pos_callback
 
 
   ! Here I'm binding to the C glfw shared library.
@@ -642,6 +643,16 @@ contains
 
     call internal_glfw_set_window_should_close(window_pointer, GLFW_TRUE)
   end subroutine glfw_close_window
+
+
+  !* Set the cursor position callback function pointer.
+  subroutine glfw_set_cursor_pos_callback(callback_function_pointer)
+    implicit none
+
+    type(c_funptr), intent(in) :: callback_function_pointer
+
+    call internal_glfw_set_cursor_pos_callback(window_pointer, callback_function_pointer)
+  end subroutine glfw_set_cursor_pos_callback
 
 
 end module glfw
