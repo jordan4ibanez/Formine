@@ -120,7 +120,7 @@ contains
 
     call camera_matrix%identity()
 
-    call camera_matrix%perspective(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), real(z_near_3d, c_float), real(z_far_3d, c_float))
+    call camera_matrix%perspective_left_handed(to_radians_f32(fov_degrees), glfw_get_aspect_ratio(), real(z_near_3d, c_float), real(z_far_3d, c_float), .true.)
 
     call camera_matrix%rotate_x(camera_rotation%x_f32())
     call camera_matrix%rotate_y(camera_rotation%y_f32())
