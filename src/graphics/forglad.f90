@@ -112,7 +112,7 @@ module forglad
   procedure(gl_delete_textures_c_interface), public, pointer :: internal_gl_delete_textures
   procedure(gl_depth_mask_c_interface), public, pointer :: internal_gl_depth_mask
   procedure(gl_depth_func_c_interface), public, pointer :: gl_depth_func
-  procedure(gl_depth_range_f_c_interface), public, pointer :: gl_depth_range_f
+  procedure(gl_depth_range_c_interface), public, pointer :: gl_depth_range
   procedure(gl_blend_equation_c_interface), public, pointer :: gl_blend_equation
   procedure(gl_blend_func_c_interface), public, pointer :: gl_blend_func
   procedure(gl_blend_func_separate_c_interface), public, pointer :: gl_blend_func_separate
@@ -631,12 +631,12 @@ module forglad
 
 
 !! DONE.
-    subroutine gl_depth_range_f_c_interface(near_val, far_val) bind(c)
+    subroutine gl_depth_range_c_interface(near_val, far_val) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       real(c_float), intent(in), value :: near_val, far_val
-    end subroutine gl_depth_range_f_c_interface
+    end subroutine gl_depth_range_c_interface
 
 
 !! DONE.
@@ -885,8 +885,8 @@ contains
     function_pointer = proc_address_finder("glDepthFunc"//achar(0))
     call c_f_procpointer(function_pointer, gl_depth_func)
 
-    function_pointer = proc_address_finder("glDepthRangef"//achar(0))
-    call c_f_procpointer(function_pointer, gl_depth_range_f)
+    function_pointer = proc_address_finder("glDepthRange"//achar(0))
+    call c_f_procpointer(function_pointer, gl_depth_range)
 
     function_pointer = proc_address_finder("glBlendEquation"//achar(0))
     call c_f_procpointer(function_pointer, gl_blend_equation)
