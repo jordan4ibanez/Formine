@@ -240,6 +240,7 @@ contains
     use :: mouse
     use :: keyboard
     use :: vector_2d
+    use :: glfw
     implicit none
 
     type(vec2d) :: mouse_delta
@@ -247,6 +248,10 @@ contains
     mouse_delta = mouse_get_delta()
 
     call camera_rotate(mouse_delta%y, mouse_delta%x, 0.0d0)
+
+    if (keyboard_key_down(GLFW_KEY_W)) then
+      print*,"forward"
+    end if
   end subroutine camera_freecam_hackjob
 
 end module camera
