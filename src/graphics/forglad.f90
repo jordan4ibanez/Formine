@@ -635,7 +635,7 @@ module forglad
       use, intrinsic :: iso_c_binding
       implicit none
 
-      real(c_float), intent(in), value :: near_val, far_val
+      real(c_double), intent(in), value :: near_val, far_val
     end subroutine gl_depth_range_c_interface
 
 
