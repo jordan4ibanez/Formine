@@ -16,6 +16,7 @@ module camera
   public :: camera_set_position_vec3d
   public :: camera_set_object_matrix_f32
   public :: camera_set_object_matrix_f64
+  public :: camera_freecam_hackjob
 
 
   real(c_float), parameter :: MIN_FOV = 50.0
@@ -65,9 +66,9 @@ contains
 
     real(c_double), intent(in), value :: x, y, z
 
-    camera_position%x = camera_position%x + x
-    camera_position%y = camera_position%x + y
-    camera_position%z = camera_position%x + z
+    camera_rotation%x = camera_rotation%x + x
+    camera_rotation%y = camera_rotation%y + y
+    camera_rotation%z = camera_rotation%z + z
 
     call wrap_camera_rotation()
   end subroutine camera_rotate
@@ -230,6 +231,8 @@ contains
     end if
   end subroutine wrap_camera_rotation
 
+
+  !! This needs to be removed down the line !!
   subroutine camera_freecam_hackjob()
     use :: mouse
     use :: keyboard
@@ -240,7 +243,7 @@ contains
 
     mouse_delta = mouse_get_delta()
 
-    call camera_rotate(mouse_delta%x, mouse_delta%y, 0.0d0)
+    call camera_rotate(mouse_delta%y, mouse_delta%x, 0.0d0)
   end subroutine camera_freecam_hackjob
 
 end module camera
