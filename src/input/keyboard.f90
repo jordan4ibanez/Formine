@@ -19,6 +19,7 @@ contains
 
   !* Key press events.
   subroutine keyboard_input_callback(window_pointer, keyboard_key, scancode, action, mods)
+    use :: mouse
     implicit none
 
     type(c_ptr), intent(in), value :: window_pointer
@@ -65,6 +66,27 @@ contains
       is_down = .true.
     end if
   end function keyboard_key_down
+
+
+  !* Check if a keyboard key is up.
+  logical function keyboard_key_up(keyboard_key) result(is_up)
+    implicit none
+
+    integer(c_int), intent(in), value :: keyboard_key
+    integer(c_int) :: state, status
+
+    is_up = .true.
+
+    call key_database%get(key(keyboard_key), state, stat = status)
+
+    if (status /= 0) then
+      return
+    end if
+
+    if (state /= GLFW_RELEASE) then
+      is_up = .false.
+    end if
+  end function keyboard_key_up
 
 
   !* This initializes the keyboard callback function.
