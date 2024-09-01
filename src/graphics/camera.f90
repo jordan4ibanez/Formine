@@ -112,6 +112,7 @@ contains
     call camera_matrix%rotate_y(camera_rotation%y_f32())
     call camera_matrix%rotate_z(camera_rotation%z_f32())
 
+    ! This flips the world into right handed.
     call camera_matrix%scale(1.0, 1.0, -1.0)
 
     !* This synchronizes the camera's depth matrix with OpenGL.
