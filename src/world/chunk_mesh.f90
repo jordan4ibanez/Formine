@@ -53,6 +53,39 @@ module chunk_mesh
     0.0, 1.0, 1.0 &  ! Top left.
     /)
 
+  !? -X (Facing camera at rotation 0.0)
+  real(c_float), dimension(12), parameter :: LEFT_FACE = (/ &
+    0.0, 1.0, 0.0, & ! Top left.
+    0.0, 0.0, 0.0, & ! Bottom Left.
+    0.0, 0.0, 1.0, & ! Bottom Right.
+    0.0, 1.0, 1.0 &  ! Top Right.
+    /)
+
+  !? +X (Facing away from camera at rotation 0.0)
+  real(c_float), dimension(12), parameter :: RIGHT_FACE = (/ &
+    1.0, 1.0, 1.0, & ! Top Right.
+    1.0, 0.0, 1.0, & ! Bottom Right.
+    1.0, 0.0, 0.0, & ! Bottom Left.
+    1.0, 1.0, 0.0 &  ! Top left.
+    /)
+
+
+  !? -Y
+  real(c_float), dimension(12), parameter :: BOTTOM_FACE = (/ &
+    0.0, 0.0, 1.0, & ! Top left.
+    0.0, 0.0, 0.0, & ! Bottom Left.
+    1.0, 0.0, 0.0, & ! Bottom Right.
+    1.0, 0.0, 1.0 &  ! Top Right.
+    /)
+
+  !? +Y
+  real(c_float), dimension(12), parameter :: TOP_FACE = (/ &
+    1.0, 1.0, 1.0, & ! Top Right.
+    1.0, 1.0, 0.0, & ! Bottom Right.
+    0.0, 1.0, 0.0, & ! Bottom Left.
+    0.0, 1.0, 1.0 &  ! Top left.
+    /)
+
   public :: chunk_mesh_generate
 
 
@@ -79,12 +112,15 @@ contains
     ! Very pointy. =>
     definition_pointer => block_repo_get_definition_pointer_by_id(1)
 
-    !* Tested with debug_texture.png, it works in right handed.
-    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
 
     ! Now we assign.
 
+
+
     !? -Z
+    !* Tested with debug_texture.png, it works in right handed.
+    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
+
     positions = BACK_FACE
     texture_coordinates = (/ &
       tr_pointer%min_x,tr_pointer%max_y, &
@@ -98,9 +134,12 @@ contains
       1.0, 1.0, 1.0, &
       1.0, 1.0, 1.0 &
       /)
+
     indices = BASE_INDICES
 
     !? +Z
+
+    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(2)%get_pointer())
 
     !! this causes a memory leak! (probably)
     positions = [positions, FRONT_FACE]
@@ -118,7 +157,103 @@ contains
       1.0, 1.0, 1.0, &
       1.0, 1.0, 1.0 &
       /)]
+
     indices = [indices, (BASE_INDICES + 4)]
+
+    !? -X
+
+    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(3)%get_pointer())
+
+    !! this causes a memory leak! (probably)
+    positions = [positions, LEFT_FACE]
+
+    texture_coordinates = [texture_coordinates, (/ &
+      tr_pointer%min_x,tr_pointer%max_y, &
+      tr_pointer%min_x,tr_pointer%min_y, &
+      tr_pointer%max_x,tr_pointer%min_y, &
+      tr_pointer%max_x,tr_pointer%max_y &
+      /)]
+
+    colors = [colors, (/&
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0 &
+      /)]
+
+    indices = [indices, (BASE_INDICES + 8)]
+
+    !? +X
+
+    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(4)%get_pointer())
+
+    !! this causes a memory leak! (probably)
+    positions = [positions, RIGHT_FACE]
+
+    texture_coordinates = [texture_coordinates, (/ &
+      tr_pointer%min_x,tr_pointer%max_y, &
+      tr_pointer%min_x,tr_pointer%min_y, &
+      tr_pointer%max_x,tr_pointer%min_y, &
+      tr_pointer%max_x,tr_pointer%max_y &
+      /)]
+
+    colors = [colors, (/&
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0 &
+      /)]
+
+    indices = [indices, (BASE_INDICES + 12)]
+
+
+    !? -Y
+
+    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(5)%get_pointer())
+
+    !! this causes a memory leak! (probably)
+    positions = [positions, BOTTOM_FACE]
+
+    texture_coordinates = [texture_coordinates, (/ &
+      tr_pointer%min_x,tr_pointer%max_y, &
+      tr_pointer%min_x,tr_pointer%min_y, &
+      tr_pointer%max_x,tr_pointer%min_y, &
+      tr_pointer%max_x,tr_pointer%max_y &
+      /)]
+
+    colors = [colors, (/&
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0 &
+      /)]
+
+    indices = [indices, (BASE_INDICES + 16)]
+
+
+    !? +Y
+
+    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(6)%get_pointer())
+
+    !! this causes a memory leak! (probably)
+    positions = [positions, TOP_FACE]
+
+    texture_coordinates = [texture_coordinates, (/ &
+      tr_pointer%min_x,tr_pointer%max_y, &
+      tr_pointer%min_x,tr_pointer%min_y, &
+      tr_pointer%max_x,tr_pointer%min_y, &
+      tr_pointer%max_x,tr_pointer%max_y &
+      /)]
+
+    colors = [colors, (/&
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0, &
+      1.0, 1.0, 1.0 &
+      /)]
+
+    indices = [indices, (BASE_INDICES + 20)]
+
 
 
 
