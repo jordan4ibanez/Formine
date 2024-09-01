@@ -174,6 +174,51 @@ module glfw
   integer(c_int), parameter, public :: GLFW_KEY_RIGHT_SUPER = 347
   integer(c_int), parameter, public :: GLFW_KEY_MENU = 348
 
+  integer(c_int), parameter, public :: GLFW_NO_API = 0
+  integer(c_int), parameter, public :: GLFW_OPENGL_API = int(z"00030001")
+  integer(c_int), parameter, public :: GLFW_OPENGL_ES_API = int(z"00030002")
+
+  integer(c_int), parameter, public :: GLFW_NO_ROBUSTNESS = 0
+  integer(c_int), parameter, public :: GLFW_NO_RESET_NOTIFICATION = int(z"00031001")
+  integer(c_int), parameter, public :: GLFW_LOSE_CONTEXT_ON_RESET = int(z"00031002")
+
+  integer(c_int), parameter, public :: GLFW_OPENGL_ANY_PROFILE = 0
+  integer(c_int), parameter, public :: GLFW_OPENGL_CORE_PROFILE = int(z"00032001")
+  integer(c_int), parameter, public :: GLFW_OPENGL_COMPAT_PROFILE = int(z"00032002")
+
+  integer(c_int), parameter, public :: GLFW_CURSOR = int(z"00033001")
+  integer(c_int), parameter, public :: GLFW_STICKY_KEYS = int(z"00033002")
+  integer(c_int), parameter, public :: GLFW_STICKY_MOUSE_BUTTONS = int(z"00033003")
+  integer(c_int), parameter, public :: GLFW_LOCK_KEY_MODS = int(z"00033004")
+  integer(c_int), parameter, public :: GLFW_RAW_MOUSE_MOTION = int(z"00033005")
+  integer(c_int), parameter, public :: GLFW_UNLIMITED_MOUSE_BUTTONS = int(z"00033006")
+
+  integer(c_int), parameter, public :: GLFW_CURSOR_NORMAL = int(z"00034001")
+  integer(c_int), parameter, public :: GLFW_CURSOR_HIDDEN = int(z"00034002")
+  integer(c_int), parameter, public :: GLFW_CURSOR_DISABLED = int(z"00034003")
+  integer(c_int), parameter, public :: GLFW_CURSOR_CAPTURED = int(z"00034004")
+
+  integer(c_int), parameter, public :: GLFW_ANY_RELEASE_BEHAVIOR = 0
+  integer(c_int), parameter, public :: GLFW_RELEASE_BEHAVIOR_FLUSH = int(z"00035001")
+  integer(c_int), parameter, public :: GLFW_RELEASE_BEHAVIOR_NONE = int(z"00035002")
+
+  integer(c_int), parameter, public :: GLFW_NATIVE_CONTEXT_API = int(z"00036001")
+  integer(c_int), parameter, public :: GLFW_EGL_CONTEXT_API = int(z"00036002")
+  integer(c_int), parameter, public :: GLFW_OSMESA_CONTEXT_API = int(z"00036003")
+
+  integer(c_int), parameter, public :: GLFW_ANGLE_PLATFORM_TYPE_NONE = int(z"00037001")
+  integer(c_int), parameter, public :: GLFW_ANGLE_PLATFORM_TYPE_OPENGL = int(z"00037002")
+  integer(c_int), parameter, public :: GLFW_ANGLE_PLATFORM_TYPE_OPENGLES = int(z"00037003")
+  integer(c_int), parameter, public :: GLFW_ANGLE_PLATFORM_TYPE_D3D9 = int(z"00037004")
+  integer(c_int), parameter, public :: GLFW_ANGLE_PLATFORM_TYPE_D3D11 = int(z"00037005")
+  integer(c_int), parameter, public :: GLFW_ANGLE_PLATFORM_TYPE_VULKAN = int(z"00037007")
+  integer(c_int), parameter, public :: GLFW_ANGLE_PLATFORM_TYPE_METAL = int(z"00037008")
+
+  integer(c_int), parameter, public :: GLFW_WAYLAND_PREFER_LIBDECOR = int(z"00038001")
+  integer(c_int), parameter, public :: GLFW_WAYLAND_DISABLE_LIBDECOR = int(z"00038002")
+
+  integer(c_int), parameter, public :: GLFW_ANY_POSITION = int(z"80000000")
+
 
   ! What we want exposed.
 
