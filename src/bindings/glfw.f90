@@ -721,6 +721,7 @@ contains
 
 
   !* Automatically updates the window GUI scale to match the window size.
+  !* This will avoid any GUI element overlap.
   subroutine glfw_update_window_gui_scale()
     implicit none
 
