@@ -422,6 +422,15 @@ module glfw
     end subroutine internal_glfw_set_input_mode
 
 
+    subroutine internal_glfw_set_cursor_pos(window, xpos, ypos) bind(c, name = "glfwSetCursorPos")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: window
+      real(c_double), intent(in), value :: xpos, ypos
+    end subroutine internal_glfw_set_cursor_pos
+
+
   end interface
 
 
