@@ -17,6 +17,9 @@ module glfw
   integer(c_int) :: window_width
   integer(c_int) :: window_height
 
+
+  ! Base on standard HD resolution.
+  
   real(c_double), parameter :: STANDARD_WINDOW_WIDTH = 1920.0d0
   real(c_double), parameter :: STANDARD_WINDOW_HEIGHT = 1080.0d0
 
