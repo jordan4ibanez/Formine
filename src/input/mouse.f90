@@ -47,6 +47,7 @@ contains
       return
     end if
 
+    call glfw_set_cursor_pos(0.0d0, 0.0d0)
     call glfw_set_input_mode(GLFW_CURSOR, GLFW_CURSOR_DISABLED)
     mouse_is_locked = .true.
   end subroutine mouse_lock
