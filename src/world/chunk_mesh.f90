@@ -6,6 +6,8 @@ module chunk_mesh
   use, intrinsic :: iso_c_binding
   implicit none
 
+
+  !
   ! +X RIGHT
   !
   ! +Y UP
@@ -20,7 +22,15 @@ module chunk_mesh
   !  |    \  | <= 1,2,3,3,4,1 improves cachiness.
   !  |______\|
   ! 2         3
+  !
+
   private
+
+
+  integer(c_int), dimension(6), parameter :: BASE_INDICES = (/ &
+    1,2,3,3,4,1 &
+    /)
+
 
   !? -Z (Facing camera at rotation 0.0)
   real(c_float), dimension(12), parameter :: BACK_FACE = (/ &
