@@ -38,7 +38,7 @@ contains
     if (action == GLFW_PRESS) then
       select case (keyboard_key)
        case (GLFW_KEY_ESCAPE)
-        print*, "peace"
+        print*, "Thanks for testing!"
         call glfw_close_window()
        case (GLFW_KEY_F1)
         call mouse_debug_lock_toggle()
