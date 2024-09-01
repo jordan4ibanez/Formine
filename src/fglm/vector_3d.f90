@@ -69,7 +69,7 @@ module vector_3d
 
   interface vec3d
     module procedure :: constructor_scalar_f64, constructor_raw_f64, constructor_array_f64, constructor_scalar_f32, constructor_raw_f32, constructor_array_f32
-  end interface
+  end interface vec3d
 
 
 contains

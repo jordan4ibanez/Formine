@@ -50,7 +50,7 @@ module vector_2i
 
   interface vec2i
     module procedure :: constructor_scalar, constructor_raw, constructor_array
-  end interface
+  end interface vec2i
 
 
 contains

@@ -54,7 +54,7 @@ module vector_2f
 
   interface vec2f
     module procedure :: constructor_scalar_f32, constructor_raw_f32, constructor_array_f32
-  end interface
+  end interface vec2f
 
 
 contains

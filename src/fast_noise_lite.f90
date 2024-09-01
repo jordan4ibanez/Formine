@@ -271,7 +271,7 @@ module fast_noise_lite
 
   interface fnl_state
     module procedure :: constructor_fnl_state
-  end interface
+  end interface fnl_state
 
 
   ! Expose public api.

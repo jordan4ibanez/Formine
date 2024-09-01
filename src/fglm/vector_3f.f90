@@ -53,7 +53,7 @@ module vector_3f
 
   interface vec3f
     module procedure :: constructor_scalar, constructor_raw, constructor_array, constructor_vec3d
-  end interface
+  end interface vec3f
 
 
 contains
