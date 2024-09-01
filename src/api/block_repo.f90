@@ -10,6 +10,7 @@ module block_repo
 
 
   public :: block_definition
+  public :: block_repo_get_definition_pointer_by_id
   public :: block_repo_deploy_lua_api
   public :: register_block
 
@@ -73,11 +74,22 @@ module block_repo
 
   integer(c_int) :: current_id = 1
   integer(c_int) :: definition_array_length = 0
-  type(block_definition), dimension(:), allocatable :: definition_array
+  type(block_definition), dimension(:), allocatable, target :: definition_array
   type(fhash_tbl_t) :: definition_database_string
 
 
 contains
+
+
+  !* Get a definition pointer by the ID.
+  function block_repo_get_definition_pointer_by_id(id) result(definition_pointer)
+    implicit none
+
+    integer(c_int), intent(in), value :: id
+    type(block_definition), pointer :: definition_pointer
+
+    definition_pointer => definition_array(id)
+  end function block_repo_get_definition_pointer_by_id
 
 
   !* This hooks the required fortran functions into the LuaJIT "blocks" table.
