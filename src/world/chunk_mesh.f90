@@ -56,9 +56,13 @@ contains
 
     type(memory_chunk), intent(in) :: input_chunk
     character(len = :, kind = c_char), allocatable :: mesh_id
+    type(block_definition), pointer :: definition_pointer
 
-    !! debugging one block, ID 1
+    !! debugging one block, ID 1 (Stone)
 
+    definition_pointer => block_repo_get_definition_pointer_by_id(1)
+
+    print*,definition_pointer%description
 
 
   end function chunk_mesh_generate
