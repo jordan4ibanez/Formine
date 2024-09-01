@@ -73,18 +73,18 @@ module chunk_mesh
 
   !? -Y
   real(c_float), dimension(12), parameter :: BOTTOM_FACE = (/ &
-    0.0, 0.0, 1.0, & ! Top left.
-    0.0, 0.0, 0.0, & ! Bottom Left.
-    1.0, 0.0, 0.0, & ! Bottom Right.
-    1.0, 0.0, 1.0 &  ! Top Right.
+    0.0, 0.0, 0.0, & ! Top left.
+    0.0, 0.0, 1.0, & ! Bottom Left.
+    1.0, 0.0, 1.0, & ! Bottom Right.
+    1.0, 0.0, 0.0 &  ! Top Right.
     /)
 
   !? +Y
   real(c_float), dimension(12), parameter :: TOP_FACE = (/ &
-    1.0, 1.0, 1.0, & ! Top Right.
-    1.0, 1.0, 0.0, & ! Bottom Right.
-    0.0, 1.0, 0.0, & ! Bottom Left.
-    0.0, 1.0, 1.0 &  ! Top left.
+    1.0, 1.0, 0.0, & ! Top Right.
+    1.0, 1.0, 1.0, & ! Bottom Right.
+    0.0, 1.0, 1.0, & ! Bottom Left.
+    0.0, 1.0, 0.0 &  ! Top left.
     /)
 
   public :: chunk_mesh_generate
