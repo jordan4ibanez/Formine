@@ -54,7 +54,8 @@ module glfw
   public :: glfw_set_cursor_pos_callback
   public :: glfw_set_input_mode
   public :: glfw_set_cursor_pos
-  public :: glfw_get_window_gui_scale
+  public :: glfw_get_window_gui_scale_f32
+  public :: glfw_get_window_gui_scale_f64
 
 
   ! Constants.
@@ -744,12 +745,20 @@ contains
   end subroutine glfw_update_window_gui_scale
 
 
-  !* Get the GUI scale of the window.
-  real(c_double) function glfw_get_window_gui_scale() result(gui_scale)
+  !* Get the GUI scale of the window in floating point.
+  real(c_float) function glfw_get_window_gui_scale_f32() result(gui_scale)
+    implicit none
+
+    gui_scale = real(window_gui_scale, c_float)
+  end function glfw_get_window_gui_scale_f32
+
+
+  !* Get the GUI scale of the window in double floating point.
+  real(c_double) function glfw_get_window_gui_scale_f64() result(gui_scale)
     implicit none
 
     gui_scale = window_gui_scale
-  end function glfw_get_window_gui_scale
+  end function glfw_get_window_gui_scale_f64
 
 
 end module glfw

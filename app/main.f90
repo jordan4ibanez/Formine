@@ -24,6 +24,7 @@ program main
   real(c_float) :: rotation !, min_x, min_y, max_x, max_y
   type(vec2f) :: text_size
   real(c_float), parameter :: FONT_SIZE = 50.0
+  real(c_float) :: floating_font_size
   integer(c_int) :: fps_new, old_fps
   character(len = :, kind = c_char), allocatable :: position_text_debug
   !type(texture_rectangle) :: tex_rect
