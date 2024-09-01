@@ -16,6 +16,7 @@ module camera
   public :: camera_set_position_vec3d
   public :: camera_set_object_matrix_f32
   public :: camera_set_object_matrix_f64
+  public :: camera_set_gui_matrix_f32
   public :: camera_freecam_hackjob
 
 
@@ -151,7 +152,6 @@ contains
     !* This synchronizes the camera's depth matrix with OpenGL.
     call gl_depth_range_f(z_near_2d, z_far_2d)
 
-
     call gl_uniform_mat4f(UNIFORM_CAMERA_MATRIX, camera_matrix)
   end subroutine camera_update_2d
 
@@ -220,6 +220,38 @@ contains
   end subroutine camera_set_object_matrix_f64
 
 
+  !* This creates the raw data of the gui matrix then uploads it into OpenGL.
+  subroutine camera_set_gui_matrix_f32(position_x, position_y, position_z, rotation_x, rotation_y, rotation_z, scale_x, scale_y, scale_z)
+    use :: math_helpers, only: into_f32
+    use :: shader
+    use :: opengl, only: gl_uniform_mat4f
+    implicit none
+
+    real(c_float), intent(in), value :: position_x, position_y, position_z, rotation_x, rotation_y, rotation_z, scale_x, scale_y, scale_z
+    type(mat4f) :: object_matrix
+
+    call object_matrix%identity()
+
+    call object_matrix%translate( &
+      position_x, &
+      position_y, &
+      position_z &
+      )
+
+    call object_matrix%rotate_y(-rotation_y)
+    call object_matrix%rotate_x(-rotation_x)
+    call object_matrix%rotate_z(-rotation_z)
+
+    call object_matrix%scale(&
+      scale_x, &
+      scale_y, &
+      scale_z &
+      )
+
+    call gl_uniform_mat4f(UNIFORM_OBJECT_MATRIX, object_matrix)
+  end subroutine camera_set_gui_matrix_f32
+
+
   !* Internal only.
 
 
@@ -265,7 +297,6 @@ contains
     mouse_delta = mouse_get_delta()
 
     call camera_rotate(mouse_delta%y, mouse_delta%x, 0.0d0)
-
 
     if (keyboard_key_down(GLFW_KEY_W)) then
       movement%x = sin(camera_rotation%y) * movement_speed
