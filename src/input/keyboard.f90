@@ -27,6 +27,11 @@ contains
     type(c_ptr), intent(in), value :: window_pointer
     integer(c_int), intent(in), value :: keyboard_key, scancode, action, mods
 
+    ! Suppress unused warnings.
+    if (.false.) then
+      print*,window_pointer, scancode, mods
+    end if
+
     call process_key(keyboard_key, action)
 
     !! This is for debugging.
