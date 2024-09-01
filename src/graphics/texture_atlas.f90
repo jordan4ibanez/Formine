@@ -112,6 +112,30 @@ contains
   end subroutine texture_atlas_pack
 
 
+  !* Get a texture rectangle for OpenGL/Vulkan.
+  function texture_atlas_get_texture_rectangle_pointer(texture_name) result(texture_rectangle_pointer)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: texture_name
+    type(texture_rectangle), pointer :: texture_rectangle_pointer
+    class(*), pointer :: generic_pointer
+    integer(c_int) :: status
+
+    call texture_coordinates_pointer%get_raw_ptr(key(texture_name), generic_pointer, stat = status)
+
+    if (status /= 0) then
+      error stop "[Texture Atlas] Error: Null pointer."
+    end if
+
+    select type(generic_pointer)
+     type is (texture_rectangle)
+      texture_rectangle_pointer => generic_pointer
+     class default
+      error stop "[Texture Atlas] Error: Wrong pointer type."
+    end select
+  end function texture_atlas_get_texture_rectangle_pointer
+
+
   !* This is debug for selecting an atlas element.
   function texture_atlas_debug() result(texture_location)
     implicit none
