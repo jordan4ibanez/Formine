@@ -199,13 +199,13 @@ program main
 
       fps_new = get_fps()
 
+      call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - text_size%y) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+
       if (fps_new /= old_fps) then
 
         call mesh_delete("fps_counter")
 
         call font_generate_text("fps_counter", 50.0, "FPS: "//int_to_string(get_fps()), center = .false., size = text_size)
-
-        call camera_set_object_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - text_size%y) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
 
       end if
 
