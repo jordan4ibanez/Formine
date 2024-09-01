@@ -56,18 +56,18 @@ module chunk_mesh
 
   !? -X (Facing left at rotation 0.0)
   real(c_float), dimension(12), parameter :: LEFT_FACE = (/ &
-    0.0, 1.0, 0.0, & ! Top left.
-    0.0, 0.0, 0.0, & ! Bottom Left.
-    0.0, 0.0, 1.0, & ! Bottom Right.
-    0.0, 1.0, 1.0 &  ! Top Right.
+    0.0, 1.0, 1.0, & ! Top left.
+    0.0, 0.0, 1.0, & ! Bottom Left.
+    0.0, 0.0, 0.0, & ! Bottom Right.
+    0.0, 1.0, 0.0 &  ! Top Right.
     /)
 
   !? +X (Facing right at rotation 0.0)
   real(c_float), dimension(12), parameter :: RIGHT_FACE = (/ &
-    1.0, 1.0, 1.0, & ! Top Right.
-    1.0, 0.0, 1.0, & ! Bottom Right.
-    1.0, 0.0, 0.0, & ! Bottom Left.
-    1.0, 1.0, 0.0 &  ! Top left.
+    1.0, 1.0, 0.0, & ! Top Right.
+    1.0, 0.0, 0.0, & ! Bottom Right.
+    1.0, 0.0, 1.0, & ! Bottom Left.
+    1.0, 1.0, 1.0 &  ! Top left.
     /)
 
 
