@@ -30,7 +30,7 @@ module camera
   real(c_float) :: fov_degrees = 72.0
 
   real(c_double) :: z_near_3d = 0.01d0
-  real(c_double) :: z_far_3d = 100.0d0
+  real(c_double) :: z_far_3d = 1000.0d0
 
   real(c_double) :: z_near_2d = -1.0d0
   real(c_double) :: z_far_2d = 1.0d0
