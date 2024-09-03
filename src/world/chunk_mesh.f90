@@ -126,6 +126,8 @@ contains
     allocate(colors(0))
     allocate(indices(0))
 
+    !? We are working with raw numbers, doing the block reallocation should not cause issues here.
+
     do i = 1,6
       positions = [positions, FACES(1:12,i)]
 
