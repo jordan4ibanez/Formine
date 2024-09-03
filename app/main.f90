@@ -26,7 +26,7 @@ program main
   type(vec2f) :: text_size
   real(c_float), parameter :: FONT_SIZE = 25.0
   real(c_float) :: floating_font_size
-  integer(c_int) :: fps_new, old_fps
+  integer(c_int) :: fps_new, old_fps, x, y
   character(len = :, kind = c_char), allocatable :: position_text_debug
   !type(texture_rectangle) :: tex_rect
 
@@ -115,7 +115,13 @@ program main
   call api_initialize()
 
 
-  call chunk_generator_new_chunk(0,0)
+  print*,"START"
+  do x = -3,3
+    do y = -3,3
+      call chunk_generator_new_chunk(x,y)
+    end do
+  end do
+  print*,"END"
 
   rotation = 0.0
 
