@@ -40,7 +40,7 @@ contains
 
     do x = 1, CHUNK_WIDTH
       do z = 1, CHUNK_WIDTH
-        current_height = base_height + floor(fnl_get_noise_2d(noise_state, real(x), real(z)) * noise_multiplier)
+        current_height = base_height + floor(fnl_get_noise_2d(noise_state, real(x + base_x), real(z + base_z)) * noise_multiplier)
         do y = 1, CHUNK_HEIGHT
           ! todo: make this more complex with lua registered biomes.
 
