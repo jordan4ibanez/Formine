@@ -125,7 +125,7 @@ contains
     real(c_float), dimension(8), allocatable :: texture_coordinates(:)
     real(c_float), dimension(12), allocatable :: colors(:)
     integer(c_int), dimension(6), allocatable :: indices(:)
-    integer(c_int) :: limit, i, x, z, y, current_offset, p_index, t_index, c_index, i_index
+    integer(c_int) :: limit, i, x, z, y, current_offset, p_index, t_index, c_index, i_index, base_y, max_y
     type(vec3i) :: direction, pos, trajectory, offset
 
     !! debugging one block, ID 1 (Stone)
@@ -151,9 +151,12 @@ contains
     c_index = -1
     i_index = -1
 
+    base_y = (MESH_STACK_HEIGHT * (mesh_stack - 1)) + 1
+    max_y = MESH_STACK_HEIGHT * (mesh_stack)
+
     do x = 1,CHUNK_WIDTH
       do z = 1,CHUNK_WIDTH
-        do y = (MESH_STACK_HEIGHT * (mesh_stack - 1)) + 1, MESH_STACK_HEIGHT * (mesh_stack)
+        do y = base_y,max_y
 
           ! Position in indices.
           pos = [x, y, z]
@@ -166,7 +169,7 @@ contains
           ! Position in world offset.
           offset = [ &
             x - 1, &
-            y - 1, &
+            y - base_y, &
             z - 1 &
             ]
 
