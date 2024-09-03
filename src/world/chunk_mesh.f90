@@ -87,6 +87,13 @@ module chunk_mesh
     0.0, 1.0, 0.0 &
     /)
 
+
+  ! Chunks shall generate each block face as follows:
+  ! [ -Z, +Z, -X, +X, -Y, +Y ]
+  real(c_float), dimension(12, 6), parameter :: AHHH = reshape((/ &
+    BACK_FACE, FRONT_FACE, LEFT_FACE, RIGHT_FACE, BOTTOM_FACE, TOP_FACE &
+    /), [12,6])
+
   public :: chunk_mesh_generate
 
 
