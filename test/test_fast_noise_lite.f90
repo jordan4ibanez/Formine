@@ -22,7 +22,7 @@ contains
     do x = -10000, 10000
       do y = -10000, 10000
         test_data = fnl_get_noise_3d(noise_state, real(x, c_float), real(y, c_float), 0.0)
-        print"(f0.5)", test_data
+        ! print"(f0.5)", test_data
         if (test_data < -1.00001 .or. test_data > 1.00001) then
           ! print"(f0.5)",test_data
           error stop "walked out of bounds"
@@ -69,5 +69,5 @@ program test_fast_noise
     end do
   end do
 
-  print*,noise_data
+  ! print*,noise_data
 end program test_fast_noise
