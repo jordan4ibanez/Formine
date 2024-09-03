@@ -33,6 +33,7 @@ module chunk_data
   !* Memory chunk is the data for the entire chunk.
 
   type :: memory_chunk
+    ! Layout: [ Y, Z, X ]
     type(block_data), dimension(CHUNK_HEIGHT, CHUNK_WIDTH, CHUNK_WIDTH), allocatable :: data(:, :, :)
     type(heap_string), dimension(MESH_STACK_ARRAY_SIZE), allocatable :: mesh(:)
   end type memory_chunk
