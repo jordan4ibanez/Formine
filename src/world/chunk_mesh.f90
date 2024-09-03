@@ -144,10 +144,6 @@ contains
 
     current_offset = 0
 
-    ! do x = 1,CHUNK_WIDTH
-    !   ! print*,"x:",x
-    !   do z = 1,CHUNK_WIDTH
-    !     do y = 1,CHUNK_HEIGHT
 
     print*,"START"
     x = 0
@@ -203,21 +199,11 @@ contains
     c_index = c_index + 11
     i_index = i_index + 5
 
-    ! print*,"p_index:", p_index
-
     positions = positions(1: p_index)
     texture_coordinates = texture_coordinates(1: t_index)
     colors = colors(1: c_index)
     indices = indices(1:i_index)
     print*,"END"
-
-    print*,size(positions)
-    print*,size(texture_coordinates)
-    print*,size(colors)
-    print*,size(indices)
-    !     end do
-    !   end do
-    ! end do
 
     call mesh_create_3d("debug_block", positions, texture_coordinates, colors, indices)
 
