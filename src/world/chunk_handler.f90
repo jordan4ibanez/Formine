@@ -61,6 +61,16 @@ contains
   end function chunk_handler_get_chunk_pointer
 
 
+  subroutine draw_chunks()
+    use :: fhash, only: fhash_iter_t, fhash_key_t
+    implicit none
+
+    class(fhash_key_t), allocatable :: generic_key
+    class(*), allocatable :: generic_placeholder
+
+  end subroutine draw_chunks
+
+
   function grab_chunk_key(x, y) result(key_new)
     implicit none
 
