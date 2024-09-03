@@ -89,7 +89,8 @@ contains
     integer(c_int) :: status
 
 
-    call print_f("hi there"//achar(10))
+    ! call print_f("hi there"//achar(10))
+    print*,"hi from C thread!"
 
 
     hi_there = 5
