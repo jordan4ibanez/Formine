@@ -29,12 +29,11 @@ module memory_texture_module
   !* It contains pixels in the pixels component.
   !* In the standard of: RGBA_8
   type :: memory_texture
-    type(pixel), dimension(:), allocatable :: pixels
-    integer(c_int) :: pixel_array_length
+    ! Layout: [ x, y ]
+    type(pixel), dimension(:, :), allocatable :: pixels(:, :)
     integer(c_int) :: width
     integer(c_int) :: height
   contains
-    procedure :: index_get_pixel => memory_texture_index_get_pixel
     procedure :: get_pixel => memory_texture_get_pixel
     procedure :: set_pixel => memory_texture_set_pixel
     procedure :: get_raw_data => memory_texture_get_raw_data
@@ -87,7 +86,7 @@ contains
     integer(1), dimension(:) :: raw_texture_memory_u8
     integer(c_int), intent(in), value :: width, height
     type(memory_texture) :: rgba_texture_new
-    integer(c_int) :: array_length, pixel_array_length, i, current_index
+    integer(c_int) :: array_length, pixel_array_length, current_index, y, x
     integer(c_int), dimension(:), allocatable :: raw_texture_memory_i32
 
     array_length = size(raw_texture_memory_u8)
@@ -105,23 +104,23 @@ contains
     raw_texture_memory_i32 = c_uchar_to_int_array(raw_texture_memory_u8)
 
     ! Allocate the array.
-    allocate(rgba_texture_new%pixels(pixel_array_length))
+    allocate(rgba_texture_new%pixels(width, height))
 
-    do i = 1,pixel_array_length
+    current_index = 1
 
-      ! Shift into offset then back into index because math.
-      current_index = ((i - 1) * 4) + 1
+    do y = 1,height
+      do x = 1,width
+        ! Now we create the pixel.
+        rgba_texture_new%pixels(x, y) = pixel( &
+          raw_texture_memory_i32(current_index), &
+          raw_texture_memory_i32(current_index + 1), &
+          raw_texture_memory_i32(current_index + 2), &
+          raw_texture_memory_i32(current_index + 3) &
+          )
 
-      ! Now we create the pixel.
-      rgba_texture_new%pixels(i) = pixel( &
-        raw_texture_memory_i32(current_index), &
-        raw_texture_memory_i32(current_index + 1), &
-        raw_texture_memory_i32(current_index + 2), &
-        raw_texture_memory_i32(current_index + 3) &
-        )
+        current_index = current_index + 4
+      end do
     end do
-
-    rgba_texture_new%pixel_array_length = pixel_array_length
   end function rgba8_texture_constructor
 
 
@@ -137,23 +136,10 @@ contains
 
     rgba_texture_new%width = width
     rgba_texture_new%height = height
-    rgba_texture_new%pixel_array_length = pixel_array_length
 
     ! Pretty simple.
-    allocate(rgba_texture_new%pixels(pixel_array_length))
+    allocate(rgba_texture_new%pixels(width, height))
   end function blank_memory_texture_constructor
-
-
-  !* Get the RGBA of an index.
-  function memory_texture_index_get_pixel(this, index) result(color)
-    implicit none
-
-    class(memory_texture), intent(in) :: this
-    integer(c_int), intent(in), value :: index
-    type(pixel) :: color
-
-    color = this%pixels(index)
-  end function memory_texture_index_get_pixel
 
 
   !* This wraps a chain of functions to just get the data we need, which is RGBA of a pixel.
@@ -173,7 +159,7 @@ contains
       error stop "[RGBA Texture] Error: Y is out of bounds ["//int_to_string(y)//"]"
     end if
 
-    color = this%index_get_pixel(this%position_to_index(x,y))
+    color = this%pixels(x, y)
   end function memory_texture_get_pixel
 
 
@@ -184,11 +170,8 @@ contains
     class(memory_texture), intent(inout) :: this
     integer(c_int), intent(in), value :: x, y
     type(pixel), intent(in) :: pixel_new
-    integer(c_int) :: i
 
-    i = this%position_to_index(x, y)
-
-    this%pixels(i) = pixel_new
+    this%pixels(x, y) = pixel_new
   end subroutine memory_texture_set_pixel
 
 
@@ -200,28 +183,30 @@ contains
     class(memory_texture), intent(in) :: this
     integer(c_int), dimension(:), allocatable :: temporary_integer_data
     integer(1), dimension(:), allocatable :: raw_texture_data_new
-    integer(c_int) :: raw_size, i, current_raw_index
+    integer(c_int) :: raw_size, current_raw_index, y, x
     type(pixel) :: current_pixel
 
-    raw_size = this%pixel_array_length * 4
+    raw_size = this%width * this%height * 4
 
     allocate(temporary_integer_data(raw_size))
 
+    current_raw_index = 1
+
     ! Collect all the pixels into the temporary array.
-    do i = 1,this%pixel_array_length
+    do y = 1,this%height
+      do x = 1,this%width
+        current_pixel = this%pixels(x, y)
 
-      ! Shift into offset then back into index because math.
-      current_raw_index = ((i - 1) * 4) + 1
+        temporary_integer_data(current_raw_index) = current_pixel%r
+        temporary_integer_data(current_raw_index + 1) = current_pixel%g
+        temporary_integer_data(current_raw_index + 2) = current_pixel%b
+        temporary_integer_data(current_raw_index + 3) = current_pixel%a
 
-      current_pixel = this%pixels(i)
-
-      temporary_integer_data(current_raw_index) = current_pixel%r
-      temporary_integer_data(current_raw_index + 1) = current_pixel%g
-      temporary_integer_data(current_raw_index + 2) = current_pixel%b
-      temporary_integer_data(current_raw_index + 3) = current_pixel%a
+        current_raw_index = current_raw_index + 4
+      end do
     end do
 
-    ! Finally, transmute it into uint_8_t.
+    ! Finally, transmute it into uint8_t.
     raw_texture_data_new = int_to_c_uchar_array(temporary_integer_data)
   end function memory_texture_get_raw_data
 
