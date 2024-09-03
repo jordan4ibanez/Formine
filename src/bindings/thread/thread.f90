@@ -1,4 +1,5 @@
 module thread
+  use :: thread_types
   use, intrinsic :: iso_c_binding
   implicit none
   ! https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html
@@ -12,29 +13,14 @@ module thread
   integer :: hi_there
 
 
-  ! https://ffmpeg.org/doxygen/3.1/os2threads_8h_source.html
-  type, bind(c) :: pthread_t
-    integer(c_int64_t) :: tid
-    type(c_funptr) :: start_routine
-    type(c_ptr) :: arg
-    type(c_ptr) :: result
-  end type pthread_t
-
-
   interface
 
 
 
     function internal_pthread_create(thread, attr, start_routine, arg) result(status) bind(c, name = "pthread_create")
+      use :: thread_types
       use, intrinsic :: iso_c_binding
       implicit none
-
-      type, bind(c) :: pthread_t
-        integer(c_int64_t) :: tid
-        type(c_funptr) :: start_routine
-        type(c_ptr) :: arg
-        type(c_ptr) :: result
-      end type pthread_t
 
       type(pthread_t), intent(inout) :: thread
       type(c_ptr), intent(in), value :: attr
@@ -45,15 +31,9 @@ module thread
 
 
     function pthread_join(thread, retval) result(status) bind(c, name = "pthread_join")
+      use :: thread_types
       use, intrinsic :: iso_c_binding
       implicit none
-
-      type, bind(c) :: pthread_t
-        integer(c_int64_t) :: tid
-        type(c_funptr) :: start_routine
-        type(c_ptr) :: arg
-        type(c_ptr) :: result
-      end type pthread_t
 
       type(pthread_t), intent(in), value :: thread
       type(c_ptr), intent(in), value :: retval
