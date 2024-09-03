@@ -9,12 +9,13 @@ module chunk_generator
   private
 
 
-  public :: debug_generate_chunk
+  public :: chunk_generator_new_chunk
 
 
 contains
 
-  subroutine debug_generate_chunk(chunk_x, chunk_z)
+
+  subroutine chunk_generator_new_chunk(chunk_x, chunk_z)
     use :: fast_noise_lite
     use :: chunk_handler
     implicit none
@@ -57,7 +58,7 @@ contains
     end do
 
     call chunk_handler_store_chunk_pointer(chunk_pointer)
-  end subroutine debug_generate_chunk
+  end subroutine chunk_generator_new_chunk
 
 
 end module chunk_generator

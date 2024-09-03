@@ -114,7 +114,7 @@ program main
   call api_initialize()
 
 
-  call debug_generate_chunk(0,0)
+  call chunk_generator_new_chunk(0,0)
 
   rotation = 0.0
 
