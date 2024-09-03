@@ -98,7 +98,7 @@ contains
 
         call camera_set_object_matrix_f32(&
           real(chunk%world_position%x * CHUNK_WIDTH, c_float), &
-          0.0, &
+          real((i - 1) * MESH_STACK_HEIGHT, c_float), &
           real(chunk%world_position%y * CHUNK_WIDTH, c_float), &
           0.0, 0.0, 0.0, &
           1.0, 1.0, 1.0)
