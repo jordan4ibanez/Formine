@@ -118,6 +118,7 @@ contains
           raw_texture_memory_i32(current_index + 3) &
           )
 
+        ! 4 channels. RGBA.
         current_index = current_index + 4
       end do
     end do
@@ -185,7 +186,7 @@ contains
     integer(c_int) :: raw_size, current_raw_index, y, x
     type(pixel) :: current_pixel
 
-    ! 4 Channels. RGBA.
+    ! 4 channels. RGBA.
     raw_size = this%width * this%height * 4
 
     allocate(raw_texture_data_new(raw_size))
@@ -203,6 +204,7 @@ contains
         raw_texture_data_new(current_raw_index + 2) = int_to_c_uchar(current_pixel%b)
         raw_texture_data_new(current_raw_index + 3) = int_to_c_uchar(current_pixel%a)
 
+        ! 4 channels. RGBA.
         current_raw_index = current_raw_index + 4
       end do
     end do
