@@ -177,18 +177,17 @@ contains
 
   !* Will extract the workable pixel data into a uint8 array which should never be modified.
   function memory_texture_get_raw_data(this) result(raw_texture_data_new)
-    use :: math_helpers, only: int_to_c_uchar_array
+    use :: math_helpers, only: int_to_c_uchar
     implicit none
 
     class(memory_texture), intent(in) :: this
-    integer(c_int), dimension(:), allocatable :: temporary_integer_data
     integer(1), dimension(:), allocatable :: raw_texture_data_new
     integer(c_int) :: raw_size, current_raw_index, y, x
     type(pixel) :: current_pixel
 
     raw_size = this%width * this%height * 4
 
-    allocate(temporary_integer_data(raw_size))
+    allocate(raw_texture_data_new(raw_size))
 
     current_raw_index = 1
 
@@ -197,17 +196,15 @@ contains
       do x = 1,this%width
         current_pixel = this%pixels(x, y)
 
-        temporary_integer_data(current_raw_index) = current_pixel%r
-        temporary_integer_data(current_raw_index + 1) = current_pixel%g
-        temporary_integer_data(current_raw_index + 2) = current_pixel%b
-        temporary_integer_data(current_raw_index + 3) = current_pixel%a
+        ! Transmute it into uint8_t.
+        raw_texture_data_new(current_raw_index) = int_to_c_uchar(current_pixel%r)
+        raw_texture_data_new(current_raw_index + 1) = int_to_c_uchar(current_pixel%g)
+        raw_texture_data_new(current_raw_index + 2) = int_to_c_uchar(current_pixel%b)
+        raw_texture_data_new(current_raw_index + 3) = int_to_c_uchar(current_pixel%a)
 
         current_raw_index = current_raw_index + 4
       end do
     end do
-
-    ! Finally, transmute it into uint8_t.
-    raw_texture_data_new = int_to_c_uchar_array(temporary_integer_data)
   end function memory_texture_get_raw_data
 
 
