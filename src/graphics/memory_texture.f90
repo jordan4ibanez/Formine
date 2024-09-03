@@ -211,22 +211,4 @@ contains
   end function memory_texture_get_raw_data
 
 
-  !* Position (in pixels) to the index in the texture array.
-  function memory_texture_internal_position_to_index(this, x, y) result(i)
-    implicit none
-
-    class(memory_texture), intent(in) :: this
-    integer(c_int), intent(in), value :: x, y
-    integer(c_int) :: a, b
-    integer(c_int) :: i
-
-    ! -1 because: We're shifting from indices into offsets.
-    a = x - 1
-    b = y - 1
-
-    ! +1 because: We're shifting from offsets into indices.
-    i = ((b * this%width) + a) + 1
-  end function memory_texture_internal_position_to_index
-
-
 end module memory_texture_module
