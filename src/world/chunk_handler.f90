@@ -1,6 +1,6 @@
 module chunk_handler
   use :: chunk_data
-  use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use :: fhash, only: fhash_tbl_t, key => fhash_key, fhash_key_char_t
   implicit none
 
 
@@ -19,14 +19,13 @@ contains
 
   subroutine store_chunk_pointer(chunk_to_store)
     use :: string
-    use :: fhash, only: fhash_key_char_t
     implicit none
 
     type(memory_chunk), intent(in), pointer :: chunk_to_store
     type(fhash_key_char_t) :: chunk_key
     integer(c_int) :: status
 
-    chunk_key = key("chunk_"//int_to_string(chunk_to_store%world_position%x)//"_"//int_to_string(chunk_to_store%world_position%y))
+    chunk_key = grab_chunk_key(chunk_to_store%world_position%x, chunk_to_store%world_position%y)
 
     call chunk_database%check_key(chunk_key, stat = status)
 
@@ -46,7 +45,7 @@ contains
     class(*), pointer :: generic_pointer
     integer(c_int) :: status
 
-    call chunk_database%get_raw_ptr(key("chunk_"//int_to_string(x)//"_"//int_to_string(y)), generic_pointer, stat = status)
+    call chunk_database%get_raw_ptr(grab_chunk_key(x,y), generic_pointer, stat = status)
 
     if (status /= 0) then
       error stop "[Chunk Handler] Error: Attempted to retrieve null chunk."
@@ -59,6 +58,16 @@ contains
       error stop "[Chunk Handler] Error: The wrong type was inserted into the database."
     end select
   end function get_chunk_pointer
+
+
+  function grab_chunk_key(x, y) result(key_new)
+    implicit none
+
+    integer(c_int), intent(in), value :: x, y
+    type(fhash_key_char_t) :: key_new
+
+    key_new = key("chunk_"//int_to_string(x)//"_"//int_to_string(y))
+  end function grab_chunk_key
 
 
 end module chunk_handler
