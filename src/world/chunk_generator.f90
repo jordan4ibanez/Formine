@@ -21,7 +21,7 @@ contains
     integer(c_int), intent(in), value :: chunk_x, chunk_z
     type(fnl_state) :: noise_state
 
-    integer(c_int) :: x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height
+    integer(c_int) :: x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, i
     type(memory_chunk) :: current_chunk
     type(block_data) :: current_block
 
@@ -51,7 +51,10 @@ contains
       end do
     end do
 
-    current_chunk%mesh(1) = chunk_mesh_generate(current_chunk, 1)
+    do i = 1,MESH_STACK_ARRAY_SIZE
+      current_chunk%mesh(i) = chunk_mesh_generate(current_chunk, i)
+    end do
+
   end subroutine debug_generate_chunk
 
 
