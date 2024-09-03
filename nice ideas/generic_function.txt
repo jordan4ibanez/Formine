@@ -1,0 +1,54 @@
+module generic_function
+  implicit none
+
+  interface
+
+    function hi_blueprint(input) result(gen)
+      implicit none
+
+      class(*), intent(inout) :: input
+      class(*), allocatable :: gen
+    end function hi_blueprint
+
+  end interface
+
+
+contains
+
+  subroutine blueprint_handler(input_procedure, generic_data)
+    implicit none
+
+    procedure(hi_blueprint) :: input_procedure
+    class(*), intent(inout) :: generic_data
+    class(*), allocatable :: gen_from_proc
+
+    gen_from_proc = input_procedure(generic_data)
+
+    select type(gen_from_proc)
+     type is (character(len = *))
+      print*,"hello "//gen_from_proc//", you're a string"
+     type is (integer)
+      print*,"that's an int! ", gen_from_proc
+     class default
+      print*,"I haven't seen that type yet."
+    end select
+  end subroutine blueprint_handler
+
+  function hi_implementation(input_string) result(blah)
+    implicit none
+
+    class(*), intent(inout), allocatable :: input_string
+    class(*), allocatable :: blah
+
+    select type(input_string)
+     type is (character(*))
+      input_string = input_string//"testing"
+    end select
+
+    blah = 1
+  end function
+
+end module generic_function
+
+
+
