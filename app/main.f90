@@ -18,6 +18,7 @@ program main
   use :: mouse
   use :: keyboard
   use :: camera
+  use :: chunk_handler
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -148,7 +149,7 @@ program main
 
 
 
-      call camera_set_object_matrix_f32(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
+      ! call camera_set_object_matrix_f32(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
 
       ! tex_rect = texture_atlas_debug()
 
@@ -182,11 +183,13 @@ program main
       !   [0,1,2, 2,3,0] &
       !   )
 
-      call texture_use("TEXTURE_ATLAS")
+      ! call texture_use("TEXTURE_ATLAS")
 
-      call mesh_draw("debug_block")
+      ! call mesh_draw("debug_block")
 
       ! call mesh_delete("debug")
+
+      call chunk_handler_draw_chunks()
 
 
       !* Move into "2D mode"
