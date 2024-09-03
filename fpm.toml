@@ -5,7 +5,7 @@ license = "MPL-2.0"
 author = "jordan4ibanez"
 maintainer = "jordan4ibanez"
 copyright = "Copyright 2024, jordan4ibanez"
-categories = ["game", "engine", "glfw", "opengl"]
+categories = ["game", "engine", "glfw", "opengl", "stb"]
 
 [build]
 auto-executables = true
