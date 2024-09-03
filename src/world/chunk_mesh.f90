@@ -153,7 +153,7 @@ contains
 
     do x = 1,CHUNK_WIDTH
       do z = 1,CHUNK_WIDTH
-        do y = MESH_STACK_HEIGHT * mesh_stack,MESH_STACK_HEIGHT * (mesh_stack + 1)
+        do y = (MESH_STACK_HEIGHT * (mesh_stack - 1)) + 1, MESH_STACK_HEIGHT * (mesh_stack)
 
           ! Position in indices.
           pos = [x, y, z]
@@ -240,9 +240,9 @@ contains
     colors = colors(1: c_index)
     indices = indices(1:i_index)
 
-    call mesh_create_3d("debug_block", positions, texture_coordinates, colors, indices)
-
     mesh_id = "mesh_stack_"//int_to_string(input_chunk%world_position%x)//"_"//int_to_string(input_chunk%world_position%y)//"_"//int_to_string(mesh_stack)
+
+    call mesh_create_3d(mesh_id, positions, texture_coordinates, colors, indices)
   end function chunk_mesh_generate
 
 
