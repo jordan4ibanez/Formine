@@ -8,7 +8,7 @@
 block.register({
   name = "stone",
   description = "Stone",
-  textures = { "debug_texture.png", "debug_texture.png", "debug_texture.png", "debug_texture.png", "debug_texture.png", "debug_texture.png" },
+  textures = { "default_stone.png", "default_stone.png", "default_stone.png", "default_stone.png", "default_stone.png", "default_stone.png" },
   draw_type = block.draw_type.normal,
 })
 
@@ -16,7 +16,7 @@ block.register({
 block.register({
   name = "dirt",
   description = "Dirt",
-  textures = { "dirt.png", "dirt.png", "dirt.png", "dirt.png", "dirt.png", "dirt.png" },
+  textures = { "default_dirt.png", "default_dirt.png", "default_dirt.png", "default_dirt.png", "default_dirt.png", "default_dirt.png" },
   draw_type = block.draw_type.normal,
 })
 
