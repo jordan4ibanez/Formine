@@ -324,11 +324,13 @@ contains
     type(vec2d) :: mouse_delta
     real(c_double) :: delta
     type(vec3d) :: movement
-    real(c_double), parameter :: movement_speed = 0.001d0
+    real(c_double) :: movement_speed
 
     delta = delta_get_f64()
 
     mouse_delta = mouse_get_delta()
+
+    movement_speed = 140.0d0 * delta
 
     call camera_rotate(mouse_delta%y, mouse_delta%x, 0.0d0)
 
