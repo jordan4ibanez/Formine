@@ -116,8 +116,8 @@ program main
 
 
   print*,"START"
-  do x = -3,3
-    do y = -3,3
+  do x = -5,5
+    do y = -5,5
       call chunk_generator_new_chunk(x,y)
     end do
   end do
