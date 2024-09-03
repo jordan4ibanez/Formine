@@ -90,7 +90,7 @@ module chunk_mesh
 
   ! Chunks shall generate each block face as follows:
   ! [ -Z, +Z, -X, +X, -Y, +Y ]
-  real(c_float), dimension(12, 6), parameter :: AHHH = reshape((/ &
+  real(c_float), dimension(12, 6), parameter :: FACES = reshape((/ &
     BACK_FACE, FRONT_FACE, LEFT_FACE, RIGHT_FACE, BOTTOM_FACE, TOP_FACE &
     /), [12,6])
 
