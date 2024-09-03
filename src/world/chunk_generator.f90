@@ -25,7 +25,7 @@ contains
     type(memory_chunk) :: current_chunk
     type(block_data) :: current_block
 
-    current_chunk = memory_chunk()
+    current_chunk = memory_chunk(chunk_x, chunk_z)
 
     base_x = chunk_x * CHUNK_WIDTH
     base_y = 0
@@ -51,8 +51,8 @@ contains
       end do
     end do
 
-    current_chunk%mesh(1) = chunk_mesh_generate(current_chunk)
-  end subroutine
+    current_chunk%mesh(1) = chunk_mesh_generate(current_chunk, 1)
+  end subroutine debug_generate_chunk
 
 
 end module chunk_generator
