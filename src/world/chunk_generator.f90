@@ -24,10 +24,6 @@ contains
     integer(c_int) :: x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height
     type(memory_chunk) :: current_chunk
     type(block_data) :: current_block
-    integer(c_int) :: current_index
-    integer(c_int), dimension(3) :: back_to
-
-    current_index = 1
 
     current_chunk = memory_chunk()
 
@@ -45,8 +41,6 @@ contains
         current_height = base_height + floor(fnl_get_noise_2d(noise_state, real(x), real(z)) * noise_multiplier)
         do y = 1, CHUNK_HEIGHT
           ! todo: make this more complex with lua registered biomes.
-
-          current_index = current_index + 1
 
           if (y <= current_height) then
             current_block = block_data()
