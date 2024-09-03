@@ -38,7 +38,6 @@ module memory_texture_module
     procedure :: get_pixel => memory_texture_get_pixel
     procedure :: set_pixel => memory_texture_set_pixel
     procedure :: get_raw_data => memory_texture_get_raw_data
-    procedure :: position_to_index => memory_texture_internal_position_to_index
   end type memory_texture
 
 
