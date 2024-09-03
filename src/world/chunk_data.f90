@@ -1,5 +1,6 @@
 module chunk_data
   use :: string
+  use :: vector_2i
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -34,6 +35,7 @@ module chunk_data
 
   type :: memory_chunk
     ! Layout: [ Y, Z, X ]
+    type(vec2i), allocatable :: world_position
     type(block_data), dimension(CHUNK_HEIGHT, CHUNK_WIDTH, CHUNK_WIDTH), allocatable :: data(:, :, :)
     type(heap_string), dimension(MESH_STACK_ARRAY_SIZE), allocatable :: mesh(:)
   end type memory_chunk
@@ -46,11 +48,14 @@ module chunk_data
 contains
 
 
-  function memory_chunk_constructor() result(memory_chunk_new)
+  function memory_chunk_constructor(x, y) result(memory_chunk_new)
     implicit none
 
+    integer(c_int) :: x, y
     type(memory_chunk) :: memory_chunk_new
 
+    allocate(memory_chunk_new%world_position)
+    memory_chunk_new%world_position = [x,y]
     allocate(memory_chunk_new%data(CHUNK_HEIGHT, CHUNK_WIDTH, CHUNK_WIDTH))
     allocate(memory_chunk_new%mesh(MESH_STACK_ARRAY_SIZE))
   end function memory_chunk_constructor
