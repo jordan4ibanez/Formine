@@ -148,7 +148,6 @@ contains
 
 
     print*,"START"
-    pos = [0, 0, 0]
 
     do x = 1,CHUNK_WIDTH
       do z = 1,CHUNK_WIDTH
