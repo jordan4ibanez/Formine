@@ -3,6 +3,7 @@ module chunk_mesh
   use :: chunk_data
   use :: block_repo
   use :: texture_atlas
+  use :: vector_3i
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -96,12 +97,12 @@ module chunk_mesh
     /), [12,6])
 
   integer(c_int), dimension(3, 6), parameter :: DIRECTIONS = reshape((/ &
-    0,0,0, &
-    0,0,0, &
-    0,0,0, &
-    0,0,0, &
-    0,0,0, &
-    0,0,0 &
+    0,  0, -1, &
+    0,  0,  1, &
+    -1, 0,  0, &
+    1,  0,  0, &
+    0, -1,  0, &
+    0,  1, 0 &
     /), [3,6])
 
   public :: chunk_mesh_generate
@@ -122,7 +123,8 @@ contains
     real(c_float), dimension(8), allocatable :: texture_coordinates(:)
     real(c_float), dimension(12), allocatable :: colors(:)
     integer(c_int), dimension(6), allocatable :: indices(:)
-    integer(c_int) :: limit, index_of_face, x, z, y, x_pos, y_pos, z_pos, current_offset, p_index, t_index, c_index, i_index
+    integer(c_int) :: limit, i, x, z, y, current_offset, p_index, t_index, c_index, i_index
+    type(vec3i) :: direction, pos, trajectory, offset
 
     !! debugging one block, ID 1 (Stone)
 
@@ -146,25 +148,50 @@ contains
 
 
     print*,"START"
-    x = 0
-    y = 0
-    z = 0
+    pos = [0, 0, 0]
 
     do x = 1,CHUNK_WIDTH
       do z = 1,CHUNK_WIDTH
         do y = 1,CHUNK_HEIGHT
 
-          x_pos = x - 1
-          y_pos = y - 1
-          z_pos = z - 1
-          do index_of_face = 1,6
+          ! Position in indices.
+          pos = [x, y, z]
 
-            ! if ((x /= 1 .and. x /= CHUNK_WIDTH) .and. (z /= 1 .and. z /= CHUNK_WIDTH) .and. (y /= 1 .and. y /= CHUNK_HEIGHT)) then
-            !   cycle
-            ! end if
+          ! Cycle on air.
+          if (input_chunk%data(pos%y, pos%z, pos%x)%id == 0) then
+            cycle
+          end if
+
+          ! Position in world offset.
+          offset = [ &
+            x - 1, &
+            y - 1, &
+            z - 1 &
+            ]
+
+          do i = 1,6
+
+            ! Direction we're looking towards.
+            direction = DIRECTIONS(1:3, i)
+
+            ! Block we're looking at.
+            trajectory = pos + direction
+
+            ! If we're going to go out of bounds, cycle.
+            ! todo: check neighbor.
+            if (trajectory%x < 1 .or. trajectory%x > CHUNK_WIDTH .or. trajectory%z < 1 .or. trajectory%z > CHUNK_WIDTH .or. trajectory%y < 1 .or. trajectory%y > CHUNK_HEIGHT) then
+              cycle
+            end if
+
+            ! If it's another fullsize block, cycle.
+            ! todo: check draw_type.
+            if (input_chunk%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
+              cycle
+            end if
+
 
             p_index = (current_offset * 12) + 1
-            positions(p_index:p_index + 11) = (FACES(1:12, index_of_face) + (/x_pos,y_pos,z_pos, x_pos,y_pos,z_pos, x_pos,y_pos,z_pos, x_pos,y_pos,z_pos/))
+            positions(p_index:p_index + 11) = (FACES(1:12, i) + (/offset%x, offset%y, offset%z, offset%x, offset%y, offset%z, offset%x, offset%y, offset%z, offset%x, offset%y, offset%z/))
 
             tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
 
