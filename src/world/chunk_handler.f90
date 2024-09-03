@@ -7,7 +7,7 @@ module chunk_handler
   private
 
 
-  public :: store_chunk
+  public :: store_chunk_pointer
 
 
   type(fhash_tbl_t) :: chunk_database
@@ -17,7 +17,7 @@ module chunk_handler
 contains
 
 
-  subroutine store_chunk(chunk_to_store)
+  subroutine store_chunk_pointer(chunk_to_store)
     use :: string
     use :: fhash, only: fhash_key_char_t
     implicit none
@@ -35,7 +35,30 @@ contains
     end if
 
     call chunk_database%set_ptr(chunk_key, chunk_to_store)
-  end subroutine store_chunk
+  end subroutine store_chunk_pointer
+
+
+  function get_chunk_pointer(x, y) result(chunk_pointer)
+    implicit none
+
+    integer(c_int), intent(in), value :: x, y
+    type(memory_chunk), pointer :: chunk_pointer
+    class(*), pointer :: generic_pointer
+    integer(c_int) :: status
+
+    call chunk_database%get_raw_ptr(key("chunk_"//int_to_string(x)//"_"//int_to_string(y)), generic_pointer, stat = status)
+
+    if (status /= 0) then
+      error stop "[Chunk Handler] Error: Attempted to retrieve null chunk."
+    end if
+
+    select type(generic_pointer)
+     type is (memory_chunk)
+      chunk_pointer => generic_pointer
+     class default
+      error stop "[Chunk Handler] Error: The wrong type was inserted into the database."
+    end select
+  end function get_chunk_pointer
 
 
 end module chunk_handler
