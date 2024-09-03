@@ -111,10 +111,12 @@ module chunk_mesh
 contains
 
 
-  function chunk_mesh_generate(input_chunk) result(mesh_id)
+  function chunk_mesh_generate(input_chunk, mesh_stack) result(mesh_id)
+    use :: string
     implicit none
 
     type(memory_chunk), intent(in) :: input_chunk
+    integer(c_int), intent(in), value :: mesh_stack
     character(len = :, kind = c_char), allocatable :: mesh_id
     type(block_definition), pointer :: definition_pointer
     type(texture_rectangle), pointer :: tr_pointer
@@ -135,23 +137,23 @@ contains
 
     ! Limit it to 1 million faces per chunk.
     ! We will grab a slice of this later to shrink it.
-    limit = 1000000
+    limit = 200000
 
     allocate(positions(12 * limit))
     allocate(texture_coordinates(8 * limit))
     allocate(colors(12 * limit))
     allocate(indices(6 * limit))
 
-    !? We are working with raw numbers, doing the block reallocation should not cause issues here.
-
     current_offset = 0
 
-
-    print*,"START"
+    p_index = -1
+    t_index = -1
+    c_index = -1
+    i_index = -1
 
     do x = 1,CHUNK_WIDTH
       do z = 1,CHUNK_WIDTH
-        do y = 1,CHUNK_HEIGHT
+        do y = MESH_STACK_HEIGHT * mesh_stack,MESH_STACK_HEIGHT * (mesh_stack + 1)
 
           ! Position in indices.
           pos = [x, y, z]
@@ -181,6 +183,8 @@ contains
             if (trajectory%x < 1 .or. trajectory%x > CHUNK_WIDTH .or. trajectory%z < 1 .or. trajectory%z > CHUNK_WIDTH .or. trajectory%y < 1 .or. trajectory%y > CHUNK_HEIGHT) then
               cycle
             end if
+
+            ! todo: if y height == chunk_height then just render the face.
 
             ! If it's another fullsize block, cycle.
             ! todo: check draw_type.
@@ -220,6 +224,12 @@ contains
       end do
     end do
 
+    ! It's a blank mesh.
+    if (p_index == -1) then
+      mesh_id = ""
+      return
+    end if
+
     p_index = p_index + 11
     t_index = t_index + 7
     c_index = c_index + 11
@@ -229,11 +239,10 @@ contains
     texture_coordinates = texture_coordinates(1: t_index)
     colors = colors(1: c_index)
     indices = indices(1:i_index)
-    print*,"END"
 
     call mesh_create_3d("debug_block", positions, texture_coordinates, colors, indices)
 
-    mesh_id = "debug_block"
+    mesh_id = "mesh_stack_"//int_to_string(input_chunk%world_position%x)//"_"//int_to_string(input_chunk%world_position%y)//"_"//int_to_string(mesh_stack)
   end function chunk_mesh_generate
 
 
