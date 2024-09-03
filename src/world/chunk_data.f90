@@ -8,10 +8,6 @@ module chunk_data
   integer(c_int), parameter :: CHUNK_WIDTH = 16
   integer(c_int), parameter :: CHUNK_HEIGHT = 128
 
-  !* Then we can define it as a flat array for massive caching boost.
-
-  integer(c_int), parameter :: CHUNK_ARRAY_SIZE = CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_WIDTH
-
   !* The chunk is divided up into 8 meshes with width, height, and depth of 16.
   !* 1 is the bottom, 8 is the top.
 
@@ -37,7 +33,7 @@ module chunk_data
   !* Memory chunk is the data for the entire chunk.
 
   type :: memory_chunk
-    type(block_data), dimension(CHUNK_ARRAY_SIZE), allocatable :: data(:)
+    type(block_data), dimension(CHUNK_HEIGHT, CHUNK_WIDTH, CHUNK_WIDTH), allocatable :: data(:, :, :)
     type(heap_string), dimension(MESH_STACK_ARRAY_SIZE), allocatable :: mesh(:)
   end type memory_chunk
 
@@ -54,7 +50,7 @@ contains
 
     type(memory_chunk) :: memory_chunk_new
 
-    allocate(memory_chunk_new%data(CHUNK_ARRAY_SIZE))
+    allocate(memory_chunk_new%data(CHUNK_HEIGHT, CHUNK_WIDTH, CHUNK_WIDTH))
     allocate(memory_chunk_new%mesh(MESH_STACK_ARRAY_SIZE))
   end function memory_chunk_constructor
 
