@@ -90,9 +90,19 @@ module chunk_mesh
 
   ! Chunks shall generate each block face as follows:
   ! [ -Z, +Z, -X, +X, -Y, +Y ]
+
   real(c_float), dimension(12, 6), parameter :: FACES = reshape((/ &
     BACK_FACE, FRONT_FACE, LEFT_FACE, RIGHT_FACE, BOTTOM_FACE, TOP_FACE &
     /), [12,6])
+
+  integer(c_int), dimension(3, 6), parameter :: DIRECTIONS = reshape((/ &
+    0,0,0, &
+    0,0,0, &
+    0,0,0, &
+    0,0,0, &
+    0,0,0, &
+    0,0,0 &
+    /), [3,6])
 
   public :: chunk_mesh_generate
 
@@ -112,7 +122,7 @@ contains
     real(c_float), dimension(8), allocatable :: texture_coordinates(:)
     real(c_float), dimension(12), allocatable :: colors(:)
     integer(c_int), dimension(6), allocatable :: indices(:)
-    integer(c_int) :: i
+    integer(c_int) :: limit, index_of_face, x, z, y, x_pos, y_pos, z_pos, current_offset, p_index, t_index, c_index, i_index
 
     !! debugging one block, ID 1 (Stone)
 
@@ -121,35 +131,93 @@ contains
 
     ! Now we assign.
 
-    allocate(positions(0))
-    allocate(texture_coordinates(0))
-    allocate(colors(0))
-    allocate(indices(0))
+    ! Limit it to 1 million faces per chunk.
+    ! We will grab a slice of this later to shrink it.
+    limit = 1000000
+
+    allocate(positions(12 * limit))
+    allocate(texture_coordinates(8 * limit))
+    allocate(colors(12 * limit))
+    allocate(indices(6 * limit))
 
     !? We are working with raw numbers, doing the block reallocation should not cause issues here.
 
-    do i = 1,6
-      positions = [positions, FACES(1:12,i)]
+    current_offset = 0
 
-      tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
+    ! do x = 1,CHUNK_WIDTH
+    !   ! print*,"x:",x
+    !   do z = 1,CHUNK_WIDTH
+    !     do y = 1,CHUNK_HEIGHT
 
-      texture_coordinates = [texture_coordinates, (/ &
-        tr_pointer%min_x,tr_pointer%min_y, &
-        tr_pointer%min_x,tr_pointer%max_y, &
-        tr_pointer%max_x,tr_pointer%max_y, &
-        tr_pointer%max_x,tr_pointer%min_y &
-        /)]
+    print*,"START"
+    x = 0
+    y = 0
+    z = 0
 
-      colors = [colors, (/&
-        1.0, 1.0, 1.0, &
-        1.0, 1.0, 1.0, &
-        1.0, 1.0, 1.0, &
-        1.0, 1.0, 1.0 &
-        /)]
+    do x = 1,CHUNK_WIDTH
+      do z = 1,CHUNK_WIDTH
+        do y = 1,CHUNK_HEIGHT
 
-      ! I love Fortran's array intrinsics.
-      indices = [indices, BASE_INDICES + (4 * (i - 1))]
+          x_pos = x - 1
+          y_pos = y - 1
+          z_pos = z - 1
+          do index_of_face = 1,6
+
+            ! if ((x /= 1 .and. x /= CHUNK_WIDTH) .and. (z /= 1 .and. z /= CHUNK_WIDTH) .and. (y /= 1 .and. y /= CHUNK_HEIGHT)) then
+            !   cycle
+            ! end if
+
+            p_index = (current_offset * 12) + 1
+            positions(p_index:p_index + 11) = (FACES(1:12, index_of_face) + (/x_pos,y_pos,z_pos, x_pos,y_pos,z_pos, x_pos,y_pos,z_pos, x_pos,y_pos,z_pos/))
+
+            tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
+
+            t_index = (current_offset * 8) + 1
+            texture_coordinates(t_index:t_index + 7) = (/ &
+              tr_pointer%min_x,tr_pointer%min_y, &
+              tr_pointer%min_x,tr_pointer%max_y, &
+              tr_pointer%max_x,tr_pointer%max_y, &
+              tr_pointer%max_x,tr_pointer%min_y &
+              /)
+
+            c_index = (current_offset * 12) + 1
+            colors(c_index:c_index + 11) = (/&
+              1.0, 1.0, 1.0, &
+              1.0, 1.0, 1.0, &
+              1.0, 1.0, 1.0, &
+              1.0, 1.0, 1.0 &
+              /)
+
+            ! ! I love Fortran's array intrinsics.
+            i_index = (current_offset * 6) + 1
+            indices(i_index:i_index + 5) = (BASE_INDICES + (4 * current_offset))
+
+            current_offset = current_offset + 1
+          end do
+        end do
+      end do
     end do
+
+    p_index = p_index + 11
+    t_index = t_index + 7
+    c_index = c_index + 11
+    i_index = i_index + 5
+
+    ! print*,"p_index:", p_index
+
+    positions = positions(1: p_index)
+    texture_coordinates = texture_coordinates(1: t_index)
+    colors = colors(1: c_index)
+    indices = indices(1:i_index)
+    print*,"END"
+
+    print*,size(positions)
+    print*,size(texture_coordinates)
+    print*,size(colors)
+    print*,size(indices)
+    !     end do
+    !   end do
+    ! end do
 
     call mesh_create_3d("debug_block", positions, texture_coordinates, colors, indices)
 
