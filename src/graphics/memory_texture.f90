@@ -185,6 +185,7 @@ contains
     integer(c_int) :: raw_size, current_raw_index, y, x
     type(pixel) :: current_pixel
 
+    ! 4 Channels. RGBA.
     raw_size = this%width * this%height * 4
 
     allocate(raw_texture_data_new(raw_size))
