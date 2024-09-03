@@ -76,7 +76,7 @@ program main
 
   call gl_get_version()
 
-  call glfw_swap_interval(0)
+  call glfw_swap_interval(1)
 
   !! This allows OpenGL debugging.
   call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
@@ -88,7 +88,7 @@ program main
   call gl_depth_func(GL_LESS)
 
   !! This enables backface culling.
-  call gl_enable(GL_CULL_FACE)
+  ! call gl_enable(GL_CULL_FACE)
 
   !! This enables alpha blending.
   call gl_enable(GL_BLEND)
