@@ -35,6 +35,9 @@ program main
   old_fps = -1
 
 
+  call thread_create(c_funloc(test_threading), c_null_ptr)
+
+
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   if (.true.) then
     return
