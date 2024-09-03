@@ -52,8 +52,9 @@ contains
     implicit none
 
     integer(c_int) :: x, y
-    type(memory_chunk) :: memory_chunk_new
+    type(memory_chunk), pointer :: memory_chunk_new
 
+    allocate(memory_chunk_new)
     allocate(memory_chunk_new%world_position)
     memory_chunk_new%world_position = [x,y]
     allocate(memory_chunk_new%data(CHUNK_HEIGHT, CHUNK_WIDTH, CHUNK_WIDTH))

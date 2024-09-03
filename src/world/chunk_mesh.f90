@@ -111,11 +111,11 @@ module chunk_mesh
 contains
 
 
-  function chunk_mesh_generate(input_chunk, mesh_stack) result(mesh_id)
+  function chunk_mesh_generate(chunk_pointer, mesh_stack) result(mesh_id)
     use :: string
     implicit none
 
-    type(memory_chunk), intent(in) :: input_chunk
+    type(memory_chunk), intent(in), pointer :: chunk_pointer
     integer(c_int), intent(in), value :: mesh_stack
     character(len = :, kind = c_char), allocatable :: mesh_id
     type(block_definition), pointer :: definition_pointer
@@ -159,7 +159,7 @@ contains
           pos = [x, y, z]
 
           ! Cycle on air.
-          if (input_chunk%data(pos%y, pos%z, pos%x)%id == 0) then
+          if (chunk_pointer%data(pos%y, pos%z, pos%x)%id == 0) then
             cycle
           end if
 
@@ -188,7 +188,7 @@ contains
 
             ! If it's another fullsize block, cycle.
             ! todo: check draw_type.
-            if (input_chunk%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
+            if (chunk_pointer%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
               cycle
             end if
 
@@ -240,7 +240,7 @@ contains
     colors = colors(1: c_index)
     indices = indices(1:i_index)
 
-    mesh_id = "mesh_stack_"//int_to_string(input_chunk%world_position%x)//"_"//int_to_string(input_chunk%world_position%y)//"_"//int_to_string(mesh_stack)
+    mesh_id = "mesh_stack_"//int_to_string(chunk_pointer%world_position%x)//"_"//int_to_string(chunk_pointer%world_position%y)//"_"//int_to_string(mesh_stack)
 
     call mesh_create_3d(mesh_id, positions, texture_coordinates, colors, indices)
   end function chunk_mesh_generate

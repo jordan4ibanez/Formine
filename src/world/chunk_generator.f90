@@ -16,16 +16,17 @@ contains
 
   subroutine debug_generate_chunk(chunk_x, chunk_z)
     use :: fast_noise_lite
+    use :: chunk_handler
     implicit none
 
     integer(c_int), intent(in), value :: chunk_x, chunk_z
     type(fnl_state) :: noise_state
 
     integer(c_int) :: x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, i
-    type(memory_chunk) :: current_chunk
+    type(memory_chunk), pointer :: chunk_pointer
     type(block_data) :: current_block
 
-    current_chunk = memory_chunk(chunk_x, chunk_z)
+    chunk_pointer => memory_chunk(chunk_x, chunk_z)
 
     base_x = chunk_x * CHUNK_WIDTH
     base_y = 0
@@ -45,16 +46,17 @@ contains
           if (y <= current_height) then
             current_block = block_data()
             current_block%id = 1
-            current_chunk%data(y, z, x) = current_block
+            chunk_pointer%data(y, z, x) = current_block
           end if
         end do
       end do
     end do
 
     do i = 1,MESH_STACK_ARRAY_SIZE
-      current_chunk%mesh(i) = chunk_mesh_generate(current_chunk, i)
+      chunk_pointer%mesh(i) = chunk_mesh_generate(chunk_pointer, i)
     end do
 
+    call chunk_handler_store_chunk_pointer(chunk_pointer)
   end subroutine debug_generate_chunk
 
 

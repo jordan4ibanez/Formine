@@ -7,7 +7,8 @@ module chunk_handler
   private
 
 
-  public :: store_chunk_pointer
+  public :: chunk_handler_store_chunk_pointer
+  public :: chunk_handler_get_chunk_pointer
 
 
   type(fhash_tbl_t) :: chunk_database
@@ -17,7 +18,7 @@ module chunk_handler
 contains
 
 
-  subroutine store_chunk_pointer(chunk_to_store)
+  subroutine chunk_handler_store_chunk_pointer(chunk_to_store)
     use :: string
     implicit none
 
@@ -34,10 +35,10 @@ contains
     end if
 
     call chunk_database%set_ptr(chunk_key, chunk_to_store)
-  end subroutine store_chunk_pointer
+  end subroutine chunk_handler_store_chunk_pointer
 
 
-  function get_chunk_pointer(x, y) result(chunk_pointer)
+  function chunk_handler_get_chunk_pointer(x, y) result(chunk_pointer)
     implicit none
 
     integer(c_int), intent(in), value :: x, y
@@ -57,7 +58,7 @@ contains
      class default
       error stop "[Chunk Handler] Error: The wrong type was inserted into the database."
     end select
-  end function get_chunk_pointer
+  end function chunk_handler_get_chunk_pointer
 
 
   function grab_chunk_key(x, y) result(key_new)
