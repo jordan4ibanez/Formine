@@ -112,6 +112,7 @@ contains
     real(c_float), dimension(8), allocatable :: texture_coordinates(:)
     real(c_float), dimension(12), allocatable :: colors(:)
     integer(c_int), dimension(6), allocatable :: indices(:)
+    integer(c_int) :: i
 
     !! debugging one block, ID 1 (Stone)
 
@@ -120,145 +121,33 @@ contains
 
     ! Now we assign.
 
-    !? -Z
-    !* Tested with debug_texture.png, it works in right handed.
-    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
+    allocate(positions(0))
+    allocate(texture_coordinates(0))
+    allocate(colors(0))
+    allocate(indices(0))
 
-    positions = BACK_FACE
-    texture_coordinates = (/ &
-      tr_pointer%min_x,tr_pointer%min_y, &
-      tr_pointer%min_x,tr_pointer%max_y, &
-      tr_pointer%max_x,tr_pointer%max_y, &
-      tr_pointer%max_x,tr_pointer%min_y &
-      /)
-    colors = (/&
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0 &
-      /)
+    do i = 1,6
+      positions = [positions, FACES(1:12,i)]
 
-    indices = BASE_INDICES
+      tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
 
-    !? +Z
+      texture_coordinates = [texture_coordinates, (/ &
+        tr_pointer%min_x,tr_pointer%min_y, &
+        tr_pointer%min_x,tr_pointer%max_y, &
+        tr_pointer%max_x,tr_pointer%max_y, &
+        tr_pointer%max_x,tr_pointer%min_y &
+        /)]
 
-    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(2)%get_pointer())
+      colors = [colors, (/&
+        1.0, 1.0, 1.0, &
+        1.0, 1.0, 1.0, &
+        1.0, 1.0, 1.0, &
+        1.0, 1.0, 1.0 &
+        /)]
 
-    !! this causes a memory leak! (probably)
-    positions = [positions, FRONT_FACE]
-
-    texture_coordinates = [texture_coordinates, (/ &
-      tr_pointer%min_x,tr_pointer%min_y, &
-      tr_pointer%min_x,tr_pointer%max_y, &
-      tr_pointer%max_x,tr_pointer%max_y, &
-      tr_pointer%max_x,tr_pointer%min_y &
-      /)]
-
-    colors = [colors, (/&
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0 &
-      /)]
-
-    indices = [indices, (BASE_INDICES + 4)]
-
-    !? -X
-
-    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(3)%get_pointer())
-
-    !! this causes a memory leak! (probably)
-    positions = [positions, LEFT_FACE]
-
-    texture_coordinates = [texture_coordinates, (/ &
-      tr_pointer%min_x,tr_pointer%min_y, &
-      tr_pointer%min_x,tr_pointer%max_y, &
-      tr_pointer%max_x,tr_pointer%max_y, &
-      tr_pointer%max_x,tr_pointer%min_y &
-      /)]
-
-    colors = [colors, (/&
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0 &
-      /)]
-
-    indices = [indices, (BASE_INDICES + 8)]
-
-    !? +X
-
-    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(4)%get_pointer())
-
-    !! this causes a memory leak! (probably)
-    positions = [positions, RIGHT_FACE]
-
-    texture_coordinates = [texture_coordinates, (/ &
-      tr_pointer%min_x,tr_pointer%min_y, &
-      tr_pointer%min_x,tr_pointer%max_y, &
-      tr_pointer%max_x,tr_pointer%max_y, &
-      tr_pointer%max_x,tr_pointer%min_y &
-      /)]
-
-    colors = [colors, (/&
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0 &
-      /)]
-
-    indices = [indices, (BASE_INDICES + 12)]
-
-
-    !? -Y
-
-    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(5)%get_pointer())
-
-    !! this causes a memory leak! (probably)
-    positions = [positions, BOTTOM_FACE]
-
-    texture_coordinates = [texture_coordinates, (/ &
-      tr_pointer%min_x,tr_pointer%min_y, &
-      tr_pointer%min_x,tr_pointer%max_y, &
-      tr_pointer%max_x,tr_pointer%max_y, &
-      tr_pointer%max_x,tr_pointer%min_y &
-      /)]
-
-    colors = [colors, (/&
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0 &
-      /)]
-
-    indices = [indices, (BASE_INDICES + 16)]
-
-
-    !? +Y
-
-    tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(6)%get_pointer())
-
-    !! this causes a memory leak! (probably)
-    positions = [positions, TOP_FACE]
-
-    texture_coordinates = [texture_coordinates, (/ &
-      tr_pointer%min_x,tr_pointer%min_y, &
-      tr_pointer%min_x,tr_pointer%max_y, &
-      tr_pointer%max_x,tr_pointer%max_y, &
-      tr_pointer%max_x,tr_pointer%min_y &
-      /)]
-
-    colors = [colors, (/&
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0, &
-      1.0, 1.0, 1.0 &
-      /)]
-
-    indices = [indices, (BASE_INDICES + 20)]
-
-
-
+      ! I love Fortran's array intrinsics.
+      indices = [indices, BASE_INDICES + (4 * (i - 1))]
+    end do
 
     call mesh_create_3d("debug_block", positions, texture_coordinates, colors, indices)
 
