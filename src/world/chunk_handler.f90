@@ -9,6 +9,7 @@ module chunk_handler
 
   public :: chunk_handler_store_chunk_pointer
   public :: chunk_handler_get_chunk_pointer
+  public :: chunk_handler_draw_chunks
 
 
   type(fhash_tbl_t) :: chunk_database
@@ -61,14 +62,51 @@ contains
   end function chunk_handler_get_chunk_pointer
 
 
-  subroutine draw_chunks()
+  subroutine chunk_handler_draw_chunks()
     use :: fhash, only: fhash_iter_t, fhash_key_t
+    use :: mesh
+    use :: texture
+    use :: camera
     implicit none
 
+    type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
-    class(*), allocatable :: generic_placeholder
+    class(*), allocatable, target :: generic_data
+    type(memory_chunk), pointer :: chunk
+    integer(c_int) :: i
+    character(len = :, kind = c_char), pointer :: current_mesh_id
 
-  end subroutine draw_chunks
+    call texture_use("TEXTURE_ATLAS")
+
+    iterator = fhash_iter_t(chunk_database)
+
+    do while(iterator%next(generic_key, generic_data))
+      select type(generic_data)
+       type is (memory_chunk)
+        chunk => generic_data
+       class default
+        error stop
+        error stop "[Chunk Handler] Error: The wrong type was inserted into the database."
+      end select
+
+      do i = 1,MESH_STACK_ARRAY_SIZE
+        current_mesh_id => chunk%mesh(i)%get_pointer()
+
+        if (current_mesh_id == "") then
+          cycle
+        end if
+
+        call camera_set_object_matrix_f32(&
+          real(chunk%world_position%x * CHUNK_WIDTH, c_float), &
+          0.0, &
+          real(chunk%world_position%y * CHUNK_WIDTH, c_float), &
+          0.0, 0.0, 0.0, &
+          1.0, 1.0, 1.0)
+
+        call mesh_draw(current_mesh_id)
+      end do
+    end do
+  end subroutine chunk_handler_draw_chunks
 
 
   function grab_chunk_key(x, y) result(key_new)
