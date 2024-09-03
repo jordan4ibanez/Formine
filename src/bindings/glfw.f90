@@ -681,7 +681,7 @@ contains
   subroutine glfw_set_key_callback(callback_function_pointer)
     implicit none
 
-    type(c_funptr), intent(in) :: callback_function_pointer
+    type(c_funptr), intent(in), value :: callback_function_pointer
 
     call internal_glfw_set_key_callback(window_pointer, callback_function_pointer)
   end subroutine glfw_set_key_callback
@@ -699,7 +699,7 @@ contains
   subroutine glfw_set_cursor_pos_callback(callback_function_pointer)
     implicit none
 
-    type(c_funptr), intent(in) :: callback_function_pointer
+    type(c_funptr), intent(in), value :: callback_function_pointer
 
     call internal_glfw_set_cursor_pos_callback(window_pointer, callback_function_pointer)
   end subroutine glfw_set_cursor_pos_callback
