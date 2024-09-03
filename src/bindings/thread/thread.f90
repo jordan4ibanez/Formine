@@ -2,14 +2,19 @@ module thread
   use :: thread_types
   use, intrinsic :: iso_c_binding
   implicit none
+
+
   ! https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html
   ! https://hpc-tutorials.llnl.gov/posix/what_is_a_thread/
 
+
   private
+
 
   public :: thread_create
   public :: test_threading
 
+  !! Modifying this without a lock is A HORRIBLE IDEA !!
   integer :: hi_there
 
 
