@@ -29,6 +29,7 @@ module string
   public :: string_cut_last
   public :: string_cut_all
   public :: string_trim_white_space
+  public :: string_trim_null_terminator
   public :: string_get_right_of_character
   public :: string_get_left_of_character
 
@@ -521,6 +522,33 @@ contains
     ! This is kind of like how you remove bits in a bit shift, but for strings.
     output_string = trim(adjustl(input_string))
   end function string_trim_white_space
+
+
+  !* Strip the null terminator (\0) off a string when C acts up.
+  function string_trim_null_terminator(input_string) result(output_string)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: input_string
+    character(len = :, kind = c_char), allocatable :: output_string
+    integer(c_int) :: length, i, found_index
+
+    length = len(input_string)
+    found_index = -1
+
+    do i = 1,length
+      if (input_string(i:i) == achar(0)) then
+        found_index = i - 1
+        exit
+      end if
+    end do
+
+    if (found_index == -1) then
+      output_string = input_string
+      return
+    end if
+
+    output_string = input_string(1:found_index)
+  end function string_trim_null_terminator
 
 
   !* This helper function is mainly made for parsing conf files.
