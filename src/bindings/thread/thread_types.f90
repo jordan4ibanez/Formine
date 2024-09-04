@@ -26,4 +26,11 @@ module thread_types
   end type thread_queue_element
 
 
+  ! What gets passed into the thread.
+  type :: thread_argument
+    logical(c_bool), pointer :: active_flag
+    ! todo: mutex pointer.
+  end type thread_argument
+
+
 end module thread_types

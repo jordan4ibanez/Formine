@@ -34,6 +34,7 @@ module thread
 
   type(pthread_t), dimension(:), pointer :: available_threads
   type(pthread_t), dimension(:), pointer :: thread_configurations
+  logical(c_bool), dimension(:), pointer :: thread_active
   type(thread_queue_element), dimension(:), allocatable :: thread_queue
 
 
@@ -183,6 +184,7 @@ contains
 
     allocate(available_threads(cpu_threads))
     allocate(thread_configurations(cpu_threads))
+    allocate(thread_active(cpu_threads))
     allocate(thread_queue(0))
   end subroutine thread_initialize
 
