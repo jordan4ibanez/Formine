@@ -76,13 +76,26 @@ module thread
       integer(c_int64_t), intent(in), value :: thread
       type(c_ptr), intent(in), value :: retval
       integer(c_int) :: status
-
     end function internal_pthread_join
 
 
-    function internal_pthread_attr_init() result(status) bind(c, name = "pthread_attr_init")
-      
+!* THIS PART IS EXTREMELY COMPLEX.
 
+
+    function for_p_thread_get_pthread_attr_t_width() result(data_width) bind(c, name = "for_p_thread_get_pthread_attr_t_width")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int) :: data_width
+    end function
+
+
+    function internal_pthread_attr_init(attr) result(status) bind(c, name = "pthread_attr_init")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: attr
+      integer(c_int) :: status
     end function internal_pthread_attr_init
 
 
@@ -179,6 +192,16 @@ contains
   end subroutine thread_wait_for_joinable
 
 
+  !* Custom hack job to allocate a pthread union into memory.
+  function allocate_raw_pthread_attr_t() result(raw_data_pointer)
+    implicit none
+
+    integer(1), dimension(:), pointer :: raw_data_pointer
+
+    allocate(raw_data_pointer(for_p_thread_get_pthread_attr_t_width()))
+  end function allocate_raw_pthread_attr_t
+
+
   subroutine thread_create_detached(subroutine_procedure_pointer, argument_pointer) bind(c)
     use :: string, only: int_to_string
     implicit none
@@ -186,11 +209,27 @@ contains
     type(c_funptr), intent(in), value :: subroutine_procedure_pointer
     type(c_ptr), intent(in), value :: argument_pointer
     type(pthread_t) :: joinable_thread_new
+    integer(1), dimension(:), pointer :: pthread_attr_t
     integer(c_int) :: status
 
+    pthread_attr_t => allocate_raw_pthread_attr_t()
+
+    status = internal_pthread_attr_init(c_loc(pthread_attr_t))
 
 
   end subroutine thread_create_detached
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   recursive subroutine test_threading_implementation(arg) bind(c)
