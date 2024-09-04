@@ -27,6 +27,8 @@ module thread
   public :: thread_wait_for_joinable
   public :: thread_create_detached
   public :: thread_process_detached_thread_queue
+  public :: thread_detached_queue_is_empty
+  public :: thread_await_all_thread_completion
   public :: test_threading_implementation
 
   integer(c_int), parameter :: THREAD_OK = 0
