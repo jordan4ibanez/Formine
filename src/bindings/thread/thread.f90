@@ -392,26 +392,13 @@ contains
 
     type(c_funptr), intent(in), value :: subroutine_procedure_pointer
     type(c_ptr), intent(in), value :: argument_pointer
-    type(thread_queue_element) :: element_new
-    type(thread_queue_element), dimension(:), allocatable :: thread_queue_new
-    integer(c_int) :: old_size, i
+    type(thread_queue_element), allocatable :: element_new
 
+    allocate(element_new)
     element_new%subroutine_pointer = subroutine_procedure_pointer
     element_new%data_to_send = argument_pointer
 
-    ! Now move things to a bigger queue.
-
-    old_size = size(thread_queue)
-
-    allocate(thread_queue_new(old_size + 1))
-
-    do i = 1,old_size
-      thread_queue_new(i) = thread_queue(i)
-    end do
-
-    call move_alloc(thread_queue_new, thread_queue)
-
-    thread_queue(old_size + 1) = element_new
+    thread_queue = [thread_queue, element_new]
   end subroutine thread_create_detached
 
 
