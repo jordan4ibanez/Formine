@@ -250,23 +250,23 @@ contains
     type(c_funptr), intent(in), value :: subroutine_procedure_pointer
     type(c_ptr), intent(in), value :: argument_pointer
     type(pthread_t) :: detached_thread_new
-    integer(1), dimension(:), pointer :: pthread_attr_t
+    integer(1), dimension(:), pointer :: thread_attributes_pointer
     integer(c_int) :: status
 
-    pthread_attr_t => allocate_raw_pthread_attr_t()
-    status = internal_pthread_attr_init(c_loc(pthread_attr_t))
+    thread_attributes_pointer => allocate_raw_pthread_attr_t()
+    status = internal_pthread_attr_init(c_loc(thread_attributes_pointer))
 
     if (status /= THREAD_OK) then
       error stop "[Thread] Error: Failed to create a thread attribute. Error status: ["//int_to_string(status)//"]"
     end if
 
-    status = internal_pthread_attr_setdetachstate(c_loc(pthread_attr_t), for_p_thread_get_pthread_create_detached_id())
+    status = internal_pthread_attr_setdetachstate(c_loc(thread_attributes_pointer), for_p_thread_get_pthread_create_detached_id())
 
     if (status /= THREAD_OK) then
       error stop "[Thread] Error: Failed to set thread attribute [detachstate]. Error status: ["//int_to_string(status)//"]"
     end if
 
-    status = internal_pthread_create(detached_thread_new, c_loc(pthread_attr_t), subroutine_procedure_pointer, argument_pointer)
+    status = internal_pthread_create(detached_thread_new, c_loc(thread_attributes_pointer), subroutine_procedure_pointer, argument_pointer)
 
     if (status /= THREAD_OK) then
       error stop "[Thread] Error: Failed to create a detached thread. Error status: ["//int_to_string(status)//"]"
