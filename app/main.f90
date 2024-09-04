@@ -37,14 +37,14 @@ program main
 
   test_data = "hi there from Fortran!"//achar(0)
 
-  test_thread = thread_create_joinable(c_funloc(test_threading_implementation), c_loc(test_data))
+  call thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
 
-  call thread_set_name(test_thread, "Formine testing")
-  print*,"thread name: ["//thread_get_name(test_thread)//"]"
+  ! call thread_set_name(test_thread, "Formine testing")
+  ! print*,"thread name: ["//thread_get_name(test_thread)//"]"
 
-  print*, "now we wait for the thread."
+  ! print*, "now we wait for the thread."
 
-  call thread_wait_for_joinable(test_thread, c_null_ptr)
+  ! call thread_wait_for_joinable(test_thread, c_null_ptr)
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
