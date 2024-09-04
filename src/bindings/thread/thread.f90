@@ -15,7 +15,7 @@ module thread
 
 
   public :: thread_create
-  public :: test_threading
+  public :: test_implementation_threading
 
   !! Modifying this without a lock is A HORRIBLE IDEA !!
   integer :: hi_there
@@ -90,7 +90,7 @@ contains
   end subroutine thread_create
 
 
-  subroutine test_threading(arg)
+  subroutine test_implementation_threading(arg)
     use :: raw_c
     implicit none
 
@@ -109,7 +109,7 @@ contains
     status = 0
 
     return
-  end subroutine test_threading
+  end subroutine test_implementation_threading
 
 
 end module thread
