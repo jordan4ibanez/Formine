@@ -79,7 +79,7 @@ contains
 
     test_data = "hi there"
 
-    thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_null_ptr)!c_loc(test_data))
+    thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_loc(test_data))
 
     print*,thread%tid, thread_status
 
