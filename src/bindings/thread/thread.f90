@@ -243,7 +243,7 @@ contains
   end function allocate_raw_pthread_attr_t
 
 
-  subroutine thread_create_detached(subroutine_procedure_pointer, argument_pointer) bind(c)
+  function thread_create_detached(subroutine_procedure_pointer, argument_pointer) result(detached_thread_new) bind(c)
     use :: string, only: int_to_string
     implicit none
 
@@ -273,7 +273,7 @@ contains
     end if
 
     !todo: FIX THE MEMORY LEAK WHEN IMPLEMENTING THE QUEUE!
-  end subroutine thread_create_detached
+  end function thread_create_detached
 
 
 
