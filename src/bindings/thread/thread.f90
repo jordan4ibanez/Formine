@@ -83,14 +83,6 @@ module thread
 !* THIS PART IS EXTREMELY COMPLEX.
 
 
-    function for_p_thread_get_pthread_attr_t_width() result(data_width) bind(c, name = "for_p_thread_get_pthread_attr_t_width")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(c_int) :: data_width
-    end function
-
-
     function internal_pthread_attr_init(attr) result(status) bind(c, name = "pthread_attr_init")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -116,6 +108,35 @@ module thread
       type(c_ptr), intent(in), value :: attr
       integer(c_int), intent(in), value :: detachstate
       integer(c_int) :: status
+    end function
+
+
+    function internal_pthread_attr_getdetachstate(attr, detachstate) result(status) bind(c, name = "pthread_attr_getdetachstate")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: attr
+      integer(c_int), intent(inout) :: detachstate
+      integer(c_int) :: status
+    end function internal_pthread_attr_getdetachstate
+
+
+    !* BEGIN CUSTOM C BINDINGS.
+
+
+    function for_p_thread_get_pthread_attr_t_width() result(data_width) bind(c, name = "for_p_thread_get_pthread_attr_t_width")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int) :: data_width
+    end function
+
+
+    function for_p_thread_get_pthread_create_detached_id() result(id) bind(c, name = "for_p_thread_get_pthread_create_detached_id")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int) :: id
     end function
 
 
@@ -234,6 +255,10 @@ contains
 
     pthread_attr_t => allocate_raw_pthread_attr_t()
     status = internal_pthread_attr_init(c_loc(pthread_attr_t))
+
+    print*,status
+
+    status = internal_pthread_attr_setdetachstate(c_loc(pthread_attr_t), for_p_thread_get_pthread_create_detached_id())
 
     print*,status
 
