@@ -27,24 +27,29 @@ program main
   type(vec2f) :: text_size
   real(c_float), parameter :: FONT_SIZE = 25.0
   real(c_float) :: floating_font_size
-  integer(c_int) :: fps_new, old_fps, x, y
+  integer(c_int) :: fps_new, old_fps, x, y, i
   character(len = :, kind = c_char), allocatable :: position_text_debug
-  type(pthread_t) :: test_thread
+  type(pthread_t), dimension(16) :: test_thread
   character(len = :, kind = c_char), allocatable, target :: test_data
 
   fps_new = 0
   old_fps = -1
 
-  test_data = "hi there from Fortran!"//achar(0)
+  do i = 1,16
+    test_data = "hi there from Fortran!"//achar(0)
 
-  call thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
+    test_thread(i) = thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
 
-  ! call thread_set_name(test_thread, "Formine testing")
+    call thread_set_name(test_thread(i), "Formine testing")
+  end do
+
   ! print*,"thread name: ["//thread_get_name(test_thread)//"]"
 
   ! print*, "now we wait for the thread."
 
   ! call thread_wait_for_joinable(test_thread, c_null_ptr)
+
+  call sleep(16)
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
