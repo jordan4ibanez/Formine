@@ -486,7 +486,7 @@ contains
     type(c_ptr), intent(in), value :: c_arg_pointer
     type(thread_argument), pointer :: arguments
     ! type(vec3i), pointer :: i
-    ! character(len = :, kind = c_char), allocatable :: z
+    character(len = :, kind = c_char), allocatable :: input_string
     ! integer(c_int) :: i, w
 
     if (.not. c_associated(c_arg_pointer)) then
@@ -496,7 +496,9 @@ contains
 
     call c_f_pointer(c_arg_pointer, arguments)
 
-    print*,"hi"
+    input_string = string_from_c(arguments%data_to_send, 50)
+
+    print*,input_string
 
 
 
@@ -532,6 +534,9 @@ contains
 
 
     ! print*,"testing", w
+
+    ! print*,arguments%active_flag
+    arguments%active_flag = .false.
   end subroutine test_threading_implementation
 
 
