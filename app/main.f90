@@ -27,39 +27,45 @@ program main
   ! type(vec2f) :: text_size
   ! real(c_float), parameter :: FONT_SIZE = 25.0
   ! real(c_float) :: floating_font_size
-  integer(c_int) :: fps_new, old_fps, x, y, i
-  character(len = :, kind = c_char), allocatable :: position_text_debug
-  logical(c_bool) :: testing_bool
-  character(len = :, kind = c_char), pointer :: test_data
 
-  fps_new = 0
-  old_fps = -1
+  ! character(len = :, kind = c_char), allocatable :: position_text_debug
+  integer(c_int) :: i!, fps_new, old_fps, x, y
+  logical(c_bool) :: testing_bool
+  ! character(len = :, kind = c_char), pointer :: test_data
+  integer(c_int), pointer :: test_data
+
+
+  ! fps_new = 0
+  ! old_fps = -1
 
 
   call thread_initialize()
 
   do i = 1,64000
 
-    allocate(character(12) :: test_data)
-    test_data = "hi "//int_to_string(i)//achar(0)
+    allocate(test_data)
+
+    test_data = i
+    ! allocate(character(12) :: test_data)
+    ! test_data = "hi "//int_to_string(i)//achar(0)
 
     call thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
   end do
 
 
-  ! do while(.not. thread_detached_queue_is_empty())
-  !   testing_bool = thread_process_detached_thread_queue()
-  ! end do
+  do while(.not. thread_detached_queue_is_empty())
+    testing_bool = thread_process_detached_thread_queue()
+  end do
 
-  ! print*,"processed thread queue"
+  print*,"processed thread queue"
 
-  ! print*,"awaiting thread pool completion"
-  ! do while (thread_await_all_thread_completion())
-  ! end do
+  print*,"awaiting thread pool completion"
+  do while (thread_await_all_thread_completion())
+  end do
 
-  ! print*,"completed, sleeping 0"
+  print*,"completed, sleeping 0"
 
-  ! call sleep(100)
+  call sleep(100)
 
   ! !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
