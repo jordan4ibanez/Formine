@@ -139,13 +139,12 @@ contains
   end subroutine thread_wait_for_joinable
 
 
-  recursive function test_threading_implementation(arg) result(status) bind(c)
+  recursive subroutine test_threading_implementation(arg) bind(c)
     use :: string
     use :: raw_c
     implicit none
 
     type(c_ptr), intent(in), value :: arg
-    integer(c_int) :: status
     ! type(vec3i), pointer :: i
     character(len = :, kind = c_char), allocatable :: z
     integer(c_int) :: i, w
@@ -165,23 +164,9 @@ contains
       w = i + 1
     end do
 
-    do i = 1,2147483646
-      w = i + 1
-    end do
-
-    do i = 1,2147483646
-      w = i + 1
-    end do
-
-    do i = 1,2147483646
-      w = i + 1
-    end do
 
     print*,"testing", w
-
-    status = 0
-    return
-  end function test_threading_implementation
+  end subroutine test_threading_implementation
 
 
 end module thread
