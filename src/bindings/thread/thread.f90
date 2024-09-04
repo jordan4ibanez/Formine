@@ -35,7 +35,7 @@ module thread
   integer(c_int) :: CPU_THREADS = 0
 
   type(pthread_t), dimension(:), pointer :: available_threads
-  type(pthread_t), dimension(:), pointer :: thread_configurations
+  type(pthread_attr_t), dimension(:), pointer :: thread_configurations
   logical(c_bool), dimension(:), pointer :: thread_active
 
   type(thread_queue_element), dimension(:), pointer :: thread_queue
@@ -289,6 +289,8 @@ contains
     element_new%subroutine_pointer = subroutine_procedure_pointer
     element_new%data_to_send = argument_pointer
 
+    print*,element_new%subroutine_pointer
+
     ! Now move things to a bigger queue.
 
     old_size = size(thread_queue)
@@ -304,16 +306,21 @@ contains
   end subroutine thread_create_detached
 
 
-  subroutine thread_process_detached_thread_queue()
+  function thread_process_detached_thread_queue() result(is_empty)
     implicit none
 
-    integer(c_int) :: queue_size, i
+    logical(c_bool) :: is_empty
+    integer(c_int) :: queue_size, i, thread_to_use
     type(thread_queue_element) :: optional_thread_queue_element
+    type(thread_argument), pointer :: thread_argument_new
+
+    is_empty = .false.
 
     queue_size = size(thread_queue)
 
     ! Nothing to do.
     if (queue_size == 0) then
+      is_empty = .true.
       return
     end if
 
@@ -323,16 +330,32 @@ contains
     end if
 
     do i = 1,queue_size
+
+      thread_to_use = find_free_thread()
+
+      ! If there's no available threads, stop.
+      if (thread_to_use == 0) then
+        print*,"queue empty"
+        exit
+      end if
+
       if (pop_thread_queue(optional_thread_queue_element)) then
         ! todo: this needs to have a mutex!
 
+        allocate(thread_argument_new)
 
+        thread_argument_new%active_flag => thread_active(thread_to_use)
+        thread_argument_new%data_to_send = optional_thread_queue_element%data_to_send
+
+        print*,optional_thread_queue_element%subroutine_pointer
+
+        call thread_process_detached_thread(optional_thread_queue_element%subroutine_pointer, c_loc(thread_argument_new), thread_to_use)
       else
         ! Nothing left to get.
         exit
       end if
     end do
-  end subroutine thread_process_detached_thread_queue
+  end function thread_process_detached_thread_queue
 
 
   !* Simply searches for a free thread to dispatch.
@@ -388,12 +411,13 @@ contains
 
 
   !* Process a thread and send it into action.
-  subroutine thread_process_detached_thread(subroutine_procedure_pointer, argument_pointer) bind(c)
+  subroutine thread_process_detached_thread(subroutine_procedure_pointer, argument_pointer, thread_index) bind(c)
     use :: string, only: int_to_string
     implicit none
 
     type(c_funptr), intent(in), value :: subroutine_procedure_pointer
     type(c_ptr), intent(in), value :: argument_pointer
+    integer(c_int), intent(in), value :: thread_index
     type(pthread_t) :: detached_thread_new
     type(pthread_attr_t) :: thread_attributes
     integer(c_int) :: status
@@ -417,19 +441,9 @@ contains
       error stop "[Thread] Error: Failed to create a detached thread. Error status: ["//int_to_string(status)//"]"
     end if
 
-    !todo: FIX THE MEMORY LEAK WHEN IMPLEMENTING THE QUEUE!
+    available_threads(thread_index) = detached_thread_new
+    thread_configurations(thread_index) = thread_attributes
   end subroutine thread_process_detached_thread
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -440,46 +454,46 @@ contains
 
     type(c_ptr), intent(in), value :: arg
     ! type(vec3i), pointer :: i
-    character(len = :, kind = c_char), allocatable :: z
-    integer(c_int) :: i, w
+    ! character(len = :, kind = c_char), allocatable :: z
+    ! integer(c_int) :: i, w
 
     if (.not. c_associated(arg)) then
       print*,"thread association failure"
       return
     end if
 
-    z = string_from_c(arg, 128)
+    ! z = string_from_c(arg, 128)
 
-    print*,"input from fortran: ["//z//"]"
+    ! print*,"input from fortran: ["//z//"]"
 
-    w = 1
+    ! w = 1
 
-    do i = 1,21!47483646
-      w = i + 1
-    end do
+    ! do i = 1,21!47483646
+    !   w = i + 1
+    ! end do
 
-    do i = 1,2147483646
-      w = i + 1
-    end do
+    ! do i = 1,2147483646
+    !   w = i + 1
+    ! end do
 
-    do i = 1,2147483646
-      w = i + 1
-    end do
+    ! do i = 1,2147483646
+    !   w = i + 1
+    ! end do
 
-    do i = 1,2147483646
-      w = i + 1
-    end do
+    ! do i = 1,2147483646
+    !   w = i + 1
+    ! end do
 
-    do i = 1,2147483646
-      w = i + 1
-    end do
+    ! do i = 1,2147483646
+    !   w = i + 1
+    ! end do
 
-    do i = 1,2147483646
-      w = i + 1
-    end do
+    ! do i = 1,2147483646
+    !   w = i + 1
+    ! end do
 
 
-    print*,"testing", w
+    ! print*,"testing", w
   end subroutine test_threading_implementation
 
 
