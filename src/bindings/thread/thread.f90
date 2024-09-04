@@ -249,20 +249,30 @@ contains
 
     type(c_funptr), intent(in), value :: subroutine_procedure_pointer
     type(c_ptr), intent(in), value :: argument_pointer
-    type(pthread_t) :: joinable_thread_new
+    type(pthread_t) :: detached_thread_new
     integer(1), dimension(:), pointer :: pthread_attr_t
     integer(c_int) :: status
 
     pthread_attr_t => allocate_raw_pthread_attr_t()
     status = internal_pthread_attr_init(c_loc(pthread_attr_t))
 
-    print*,status
+    if (status /= THREAD_OK) then
+      error stop "[Thread] Error: Failed to create a thread attribute. Error status: ["//int_to_string(status)//"]"
+    end if
 
     status = internal_pthread_attr_setdetachstate(c_loc(pthread_attr_t), for_p_thread_get_pthread_create_detached_id())
 
-    print*,status
+    if (status /= THREAD_OK) then
+      error stop "[Thread] Error: Failed to set thread attribute [detachstate]. Error status: ["//int_to_string(status)//"]"
+    end if
 
+    status = internal_pthread_create(detached_thread_new, c_loc(pthread_attr_t), subroutine_procedure_pointer, argument_pointer)
 
+    if (status /= THREAD_OK) then
+      error stop "[Thread] Error: Failed to create a detached thread. Error status: ["//int_to_string(status)//"]"
+    end if
+
+    !todo: FIX THE MEMORY LEAK WHEN IMPLEMENTING THE QUEUEU!
   end subroutine thread_create_detached
 
 
