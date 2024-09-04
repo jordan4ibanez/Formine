@@ -542,9 +542,6 @@ contains
     !   w = i + 1
     ! end do
 
-
-    print*,"testing", w
-
     ! print*,arguments%active_flag
     arguments%active_flag = .false.
   end subroutine test_threading_implementation

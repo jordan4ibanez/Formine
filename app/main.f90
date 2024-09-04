@@ -38,7 +38,7 @@ program main
 
   call thread_initialize()
 
-  do i = 1,128
+  do i = 1,1024
 
     allocate(character(12) :: test_data)
     test_data = "hi "//int_to_string(i)//achar(0)
