@@ -68,6 +68,7 @@ contains
 
 
   subroutine thread_create(function_pointer, arg)
+    use :: string
     implicit none
 
     type(c_funptr), intent(in), value :: function_pointer
@@ -75,40 +76,42 @@ contains
     integer(c_int) :: thread_status
     character(len = :, kind = c_char), allocatable, target :: test_data
     type(pthread_t) :: thread
-    type(c_ptr) :: retval
 
-    test_data = "hi there"
+    integer(c_int), pointer :: i
 
-    thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_loc(test_data))
+    allocate(i)
 
-    print*,thread%tid, thread_status
+    i = 5
+
+    thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_loc(i))
+
+
+    call sleep(0)
 
     thread_status = pthread_join(thread, c_null_ptr)
 
-    call sleep(0)
+    call sleep(1)
 
   end subroutine thread_create
 
 
-  subroutine test_threading_implementation(arg)
+  recursive subroutine test_threading_implementation(arg) bind(c)
+    use :: string
     use :: raw_c
     implicit none
 
     type(c_ptr), intent(in), value :: arg
-    integer(c_int) :: status
+    integer(c_int), pointer :: i
 
+    if (.not. c_associated(arg)) then
+      print*,"thread association failure"
+      return
+    end if
 
-    ! call print_f("hi there"//achar(10))
-    print*,"hi from C thread!"
+    call c_f_pointer(arg, i)
 
-    print*,"arg location:", arg
-    print*,"is null pointer:", .not. c_associated(arg)
+    print*,i
 
-    hi_there = 5
-
-    status = 0
-
-    return
   end subroutine test_threading_implementation
 
 
