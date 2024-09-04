@@ -393,6 +393,7 @@ contains
     end if
 
     ! Shrink the queue.
+    print*,thread_queue(1)%subroutine_pointer
     optional_thread_queue_element = thread_queue(1)
 
     old_size = size(thread_queue)
