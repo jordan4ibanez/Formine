@@ -539,7 +539,6 @@ contains
 
     type(c_ptr), intent(in), value :: c_arg_pointer
     type(thread_argument), pointer :: arguments
-    ! type(vec3i), pointer :: i
     character(len = :, kind = c_char), allocatable :: input_string
     integer(c_int) :: i, w
 
@@ -549,6 +548,7 @@ contains
     end if
 
     call c_f_pointer(c_arg_pointer, arguments)
+
 
     input_string = string_from_c(arguments%data_to_send, 50)
 
@@ -589,7 +589,9 @@ contains
     ! end do
 
     ! print*,arguments%active_flag
+    !! todo: add mutex try
     arguments%active_flag = .false.
+    !! todo: add mutex release
   end subroutine test_threading_implementation
 
 
