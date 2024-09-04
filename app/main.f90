@@ -29,8 +29,8 @@ program main
   real(c_float) :: floating_font_size
   integer(c_int) :: fps_new, old_fps, x, y, i
   character(len = :, kind = c_char), allocatable :: position_text_debug
-  type(pthread_t), dimension(16) :: test_thread
-  character(len = :, kind = c_char), allocatable, target :: test_data
+  logical(c_bool) :: testing_bool
+  character(len = :, kind = c_char), pointer :: test_data
 
   fps_new = 0
   old_fps = -1
@@ -38,8 +38,10 @@ program main
 
   call thread_initialize()
 
-  do i = 1,1
-    test_data = "hi there from Fortran!"//achar(0)
+  do i = 1,128
+
+    allocate(character(12) :: test_data)
+    test_data = "hi "//int_to_string(i)//achar(0)
 
     call thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
 
@@ -50,12 +52,19 @@ program main
 
   ! print*, "now we wait for the thread."
 
-  !! was here
-  do while(thread_process_detached_thread_queue())
+  do while(.not. thread_detached_queue_is_empty())
+    testing_bool = thread_process_detached_thread_queue()
   end do
 
-  call sleep(10)
+  print*,"processed thread queue"
 
+  print*,"awaiting thread pool completion"
+  do while (thread_await_all_thread_completion())
+  end do
+
+  print*,"completed, sleeping 0"
+
+  call sleep(0)
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   if (.true.) then
