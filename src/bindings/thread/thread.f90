@@ -21,6 +21,7 @@ module thread
   public :: thread_queue_element
 
   public :: thread_initialize
+  public :: thread_create_mutex
   public :: thread_create_joinable
   public :: thread_set_name
   public :: thread_get_name
@@ -35,6 +36,8 @@ module thread
   integer(c_int), parameter :: THREAD_DOES_NOT_EXIST = 3
 
   integer(c_int) :: CPU_THREADS = 0
+
+  type(mutex_rwlock) :: thread_mutex
 
   type(pthread_t), dimension(:), pointer :: available_threads
   type(pthread_attr_t), dimension(:), pointer :: thread_configurations
@@ -212,6 +215,8 @@ contains
 
     CPU_THREADS = for_p_thread_get_cpu_threads()
 
+    thread_mutex = thread_create_mutex()
+
     allocate(available_threads(CPU_THREADS))
     allocate(thread_configurations(CPU_THREADS))
     allocate(thread_arguments(CPU_THREADS))
@@ -224,9 +229,12 @@ contains
   function thread_create_mutex() result(mutex_new)
     implicit none
 
-    type(mutex_rwlock) :: mutex_new
+    type(mutex_rwlock), target :: mutex_new
+    integer(c_int) :: status
 
     allocate(mutex_new%raw_data_pointer(for_p_thread_get_pthread_mutex_t_width()))
+
+    status = internal_pthread_rwlock_init(c_loc(mutex_new), c_null_ptr)
   end function thread_create_mutex
 
 
