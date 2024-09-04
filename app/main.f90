@@ -38,7 +38,7 @@ program main
   do i = 1,16
     test_data = "hi there from Fortran!"//achar(0)
 
-    test_thread(i) = thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
+    test_thread(i) = thread_create_joinable(c_funloc(test_threading_implementation), c_loc(test_data))
 
     call thread_set_name(test_thread(i), "Formine testing")
   end do
@@ -47,9 +47,9 @@ program main
 
   ! print*, "now we wait for the thread."
 
-  ! call thread_wait_for_joinable(test_thread, c_null_ptr)
-
-  call sleep(16)
+  do i = 1,16
+    call thread_wait_for_joinable(test_thread(i), c_null_ptr)
+  end do
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
