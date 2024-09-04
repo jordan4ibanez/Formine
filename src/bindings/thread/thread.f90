@@ -136,6 +136,16 @@ module thread
     end function internal_pthread_attr_getdetachstate
 
 
+    function internal_pthread_rwlock_init(rwlock, attr) result(status) bind(c, name = "pthread_rwlock_init")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: rwlock
+      type(c_ptr), intent(in), value :: attr
+      integer(c_int) :: status
+    end function internal_pthread_rwlock_init
+
+
     !* BEGIN CUSTOM C BINDINGS.
 
 
