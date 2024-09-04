@@ -107,6 +107,17 @@ module thread
       integer(c_int) :: status
     end function internal_pthread_attr_destroy
 
+
+    function internal_pthread_attr_setdetachstate(attr, detachstate) result(status) bind(c, name = "pthread_attr_setdetachstate")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: attr
+      integer(c_int), intent(in), value :: detachstate
+      integer(c_int) :: status
+    end function
+
+
 !* BEGIN FUNCTION BLUEPRINTS.
 
 
