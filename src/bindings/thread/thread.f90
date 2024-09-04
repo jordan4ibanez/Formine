@@ -335,6 +335,24 @@ contains
   end subroutine thread_process_detached_thread_queue
 
 
+  !* Simply searches for a free thread to dispatch.
+  !* This is a very naive implementation.
+  function find_free_thread() result(thread_index)
+    implicit none
+
+    integer(c_int) :: thread_index, i
+
+    thread_index = 0
+
+    do i = 1,CPU_THREADS
+      if (.not. thread_active(i)) then
+        thread_index = i
+        exit
+      end if
+    end do
+  end function find_free_thread
+
+
   !* Rust style thread pop.
   function pop_thread_queue(optional_thread_queue_element) result(ok)
     implicit none
