@@ -34,10 +34,10 @@ module thread_types
   end type thread_argument
 
 
-  ! rwlock_mutex.
-  type :: rwlock_mutex
+  ! mutex_rwlock.
+  type :: mutex_rwlock
     integer(1), dimension(:), pointer :: raw_data_pointer => null()
-  end type rwlock_mutex
+  end type mutex_rwlock
 
 
 end module thread_types
