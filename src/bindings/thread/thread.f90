@@ -35,7 +35,8 @@ module thread
   type(pthread_t), dimension(:), pointer :: available_threads
   type(pthread_t), dimension(:), pointer :: thread_configurations
   logical(c_bool), dimension(:), pointer :: thread_active
-  type(thread_queue_element), dimension(:), allocatable :: thread_queue
+
+  type(thread_queue_element), dimension(:), pointer :: thread_queue
 
 
 
@@ -275,7 +276,38 @@ contains
   end function allocate_raw_pthread_attr_t
 
 
-  function thread_create_detached(subroutine_procedure_pointer, argument_pointer) result(detached_thread_new) bind(c)
+  !* Queue up a thread to be run.
+  subroutine thread_create_detached(subroutine_procedure_pointer, argument_pointer)
+    implicit none
+
+    type(c_funptr), intent(in), value :: subroutine_procedure_pointer
+    type(c_ptr), intent(in), value :: argument_pointer
+    type(thread_queue_element) :: element_new
+    type(thread_queue_element), dimension(:), pointer :: thread_queue_new
+    integer(c_int) :: old_size, i
+
+    element_new%subroutine_pointer = subroutine_procedure_pointer
+    element_new%data_to_send = argument_pointer
+
+    ! Now move things to a bigger queue.
+
+    old_size = size(thread_queue)
+
+    allocate(thread_queue_new(old_size + 1))
+
+    do i = 1,old_size
+      thread_queue_new(i) = thread_queue(i)
+    end do
+
+    deallocate(thread_queue)
+    thread_queue => thread_queue_new
+  end subroutine thread_create_detached
+
+  
+
+
+  !* Process a thread and send it into action.
+  subroutine thread_process_detached_thread(subroutine_procedure_pointer, argument_pointer) bind(c)
     use :: string, only: int_to_string
     implicit none
 
@@ -305,7 +337,7 @@ contains
     end if
 
     !todo: FIX THE MEMORY LEAK WHEN IMPLEMENTING THE QUEUE!
-  end function thread_create_detached
+  end subroutine thread_process_detached_thread
 
 
 
