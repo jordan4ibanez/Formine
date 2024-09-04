@@ -84,12 +84,9 @@ contains
 
     thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_loc(z))
 
-
-    call sleep(0)
-
     thread_status = pthread_join(thread, c_null_ptr)
 
-    call sleep(1)
+    print*,"main is still going!"
 
   end subroutine thread_create
 
