@@ -30,7 +30,7 @@ module thread_types
   type :: thread_argument
     logical(c_bool), pointer :: active_flag => null()
     type(c_ptr) :: data_to_send = c_null_ptr
-    ! todo: mutex pointer.
+    type(mutex_rwlock), pointer :: mutex_pointer => null()
   end type thread_argument
 
 
