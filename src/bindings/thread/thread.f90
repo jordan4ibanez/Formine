@@ -407,6 +407,17 @@ contains
   end function pop_thread_queue
 
 
+  !* Check if the thread queue is empty.
+  !* This is primarily used for debugging.
+  function thread_detached_queue_is_empty() result(is_empty)
+    implicit none
+
+    logical(c_bool) :: is_empty
+
+    is_empty = size(thread_queue) == 0
+  end function thread_detached_queue_is_empty
+
+
   !* Process a thread and send it into action.
   subroutine thread_process_detached_thread(subroutine_procedure_pointer, argument_pointer, thread_index) bind(c)
     use :: string, only: int_to_string
