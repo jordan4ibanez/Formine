@@ -7,6 +7,7 @@ module thread
 
   ! https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html
   ! https://hpc-tutorials.llnl.gov/posix/what_is_a_thread/
+  ! https://docs.oracle.com/cd/E19455-01/806-5257/6je9h032u/index.html
   ! Also: All of the Linux man pages LOL.
   !
   !* Implementation note:
