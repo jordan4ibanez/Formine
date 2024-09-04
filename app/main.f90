@@ -44,7 +44,6 @@ program main
     test_data = "hi "//int_to_string(i)//achar(0)
 
     call thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
-    print*,i
   end do
 
 
@@ -60,7 +59,7 @@ program main
 
   print*,"completed, sleeping 0"
 
-  call sleep(10)
+  call sleep(100)
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
   if (.true.) then
