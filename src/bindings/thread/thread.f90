@@ -80,14 +80,10 @@ contains
     type(vec3i), target :: i
     character(len = :, kind = c_char), allocatable, target :: z
 
+    z = "hi there"
 
-    
 
-    i = [1,2,3]
-
-    ! z = 
-
-    thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_loc(i))
+    thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_loc(z))
 
 
     call sleep(0)
@@ -105,16 +101,20 @@ contains
     implicit none
 
     type(c_ptr), intent(in), value :: arg
-    type(vec3i), pointer :: i
+    ! type(vec3i), pointer :: i
+    character(len = :, kind = c_char), allocatable :: z
 
     if (.not. c_associated(arg)) then
       print*,"thread association failure"
       return
     end if
 
-    call c_f_pointer(arg, i)
+    
+    z = string_from_c(arg, 128)
 
-    print*,i
+    ! call c_f_pointer(arg, z)
+
+    print*,z
 
   end subroutine test_threading_implementation
 
