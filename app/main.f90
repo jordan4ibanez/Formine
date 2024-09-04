@@ -51,12 +51,8 @@ program main
   ! print*, "now we wait for the thread."
 
   !! was here
-  ! do while(thread_process_detached_thread_queue())
-  ! end do
-
-  ! do i = 1,16
-  ! call thread_wait_for_joinable(test_thread(i), c_null_ptr)
-  ! end do
+  do while(thread_process_detached_thread_queue())
+  end do
 
   call sleep(10)
 
