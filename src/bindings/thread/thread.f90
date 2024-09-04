@@ -453,11 +453,21 @@ contains
       error stop "[Thread] Error: Failed to create a detached thread. Error status: ["//int_to_string(status)//"]"
     end if
 
+    ! Clean up old attribute data.
+    if (associated(thread_configurations(thread_index)%raw_data_pointer)) then
+      status = internal_pthread_attr_destroy(c_loc(thread_configurations(thread_index)%raw_data_pointer))
+      if (status /= THREAD_OK) then
+        error stop "[Thread] Error: Failed to destroy a detached thread. Error status: ["//int_to_string(status)//"]"
+      end if
+      deallocate(thread_configurations(thread_index)%raw_data_pointer)
+    end if
+
     available_threads(thread_index) = detached_thread_new
     thread_configurations(thread_index) = thread_attributes
   end subroutine thread_process_detached_thread
 
 
+  !* And the end of the program, wait for all threads to complete until continuing.
   function thread_await_all_thread_completion() result(still_processing)
     implicit none
 
