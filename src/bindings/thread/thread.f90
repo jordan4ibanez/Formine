@@ -6,6 +6,9 @@ module thread
 
   ! https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html
   ! https://hpc-tutorials.llnl.gov/posix/what_is_a_thread/
+  !
+  !* Implementation note:
+  !* This has been HEAVILY modified to be easy to work with in Fortran.
 
 
   private
@@ -19,7 +22,6 @@ module thread
 
 
   interface
-
 
 
     function internal_pthread_create(thread, attr, start_routine, arg) result(status) bind(c, name = "pthread_create")
@@ -44,8 +46,19 @@ module thread
       type(c_ptr), intent(in), value :: retval
       integer(c_int) :: status
 
-
     end function pthread_join
+
+
+!* BEGIN FUNCTION BLUEPRINTS.
+
+
+    function thread_function_c_interface(arg) result(anything_pointer)
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: arg
+      type(c_ptr) :: anything_pointer
+    end function thread_function_c_interface
 
 
   end interface
@@ -66,27 +79,18 @@ contains
 
     test_data = "hi there"
 
-    print*,1
-
-    thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_loc(test_data))
-
-    print*,2
+    thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_null_ptr)!c_loc(test_data))
 
     print*,thread%tid, thread_status
 
-    print*,3
-
     thread_status = pthread_join(thread, c_null_ptr)
-    print*,4
 
     call sleep(0)
-
-    print*,hi_there
 
   end subroutine thread_create
 
 
-  function test_threading(arg) result(status) bind(c)
+  subroutine test_threading(arg)
     use :: raw_c
     implicit none
 
@@ -97,13 +101,15 @@ contains
     ! call print_f("hi there"//achar(10))
     print*,"hi from C thread!"
 
+    print*,"arg location:", arg
+    print*,"is null pointer:", .not. c_associated(arg)
 
     hi_there = 5
 
     status = 0
 
     return
-  end function test_threading
+  end subroutine test_threading
 
 
 end module thread
