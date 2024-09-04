@@ -407,7 +407,7 @@ contains
     implicit none
 
     logical(c_bool) :: is_empty
-    integer(c_int) :: queue_size, i, thread_to_use
+    integer(c_int) :: queue_size, i, thread_to_use, status
     type(thread_queue_element) :: optional_thread_queue_element
 
     is_empty = .false.
@@ -436,9 +436,14 @@ contains
 
       if (pop_thread_queue(optional_thread_queue_element)) then
 
-        thread_active(thread_to_use) = .true.
+        status = thread_write_lock(c_loc(thread_mutex))
 
+        thread_active(thread_to_use) = .true.
         thread_arguments(thread_to_use)%mutex_pointer = c_loc(thread_mutex)
+
+        status = thread_unlock_lock(c_loc(thread_mutex))
+
+
         thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
         thread_arguments(thread_to_use)%data_to_send = optional_thread_queue_element%data_to_send
 
@@ -456,16 +461,19 @@ contains
   function find_free_thread() result(thread_index)
     implicit none
 
-    integer(c_int) :: thread_index, i
+    integer(c_int) :: thread_index, i, status
 
     thread_index = 0
 
+    status = thread_read_lock(c_loc(thread_mutex))
     do i = 1,CPU_THREADS
       if (.not. thread_active(i)) then
         thread_index = i
+        ! status = thread_unlock_lock(c_loc(thread_mutex))
         exit
       end if
     end do
+    status = thread_unlock_lock(c_loc(thread_mutex))
   end function find_free_thread
 
 
@@ -476,7 +484,7 @@ contains
     type(thread_queue_element), intent(inout) :: optional_thread_queue_element
     logical(c_bool) :: ok
     type(thread_queue_element), dimension(:), allocatable :: thread_queue_new
-    integer(c_int) :: old_size, i
+    integer(c_int) :: old_size
 
     ok = .false.
 
@@ -559,16 +567,19 @@ contains
     implicit none
 
     logical(c_bool) :: still_processing
-    integer(c_int) :: i
+    integer(c_int) :: i, status
 
     still_processing = .true.
 
+    status = thread_read_lock(c_loc(thread_mutex))
     do i = 1,CPU_THREADS
       if (thread_active(i)) then
+        status = thread_unlock_lock(c_loc(thread_mutex))
         call sleep(0)
         return
       end if
     end do
+    status = thread_unlock_lock(c_loc(thread_mutex))
 
     still_processing = .false.
   end function thread_await_all_thread_completion
