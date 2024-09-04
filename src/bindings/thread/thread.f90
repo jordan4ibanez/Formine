@@ -16,8 +16,10 @@ module thread
 
   private
 
+  public :: pthread_t
 
-  public :: thread_create
+  public :: thread_create_joinable
+  public :: thread_wait_for_joinable
   public :: test_threading_implementation
 
   integer :: thread_status = -1
@@ -43,7 +45,7 @@ module thread
     end function internal_pthread_create
 
 
-    function pthread_join(thread, retval) result(status) bind(c, name = "pthread_join")
+    function internal_pthread_join(thread, retval) result(status) bind(c, name = "pthread_join")
       use :: thread_types
       use, intrinsic :: iso_c_binding
       implicit none
@@ -52,7 +54,7 @@ module thread
       type(c_ptr), intent(in), value :: retval
       integer(c_int) :: status
 
-    end function pthread_join
+    end function internal_pthread_join
 
 
 !* BEGIN FUNCTION BLUEPRINTS.
@@ -72,35 +74,36 @@ module thread
 contains
 
 
-  subroutine thread_create(function_pointer, arg)
+  !* Create a new joinable thread.
+  !* Returns you the thread struct.
+  function thread_create_joinable(function_pointer, argument_pointer) result(joinable_thread_new) bind(c)
     use :: string
     implicit none
 
     type(c_funptr), intent(in), value :: function_pointer
-    type(c_ptr), intent(in), value :: arg
+    type(c_ptr), intent(in), value :: argument_pointer
+    type(pthread_t) :: joinable_thread_new
     integer(c_int) :: local_thread_status
-    character(len = :, kind = c_char), allocatable, target :: test_data
-    type(pthread_t) :: thread
 
-    type(vec3i), target :: i
-    character(len = :, kind = c_char), allocatable, target :: z
+    local_thread_status = internal_pthread_create(joinable_thread_new, c_null_ptr, function_pointer, argument_pointer)
 
-    z = "hi there"//achar(0)
-
-    local_thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_loc(z))
-
-    print*,thread%tid
-
-    print*, "we're doing stuff in fortran while we wait"
-
-    if (pthread_join(thread%tid, c_null_ptr) /= THREAD_OK) then
-      error stop "[Thread] Error: Created a non-existent thread!"
+    if (local_thread_status /= THREAD_OK) then
+      error stop "[Thread] Error: Failed to create a joinable thread"
     end if
+  end function thread_create_joinable
 
-    print*,"continuing!"
 
+  !* Wait for a thread to be finished then reclaim it's data and get it's return.
+  subroutine thread_wait_for_joinable(joinable_thread, return_val_pointer) bind(c)
+    implicit none
 
-  end subroutine thread_create
+    type(pthread_t), intent(in), value :: joinable_thread
+    type(c_ptr), intent(in), value :: return_val_pointer
+
+    if (internal_pthread_join(joinable_thread%tid, return_val_pointer) /= THREAD_OK) then
+      error stop "[joinable_thread] Error: Tried to join non-existent joinable_thread!"
+    end if
+  end subroutine thread_wait_for_joinable
 
 
   recursive function test_threading_implementation(arg) result(status) bind(c)
