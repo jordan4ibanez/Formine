@@ -8,7 +8,11 @@
 // int test = ENOENT;
 
 const static int pthread_attr_t_size = sizeof(pthread_attr_t);
+
+const static int pthread_mutex_t_size = sizeof(pthread_mutex_t);
+
 // const static int pthread_create_joinable_id = PTHREAD_CREATE_JOINABLE;
+
 const static int pthread_create_detached_id = PTHREAD_CREATE_DETACHED;
 
 //* Make this portable.
@@ -16,6 +20,11 @@ const static int pthread_create_detached_id = PTHREAD_CREATE_DETACHED;
 int for_p_thread_get_pthread_attr_t_width()
 {
   return pthread_attr_t_size;
+}
+
+int for_p_thread_get_pthread_mutex_t_width()
+{
+  return pthread_mutex_t_size;
 }
 
 int for_p_thread_get_pthread_create_detached_id()
