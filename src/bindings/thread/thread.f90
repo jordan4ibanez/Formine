@@ -550,7 +550,6 @@ contains
 
     deallocate(thread_attributes%raw_data_pointer)
 
-    available_threads(thread_index) = detached_thread_new
   end subroutine thread_process_detached_thread
 
 
