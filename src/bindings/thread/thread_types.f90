@@ -3,6 +3,7 @@ module thread_types
   implicit none
 
 
+  ! Raw thread struct.
   ! https://ffmpeg.org/doxygen/3.1/os2threads_8h_source.html
   type, bind(c) :: pthread_t
     integer(c_int64_t) :: tid
@@ -10,6 +11,19 @@ module thread_types
     type(c_ptr) :: arg
     type(c_ptr) :: result
   end type pthread_t
+
+
+  ! Raw thread configuration.
+  type :: pthread_attr_t
+    integer(1), dimension(:), pointer :: raw_data_pointer
+  end type pthread_attr_t
+
+
+  ! A raw thread queue element.
+  type :: thread_queue_element
+    type(c_funptr) :: subroutine_pointer
+    type(c_ptr) :: data_to_send
+  end type thread_queue_element
 
 
 end module thread_types
