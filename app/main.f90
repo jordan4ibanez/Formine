@@ -35,21 +35,29 @@ program main
   fps_new = 0
   old_fps = -1
 
-  do i = 1,16
+
+  call thread_initialize()
+
+  do i = 1,1
     test_data = "hi there from Fortran!"//achar(0)
 
-    test_thread(i) = thread_create_joinable(c_funloc(test_threading_implementation), c_loc(test_data))
+    call thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
 
-    call thread_set_name(test_thread(i), "Formine testing")
+    ! call thread_set_name(test_thread(i), "Formine testing")
   end do
 
   ! print*,"thread name: ["//thread_get_name(test_thread)//"]"
 
   ! print*, "now we wait for the thread."
 
-  do i = 1,16
-    call thread_wait_for_joinable(test_thread(i), c_null_ptr)
+  do while(thread_process_detached_thread_queue())
   end do
+
+  ! do i = 1,16
+    ! call thread_wait_for_joinable(test_thread(i), c_null_ptr)
+  ! end do
+
+  call sleep(10)
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
