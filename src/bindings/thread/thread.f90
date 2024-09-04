@@ -91,6 +91,8 @@ contains
 
     print*,thread%tid
 
+    print*, "we're doing stuff in fortran while we wait"
+
     if (pthread_join(thread%tid, c_null_ptr) /= THREAD_OK) then
       error stop "[Thread] Error: Created a non-existent thread!"
     end if
