@@ -29,6 +29,7 @@ module thread_types
   ! What gets passed into the thread.
   type :: thread_argument
     logical(c_bool), pointer :: active_flag
+    type(c_ptr) :: data_to_send
     ! todo: mutex pointer.
   end type thread_argument
 
