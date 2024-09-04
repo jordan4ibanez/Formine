@@ -169,6 +169,15 @@ module thread
     end function thread_read_lock
 
 
+    function thread_unlock_lock(rwlock) result(status) bind(c, name = "pthread_rwlock_unlock")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: rwlock
+      integer(c_int) :: status
+    end function thread_unlock_lock
+
+
     !* BEGIN CUSTOM C BINDINGS.
 
 
