@@ -402,6 +402,7 @@ contains
   end subroutine thread_create_detached
 
 
+  !* Process all the queued threads limited by cpu threads available.
   function thread_process_detached_thread_queue() result(is_empty)
     implicit none
 
@@ -583,7 +584,7 @@ contains
     type(thread_argument), pointer :: arguments
     type(c_ptr) :: void_pointer
     ! character(len = :, kind = c_char), allocatable :: input_string
-    integer(c_int), pointer :: input_data
+    ! integer(c_int), pointer :: input_data
     integer(c_int) :: status
 
     if (.not. c_associated(c_arg_pointer)) then
@@ -594,7 +595,6 @@ contains
     call c_f_pointer(c_arg_pointer, arguments)
 
     void_pointer = c_null_ptr
-
 
     status = thread_write_lock(arguments%mutex_pointer)
 
