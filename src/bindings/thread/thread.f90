@@ -202,6 +202,16 @@ contains
   end subroutine thread_initialize
 
 
+  !* Create a new mutex.
+  function thread_create_mutex() result(mutex_new)
+    implicit none
+
+    type(mutex_rwlock) :: mutex_new
+
+    allocate(mutex_new%raw_data_pointer(for_p_thread_get_pthread_mutex_t_width()))
+  end function thread_create_mutex
+
+
   !* Create a new joinable thread.
   !* Returns you the thread struct.
   function thread_create_joinable(subroutine_procedure_pointer, argument_pointer) result(joinable_thread_new) bind(c)
