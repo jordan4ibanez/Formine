@@ -23,6 +23,7 @@ module thread
   public :: thread_set_name
   public :: thread_get_name
   public :: thread_wait_for_joinable
+  public :: thread_create_detached
   public :: test_threading_implementation
 
   integer(c_int), parameter :: THREAD_OK = 0
@@ -232,8 +233,9 @@ contains
     integer(c_int) :: status
 
     pthread_attr_t => allocate_raw_pthread_attr_t()
-
     status = internal_pthread_attr_init(c_loc(pthread_attr_t))
+
+    print*,status
 
 
   end subroutine thread_create_detached
