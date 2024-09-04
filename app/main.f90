@@ -29,13 +29,19 @@ program main
   real(c_float) :: floating_font_size
   integer(c_int) :: fps_new, old_fps, x, y
   character(len = :, kind = c_char), allocatable :: position_text_debug
-  !type(texture_rectangle) :: tex_rect
+  type(pthread_t) :: test_thread
+  character(len = :, kind = c_char), allocatable, target :: test_data
 
   fps_new = 0
   old_fps = -1
 
+  test_data = "hi there from Fortran!"//achar(0)
 
-  call thread_create(c_funloc(test_threading_implementation), c_null_ptr)
+  test_thread = thread_create_joinable(c_funloc(test_threading_implementation), c_loc(test_data))
+
+  print*, "now we wait for the thread."
+
+  call thread_wait_for_joinable(test_thread, c_null_ptr)
 
 
   !! BEGIN WARNING: This is only to be used for when developing libraries.
