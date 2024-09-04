@@ -456,6 +456,25 @@ contains
   end subroutine thread_process_detached_thread
 
 
+  function thread_await_all_thread_completion() result(still_processing)
+    implicit none
+
+    logical(c_bool) :: still_processing
+    integer(c_int) :: i
+
+    still_processing = .true.
+
+    do i = 1,CPU_THREADS
+      if (thread_active(i)) then
+        exit
+      end if
+    end do
+
+    call sleep(0)
+
+    still_processing = .false.
+  end function thread_await_all_thread_completion
+
 
   recursive subroutine test_threading_implementation(c_arg_pointer) bind(c)
     use :: string
