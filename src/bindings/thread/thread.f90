@@ -485,16 +485,12 @@ contains
     end if
 
     ! Shrink the queue.
+
     optional_thread_queue_element = thread_queue(1)
 
     old_size = size(thread_queue)
-
     allocate(thread_queue_new(old_size - 1))
-
-    do i = 2,old_size
-      thread_queue_new(i - 1) = thread_queue(i)
-    end do
-
+    thread_queue_new = thread_queue(2:old_size)
     call move_alloc(thread_queue_new, thread_queue)
 
     ok = .true.
