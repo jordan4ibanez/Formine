@@ -10,6 +10,8 @@ module thread
   !
   !* Implementation note:
   !* This has been HEAVILY modified to be easy to work with in Fortran.
+  !
+  ! todo: we need locks!
 
 
   private
@@ -18,8 +20,11 @@ module thread
   public :: thread_create
   public :: test_threading_implementation
 
-  !! Modifying this without a lock is A HORRIBLE IDEA !!
-  integer :: hi_there
+  integer :: thread_status = -1
+
+  integer(c_int), parameter :: THREAD_OK = 0
+  integer(c_int), parameter :: THREAD_DOES_NOT_EXIST = 3
+
 
 
   interface
@@ -43,7 +48,7 @@ module thread
       use, intrinsic :: iso_c_binding
       implicit none
 
-      type(pthread_t), intent(in), value :: thread
+      integer(c_int64_t), intent(in), value :: thread
       type(c_ptr), intent(in), value :: retval
       integer(c_int) :: status
 
@@ -73,7 +78,7 @@ contains
 
     type(c_funptr), intent(in), value :: function_pointer
     type(c_ptr), intent(in), value :: arg
-    integer(c_int) :: thread_status
+    integer(c_int) :: local_thread_status
     character(len = :, kind = c_char), allocatable, target :: test_data
     type(pthread_t) :: thread
 
@@ -82,23 +87,30 @@ contains
 
     z = "hi there"//achar(0)
 
-    thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_loc(z))
+    local_thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_loc(z))
 
-    thread_status = pthread_join(thread, c_null_ptr)
+    print*,thread%tid
 
-    print*,"main is still going!"
+    if (pthread_join(thread%tid, c_null_ptr) /= THREAD_OK) then
+      error stop "[Thread] Error: Created a non-existent thread!"
+    end if
+
+    print*,"continuing!"
+
 
   end subroutine thread_create
 
 
-  recursive subroutine test_threading_implementation(arg) bind(c)
+  recursive function test_threading_implementation(arg) result(status) bind(c)
     use :: string
     use :: raw_c
     implicit none
 
     type(c_ptr), intent(in), value :: arg
+    integer(c_int) :: status
     ! type(vec3i), pointer :: i
     character(len = :, kind = c_char), allocatable :: z
+    integer(c_int) :: i, w
 
     if (.not. c_associated(arg)) then
       print*,"thread association failure"
@@ -107,9 +119,19 @@ contains
 
     z = string_from_c(arg, 128)
 
-    print*,"["//z//"]"
+    print*,"input from fortran: ["//z//"]"
 
-  end subroutine test_threading_implementation
+    w = 1
+
+    do i = 1,2147483646
+      w = i + 1
+    end do
+
+    print*,"testing", w
+
+    status = 0
+    return
+  end function test_threading_implementation
 
 
 end module thread
