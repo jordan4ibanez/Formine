@@ -77,11 +77,15 @@ contains
     character(len = :, kind = c_char), allocatable, target :: test_data
     type(pthread_t) :: thread
 
-    type(vec3i), allocatable, target :: i
+    type(vec3i), target :: i
+    character(len = :, kind = c_char), allocatable, target :: z
 
-    allocate(i)
+
+    
 
     i = [1,2,3]
+
+    ! z = 
 
     thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_loc(i))
 
