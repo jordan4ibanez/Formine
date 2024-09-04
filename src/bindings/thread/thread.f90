@@ -533,7 +533,9 @@ contains
       error stop "[Thread] Error: Failed to set thread attribute [detachstate]. Error status: ["//int_to_string(status)//"]"
     end if
 
-    status = internal_pthread_create(detached_thread_new, c_loc(thread_attributes%raw_data_pointer), subroutine_procedure_pointer, argument_pointer)
+    available_threads(thread_index) = detached_thread_new
+
+    status = internal_pthread_create(available_threads(thread_index), c_loc(thread_attributes%raw_data_pointer), subroutine_procedure_pointer, argument_pointer)
 
     if (status /= THREAD_OK) then
       error stop "[Thread] Error: Failed to create a detached thread. Error status: ["//int_to_string(status)//"]"
