@@ -29,7 +29,7 @@ program main
   ! real(c_float) :: floating_font_size
 
   ! character(len = :, kind = c_char), allocatable :: position_text_debug
-  integer(c_int) :: i!, fps_new, old_fps, x, y
+  integer(c_int) :: i,y!, fps_new, old_fps, x, y
   logical(c_bool) :: testing_bool
   ! character(len = :, kind = c_char), pointer :: test_data
   integer(c_int), pointer :: test_data
@@ -41,31 +41,56 @@ program main
 
   call thread_initialize()
 
-  do i = 1,99000
+  y = 1
 
-    ! allocate(test_data)
+  do
+    y = y + 1
 
-    ! test_data = i
+    if (y >= 10000) then
+      exit
+    end if
 
-    call thread_create_detached(c_funloc(test_threading_implementation), c_null_ptr)!c_loc(test_data))
+    if (mod(y, 1000) == 0) then
+      print*,y
+    end if
+
+    do i = 1,500!0
+
+      if (mod(i, 1000) == 0) then
+        print*,i
+      end if
+
+      ! allocate(test_data)
+
+      ! test_data = i
+
+      call thread_create_detached(c_funloc(test_threading_implementation), c_null_ptr)!c_loc(test_data))
+    end do
+
+    ! if (.true.) then
+    !   call sleep(100)
+    !   return
+    ! end if
+
+    ! print*,"starting"
+
+
+    do while(.not. thread_detached_queue_is_empty())
+      testing_bool = thread_process_detached_thread_queue()
+    end do
+
+    ! print*,"processed thread queue"
+
+    ! print*,"awaiting thread pool completion"
+    do while (thread_await_all_thread_completion())
+    end do
+
+    ! print*,"completed, sleeping 0"
+
+    call sleep(0)
   end do
 
-  print*,"starting"
-
-
-  do while(.not. thread_detached_queue_is_empty())
-    testing_bool = thread_process_detached_thread_queue()
-  end do
-
-  print*,"processed thread queue"
-
-  print*,"awaiting thread pool completion"
-  do while (thread_await_all_thread_completion())
-  end do
-
-  print*,"completed, sleeping 0"
-
-  call sleep(100)
+  call sleep(5)
 
   ! !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
