@@ -571,13 +571,14 @@ contains
 
 
   !! TESTING/EXAMPLE ONLY !!
-  recursive subroutine test_threading_implementation(c_arg_pointer) bind(c)
+  recursive function test_threading_implementation(c_arg_pointer) result(void_pointer) bind(c)
     use :: string
     use :: raw_c
     implicit none
 
     type(c_ptr), intent(in), value :: c_arg_pointer
     type(thread_argument), pointer :: arguments
+    type(c_ptr) :: void_pointer
     ! character(len = :, kind = c_char), allocatable :: input_string
     integer(c_int), pointer :: input_data
     integer(c_int) :: status
@@ -589,20 +590,15 @@ contains
 
     call c_f_pointer(c_arg_pointer, arguments)
 
-    ! input_string = string_from_c(arguments%data_to_send, 50)
+    void_pointer = c_null_ptr
 
-    ! call c_f_pointer(arguments%data_to_send, input_data)
-
-    ! print*,"output", input_data
-
-    ! deallocate(input_data)
-
-    ! print*,arguments%active_flag
 
     status = thread_write_lock(arguments%mutex_pointer)
+
     arguments%active_flag = .false.
+
     status = thread_unlock_lock(arguments%mutex_pointer)
-  end subroutine test_threading_implementation
+  end function test_threading_implementation
 
 
 end module thread
