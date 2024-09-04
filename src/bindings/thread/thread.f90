@@ -18,7 +18,9 @@ module thread
   private
 
   public :: pthread_t
+  public :: thread_queue_element
 
+  public :: thread_initialize
   public :: thread_create_joinable
   public :: thread_set_name
   public :: thread_get_name
@@ -28,6 +30,12 @@ module thread
 
   integer(c_int), parameter :: THREAD_OK = 0
   integer(c_int), parameter :: THREAD_DOES_NOT_EXIST = 3
+
+
+  type(pthread_t), dimension(:), pointer :: available_threads
+  type(pthread_t), dimension(:), pointer :: thread_configurations
+  type(thread_queue_element), dimension(:), allocatable :: thread_queue
+
 
 
   interface
@@ -140,6 +148,14 @@ module thread
     end function
 
 
+    function for_p_thread_get_cpu_threads() result(thread_count) bind(c, name = "for_p_thread_get_cpu_threads")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int) :: thread_count
+    end function for_p_thread_get_cpu_threads
+
+
 !* BEGIN FUNCTION BLUEPRINTS.
 
 
@@ -155,6 +171,20 @@ module thread
 
 
 contains
+
+
+  !* Fire up the module.
+  subroutine thread_initialize()
+    implicit none
+
+    integer(c_int) :: cpu_threads
+
+    cpu_threads = for_p_thread_get_cpu_threads()
+
+    allocate(available_threads(cpu_threads))
+    allocate(thread_configurations(cpu_threads))
+    allocate(thread_queue(0))
+  end subroutine thread_initialize
 
 
   !* Create a new joinable thread.
@@ -234,12 +264,12 @@ contains
 
 
   !* Custom hack job to allocate a pthread union into memory.
-  function allocate_raw_pthread_attr_t() result(raw_data_pointer)
+  function allocate_raw_pthread_attr_t() result(thread_new_attr)
     implicit none
 
-    integer(1), dimension(:), pointer :: raw_data_pointer
+    type(pthread_attr_t) :: thread_new_attr
 
-    allocate(raw_data_pointer(for_p_thread_get_pthread_attr_t_width()))
+    allocate(thread_new_attr%raw_data_pointer(for_p_thread_get_pthread_attr_t_width()))
   end function allocate_raw_pthread_attr_t
 
 
@@ -250,23 +280,23 @@ contains
     type(c_funptr), intent(in), value :: subroutine_procedure_pointer
     type(c_ptr), intent(in), value :: argument_pointer
     type(pthread_t) :: detached_thread_new
-    integer(1), dimension(:), pointer :: thread_attributes_pointer
+    type(pthread_attr_t) :: thread_attributes
     integer(c_int) :: status
 
-    thread_attributes_pointer => allocate_raw_pthread_attr_t()
-    status = internal_pthread_attr_init(c_loc(thread_attributes_pointer))
+    thread_attributes = allocate_raw_pthread_attr_t()
+    status = internal_pthread_attr_init(c_loc(thread_attributes%raw_data_pointer))
 
     if (status /= THREAD_OK) then
       error stop "[Thread] Error: Failed to create a thread attribute. Error status: ["//int_to_string(status)//"]"
     end if
 
-    status = internal_pthread_attr_setdetachstate(c_loc(thread_attributes_pointer), for_p_thread_get_pthread_create_detached_id())
+    status = internal_pthread_attr_setdetachstate(c_loc(thread_attributes%raw_data_pointer), for_p_thread_get_pthread_create_detached_id())
 
     if (status /= THREAD_OK) then
       error stop "[Thread] Error: Failed to set thread attribute [detachstate]. Error status: ["//int_to_string(status)//"]"
     end if
 
-    status = internal_pthread_create(detached_thread_new, c_loc(thread_attributes_pointer), subroutine_procedure_pointer, argument_pointer)
+    status = internal_pthread_create(detached_thread_new, c_loc(thread_attributes%raw_data_pointer), subroutine_procedure_pointer, argument_pointer)
 
     if (status /= THREAD_OK) then
       error stop "[Thread] Error: Failed to create a detached thread. Error status: ["//int_to_string(status)//"]"
