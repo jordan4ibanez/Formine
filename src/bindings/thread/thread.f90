@@ -302,7 +302,28 @@ contains
     thread_queue => thread_queue_new
   end subroutine thread_create_detached
 
-  
+
+  subroutine thread_process_detached_thread_queue()
+    implicit none
+
+    integer(c_int) :: queue_size, i
+
+    queue_size = size(thread_queue)
+
+    ! Nothing to do.
+    if (queue_size == 0) then
+      return
+    end if
+
+    ! Don't attempt to go past available threads.
+    if (queue_size > CPU_THREADS) then
+      queue_size = CPU_THREADS
+    end if
+
+    do i = 1,queue_size
+
+    end do
+  end subroutine thread_process_detached_thread_queue
 
 
   !* Process a thread and send it into action.
