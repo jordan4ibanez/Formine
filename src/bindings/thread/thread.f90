@@ -38,7 +38,7 @@ module thread
 
   integer(c_int) :: CPU_THREADS = 0
 
-  type(mutex_rwlock) :: thread_mutex
+  type(mutex_rwlock), pointer :: thread_mutex
 
   type(pthread_t), dimension(:), pointer :: available_threads
   type(pthread_attr_t), dimension(:), pointer :: thread_configurations
@@ -216,6 +216,7 @@ contains
 
     CPU_THREADS = for_p_thread_get_cpu_threads()
 
+    allocate(thread_mutex)
     thread_mutex = thread_create_mutex()
 
     allocate(available_threads(CPU_THREADS))
