@@ -58,7 +58,7 @@ module thread
   type(thread_argument), dimension(:), pointer :: thread_arguments
   logical(c_bool), dimension(:), pointer :: thread_active
 
-  type(thread_queue_element), dimension(:), pointer :: thread_queue
+  type(thread_queue_element), dimension(:), allocatable :: thread_queue
 
 
 
@@ -373,7 +373,7 @@ contains
     type(c_funptr), intent(in), value :: subroutine_procedure_pointer
     type(c_ptr), intent(in), value :: argument_pointer
     type(thread_queue_element) :: element_new
-    type(thread_queue_element), dimension(:), pointer :: thread_queue_new
+    type(thread_queue_element), dimension(:), allocatable :: thread_queue_new
     integer(c_int) :: old_size, i
 
     element_new%subroutine_pointer = subroutine_procedure_pointer
@@ -389,8 +389,7 @@ contains
       thread_queue_new(i) = thread_queue(i)
     end do
 
-    deallocate(thread_queue)
-    thread_queue => thread_queue_new
+    call move_alloc(thread_queue_new, thread_queue)
 
     thread_queue(old_size + 1) = element_new
   end subroutine thread_create_detached
@@ -468,7 +467,7 @@ contains
 
     type(thread_queue_element), intent(inout) :: optional_thread_queue_element
     logical(c_bool) :: ok
-    type(thread_queue_element), dimension(:), pointer :: thread_queue_new
+    type(thread_queue_element), dimension(:), allocatable :: thread_queue_new
     integer(c_int) :: old_size, i
 
     ok = .false.
@@ -489,8 +488,7 @@ contains
       thread_queue_new(i - 1) = thread_queue(i)
     end do
 
-    deallocate(thread_queue)
-    thread_queue => thread_queue_new
+    call move_alloc(thread_queue_new, thread_queue)
 
     ok = .true.
   end function pop_thread_queue
@@ -580,7 +578,8 @@ contains
 
     type(c_ptr), intent(in), value :: c_arg_pointer
     type(thread_argument), pointer :: arguments
-    character(len = :, kind = c_char), allocatable :: input_string
+    ! character(len = :, kind = c_char), allocatable :: input_string
+    integer(c_int), pointer :: input_data
     integer(c_int) :: status
 
     if (.not. c_associated(c_arg_pointer)) then
@@ -590,11 +589,13 @@ contains
 
     call c_f_pointer(c_arg_pointer, arguments)
 
-    input_string = string_from_c(arguments%data_to_send, 50)
+    ! input_string = string_from_c(arguments%data_to_send, 50)
 
-    print*,input_string
+    call c_f_pointer(arguments%data_to_send, input_data)
 
-    deallocate(input_string)
+    print*,input_data
+
+    deallocate(input_data)
 
     ! print*,arguments%active_flag
 
