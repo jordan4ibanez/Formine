@@ -7,6 +7,7 @@ module thread
 
   ! https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html
   ! https://hpc-tutorials.llnl.gov/posix/what_is_a_thread/
+  ! Also: All of the Linux man pages LOL.
   !
   !* Implementation note:
   !* This has been HEAVILY modified to be easy to work with in Fortran.
@@ -77,6 +78,12 @@ module thread
       integer(c_int) :: status
 
     end function internal_pthread_join
+
+
+    function internal_pthread_attr_init() result(status) bind(c, name = "pthread_attr_init")
+      
+
+    end function internal_pthread_attr_init
 
 
 !* BEGIN FUNCTION BLUEPRINTS.
@@ -170,6 +177,20 @@ contains
       error stop "[joinable_thread] Error: Tried to join non-existent joinable_thread! Error status: ["//int_to_string(status)//"]"
     end if
   end subroutine thread_wait_for_joinable
+
+
+  subroutine thread_create_detached(subroutine_procedure_pointer, argument_pointer) bind(c)
+    use :: string, only: int_to_string
+    implicit none
+
+    type(c_funptr), intent(in), value :: subroutine_procedure_pointer
+    type(c_ptr), intent(in), value :: argument_pointer
+    type(pthread_t) :: joinable_thread_new
+    integer(c_int) :: status
+
+
+
+  end subroutine thread_create_detached
 
 
   recursive subroutine test_threading_implementation(arg) bind(c)
