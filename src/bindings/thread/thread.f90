@@ -150,6 +150,24 @@ module thread
     end function internal_pthread_rwlock_init
 
 
+    function thread_write_lock(rwlock) result(status) bind(c, name = "pthread_rwlock_wrlock")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: rwlock
+      integer(c_int) :: status
+    end function thread_write_lock
+
+
+    function thread_read_lock(rwlock) result(status) bind(c, name = "pthread_rwlock_rdlock")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: rwlock
+      integer(c_int) :: status
+    end function thread_read_lock
+
+
     !* BEGIN CUSTOM C BINDINGS.
 
 
