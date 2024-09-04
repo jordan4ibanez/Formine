@@ -326,6 +326,40 @@ contains
   end subroutine thread_process_detached_thread_queue
 
 
+  !* Rust style thread pop.
+  function pop_thread_queue(optional_thread_queue_element) result(ok)
+    implicit none
+
+    type(thread_queue_element), intent(inout) :: optional_thread_queue_element
+    logical(c_bool) :: ok
+    type(thread_queue_element), dimension(:), pointer :: thread_queue_new
+    integer(c_int) :: old_size, i
+
+    ok = .false.
+
+    ! The queue is empty.
+    if (size(thread_queue) == 0) then
+      return
+    end if
+
+    ! Shrink the queue.
+    optional_thread_queue_element = thread_queue(1)
+
+    old_size = size(thread_queue)
+
+    allocate(thread_queue_new(old_size - 1))
+
+    do i = 2,old_size
+      thread_queue_new(i - 1) = thread_queue(i)
+    end do
+
+    deallocate(thread_queue)
+    thread_queue => thread_queue_new
+
+    ok = .true.
+  end function pop_thread_queue
+
+
   !* Process a thread and send it into action.
   subroutine thread_process_detached_thread(subroutine_procedure_pointer, argument_pointer) bind(c)
     use :: string, only: int_to_string
