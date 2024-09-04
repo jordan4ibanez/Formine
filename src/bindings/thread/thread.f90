@@ -116,6 +116,16 @@ module thread
 !* THIS PART IS EXTREMELY COMPLEX.
 
 
+    function pthread_detach(thread) result(status) bind(c, name = "pthread_detach")
+      use :: thread_types
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int64_t), intent(in), value :: thread
+      integer(c_int) :: status
+    end function pthread_detach
+
+
     function internal_pthread_attr_init(attr) result(status) bind(c, name = "pthread_attr_init")
       use, intrinsic :: iso_c_binding
       implicit none
