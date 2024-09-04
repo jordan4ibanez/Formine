@@ -591,11 +591,11 @@ contains
 
     ! input_string = string_from_c(arguments%data_to_send, 50)
 
-    call c_f_pointer(arguments%data_to_send, input_data)
+    ! call c_f_pointer(arguments%data_to_send, input_data)
 
-    print*,"output", input_data
+    ! print*,"output", input_data
 
-    deallocate(input_data)
+    ! deallocate(input_data)
 
     ! print*,arguments%active_flag
 

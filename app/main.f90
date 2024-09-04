@@ -43,16 +43,14 @@ program main
 
   do i = 1,99000
 
-    allocate(test_data)
+    ! allocate(test_data)
 
-    test_data = i
-    ! allocate(character(12) :: test_data)
-    ! test_data = "hi "//int_to_string(i)//achar(0)
+    ! test_data = i
 
-    call thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
-
-    print*,i
+    call thread_create_detached(c_funloc(test_threading_implementation), c_null_ptr)!c_loc(test_data))
   end do
+
+  print*,"starting"
 
 
   do while(.not. thread_detached_queue_is_empty())
