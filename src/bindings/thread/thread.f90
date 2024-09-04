@@ -45,6 +45,17 @@ module thread
     end function internal_pthread_create
 
 
+    function internal_pthread_setname_np(thread, name) result(status) bind(c, name = "pthread_setname_np")
+      use :: thread_types
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int64_t), intent(in), value :: thread
+      character(len = 1, kind = c_char), intent(in) :: name
+      integer(c_int) :: status
+    end function internal_pthread_setname_np
+
+
     function internal_pthread_join(thread, retval) result(status) bind(c, name = "pthread_join")
       use :: thread_types
       use, intrinsic :: iso_c_binding
@@ -77,31 +88,54 @@ contains
   !* Create a new joinable thread.
   !* Returns you the thread struct.
   function thread_create_joinable(function_pointer, argument_pointer) result(joinable_thread_new) bind(c)
-    use :: string
+    use :: string, only: int_to_string
     implicit none
 
     type(c_funptr), intent(in), value :: function_pointer
     type(c_ptr), intent(in), value :: argument_pointer
     type(pthread_t) :: joinable_thread_new
-    integer(c_int) :: local_thread_status
+    integer(c_int) :: status
 
-    local_thread_status = internal_pthread_create(joinable_thread_new, c_null_ptr, function_pointer, argument_pointer)
+    status = internal_pthread_create(joinable_thread_new, c_null_ptr, function_pointer, argument_pointer)
 
-    if (local_thread_status /= THREAD_OK) then
-      error stop "[Thread] Error: Failed to create a joinable thread"
+    if (status /= THREAD_OK) then
+      error stop "[Thread] Error: Failed to create a joinable thread. Error status: ["//int_to_string(status)//"]"
     end if
   end function thread_create_joinable
 
 
+  subroutine thread_set_name(thread, name) bind(c)
+    use :: string, only: int_to_string
+    implicit none
+
+    type(pthread_t), intent(in), value :: thread
+    character(len = *, kind = c_char), intent(in) :: name
+    character(len = :, kind = c_char), allocatable, target :: c_name
+    integer(c_int) :: status
+
+    c_name = name//achar(0)
+    status = internal_pthread_setname_np(thread%tid, c_name)
+
+    if (status /= THREAD_OK) then
+      error stop "[Thread] Error: Failed to name thread. Error status: ["//int_to_string(status)//"]"
+    end if
+
+  end subroutine thread_set_name
+
+
   !* Wait for a thread to be finished then reclaim it's data and get it's return.
   subroutine thread_wait_for_joinable(joinable_thread, return_val_pointer) bind(c)
+    use :: string, only: int_to_string
     implicit none
 
     type(pthread_t), intent(in), value :: joinable_thread
     type(c_ptr), intent(in), value :: return_val_pointer
+    integer(c_int) :: status
 
-    if (internal_pthread_join(joinable_thread%tid, return_val_pointer) /= THREAD_OK) then
-      error stop "[joinable_thread] Error: Tried to join non-existent joinable_thread!"
+    status = internal_pthread_join(joinable_thread%tid, return_val_pointer)
+
+    if (status /= THREAD_OK) then
+      error stop "[joinable_thread] Error: Tried to join non-existent joinable_thread! Error status: ["//int_to_string(status)//"]"
     end if
   end subroutine thread_wait_for_joinable
 
@@ -127,6 +161,18 @@ contains
     print*,"input from fortran: ["//z//"]"
 
     w = 1
+
+    do i = 1,2147483646
+      w = i + 1
+    end do
+
+    do i = 1,2147483646
+      w = i + 1
+    end do
+
+    do i = 1,2147483646
+      w = i + 1
+    end do
 
     do i = 1,2147483646
       w = i + 1
