@@ -49,6 +49,8 @@ module thread
   integer(c_int), parameter :: THREAD_OK = 0
   integer(c_int), parameter :: THREAD_DOES_NOT_EXIST = 3
 
+  integer(c_int) :: THREAD_DETACH
+
   integer(c_int) :: CPU_THREADS = 0
 
   type(mutex_rwlock), pointer :: thread_mutex
@@ -253,6 +255,7 @@ contains
   subroutine thread_initialize()
     implicit none
 
+    THREAD_DETACH = for_p_thread_get_pthread_create_detached_id()
     CPU_THREADS = for_p_thread_get_cpu_threads()
 
     allocate(thread_mutex)
@@ -522,7 +525,7 @@ contains
       error stop "[Thread] Error: Failed to create a thread attribute. Error status: ["//int_to_string(status)//"]"
     end if
 
-    status = internal_pthread_attr_setdetachstate(c_loc(thread_attributes%raw_data_pointer), for_p_thread_get_pthread_create_detached_id())
+    status = internal_pthread_attr_setdetachstate(c_loc(thread_attributes%raw_data_pointer), THREAD_DETACH)
 
     if (status /= THREAD_OK) then
       error stop "[Thread] Error: Failed to set thread attribute [detachstate]. Error status: ["//int_to_string(status)//"]"
@@ -590,7 +593,7 @@ contains
 
     call c_f_pointer(arguments%data_to_send, input_data)
 
-    print*,input_data
+    print*,"output", input_data
 
     deallocate(input_data)
 
