@@ -27,5 +27,11 @@ int for_p_thread_get_pthread_create_detached_id()
 //* You can thank tavianator: https://www.reddit.com/r/C_Programming/comments/6zxnr1/comment/dmzuwt6
 int for_p_thread_get_cpu_threads()
 {
-  return sysconf(_SC_NPROCESSORS_ONLN);
+  int thread_count = sysconf(_SC_NPROCESSORS_ONLN);
+  thread_count = thread_count - 1;
+  if (thread_count == 0)
+  {
+    thread_count = 1;
+  }
+  return thread_count;
 }
