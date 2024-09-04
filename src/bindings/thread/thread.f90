@@ -272,7 +272,7 @@ contains
       error stop "[Thread] Error: Failed to create a detached thread. Error status: ["//int_to_string(status)//"]"
     end if
 
-    !todo: FIX THE MEMORY LEAK WHEN IMPLEMENTING THE QUEUEU!
+    !todo: FIX THE MEMORY LEAK WHEN IMPLEMENTING THE QUEUE!
   end subroutine thread_create_detached
 
 
