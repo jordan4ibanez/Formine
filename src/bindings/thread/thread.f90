@@ -31,6 +31,7 @@ module thread
   integer(c_int), parameter :: THREAD_OK = 0
   integer(c_int), parameter :: THREAD_DOES_NOT_EXIST = 3
 
+  integer(c_int) :: CPU_THREADS = 0
 
   type(pthread_t), dimension(:), pointer :: available_threads
   type(pthread_t), dimension(:), pointer :: thread_configurations
@@ -179,13 +180,11 @@ contains
   subroutine thread_initialize()
     implicit none
 
-    integer(c_int) :: cpu_threads
+    CPU_THREADS = for_p_thread_get_cpu_threads()
 
-    cpu_threads = for_p_thread_get_cpu_threads()
-
-    allocate(available_threads(cpu_threads))
-    allocate(thread_configurations(cpu_threads))
-    allocate(thread_active(cpu_threads))
+    allocate(available_threads(CPU_THREADS))
+    allocate(thread_configurations(CPU_THREADS))
+    allocate(thread_active(CPU_THREADS))
     allocate(thread_queue(0))
   end subroutine thread_initialize
 
