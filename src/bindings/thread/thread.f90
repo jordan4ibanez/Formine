@@ -19,10 +19,10 @@ module thread
   public :: pthread_t
 
   public :: thread_create_joinable
+  public :: thread_set_name
+  public :: thread_get_name
   public :: thread_wait_for_joinable
   public :: test_threading_implementation
-
-  integer :: thread_status = -1
 
   integer(c_int), parameter :: THREAD_OK = 0
   integer(c_int), parameter :: THREAD_DOES_NOT_EXIST = 3
@@ -53,6 +53,18 @@ module thread
       character(len = 1, kind = c_char), intent(in) :: name
       integer(c_int) :: status
     end function internal_pthread_setname_np
+
+
+    function internal_pthread_getname_np(thread, name, len) result(status) bind(c, name = "pthread_getname_np")
+      use :: thread_types
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int64_t), intent(in), value :: thread
+      type(c_ptr), intent(in), value :: name
+      integer(c_size_t), intent(in), value :: len
+      integer(c_int) :: status
+    end function internal_pthread_getname_np
 
 
     function internal_pthread_join(thread, retval) result(status) bind(c, name = "pthread_join")
@@ -103,23 +115,44 @@ contains
   end function thread_create_joinable
 
 
+  !* Set a thread's name.
   subroutine thread_set_name(thread, name) bind(c)
-    use :: string, only: int_to_string
+    use :: string, only: int_to_string, string_from_c
     implicit none
 
-    type(pthread_t), intent(in), value :: thread
+    type(pthread_t), intent(inout) :: thread
     character(len = *, kind = c_char), intent(in) :: name
     character(len = :, kind = c_char), allocatable, target :: c_name
     integer(c_int) :: status
 
+    !* Implementation note:
+    !* We ignore the status because this thread could have already finished by the time we get here.
+
     c_name = name//achar(0)
     status = internal_pthread_setname_np(thread%tid, c_name)
+  end subroutine thread_set_name
+
+
+  !* Set a thread's name.
+  !* If the thread does not exist, this will return "".
+  function thread_get_name(thread) result(thread_name)
+    use :: string, only: int_to_string, string_from_c
+    implicit none
+
+    type(pthread_t), intent(in), value :: thread
+    character(len = :, kind = c_char), allocatable :: thread_name
+    type(c_ptr) :: c_string_pointer
+    integer(c_int) :: status
+
+    status = internal_pthread_getname_np(thread%tid, c_string_pointer, 128_8)
 
     if (status /= THREAD_OK) then
-      error stop "[Thread] Error: Failed to name thread. Error status: ["//int_to_string(status)//"]"
+      thread_name = ""
+      return
     end if
 
-  end subroutine thread_set_name
+    thread_name = string_from_c(c_string_pointer, 128)
+  end function thread_get_Name
 
 
   !* Wait for a thread to be finished then reclaim it's data and get it's return.
@@ -159,6 +192,26 @@ contains
     print*,"input from fortran: ["//z//"]"
 
     w = 1
+
+    do i = 1,21!47483646
+      w = i + 1
+    end do
+
+    do i = 1,2147483646
+      w = i + 1
+    end do
+
+    do i = 1,2147483646
+      w = i + 1
+    end do
+
+    do i = 1,2147483646
+      w = i + 1
+    end do
+
+    do i = 1,2147483646
+      w = i + 1
+    end do
 
     do i = 1,2147483646
       w = i + 1

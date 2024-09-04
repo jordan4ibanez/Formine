@@ -39,6 +39,9 @@ program main
 
   test_thread = thread_create_joinable(c_funloc(test_threading_implementation), c_loc(test_data))
 
+  call thread_set_name(test_thread, "Formine testing")
+  print*,"thread name: ["//thread_get_name(test_thread)//"]"
+
   print*, "now we wait for the thread."
 
   call thread_wait_for_joinable(test_thread, c_null_ptr)
