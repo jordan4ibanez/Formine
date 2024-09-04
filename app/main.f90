@@ -38,23 +38,20 @@ program main
 
   call thread_initialize()
 
-  do i = 1,1024
+  ! do i = 1,1024
 
-    allocate(character(12) :: test_data)
-    test_data = "hi "//int_to_string(i)//achar(0)
+  !   allocate(character(12) :: test_data)
+  !   test_data = "hi "//int_to_string(i)//achar(0)
 
-    call thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
+  !   call thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
 
-    ! call thread_set_name(test_thread(i), "Formine testing")
-  end do
+  !   ! call thread_set_name(test_thread(i), "Formine testing")
+  ! end do
 
-  ! print*,"thread name: ["//thread_get_name(test_thread)//"]"
 
-  ! print*, "now we wait for the thread."
-
-  do while(.not. thread_detached_queue_is_empty())
-    testing_bool = thread_process_detached_thread_queue()
-  end do
+  ! do while(.not. thread_detached_queue_is_empty())
+  !   testing_bool = thread_process_detached_thread_queue()
+  ! end do
 
   print*,"processed thread queue"
 
