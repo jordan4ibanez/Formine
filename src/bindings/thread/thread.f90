@@ -510,24 +510,26 @@ contains
     print*,input_string
 
 
+    deallocate(input_string)
+
 
     ! z = string_from_c(arg, 128)
 
     ! print*,"input from fortran: ["//z//"]"
 
-    w = 1
+    ! w = 1
 
-    do i = 1,21!47483646
-      w = i + 1
-    end do
+    ! do i = 1,21!47483646
+    !   w = i + 1
+    ! end do
 
-    do i = 1,2147483646
-      w = i + 1
-    end do
+    ! do i = 1,2147483646
+    !   w = i + 1
+    ! end do
 
-    do i = 1,2147483646
-      w = i + 1
-    end do
+    ! do i = 1,2147483646
+    !   w = i + 1
+    ! end do
 
     ! do i = 1,2147483646
     !   w = i + 1
