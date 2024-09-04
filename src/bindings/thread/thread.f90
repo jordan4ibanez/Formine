@@ -26,6 +26,7 @@ module thread
   public :: thread_get_name
   public :: thread_wait_for_joinable
   public :: thread_create_detached
+  public :: thread_process_detached_thread_queue
   public :: test_threading_implementation
 
   integer(c_int), parameter :: THREAD_OK = 0
@@ -307,6 +308,7 @@ contains
     implicit none
 
     integer(c_int) :: queue_size, i
+    type(thread_queue_element) :: optional_thread_queue_element
 
     queue_size = size(thread_queue)
 
@@ -321,7 +323,14 @@ contains
     end if
 
     do i = 1,queue_size
+      if (pop_thread_queue(optional_thread_queue_element)) then
+        ! todo: this needs to have a mutex!
 
+
+      else
+        ! Nothing left to get.
+        exit
+      end if
     end do
   end subroutine thread_process_detached_thread_queue
 
