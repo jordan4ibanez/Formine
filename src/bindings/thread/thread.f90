@@ -14,7 +14,19 @@ module thread
   !* Implementation note:
   !* This has been HEAVILY modified to be easy to work with in Fortran.
   !
-  ! todo: we need locks!
+  ! Detached thread runthrough:
+  !
+  ! 1.) thread_create_detached()
+  ! Goes into queue.
+  !
+  ! 2.) thread_process_detached_thread_queue()
+  ! Calls pop_thread_queue()
+  !
+  ! 3.) thread_process_detached_thread()
+  ! Will delete old thread attributes.
+  ! Passes required data pointers into slots.
+  !
+  !
 
 
   private
@@ -560,6 +572,7 @@ contains
   end function thread_await_all_thread_completion
 
 
+  !! TESTING/EXAMPLE ONLY !!
   recursive subroutine test_threading_implementation(c_arg_pointer) bind(c)
     use :: string
     use :: raw_c
