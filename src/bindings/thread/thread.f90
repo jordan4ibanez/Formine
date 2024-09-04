@@ -28,7 +28,6 @@ module thread
   integer(c_int), parameter :: THREAD_DOES_NOT_EXIST = 3
 
 
-
   interface
 
 
@@ -87,16 +86,16 @@ contains
 
   !* Create a new joinable thread.
   !* Returns you the thread struct.
-  function thread_create_joinable(function_pointer, argument_pointer) result(joinable_thread_new) bind(c)
+  function thread_create_joinable(subroutine_procedure_pointer, argument_pointer) result(joinable_thread_new) bind(c)
     use :: string, only: int_to_string
     implicit none
 
-    type(c_funptr), intent(in), value :: function_pointer
+    type(c_funptr), intent(in), value :: subroutine_procedure_pointer
     type(c_ptr), intent(in), value :: argument_pointer
     type(pthread_t) :: joinable_thread_new
     integer(c_int) :: status
 
-    status = internal_pthread_create(joinable_thread_new, c_null_ptr, function_pointer, argument_pointer)
+    status = internal_pthread_create(joinable_thread_new, c_null_ptr, subroutine_procedure_pointer, argument_pointer)
 
     if (status /= THREAD_OK) then
       error stop "[Thread] Error: Failed to create a joinable thread. Error status: ["//int_to_string(status)//"]"
