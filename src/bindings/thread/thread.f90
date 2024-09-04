@@ -487,7 +487,7 @@ contains
     type(thread_argument), pointer :: arguments
     ! type(vec3i), pointer :: i
     character(len = :, kind = c_char), allocatable :: input_string
-    ! integer(c_int) :: i, w
+    integer(c_int) :: i, w
 
     if (.not. c_associated(c_arg_pointer)) then
       print*,"thread association failure"
@@ -506,23 +506,19 @@ contains
 
     ! print*,"input from fortran: ["//z//"]"
 
-    ! w = 1
+    w = 1
 
-    ! do i = 1,21!47483646
-    !   w = i + 1
-    ! end do
+    do i = 1,21!47483646
+      w = i + 1
+    end do
 
-    ! do i = 1,2147483646
-    !   w = i + 1
-    ! end do
+    do i = 1,2147483646
+      w = i + 1
+    end do
 
-    ! do i = 1,2147483646
-    !   w = i + 1
-    ! end do
-
-    ! do i = 1,2147483646
-    !   w = i + 1
-    ! end do
+    do i = 1,2147483646
+      w = i + 1
+    end do
 
     ! do i = 1,2147483646
     !   w = i + 1
@@ -532,8 +528,12 @@ contains
     !   w = i + 1
     ! end do
 
+    ! do i = 1,2147483646
+    !   w = i + 1
+    ! end do
 
-    ! print*,"testing", w
+
+    print*,"testing", w
 
     ! print*,arguments%active_flag
     arguments%active_flag = .false.
