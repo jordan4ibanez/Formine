@@ -345,10 +345,10 @@ contains
 
         allocate(thread_argument_new)
 
+        thread_active(thread_to_use) = .true.
+
         thread_argument_new%active_flag => thread_active(thread_to_use)
         thread_argument_new%data_to_send = optional_thread_queue_element%data_to_send
-
-        thread_active(thread_to_use) = .true.
 
         call thread_process_detached_thread(optional_thread_queue_element%subroutine_pointer, c_loc(thread_argument_new), thread_to_use)
       else
@@ -468,11 +468,10 @@ contains
 
     do i = 1,CPU_THREADS
       if (thread_active(i)) then
-        exit
+        call sleep(0)
+        return
       end if
     end do
-
-    call sleep(0)
 
     still_processing = .false.
   end function thread_await_all_thread_completion
