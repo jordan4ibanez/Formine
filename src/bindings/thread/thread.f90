@@ -1,5 +1,6 @@
 module thread
   use :: thread_types
+  use :: vector_3i
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -77,11 +78,11 @@ contains
     character(len = :, kind = c_char), allocatable, target :: test_data
     type(pthread_t) :: thread
 
-    integer(c_int), pointer :: i
+    type(vec3i), pointer :: i
 
     allocate(i)
 
-    i = 5
+    i = [1,2,3]
 
     thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_loc(i))
 
@@ -101,7 +102,7 @@ contains
     implicit none
 
     type(c_ptr), intent(in), value :: arg
-    integer(c_int), pointer :: i
+    type(vec3i), pointer :: i
 
     if (.not. c_associated(arg)) then
       print*,"thread association failure"
