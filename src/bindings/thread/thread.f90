@@ -416,10 +416,10 @@ contains
       end if
 
       if (pop_thread_queue(optional_thread_queue_element)) then
-        ! todo: this needs to have a mutex!
 
         thread_active(thread_to_use) = .true.
 
+        thread_arguments(thread_to_use)%mutex_pointer = c_loc(thread_mutex)
         thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
         thread_arguments(thread_to_use)%data_to_send = optional_thread_queue_element%data_to_send
 
@@ -568,6 +568,7 @@ contains
     type(c_ptr), intent(in), value :: c_arg_pointer
     type(thread_argument), pointer :: arguments
     character(len = :, kind = c_char), allocatable :: input_string
+    integer(c_int) :: status
 
     if (.not. c_associated(c_arg_pointer)) then
       print*,"thread association failure"
@@ -583,9 +584,10 @@ contains
     deallocate(input_string)
 
     ! print*,arguments%active_flag
-    !! todo: add mutex try
+
+    status = thread_write_lock(arguments%mutex_pointer)
     arguments%active_flag = .false.
-    !! todo: add mutex release
+    status = thread_unlock_lock(arguments%mutex_pointer)
   end subroutine test_threading_implementation
 
 
