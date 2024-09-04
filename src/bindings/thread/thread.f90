@@ -540,7 +540,6 @@ contains
     type(c_ptr), intent(in), value :: c_arg_pointer
     type(thread_argument), pointer :: arguments
     character(len = :, kind = c_char), allocatable :: input_string
-    integer(c_int) :: i, w
 
     if (.not. c_associated(c_arg_pointer)) then
       print*,"thread association failure"
@@ -549,44 +548,11 @@ contains
 
     call c_f_pointer(c_arg_pointer, arguments)
 
-
     input_string = string_from_c(arguments%data_to_send, 50)
 
     print*,input_string
 
-
     deallocate(input_string)
-
-
-    ! z = string_from_c(arg, 128)
-
-    ! print*,"input from fortran: ["//z//"]"
-
-    ! w = 1
-
-    ! do i = 1,21!47483646
-    !   w = i + 1
-    ! end do
-
-    ! do i = 1,2147483646
-    !   w = i + 1
-    ! end do
-
-    ! do i = 1,2147483646
-    !   w = i + 1
-    ! end do
-
-    ! do i = 1,2147483646
-    !   w = i + 1
-    ! end do
-
-    ! do i = 1,2147483646
-    !   w = i + 1
-    ! end do
-
-    ! do i = 1,2147483646
-    !   w = i + 1
-    ! end do
 
     ! print*,arguments%active_flag
     !! todo: add mutex try
