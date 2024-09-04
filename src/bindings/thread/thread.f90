@@ -80,8 +80,7 @@ contains
     type(vec3i), target :: i
     character(len = :, kind = c_char), allocatable, target :: z
 
-    z = "hi there"
-
+    z = "hi there"//achar(0)
 
     thread_status = internal_pthread_create(thread, c_null_ptr, function_pointer, c_loc(z))
 
@@ -109,12 +108,9 @@ contains
       return
     end if
 
-    
     z = string_from_c(arg, 128)
 
-    ! call c_f_pointer(arg, z)
-
-    print*,z
+    print*,"["//z//"]"
 
   end subroutine test_threading_implementation
 
