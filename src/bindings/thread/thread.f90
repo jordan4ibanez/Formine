@@ -303,6 +303,8 @@ contains
 
     deallocate(thread_queue)
     thread_queue => thread_queue_new
+
+    thread_queue(old_size + 1) = element_new
   end subroutine thread_create_detached
 
 
