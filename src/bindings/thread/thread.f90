@@ -99,6 +99,14 @@ module thread
     end function internal_pthread_attr_init
 
 
+    function internal_pthread_attr_destroy(attr) result(status) bind(c, name = "pthread_attr_destroy")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: attr
+      integer(c_int) :: status
+    end function internal_pthread_attr_destroy
+
 !* BEGIN FUNCTION BLUEPRINTS.
 
 
