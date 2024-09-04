@@ -54,7 +54,6 @@ module thread
   type(mutex_rwlock), pointer :: thread_mutex
 
   type(pthread_t), dimension(:), pointer :: available_threads
-  type(pthread_attr_t), dimension(:), pointer :: thread_configurations
   type(thread_argument), dimension(:), pointer :: thread_arguments
   logical(c_bool), dimension(:), pointer :: thread_active
 
@@ -260,7 +259,6 @@ contains
     thread_mutex = thread_create_mutex()
 
     allocate(available_threads(CPU_THREADS))
-    allocate(thread_configurations(CPU_THREADS))
     allocate(thread_arguments(CPU_THREADS))
     allocate(thread_active(CPU_THREADS))
     allocate(thread_queue(0))
@@ -536,17 +534,16 @@ contains
       error stop "[Thread] Error: Failed to create a detached thread. Error status: ["//int_to_string(status)//"]"
     end if
 
-    ! Clean up old attribute data.
-    if (associated(thread_configurations(thread_index)%raw_data_pointer)) then
-      status = internal_pthread_attr_destroy(c_loc(thread_configurations(thread_index)%raw_data_pointer))
-      if (status /= THREAD_OK) then
-        error stop "[Thread] Error: Failed to destroy a detached thread. Error status: ["//int_to_string(status)//"]"
-      end if
-      deallocate(thread_configurations(thread_index)%raw_data_pointer)
+    ! Clean up attribute data.
+    status = internal_pthread_attr_destroy(c_loc(thread_attributes%raw_data_pointer))
+
+    if (status /= THREAD_OK) then
+      error stop "[Thread] Error: Failed to destroy a detached thread. Error status: ["//int_to_string(status)//"]"
     end if
 
+    deallocate(thread_attributes%raw_data_pointer)
+
     available_threads(thread_index) = detached_thread_new
-    thread_configurations(thread_index) = thread_attributes
   end subroutine thread_process_detached_thread
 
 

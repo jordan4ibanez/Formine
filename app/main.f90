@@ -41,7 +41,7 @@ program main
 
   call thread_initialize()
 
-  do i = 1,64000
+  do i = 1,99000
 
     allocate(test_data)
 
@@ -50,6 +50,8 @@ program main
     ! test_data = "hi "//int_to_string(i)//achar(0)
 
     call thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
+
+    print*,i
   end do
 
 
