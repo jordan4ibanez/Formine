@@ -79,6 +79,15 @@ module thread
     end function internal_pthread_create
 
 
+    function pthread_cancel(thread) result(status) bind(c, name = "pthread_cancel")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int64_t), intent(in), value :: thread
+      integer(c_int) :: status
+    end function pthread_cancel
+
+
     function internal_pthread_setname_np(thread, name) result(status) bind(c, name = "pthread_setname_np")
       use :: thread_types
       use, intrinsic :: iso_c_binding
