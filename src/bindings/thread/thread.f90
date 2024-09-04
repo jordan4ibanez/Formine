@@ -289,8 +289,6 @@ contains
     element_new%subroutine_pointer = subroutine_procedure_pointer
     element_new%data_to_send = argument_pointer
 
-    print*,element_new%subroutine_pointer
-
     ! Now move things to a bigger queue.
 
     old_size = size(thread_queue)
@@ -337,7 +335,6 @@ contains
 
       ! If there's no available threads, stop.
       if (thread_to_use == 0) then
-        print*,"queue empty"
         exit
       end if
 
@@ -348,8 +345,6 @@ contains
 
         thread_argument_new%active_flag => thread_active(thread_to_use)
         thread_argument_new%data_to_send = optional_thread_queue_element%data_to_send
-
-        print*,optional_thread_queue_element%subroutine_pointer
 
         call thread_process_detached_thread(optional_thread_queue_element%subroutine_pointer, c_loc(thread_argument_new), thread_to_use)
       else
@@ -395,7 +390,6 @@ contains
     end if
 
     ! Shrink the queue.
-    print*,thread_queue(1)%subroutine_pointer
     optional_thread_queue_element = thread_queue(1)
 
     old_size = size(thread_queue)
@@ -450,20 +444,27 @@ contains
 
 
 
-  recursive subroutine test_threading_implementation(arg) bind(c)
+  recursive subroutine test_threading_implementation(c_arg_pointer) bind(c)
     use :: string
     use :: raw_c
     implicit none
 
-    type(c_ptr), intent(in), value :: arg
+    type(c_ptr), intent(in), value :: c_arg_pointer
+    type(thread_argument), pointer :: arguments
     ! type(vec3i), pointer :: i
     ! character(len = :, kind = c_char), allocatable :: z
     ! integer(c_int) :: i, w
 
-    if (.not. c_associated(arg)) then
+    if (.not. c_associated(c_arg_pointer)) then
       print*,"thread association failure"
       return
     end if
+
+    call c_f_pointer(c_arg_pointer, arguments)
+
+    print*,"hi"
+
+
 
     ! z = string_from_c(arg, 128)
 
