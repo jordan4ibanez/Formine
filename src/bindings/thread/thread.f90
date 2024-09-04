@@ -77,7 +77,7 @@ contains
     character(len = :, kind = c_char), allocatable, target :: test_data
     type(pthread_t) :: thread
 
-    type(vec3i), pointer :: i
+    type(vec3i), allocatable, target :: i
 
     allocate(i)
 
