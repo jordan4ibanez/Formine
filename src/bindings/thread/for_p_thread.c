@@ -1,4 +1,5 @@
 #include <pthread.h>
+#include <unistd.h>
 // This one is for looking up error IDs.
 // #include <errno.h>
 // Go through to <errno-base.h>
@@ -20,4 +21,11 @@ int for_p_thread_get_pthread_attr_t_width()
 int for_p_thread_get_pthread_create_detached_id()
 {
   return pthread_create_detached_id;
+}
+
+//* Getting the number of available threads.
+//* You can thank tavianator: https://www.reddit.com/r/C_Programming/comments/6zxnr1/comment/dmzuwt6
+int for_p_thread_get_cpu_threads()
+{
+  return sysconf(_SC_NPROCESSORS_ONLN);
 }
