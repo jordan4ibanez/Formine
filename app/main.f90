@@ -44,6 +44,7 @@ program main
   y = 1
 
   do
+    ! print*,y
     y = y + 1
 
     if (y >= 10000) then
@@ -54,11 +55,11 @@ program main
       print*,y
     end if
 
-    do i = 1,500!0
+    do i = 1,500
 
-      if (mod(i, 1000) == 0) then
-        print*,i
-      end if
+      ! if (mod(i, 1000) == 0) then
+      !   print*,i
+      ! end if
 
       ! allocate(test_data)
 
