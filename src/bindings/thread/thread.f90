@@ -346,6 +346,8 @@ contains
         thread_argument_new%active_flag => thread_active(thread_to_use)
         thread_argument_new%data_to_send = optional_thread_queue_element%data_to_send
 
+        thread_active(thread_to_use) = .true.
+
         call thread_process_detached_thread(optional_thread_queue_element%subroutine_pointer, c_loc(thread_argument_new), thread_to_use)
       else
         ! Nothing left to get.
