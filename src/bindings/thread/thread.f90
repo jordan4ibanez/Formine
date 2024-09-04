@@ -38,6 +38,7 @@ module thread
 
   type(pthread_t), dimension(:), pointer :: available_threads
   type(pthread_attr_t), dimension(:), pointer :: thread_configurations
+  type(thread_argument), dimension(:), pointer :: thread_arguments
   logical(c_bool), dimension(:), pointer :: thread_active
 
   type(thread_queue_element), dimension(:), pointer :: thread_queue
@@ -187,6 +188,7 @@ contains
 
     allocate(available_threads(CPU_THREADS))
     allocate(thread_configurations(CPU_THREADS))
+    allocate(thread_arguments(CPU_THREADS))
     allocate(thread_active(CPU_THREADS))
     allocate(thread_queue(0))
   end subroutine thread_initialize
@@ -314,7 +316,6 @@ contains
     logical(c_bool) :: is_empty
     integer(c_int) :: queue_size, i, thread_to_use
     type(thread_queue_element) :: optional_thread_queue_element
-    type(thread_argument), pointer :: thread_argument_new
 
     is_empty = .false.
 
@@ -343,14 +344,12 @@ contains
       if (pop_thread_queue(optional_thread_queue_element)) then
         ! todo: this needs to have a mutex!
 
-        allocate(thread_argument_new)
-
         thread_active(thread_to_use) = .true.
 
-        thread_argument_new%active_flag => thread_active(thread_to_use)
-        thread_argument_new%data_to_send = optional_thread_queue_element%data_to_send
+        thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
+        thread_arguments(thread_to_use)%data_to_send = optional_thread_queue_element%data_to_send
 
-        call thread_process_detached_thread(optional_thread_queue_element%subroutine_pointer, c_loc(thread_argument_new), thread_to_use)
+        call thread_process_detached_thread(optional_thread_queue_element%subroutine_pointer, c_loc(thread_arguments(thread_to_use)), thread_to_use)
       else
         ! Nothing left to get.
         exit
