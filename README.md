@@ -91,6 +91,27 @@ _Or_ you can just change the Makefile to use gfortran-14, but that's annoying.
 
 -----
 
+### Install dependencies on Mac OS
+
+You're going to need MacPorts and Homebrew. This was tested in Mac OS Monterey.
+
+Mac Ports:
+```
+sudo port install fpm
+```
+
+Homebrew
+```
+brew install gfortran glfw stb
+```
+
+Then you simply will make with the Mac flag.
+```
+make mac
+```
+
+-----
+
 ### Install dependencies on Windows 10/11 using MSYS2
 
 You need to be sure you open MSYS2 UCRT64 or else it will not work.
