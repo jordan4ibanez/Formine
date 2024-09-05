@@ -5,6 +5,9 @@ default:
 windows:
 	@fpm run --c-flag -Wno-discarded-qualifiers --c-flag -Wno-incompatible-pointer-types
 
+mac:
+	@fpm run --c-flag -Wno-discarded-qualifiers --c-flag -Wno-incompatible-pointer-types
+
 
 gdb:
 	@MALLOC_CHECK_=2 fpm run --flag   -g \
