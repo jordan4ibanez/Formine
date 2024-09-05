@@ -109,7 +109,7 @@ program main
   !! Need this flag to have OpenGL debugging available!
   call glfw_window_hint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE)
   call glfw_window_hint(GLFW_CONTEXT_VERSION_MAJOR, 4)
-  call glfw_window_hint(GLFW_CONTEXT_VERSION_MINOR, 2)
+  call glfw_window_hint(GLFW_CONTEXT_VERSION_MINOR, 1)
   call glfw_window_hint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE)
 
 
