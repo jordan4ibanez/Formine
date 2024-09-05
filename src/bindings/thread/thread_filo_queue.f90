@@ -9,6 +9,18 @@ module thread_filo_queue
 
   public :: concurrent_linked_filo_queue
 
+
+  integer(c_int), parameter :: QUEUE_NONE = 0
+  integer(c_int), parameter :: QUEUE_I32 = 1
+  integer(c_int), parameter :: QUEUE_I64 = 2
+  integer(c_int), parameter :: QUEUE_F32 = 3
+  integer(c_int), parameter :: QUEUE_F64 = 4
+  integer(c_int), parameter :: QUEUE_BOOL = 5
+  integer(c_int), parameter :: QUEUE_STRING = 6
+  integer(c_int), parameter :: QUEUE_GENERIC = 7
+
+
+
   type :: queue_data
     !* Basic types.
     integer(c_int), pointer :: i32 => null()
@@ -20,6 +32,8 @@ module thread_filo_queue
     character(len = :, kind = c_char), pointer :: string => null()
     !* Completely polymorphic.
     class(*), pointer :: generic => null()
+    !* Designate the type of the element.
+    integer(c_int) :: type = QUEUE_NONE
   end type queue_data
 
 
