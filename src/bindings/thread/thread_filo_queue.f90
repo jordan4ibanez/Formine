@@ -92,6 +92,10 @@ contains
     status = thread_write_lock(this%c_mutex_pointer)
     !! BEGIN SAFE OPERATION.
 
+    if (.not. associated(generic_pointer)) then
+      error stop "[Thread FILO Queue] Error: Received a null pointer."
+    end if
+
     allocate(node_new)
     node_new%data => generic_pointer
 
