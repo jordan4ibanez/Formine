@@ -40,10 +40,11 @@ contains
   end function constructor_concurrent_linked_filo_queue
 
 
-  subroutine concurrent_linked_filo_queue_insert(this)
+  subroutine concurrent_linked_filo_queue_insert(this, generic_pointer)
     implicit none
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
+    class(*), pointer :: generic_pointer
     integer(c_int) :: status
 
     call thread_write_lock(this%c_mutex_pointer)
@@ -57,20 +58,23 @@ contains
   end subroutine concurrent_linked_filo_queue_insert
 
 
-  subroutine concurrent_linked_filo_queue_pop(this)
+  function concurrent_linked_filo_queue_pop(this) result(generic_pointer)
     implicit none
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
+    class(*), pointer :: generic_pointer
+
+    generic_pointer => null()
 
     call thread_write_lock(this%c_mutex_pointer)
     !? BEGIN SAFE OPERATION.
 
 
-    
+
 
     !? END SAFE OPERATION.
     call thread_unlock_lock(this%c_mutex_pointer)
-  end subroutine concurrent_linked_filo_queue_pop
+  end function concurrent_linked_filo_queue_pop
 
 
 end module thread_lifo_queue
