@@ -169,13 +169,21 @@ contains
 
         select case(current%data%type)
          case (QUEUE_NONE)
+          error stop
          case (QUEUE_I32)
+          print*,current%data%i32
          case (QUEUE_I64)
+          print*,current%data%i64
          case (QUEUE_F32)
+          print*,current%data%f32
          case (QUEUE_F64)
+          print*,current%data%f64
          case (QUEUE_BOOL)
+          print*,current%data%bool
          case (QUEUE_STRING)
+          print*,current%data%string
          case (QUEUE_GENERIC)
+          print*,"NO IDEA!"
         end select
 
         !! END DEBUGGING !!
@@ -192,6 +200,9 @@ contains
       end do
 
     end if
+
+    this%head => null()
+    this%tail => null()
 
     !! END SAFE OPERATION.
     status = thread_unlock_lock(this%c_mutex_pointer)
