@@ -200,8 +200,6 @@ contains
       do
         next => current%next
 
-        !! THIS IS DEBUGGIN ONLY !!
-
         select case(current%data%type)
          case (QUEUE_NONE)
           error stop "QUEUE FAILURE!"
@@ -220,8 +218,6 @@ contains
          case (QUEUE_GENERIC)
           deallocate(current%data%generic)
         end select
-
-        !! END DEBUGGING !!
 
         deallocate(current%data)
         deallocate(current)
