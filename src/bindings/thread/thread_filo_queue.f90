@@ -56,7 +56,7 @@ module thread_filo_queue
     type(queue_node), pointer :: tail => null()
     type(mutex_rwlock), pointer :: mutex => null()
     type(c_ptr) :: c_mutex_pointer = c_null_ptr
-    logical(c_bool) :: empty = .true.
+    integer(c_int) :: items = 0
   contains
     procedure :: push => concurrent_linked_filo_queue_push
     procedure :: pop => concurrent_linked_filo_queue_pop
@@ -117,7 +117,7 @@ contains
       this%tail => node_new
     end if
 
-    this%empty = .false.
+    this%items = this%items + 1
 
     !! END SAFE OPERATION.
     status = thread_unlock_lock(this%c_mutex_pointer)
@@ -174,11 +174,12 @@ contains
       deallocate(this%head)
 
       this%head => next_pointer
+
+      this%items = this%items - 1
     end if
 
     !* If the head was pointed to null, we must nullify the tail.
     if (.not. associated(this%head)) then
-      this%empty = .true.
       this%tail => null()
     end if
 
@@ -241,7 +242,7 @@ contains
     this%head => null()
     this%tail => null()
 
-    this%empty = .true.
+    this%items = 0
 
     !! END SAFE OPERATION.
     status = thread_unlock_lock(this%c_mutex_pointer)
@@ -312,7 +313,7 @@ contains
     status =  thread_write_lock(this%c_mutex_pointer)
     !! BEGIN SAFE OPERATION.
 
-    empty = this%empty
+    empty = this%items == 0
 
     !! END SAFE OPERATION.
     status = thread_unlock_lock(this%c_mutex_pointer)
