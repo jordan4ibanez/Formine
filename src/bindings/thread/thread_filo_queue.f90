@@ -307,8 +307,15 @@ contains
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
     logical(c_bool) :: empty
+    integer(c_int) :: status
+
+    status =  thread_write_lock(this%c_mutex_pointer)
+    !! BEGIN SAFE OPERATION.
 
     empty = this%empty
+
+    !! END SAFE OPERATION.
+    status = thread_unlock_lock(this%c_mutex_pointer)
   end function concurrent_linked_filo_queue_is_empty
 
 
