@@ -12,41 +12,54 @@ contains
     implicit none
 
     type(concurrent_linked_filo_queue) :: queue
-    integer(c_int) :: i
-    integer(c_int), pointer :: i_pointer
-    character(len = :, kind = c_char), pointer :: s_pointer
-    type(queue_data), pointer :: testing
+    integer(c_int) :: i, y
+    ! integer(c_int), pointer :: i_pointer
+    character(len = :, kind = c_char), allocatable :: stringy
+    ! type(queue_data), pointer :: testing
     class(*), pointer :: test_generic_pointer
 
     queue = concurrent_linked_filo_queue()
 
     print*,"begin test memory leak"
-    ! do
 
-    do i = 1,10
+    y = 1
 
-      allocate(i_pointer)
-      i_pointer = i
-      call queue%push(queue_data(i_pointer))
+    do
 
-      allocate(character(12) :: s_pointer)
-      s_pointer = "hi there!"//int_to_string(i)
+      print*,"iteration: ",y
 
-      call queue%push(queue_data(s_pointer))
+      y = y + 1
+
+      do i = 1,10
+
+        ! allocate(i_pointer)
+        ! i_pointer = i
+        ! call queue%push(queue_data(i_pointer))
+
+        stringy = "hi there!"
+
+        call queue%push(queue_data(stringy))
+      end do
+
+      i = 1
+      do
+        print*,"pop ", i
+
+        i = i + 1
+
+        test_generic_pointer => queue%pop()
+
+        if (.not. associated(test_generic_pointer)) then
+          exit
+        end if
+
+        deallocate(test_generic_pointer)
+
+      end do
+
+      ! call queue%destroy()
 
     end do
-
-    ! do i = 1,10
-
-    !   test_generic_pointer => queue%pop()
-
-    !   deallocate(test_generic_pointer)
-
-    ! end do
-
-    call queue%destroy()
-
-    ! end do
 
 
 
