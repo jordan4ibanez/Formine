@@ -7,8 +7,8 @@ windows:
 
 
 gdb:
-	@MALLOC_CHECK_=2 fpm run --flag   -g \
-	                         --c-flag -g
+	@MALLOC_CHECK_=2 fpm run --flag   -g --flag   -lmcheck \
+	                         --c-flag -g --c-flag -lmcheck
 
 valgrind:
 	@valgrind --trace-children=yes --leak-check=full fpm run --flag   -g \
@@ -28,8 +28,8 @@ test:
 
 .PHONY: test_gdb
 test_gdb:
-	@MALLOC_CHECK_=2 fpm test --flag   -g --flag   -fsanitize=leak \
-	                          --c-flag -g --c-flag -fsanitize=leak
+	@MALLOC_CHECK_=2 fpm test --flag   -g --flag   -lmcheck \
+	                          --c-flag -g --c-flag -lmcheck
 .PHONY: test_valgrind
 test_valgrind:
 	@valgrind --trace-children=yes --leak-check=full fpm test --flag   -g \
