@@ -684,8 +684,8 @@ contains
 
 
   !* This finds the base version of OpenGL that your GPU supports.
-  !* Will check if it is greater than or equal to OpenGL 4.2.
-  function is_opengl_4_2_capable() result(success)
+  !* Will check if it is greater than or equal to OpenGL 4.1.
+  function is_opengl_4_1_capable() result(success)
     use :: string
     implicit none
 
@@ -700,12 +700,12 @@ contains
     if (major < 4) then
       return
     end if
-    if (minor < 2) then
+    if (minor < 1) then
       return
     end if
 
     success = .true.
-  end function is_opengl_4_2_capable
+  end function is_opengl_4_1_capable
 
 
   !* Loads up the function pointers for OpenGL.
@@ -728,8 +728,8 @@ contains
     function_pointer = proc_address_finder("glGetIntegerv"//achar(0))
     call c_f_procpointer(function_pointer, gl_get_integer_v)
 
-    if (.not. is_opengl_4_2_capable()) then
-      error stop "[Forglad] Critical Error: GPU not capable of OpenGL 4.2 context."
+    if (.not. is_opengl_4_1_capable()) then
+      error stop "[Forglad] Critical Error: GPU not capable of OpenGL 4.1 context."
     end if
 
     function_pointer = proc_address_finder("glGetString"//achar(0))
