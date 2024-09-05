@@ -41,6 +41,7 @@ module thread
 
   public :: thread_initialize
   public :: thread_create_mutex
+  public :: thread_destroy_mutex
   public :: thread_create_joinable
   public :: thread_set_name
   public :: thread_get_name
@@ -313,6 +314,19 @@ contains
 
     status = internal_pthread_rwlock_init(c_loc(mutex_new), c_null_ptr)
   end function thread_create_mutex
+
+
+  !* Destroy a mutex.
+  subroutine thread_destroy_mutex(input_mutex)
+    implicit none
+
+    type(mutex_rwlock), intent(inout), target :: input_mutex
+    integer(c_int) :: status
+
+    status = internal_pthread_rwlock_destroy(c_loc(input_mutex), c_null_ptr)
+
+    deallocate(input_mutex%raw_data_pointer)
+  end subroutine thread_destroy_mutex
 
 
   !* Create a new joinable thread.
