@@ -134,8 +134,28 @@ contains
     if (associated(this%head)) then
       next_pointer => this%head%next
 
-      generic_pointer => this%head%data
+      ! First we unshell the data.
+      select case(this%head%data%type)
+       case (QUEUE_NONE)
+        error stop "QUEUE FAILURE!"
+       case (QUEUE_I32)
+        generic_pointer => this%head%data%i32
+       case (QUEUE_I64)
+        generic_pointer => this%head%data%i64
+       case (QUEUE_F32)
+        generic_pointer => this%head%data%f32
+       case (QUEUE_F64)
+        generic_pointer => this%head%data%f64
+       case (QUEUE_BOOL)
+        generic_pointer => this%head%data%bool
+       case (QUEUE_STRING)
+        generic_pointer => this%head%data%string
+       case (QUEUE_GENERIC)
+        generic_pointer => this%head%data%generic
+      end select
 
+      ! Then we deallocate.
+      deallocate(this%head%data)
       deallocate(this%head)
 
       this%head => next_pointer
@@ -169,21 +189,21 @@ contains
 
         select case(current%data%type)
          case (QUEUE_NONE)
-          error stop
+          error stop "QUEUE FAILURE!"
          case (QUEUE_I32)
-          print*,current%data%i32
+          deallocate(current%data%i32)
          case (QUEUE_I64)
-          print*,current%data%i64
+          deallocate(current%data%i64)
          case (QUEUE_F32)
-          print*,current%data%f32
+          deallocate(current%data%f32)
          case (QUEUE_F64)
-          print*,current%data%f64
+          deallocate(current%data%f64)
          case (QUEUE_BOOL)
-          print*,current%data%bool
+          deallocate(current%data%bool)
          case (QUEUE_STRING)
-          print*,current%data%string
+          deallocate(current%data%string)
          case (QUEUE_GENERIC)
-          print*,"NO IDEA!"
+          deallocate(current%data%generic)
         end select
 
         !! END DEBUGGING !!
