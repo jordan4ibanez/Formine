@@ -1,5 +1,7 @@
 module thread
   use :: thread_types
+  use :: thread_mutex
+  use :: thread_filo_queue
   use :: vector_3i
   use, intrinsic :: iso_c_binding
   implicit none
@@ -59,7 +61,7 @@ module thread
 
   integer(c_int) :: CPU_THREADS = 0
 
-  type(mutex_rwlock), pointer :: thread_mutex
+  type(mutex_rwlock), pointer :: module_mutex
 
   type(pthread_t), dimension(:), pointer :: available_threads
   type(thread_argument), dimension(:), pointer :: thread_arguments
@@ -179,95 +181,6 @@ module thread
     end function internal_pthread_attr_getdetachstate
 
 
-    function internal_pthread_rwlock_init(rwlock, attr) result(status) bind(c, name = "pthread_rwlock_init")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: rwlock
-      type(c_ptr), intent(in), value :: attr
-      integer(c_int) :: status
-    end function internal_pthread_rwlock_init
-
-
-    function internal_pthread_rwlock_destroy(rwlock, attr) result(status) bind(c, name = "pthread_rwlock_destroy")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: rwlock
-      type(c_ptr), intent(in), value :: attr
-      integer(c_int) :: status
-    end function internal_pthread_rwlock_destroy
-
-
-    function thread_write_lock(rwlock) result(status) bind(c, name = "pthread_rwlock_wrlock")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: rwlock
-      integer(c_int) :: status
-    end function thread_write_lock
-
-
-    function thread_read_lock(rwlock) result(status) bind(c, name = "pthread_rwlock_rdlock")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: rwlock
-      integer(c_int) :: status
-    end function thread_read_lock
-
-
-    function thread_unlock_lock(rwlock) result(status) bind(c, name = "pthread_rwlock_unlock")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: rwlock
-      integer(c_int) :: status
-    end function thread_unlock_lock
-
-
-    !* BEGIN CUSTOM C BINDINGS.
-
-
-    function for_p_thread_get_pthread_attr_t_width() result(data_width) bind(c, name = "for_p_thread_get_pthread_attr_t_width")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(c_int) :: data_width
-    end function
-
-
-    function for_p_thread_get_pthread_create_detached_id() result(id) bind(c, name = "for_p_thread_get_pthread_create_detached_id")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(c_int) :: id
-    end function
-
-
-    function for_p_thread_get_cpu_threads() result(thread_count) bind(c, name = "for_p_thread_get_cpu_threads")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(c_int) :: thread_count
-    end function for_p_thread_get_cpu_threads
-
-
-    function for_p_thread_get_pthread_mutex_t_width() result(data_width) bind(c, name = "for_p_thread_get_pthread_mutex_t_width")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(c_int) :: data_width
-    end function for_p_thread_get_pthread_mutex_t_width
-
-
-    function for_p_thread_get_pthread_mutexattr_t_width() result(data_width) bind(c, name = "for_p_thread_get_pthread_mutexattr_t_width")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(c_int) :: data_width
-    end function for_p_thread_get_pthread_mutexattr_t_width
-
 
 !* BEGIN FUNCTION BLUEPRINTS.
 
@@ -293,8 +206,8 @@ contains
     THREAD_DETACH = for_p_thread_get_pthread_create_detached_id()
     CPU_THREADS = for_p_thread_get_cpu_threads()
 
-    allocate(thread_mutex)
-    thread_mutex => thread_create_mutex_pointer()
+    allocate(module_mutex)
+    module_mutex => thread_create_mutex_pointer()
 
     allocate(available_threads(CPU_THREADS))
     allocate(thread_arguments(CPU_THREADS))
@@ -303,18 +216,6 @@ contains
   end subroutine thread_initialize
 
 
-  !* Create a new mutex pointer.
-  function thread_create_mutex_pointer() result(mutex_pointer_new)
-    implicit none
-
-    type(mutex_rwlock), pointer :: mutex_pointer_new
-    integer(c_int) :: status
-
-    allocate(mutex_pointer_new)
-    allocate(mutex_pointer_new%raw_data_pointer(for_p_thread_get_pthread_mutex_t_width()))
-
-    status = internal_pthread_rwlock_init(c_loc(mutex_pointer_new), c_null_ptr)
-  end function thread_create_mutex_pointer
 
 
   !* Destroy a mutex pointer.
@@ -467,12 +368,12 @@ contains
 
       if (pop_thread_queue(optional_thread_queue_element)) then
 
-        status = thread_write_lock(c_loc(thread_mutex))
+        status = thread_write_lock(c_loc(module_mutex))
 
         thread_active(thread_to_use) = .true.
-        thread_arguments(thread_to_use)%mutex_pointer = c_loc(thread_mutex)
+        thread_arguments(thread_to_use)%mutex_pointer = c_loc(module_mutex)
 
-        status = thread_unlock_lock(c_loc(thread_mutex))
+        status = thread_unlock_lock(c_loc(module_mutex))
 
 
         thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
@@ -496,7 +397,7 @@ contains
 
     thread_index = 0
 
-    status = thread_read_lock(c_loc(thread_mutex))
+    status = thread_read_lock(c_loc(module_mutex))
     do i = 1,CPU_THREADS
       if (.not. thread_active(i)) then
         thread_index = i
@@ -504,7 +405,7 @@ contains
         exit
       end if
     end do
-    status = thread_unlock_lock(c_loc(thread_mutex))
+    status = thread_unlock_lock(c_loc(module_mutex))
   end function find_free_thread
 
 
@@ -602,15 +503,15 @@ contains
 
     still_processing = .true.
 
-    status = thread_read_lock(c_loc(thread_mutex))
+    status = thread_read_lock(c_loc(module_mutex))
     do i = 1,CPU_THREADS
       if (thread_active(i)) then
-        status = thread_unlock_lock(c_loc(thread_mutex))
+        status = thread_unlock_lock(c_loc(module_mutex))
         call sleep(0)
         return
       end if
     end do
-    status = thread_unlock_lock(c_loc(thread_mutex))
+    status = thread_unlock_lock(c_loc(module_mutex))
 
     still_processing = .false.
   end function thread_await_all_thread_completion

@@ -1,5 +1,6 @@
 module thread_filo_queue
-  use :: thread
+  use :: thread_types
+  use :: thread_mutex
   use, intrinsic :: iso_c_binding
   implicit none
 
