@@ -609,7 +609,6 @@ module luajit
       type(c_ptr), intent(in), value :: state
       character(len = 1, kind = c_char), intent(in) :: file_path
       integer(c_int) :: status
-
     end function luaL_loadfile
 
 
