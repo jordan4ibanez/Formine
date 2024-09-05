@@ -246,4 +246,40 @@ contains
   end function queue_create_element_f64
 
 
+  function queue_create_element_bool(bool) result(new_queue_element_pointer)
+    implicit none
+
+    type(queue_data), pointer :: new_queue_element_pointer
+    logical, intent(in), value :: bool
+
+    allocate(new_queue_element_pointer%bool)
+    new_queue_element_pointer%bool = bool
+  end function queue_create_element_bool
+
+
+  function queue_create_element_string(string) result(new_queue_element_pointer)
+    implicit none
+
+    type(queue_data), pointer :: new_queue_element_pointer
+    character(len = *, kind = c_char), intent(in) :: string
+    integer(c_int) :: string_length
+
+    string_length = len(string)
+
+    allocate(character(len = string_length, kind = c_char) :: new_queue_element_pointer%string)
+
+    new_queue_element_pointer%string(1:string_length) = string(1:string_length)
+  end function queue_create_element_string
+
+
+  function queue_create_element_generic(generic) result(new_queue_element_pointer)
+    implicit none
+
+    type(queue_data), pointer :: new_queue_element_pointer
+    class(*), intent(in), pointer :: generic
+
+    new_queue_element_pointer%generic => generic
+  end function queue_create_element_generic
+
+
 end module thread_filo_queue
