@@ -130,6 +130,19 @@ contains
       do
         next => current%next
 
+        !! THIS IS DEBUGGIN ONLY !!
+
+        associate (current_data => current%data)
+          select type(current_data)
+           type is (integer(c_int))
+            print*,current_data
+           type is (character(*))
+            print*,current_data
+          end select
+        end associate
+
+        !! END DEBUGGING !!
+
         deallocate(current%data)
         deallocate(current)
 
