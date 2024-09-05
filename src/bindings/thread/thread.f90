@@ -40,8 +40,8 @@ module thread
   public :: thread_unlock_lock
 
   public :: thread_initialize
-  public :: thread_create_mutex
-  public :: thread_destroy_mutex
+  public :: thread_create_mutex_pointer
+  public :: thread_destroy_mutex_pointer
   public :: thread_create_joinable
   public :: thread_set_name
   public :: thread_get_name
@@ -294,7 +294,7 @@ contains
     CPU_THREADS = for_p_thread_get_cpu_threads()
 
     allocate(thread_mutex)
-    thread_mutex = thread_create_mutex()
+    thread_mutex => thread_create_mutex_pointer()
 
     allocate(available_threads(CPU_THREADS))
     allocate(thread_arguments(CPU_THREADS))
@@ -303,30 +303,32 @@ contains
   end subroutine thread_initialize
 
 
-  !* Create a new mutex.
-  function thread_create_mutex() result(mutex_new)
+  !* Create a new mutex pointer.
+  function thread_create_mutex_pointer() result(mutex_pointer_new)
     implicit none
 
-    type(mutex_rwlock), target :: mutex_new
+    type(mutex_rwlock), pointer :: mutex_pointer_new
     integer(c_int) :: status
 
-    allocate(mutex_new%raw_data_pointer(for_p_thread_get_pthread_mutex_t_width()))
+    allocate(mutex_pointer_new)
+    allocate(mutex_pointer_new%raw_data_pointer(for_p_thread_get_pthread_mutex_t_width()))
 
-    status = internal_pthread_rwlock_init(c_loc(mutex_new), c_null_ptr)
-  end function thread_create_mutex
+    status = internal_pthread_rwlock_init(c_loc(mutex_pointer_new), c_null_ptr)
+  end function thread_create_mutex_pointer
 
 
-  !* Destroy a mutex.
-  subroutine thread_destroy_mutex(input_mutex)
+  !* Destroy a mutex pointer.
+  subroutine thread_destroy_mutex_pointer(input_mutex_pointer)
     implicit none
 
-    type(mutex_rwlock), intent(inout), target :: input_mutex
+    type(mutex_rwlock), intent(inout), pointer :: input_mutex_pointer
     integer(c_int) :: status
 
-    status = internal_pthread_rwlock_destroy(c_loc(input_mutex), c_null_ptr)
+    status = internal_pthread_rwlock_destroy(c_loc(input_mutex_pointer), c_null_ptr)
 
-    deallocate(input_mutex%raw_data_pointer)
-  end subroutine thread_destroy_mutex
+    deallocate(input_mutex_pointer%raw_data_pointer)
+    deallocate(input_mutex_pointer)
+  end subroutine thread_destroy_mutex_pointer
 
 
   !* Create a new joinable thread.
