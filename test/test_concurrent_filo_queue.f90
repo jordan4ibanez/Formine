@@ -16,7 +16,7 @@ contains
     ! integer(c_int), pointer :: i_pointer
     character(len = :, kind = c_char), allocatable :: stringy
     ! type(queue_data), pointer :: testing
-    class(*), pointer :: test_generic_pointer
+    class(*), pointer :: test_generic_pointer_option
 
     queue = concurrent_linked_filo_queue()
 
@@ -42,22 +42,16 @@ contains
       end do
 
       i = 1
-      ! do
-      !   ! print*,"pop ", i
+      do while(queue%pop(test_generic_pointer_option))
+        ! print*,"pop ", i
 
-      !   i = i + 1
+        i = i + 1
 
-      !   test_generic_pointer => queue%pop()
+        deallocate(test_generic_pointer_option)
 
-      !   if (.not. associated(test_generic_pointer)) then
-      !     exit
-      !   end if
+      end do
 
-      !   deallocate(test_generic_pointer)
-
-      ! end do
-
-      call queue%destroy()
+      ! call queue%destroy()
 
     end do
 
