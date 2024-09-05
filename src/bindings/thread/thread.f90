@@ -35,6 +35,10 @@ module thread
   public :: thread_queue_element
   public :: mutex_rwlock
 
+  public :: thread_write_lock
+  public :: thread_read_lock
+  public :: thread_unlock_lock
+
   public :: thread_initialize
   public :: thread_create_mutex
   public :: thread_create_joinable
