@@ -1,11 +1,8 @@
 default:
 	@fpm run
 
-# This should probably be a variable.
-windows:
-	@fpm run --c-flag -Wno-discarded-qualifiers --c-flag -Wno-incompatible-pointer-types
 
-mac:
+windows:
 	@fpm run --c-flag -Wno-discarded-qualifiers --c-flag -Wno-incompatible-pointer-types
 
 
