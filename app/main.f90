@@ -42,63 +42,11 @@ program main
 
   y = 1
 
-  do
-    ! print*,y
-    y = y + 1
-
-    if (y >= 10000) then
-      exit
-    end if
-
-    if (mod(y, 1000) == 0) then
-      print*,y
-    end if
-
-    do i = 1,100
-
-      ! if (mod(i, 100) == 0) then
-      !   print*,i
-      ! end if
-
-      allocate(character(len = 128,  kind = c_char) :: test_data)
-      test_data = "hi there "//int_to_string(i)
-
-      ! allocate(test_data)
-
-      ! test_data = i
-
-      call thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
-    end do
-
-    ! if (.true.) then
-    !   call sleep(100)
-    !   return
-    ! end if
-
-    ! print*,"starting"
-
-
-    do while(.not. thread_detached_queue_is_empty())
-      testing_bool = thread_process_detached_thread_queue()
-    end do
-
-    ! print*,"processed thread queue"
-
-    ! print*,"awaiting thread pool completion"
-    ! do while (thread_await_all_thread_completion())
-    ! end do
-
-    ! print*,"completed, sleeping 0"
-
-    call sleep(0)
-  end do
-
-  call sleep(5)
 
   ! !! BEGIN WARNING: This is only to be used for when developing libraries.
-  if (.true.) then
-    return
-  end if
+  ! if (.true.) then
+  !   return
+  ! end if
   ! !! END WARNING.
 
 
