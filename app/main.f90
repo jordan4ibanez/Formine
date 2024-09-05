@@ -31,71 +31,74 @@ program main
   character(len = :, kind = c_char), allocatable :: position_text_debug
   integer(c_int) :: i,y, fps_new, old_fps, x
   logical(c_bool) :: testing_bool
-  ! character(len = :, kind = c_char), pointer :: test_data
-  integer(c_int), pointer :: test_data
+  character(len = :, kind = c_char), pointer :: test_data
+  ! integer(c_int), pointer :: test_data
 
 
   fps_new = 0
   old_fps = -1
 
-  ! call thread_initialize()
+  call thread_initialize()
 
-  ! y = 1
+  y = 1
 
-  ! do
-  !   ! print*,y
-  !   y = y + 1
+  do
+    ! print*,y
+    y = y + 1
 
-  !   if (y >= 10000) then
-  !     exit
-  !   end if
+    if (y >= 10000) then
+      exit
+    end if
 
-  !   if (mod(y, 1000) == 0) then
-  !     print*,y
-  !   end if
+    if (mod(y, 1000) == 0) then
+      print*,y
+    end if
 
-  !   do i = 1,500
+    do i = 1,10000000
 
-  !     ! if (mod(i, 1000) == 0) then
-  !     !   print*,i
-  !     ! end if
+      if (mod(i, 1000) == 0) then
+        print*,i
+      end if
 
-  !     ! allocate(test_data)
+      allocate(character(len = 128,  kind = c_char) :: test_data)
+      test_data = "hi there "//int_to_string(i)
 
-  !     ! test_data = i
+      ! allocate(test_data)
 
-  !     call thread_create_detached(c_funloc(test_threading_implementation), c_null_ptr)!c_loc(test_data))
-  !   end do
+      ! test_data = i
 
-  !   ! if (.true.) then
-  !   !   call sleep(100)
-  !   !   return
-  !   ! end if
+      call thread_create_detached(c_funloc(test_threading_implementation), c_loc(test_data))
+    end do
 
-  !   ! print*,"starting"
+    ! if (.true.) then
+    !   call sleep(100)
+    !   return
+    ! end if
+
+    ! print*,"starting"
 
 
-  !   do while(.not. thread_detached_queue_is_empty())
-  !     testing_bool = thread_process_detached_thread_queue()
-  !   end do
+    do while(.not. thread_detached_queue_is_empty())
+      testing_bool = thread_process_detached_thread_queue()
+    end do
 
-  !   ! print*,"processed thread queue"
+    ! print*,"processed thread queue"
 
-  !   ! print*,"awaiting thread pool completion"
-  !   do while (thread_await_all_thread_completion())
-  !   end do
+    ! print*,"awaiting thread pool completion"
+    ! do while (thread_await_all_thread_completion())
+    ! end do
 
-  !   ! print*,"completed, sleeping 0"
+    ! print*,"completed, sleeping 0"
 
-  !   call sleep(0)
-  ! end do
+    call sleep(0)
+  end do
 
-  ! call sleep(5)
+  call sleep(5)
 
   ! !! BEGIN WARNING: This is only to be used for when developing libraries.
-  ! if (.true.) then
-  !   return
-  ! end if
+  if (.true.) then
+    return
+  end if
   ! !! END WARNING.
 
 
