@@ -1106,21 +1106,9 @@ contains
 
     type(c_ptr), intent(in), value :: state
     character(len = *, kind = c_char), intent(in) :: file_path
-    type(file_reader) :: reader
-    character(len = :, kind = c_char), allocatable :: c_string
     integer(c_int) :: status
 
-    call reader%read_file(file_path)
-
-    if (.not. reader%exists) then
-      print"(A)", "[LuaJIT] Error: Could not load file path ["//file_path//"]. Does not exist."
-      status = LUAJIT_RUN_FILE_MISSING
-      return
-    end if
-
-    c_string = into_c_string(reader%file_string)
-
-    if (lual_loadstring(state, c_string) == LUA_OK) then
+    if (lual_loadfile(state, file_path//achar(0)) == LUA_OK) then
       if (lua_pcall(state, 0, 0, 0) == LUA_OK) then
         ! If code was executed successfully, we remove the code from the stack.
         call lua_pop(state, lua_gettop(state))
