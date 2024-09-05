@@ -67,8 +67,7 @@ module thread
   type(thread_argument), dimension(:), pointer :: thread_arguments
   logical(c_bool), dimension(:), pointer :: thread_active
 
-  type(concurrent_linked_filo_queue) :: thread_queue
-
+  type(concurrent_linked_filo_queue) :: master_thread_queue
 
 
   interface
@@ -212,7 +211,7 @@ contains
     allocate(available_threads(CPU_THREADS))
     allocate(thread_arguments(CPU_THREADS))
     allocate(thread_active(CPU_THREADS))
-    allocate(thread_queue(0))
+    master_thread_queue = concurrent_linked_filo_queue()
   end subroutine thread_initialize
 
 
@@ -324,13 +323,13 @@ contains
 
     type(c_funptr), intent(in), value :: subroutine_procedure_pointer
     type(c_ptr), intent(in), value :: argument_pointer
-    type(thread_queue_element), allocatable :: element_new
+    type(thread_queue_element), pointer :: element_new
 
     allocate(element_new)
     element_new%subroutine_pointer = subroutine_procedure_pointer
     element_new%data_to_send = argument_pointer
 
-    thread_queue = [thread_queue, element_new]
+    call master_thread_queue%push(queue_data(element_new))
   end subroutine thread_create_detached
 
 
@@ -340,17 +339,17 @@ contains
 
     logical(c_bool) :: is_empty
     integer(c_int) :: queue_size, i, thread_to_use, status
-    type(thread_queue_element) :: optional_thread_queue_element
+    class(*), pointer :: generic_pointer
+    type(thread_queue_element), pointer :: optional_thread_queue_element_pointer
 
     is_empty = .false.
 
-    queue_size = size(thread_queue)
-
-    ! Nothing to do.
-    if (queue_size == 0) then
+    if (master_thread_queue%is_empty()) then
       is_empty = .true.
       return
     end if
+
+    queue_size = master_thread_queue%get_size()
 
     ! Don't attempt to go past available threads.
     if (queue_size > CPU_THREADS) then
@@ -366,7 +365,14 @@ contains
         exit
       end if
 
-      if (pop_thread_queue(optional_thread_queue_element)) then
+      if (master_thread_queue%pop(generic_pointer)) then
+
+        select type (generic_pointer)
+         type is (thread_queue_element)
+          optional_thread_queue_element_pointer => generic_pointer
+         class default
+          error stop "[Thread] Error: Wrong data type in the queue."
+        end select
 
         status = thread_write_lock(c_loc(module_mutex))
 
@@ -375,11 +381,12 @@ contains
 
         status = thread_unlock_lock(c_loc(module_mutex))
 
-
         thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
-        thread_arguments(thread_to_use)%data_to_send = optional_thread_queue_element%data_to_send
+        thread_arguments(thread_to_use)%sent_data = optional_thread_queue_element_pointer%data_to_send
 
-        call thread_process_detached_thread(optional_thread_queue_element%subroutine_pointer, c_loc(thread_arguments(thread_to_use)), thread_to_use)
+        call thread_process_detached_thread(optional_thread_queue_element_pointer%subroutine_pointer, c_loc(thread_arguments(thread_to_use)), thread_to_use)
+
+        deallocate(optional_thread_queue_element_pointer)
       else
         ! Nothing left to get.
         exit
@@ -409,35 +416,6 @@ contains
   end function find_free_thread
 
 
-  !* Rust style thread pop.
-  function pop_thread_queue(optional_thread_queue_element) result(ok)
-    implicit none
-
-    type(thread_queue_element), intent(inout) :: optional_thread_queue_element
-    logical(c_bool) :: ok
-    type(thread_queue_element), dimension(:), allocatable :: thread_queue_new
-    integer(c_int) :: old_size
-
-    ok = .false.
-
-    ! The queue is empty.
-    if (size(thread_queue) == 0) then
-      return
-    end if
-
-    ! Shrink the queue.
-
-    optional_thread_queue_element = thread_queue(1)
-
-    old_size = size(thread_queue)
-    allocate(thread_queue_new(old_size - 1))
-    thread_queue_new = thread_queue(2:old_size)
-    call move_alloc(thread_queue_new, thread_queue)
-
-    ok = .true.
-  end function pop_thread_queue
-
-
   !* Check if the thread queue is empty.
   !* This is primarily used for debugging.
   function thread_detached_queue_is_empty() result(is_empty)
@@ -445,7 +423,7 @@ contains
 
     logical(c_bool) :: is_empty
 
-    is_empty = size(thread_queue) == 0
+    is_empty = master_thread_queue%is_empty()
   end function thread_detached_queue_is_empty
 
 
@@ -526,7 +504,7 @@ contains
     type(c_ptr), intent(in), value :: c_arg_pointer
     type(thread_argument), pointer :: arguments
     type(c_ptr) :: void_pointer
-    ! character(len = :, kind = c_char), allocatable :: input_string
+    character(len = 128, kind = c_char), pointer :: input_string
     ! integer(c_int), pointer :: input_data
     integer(c_int) :: status
 
@@ -537,13 +515,22 @@ contains
 
     call c_f_pointer(c_arg_pointer, arguments)
 
-    void_pointer = c_null_ptr
+
+    call c_f_pointer(arguments%sent_data, input_string)
+
+    ! print*,c_loc(input_string)
+
+    ! print*,input_string
+
+    deallocate(input_string)
 
     status = thread_write_lock(arguments%mutex_pointer)
 
     arguments%active_flag = .false.
 
     status = thread_unlock_lock(arguments%mutex_pointer)
+
+    void_pointer = c_null_ptr
   end function test_threading_implementation
 
 
