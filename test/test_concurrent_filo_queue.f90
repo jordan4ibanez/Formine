@@ -42,22 +42,22 @@ contains
       end do
 
       i = 1
-      do
-        ! print*,"pop ", i
+      ! do
+      !   ! print*,"pop ", i
 
-        i = i + 1
+      !   i = i + 1
 
-        test_generic_pointer => queue%pop()
+      !   test_generic_pointer => queue%pop()
 
-        if (.not. associated(test_generic_pointer)) then
-          exit
-        end if
+      !   if (.not. associated(test_generic_pointer)) then
+      !     exit
+      !   end if
 
-        deallocate(test_generic_pointer)
+      !   deallocate(test_generic_pointer)
 
-      end do
+      ! end do
 
-      ! call queue%destroy()
+      call queue%destroy()
 
     end do
 
