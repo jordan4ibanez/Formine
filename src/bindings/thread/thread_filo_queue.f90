@@ -235,9 +235,11 @@ contains
 
      type is (character(len = *, kind = c_char))
       new_queue_element_pointer%type = QUEUE_STRING
-      associate (string_len => len(generic))
+      ! I am working around a GCC bug.
+      temp = generic
+      associate (string_len => len(temp))
         allocate(character(len = string_len, kind = c_char) :: new_queue_element_pointer%string)
-        new_queue_element_pointer%string(1:string_len) = generic(1:string_len)
+        new_queue_element_pointer%string(1:string_len) = temp(1:string_len)
       end associate
 
      class default
