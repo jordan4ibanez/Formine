@@ -54,11 +54,11 @@ program main
       print*,y
     end if
 
-    do i = 1,10000000
+    do i = 1,100
 
-      if (mod(i, 1000) == 0) then
-        print*,i
-      end if
+      ! if (mod(i, 100) == 0) then
+      !   print*,i
+      ! end if
 
       allocate(character(len = 128,  kind = c_char) :: test_data)
       test_data = "hi there "//int_to_string(i)
