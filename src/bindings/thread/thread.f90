@@ -188,6 +188,16 @@ module thread
     end function internal_pthread_rwlock_init
 
 
+    function internal_pthread_rwlock_destroy(rwlock, attr) result(status) bind(c, name = "pthread_rwlock_destroy")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: rwlock
+      type(c_ptr), intent(in), value :: attr
+      integer(c_int) :: status
+    end function internal_pthread_rwlock_destroy
+
+
     function thread_write_lock(rwlock) result(status) bind(c, name = "pthread_rwlock_wrlock")
       use, intrinsic :: iso_c_binding
       implicit none
