@@ -7,8 +7,12 @@ module thread_lifo_queue
   private
 
 
-  type :: queue_node
+  public :: concurrent_linked_filo_queue
 
+
+  type :: queue_node
+    type(queue_node), pointer :: next => null()
+    class(*), pointer :: data => null()
   end type queue_node
 
 
@@ -46,15 +50,31 @@ contains
     class(concurrent_linked_filo_queue), intent(inout) :: this
     class(*), pointer :: generic_pointer
     integer(c_int) :: status
+    type(queue_node), pointer :: node_new
 
-    call thread_write_lock(this%c_mutex_pointer)
-    !? BEGIN SAFE OPERATION.
+    status = thread_write_lock(this%c_mutex_pointer)
+    !! BEGIN SAFE OPERATION.
 
+    allocate(node_new)
+    node_new%data => generic_pointer
 
+    ! If the head is null, this is the new head.
+    if (.not. associated(this%head)) then
+      this%head => node_new
+    end if
 
+    ! If we have a tail, it now points to the new node.
+    ! The new node then becomes the tail.
+    if (associated(this%tail)) then
+      this%tail%next => node_new
+      this%tail => node_new
+    else
+      ! If we do not have a tail, the new node is now the tail.
+      this%tail => node_new
+    end if
 
-    !? END SAFE OPERATION.
-    call thread_unlock_lock(this%c_mutex_pointer)
+    !! END SAFE OPERATION.
+    status = thread_unlock_lock(this%c_mutex_pointer)
   end subroutine concurrent_linked_filo_queue_insert
 
 
@@ -63,17 +83,28 @@ contains
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
     class(*), pointer :: generic_pointer
+    integer(c_int) :: status
+    type(queue_node), pointer :: next_pointer
+
+    status =  thread_write_lock(this%c_mutex_pointer)
+    !! BEGIN SAFE OPERATION.
 
     generic_pointer => null()
 
-    call thread_write_lock(this%c_mutex_pointer)
-    !? BEGIN SAFE OPERATION.
+    ! If we have a head, the output will become the head data.
+    ! The head will now be shifted forward, and the old head will be cleaned up.
+    if (associated(this%head)) then
+      next_pointer => this%head%next
 
+      generic_pointer => this%head%data
 
+      deallocate(this%head)
 
+      this%head => next_pointer
+    end if
 
-    !? END SAFE OPERATION.
-    call thread_unlock_lock(this%c_mutex_pointer)
+    !! END SAFE OPERATION.
+    status = thread_unlock_lock(this%c_mutex_pointer)
   end function concurrent_linked_filo_queue_pop
 
 
