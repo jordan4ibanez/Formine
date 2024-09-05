@@ -18,6 +18,7 @@ module-naming = false
 # link = ["glfw3", "opengl32", "luajit-5.1"]
 
 # MacOS needs different link flags.
+# link = ["glfw", "luajit-5.1"]
 
 # Everything else (for now)
 link = ["glfw", "stb", "luajit-5.1"]
