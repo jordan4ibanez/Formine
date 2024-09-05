@@ -33,6 +33,7 @@ module thread
 
   public :: pthread_t
   public :: thread_queue_element
+  public :: mutex_rwlock
 
   public :: thread_initialize
   public :: thread_create_mutex

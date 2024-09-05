@@ -1,5 +1,5 @@
 module thread_lifo_queue
-  use :: thread_types
+  use :: thread
   use, intrinsic :: iso_c_binding
   implicit none
 
