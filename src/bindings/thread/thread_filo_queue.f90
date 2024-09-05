@@ -56,10 +56,12 @@ module thread_filo_queue
     type(queue_node), pointer :: tail => null()
     type(mutex_rwlock), pointer :: mutex => null()
     type(c_ptr) :: c_mutex_pointer = c_null_ptr
+    logical(c_bool) :: empty = .true.
   contains
     procedure :: push => concurrent_linked_filo_queue_push
     procedure :: pop => concurrent_linked_filo_queue_pop
     procedure :: destroy => concurrent_linked_filo_queue_destroy
+    procedure :: is_empty => concurrent_linked_filo_queue_is_empty
   end type concurrent_linked_filo_queue
 
 
@@ -114,6 +116,8 @@ contains
       ! If we do not have a tail, the new node is now the tail.
       this%tail => node_new
     end if
+
+    this%empty = .false.
 
     !! END SAFE OPERATION.
     status = thread_unlock_lock(this%c_mutex_pointer)
@@ -174,6 +178,7 @@ contains
 
     !* If the head was pointed to null, we must nullify the tail.
     if (.not. associated(this%head)) then
+      this%empty = .true.
       this%tail => null()
     end if
 
@@ -236,6 +241,8 @@ contains
     this%head => null()
     this%tail => null()
 
+    this%empty = .true.
+
     !! END SAFE OPERATION.
     status = thread_unlock_lock(this%c_mutex_pointer)
   end subroutine concurrent_linked_filo_queue_destroy
@@ -292,6 +299,17 @@ contains
       new_queue_element_pointer%generic => generic
     end select
   end function queue_data_constructor
+
+
+  !* Check if the queue is empty.
+  function concurrent_linked_filo_queue_is_empty(this) result(empty)
+    implicit none
+
+    class(concurrent_linked_filo_queue), intent(inout) :: this
+    logical(c_bool) :: empty
+
+    empty = this%empty
+  end function concurrent_linked_filo_queue_is_empty
 
 
 end module thread_filo_queue
