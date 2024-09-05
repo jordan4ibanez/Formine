@@ -220,6 +220,8 @@ module glfw
   integer(c_int), parameter, public :: GLFW_NO_RESET_NOTIFICATION = int(z"00031001")
   integer(c_int), parameter, public :: GLFW_LOSE_CONTEXT_ON_RESET = int(z"00031002")
 
+  integer(c_int), parameter, public ::  GLFW_OPENGL_PROFILE = int(z"00022008")
+
   integer(c_int), parameter, public :: GLFW_OPENGL_ANY_PROFILE = 0
   integer(c_int), parameter, public :: GLFW_OPENGL_CORE_PROFILE = int(z"00032001")
   integer(c_int), parameter, public :: GLFW_OPENGL_COMPAT_PROFILE = int(z"00032002")
