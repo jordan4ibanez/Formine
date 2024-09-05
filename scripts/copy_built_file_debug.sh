@@ -1,5 +1,5 @@
 #!/bin/bash
-location=$(find ./build/ -type f -name "formine")
+location=$(find ./build/ -type f -name "Formine")
 
 if [ "$location" == "" ]; then
   echo "Script error, blank!"
