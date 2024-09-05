@@ -22,7 +22,7 @@ module thread_filo_queue
     type(mutex_rwlock), pointer :: mutex => null()
     type(c_ptr) :: c_mutex_pointer = c_null_ptr
   contains
-    procedure :: insert => concurrent_linked_filo_queue_insert
+    procedure :: push => concurrent_linked_filo_queue_push
     procedure :: pop => concurrent_linked_filo_queue_pop
     procedure :: destroy => concurrent_linked_filo_queue_destroy
   end type concurrent_linked_filo_queue
@@ -40,13 +40,13 @@ contains
 
     type(concurrent_linked_filo_queue) :: queue_new
 
-    queue_new%mutex = thread_create_mutex()
+    queue_new%mutex => thread_create_mutex_pointer()
     queue_new%c_mutex_pointer = c_loc(queue_new%mutex)
   end function constructor_concurrent_linked_filo_queue
 
 
   !* Push an element into the end of a queue.
-  subroutine concurrent_linked_filo_queue_insert(this, generic_pointer)
+  subroutine concurrent_linked_filo_queue_push(this, generic_pointer)
     implicit none
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
@@ -77,7 +77,7 @@ contains
 
     !! END SAFE OPERATION.
     status = thread_unlock_lock(this%c_mutex_pointer)
-  end subroutine concurrent_linked_filo_queue_insert
+  end subroutine concurrent_linked_filo_queue_push
 
 
   !* Pop the first element off the queue.
