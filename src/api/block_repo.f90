@@ -129,7 +129,7 @@ contains
 
   !* This allows you to register a block into the engine from LuaJIT.
   !* See the LuaJIT API [./api/init.lua] for the layout of block_definition.
-  subroutine register_block(state)
+  recursive function register_block(state) result(status) bind(c)
     use :: string
     use :: array, only: string_array
     implicit none
@@ -144,7 +144,6 @@ contains
     !* The smart pointer where we will store the block definiton.
     !* We will only allocate this after a successful data query from LuaJIT.
     type(block_definition) :: definition_new
-
 
     status = LUAJIT_GET_OK
 
@@ -220,7 +219,7 @@ contains
 
     definition_array_length = definition_array_length + 1
     current_id = current_id + 1
-  end subroutine register_block
+  end function register_block
 
 
 end module block_repo
