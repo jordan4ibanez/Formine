@@ -62,6 +62,7 @@ module thread_filo_queue
     procedure :: pop => concurrent_linked_filo_queue_pop
     procedure :: destroy => concurrent_linked_filo_queue_destroy
     procedure :: is_empty => concurrent_linked_filo_queue_is_empty
+    procedure :: get_item_count => concurrent_linked_filo_queue_get_item_count
   end type concurrent_linked_filo_queue
 
 
@@ -318,6 +319,24 @@ contains
     !! END SAFE OPERATION.
     status = thread_unlock_lock(this%c_mutex_pointer)
   end function concurrent_linked_filo_queue_is_empty
+
+
+  !* Check number of items in the queue.
+  function concurrent_linked_filo_queue_get_item_count(this) result(item_count)
+    implicit none
+
+    class(concurrent_linked_filo_queue), intent(inout) :: this
+    integer(c_int) :: item_count
+    integer(c_int) :: status
+
+    status =  thread_write_lock(this%c_mutex_pointer)
+    !! BEGIN SAFE OPERATION.
+
+    item_count = this%items
+
+    !! END SAFE OPERATION.
+    status = thread_unlock_lock(this%c_mutex_pointer)
+  end function concurrent_linked_filo_queue_get_item_count
 
 
 end module thread_filo_queue
