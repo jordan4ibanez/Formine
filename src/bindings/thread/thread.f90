@@ -334,18 +334,14 @@ contains
 
 
   !* Process all the queued threads limited by cpu threads available.
-  function thread_process_detached_thread_queue() result(is_empty)
+  subroutine thread_process_detached_thread_queue()
     implicit none
 
-    logical(c_bool) :: is_empty
     integer(c_int) :: queue_size, i, thread_to_use, status
     class(*), pointer :: generic_pointer
     type(thread_queue_element), pointer :: optional_thread_queue_element_pointer
 
-    is_empty = .false.
-
     if (master_thread_queue%is_empty()) then
-      is_empty = .true.
       return
     end if
 
@@ -392,7 +388,7 @@ contains
         exit
       end if
     end do
-  end function thread_process_detached_thread_queue
+  end subroutine thread_process_detached_thread_queue
 
 
   !* Simply searches for a free thread to dispatch.
