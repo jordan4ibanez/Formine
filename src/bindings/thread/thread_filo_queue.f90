@@ -51,6 +51,7 @@ module thread_filo_queue
 
 
   type :: concurrent_linked_filo_queue
+    private
     type(queue_node), pointer :: head => null()
     type(queue_node), pointer :: tail => null()
     type(mutex_rwlock), pointer :: mutex => null()
