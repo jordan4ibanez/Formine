@@ -19,8 +19,8 @@ module shader
   integer(c_int), parameter :: ATTRIBUTE_TEXTURE_COORDINATE = 1
   integer(c_int), parameter :: ATTRIBUTE_COLOR = 2
 
-  integer(c_int), parameter :: UNIFORM_CAMERA_MATRIX = 0
-  integer(c_int), parameter :: UNIFORM_OBJECT_MATRIX = 1
+  integer(c_int) :: UNIFORM_CAMERA_MATRIX
+  integer(c_int) :: UNIFORM_OBJECT_MATRIX
 
 
   public :: shader_create
@@ -146,13 +146,17 @@ contains
       error stop "[Shader] Error: Failed to delete the fragment shader object."
     end if
 
+    UNIFORM_CAMERA_MATRIX = gl_get_uniform_location(program_id, "camera_matrix"//achar(0))
+    UNIFORM_OBJECT_MATRIX = gl_get_uniform_location(program_id, "object_matrix"//achar(0))
+
     ! Finally validate this whole thing.
-    call gl_validate_program(program_id)
-    if (gl_get_program_iv(program_id, GL_VALIDATE_STATUS) == GL_FALSE) then
-      error stop "[Shader] Error: Failed to validate shader ["//shader_name//"]."
-    else
-      print"(A)","[Shader]: Successfully validated shader ["//shader_name//"]."
-    end if
+    ! call gl_validate_program(program_id)
+    
+    ! if (gl_get_program_iv(program_id, GL_VALIDATE_STATUS) == GL_FALSE) then
+    !   error stop "[Shader] Error: Failed to validate shader ["//shader_name//"]."
+    ! else
+    !   print"(A)","[Shader]: Successfully validated shader ["//shader_name//"]."
+    ! end if
 
     ! Woooo!
     print"(A)","[Shader]: Shader ["//shader_name//"] created successfully."
