@@ -21,7 +21,7 @@ module-naming = false
 #! This is a combination of MacPorts and Homebrew.
 # You must also aadd this to your .bashrc:
 # export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/lib
-link = ["glfw3", "luajit-5.1"]
+# link = ["glfw", "luajit-5.1"]
 
 # Everything else (for now)
 link = ["glfw", "stb", "luajit-5.1"]
