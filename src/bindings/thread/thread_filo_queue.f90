@@ -9,6 +9,19 @@ module thread_filo_queue
 
   public :: concurrent_linked_filo_queue
 
+  type :: queue_data
+    !* Basic types.
+    integer(c_int), pointer :: i32 => null()
+    integer(c_int64_t), pointer :: i64 => null()
+    real(c_float), pointer :: f32 => null()
+    real(c_double), pointer :: f64 => null()
+    logical(c_bool), pointer :: bool => null()
+    !* String.
+    character(len = :, kind = c_char), pointer :: string => null()
+    !* Completely polymorphic.
+    class(*), pointer :: generic => null()
+  end type queue_data
+
 
   type :: queue_node
     type(queue_node), pointer :: next => null()
@@ -32,6 +45,11 @@ module thread_filo_queue
     module procedure :: constructor_concurrent_linked_filo_queue
   end interface concurrent_linked_filo_queue
 
+  interface queue_create_element
+    module procedure :: queue_create_element_i32
+
+  end interface queue_create_element
+
 contains
 
 
@@ -50,7 +68,7 @@ contains
     implicit none
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
-    class(*), pointer :: generic_pointer
+    class(*), intent(in), pointer :: generic_pointer
     integer(c_int) :: status
     type(queue_node), pointer :: node_new
 
@@ -159,5 +177,35 @@ contains
     !! END SAFE OPERATION.
     status = thread_unlock_lock(this%c_mutex_pointer)
   end subroutine concurrent_linked_filo_queue_destroy
+
+!* BEGIN QUEUE ELEMENT GENERIC.
+
+  function queue_create_element_i32() result(queue_element_new)
+    implicit none
+
+    type(queue_data), pointer :: queue_element_new
+  end function queue_create_element_i32
+
+
+  function queue_create_element_i64() result(queue_element_new)
+    implicit none
+
+    type(queue_data), pointer :: queue_element_new
+  end function queue_create_element_i64
+
+
+  function queue_create_element_f32() result(queue_element_new)
+    implicit none
+
+    type(queue_data), pointer :: queue_element_new
+  end function queue_create_element_f32
+
+
+  function queue_create_element_f64() result(queue_element_new)
+    implicit none
+
+    type(queue_data), pointer :: queue_element_new
+  end function queue_create_element_f64
+
 
 end module thread_filo_queue
