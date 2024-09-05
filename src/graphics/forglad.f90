@@ -708,6 +708,30 @@ contains
   end function is_opengl_4_1_capable
 
 
+  !* A GPU needs OpenGL 4.3 support to enable debugging.
+  function forglad_gpu_supports_gl_debugging() result(ok_to_debug)
+    use :: string
+    implicit none
+
+    integer(c_int) :: major, minor
+    logical(c_bool) :: ok_to_debug
+
+    ok_to_debug = .false.
+
+    call gl_get_integer_v(GL_MAJOR_VERSION, major)
+    call gl_get_integer_v(GL_MINOR_VERSION, minor)
+
+    if (major < 4) then
+      return
+    end if
+    if (minor < 3) then
+      return
+    end if
+
+    ok_to_debug = .true.
+  end function forglad_gpu_supports_gl_debugging
+
+
   !* Loads up the function pointers for OpenGL.
   !* This gets a function pointer passed into it to prevent a circular dependency.
   subroutine forglad_load_gl(proc_address_finder_raw)
@@ -747,8 +771,11 @@ contains
     function_pointer = proc_address_finder("glDisable"//achar(0))
     call c_f_procpointer(function_pointer, gl_disable)
 
-    function_pointer = proc_address_finder("glDebugMessageCallback"//achar(0))
-    call c_f_procpointer(function_pointer, internal_gl_debug_message_callback)
+    ! Don't bother loading this pointer if it doesn't exist.
+    if (forglad_gpu_supports_gl_debugging()) then
+      function_pointer = proc_address_finder("glDebugMessageCallback"//achar(0))
+      call c_f_procpointer(function_pointer, internal_gl_debug_message_callback)
+    end if
 
     function_pointer = proc_address_finder("glCreateProgram"//achar(0))
     call c_f_procpointer(function_pointer, internal_gl_create_program)
