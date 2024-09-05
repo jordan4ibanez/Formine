@@ -120,22 +120,28 @@ contains
 
 
   !* Pop the first element off the queue.
-  function concurrent_linked_filo_queue_pop(this) result(generic_pointer)
+  function concurrent_linked_filo_queue_pop(this, generic_pointer) result(some)
     implicit none
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
-    class(*), pointer :: generic_pointer
+    class(*), intent(inout), pointer :: generic_pointer
+    logical(c_bool) :: some
     integer(c_int) :: status
     type(queue_node), pointer :: next_pointer
 
     status =  thread_write_lock(this%c_mutex_pointer)
     !! BEGIN SAFE OPERATION.
 
+    some = .false.
+
     generic_pointer => null()
 
     ! If we have a head, the output will become the head data.
     ! The head will now be shifted forward, and the old head will be cleaned up.
     if (associated(this%head)) then
+
+      some = .true.
+
       next_pointer => this%head%next
 
       ! First we unshell the data.
