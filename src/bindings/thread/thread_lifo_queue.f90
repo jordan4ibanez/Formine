@@ -16,10 +16,12 @@ module thread_lifo_queue
     type(queue_node), pointer :: head => null()
     type(queue_node), pointer :: tail => null()
     type(mutex_rwlock), pointer :: mutex => null()
+    type(c_ptr) :: c_mutex_pointer = c_null_ptr
   contains
     procedure :: insert => concurrent_linked_filo_queue_insert
     procedure :: pop => concurrent_linked_filo_queue_pop
   end type concurrent_linked_filo_queue
+
 
   interface concurrent_linked_filo_queue
     module procedure :: constructor_concurrent_linked_filo_queue
@@ -32,6 +34,9 @@ contains
     implicit none
 
     type(concurrent_linked_filo_queue) :: queue_new
+
+    queue_new%mutex = thread_create_mutex()
+    queue_new%c_mutex_pointer = c_loc(queue_new%mutex)
   end function constructor_concurrent_linked_filo_queue
 
 
@@ -39,6 +44,16 @@ contains
     implicit none
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
+    integer(c_int) :: status
+
+    call thread_write_lock(this%c_mutex_pointer)
+    !? BEGIN SAFE OPERATION.
+
+
+
+
+    !? END SAFE OPERATION.
+    call thread_unlock_lock(this%c_mutex_pointer)
   end subroutine concurrent_linked_filo_queue_insert
 
 
@@ -46,6 +61,15 @@ contains
     implicit none
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
+
+    call thread_write_lock(this%c_mutex_pointer)
+    !? BEGIN SAFE OPERATION.
+
+
+    
+
+    !? END SAFE OPERATION.
+    call thread_unlock_lock(this%c_mutex_pointer)
   end subroutine concurrent_linked_filo_queue_pop
 
 
