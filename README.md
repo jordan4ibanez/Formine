@@ -95,14 +95,22 @@ _Or_ you can just change the Makefile to use gfortran-14, but that's annoying.
 
 You're going to need MacPorts and Homebrew. This was tested in Mac OS Monterey.
 
+Well first, you're going to need to edit your ``.zshrc`` to add a non-standard path.
+
+Add this to ``.zshrc``:
+
+```
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/lib
+```
+
 Mac Ports:
 ```
-sudo port install fpm
+sudo port install fpm stb
 ```
 
 Homebrew
 ```
-brew install gfortran glfw stb
+brew install gfortran glfw
 ```
 
 Then you simply will make with the Mac flag.
