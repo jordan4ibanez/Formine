@@ -45,6 +45,7 @@ contains
   end function constructor_concurrent_linked_filo_queue
 
 
+  !* Push an element into the end of a queue.
   subroutine concurrent_linked_filo_queue_insert(this, generic_pointer)
     implicit none
 
@@ -79,6 +80,7 @@ contains
   end subroutine concurrent_linked_filo_queue_insert
 
 
+  !* Pop the first element off the queue.
   function concurrent_linked_filo_queue_pop(this) result(generic_pointer)
     implicit none
 
@@ -109,6 +111,8 @@ contains
   end function concurrent_linked_filo_queue_pop
 
 
+  !* Destroy all data in a queue.
+  !! This will not destroy the mutex. You are still required to do that.
   subroutine concurrent_linked_filo_queue_destroy(this)
     implicit none
 
