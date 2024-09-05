@@ -7,6 +7,7 @@ module forglad
 
 
   public :: forglad_load_gl
+  public :: forglad_gpu_supports_gl_debugging
 
 
   ! These are OpenGL constants.

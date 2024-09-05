@@ -137,9 +137,11 @@ program main
 
   call glfw_swap_interval(1)
 
-  !! This allows OpenGL debugging.
-  call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
-  call gl_set_debug_message_callback()
+  !! This allows OpenGL debugging. (But not on Mac OS)
+  if (forglad_gpu_supports_gl_debugging()) then
+    call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
+    call gl_set_debug_message_callback()
+  end if
 
   !! This enabled depth testing.
   call gl_depth_mask(.true.)

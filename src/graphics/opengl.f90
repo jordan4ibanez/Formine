@@ -10,6 +10,7 @@ module opengl
   ! OpenGL function pointer loader.
 
   public :: forglad_load_gl
+  public :: forglad_gpu_supports_gl_debugging
 
   ! OpenGL function pointers.
 
