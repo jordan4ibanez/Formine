@@ -26,7 +26,7 @@ contains
 
     do
 
-      print*,"iteration: ",y
+      ! print*,"iteration: ",y
 
       y = y + 1
 
@@ -43,7 +43,7 @@ contains
 
       i = 1
       do
-        print*,"pop ", i
+        ! print*,"pop ", i
 
         i = i + 1
 
