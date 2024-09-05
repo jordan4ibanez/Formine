@@ -1,4 +1,4 @@
-module test_fast_pack_suite
+module test_suite_fast_pack
   use :: fast_pack
   implicit none
 
@@ -95,11 +95,11 @@ contains
   end subroutine call_in
 
 
-end module test_fast_pack_suite
+end module test_suite_fast_pack
 
 
 program test_fast_pack
-  use test_fast_pack_suite
+  use test_suite_fast_pack
   implicit none
 
 
