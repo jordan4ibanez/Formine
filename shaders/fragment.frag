@@ -1,4 +1,4 @@
-#version 420
+#version 410
 
 in vec3 pixel_color;
 in vec2 output_texture_coordinate;
