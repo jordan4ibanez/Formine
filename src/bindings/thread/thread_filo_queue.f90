@@ -39,7 +39,7 @@ module thread_filo_queue
 
   type :: queue_node
     type(queue_node), pointer :: next => null()
-    class(*), pointer :: data => null()
+    type(queue_data), pointer :: data => null()
   end type queue_node
 
 
@@ -59,8 +59,12 @@ module thread_filo_queue
     module procedure :: constructor_concurrent_linked_filo_queue
   end interface concurrent_linked_filo_queue
 
+
   interface queue_create_element
     module procedure :: queue_create_element_i32
+    module procedure :: queue_create_element_i64
+    module procedure :: queue_create_element_f32
+    module procedure :: queue_create_element_f64
 
   end interface queue_create_element
 
@@ -82,7 +86,7 @@ contains
     implicit none
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
-    class(*), intent(in), pointer :: generic_pointer
+    type(queue_data), intent(in), pointer :: generic_pointer
     integer(c_int) :: status
     type(queue_node), pointer :: node_new
 
@@ -164,14 +168,16 @@ contains
 
         !! THIS IS DEBUGGIN ONLY !!
 
-        associate (current_data => current%data)
-          select type(current_data)
-           type is (integer(c_int))
-            print*,current_data
-           type is (character(*))
-            print*,current_data
-          end select
-        end associate
+        select case(current%data%type)
+         case (QUEUE_NONE)
+         case (QUEUE_I32)
+         case (QUEUE_I64)
+         case (QUEUE_F32)
+         case (QUEUE_F64)
+         case (QUEUE_BOOL)
+         case (QUEUE_STRING)
+         case (QUEUE_GENERIC)
+        end select
 
         !! END DEBUGGING !!
 
@@ -192,33 +198,51 @@ contains
     status = thread_unlock_lock(this%c_mutex_pointer)
   end subroutine concurrent_linked_filo_queue_destroy
 
+
 !* BEGIN QUEUE ELEMENT GENERIC.
 
-  function queue_create_element_i32() result(queue_element_new)
+
+  function queue_create_element_i32(i32) result(new_queue_element_pointer)
     implicit none
 
-    type(queue_data), pointer :: queue_element_new
+    type(queue_data), pointer :: new_queue_element_pointer
+    integer(c_int), intent(in), value :: i32
+
+    allocate(new_queue_element_pointer%i32)
+    new_queue_element_pointer%i32 = i32
   end function queue_create_element_i32
 
 
-  function queue_create_element_i64() result(queue_element_new)
+  function queue_create_element_i64(i64) result(new_queue_element_pointer)
     implicit none
 
-    type(queue_data), pointer :: queue_element_new
+    type(queue_data), pointer :: new_queue_element_pointer
+    integer(c_int64_t), intent(in), value :: i64
+
+    allocate(new_queue_element_pointer%i64)
+    new_queue_element_pointer%i64 = i64
   end function queue_create_element_i64
 
 
-  function queue_create_element_f32() result(queue_element_new)
+  function queue_create_element_f32(f32) result(new_queue_element_pointer)
     implicit none
 
-    type(queue_data), pointer :: queue_element_new
+    type(queue_data), pointer :: new_queue_element_pointer
+    integer(c_int), intent(in), value :: f32
+
+    allocate(new_queue_element_pointer%f32)
+    new_queue_element_pointer%f32 = f32
   end function queue_create_element_f32
 
 
-  function queue_create_element_f64() result(queue_element_new)
+  function queue_create_element_f64(f64) result(new_queue_element_pointer)
     implicit none
 
-    type(queue_data), pointer :: queue_element_new
+    type(queue_data), pointer :: new_queue_element_pointer
+    integer(c_int), intent(in), value :: f64
+
+    allocate(new_queue_element_pointer%f64)
+    new_queue_element_pointer%f64 = f64
   end function queue_create_element_f64
 
 
