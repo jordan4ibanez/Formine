@@ -45,7 +45,7 @@ block = {}
 
 --- A block's drawtype.
 --- This is a reflection of the Fortran draw_type parameters.
----@enum draw_type
+--- @enum draw_type
 block.draw_type = {
   air = 0,
   normal = 1
