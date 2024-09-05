@@ -1,4 +1,4 @@
-module thread_lifo_queue
+module thread_filo_queue
   use :: thread
   use, intrinsic :: iso_c_binding
   implicit none
@@ -160,4 +160,4 @@ contains
     status = thread_unlock_lock(this%c_mutex_pointer)
   end subroutine concurrent_linked_filo_queue_destroy
 
-end module thread_lifo_queue
+end module thread_filo_queue
