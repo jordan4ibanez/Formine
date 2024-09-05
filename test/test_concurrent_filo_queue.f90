@@ -16,10 +16,14 @@ contains
     integer(c_int), pointer :: i_pointer
     character(len = :, kind = c_char), pointer :: s_pointer
     type(queue_data), pointer :: testing
+    class(*), pointer :: test_generic_pointer
 
     queue = concurrent_linked_filo_queue()
 
-    do i = 1,1000
+    print*,"begin test memory leak"
+    ! do
+
+    do i = 1,10
 
       allocate(i_pointer)
       i_pointer = i
@@ -29,9 +33,22 @@ contains
       s_pointer = "hi there!"//int_to_string(i)
 
       call queue%push(queue_data(s_pointer))
+
     end do
 
+    ! do i = 1,10
+
+    !   test_generic_pointer => queue%pop()
+
+    !   deallocate(test_generic_pointer)
+
+    ! end do
+
     call queue%destroy()
+
+    ! end do
+
+
 
   end subroutine test_it_single_threaded
 
