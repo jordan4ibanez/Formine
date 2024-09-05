@@ -228,7 +228,7 @@ contains
     implicit none
 
     type(queue_data), pointer :: new_queue_element_pointer
-    integer(c_int), intent(in), value :: f32
+    real(c_float), intent(in), value :: f32
 
     allocate(new_queue_element_pointer%f32)
     new_queue_element_pointer%f32 = f32
@@ -239,7 +239,7 @@ contains
     implicit none
 
     type(queue_data), pointer :: new_queue_element_pointer
-    integer(c_int), intent(in), value :: f64
+    real(c_double), intent(in), value :: f64
 
     allocate(new_queue_element_pointer%f64)
     new_queue_element_pointer%f64 = f64
