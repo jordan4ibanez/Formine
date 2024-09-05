@@ -691,6 +691,21 @@ module luajit
 !? END RAW BINDINGS. =================================================================================
 
 
+!? BEGIN LUAJIT FUNCTION BLUEPRINT. =================================================================================
+
+
+    recursive function luajit_example_blueprint(state) result(status) bind(c)
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: state
+      integer(c_int) :: status
+    end function luajit_example_blueprint
+
+
+!? END LUAJIT FUNCTION BLUEPRINT. =================================================================================
+
+
   end interface
 
 
