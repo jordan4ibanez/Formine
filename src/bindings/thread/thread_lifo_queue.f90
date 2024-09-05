@@ -24,6 +24,7 @@ module thread_lifo_queue
   contains
     procedure :: insert => concurrent_linked_filo_queue_insert
     procedure :: pop => concurrent_linked_filo_queue_pop
+    procedure :: destroy => concurrent_linked_filo_queue_destroy
   end type concurrent_linked_filo_queue
 
 
@@ -107,5 +108,39 @@ contains
     status = thread_unlock_lock(this%c_mutex_pointer)
   end function concurrent_linked_filo_queue_pop
 
+
+  subroutine concurrent_linked_filo_queue_destroy(this)
+    implicit none
+
+    class(concurrent_linked_filo_queue), intent(inout) :: this
+    type(queue_node), pointer :: current, next
+    integer(c_int) :: status
+
+    status =  thread_write_lock(this%c_mutex_pointer)
+    !! BEGIN SAFE OPERATION.
+
+    if (associated(this%head)) then
+
+      current => this%head
+
+      do
+        next => current%next
+
+        deallocate(current%data)
+        deallocate(current)
+
+        ! Pointing at nothing.
+        if (.not. associated(next)) then
+          exit
+        end if
+
+        current => next
+      end do
+
+    end if
+
+    !! END SAFE OPERATION.
+    status = thread_unlock_lock(this%c_mutex_pointer)
+  end subroutine concurrent_linked_filo_queue_destroy
 
 end module thread_lifo_queue
