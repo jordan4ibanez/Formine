@@ -28,8 +28,8 @@ test:
 
 .PHONY: test_gdb
 test_gdb:
-	@MALLOC_CHECK_=2 fpm test --flag   -g \
-	                          --c-flag -g
+	@MALLOC_CHECK_=2 fpm test --flag   -g --flag   -fsanitize=leak \
+	                          --c-flag -g --c-flag -fsanitize=leak
 .PHONY: test_valgrind
 test_valgrind:
 	@valgrind --trace-children=yes --leak-check=full fpm test --flag   -g \
