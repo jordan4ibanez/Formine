@@ -8,6 +8,8 @@ module thread_filo_queue
 
 
   public :: concurrent_linked_filo_queue
+  public :: queue_data
+  public :: queue_data_constructor
 
 
   integer(c_int), parameter :: QUEUE_NONE = 0
@@ -36,6 +38,11 @@ module thread_filo_queue
     integer(c_int) :: type = QUEUE_NONE
   end type queue_data
 
+  interface queue_data
+    module procedure :: queue_data_constructor
+  end interface queue_data
+
+
 
   type :: queue_node
     type(queue_node), pointer :: next => null()
@@ -59,14 +66,6 @@ module thread_filo_queue
     module procedure :: constructor_concurrent_linked_filo_queue
   end interface concurrent_linked_filo_queue
 
-
-  interface queue_create_element
-    module procedure :: queue_create_element_i32
-    module procedure :: queue_create_element_i64
-    module procedure :: queue_create_element_f32
-    module procedure :: queue_create_element_f64
-
-  end interface queue_create_element
 
 contains
 
@@ -199,87 +198,55 @@ contains
   end subroutine concurrent_linked_filo_queue_destroy
 
 
-!* BEGIN QUEUE ELEMENT GENERIC.
-
-
-  function queue_create_element_i32(i32) result(new_queue_element_pointer)
+  function queue_data_constructor(generic) result(new_queue_element_pointer)
     implicit none
 
     type(queue_data), pointer :: new_queue_element_pointer
-    integer(c_int), intent(in), value :: i32
+    class(*), intent(in), target :: generic
+    character(len = :, kind = c_char), allocatable :: temp
 
-    allocate(new_queue_element_pointer%i32)
-    new_queue_element_pointer%i32 = i32
-  end function queue_create_element_i32
+    allocate(new_queue_element_pointer)
 
+    select type(generic)
+     type is (integer(c_int))
+      new_queue_element_pointer%type = QUEUE_I32
+      allocate(new_queue_element_pointer%i32)
+      new_queue_element_pointer%i32 = generic
 
-  function queue_create_element_i64(i64) result(new_queue_element_pointer)
-    implicit none
+     type is (integer(c_int64_t))
+      new_queue_element_pointer%type = QUEUE_I64
+      allocate(new_queue_element_pointer%i64)
+      new_queue_element_pointer%i64 = generic
 
-    type(queue_data), pointer :: new_queue_element_pointer
-    integer(c_int64_t), intent(in), value :: i64
+     type is (real(c_float))
+      new_queue_element_pointer%type = QUEUE_F32
+      allocate(new_queue_element_pointer%f32)
+      new_queue_element_pointer%f32 = generic
 
-    allocate(new_queue_element_pointer%i64)
-    new_queue_element_pointer%i64 = i64
-  end function queue_create_element_i64
+     type is (real(c_double))
+      new_queue_element_pointer%type = QUEUE_F64
+      allocate(new_queue_element_pointer%f64)
+      new_queue_element_pointer%f64 = generic
 
+     type is (logical)
+      new_queue_element_pointer%type = QUEUE_BOOL
+      allocate(new_queue_element_pointer%bool)
+      new_queue_element_pointer%bool = generic
 
-  function queue_create_element_f32(f32) result(new_queue_element_pointer)
-    implicit none
+     type is (character(len = *, kind = c_char))
+      new_queue_element_pointer%type = QUEUE_STRING
+      associate (string_len => len(generic))
+        allocate(character(len = string_len, kind = c_char) :: new_queue_element_pointer%string)
+        new_queue_element_pointer%string(1:string_len) = generic(1:string_len)
+      end associate
 
-    type(queue_data), pointer :: new_queue_element_pointer
-    real(c_float), intent(in), value :: f32
-
-    allocate(new_queue_element_pointer%f32)
-    new_queue_element_pointer%f32 = f32
-  end function queue_create_element_f32
-
-
-  function queue_create_element_f64(f64) result(new_queue_element_pointer)
-    implicit none
-
-    type(queue_data), pointer :: new_queue_element_pointer
-    real(c_double), intent(in), value :: f64
-
-    allocate(new_queue_element_pointer%f64)
-    new_queue_element_pointer%f64 = f64
-  end function queue_create_element_f64
-
-
-  function queue_create_element_bool(bool) result(new_queue_element_pointer)
-    implicit none
-
-    type(queue_data), pointer :: new_queue_element_pointer
-    logical, intent(in), value :: bool
-
-    allocate(new_queue_element_pointer%bool)
-    new_queue_element_pointer%bool = bool
-  end function queue_create_element_bool
-
-
-  function queue_create_element_string(string) result(new_queue_element_pointer)
-    implicit none
-
-    type(queue_data), pointer :: new_queue_element_pointer
-    character(len = *, kind = c_char), intent(in) :: string
-    integer(c_int) :: string_length
-
-    string_length = len(string)
-
-    allocate(character(len = string_length, kind = c_char) :: new_queue_element_pointer%string)
-
-    new_queue_element_pointer%string(1:string_length) = string(1:string_length)
-  end function queue_create_element_string
-
-
-  function queue_create_element_generic(generic) result(new_queue_element_pointer)
-    implicit none
-
-    type(queue_data), pointer :: new_queue_element_pointer
-    class(*), intent(in), pointer :: generic
-
-    new_queue_element_pointer%generic => generic
-  end function queue_create_element_generic
+     class default
+      !? We will check if this thing is a pointer.
+      !! If it's not, it's going to blow up.
+      new_queue_element_pointer%type = QUEUE_GENERIC
+      new_queue_element_pointer%generic => generic
+    end select
+  end function queue_data_constructor
 
 
 end module thread_filo_queue
