@@ -120,11 +120,11 @@ contains
 
 
   !* Pop the first element off the queue.
-  function concurrent_linked_filo_queue_pop(this, generic_pointer) result(some)
+  function concurrent_linked_filo_queue_pop(this, generic_pointer_option) result(some)
     implicit none
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
-    class(*), intent(inout), pointer :: generic_pointer
+    class(*), intent(inout), pointer :: generic_pointer_option
     logical(c_bool) :: some
     integer(c_int) :: status
     type(queue_node), pointer :: next_pointer
@@ -134,7 +134,7 @@ contains
 
     some = .false.
 
-    generic_pointer => null()
+    generic_pointer_option => null()
 
     ! If we have a head, the output will become the head data.
     ! The head will now be shifted forward, and the old head will be cleaned up.
@@ -149,19 +149,19 @@ contains
        case (QUEUE_NONE)
         error stop "QUEUE FAILURE!"
        case (QUEUE_I32)
-        generic_pointer => this%head%data%i32
+        generic_pointer_option => this%head%data%i32
        case (QUEUE_I64)
-        generic_pointer => this%head%data%i64
+        generic_pointer_option => this%head%data%i64
        case (QUEUE_F32)
-        generic_pointer => this%head%data%f32
+        generic_pointer_option => this%head%data%f32
        case (QUEUE_F64)
-        generic_pointer => this%head%data%f64
+        generic_pointer_option => this%head%data%f64
        case (QUEUE_BOOL)
-        generic_pointer => this%head%data%bool
+        generic_pointer_option => this%head%data%bool
        case (QUEUE_STRING)
-        generic_pointer => this%head%data%string
+        generic_pointer_option => this%head%data%string
        case (QUEUE_GENERIC)
-        generic_pointer => this%head%data%generic
+        generic_pointer_option => this%head%data%generic
       end select
 
       ! Then we deallocate.
