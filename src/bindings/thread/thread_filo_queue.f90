@@ -161,6 +161,11 @@ contains
       this%head => next_pointer
     end if
 
+    !* If the head was pointed to null, we must nullify the tail.
+    if (.not. associated(this%head)) then
+      this%tail => null()
+    end if
+
     !! END SAFE OPERATION.
     status = thread_unlock_lock(this%c_mutex_pointer)
   end function concurrent_linked_filo_queue_pop
