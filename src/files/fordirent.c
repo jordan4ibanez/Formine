@@ -6,6 +6,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#ifdef __APPLE__
+#include <string.h>
+#endif
+
 /*
 You can thank:
 Jean-Bernard Jansen https://stackoverflow.com/a/4204758
