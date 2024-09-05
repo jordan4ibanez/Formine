@@ -271,6 +271,8 @@ program main
 
       call glfw_poll_events()
 
+      call thread_process_detached_thread_queue()
+
     end do
   end if
 
