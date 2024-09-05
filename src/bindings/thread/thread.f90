@@ -67,7 +67,7 @@ module thread
   type(thread_argument), dimension(:), pointer :: thread_arguments
   logical(c_bool), dimension(:), pointer :: thread_active
 
-  type(thread_queue_element), dimension(:), allocatable :: thread_queue
+  type(concurrent_linked_filo_queue) :: thread_queue
 
 
 

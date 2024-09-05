@@ -10,7 +10,6 @@ module thread_filo_queue
 
   public :: concurrent_linked_filo_queue
   public :: queue_data
-  public :: queue_data_constructor
 
 
   integer(c_int), parameter :: QUEUE_NONE = 0
