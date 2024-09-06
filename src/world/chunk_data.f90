@@ -48,17 +48,17 @@ module chunk_data
 contains
 
 
-  function memory_chunk_constructor(x, y) result(memory_chunk_new)
+  function memory_chunk_constructor(x, y) result(new_memory_chunk)
     implicit none
 
     integer(c_int) :: x, y
-    type(memory_chunk), pointer :: memory_chunk_new
+    type(memory_chunk), pointer :: new_memory_chunk
 
-    allocate(memory_chunk_new)
-    allocate(memory_chunk_new%world_position)
-    memory_chunk_new%world_position = [x,y]
-    allocate(memory_chunk_new%data(CHUNK_HEIGHT, CHUNK_WIDTH, CHUNK_WIDTH))
-    allocate(memory_chunk_new%mesh(MESH_STACK_ARRAY_SIZE))
+    allocate(new_memory_chunk)
+    allocate(new_memory_chunk%world_position)
+    new_memory_chunk%world_position = [x,y]
+    allocate(new_memory_chunk%data(CHUNK_HEIGHT, CHUNK_WIDTH, CHUNK_WIDTH))
+    allocate(new_memory_chunk%mesh(MESH_STACK_ARRAY_SIZE))
   end function memory_chunk_constructor
 
 

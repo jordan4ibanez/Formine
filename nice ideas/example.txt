@@ -48,7 +48,7 @@ module orient_class
   end type orientation
 
 
-  public :: orientation_new
+  public :: new_orientation
 
 
 contains
@@ -194,7 +194,7 @@ contains
 
 
   ! Constructor.
-  type(orientation) function orientation_new(optional_initial_value) result(instance_new)
+  type(orientation) function new_orientation(optional_initial_value) result(new_instance)
     implicit none
 
     integer, intent(in), optional :: optional_initial_value
@@ -209,8 +209,8 @@ contains
     end if
 
     ! Now construct it.
-    instance_new = orientation(value)
-  end function orientation_new
+    new_instance = orientation(value)
+  end function new_orientation
 
 
 end module orient_class
@@ -236,7 +236,7 @@ contains
 
     type(orientation) :: blah
 
-    blah = orientation_new(ORIENT_UP)
+    blah = new_orientation(ORIENT_UP)
 
     !! Fix this, does nothing for now.
     print*,"test:",blah

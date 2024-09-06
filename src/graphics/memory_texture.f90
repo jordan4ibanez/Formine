@@ -49,12 +49,12 @@ contains
 
 
   !* Constructor for a pixel.
-  function pixel_constructor(r, g, b, a) result(pixel_new)
+  function pixel_constructor(r, g, b, a) result(new_pixel)
     use :: string
     implicit none
 
     integer(c_int), intent(in), value :: r, g, b, a
-    type(pixel) :: pixel_new
+    type(pixel) :: new_pixel
 
     ! Range checks for RGBA.
     if (r < 0 .or. r > 255) then
@@ -70,22 +70,22 @@ contains
       error stop "[RGBA Texture] Error: Alpha is out of range. Range: [0-255]. Received: ["//int_to_string(a)//"]"
     end if
 
-    pixel_new%r = r
-    pixel_new%g = g
-    pixel_new%b = b
-    pixel_new%a = a
+    new_pixel%r = r
+    new_pixel%g = g
+    new_pixel%b = b
+    new_pixel%a = a
   end function pixel_constructor
 
 
   !* Constructor for raw rgba8 data.
-  function rgba8_texture_constructor(raw_texture_memory_u8, width, height) result(rgba_texture_new)
+  function rgba8_texture_constructor(raw_texture_memory_u8, width, height) result(new_rgba_texture)
     use :: string
     use :: math_helpers
     implicit none
 
     integer(1), dimension(:) :: raw_texture_memory_u8
     integer(c_int), intent(in), value :: width, height
-    type(memory_texture) :: rgba_texture_new
+    type(memory_texture) :: new_rgba_texture
     integer(c_int) :: array_length, pixel_array_length, current_index, y, x
     integer(c_int), dimension(:), allocatable :: raw_texture_memory_i32
 
@@ -97,21 +97,21 @@ contains
       error stop "[RGBA Texture] Error: Received raw texture memory with assumed width ["//int_to_string(width)//"] | height ["//int_to_string(height)//"]. Assumed size is wrong."
     end if
 
-    rgba_texture_new%width = width
-    rgba_texture_new%height = height
+    new_rgba_texture%width = width
+    new_rgba_texture%height = height
 
     ! Shift this into a format we can use.
     raw_texture_memory_i32 = c_uchar_to_int_array(raw_texture_memory_u8)
 
     ! Allocate the array.
-    allocate(rgba_texture_new%pixels(width, height))
+    allocate(new_rgba_texture%pixels(width, height))
 
     current_index = 1
 
     do y = 1,height
       do x = 1,width
         ! Now we create the pixel.
-        rgba_texture_new%pixels(x, y) = pixel( &
+        new_rgba_texture%pixels(x, y) = pixel( &
           raw_texture_memory_i32(current_index), &
           raw_texture_memory_i32(current_index + 1), &
           raw_texture_memory_i32(current_index + 2), &
@@ -126,20 +126,20 @@ contains
 
 
   !* Constructor for a blank memory texture with a size.
-  function blank_memory_texture_constructor(width, height) result(rgba_texture_new)
+  function blank_memory_texture_constructor(width, height) result(new_rgba_texture)
     implicit none
 
     integer(c_int), intent(in), value :: width, height
-    type(memory_texture) :: rgba_texture_new
+    type(memory_texture) :: new_rgba_texture
     integer(c_int) :: pixel_array_length
 
     pixel_array_length = width * height
 
-    rgba_texture_new%width = width
-    rgba_texture_new%height = height
+    new_rgba_texture%width = width
+    new_rgba_texture%height = height
 
     ! Pretty simple.
-    allocate(rgba_texture_new%pixels(width, height))
+    allocate(new_rgba_texture%pixels(width, height))
   end function blank_memory_texture_constructor
 
 
@@ -165,31 +165,31 @@ contains
 
 
   !* Set the pixel of a texture.
-  subroutine memory_texture_set_pixel(this, x, y, pixel_new)
+  subroutine memory_texture_set_pixel(this, x, y, new_pixel)
     implicit none
 
     class(memory_texture), intent(inout) :: this
     integer(c_int), intent(in), value :: x, y
-    type(pixel), intent(in) :: pixel_new
+    type(pixel), intent(in) :: new_pixel
 
-    this%pixels(x, y) = pixel_new
+    this%pixels(x, y) = new_pixel
   end subroutine memory_texture_set_pixel
 
 
   !* Will extract the workable pixel data into a uint8 array which should never be modified.
-  function memory_texture_get_raw_data(this) result(raw_texture_data_new)
+  function memory_texture_get_raw_data(this) result(new_raw_texture_data)
     use :: math_helpers, only: int_to_c_uchar
     implicit none
 
     class(memory_texture), intent(in) :: this
-    integer(1), dimension(:), allocatable :: raw_texture_data_new
+    integer(1), dimension(:), allocatable :: new_raw_texture_data
     integer(c_int) :: raw_size, current_raw_index, y, x
     type(pixel) :: current_pixel
 
     ! 4 channels. RGBA.
     raw_size = this%width * this%height * 4
 
-    allocate(raw_texture_data_new(raw_size))
+    allocate(new_raw_texture_data(raw_size))
 
     current_raw_index = 1
 
@@ -199,10 +199,10 @@ contains
         current_pixel = this%pixels(x, y)
 
         ! Transmute it into uint8_t.
-        raw_texture_data_new(current_raw_index) = int_to_c_uchar(current_pixel%r)
-        raw_texture_data_new(current_raw_index + 1) = int_to_c_uchar(current_pixel%g)
-        raw_texture_data_new(current_raw_index + 2) = int_to_c_uchar(current_pixel%b)
-        raw_texture_data_new(current_raw_index + 3) = int_to_c_uchar(current_pixel%a)
+        new_raw_texture_data(current_raw_index) = int_to_c_uchar(current_pixel%r)
+        new_raw_texture_data(current_raw_index + 1) = int_to_c_uchar(current_pixel%g)
+        new_raw_texture_data(current_raw_index + 2) = int_to_c_uchar(current_pixel%b)
+        new_raw_texture_data(current_raw_index + 3) = int_to_c_uchar(current_pixel%a)
 
         ! 4 channels. RGBA.
         current_raw_index = current_raw_index + 4

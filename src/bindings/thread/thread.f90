@@ -233,16 +233,16 @@ contains
 
   !* Create a new joinable thread.
   !* Returns you the thread struct.
-  function thread_create_joinable(subroutine_procedure_pointer, argument_pointer) result(joinable_thread_new) bind(c)
+  function thread_create_joinable(subroutine_procedure_pointer, argument_pointer) result(new_joinable_thread) bind(c)
     use :: string, only: int_to_string
     implicit none
 
     type(c_funptr), intent(in), value :: subroutine_procedure_pointer
     type(c_ptr), intent(in), value :: argument_pointer
-    type(pthread_t) :: joinable_thread_new
+    type(pthread_t) :: new_joinable_thread
     integer(c_int) :: status
 
-    status = internal_pthread_create(joinable_thread_new, c_null_ptr, subroutine_procedure_pointer, argument_pointer)
+    status = internal_pthread_create(new_joinable_thread, c_null_ptr, subroutine_procedure_pointer, argument_pointer)
 
     if (status /= THREAD_OK) then
       error stop "[Thread] Error: Failed to create a joinable thread. Error status: ["//int_to_string(status)//"]"
@@ -308,12 +308,12 @@ contains
 
 
   !* Custom hack job to allocate a pthread union into memory.
-  function allocate_raw_pthread_attr_t() result(thread_new_attr)
+  function allocate_raw_pthread_attr_t() result(new_thread_attr)
     implicit none
 
-    type(pthread_attr_t) :: thread_new_attr
+    type(pthread_attr_t) :: new_thread_attr
 
-    allocate(thread_new_attr%raw_data_pointer(for_p_thread_get_pthread_attr_t_width()))
+    allocate(new_thread_attr%raw_data_pointer(for_p_thread_get_pthread_attr_t_width()))
   end function allocate_raw_pthread_attr_t
 
 
@@ -323,13 +323,13 @@ contains
 
     type(c_funptr), intent(in), value :: subroutine_procedure_pointer
     type(c_ptr), intent(in), value :: argument_pointer
-    type(thread_queue_element), pointer :: element_new
+    type(thread_queue_element), pointer :: new_element
 
-    allocate(element_new)
-    element_new%subroutine_pointer = subroutine_procedure_pointer
-    element_new%data_to_send = argument_pointer
+    allocate(new_element)
+    new_element%subroutine_pointer = subroutine_procedure_pointer
+    new_element%data_to_send = argument_pointer
 
-    call master_thread_queue%push(queue_data(element_new))
+    call master_thread_queue%push(queue_data(new_element))
   end subroutine thread_create_detached
 
 
@@ -431,7 +431,7 @@ contains
     type(c_funptr), intent(in), value :: subroutine_procedure_pointer
     type(c_ptr), intent(in), value :: argument_pointer
     integer(c_int), intent(in), value :: thread_index
-    type(pthread_t) :: detached_thread_new
+    type(pthread_t) :: new_detached_thread
     type(pthread_attr_t) :: thread_attributes
     integer(c_int) :: status
 
@@ -448,7 +448,7 @@ contains
       error stop "[Thread] Error: Failed to set thread attribute [detachstate]. Error status: ["//int_to_string(status)//"]"
     end if
 
-    available_threads(thread_index) = detached_thread_new
+    available_threads(thread_index) = new_detached_thread
 
     status = internal_pthread_create(available_threads(thread_index), c_loc(thread_attributes%raw_data_pointer), subroutine_procedure_pointer, argument_pointer)
 

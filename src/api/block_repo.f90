@@ -143,7 +143,7 @@ contains
     integer(c_int) :: draw_type
     !* The smart pointer where we will store the block definiton.
     !* We will only allocate this after a successful data query from LuaJIT.
-    type(block_definition) :: definition_new
+    type(block_definition) :: new_definition
 
     status = LUAJIT_GET_OK
 
@@ -201,10 +201,10 @@ contains
     ! We have completed a successful query of the definition table from LuaJIT.
     ! Put all the data into the fortran database.
 
-    definition_new%name = name%get()
-    definition_new%description = description%get()
-    definition_new%textures = textures%data
-    definition_new%draw_type = draw_type
+    new_definition%name = name%get()
+    new_definition%description = description%get()
+    new_definition%textures = textures%data
+    new_definition%draw_type = draw_type
 
     ! print"(A)", module_name//": Current Block definition:"
     ! print"(A)", "Name: "//definition_pointer%name
@@ -213,9 +213,9 @@ contains
     ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
 
     ! Copy the definition into the string based database.
-    call definition_database_string%set(key(definition_new%name), definition_new)
+    call definition_database_string%set(key(new_definition%name), new_definition)
 
-    definition_array = [definition_array, definition_new]
+    definition_array = [definition_array, new_definition]
 
     definition_array_length = definition_array_length + 1
     current_id = current_id + 1

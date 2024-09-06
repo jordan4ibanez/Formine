@@ -62,16 +62,16 @@ module thread_mutex
 contains
 
   !* Create a new mutex pointer.
-  function thread_create_mutex_pointer() result(mutex_pointer_new)
+  function thread_create_mutex_pointer() result(new_mutex_pointer)
     implicit none
 
-    type(mutex_rwlock), pointer :: mutex_pointer_new
+    type(mutex_rwlock), pointer :: new_mutex_pointer
     integer(c_int) :: status
 
-    allocate(mutex_pointer_new)
-    allocate(mutex_pointer_new%raw_data_pointer(for_p_thread_get_pthread_mutex_t_width()))
+    allocate(new_mutex_pointer)
+    allocate(new_mutex_pointer%raw_data_pointer(for_p_thread_get_pthread_mutex_t_width()))
 
-    status = internal_pthread_rwlock_init(c_loc(mutex_pointer_new), c_null_ptr)
+    status = internal_pthread_rwlock_init(c_loc(new_mutex_pointer), c_null_ptr)
   end function thread_create_mutex_pointer
 
 end module thread_mutex

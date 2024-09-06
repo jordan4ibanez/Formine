@@ -177,11 +177,11 @@ contains
 
 
   !* Internal only. Set a texture in the database.
-  subroutine set_texture(texture_name, texture_new, x, y)
+  subroutine set_texture(texture_name, new_texture, x, y)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
-    integer(c_int), intent(in) :: texture_new, x, y
+    integer(c_int), intent(in) :: new_texture, x, y
 
     ! This creates an enforcement where the texture must be deleted before it can be re-assigned.
     ! This prevents a severe memory leak.
@@ -193,7 +193,7 @@ contains
       print"(A)", "[Texture]: set texture ["//texture_name//"]"
     end if
 
-    call texture_database%set(key(texture_name), texture_new)
+    call texture_database%set(key(texture_name), new_texture)
     call texture_size_database%set(key(texture_name), vec2i(x, y))
   end subroutine set_texture
 

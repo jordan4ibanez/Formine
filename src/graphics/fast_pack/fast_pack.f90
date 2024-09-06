@@ -95,50 +95,50 @@ module fast_pack
 contains
 
 
-  function constructor_fast_packer_blank() result(fast_packer_new)
+  function constructor_fast_packer_blank() result(new_fast_packer)
     implicit none
 
     type(fast_packer_config) :: config
-    type(fast_packer) :: fast_packer_new
+    type(fast_packer) :: new_fast_packer
 
     ! Config gets generated with it's defaults, hooray!
 
     ! Now chain to the constructor with a config.
-    fast_packer_new = constructor_fast_packer(config)
+    new_fast_packer = constructor_fast_packer(config)
   end function constructor_fast_packer_blank
 
 
-  function constructor_fast_packer(config) result(fast_packer_new)
+  function constructor_fast_packer(config) result(new_fast_packer)
     implicit none
 
     type(fast_packer_config), intent(in) :: config
-    type(fast_packer) :: fast_packer_new
+    type(fast_packer) :: new_fast_packer
 
     ! Assign from config.
-    fast_packer_new%fast_canvas_export = config%fast_canvas_export
-    fast_packer_new%enable_trimming = config%enable_trimming
-    fast_packer_new%padding = config%padding
-    fast_packer_new%edge_color = config%edge_color
-    fast_packer_new%blank_color = config%blank_color
-    fast_packer_new%canvas_expansion_amount = config%canvas_expansion_amount
-    fast_packer_new%debug_edge = config%debug_edge
-    fast_packer_new%canvas_width = config%width
-    fast_packer_new%canvas_height = config%height
+    new_fast_packer%fast_canvas_export = config%fast_canvas_export
+    new_fast_packer%enable_trimming = config%enable_trimming
+    new_fast_packer%padding = config%padding
+    new_fast_packer%edge_color = config%edge_color
+    new_fast_packer%blank_color = config%blank_color
+    new_fast_packer%canvas_expansion_amount = config%canvas_expansion_amount
+    new_fast_packer%debug_edge = config%debug_edge
+    new_fast_packer%canvas_width = config%width
+    new_fast_packer%canvas_height = config%height
 
     ! Allocate
-    allocate(fast_packer_new%keys_array(0))
-    allocate(fast_packer_new%position_x(0))
-    allocate(fast_packer_new%position_y(0))
-    allocate(fast_packer_new%box_width(0))
-    allocate(fast_packer_new%box_height(0))
-    allocate(fast_packer_new%textures(0))
-    allocate(fast_packer_new%available_x(1))
-    allocate(fast_packer_new%available_y(1))
+    allocate(new_fast_packer%keys_array(0))
+    allocate(new_fast_packer%position_x(0))
+    allocate(new_fast_packer%position_y(0))
+    allocate(new_fast_packer%box_width(0))
+    allocate(new_fast_packer%box_height(0))
+    allocate(new_fast_packer%textures(0))
+    allocate(new_fast_packer%available_x(1))
+    allocate(new_fast_packer%available_y(1))
 
-    fast_packer_new%available_x(1) = config%padding
-    fast_packer_new%available_y(1) = config%padding
+    new_fast_packer%available_x(1) = config%padding
+    new_fast_packer%available_y(1) = config%padding
 
-    fast_packer_new%allocated = .true.
+    new_fast_packer%allocated = .true.
   end function constructor_fast_packer
 
 
@@ -241,7 +241,7 @@ contains
     integer(c_int), intent(in) :: current_index
     logical(c_bool) :: pack_success, found, failed
     integer(c_int) :: padding, score, max_x, max_y, best_x, best_y, this_width, this_height
-    integer(c_int) :: y_index, x_index, y, x, score_new, i, other_x, other_y, other_width, other_height
+    integer(c_int) :: y_index, x_index, y, x, new_score, i, other_x, other_y, other_width, other_height
     integer(c_int), dimension(:), allocatable :: temp_x_array, temp_y_array
 
     found = .false.
@@ -263,9 +263,9 @@ contains
 
         x = this%available_x(x_index)
 
-        score_new = x + y
+        new_score = x + y
 
-        if (score_new >= score) then
+        if (new_score >= score) then
           exit x_iter
         end if
 
@@ -299,7 +299,7 @@ contains
             found = .true.
             best_x = x
             best_y = y
-            score = score_new
+            score = new_score
             exit x_iter
           end if
         end if
@@ -346,15 +346,15 @@ contains
 
     class(fast_packer), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: file_path
-    type(memory_texture) :: memory_texture_new
+    type(memory_texture) :: new_memory_texture
     integer(1), dimension(:), allocatable :: raw_texture_data
     integer(c_int) :: status
 
-    memory_texture_new = this%save_to_memory_texture()
+    new_memory_texture = this%save_to_memory_texture()
 
-    raw_texture_data = memory_texture_new%get_raw_data()
+    raw_texture_data = new_memory_texture%get_raw_data()
 
-    status = stbi_write_png(file_path, memory_texture_new%width, memory_texture_new%height, raw_texture_data)
+    status = stbi_write_png(file_path, new_memory_texture%width, new_memory_texture%height, raw_texture_data)
     if (status == 0) then
       error stop "[Fast Pack] Error: Failed to write png image to ["//file_path//"] status: ["//int_to_string(status)//"]"
     end if
@@ -362,11 +362,11 @@ contains
 
 
   !* Write the texture packer's data to a memory_texture. This locks out the fast packer.
-  function fast_packer_save_to_memory_texture(this) result(memory_texture_new)
+  function fast_packer_save_to_memory_texture(this) result(new_memory_texture)
     implicit none
 
     class(fast_packer), intent(inout) :: this
-    type(memory_texture) :: memory_texture_new
+    type(memory_texture) :: new_memory_texture
     integer(c_int) :: i, this_x, this_y, this_width, this_height, x, y, canvas_pixel_x, canvas_pixel_y, texture_pixel_x, texture_pixel_y
     type(pixel) :: current_pixel
 
@@ -378,7 +378,7 @@ contains
     this%canvas_height = this%max_y
 
     ! Create a new memory texture the size of the canvas.
-    memory_texture_new = memory_texture(this%canvas_width, this%canvas_height)
+    new_memory_texture = memory_texture(this%canvas_width, this%canvas_height)
 
     ! Iterate through each texture and copy the data into the new memory texture.
     do i = 1,this%current_id - 1
@@ -400,7 +400,7 @@ contains
 
           current_pixel = this%textures(i)%get_pixel(texture_pixel_x, texture_pixel_y)
 
-          call memory_texture_new%set_pixel(canvas_pixel_x, canvas_pixel_y, current_pixel)
+          call new_memory_texture%set_pixel(canvas_pixel_x, canvas_pixel_y, current_pixel)
         end do
       end do
     end do
@@ -422,7 +422,7 @@ contains
     class(fast_packer), intent(inout) :: this
     integer(c_int) :: keys_array_size, i
     real(c_double) :: d_min_x, d_min_y, d_max_x, d_max_y, d_canvas_width, d_canvas_height
-    type(texture_rectangle), pointer :: texture_rectangle_new
+    type(texture_rectangle), pointer :: new_texture_rectangle
 
     ! We use a hash table to store the texture_rectangles.
     ! Ideally, access time will be n(1). Hopefully.
@@ -466,16 +466,16 @@ contains
 
       ! Next, create the floating point position in OpenGL/Vulkan memory.
       ! We are chopping the precision to single floating point.
-      allocate(texture_rectangle_new)
-      texture_rectangle_new = texture_rectangle()
+      allocate(new_texture_rectangle)
+      new_texture_rectangle = texture_rectangle()
 
-      texture_rectangle_new%min_x = real(d_min_x / d_canvas_width, kind = c_float)
-      texture_rectangle_new%min_y = real(d_min_y / d_canvas_height, kind = c_float)
-      texture_rectangle_new%max_x = real(d_max_x / d_canvas_width, kind = c_float)
-      texture_rectangle_new%max_y = real(d_max_y / d_canvas_height, kind = c_float)
+      new_texture_rectangle%min_x = real(d_min_x / d_canvas_width, kind = c_float)
+      new_texture_rectangle%min_y = real(d_min_y / d_canvas_height, kind = c_float)
+      new_texture_rectangle%max_x = real(d_max_x / d_canvas_width, kind = c_float)
+      new_texture_rectangle%max_y = real(d_max_y / d_canvas_height, kind = c_float)
 
       ! Now put it into the database.
-      call this%texture_coordinates%set_ptr(key(this%keys_array(i)%get()), texture_rectangle_new)
+      call this%texture_coordinates%set_ptr(key(this%keys_array(i)%get()), new_texture_rectangle)
     end do
   end subroutine fast_packer_create_texture_rectangles
 
@@ -486,43 +486,43 @@ contains
 
     class(fast_packer), intent(inout) :: this
     integer(c_int), intent(in) :: current_index
-    integer(c_int) :: right_new, top_new
+    integer(c_int) :: new_right, new_top
 
-    right_new = this%position_x(current_index) + this%box_width(current_index)
-    top_new = this%position_y(current_index) + this%box_height(current_index)
+    new_right = this%position_x(current_index) + this%box_width(current_index)
+    new_top = this%position_y(current_index) + this%box_height(current_index)
 
-    if (right_new > this%max_x) then
-      this%max_x = right_new + this%padding
+    if (new_right > this%max_x) then
+      this%max_x = new_right + this%padding
     end if
 
-    if (top_new > this%max_y) then
-      this%max_y = top_new + this%padding
+    if (new_top > this%max_y) then
+      this%max_y = new_top + this%padding
     end if
   end subroutine
 
 
   !* Upload a texture from a file path into the fast_packer.
-  function fast_packer_upload_texture_from_file_path(this, texture_key, file_path) result(index_new)
+  function fast_packer_upload_texture_from_file_path(this, texture_key, file_path) result(new_index)
     implicit none
 
     class(fast_packer), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: texture_key, file_path
-    integer(c_int) :: index_new
+    integer(c_int) :: new_index
     integer(c_int) :: width, height, channels
     integer(1), dimension(:), allocatable :: temporary_raw_texture
-    type(memory_texture) :: texture_new
+    type(memory_texture) :: new_texture
 
     temporary_raw_texture = stbi_load(file_path, width, height, channels, 4)
 
-    texture_new = memory_texture(temporary_raw_texture, width, height)
+    new_texture = memory_texture(temporary_raw_texture, width, height)
 
     ! This is chained.
-    index_new = this%upload_texture_memory(texture_key, texture_new)
+    new_index = this%upload_texture_memory(texture_key, new_texture)
   end function fast_packer_upload_texture_from_file_path
 
 
   !* Upload a memory_texture into the fast_packer.
-  function fast_packer_upload_texture_from_memory(this, texture_key, mem_texture) result(index_new)
+  function fast_packer_upload_texture_from_memory(this, texture_key, mem_texture) result(new_index)
     use :: array, only: array_i32_insert, array_string_insert, array_memory_texture_insert
     implicit none
 
@@ -530,7 +530,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: texture_key
     type(memory_texture), intent(in) :: mem_texture
     type(memory_texture) :: trimmed_texture
-    integer(c_int) :: index_new
+    integer(c_int) :: new_index
     integer(c_int), dimension(:), allocatable :: temp_x, temp_y, temp_width, temp_height
     type(heap_string), dimension(:), allocatable :: temp_keys
     type(memory_texture), dimension(:), allocatable :: temp_textures
@@ -542,7 +542,7 @@ contains
       trimmed_texture = mem_texture
     end if
 
-    index_new = this%current_id
+    new_index = this%current_id
 
     this%current_id = this%current_id + 1
 
@@ -591,7 +591,7 @@ contains
 
     type(memory_texture), intent(in) :: input
     type(memory_texture) :: output
-    integer(c_int) :: texture_width, texture_height, min_x, min_y, x, y, max_x, max_y, size_x_new, size_y_new
+    integer(c_int) :: texture_width, texture_height, min_x, min_y, x, y, max_x, max_y, new_size_x, new_size_y
     type(pixel) :: current_pixel
 
     min_x = 0
@@ -649,19 +649,19 @@ contains
       end do
     end do iterator_max_y
 
-    size_x_new = max_x - min_x
-    size_y_new = max_y - min_y
+    new_size_x = max_x - min_x
+    new_size_y = max_y - min_y
 
     ! It's the same size, just return the same memory.
-    if (size_x_new == input%width .and. size_y_new == input%height) then
+    if (new_size_x == input%width .and. new_size_y == input%height) then
       output = input
       return
     end if
 
-    output = memory_texture(size_x_new, size_y_new)
+    output = memory_texture(new_size_x, new_size_y)
 
-    do x = 1, size_x_new
-      do y = 1, size_y_new
+    do x = 1, new_size_x
+      do y = 1, new_size_y
         call output%set_pixel(x, y, input%get_pixel(x + min_x, y + min_y))
       end do
     end do

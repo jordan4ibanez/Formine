@@ -1,5 +1,5 @@
   character(len = :, kind = c_char), allocatable :: position_text_debug
-  integer(c_int) :: i,y, fps_new, old_fps, x
+  integer(c_int) :: i,y, new_fps, old_fps, x
   logical(c_bool) :: testing_bool
   character(len = :, kind = c_char), pointer :: test_data
 

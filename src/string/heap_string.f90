@@ -43,26 +43,26 @@ contains
 
 
   !* heap_string constructor.
-  function constructor(optional_string) result(string_new)
+  function constructor(optional_string) result(new_string)
     implicit none
 
     character(len = *, kind = c_char), intent(in), optional :: optional_string
-    type(heap_string) :: string_new
+    type(heap_string) :: new_string
 
     if (present(optional_string)) then
-      string_new%data = optional_string
+      new_string%data = optional_string
     end if
   end function constructor
 
 
   !* Very simple assignment operator.
-  subroutine assign(this, data_new)
+  subroutine assign(this, new_data)
     implicit none
 
     class(heap_string), intent(inout) :: this
-    character(len = *, kind = c_char), intent(in) :: data_new
+    character(len = *, kind = c_char), intent(in) :: new_data
 
-    this%data = data_new
+    this%data = new_data
   end subroutine assign
 
 

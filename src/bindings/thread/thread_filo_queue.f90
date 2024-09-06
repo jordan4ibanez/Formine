@@ -74,13 +74,13 @@ module thread_filo_queue
 contains
 
 
-  function constructor_concurrent_linked_filo_queue() result(queue_new)
+  function constructor_concurrent_linked_filo_queue() result(new_queue)
     implicit none
 
-    type(concurrent_linked_filo_queue) :: queue_new
+    type(concurrent_linked_filo_queue) :: new_queue
 
-    queue_new%mutex => thread_create_mutex_pointer()
-    queue_new%c_mutex_pointer = c_loc(queue_new%mutex)
+    new_queue%mutex => thread_create_mutex_pointer()
+    new_queue%c_mutex_pointer = c_loc(new_queue%mutex)
   end function constructor_concurrent_linked_filo_queue
 
 
@@ -91,7 +91,7 @@ contains
     class(concurrent_linked_filo_queue), intent(inout) :: this
     type(queue_data), intent(in), pointer :: generic_pointer
     integer(c_int) :: status
-    type(queue_node), pointer :: node_new
+    type(queue_node), pointer :: new_node
 
     status = thread_write_lock(this%c_mutex_pointer)
     !! BEGIN SAFE OPERATION.
@@ -100,22 +100,22 @@ contains
       error stop "[Thread FILO Queue] Error: Received a null pointer."
     end if
 
-    allocate(node_new)
-    node_new%data => generic_pointer
+    allocate(new_node)
+    new_node%data => generic_pointer
 
     ! If the head is null, this is the new head.
     if (.not. associated(this%head)) then
-      this%head => node_new
+      this%head => new_node
     end if
 
     ! If we have a tail, it now points to the new node.
     ! The new node then becomes the tail.
     if (associated(this%tail)) then
-      this%tail%next => node_new
-      this%tail => node_new
+      this%tail%next => new_node
+      this%tail => new_node
     else
       ! If we do not have a tail, the new node is now the tail.
-      this%tail => node_new
+      this%tail => new_node
     end if
 
     this%items = this%items + 1

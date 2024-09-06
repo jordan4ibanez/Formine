@@ -42,20 +42,20 @@ contains
     ! integer(c_float)
     ! But doing this will make it so after 24 days, it WILL wrap around!
     ! You will also run into extreme precision problems on high refresh rate devices.
-    integer(c_int64_t) :: count, count_rate, count_max, delta_integral_new
+    integer(c_int64_t) :: count, count_rate, count_max, new_delta_integral
 
     call system_clock(count, count_rate, count_max)
 
     ! Move the calculation into milliseconds
-    delta_integral_new = count
+    new_delta_integral = count
 
     ! Now set it.
-    delta = real(delta_integral_new - old_delta_integral, kind = c_double)
+    delta = real(new_delta_integral - old_delta_integral, kind = c_double)
 
     delta = delta / real(count_rate, kind = c_double)
 
     ! Finally, save it.
-    old_delta_integral = delta_integral_new
+    old_delta_integral = new_delta_integral
 
     ! Bolt on FPS calculation.
     call fps_calculation()

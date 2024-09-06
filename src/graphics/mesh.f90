@@ -72,38 +72,38 @@ contains
     integer(c_int), intent(in), value :: dimensions
     real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), intent(in), target :: indices
-    type(mesh_data), pointer :: mesh_new
+    type(mesh_data), pointer :: new_mesh
 
     ! Set up our memory here. We are working with manual memory management.
-    allocate(mesh_new)
+    allocate(new_mesh)
 
     ! Into vertex array object.
 
-    mesh_new%vao = gl_gen_vertex_arrays()
+    new_mesh%vao = gl_gen_vertex_arrays()
 
     if (debug_mode) then
-      print"(A)","vao: ["//int_to_string(mesh_new%vao)//"]"
+      print"(A)","vao: ["//int_to_string(new_mesh%vao)//"]"
     end if
 
-    call gl_bind_vertex_array(mesh_new%vao)
+    call gl_bind_vertex_array(new_mesh%vao)
 
     ! Into position vertex buffer object.
 
-    mesh_new%vbo_position = upload_positions(positions, dimensions)
+    new_mesh%vbo_position = upload_positions(positions, dimensions)
 
-    mesh_new%vbo_texture_coordinate = upload_texture_coordinate(texture_coordinates)
+    new_mesh%vbo_texture_coordinate = upload_texture_coordinate(texture_coordinates)
 
-    mesh_new%vbo_color = upload_colors(colors)
+    new_mesh%vbo_color = upload_colors(colors)
 
-    mesh_new%vbo_indices = upload_indices(indices)
+    new_mesh%vbo_indices = upload_indices(indices)
 
-    mesh_new%indices_length = size(indices)
+    new_mesh%indices_length = size(indices)
 
     ! Now unbind vertex array object.
     call gl_bind_vertex_array(0)
 
     ! Finally, upload into the database.
-    call set_mesh(mesh_name, mesh_new)
+    call set_mesh(mesh_name, new_mesh)
   end subroutine mesh_create_internal
 
 
@@ -246,11 +246,11 @@ contains
 
 
   !* Set or update a shader in the database.
-  subroutine set_mesh(mesh_name, mesh_new)
+  subroutine set_mesh(mesh_name, new_mesh)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
-    type(mesh_data), intent(in), pointer :: mesh_new
+    type(mesh_data), intent(in), pointer :: new_mesh
 
     ! This creates an enforcement where the mesh must be deleted before it can be re-assigned.
     ! This prevents a severe memory leak.
@@ -262,7 +262,7 @@ contains
       print"(A)", "[Mesh]: set mesh ["//mesh_name//"]"
     end if
 
-    call mesh_database%set_ptr(key(mesh_name), mesh_new)
+    call mesh_database%set_ptr(key(mesh_name), new_mesh)
   end subroutine set_mesh
 
 

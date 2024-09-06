@@ -29,13 +29,13 @@ program main
   real(c_float) :: floating_font_size
 
   character(len = :, kind = c_char), allocatable :: position_text_debug
-  integer(c_int) :: i,y, fps_new, old_fps, x
+  integer(c_int) :: i,y, new_fps, old_fps, x
   logical(c_bool) :: testing_bool
   character(len = :, kind = c_char), pointer :: test_data
   ! integer(c_int), pointer :: test_data
 
 
-  fps_new = 0
+  new_fps = 0
   old_fps = -1
 
   call thread_initialize()
@@ -223,12 +223,12 @@ program main
 
       ! Process first text.
 
-      fps_new = get_fps()
+      new_fps = get_fps()
 
       floating_font_size = FONT_SIZE * glfw_get_window_gui_scale_f32()
 
       call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - floating_font_size) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
-      if (fps_new /= old_fps) then
+      if (new_fps /= old_fps) then
         call mesh_delete("fps_counter")
         call font_generate_text("fps_counter", floating_font_size, "FPS: "//int_to_string(get_fps()), center = .false., size = text_size)
       end if

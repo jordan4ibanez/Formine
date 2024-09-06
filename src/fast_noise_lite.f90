@@ -2504,24 +2504,24 @@ contains
   !* Creates a noise state with default values.
   !* @param seed Optionally set the state seed.
   !*
-  type(fnl_state) function constructor_fnl_state() result(state_new)
+  type(fnl_state) function constructor_fnl_state() result(new_state)
     implicit none
 
-    state_new%seed = 1337
-    state_new%frequency = 0.01
-    state_new%noise_type = FNL_NOISE_OPENSIMPLEX2
-    state_new%rotation_type_3d = FNL_ROTATION_NONE
-    state_new%fractal_type = FNL_FRACTAL_NONE
-    state_new%octaves = 3
-    state_new%lacunarity = 2.0
-    state_new%gain = 0.5
-    state_new%weighted_strength = 0.0
-    state_new%ping_pong_strength = 2.0
-    state_new%cellular_distance_func = FNL_CELLULAR_DISTANCE_EUCLIDEANSQ
-    state_new%cellular_return_type = FNL_CELLULAR_RETURN_TYPE_DISTANCE
-    state_new%cellular_jitter_mod = 1.0
-    state_new%domain_warp_amp = 30.0
-    state_new%domain_warp_type = FNL_DOMAIN_WARP_OPENSIMPLEX2
+    new_state%seed = 1337
+    new_state%frequency = 0.01
+    new_state%noise_type = FNL_NOISE_OPENSIMPLEX2
+    new_state%rotation_type_3d = FNL_ROTATION_NONE
+    new_state%fractal_type = FNL_FRACTAL_NONE
+    new_state%octaves = 3
+    new_state%lacunarity = 2.0
+    new_state%gain = 0.5
+    new_state%weighted_strength = 0.0
+    new_state%ping_pong_strength = 2.0
+    new_state%cellular_distance_func = FNL_CELLULAR_DISTANCE_EUCLIDEANSQ
+    new_state%cellular_return_type = FNL_CELLULAR_RETURN_TYPE_DISTANCE
+    new_state%cellular_jitter_mod = 1.0
+    new_state%domain_warp_amp = 30.0
+    new_state%domain_warp_type = FNL_DOMAIN_WARP_OPENSIMPLEX2
   end function constructor_fnl_state
 
 

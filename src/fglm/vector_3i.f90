@@ -54,29 +54,29 @@ contains
   !* Constructors.
 
 
-  type(vec3i) function constructor_scalar(i) result(vec3i_new)
+  type(vec3i) function constructor_scalar(i) result(new_vec3i)
     implicit none
     integer(c_int), intent(in), value :: i
 
-    vec3i_new = i
+    new_vec3i = i
   end function constructor_scalar
 
 
-  type(vec3i) function constructor_raw(x1,y1,z1) result(vec3i_new)
+  type(vec3i) function constructor_raw(x1,y1,z1) result(new_vec3i)
     implicit none
 
     integer(c_int), intent(in), value :: x1,y1,z1
 
-    vec3i_new = [x1,y1,z1]
+    new_vec3i = [x1,y1,z1]
   end function constructor_raw
 
 
-  type(vec3i) function constructor_array(xyz_array) result(vec3i_new)
+  type(vec3i) function constructor_array(xyz_array) result(new_vec3i)
     implicit none
 
     integer(c_int), dimension(3), intent(in) :: xyz_array
 
-    vec3i_new = xyz_array(1:3)
+    new_vec3i = xyz_array(1:3)
   end function constructor_array
 
 
@@ -157,166 +157,166 @@ contains
   !* Addition.
 
 
-  type(vec3i) function add_scalar_i32(this, i) result(vec3i_new)
+  type(vec3i) function add_scalar_i32(this, i) result(new_vec3i)
     implicit none
 
     class(vec3i), intent(in) :: this
     integer(c_int), intent(in), value :: i
 
-    vec3i_new%x = this%x + i
-    vec3i_new%y = this%y + i
-    vec3i_new%z = this%z + i
+    new_vec3i%x = this%x + i
+    new_vec3i%y = this%y + i
+    new_vec3i%z = this%z + i
   end function add_scalar_i32
 
 
-  type(vec3i) function add_array_i32(this, arr) result(vec3i_new)
+  type(vec3i) function add_array_i32(this, arr) result(new_vec3i)
     implicit none
 
     class(vec3i), intent(in) :: this
     integer(c_int), dimension(3), intent(in) :: arr
 
-    vec3i_new%x = this%x + arr(1)
-    vec3i_new%y = this%y + arr(2)
-    vec3i_new%z = this%z + arr(3)
+    new_vec3i%x = this%x + arr(1)
+    new_vec3i%y = this%y + arr(2)
+    new_vec3i%z = this%z + arr(3)
   end function add_array_i32
 
 
-  type(vec3i) function add_vec3i(this, other) result(vec3i_new)
+  type(vec3i) function add_vec3i(this, other) result(new_vec3i)
     implicit none
 
     class(vec3i), intent(in) :: this
     type(vec3i), intent(in), value :: other
 
-    vec3i_new%x = this%x + other%x
-    vec3i_new%y = this%y + other%y
-    vec3i_new%z = this%z + other%z
+    new_vec3i%x = this%x + other%x
+    new_vec3i%y = this%y + other%y
+    new_vec3i%z = this%z + other%z
   end function add_vec3i
 
 
   !* Subtraction.
 
 
-  type(vec3i) function subtract_scalar_i32(this, i) result(vec3i_new)
+  type(vec3i) function subtract_scalar_i32(this, i) result(new_vec3i)
     implicit none
 
     class(vec3i), intent(in) :: this
     integer(c_int), intent(in), value :: i
 
-    vec3i_new%x = this%x - i
-    vec3i_new%y = this%y - i
-    vec3i_new%z = this%z - i
+    new_vec3i%x = this%x - i
+    new_vec3i%y = this%y - i
+    new_vec3i%z = this%z - i
   end function subtract_scalar_i32
 
 
-  type(vec3i) function subtract_array_i32(this, arr) result(vec3i_new)
+  type(vec3i) function subtract_array_i32(this, arr) result(new_vec3i)
     implicit none
 
     class(vec3i), intent(in) :: this
     integer(c_int), dimension(3), intent(in) :: arr
 
-    vec3i_new%x = this%x - arr(1)
-    vec3i_new%y = this%y - arr(2)
-    vec3i_new%z = this%z - arr(3)
+    new_vec3i%x = this%x - arr(1)
+    new_vec3i%y = this%y - arr(2)
+    new_vec3i%z = this%z - arr(3)
   end function subtract_array_i32
 
 
-  type(vec3i) function subtract_vec3i(this, other) result(vec3i_new)
+  type(vec3i) function subtract_vec3i(this, other) result(new_vec3i)
     implicit none
 
     class(vec3i), intent(in) :: this
     type(vec3i), intent(in), value :: other
 
-    vec3i_new%x = this%x - other%x
-    vec3i_new%y = this%y - other%y
-    vec3i_new%z = this%z - other%z
+    new_vec3i%x = this%x - other%x
+    new_vec3i%y = this%y - other%y
+    new_vec3i%z = this%z - other%z
   end function subtract_vec3i
 
 
   !* Multiplication.
 
 
-  type(vec3i) function multiply_scalar_i32(this, i) result(vec3i_new)
+  type(vec3i) function multiply_scalar_i32(this, i) result(new_vec3i)
     implicit none
 
     class(vec3i), intent(in) :: this
     integer(c_int), intent(in), value :: i
 
-    vec3i_new%x = this%x * i
-    vec3i_new%y = this%y * i
-    vec3i_new%z = this%z * i
+    new_vec3i%x = this%x * i
+    new_vec3i%y = this%y * i
+    new_vec3i%z = this%z * i
   end function multiply_scalar_i32
 
 
-  type(vec3i) function multiply_array_i32(this, arr) result(vec3i_new)
+  type(vec3i) function multiply_array_i32(this, arr) result(new_vec3i)
     implicit none
 
     class(vec3i), intent(in) :: this
     integer(c_int), dimension(3), intent(in) :: arr
 
-    vec3i_new%x = this%x * arr(1)
-    vec3i_new%y = this%y * arr(2)
-    vec3i_new%z = this%z * arr(3)
+    new_vec3i%x = this%x * arr(1)
+    new_vec3i%y = this%y * arr(2)
+    new_vec3i%z = this%z * arr(3)
   end function multiply_array_i32
 
 
-  type(vec3i) function multiply_vec3i(this, other) result(vec3i_new)
+  type(vec3i) function multiply_vec3i(this, other) result(new_vec3i)
     implicit none
 
     class(vec3i), intent(in) :: this
     type(vec3i), intent(in), value :: other
 
-    vec3i_new%x = this%x * other%x
-    vec3i_new%y = this%y * other%y
-    vec3i_new%z = this%z * other%z
+    new_vec3i%x = this%x * other%x
+    new_vec3i%y = this%y * other%y
+    new_vec3i%z = this%z * other%z
   end function multiply_vec3i
 
 
   !* Division.
 
 
-  type(vec3i) function divide_scalar_i32(this, i) result(vec3i_new)
+  type(vec3i) function divide_scalar_i32(this, i) result(new_vec3i)
     implicit none
 
     class(vec3i), intent(in) :: this
     integer(c_int), intent(in), value :: i
 
-    vec3i_new%x = this%x / i
-    vec3i_new%y = this%y / i
-    vec3i_new%z = this%z / i
+    new_vec3i%x = this%x / i
+    new_vec3i%y = this%y / i
+    new_vec3i%z = this%z / i
   end function divide_scalar_i32
 
 
-  type(vec3i) function divide_array_i32(this, arr) result(vec3i_new)
+  type(vec3i) function divide_array_i32(this, arr) result(new_vec3i)
     implicit none
 
     class(vec3i), intent(in) :: this
     integer(c_int), dimension(3), intent(in) :: arr
 
-    vec3i_new%x = this%x / arr(1)
-    vec3i_new%y = this%y / arr(2)
-    vec3i_new%z = this%z / arr(3)
+    new_vec3i%x = this%x / arr(1)
+    new_vec3i%y = this%y / arr(2)
+    new_vec3i%z = this%z / arr(3)
   end function divide_array_i32
 
 
-  type(vec3i) function divide_vec3i(this, other) result(vec3i_new)
+  type(vec3i) function divide_vec3i(this, other) result(new_vec3i)
     implicit none
 
     class(vec3i), intent(in) :: this
     type(vec3i), intent(in), value :: other
 
-    vec3i_new%x = this%x / other%x
-    vec3i_new%y = this%y / other%y
-    vec3i_new%z = this%z / other%z
+    new_vec3i%x = this%x / other%x
+    new_vec3i%y = this%y / other%y
+    new_vec3i%z = this%z / other%z
   end function divide_vec3i
 
 
-  function as_array(this) result(array_new)
+  function as_array(this) result(new_array)
     implicit none
 
     class(vec3i), intent(in) :: this
-    integer(c_int), dimension(3) :: array_new
+    integer(c_int), dimension(3) :: new_array
 
-    array_new = [this%x, this%y, this%z]
+    new_array = [this%x, this%y, this%z]
   end function
 
 

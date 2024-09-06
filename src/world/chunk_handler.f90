@@ -109,13 +109,13 @@ contains
   end subroutine chunk_handler_draw_chunks
 
 
-  function grab_chunk_key(x, y) result(key_new)
+  function grab_chunk_key(x, y) result(new_key)
     implicit none
 
     integer(c_int), intent(in), value :: x, y
-    type(fhash_key_char_t) :: key_new
+    type(fhash_key_char_t) :: new_key
 
-    key_new = key("chunk_"//int_to_string(x)//"_"//int_to_string(y))
+    new_key = key("chunk_"//int_to_string(x)//"_"//int_to_string(y))
   end function grab_chunk_key
 
 
