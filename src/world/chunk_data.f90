@@ -45,6 +45,21 @@ module chunk_data
   end interface memory_chunk
 
 
+  !* The data that will get sent to the chunk mesh generator.
+  type :: chunk_mesh_generator_message
+    !* Current chunk.
+    type(memory_chunk), pointer :: current => null()
+    !* Neighbor: -X
+    type(memory_chunk), pointer :: left => null()
+    !* Neighbor: +X
+    type(memory_chunk), pointer :: right => null()
+    !* Neighbor: -Z
+    type(memory_chunk), pointer :: back => null()
+    !* Neighbor: +Z
+    type(memory_chunk), pointer :: front => null()
+  end type chunk_mesh_generator_message
+
+
 contains
 
 
