@@ -11,6 +11,7 @@ MINOR=0
 PATCH=0
 OUTPUT_STRING=""
 IS_RELEASE=false
+STRING_PARAMETER=""
 
 
 while IFS= read -r LINE; do
@@ -65,6 +66,9 @@ PATCH=$RAW_VERSION_IDENTIFIER
 
 if [[ $ARGUMENT == "RELEASE"* ]]; then
   IS_RELEASE=true
+  STRING_PARAMETER='character(len = 15, kind = c_char), parameter :: VERSION_STRING = "'$MAJOR'.'$MINOR'.'$PATCH' - Release"'
+else
+  STRING_PARAMETER='character(len = 13, kind = c_char), parameter :: VERSION_STRING = "'$MAJOR'.'$MINOR'.'$PATCH' - Debug"'
 fi
 
 cat > "./src/version_info/version_info_raw_data.f90" <<- END
@@ -79,6 +83,7 @@ module raw_data_version_info
   integer(c_int), parameter :: FORMINE_VERSION_MINOR = $MINOR
   integer(c_int), parameter :: FORMINE_VERSION_PATCH = $PATCH
   logical(c_bool), parameter :: FORMINE_IS_RELEASE = .$IS_RELEASE.
+  $STRING_PARAMETER
 end module raw_data_version_info
 END
 
