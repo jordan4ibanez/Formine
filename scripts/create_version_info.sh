@@ -66,9 +66,9 @@ PATCH=$RAW_VERSION_IDENTIFIER
 
 if [[ $ARGUMENT == "RELEASE"* ]]; then
   IS_RELEASE=true
-  STRING_PARAMETER='character(len = 15, kind = c_char), parameter :: VERSION_STRING = "'$MAJOR'.'$MINOR'.'$PATCH' - Release"'
+  STRING_PARAMETER='character(len = 15, kind = c_char), parameter :: FORMINE_VERSION_STRING = "'$MAJOR'.'$MINOR'.'$PATCH' - Release"'
 else
-  STRING_PARAMETER='character(len = 13, kind = c_char), parameter :: VERSION_STRING = "'$MAJOR'.'$MINOR'.'$PATCH' - Debug"'
+  STRING_PARAMETER='character(len = 13, kind = c_char), parameter :: FORMINE_VERSION_STRING = "'$MAJOR'.'$MINOR'.'$PATCH' - Debug"'
 fi
 
 cat > "./src/version_info/version_info_raw_data.f90" <<- END
