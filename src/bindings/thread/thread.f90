@@ -53,7 +53,7 @@ module thread
   public :: thread_process_detached_thread_queue
   public :: thread_detached_queue_is_empty
   public :: thread_await_all_thread_completion
-  public :: test_threading_implementation
+  public :: test_threading_example
 
   integer(c_int), parameter :: THREAD_OK = 0
   integer(c_int), parameter :: THREAD_DOES_NOT_EXIST = 3
@@ -493,8 +493,8 @@ contains
   end function thread_await_all_thread_completion
 
 
-  !! TESTING/EXAMPLE ONLY !!
-  recursive function test_threading_implementation(c_arg_pointer) result(void_pointer) bind(c)
+  !! EXAMPLE ONLY !!
+  recursive function test_threading_example(c_arg_pointer) result(void_pointer) bind(c)
     use :: string
     use :: raw_c
     implicit none
@@ -522,14 +522,11 @@ contains
 
     deallocate(input_string)
 
-    status = thread_write_lock(arguments%mutex_pointer)
-
-    arguments%active_flag = .false.
-
-    status = thread_unlock_lock(arguments%mutex_pointer)
-
     void_pointer = c_null_ptr
-  end function test_threading_implementation
+    status = thread_write_lock(arguments%mutex_pointer)
+    arguments%active_flag = .false.
+    status = thread_unlock_lock(arguments%mutex_pointer)
+  end function test_threading_example
 
 
 end module thread
