@@ -1,5 +1,6 @@
-#/bin/bash
-#! this is just ridiculous.
+#!/bin/bash
+
+# this is just ridiculous.
 
 ARGUMENT="$@"
 FOUND=false
