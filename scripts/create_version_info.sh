@@ -11,6 +11,8 @@ MINOR=0
 PATCH=0
 OUTPUT_STRING=""
 IS_RELEASE=false
+VERSION_INFO_STRING=""
+VERSION_INFO_STRING_LENGTH=0
 STRING_PARAMETER=""
 
 
@@ -63,13 +65,24 @@ PATCH=$RAW_VERSION_IDENTIFIER
 
 
 #* CHECK IF RELEASE.
+#* GENERATE STRING PARAMETER.
+
 
 if [[ $ARGUMENT == "RELEASE"* ]]; then
   IS_RELEASE=true
-  STRING_PARAMETER='character(len = 15, kind = c_char), parameter :: FORMINE_VERSION_STRING = "'$MAJOR'.'$MINOR'.'$PATCH' - Release"'
+  VERSION_INFO_STRING=$MAJOR'.'$MINOR'.'$PATCH' - Release'
 else
-  STRING_PARAMETER='character(len = 13, kind = c_char), parameter :: FORMINE_VERSION_STRING = "'$MAJOR'.'$MINOR'.'$PATCH' - Debug"'
+  IS_RELEASE=false
+  VERSION_INFO_STRING=$MAJOR'.'$MINOR'.'$PATCH' - Debug'
 fi
+
+VERSION_INFO_STRING_LENGTH=${#VERSION_INFO_STRING}
+
+STRING_PARAMETER='character(len = '$VERSION_INFO_STRING_LENGTH', kind = c_char), parameter :: FORMINE_VERSION_STRING = "'$VERSION_INFO_STRING'"'
+
+
+#* OUTPUT RAW SOURCE CODE TO SPECIFIED LOCATION.
+
 
 cat > "./src/version_info/version_info_raw_data.f90" <<- END
 module raw_data_version_info
