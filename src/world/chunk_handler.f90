@@ -9,6 +9,7 @@ module chunk_handler
 
   public :: chunk_handler_store_chunk_pointer
   public :: chunk_handler_get_chunk_pointer
+  public :: chunk_handler_get_clone_chunk_pointer
   public :: chunk_handler_draw_chunks
 
 
@@ -60,6 +61,41 @@ contains
       error stop "[Chunk Handler] Error: The wrong type was inserted into the database."
     end select
   end function chunk_handler_get_chunk_pointer
+
+
+  !* This will clone a chunk's raw data (not the meshes) and return the pointer to it.
+  function chunk_handler_get_clone_chunk_pointer(x, y) result(clone_chunk_pointer)
+    implicit none
+
+    integer(c_int), intent(in), value :: x, y
+    type(memory_chunk), pointer :: clone_chunk_pointer
+    type(memory_chunk), pointer :: original_chunk_pointer
+    class(*), pointer :: generic_pointer
+    integer(c_int) :: status
+
+    clone_chunk_pointer => null()
+
+    call chunk_database%get_raw_ptr(grab_chunk_key(x,y), generic_pointer, stat = status)
+
+    ! If not existent, return a null pointer.
+    if (status /= 0) then
+      return
+    end if
+
+    select type(generic_pointer)
+     type is (memory_chunk)
+      original_chunk_pointer => generic_pointer
+     class default
+      error stop "[Chunk Handler] Error: The wrong type was inserted into the database."
+    end select
+
+    ! Allocate pointer.
+    allocate(clone_chunk_pointer)
+
+    ! Allocation upon assignment.
+    clone_chunk_pointer%data = original_chunk_pointer%data
+    clone_chunk_pointer%world_position = original_chunk_pointer%world_position
+  end function chunk_handler_get_clone_chunk_pointer
 
 
   subroutine chunk_handler_draw_chunks()
