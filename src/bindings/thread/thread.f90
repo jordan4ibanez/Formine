@@ -185,12 +185,13 @@ module thread
 !* BEGIN FUNCTION BLUEPRINTS.
 
 
-    recursive subroutine thread_function_c_interface(c_arg_pointer) bind(c)
+    recursive function thread_function_c_interface(c_arg_pointer) result(c_return_pointer) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
       type(c_ptr), intent(in), value :: c_arg_pointer
-    end subroutine thread_function_c_interface
+      type(c_ptr) :: c_return_pointer
+  end function thread_function_c_interface
 
 
   end interface
