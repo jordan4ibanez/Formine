@@ -138,126 +138,128 @@ contains
 
     call c_f_pointer(c_arg_pointer, arguments)
 
-    if (.not. c_associated(arguments%sent_data)) then
-      error stop "[Chunk Mesh] Fatal error: Was passed a null sent_data pointer."
-    end if
+    print*,"hi"
 
-    call c_f_pointer(arguments%sent_data, generator_message)
+    ! if (.not. c_associated(arguments%sent_data)) then
+    !   error stop "[Chunk Mesh] Fatal error: Was passed a null sent_data pointer."
+    ! end if
 
-
-    !!fixme: this is EXTREMELY unsafe.
-    ! Very pointy. =>
-    definition_pointer => block_repo_get_definition_pointer_by_id(1)
-
-    ! Now we assign.
-
-    ! Limit it to 1 million faces per chunk.
-    ! We will grab a slice of this later to shrink it.
-    limit = 200000
-
-    allocate(positions(12 * limit))
-    allocate(texture_coordinates(8 * limit))
-    allocate(colors(12 * limit))
-    allocate(indices(6 * limit))
-
-    current_offset = 0
-
-    p_index = -1
-    t_index = -1
-    c_index = -1
-    i_index = -1
-
-    base_y = (MESH_STACK_HEIGHT * (generator_message%mesh_stack - 1)) + 1
-    max_y = MESH_STACK_HEIGHT * (generator_message%mesh_stack)
-
-    do x = 1,CHUNK_WIDTH
-      do z = 1,CHUNK_WIDTH
-        do y = base_y,max_y
-
-          ! Position in indices.
-          pos = [x, y, z]
-
-          ! Cycle on air.
-          if (generator_message%current%data(pos%y, pos%z, pos%x)%id == 0) then
-            cycle
-          end if
-
-          ! Position in world offset.
-          offset = [ &
-            x - 1, &
-            y - base_y, &
-            z - 1 &
-            ]
-
-          do i = 1,6
-
-            ! Direction we're looking towards.
-            direction = DIRECTIONS(1:3, i)
-
-            ! Block we're looking at.
-            trajectory = pos + direction
-
-            ! If we're going to go out of bounds, cycle.
-            ! todo: check neighbor.
-            if (trajectory%x < 1 .or. trajectory%x > CHUNK_WIDTH .or. trajectory%z < 1 .or. trajectory%z > CHUNK_WIDTH .or. trajectory%y < 1 .or. trajectory%y > CHUNK_HEIGHT) then
-              cycle
-            end if
-
-            ! todo: if y height == chunk_height then just render the face.
-
-            ! If it's another fullsize block, cycle.
-            ! todo: check draw_type.
-            if (generator_message%current%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
-              cycle
-            end if
+    ! call c_f_pointer(arguments%sent_data, generator_message)
 
 
-            p_index = (current_offset * 12) + 1
-            positions(p_index:p_index + 11) = (FACES(1:12, i) + (/offset%x, offset%y, offset%z, offset%x, offset%y, offset%z, offset%x, offset%y, offset%z, offset%x, offset%y, offset%z/))
+    ! !!fixme: this is EXTREMELY unsafe.
+    ! ! Very pointy. =>
+    ! definition_pointer => block_repo_get_definition_pointer_by_id(1)
 
-            tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
+    ! ! Now we assign.
 
-            t_index = (current_offset * 8) + 1
-            texture_coordinates(t_index:t_index + 7) = (/ &
-              tr_pointer%min_x,tr_pointer%min_y, &
-              tr_pointer%min_x,tr_pointer%max_y, &
-              tr_pointer%max_x,tr_pointer%max_y, &
-              tr_pointer%max_x,tr_pointer%min_y &
-              /)
+    ! ! Limit it to 1 million faces per chunk.
+    ! ! We will grab a slice of this later to shrink it.
+    ! limit = 200000
 
-            c_index = (current_offset * 12) + 1
-            colors(c_index:c_index + 11) = (/&
-              1.0, 1.0, 1.0, &
-              1.0, 1.0, 1.0, &
-              1.0, 1.0, 1.0, &
-              1.0, 1.0, 1.0 &
-              /)
+    ! allocate(positions(12 * limit))
+    ! allocate(texture_coordinates(8 * limit))
+    ! allocate(colors(12 * limit))
+    ! allocate(indices(6 * limit))
 
-            ! ! I love Fortran's array intrinsics.
-            i_index = (current_offset * 6) + 1
-            indices(i_index:i_index + 5) = (BASE_INDICES + (4 * current_offset))
+    ! current_offset = 0
 
-            current_offset = current_offset + 1
-          end do
-        end do
-      end do
-    end do
+    ! p_index = -1
+    ! t_index = -1
+    ! c_index = -1
+    ! i_index = -1
 
-    ! It's a blank mesh.
-    if (p_index == -1) then
-      mesh_id = ""
-      return
-    end if
+    ! base_y = (MESH_STACK_HEIGHT * (generator_message%mesh_stack - 1)) + 1
+    ! max_y = MESH_STACK_HEIGHT * (generator_message%mesh_stack)
 
-    p_index = p_index + 11
-    t_index = t_index + 7
-    c_index = c_index + 11
-    i_index = i_index + 5
+    ! do x = 1,CHUNK_WIDTH
+    !   do z = 1,CHUNK_WIDTH
+    !     do y = base_y,max_y
 
-    positions = positions(1: p_index)
-    texture_coordinates = texture_coordinates(1: t_index)
-    colors = colors(1: c_index)
-    indices = indices(1:i_index)
+    !       ! Position in indices.
+    !       pos = [x, y, z]
+
+    !       ! Cycle on air.
+    !       if (generator_message%current%data(pos%y, pos%z, pos%x)%id == 0) then
+    !         cycle
+    !       end if
+
+    !       ! Position in world offset.
+    !       offset = [ &
+    !         x - 1, &
+    !         y - base_y, &
+    !         z - 1 &
+    !         ]
+
+    !       do i = 1,6
+
+    !         ! Direction we're looking towards.
+    !         direction = DIRECTIONS(1:3, i)
+
+    !         ! Block we're looking at.
+    !         trajectory = pos + direction
+
+    !         ! If we're going to go out of bounds, cycle.
+    !         ! todo: check neighbor.
+    !         if (trajectory%x < 1 .or. trajectory%x > CHUNK_WIDTH .or. trajectory%z < 1 .or. trajectory%z > CHUNK_WIDTH .or. trajectory%y < 1 .or. trajectory%y > CHUNK_HEIGHT) then
+    !           cycle
+    !         end if
+
+    !         ! todo: if y height == chunk_height then just render the face.
+
+    !         ! If it's another fullsize block, cycle.
+    !         ! todo: check draw_type.
+    !         if (generator_message%current%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
+    !           cycle
+    !         end if
+
+
+    !         p_index = (current_offset * 12) + 1
+    !         positions(p_index:p_index + 11) = (FACES(1:12, i) + (/offset%x, offset%y, offset%z, offset%x, offset%y, offset%z, offset%x, offset%y, offset%z, offset%x, offset%y, offset%z/))
+
+    !         tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
+
+    !         t_index = (current_offset * 8) + 1
+    !         texture_coordinates(t_index:t_index + 7) = (/ &
+    !           tr_pointer%min_x,tr_pointer%min_y, &
+    !           tr_pointer%min_x,tr_pointer%max_y, &
+    !           tr_pointer%max_x,tr_pointer%max_y, &
+    !           tr_pointer%max_x,tr_pointer%min_y &
+    !           /)
+
+    !         c_index = (current_offset * 12) + 1
+    !         colors(c_index:c_index + 11) = (/&
+    !           1.0, 1.0, 1.0, &
+    !           1.0, 1.0, 1.0, &
+    !           1.0, 1.0, 1.0, &
+    !           1.0, 1.0, 1.0 &
+    !           /)
+
+    !         ! ! I love Fortran's array intrinsics.
+    !         i_index = (current_offset * 6) + 1
+    !         indices(i_index:i_index + 5) = (BASE_INDICES + (4 * current_offset))
+
+    !         current_offset = current_offset + 1
+    !       end do
+    !     end do
+    !   end do
+    ! end do
+
+    ! ! It's a blank mesh.
+    ! if (p_index == -1) then
+    !   mesh_id = ""
+    !   return
+    ! end if
+
+    ! p_index = p_index + 11
+    ! t_index = t_index + 7
+    ! c_index = c_index + 11
+    ! i_index = i_index + 5
+
+    ! positions = positions(1: p_index)
+    ! texture_coordinates = texture_coordinates(1: t_index)
+    ! colors = colors(1: c_index)
+    ! indices = indices(1:i_index)
 
 
     !! fixme: this should be passing it back into a concurrent FILO queue.
@@ -265,8 +267,6 @@ contains
     ! mesh_id = "mesh_stack_"//int_to_string(chunk_pointer%world_position%x)//"_"//int_to_string(chunk_pointer%world_position%y)//"_"//int_to_string(mesh_stack)
 
     ! call mesh_create_3d(mesh_id, positions, texture_coordinates, colors, indices)
-
-
 
 
     void_pointer = c_null_ptr
@@ -277,13 +277,14 @@ contains
 
 
 
-  subroutine chunk_mesh_generate(chunk_pointer, mesh_stack)
+  subroutine chunk_mesh_generate(x,z, mesh_stack)
     use :: string
     implicit none
 
-    type(memory_chunk), intent(in), pointer :: chunk_pointer
-    integer(c_int), intent(in), value :: mesh_stack
+    integer(c_int), intent(in), value :: x, z, mesh_stack
 
+
+    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_null_ptr)!c_loc(test_data))
   end subroutine chunk_mesh_generate
 
 
