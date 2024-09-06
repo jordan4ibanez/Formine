@@ -103,6 +103,8 @@ Homebrew
 brew install gfortran glfw
 ```
 
+**You must switch** the ``link`` flags in the [fpm.toml](https://github.com/jordan4ibanez/Formine/blob/master/fpm.toml) to the mac one!
+
 Then you simply will make with the Mac flag.
 ```
 make mac
