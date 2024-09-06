@@ -514,7 +514,7 @@ contains
     ! Thread passes in a thread_argument pointer.
     ! Check it.
     if (.not. c_associated(c_arg_pointer)) then
-      print*,"thread association failure"
+      error stop "[Thread] Fatal error: sent argument is null."
       return
     end if
 
@@ -525,8 +525,10 @@ contains
     !? Remember: This is a void pointer, it can be any type.
     !? If you're not sure what type is getting sent where, there is an
     !? implementation issue and it MUST be fixed.
+    !?
+    !? But you can also send in null pointers, you must expect them though.
     if (.not. c_associated(arguments%sent_data)) then
-      print*, "thread sent data association failure"
+      error stop "[Thread] Fatal error: Sent data is null."
       return
     end if
 
@@ -540,6 +542,10 @@ contains
     deallocate(input_string)
 
     ! We lock the mutex to write that the thread has completed.
+    !? Implementation note:
+    !! THIS MUST BE DONE.
+    !? If this is not done, no threads will be
+    !? freed in the state machine!
     status = thread_write_lock(arguments%mutex_pointer)
     arguments%active_flag = .false.
     status = thread_unlock_lock(arguments%mutex_pointer)
