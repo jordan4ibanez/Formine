@@ -8,4 +8,5 @@ module raw_data_version_info
   integer(c_int), parameter :: FORMINE_VERSION_MAJOR = 0
   integer(c_int), parameter :: FORMINE_VERSION_MINOR = 3
   integer(c_int), parameter :: FORMINE_VERSION_PATCH = 0
+  logical(c_bool), parameter :: FORMINE_IS_RELEASE = .false.
 end module raw_data_version_info
