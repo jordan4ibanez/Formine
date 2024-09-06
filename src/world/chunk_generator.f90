@@ -53,13 +53,13 @@ contains
       end do
     end do
 
+    call chunk_handler_store_chunk_pointer(chunk_pointer)
+
     do i = 1,MESH_STACK_ARRAY_SIZE
       chunk_pointer%mesh(i) = ""
       ! chunk_pointer%mesh(i) =
       call chunk_mesh_generate(chunk_pointer%world_position%x, chunk_pointer%world_position%y, i)
     end do
-
-    call chunk_handler_store_chunk_pointer(chunk_pointer)
   end subroutine chunk_generator_new_chunk
 
 
