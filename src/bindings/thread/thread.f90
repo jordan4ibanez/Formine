@@ -34,6 +34,7 @@ module thread
   private
 
   public :: pthread_t
+  public :: thread_argument
   public :: thread_queue_element
   public :: mutex_rwlock
 
@@ -184,11 +185,11 @@ module thread
 !* BEGIN FUNCTION BLUEPRINTS.
 
 
-    recursive subroutine thread_function_c_interface(arg) bind(c)
+    recursive subroutine thread_function_c_interface(c_arg_pointer) bind(c)
       use, intrinsic :: iso_c_binding
       implicit none
 
-      type(c_ptr), intent(in), value :: arg
+      type(c_ptr), intent(in), value :: c_arg_pointer
     end subroutine thread_function_c_interface
 
 
