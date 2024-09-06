@@ -63,7 +63,7 @@ PATCH=$RAW_VERSION_IDENTIFIER
 
 #* CHECK IF RELEASE.
 
-if [[ $ARGUMENT == "release"* ]]; then
+if [[ $ARGUMENT == "RELEASE"* ]]; then
   IS_RELEASE=true
 fi
 
