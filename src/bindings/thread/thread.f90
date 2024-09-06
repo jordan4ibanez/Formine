@@ -502,30 +502,49 @@ contains
     type(c_ptr), intent(in), value :: c_arg_pointer
     type(thread_argument), pointer :: arguments
     type(c_ptr) :: void_pointer
+    !? Implementation note:
+    !? When working with strings in threads, they must be a defined size.
     character(len = 128, kind = c_char), pointer :: input_string
     ! integer(c_int), pointer :: input_data
     integer(c_int) :: status
 
+    ! We will basically always return a null void pointer.
+    void_pointer = c_null_ptr
+
+    ! Thread passes in a thread_argument pointer.
+    ! Check it.
     if (.not. c_associated(c_arg_pointer)) then
       print*,"thread association failure"
       return
     end if
 
+    ! We shift it into Fortran.
     call c_f_pointer(c_arg_pointer, arguments)
 
+    ! Check our string void pointer.
+    !? Remember: This is a void pointer, it can be any type.
+    !? If you're not sure what type is getting sent where, there is an
+    !? implementation issue and it MUST be fixed.
+    if (.not. c_associated(arguments%sent_data)) then
+      print*, "thread sent data association failure"
+      return
+    end if
 
+    ! Shift the string pointer into Fortran.
     call c_f_pointer(arguments%sent_data, input_string)
 
-    ! print*,c_loc(input_string)
+    ! Print it.
+    print*,input_string
 
-    ! print*,input_string
-
+    ! It's a pointer, deallocate it.
     deallocate(input_string)
 
-    void_pointer = c_null_ptr
+    ! We lock the mutex to write that the thread has completed.
     status = thread_write_lock(arguments%mutex_pointer)
     arguments%active_flag = .false.
     status = thread_unlock_lock(arguments%mutex_pointer)
+
+    ! The null void pointer is returned.
   end function test_threading_example
 
 
