@@ -111,13 +111,16 @@ module chunk_mesh
 
 contains
 
-
-  function chunk_mesh_generate(chunk_pointer, mesh_stack) result(mesh_id)
-    use :: string
+  recursive function chunk_mesh_generation_thread(c_arg_pointer) result(void_pointer) bind(c)
+    use, intrinsic :: iso_c_binding
     implicit none
 
-    type(memory_chunk), intent(in), pointer :: chunk_pointer
-    integer(c_int), intent(in), value :: mesh_stack
+    type(c_ptr), intent(in), value :: c_arg_pointer
+    type(c_ptr) :: void_pointer
+    type(thread_argument), pointer :: arguments
+    type(chunk_mesh_generator_message), pointer :: generator_message
+
+    integer(c_int) :: status
     character(len = :, kind = c_char), allocatable :: mesh_id
     type(block_definition), pointer :: definition_pointer
     type(texture_rectangle), pointer :: tr_pointer
@@ -129,8 +132,20 @@ contains
     integer(c_int) :: limit, i, x, z, y, current_offset, p_index, t_index, c_index, i_index, base_y, max_y
     type(vec3i) :: direction, pos, trajectory, offset
 
-    !! debugging one block, ID 1 (Stone)
+    if (.not. c_associated(c_arg_pointer)) then
+      error stop "[Chunk Mesh] Fatal error: Was passed a null thread_argument pointer."
+    end if
 
+    call c_f_pointer(c_arg_pointer, arguments)
+
+    if (.not. c_associated(arguments%sent_data)) then
+      error stop "[Chunk Mesh] Fatal error: Was passed a null sent_data pointer."
+    end if
+
+    call c_f_pointer(arguments%sent_data, generator_message)
+
+
+    !!fixme: this is EXTREMELY unsafe.
     ! Very pointy. =>
     definition_pointer => block_repo_get_definition_pointer_by_id(1)
 
@@ -152,8 +167,8 @@ contains
     c_index = -1
     i_index = -1
 
-    base_y = (MESH_STACK_HEIGHT * (mesh_stack - 1)) + 1
-    max_y = MESH_STACK_HEIGHT * (mesh_stack)
+    base_y = (MESH_STACK_HEIGHT * (generator_message%mesh_stack - 1)) + 1
+    max_y = MESH_STACK_HEIGHT * (generator_message%mesh_stack)
 
     do x = 1,CHUNK_WIDTH
       do z = 1,CHUNK_WIDTH
@@ -163,7 +178,7 @@ contains
           pos = [x, y, z]
 
           ! Cycle on air.
-          if (chunk_pointer%data(pos%y, pos%z, pos%x)%id == 0) then
+          if (generator_message%current%data(pos%y, pos%z, pos%x)%id == 0) then
             cycle
           end if
 
@@ -192,7 +207,7 @@ contains
 
             ! If it's another fullsize block, cycle.
             ! todo: check draw_type.
-            if (chunk_pointer%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
+            if (generator_message%current%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
               cycle
             end if
 
@@ -244,10 +259,32 @@ contains
     colors = colors(1: c_index)
     indices = indices(1:i_index)
 
-    mesh_id = "mesh_stack_"//int_to_string(chunk_pointer%world_position%x)//"_"//int_to_string(chunk_pointer%world_position%y)//"_"//int_to_string(mesh_stack)
 
-    call mesh_create_3d(mesh_id, positions, texture_coordinates, colors, indices)
-  end function chunk_mesh_generate
+    !! fixme: this should be passing it back into a concurrent FILO queue.
+
+    ! mesh_id = "mesh_stack_"//int_to_string(chunk_pointer%world_position%x)//"_"//int_to_string(chunk_pointer%world_position%y)//"_"//int_to_string(mesh_stack)
+
+    ! call mesh_create_3d(mesh_id, positions, texture_coordinates, colors, indices)
+
+
+
+
+    void_pointer = c_null_ptr
+    status = thread_write_lock(arguments%mutex_pointer)
+    arguments%active_flag = .false.
+    status = thread_unlock_lock(arguments%mutex_pointer)
+  end function chunk_mesh_generation_thread
+
+
+
+  subroutine chunk_mesh_generate(chunk_pointer, mesh_stack)
+    use :: string
+    implicit none
+
+    type(memory_chunk), intent(in), pointer :: chunk_pointer
+    integer(c_int), intent(in), value :: mesh_stack
+
+  end subroutine chunk_mesh_generate
 
 
 end module chunk_mesh
