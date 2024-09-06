@@ -57,6 +57,8 @@ module chunk_data
     type(memory_chunk), pointer :: back => null()
     !* Neighbor: +Z
     type(memory_chunk), pointer :: front => null()
+    !* Which stack portion to generate.
+    integer(c_int) :: mesh_stack = -1
   end type chunk_mesh_generator_message
 
 
