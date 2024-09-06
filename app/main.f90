@@ -24,24 +24,21 @@ program main
   use, intrinsic ::  iso_c_binding
   implicit none
 
-  real(c_float) :: rotation, min_x, min_y, max_x, max_y
+  real(c_float) :: rotation!, min_x, min_y, max_x, max_y
   type(vec2f) :: text_size
   real(c_float), parameter :: FONT_SIZE = 25.0
   real(c_float) :: floating_font_size
 
   character(len = :, kind = c_char), allocatable :: position_text_debug
-  integer(c_int) :: i,y, new_fps, old_fps, x
-  logical(c_bool) :: testing_bool
-  character(len = :, kind = c_char), pointer :: test_data
+  integer(c_int) :: y, new_fps, old_fps, x!, i
+  ! logical(c_bool) :: testing_bool
+  ! character(len = :, kind = c_char), pointer :: test_data
   ! integer(c_int), pointer :: test_data
 
 
   new_fps = 0
   old_fps = -1
-
   y = 1
-
-
 
 
   ! !! BEGIN WARNING: This is only to be used for when developing libraries.
