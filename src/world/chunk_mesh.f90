@@ -4,6 +4,7 @@ module chunk_mesh
   use :: block_repo
   use :: texture_atlas
   use :: vector_3i
+  use :: thread
   use, intrinsic :: iso_c_binding
   implicit none
 
