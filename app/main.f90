@@ -19,7 +19,7 @@ program main
   use :: keyboard
   use :: camera
   use :: chunk_handler
-  use :: thread
+  use :: thread_handler
   use :: version_info
   use, intrinsic ::  iso_c_binding
   implicit none
@@ -42,9 +42,9 @@ program main
 
 
   ! !! BEGIN WARNING: This is only to be used for when developing libraries.
-  if (.true.) then
-    return
-  end if
+  ! if (.true.) then
+  !   return
+  ! end if
   ! !! END WARNING.
 
 
@@ -272,7 +272,7 @@ program main
 
       call glfw_poll_events()
 
-      call thread_process_detached_thread_queue()
+      call thread_handler_run()
 
     end do
   end if
