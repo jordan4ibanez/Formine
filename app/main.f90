@@ -20,6 +20,7 @@ program main
   use :: camera
   use :: chunk_handler
   use :: thread
+  use :: version_info
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -65,7 +66,7 @@ program main
 
 
   ! Try to initialize the Window.
-  if (.not. glfw_create_window(640,480, "Fortran Game Engine")) then
+  if (.not. glfw_create_window(640,480, "Formine - "//FORMINE_VERSION_STRING)) then
     return
   end if
 
