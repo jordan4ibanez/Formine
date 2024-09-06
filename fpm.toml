@@ -1,3 +1,4 @@
+#! If you change the ordering of this first section, you'll break the version info in game.
 name = "Formine"
 description = "A test of learning modern fortran through game dev."
 version = "0.3.0"
