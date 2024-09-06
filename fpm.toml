@@ -1,6 +1,5 @@
-#! If you change the ordering of this first section, you'll break the version info in game.
 name = "Formine"
-description = "A test of learning modern fortran through game dev."
+description = "A voxel game written in Fortran."
 version = "0.3.0"
 license = "MPL-2.0"
 author = "jordan4ibanez"
