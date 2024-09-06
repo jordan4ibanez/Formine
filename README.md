@@ -1,5 +1,5 @@
 # Formine
- I realized I never posted any fortran stuff to my github so here it is.
+ A voxel game written in Fortran.
 
 ## Why is this called Formine?
 
