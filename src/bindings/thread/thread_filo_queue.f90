@@ -22,7 +22,6 @@ module thread_filo_queue
   integer(c_int), parameter :: QUEUE_GENERIC = 7
 
 
-
   type :: queue_data
     !* Basic types.
     integer(c_int), pointer :: i32 => null()
