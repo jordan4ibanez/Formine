@@ -1,6 +1,7 @@
 #/bin/bash
 #! this is just ridiculous.
 
+ARGUMENT="$@"
 FOUND=false
 VERSION_STRING=""
 RAW_VERSION_IDENTIFIER=""
@@ -8,6 +9,7 @@ MAJOR=0
 MINOR=0
 PATCH=0
 OUTPUT_STRING=""
+IS_RELEASE=false
 
 
 while IFS= read -r LINE; do
@@ -58,7 +60,11 @@ RAW_VERSION_IDENTIFIER=${RAW_VERSION_IDENTIFIER#*.}
 PATCH=$RAW_VERSION_IDENTIFIER
 
 
-echo [$MAJOR].[$MINOR].[$PATCH]
+#* CHECK IF RELEASE.
+
+if [[ $ARGUMENT == "release"* ]]; then
+  IS_RELEASE=true
+fi
 
 cat > "./src/version_info/version_info_raw_data.f90" <<- END
 module raw_data_version_info
@@ -71,6 +77,7 @@ module raw_data_version_info
   integer(c_int), parameter :: FORMINE_VERSION_MAJOR = $MAJOR
   integer(c_int), parameter :: FORMINE_VERSION_MINOR = $MINOR
   integer(c_int), parameter :: FORMINE_VERSION_PATCH = $PATCH
+  logical(c_bool), parameter :: FORMINE_IS_RELEASE = .$IS_RELEASE.
 end module raw_data_version_info
 END
 
