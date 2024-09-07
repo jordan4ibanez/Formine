@@ -23,6 +23,7 @@ module texture_atlas
   public :: texture_atlas_get_texture_rectangle_pointer
   public :: texture_atlas_get_texture_indices_clone_pointer
   public :: texture_atlas_get_texture_positions_array_clone_pointer
+  public :: texture_atlas_get_texture_count
   public :: texture_atlas_destroy
 
 
@@ -292,6 +293,16 @@ contains
 
     positions_array_clone_pointer = texture_positions_array
   end function texture_atlas_get_texture_positions_array_clone_pointer
+
+
+  !* Get the number of textures in the atlas.
+  function texture_atlas_get_texture_count() result(count)
+    implicit none
+
+    integer(c_int) :: count
+
+    count = key_array_size
+  end function texture_atlas_get_texture_count
 
 
   !* This frees any pointers used by the texture atlas module.
