@@ -40,6 +40,6 @@ block.register({
 block.register({
   name = "bedrock",
   description = "Bedrock",
-  textures = { "default_stone.png", "default_stone.png", "default_stone.png", "default_stone.png", "default_stone.png", "default_stone.png" },
+  textures = { "default_bedrock.png", "default_bedrock.png", "default_bedrock.png", "default_bedrock.png", "default_bedrock.png", "default_bedrock.png" },
   draw_type = block.draw_type.normal,
 })
