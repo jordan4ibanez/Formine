@@ -90,7 +90,7 @@ contains
     end select
 
     ! Allocate pointer.
-    allocate(clone_chunk_pointer)
+    clone_chunk_pointer => memory_chunk(x,y)
 
     ! Allocation upon assignment.
     clone_chunk_pointer%data = original_chunk_pointer%data
