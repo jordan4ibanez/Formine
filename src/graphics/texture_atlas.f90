@@ -21,6 +21,8 @@ module texture_atlas
   public :: texture_atlas_add_texture_to_pack
   public :: texture_atlas_pack
   public :: texture_atlas_get_texture_rectangle_pointer
+  public :: texture_atlas_get_texture_indices_clone_pointer
+  public :: texture_atlas_get_texture_positions_array_clone_pointer
   public :: texture_atlas_destroy
 
 
@@ -36,8 +38,9 @@ module texture_atlas
 
   !? Each index is the Block ID. [arr, id]
   !? Each array at the ID points to a gpu position in the texture atlas.
-  integer(c_int), dimension(6,0), allocatable :: integer_strings(:, :)
+  integer(c_int), dimension(6,0), allocatable :: texture_indices(:, :)
   type(texture_rectangle), dimension(:), allocatable :: texture_positions_array
+  integer(c_int) :: key_array_size = 0
 
 
 contains
@@ -204,28 +207,6 @@ contains
   end function array_texture_pack_element_insert
 
 
-  !* This frees any pointers used by the texture atlas module.
-  subroutine texture_atlas_destroy()
-    use :: terminal
-    implicit none
-
-    ! Free the pointer.
-    if (associated(texture_coordinates_pointer)) then
-      deallocate(texture_coordinates_pointer)
-      ! Double check.
-      if (associated(texture_coordinates_pointer)) then
-        print"(A)",colorize_rgb("[Texture Atlas] Error: Failed to free the texture coordinates pointer.", 255, 0, 0)
-        return
-      end if
-    else
-      ! If this happens, something went very wrong.
-      print"(A)",colorize_rgb("[Texture Atlas] Error: Texture coordinates pointer is not associated.", 255, 0, 0)
-      return
-    end if
-    ! Everything is freed, hooray.
-    print"(A)", "[Texture Atlas]: Successfully destroyed texture atlas."
-  end subroutine
-
   !* This will match up texture IDs to raw texture coordinate data so
   !* it can be accessed extremely fast.
   subroutine optimize_data_array()
@@ -234,7 +215,7 @@ contains
 
     character(len = :, kind = c_char), allocatable :: temp
     type(fhash_tbl_t) :: string_to_index_array
-    integer(c_int) :: key_array_size, i, status, y, current_index
+    integer(c_int) :: i, status, y, current_index
     class(*), pointer :: generic_pointer
     type(texture_rectangle), pointer :: rect_pointer
     type(block_definition), pointer :: definition_pointer
@@ -245,7 +226,7 @@ contains
 
     allocate(texture_positions_array(key_array_size))
 
-    allocate(integer_strings(6, key_array_size))
+    allocate(texture_indices(6, key_array_size))
 
     ! String name is first come first serve.
     ! As long as it never changes, this will work perfectly.
@@ -281,12 +262,59 @@ contains
           error stop "[Texture Atlas] Error: Received an invalid texture. ["//definition_pointer%textures(y)%get()//"]"
         end if
 
-        integer_strings(y, i) = current_index
+        texture_indices(y, i) = current_index
       end do
     end do
 
     print"(A)","[Texture Atlas]: Cachiness optimization complete. Optimized: ["//int_to_string(key_array_size)//"] textures."
   end subroutine optimize_data_array
+
+
+  !* Clone the texture indices and return a pointer to the data.
+  function texture_atlas_get_texture_indices_clone_pointer() result(indices_clone_pointer)
+    implicit none
+
+    integer(c_int), dimension(6,0), pointer :: indices_clone_pointer(:, :)
+
+    allocate(indices_clone_pointer(6, key_array_size))
+
+    indices_clone_pointer = texture_indices
+  end function texture_atlas_get_texture_indices_clone_pointer
+
+
+  !* Clone the texture positions array and return a pointer to the data.
+  function texture_atlas_get_texture_positions_array_clone_pointer() result(positions_array_clone_pointer)
+    implicit none
+
+    type(texture_rectangle), dimension(:), pointer :: positions_array_clone_pointer(:)
+
+    allocate(positions_array_clone_pointer(key_array_size))
+
+    positions_array_clone_pointer = texture_positions_array
+  end function texture_atlas_get_texture_positions_array_clone_pointer
+
+
+  !* This frees any pointers used by the texture atlas module.
+  subroutine texture_atlas_destroy()
+    use :: terminal
+    implicit none
+
+    ! Free the pointer.
+    if (associated(texture_coordinates_pointer)) then
+      deallocate(texture_coordinates_pointer)
+      ! Double check.
+      if (associated(texture_coordinates_pointer)) then
+        print"(A)",colorize_rgb("[Texture Atlas] Error: Failed to free the texture coordinates pointer.", 255, 0, 0)
+        return
+      end if
+    else
+      ! If this happens, something went very wrong.
+      print"(A)",colorize_rgb("[Texture Atlas] Error: Texture coordinates pointer is not associated.", 255, 0, 0)
+      return
+    end if
+    ! Everything is freed, hooray.
+    print"(A)", "[Texture Atlas]: Successfully destroyed texture atlas."
+  end subroutine
 
 
 end module texture_atlas
