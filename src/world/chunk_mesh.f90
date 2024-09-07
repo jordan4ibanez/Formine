@@ -172,6 +172,25 @@ contains
       deallocate(generator_message%front)
     end if
 
+    if (.not. associated(generator_message%texture_indices)) then
+      error stop "indices"
+    end if
+
+    deallocate(generator_message%texture_indices)
+
+    if (.not. associated(generator_message%texture_positions_array)) then
+      error stop "positions"
+    end if
+
+    deallocate(generator_message%texture_positions_array)
+
+    if (generator_message%texture_count == 0) then
+      error stop "count"
+    end if
+
+    ! Finally, deallocate the message itself.
+    deallocate(generator_message)
+
 
     ! fixme: this is EXTREMELY unsafe.
     ! Need: string and array
@@ -326,7 +345,9 @@ contains
     message_to_generator%back => chunk_handler_get_clone_chunk_pointer(x,z - 1)
     message_to_generator%front => chunk_handler_get_clone_chunk_pointer(x,z + 1)
 
-    ! todo: need a copy of the block database.
+    message_to_generator%texture_indices => texture_atlas_get_texture_indices_clone_pointer()
+    message_to_generator%texture_positions_array => texture_atlas_get_texture_positions_array_clone_pointer()
+    message_to_generator%texture_count = texture_atlas_get_texture_count()
 
     call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator))
   end subroutine chunk_mesh_generate
