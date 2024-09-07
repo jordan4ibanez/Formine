@@ -111,7 +111,8 @@ contains
 
     print"(A)","[Texture Atlas]: Successfully stitched together the texture atlas."
 
-    
+    ! This will optimize the understandable data into pure numbers.
+    call optimize_data_array()
   end subroutine texture_atlas_pack
 
 
