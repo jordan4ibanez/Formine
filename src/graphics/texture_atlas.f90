@@ -280,10 +280,10 @@ contains
         if (status /= 0) then
           error stop "[Texture Atlas] Error: Received an invalid texture. ["//definition_pointer%textures(y)%get()//"]"
         end if
+
+        integer_strings(y, i) = current_index
       end do
-
     end do
-
 
     print"(A)","[Texture Atlas]: Cachiness optimization complete. Optimized: ["//int_to_string(key_array_size)//"] textures."
   end subroutine optimize_data_array
