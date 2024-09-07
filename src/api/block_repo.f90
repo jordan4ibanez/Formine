@@ -82,12 +82,6 @@ module block_repo
   type(block_definition), dimension(:), allocatable, target :: definition_array
 
   ! Data oriented.
-
-  !? Each index is the Block ID. [arr, id]
-  !? Each array at the ID points to a gpu position in the texture atlas.
-  integer(c_int), dimension(6,0), allocatable :: integer_strings(:)
-
-
   integer(c_int) :: draw_type = DRAW_TYPE_AIR
 
 
@@ -234,15 +228,6 @@ contains
     definition_array_length = definition_array_length + 1
     current_id = current_id + 1
   end function register_block
-
-
-  !* This will match up texture IDs to raw texture coordinate data so
-  !* it can be accessed extremely fast.
-  subroutine block_repo_populate_raw_data()
-    implicit none
-
-
-  end subroutine block_repo_populate_raw_data
 
 
 end module block_repo
