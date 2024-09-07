@@ -145,7 +145,13 @@ contains
 
     call c_f_pointer(arguments%sent_data, generator_message)
 
+
+
+
     ! This shall go at the end to deallocate the pointers.
+
+    ! todo: get the texture memory locations.
+
     if (associated(generator_message%current)) then
       deallocate(generator_message%current)
     end if
@@ -167,7 +173,12 @@ contains
     end if
 
 
-    ! !!fixme: this is EXTREMELY unsafe.
+    ! fixme: this is EXTREMELY unsafe.
+    ! Need: string and array
+    ! texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
+
+
+
     ! ! Very pointy. =>
     ! definition_pointer => block_repo_get_definition_pointer_by_id(1)
 
