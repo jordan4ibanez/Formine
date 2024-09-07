@@ -74,8 +74,23 @@ module block_repo
 
   integer(c_int) :: current_id = 1
   integer(c_int) :: definition_array_length = 0
-  type(block_definition), dimension(:), allocatable, target :: definition_array
+
+  ! Random access oriented.
+
   type(fhash_tbl_t) :: definition_database_string
+
+  ! Object oriented.
+  type(block_definition), dimension(:), allocatable, target :: definition_array
+
+  ! Data oriented.
+
+  !? Each index is the Block ID. [arr, id]
+  !? Each array at the ID points to a gpu position in the texture atlas.
+  integer(c_int), dimension(6,0), allocatable :: integer_strings(:)
+
+
+  integer(c_int) :: draw_type = DRAW_TYPE_AIR
+
 
 
 contains
