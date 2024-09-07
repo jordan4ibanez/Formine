@@ -10,6 +10,7 @@ module block_repo
 
 
   public :: block_definition
+  public :: block_repo_get_number_of_definitions
   public :: block_repo_get_definition_pointer_by_id
   public :: block_repo_deploy_lua_api
   public :: register_block
@@ -87,6 +88,16 @@ module block_repo
 
 
 contains
+
+
+  !* Check how many blocks are registered.
+  function block_repo_get_number_of_definitions() result(total)
+    implicit none
+
+    integer(c_int) :: total
+
+    total = size(definition_array)
+  end function block_repo_get_number_of_definitions
 
 
   !* Get a definition pointer by the ID.
