@@ -34,6 +34,11 @@ module texture_atlas
   type(fhash_tbl_t), pointer :: texture_coordinates_pointer
   type(heap_string), dimension(:), allocatable :: texture_key_array
 
+  !? Each index is the Block ID. [arr, id]
+  !? Each array at the ID points to a gpu position in the texture atlas.
+  integer(c_int), dimension(6,0), allocatable :: integer_strings(:, :)
+  type(texture_rectangle), dimension(:), allocatable :: texture_positions_array
+
 
 contains
 
