@@ -21,7 +21,6 @@ module texture_atlas
   public :: texture_atlas_add_texture_to_pack
   public :: texture_atlas_pack
   public :: texture_atlas_get_texture_rectangle_pointer
-  public :: texture_atlas_debug
   public :: texture_atlas_destroy
 
 
@@ -33,8 +32,7 @@ module texture_atlas
 
   type(texture_pack_element), dimension(:), allocatable :: textures_to_pack
   type(fhash_tbl_t), pointer :: texture_coordinates_pointer
-  type(heap_string), dimension(:), allocatable :: showcase_array
-  integer(c_int) :: current_index, showcase_length
+  type(heap_string), dimension(:), allocatable :: texture_key_array
 
 
 contains
@@ -104,12 +102,11 @@ contains
     ! Now we attach the coordinates pointer to be used for the lifetime of the game.
     texture_coordinates_pointer => packer%get_texture_coordinates_database()
 
-    showcase_array = packer%get_keys()
-
-    current_index = 1
-    showcase_length = size(showcase_array)
+    texture_key_array = packer%get_keys()
 
     print"(A)","[Texture Atlas]: Successfully stitched together the texture atlas."
+
+    
   end subroutine texture_atlas_pack
 
 
@@ -138,45 +135,45 @@ contains
 
 
   !* This is debug for selecting an atlas element.
-  function texture_atlas_debug() result(texture_location)
-    implicit none
+  ! function texture_atlas_debug() result(texture_location)
+  !   implicit none
 
-    class(*), allocatable :: generic_data
-    integer(c_int) :: status
-    type(texture_rectangle) :: texture_location
+  !   class(*), allocatable :: generic_data
+  !   integer(c_int) :: status
+  !   type(texture_rectangle) :: texture_location
 
-    call texture_coordinates_pointer%get_raw(key(showcase_array(current_index)%get()), generic_data, stat = status)
+  !   call texture_coordinates_pointer%get_raw(key(texture_key_array(current_index)%get()), generic_data, stat = status)
 
-    if (status /= 0) then
-      error stop "Debug failed, it doesn't exist"
-    end if
+  !   if (status /= 0) then
+  !     error stop "Debug failed, it doesn't exist"
+  !   end if
 
-    select type (generic_data)
-     type is (texture_rectangle)
-      texture_location = generic_data
-     class default
-      error stop "How, did this even get in here?!"
-    end select
+  !   select type (generic_data)
+  !    type is (texture_rectangle)
+  !     texture_location = generic_data
+  !    class default
+  !     error stop "How, did this even get in here?!"
+  !   end select
 
-    current_index = current_index + 1
-    if (current_index > showcase_length) then
-      current_index = 1
-    end if
+  !   current_index = current_index + 1
+  !   if (current_index > showcase_length) then
+  !     current_index = 1
+  !   end if
 
-    ! print*,output
+  ! print*,output
 
-    ! Make this actually readable
-    ! print*,"BEGIN OUTPUT"
+  ! Make this actually readable
+  ! print*,"BEGIN OUTPUT"
 
-    ! write(*,"(A f0.10)") "min_x = 0", output%min_x
+  ! write(*,"(A f0.10)") "min_x = 0", output%min_x
 
-    ! write(*,"(A f0.10)") "min_y = 0", output%min_y
+  ! write(*,"(A f0.10)") "min_y = 0", output%min_y
 
-    ! write(*,"(A f0.10)") "max_x = 0", output%max_x
+  ! write(*,"(A f0.10)") "max_x = 0", output%max_x
 
-    ! write(*,"(A f0.10)") "max_y = 0", output%max_y
+  ! write(*,"(A f0.10)") "max_y = 0", output%max_y
 
-  end function texture_atlas_debug
+  ! end function texture_atlas_debug
 
 
   !* Insert a value at the end of a memory texture array.

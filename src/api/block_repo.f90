@@ -76,7 +76,6 @@ module block_repo
   integer(c_int) :: definition_array_length = 0
 
   ! Random access oriented.
-
   type(fhash_tbl_t) :: definition_database_string
 
   ! Object oriented.
@@ -235,6 +234,15 @@ contains
     definition_array_length = definition_array_length + 1
     current_id = current_id + 1
   end function register_block
+
+
+  !* This will match up texture IDs to raw texture coordinate data so
+  !* it can be accessed extremely fast.
+  subroutine block_repo_populate_raw_data()
+    implicit none
+
+
+  end subroutine block_repo_populate_raw_data
 
 
 end module block_repo
