@@ -122,7 +122,7 @@ contains
   function get(this) result(data)
     implicit none
 
-    class(heap_string), intent(inout) :: this
+    class(heap_string), intent(in) :: this
     character(len = :), allocatable :: data
 
     data = this%data
