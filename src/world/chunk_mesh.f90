@@ -1,6 +1,7 @@
 module chunk_mesh
   use :: mesh
   use :: chunk_data
+  use :: chunk_handler
   use :: block_repo
   use :: texture_atlas
   use :: vector_3i
@@ -123,14 +124,14 @@ contains
     integer(c_int) :: status
     character(len = :, kind = c_char), allocatable :: mesh_id
     type(block_definition), pointer :: definition_pointer
-    type(texture_rectangle), pointer :: tr_pointer
+    ! type(texture_rectangle), pointer :: tr_pointer
     ! Written like this to denote the multiplicative each should have.
-    real(c_float), dimension(12), allocatable :: positions(:)
-    real(c_float), dimension(8), allocatable :: texture_coordinates(:)
-    real(c_float), dimension(12), allocatable :: colors(:)
-    integer(c_int), dimension(6), allocatable :: indices(:)
-    integer(c_int) :: limit, i, x, z, y, current_offset, p_index, t_index, c_index, i_index, base_y, max_y
-    type(vec3i) :: direction, pos, trajectory, offset
+    ! real(c_float), dimension(12), allocatable :: positions(:)
+    ! real(c_float), dimension(8), allocatable :: texture_coordinates(:)
+    ! real(c_float), dimension(12), allocatable :: colors(:)
+    ! integer(c_int), dimension(6), allocatable :: indices(:)
+    ! integer(c_int) :: limit, i, x, z, y, current_offset, p_index, t_index, c_index, i_index, base_y, max_y
+    ! type(vec3i) :: direction, pos, trajectory, offset
 
     if (.not. c_associated(c_arg_pointer)) then
       error stop "[Chunk Mesh] Fatal error: Was passed a null thread_argument pointer."
@@ -138,13 +139,32 @@ contains
 
     call c_f_pointer(c_arg_pointer, arguments)
 
-    print*,"hi"
+    if (.not. c_associated(arguments%sent_data)) then
+      error stop "[Chunk Mesh] Fatal error: Was passed a null sent_data pointer."
+    end if
 
-    ! if (.not. c_associated(arguments%sent_data)) then
-    !   error stop "[Chunk Mesh] Fatal error: Was passed a null sent_data pointer."
-    ! end if
+    call c_f_pointer(arguments%sent_data, generator_message)
 
-    ! call c_f_pointer(arguments%sent_data, generator_message)
+    ! This shall go at the end to deallocate the pointers.
+    if (associated(generator_message%current)) then
+      deallocate(generator_message%current)
+    end if
+
+    if (associated(generator_message%left)) then
+      deallocate(generator_message%left)
+    end if
+
+    if (associated(generator_message%right)) then
+      deallocate(generator_message%right)
+    end if
+
+    if (associated(generator_message%back)) then
+      deallocate(generator_message%back)
+    end if
+
+    if (associated(generator_message%front)) then
+      deallocate(generator_message%front)
+    end if
 
 
     ! !!fixme: this is EXTREMELY unsafe.
@@ -277,14 +297,27 @@ contains
 
 
 
+  !* Queue up a chunk mesh generation call.
   subroutine chunk_mesh_generate(x,z, mesh_stack)
     use :: string
     implicit none
 
     integer(c_int), intent(in), value :: x, z, mesh_stack
+    type(chunk_mesh_generator_message), pointer :: message_to_generator
 
+    allocate(message_to_generator)
 
-    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_null_ptr)!c_loc(test_data))
+    message_to_generator%current => chunk_handler_get_clone_chunk_pointer(x,z)
+
+    message_to_generator%left => chunk_handler_get_clone_chunk_pointer(x - 1,z)
+    message_to_generator%right => chunk_handler_get_clone_chunk_pointer(x + 1,z)
+
+    message_to_generator%back => chunk_handler_get_clone_chunk_pointer(x,z - 1)
+    message_to_generator%front => chunk_handler_get_clone_chunk_pointer(x,z + 1)
+
+    ! todo: need a copy of the block database.
+
+    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator))
   end subroutine chunk_mesh_generate
 
 
