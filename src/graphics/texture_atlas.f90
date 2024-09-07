@@ -226,5 +226,67 @@ contains
     print"(A)", "[Texture Atlas]: Successfully destroyed texture atlas."
   end subroutine
 
+  !* This will match up texture IDs to raw texture coordinate data so
+  !* it can be accessed extremely fast.
+  subroutine optimize_data_array()
+    use :: block_repo, only: block_definition, block_repo_get_number_of_definitions, block_repo_get_definition_pointer_by_id
+    implicit none
+
+    character(len = :, kind = c_char), allocatable :: temp
+    type(fhash_tbl_t) :: string_to_index_array
+    integer(c_int) :: key_array_size, i, status, y, current_index
+    class(*), pointer :: generic_pointer
+    type(texture_rectangle), pointer :: rect_pointer
+    type(block_definition), pointer :: definition_pointer
+
+    print"(A)","[Texture Atlas]: Begin cachiness optimization."
+
+    key_array_size = size(texture_key_array)
+
+    allocate(texture_positions_array(key_array_size))
+
+    allocate(integer_strings(6, key_array_size))
+
+    ! String name is first come first serve.
+    ! As long as it never changes, this will work perfectly.
+    do i = 1,size(texture_key_array)
+
+      temp = texture_key_array(i)%get()
+
+      call string_to_index_array%set(key(temp), i)
+
+      call texture_coordinates_pointer%get_raw_ptr(key(temp), generic_pointer, stat = status)
+
+      select type(generic_pointer)
+       type is (texture_rectangle)
+        rect_pointer => generic_pointer
+       class default
+        error stop "[Texture Atlas] Error: Wrong type in texture_coordinates_pointer."
+      end select
+
+      texture_positions_array(i)%min_x = rect_pointer%min_x
+      texture_positions_array(i)%min_y = rect_pointer%min_y
+      texture_positions_array(i)%max_x = rect_pointer%max_x
+      texture_positions_array(i)%max_y = rect_pointer%max_y
+    end do
+
+    ! Now iterate them, and insert the indices of the textures in the array.
+    do i = 1,block_repo_get_number_of_definitions()
+      definition_pointer => block_repo_get_definition_pointer_by_id(i)
+
+      do y = 1,6
+        call string_to_index_array%get(key(definition_pointer%textures(y)%get()), current_index, stat = status)
+
+        if (status /= 0) then
+          error stop "[Texture Atlas] Error: Received an invalid texture. ["//definition_pointer%textures(y)%get()//"]"
+        end if
+      end do
+
+    end do
+
+
+    print"(A)","[Texture Atlas]: Cachiness optimization complete. Optimized: ["//int_to_string(key_array_size)//"] textures."
+  end subroutine optimize_data_array
+
 
 end module texture_atlas
