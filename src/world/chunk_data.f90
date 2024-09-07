@@ -1,6 +1,7 @@
 module chunk_data
   use :: string
   use :: vector_2i
+  use :: texture_atlas
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -57,6 +58,12 @@ module chunk_data
     type(memory_chunk), pointer :: back => null()
     !* Neighbor: +Z
     type(memory_chunk), pointer :: front => null()
+    !* Pointer of texture indices into the positions array.
+    integer(c_int), dimension(6,0), pointer :: texture_indices(:, :)
+    !* Texture positions array.
+    type(texture_rectangle), dimension(:), pointer :: texture_positions_array
+    !* Total number of textures.
+    integer(c_int) :: texture_count = 0
     !* Which stack portion to generate.
     integer(c_int) :: mesh_stack = -1
   end type chunk_mesh_generator_message
