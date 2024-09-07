@@ -2,6 +2,7 @@ module fast_pack
   use :: memory_texture_module
   use :: stb_image
   use :: string
+  use :: fast_pack_types
   use :: fhash, only: fhash_tbl_t, key => fhash_key
   use, intrinsic :: iso_c_binding
   implicit none
@@ -16,15 +17,6 @@ module fast_pack
   public :: texture_rectangle
   public :: fast_packer_config
   public :: fast_packer
-
-
-  !* Represents a texture size.
-  type :: texture_rectangle
-    real(c_float) :: min_x = 0.0
-    real(c_float) :: min_y = 0.0
-    real(c_float) :: max_x = 0.0
-    real(c_float) :: max_y = 0.0
-  end type texture_rectangle
 
 
   !* Configure the fast packer.
