@@ -24,7 +24,7 @@ block.register({
 block.register({
   name = "grass",
   description = "Grass",
-  textures = { "grass.png", "grass.png", "grass.png", "grass.png", "grass.png", "grass.png" },
+  textures = { "default_grass.png", "default_grass.png", "default_grass.png", "default_grass.png", "default_grass.png", "default_grass.png" },
   draw_type = block.draw_type.normal,
 })
 
@@ -32,7 +32,7 @@ block.register({
 block.register({
   name = "sand",
   description = "Sand",
-  textures = { "sand.png", "sand.png", "sand.png", "sand.png", "sand.png", "sand.png" },
+  textures = { "default_sand.png", "default_sand.png", "default_sand.png", "default_sand.png", "default_sand.png", "default_sand.png" },
   draw_type = block.draw_type.normal,
 })
 
@@ -40,6 +40,6 @@ block.register({
 block.register({
   name = "bedrock",
   description = "Bedrock",
-  textures = { "bedrock.png", "bedrock.png", "bedrock.png", "bedrock.png", "bedrock.png", "bedrock.png" },
+  textures = { "default_stone.png", "default_stone.png", "default_stone.png", "default_stone.png", "default_stone.png", "default_stone.png" },
   draw_type = block.draw_type.normal,
 })
