@@ -82,7 +82,7 @@ module block_repo
   type(block_definition), dimension(:), allocatable, target :: definition_array
 
   ! Data oriented.
-  integer(c_int) :: draw_type = DRAW_TYPE_AIR
+  ! integer(c_int) :: draw_type = DRAW_TYPE_AIR
 
 
 
