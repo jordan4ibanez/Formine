@@ -87,7 +87,7 @@ program main
 
   call gl_get_version()
 
-  call glfw_swap_interval(1)
+  call glfw_swap_interval(0)
 
   !! This allows OpenGL debugging. (But not on Mac OS)
   if (forglad_gpu_supports_gl_debugging()) then
