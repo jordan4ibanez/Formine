@@ -48,15 +48,19 @@ contains
 
     integer(c_int), intent(in), value :: x, y
     type(fhash_key_char_t) :: chunk_key
+    class(*), pointer :: generic_pointer
     integer(c_int) :: status
 
     chunk_key = grab_chunk_key(x, y)
 
-    call chunk_database%check_key(chunk_key, stat = status)
+    call chunk_database%get_raw_ptr(chunk_key, generic_pointer, stat = status)
 
     if (status /= 0) then
       print"(A)", "[Chunk Handler] Warning: Attempted to delete chunk that doesn't exist."
+      return
     end if
+
+    deallocate(generic_pointer)
 
     call chunk_database%unset(chunk_key)
   end subroutine chunk_handler_delete_chunk
