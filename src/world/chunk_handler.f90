@@ -54,7 +54,7 @@ contains
 
     call chunk_database%check_key(chunk_key, stat = status)
 
-    if (status == 0) then
+    if (status /= 0) then
       print"(A)", "[Chunk Handler] Warning: Attempted to delete chunk that doesn't exist."
     end if
 
