@@ -8,6 +8,7 @@ module chunk_handler
 
 
   public :: chunk_handler_store_chunk_pointer
+  public :: chunk_handler_delete_chunk
   public :: chunk_handler_get_chunk_pointer
   public :: chunk_handler_get_clone_chunk_pointer
   public :: chunk_handler_draw_chunks
@@ -20,6 +21,7 @@ module chunk_handler
 contains
 
 
+  !* Store a chunk pointer into the database.
   subroutine chunk_handler_store_chunk_pointer(chunk_to_store)
     use :: string
     implicit none
@@ -40,6 +42,27 @@ contains
   end subroutine chunk_handler_store_chunk_pointer
 
 
+  !* Delete a chunk from the database.
+  subroutine chunk_handler_delete_chunk(x, y)
+    implicit none
+
+    integer(c_int), intent(in), value :: x, y
+    type(fhash_key_char_t) :: chunk_key
+    integer(c_int) :: status
+
+    chunk_key = grab_chunk_key(x, y)
+
+    call chunk_database%check_key(chunk_key, stat = status)
+
+    if (status == 0) then
+      print"(A)", "[Chunk Handler] Warning: Attempted to delete chunk that doesn't exist."
+    end if
+
+    call chunk_database%unset(chunk_key)
+  end subroutine chunk_handler_delete_chunk
+
+
+  !* Get a raw chunk pointer from the database.
   function chunk_handler_get_chunk_pointer(x, y) result(chunk_pointer)
     implicit none
 
@@ -98,6 +121,7 @@ contains
   end function chunk_handler_get_clone_chunk_pointer
 
 
+  !* Draw all chunk meshes.
   subroutine chunk_handler_draw_chunks()
     use :: fhash, only: fhash_iter_t, fhash_key_t
     use :: mesh
@@ -152,6 +176,7 @@ contains
   end subroutine chunk_handler_draw_chunks
 
 
+  !! Internal only. Generates a key from an x,y position.
   function grab_chunk_key(x, y) result(new_key)
     implicit none
 
