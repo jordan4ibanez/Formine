@@ -201,15 +201,15 @@ contains
       do z = 1,CHUNK_WIDTH
         do y = base_y,max_y
 
-          ! Position in indices.
-          pos = [x, y, z]
-
-          current_id = generator_message%current%data(pos%y, pos%z, pos%x)%id
+          current_id = generator_message%current%data(y, z, x)%id
 
           ! Cycle on air.
           if (current_id == 0) then
             cycle
           end if
+
+          ! Position in indices.
+          pos = [x, y, z]
 
           ! Position in world offset.
           offset = [ &
