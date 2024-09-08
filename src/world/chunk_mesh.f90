@@ -133,17 +133,27 @@ contains
     ! integer(c_int) :: limit, i, x, z, y, current_offset, p_index, t_index, c_index, i_index, base_y, max_y
     ! type(vec3i) :: direction, pos, trajectory, offset
 
+    !? Transfer main argument pointer to Fortran.
+
     if (.not. c_associated(c_arg_pointer)) then
       error stop "[Chunk Mesh] Fatal error: Was passed a null thread_argument pointer."
     end if
 
     call c_f_pointer(c_arg_pointer, arguments)
 
+    !? Transfer sent data pointer to Fortran.
+
     if (.not. c_associated(arguments%sent_data)) then
       error stop "[Chunk Mesh] Fatal error: Was passed a null sent_data pointer."
     end if
 
     call c_f_pointer(arguments%sent_data, generator_message)
+
+    !? Ensure required components are present.
+
+    if (.not. associated(generator_message%current)) then
+      error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
+    end if
 
     if (.not. associated(generator_message%texture_indices)) then
       error stop "[Chunk Mesh] {thread} error: Texture indices is a null pointer."
@@ -158,11 +168,6 @@ contains
     end if
 
 
-    ! print*,"hi"
-
-    ! This shall go at the end to deallocate the pointers.
-
-    ! todo: get the texture memory locations.
 
     ! fixme: this is EXTREMELY unsafe.
     ! Need: string and array
