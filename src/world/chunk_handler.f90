@@ -112,6 +112,13 @@ contains
     integer(c_int) :: i
     character(len = :, kind = c_char), pointer :: current_mesh_id
 
+    call chunk_database%stats(num_items = i)
+
+    ! If there's nothing to do, don't do anything.
+    if (i == 0) then
+      return
+    end if
+
     call texture_use("TEXTURE_ATLAS")
 
     iterator = fhash_iter_t(chunk_database)
