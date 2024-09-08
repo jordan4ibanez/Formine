@@ -153,8 +153,8 @@ contains
       error stop "[Chunk Mesh] {thread} error: Texture positions array is a null pointer."
     end if
 
-    if (generator_message%texture_count == 0) then
-      error stop "[Chunk Mesh] {thread} error: Texture count is 0."
+    if (generator_message%texture_count <= 0) then
+      error stop "[Chunk Mesh] {thread} error: Texture count is 0 or less."
     end if
 
 
