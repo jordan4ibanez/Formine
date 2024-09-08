@@ -122,8 +122,8 @@ contains
     type(chunk_mesh_generator_message), pointer :: generator_message
 
     integer(c_int) :: status
-    character(len = :, kind = c_char), allocatable :: mesh_id
-    type(block_definition), pointer :: definition_pointer
+    ! character(len = :, kind = c_char), allocatable :: mesh_id
+    ! type(block_definition), pointer :: definition_pointer
     ! type(texture_rectangle), pointer :: tr_pointer
     ! Written like this to denote the multiplicative each should have.
     ! real(c_float), dimension(12), allocatable :: positions(:)
@@ -147,36 +147,60 @@ contains
 
 
 
+    ! print*,"hi"
 
     ! This shall go at the end to deallocate the pointers.
 
     ! todo: get the texture memory locations.
 
+    !! Chunk data deallocation.
+
     if (associated(generator_message%current)) then
+      deallocate(generator_message%current%world_position)
+      deallocate(generator_message%current%data)
+      deallocate(generator_message%current%mesh)
       deallocate(generator_message%current)
     end if
 
     if (associated(generator_message%left)) then
+      deallocate(generator_message%left%world_position)
+      deallocate(generator_message%left%data)
+      deallocate(generator_message%left%mesh)
       deallocate(generator_message%left)
     end if
 
     if (associated(generator_message%right)) then
+      deallocate(generator_message%right%world_position)
+      deallocate(generator_message%right%data)
+      deallocate(generator_message%right%mesh)
       deallocate(generator_message%right)
     end if
 
     if (associated(generator_message%back)) then
+      deallocate(generator_message%back%world_position)
+      deallocate(generator_message%back%data)
+      deallocate(generator_message%back%mesh)
       deallocate(generator_message%back)
     end if
 
     if (associated(generator_message%front)) then
+      deallocate(generator_message%front%world_position)
+      deallocate(generator_message%front%data)
+      deallocate(generator_message%front%mesh)
       deallocate(generator_message%front)
     end if
+
+
+    !! Texture indices pointers deallocation.
 
     if (.not. associated(generator_message%texture_indices)) then
       error stop "indices"
     end if
 
     deallocate(generator_message%texture_indices)
+
+
+    !! Texture positions array deallocation.
 
     if (.not. associated(generator_message%texture_positions_array)) then
       error stop "positions"
@@ -188,7 +212,7 @@ contains
       error stop "count"
     end if
 
-    ! Finally, deallocate the message itself.
+    !! Finally, deallocate the message itself.
     deallocate(generator_message)
 
 
@@ -349,7 +373,7 @@ contains
     message_to_generator%texture_positions_array => texture_atlas_get_texture_positions_array_clone_pointer()
     message_to_generator%texture_count = texture_atlas_get_texture_count()
 
-    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator))
+    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_null_ptr)!c_loc(message_to_generator))
   end subroutine chunk_mesh_generate
 
 
