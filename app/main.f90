@@ -127,22 +127,31 @@ program main
   call api_initialize()
 
 
-  print*,"START"
-  do x = -5,5
-    do y = -5,5
-      call chunk_generator_new_chunk(x,y)
-    end do
-  end do
-  print*,"END"
+  ! print*,"START"
+  ! do x = -5,5
+  !   do y = -5,5
+  !     call chunk_generator_new_chunk(x,y)
+  !   end do
+  ! end do
+  ! print*,"END"
 
   rotation = 0.0
 
   ! Move the camera back.
   ! call camera_set_position_f32(0.0, 0.0, -3.0)
+  x = 0
 
   !! This is debugging for functions!
   if (.true.) then
     do while(.not. glfw_window_should_close())
+
+      ! do x = -5,5
+      ! do y = -5,5
+      call chunk_generator_new_chunk(x,1)
+      call chunk_handler_delete_chunk(x, 1)
+      x = x + 1
+      !   end do
+      ! end do
 
       call delta_tick()
 
