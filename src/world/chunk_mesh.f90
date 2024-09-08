@@ -145,6 +145,17 @@ contains
 
     call c_f_pointer(arguments%sent_data, generator_message)
 
+    if (.not. associated(generator_message%texture_indices)) then
+      error stop "[Chunk Mesh] {thread} error: Texture indices is a null pointer."
+    end if
+
+    if (.not. associated(generator_message%texture_positions_array)) then
+      error stop "[Chunk Mesh] {thread} error: Texture positions array is a null pointer."
+    end if
+
+    if (generator_message%texture_count == 0) then
+      error stop "[Chunk Mesh] {thread} error: Texture count is 0."
+    end if
 
 
     ! print*,"hi"
@@ -152,69 +163,6 @@ contains
     ! This shall go at the end to deallocate the pointers.
 
     ! todo: get the texture memory locations.
-
-    !! Chunk data deallocation.
-
-    if (associated(generator_message%current)) then
-      deallocate(generator_message%current%world_position)
-      deallocate(generator_message%current%data)
-      deallocate(generator_message%current%mesh)
-      deallocate(generator_message%current)
-    end if
-
-    if (associated(generator_message%left)) then
-      deallocate(generator_message%left%world_position)
-      deallocate(generator_message%left%data)
-      deallocate(generator_message%left%mesh)
-      deallocate(generator_message%left)
-    end if
-
-    if (associated(generator_message%right)) then
-      deallocate(generator_message%right%world_position)
-      deallocate(generator_message%right%data)
-      deallocate(generator_message%right%mesh)
-      deallocate(generator_message%right)
-    end if
-
-    if (associated(generator_message%back)) then
-      deallocate(generator_message%back%world_position)
-      deallocate(generator_message%back%data)
-      deallocate(generator_message%back%mesh)
-      deallocate(generator_message%back)
-    end if
-
-    if (associated(generator_message%front)) then
-      deallocate(generator_message%front%world_position)
-      deallocate(generator_message%front%data)
-      deallocate(generator_message%front%mesh)
-      deallocate(generator_message%front)
-    end if
-
-
-    !! Texture indices pointers deallocation.
-
-    if (.not. associated(generator_message%texture_indices)) then
-      error stop "indices"
-    end if
-
-    deallocate(generator_message%texture_indices)
-
-
-    !! Texture positions array deallocation.
-
-    if (.not. associated(generator_message%texture_positions_array)) then
-      error stop "positions"
-    end if
-
-    deallocate(generator_message%texture_positions_array)
-
-    if (generator_message%texture_count == 0) then
-      error stop "count"
-    end if
-
-    !! Finally, deallocate the message itself.
-    deallocate(generator_message)
-
 
     ! fixme: this is EXTREMELY unsafe.
     ! Need: string and array
@@ -342,6 +290,34 @@ contains
 
     ! call mesh_create_3d(mesh_id, positions, texture_coordinates, colors, indices)
 
+    !? Deallocate all the memory regions in the message.
+
+    if (associated(generator_message%current)) then
+      deallocate(generator_message%current)
+    end if
+
+    if (associated(generator_message%left)) then
+      deallocate(generator_message%left)
+    end if
+
+    if (associated(generator_message%right)) then
+      deallocate(generator_message%right)
+    end if
+
+    if (associated(generator_message%back)) then
+      deallocate(generator_message%back)
+    end if
+
+    if (associated(generator_message%front)) then
+      deallocate(generator_message%front)
+    end if
+
+    deallocate(generator_message%texture_indices)
+
+    deallocate(generator_message%texture_positions_array)
+
+    !! Finally, deallocate the message itself.
+    deallocate(generator_message)
 
     void_pointer = c_null_ptr
     status = thread_write_lock(arguments%mutex_pointer)
