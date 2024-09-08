@@ -131,7 +131,7 @@ contains
     real(c_float), dimension(8), allocatable :: texture_coordinates(:)
     real(c_float), dimension(12), allocatable :: colors(:)
     integer(c_int), dimension(6), allocatable :: indices(:)
-    integer(c_int) :: limit, i, x, z, y, current_offset, p_index, t_index, c_index, i_index, base_y, max_y
+    integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y
     type(vec3i) :: direction, pos, trajectory, offset
 
     !? Transfer main argument pointer to Fortran.
@@ -204,8 +204,10 @@ contains
           ! Position in indices.
           pos = [x, y, z]
 
+          current_id = generator_message%current%data(pos%y, pos%z, pos%x)%id
+
           ! Cycle on air.
-          if (generator_message%current%data(pos%y, pos%z, pos%x)%id == 0) then
+          if (current_id == 0) then
             cycle
           end if
 
