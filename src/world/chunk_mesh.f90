@@ -108,6 +108,7 @@ module chunk_mesh
 
 
   public :: chunk_mesh_initialize
+  public :: chunk_mesh_handle_output_queue
   public :: chunk_mesh_generate
 
 
@@ -122,6 +123,9 @@ module chunk_mesh
 
 
   type(concurrent_linked_filo_queue) :: chunk_mesh_thread_output_queue
+  ! todo: make this a setting in the game's menu.
+  integer(c_int) :: queue_pop_limit = 16
+
 
 contains
 
@@ -133,8 +137,32 @@ contains
     chunk_mesh_thread_output_queue = concurrent_linked_filo_queue()
   end subroutine chunk_mesh_initialize
 
+
+  !* Handle output from the thread output queue.
   subroutine chunk_mesh_handle_output_queue()
     implicit none
+
+    integer(c_int) :: i, total
+    class(*), pointer :: generic_pointer
+    type(message_from_mesh_generator), pointer :: new_message
+
+    do i = 1,queue_pop_limit
+      if (.not. chunk_mesh_thread_output_queue%pop(generic_pointer)) then
+        total = i - 1
+        exit
+      end if
+
+      select type(generic_pointer)
+       type is (message_from_mesh_generator)
+        new_message => generic_pointer
+       class default
+        error stop "[Chunk Mesh] Error: Wrong type in queue."
+      end select
+    end do
+
+    if (total > 0) then
+      print*,total
+    end if
 
     !! fixme: this should be passing it back into a concurrent FILO queue.
 
