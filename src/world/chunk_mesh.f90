@@ -347,16 +347,6 @@ contains
 
     call chunk_mesh_thread_output_queue%push(queue_data(output_message))
 
-
-
-
-
-    !! fixme: this should be passing it back into a concurrent FILO queue.
-
-    ! mesh_id = "mesh_stack_"//int_to_string(chunk_pointer%world_position%x)//"_"//int_to_string(chunk_pointer%world_position%y)//"_"//int_to_string(mesh_stack)
-
-    ! call mesh_create_3d(mesh_id, positions, texture_coordinates, colors, indices)
-
     !? Deallocate all the memory regions in the message.
 
     if (associated(generator_message%current)) then
