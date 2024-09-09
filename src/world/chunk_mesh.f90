@@ -401,28 +401,28 @@ contains
 
 
     !? Deallocate all the memory regions in the message.
-    deallocate(generator_message%world_position)
+    ! deallocate(generator_message%world_position)
 
-    deallocate(generator_message%current)
+    ! deallocate(generator_message%current)
 
-    if (associated(generator_message%left)) then
-      deallocate(generator_message%left)
-    end if
-    if (associated(generator_message%right)) then
-      deallocate(generator_message%right)
-    end if
+    ! if (associated(generator_message%left)) then
+    !   deallocate(generator_message%left)
+    ! end if
+    ! if (associated(generator_message%right)) then
+    !   deallocate(generator_message%right)
+    ! end if
 
-    if (associated(generator_message%back)) then
-      deallocate(generator_message%back)
-    end if
-    if (associated(generator_message%front)) then
-      deallocate(generator_message%front)
-    end if
+    ! if (associated(generator_message%back)) then
+    !   deallocate(generator_message%back)
+    ! end if
+    ! if (associated(generator_message%front)) then
+    !   deallocate(generator_message%front)
+    ! end if
 
-    deallocate(generator_message%texture_indices)
-    deallocate(generator_message%texture_positions_array)
+    ! deallocate(generator_message%texture_indices)
+    ! deallocate(generator_message%texture_positions_array)
 
-    deallocate(generator_message)
+    ! deallocate(generator_message)
 
     void_pointer = c_null_ptr
     status = thread_write_lock(arguments%mutex_pointer)
@@ -462,30 +462,30 @@ contains
     message_to_generator%mesh_stack = mesh_stack
 
     !! Sample deallocation
-    ! deallocate(message_to_generator%world_position)
+    deallocate(message_to_generator%world_position)
 
-    ! deallocate(message_to_generator%current)
+    deallocate(message_to_generator%current)
 
-    ! if (associated(message_to_generator%left)) then
-    !   deallocate(message_to_generator%left)
-    ! end if
-    ! if (associated(message_to_generator%right)) then
-    !   deallocate(message_to_generator%right)
-    ! end if
+    if (associated(message_to_generator%left)) then
+      deallocate(message_to_generator%left)
+    end if
+    if (associated(message_to_generator%right)) then
+      deallocate(message_to_generator%right)
+    end if
 
-    ! if (associated(message_to_generator%back)) then
-    !   deallocate(message_to_generator%back)
-    ! end if
-    ! if (associated(message_to_generator%front)) then
-    !   deallocate(message_to_generator%front)
-    ! end if
+    if (associated(message_to_generator%back)) then
+      deallocate(message_to_generator%back)
+    end if
+    if (associated(message_to_generator%front)) then
+      deallocate(message_to_generator%front)
+    end if
 
-    ! deallocate(message_to_generator%texture_indices)
-    ! deallocate(message_to_generator%texture_positions_array)
+    deallocate(message_to_generator%texture_indices)
+    deallocate(message_to_generator%texture_positions_array)
 
-    ! deallocate(message_to_generator)
+    deallocate(message_to_generator)
 
-    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator))
+    ! call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator))
   end subroutine chunk_mesh_generate
 
 
