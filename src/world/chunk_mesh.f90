@@ -109,6 +109,17 @@ module chunk_mesh
 
   public :: chunk_mesh_generate
 
+
+  type :: message_from_mesh_generator
+    type(vec2i), pointer :: world_position
+    real(c_float), dimension(12), pointer :: positions(:)
+    real(c_float), dimension(8), pointer :: texture_coordinates(:)
+    real(c_float), dimension(12), pointer :: colors(:)
+    integer(c_int), dimension(6), pointer :: indices(:)
+    integer(c_int) :: mesh_stack
+  end type message_from_mesh_generator
+
+
   type(concurrent_linked_filo_queue) :: chunk_mesh_thread_output_queue
 
 contains
