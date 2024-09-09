@@ -143,6 +143,9 @@ contains
     ! call mesh_create_3d(mesh_id, positions, texture_coordinates, colors, indices)
 
   end subroutine chunk_mesh_handle_output_queue
+
+
+  !* This is the function which runs in the thread to actually generate chunk meshes.
   recursive function chunk_mesh_generation_thread(c_arg_pointer) result(void_pointer) bind(c)
     use, intrinsic :: iso_c_binding
     implicit none
@@ -340,6 +343,7 @@ contains
     output_message%indices = indices
     output_message%mesh_stack = generator_message%mesh_stack
 
+    !? Push it into the queue.
 
     call chunk_mesh_thread_output_queue%push(queue_data(output_message))
 
