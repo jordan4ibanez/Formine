@@ -164,6 +164,10 @@ contains
 
     !? Ensure required components are present.
 
+    if (.not. associated(generator_message%world_position)) then
+      error stop "[Chunk Mesh] {thread} error: World position is a null pointer."
+    end if
+
     if (.not. associated(generator_message%current)) then
       error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
     end if
