@@ -72,6 +72,8 @@ program main
   ! Get portable function pointers.
   call forglad_load_gl(c_funloc(glfw_get_proc_address))
 
+  ! Only initialize thread components when we're sure the game starts up.
+  call thread_handler_intialization()
 
   call mouse_initialize()
 
