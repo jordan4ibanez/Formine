@@ -174,11 +174,6 @@ contains
 
     !? Begin implementation.
 
-    !! BEGIN EXTREMELY UNSAFE UNTHREADED IMPL EXAMPLE.
-    ! texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
-    ! definition_pointer => block_repo_get_definition_pointer_by_id(1)
-    !! END EXTREMELY UNSAFE UNTHREADED IMPL EXAMPLE.
-
     ! Now we assign.
 
     ! Limit it to 1 million faces per chunk.
