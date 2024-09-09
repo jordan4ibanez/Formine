@@ -48,6 +48,8 @@ module chunk_data
 
   !* The data that will get sent to the chunk mesh generator.
   type :: chunk_mesh_generator_message
+    !* The position in the world in which the chunk resides.
+    type(vec2i), pointer :: world_position => null()
     !* Current chunk.
     type(memory_chunk), pointer :: current => null()
     !* Neighbor: -X
