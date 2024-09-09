@@ -169,6 +169,10 @@ contains
       error stop "[Chunk Mesh] {thread} error: Texture count is 0 or less."
     end if
 
+    if (generator_message%mesh_stack <= 0) then
+      error stop "[Chunk Mesh] {thread} error: Mesh stack is 0 or less."
+    end if
+
 
     !? Begin implementation.
 
