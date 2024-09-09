@@ -130,7 +130,6 @@ contains
     real(c_float), dimension(8), allocatable :: texture_coordinates(:)
     real(c_float), dimension(12), allocatable :: colors(:)
     integer(c_int), dimension(6), allocatable :: indices(:)
-    integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y
     integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y, current_rect_index
     type(vec3i) :: direction, pos, trajectory, offset
 
