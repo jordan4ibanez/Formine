@@ -38,6 +38,7 @@ module thread
   public :: thread_queue_element
   public :: mutex_rwlock
   public :: concurrent_linked_filo_queue
+  public :: queue_data
 
   public :: thread_write_lock
   public :: thread_read_lock
