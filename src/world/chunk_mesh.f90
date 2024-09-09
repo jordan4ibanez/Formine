@@ -292,7 +292,6 @@ contains
 
     ! It's a blank mesh.
     if (p_index == -1) then
-      mesh_id = ""
       return
     end if
 
