@@ -122,7 +122,7 @@ module chunk_mesh
   end type message_from_mesh_generator
 
 
-  type(concurrent_linked_filo_queue) :: chunk_mesh_thread_output_queue
+  type(concurrent_linked_filo_queue) :: thread_output_queue
   ! todo: make this a setting in the game's menu.
   integer(c_int) :: queue_pop_limit = 16
 
@@ -134,7 +134,7 @@ contains
   subroutine chunk_mesh_initialize()
     implicit none
 
-    chunk_mesh_thread_output_queue = concurrent_linked_filo_queue()
+    thread_output_queue = concurrent_linked_filo_queue()
   end subroutine chunk_mesh_initialize
 
 
@@ -146,8 +146,9 @@ contains
     class(*), pointer :: generic_pointer
     type(message_from_mesh_generator), pointer :: new_message
 
+
     do i = 1,queue_pop_limit
-      if (.not. chunk_mesh_thread_output_queue%pop(generic_pointer)) then
+      if (.not. thread_output_queue%pop(generic_pointer)) then
         total = i - 1
         exit
       end if
@@ -185,8 +186,6 @@ contains
     type(chunk_mesh_generator_message), pointer :: generator_message
     !? Working variables.
     integer(c_int) :: status
-    character(len = :, kind = c_char), allocatable :: mesh_id
-    type(block_definition), pointer :: definition_pointer
     type(texture_rectangle), pointer :: tr_pointer
     ! Written like this to denote the multiplicative each should have.
     real(c_float), dimension(12), allocatable :: positions(:)
@@ -340,40 +339,39 @@ contains
       end do
     end do
 
-    ! It's a blank mesh.
-    if (p_index == -1) then
-      return
+    ! It's not a blank mesh.
+    if (p_index > -1) then
+
+      p_index = p_index + 11
+      t_index = t_index + 7
+      c_index = c_index + 11
+      i_index = i_index + 5
+
+      positions = positions(1: p_index)
+      texture_coordinates = texture_coordinates(1: t_index)
+      colors = colors(1: c_index)
+      indices = indices(1:i_index)
+
+      !? Compose output.
+
+      allocate(output_message)
+      allocate(output_message%world_position)
+      allocate(output_message%positions(p_index))
+      allocate(output_message%texture_coordinates(t_index))
+      allocate(output_message%colors(c_index))
+      allocate(output_message%indices(i_index))
+
+      output_message%world_position = generator_message%world_position
+      output_message%positions = positions
+      output_message%texture_coordinates = texture_coordinates
+      output_message%colors = colors
+      output_message%indices = indices
+      output_message%mesh_stack = generator_message%mesh_stack
+
+      !? Push it into the queue.
+
+      call thread_output_queue%push(queue_data(output_message))
     end if
-
-    p_index = p_index + 11
-    t_index = t_index + 7
-    c_index = c_index + 11
-    i_index = i_index + 5
-
-    positions = positions(1: p_index)
-    texture_coordinates = texture_coordinates(1: t_index)
-    colors = colors(1: c_index)
-    indices = indices(1:i_index)
-
-    !? Compose output.
-
-    allocate(output_message)
-    allocate(output_message%world_position)
-    allocate(output_message%positions(p_index))
-    allocate(output_message%texture_coordinates(t_index))
-    allocate(output_message%colors(c_index))
-    allocate(output_message%indices(i_index))
-
-    output_message%world_position = generator_message%world_position
-    output_message%positions = positions
-    output_message%texture_coordinates = texture_coordinates
-    output_message%colors = colors
-    output_message%indices = indices
-    output_message%mesh_stack = generator_message%mesh_stack
-
-    !? Push it into the queue.
-
-    call chunk_mesh_thread_output_queue%push(queue_data(output_message))
 
     !? Deallocate all the memory regions in the message.
 
