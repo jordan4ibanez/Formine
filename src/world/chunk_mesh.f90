@@ -107,6 +107,7 @@ module chunk_mesh
     /), [3,6])
 
 
+  public :: chunk_mesh_initialize
   public :: chunk_mesh_generate
 
 
@@ -123,6 +124,15 @@ module chunk_mesh
   type(concurrent_linked_filo_queue) :: chunk_mesh_thread_output_queue
 
 contains
+
+
+  !* Basic initialization of the chunk mesh module.
+  subroutine chunk_mesh_initialize()
+    implicit none
+
+    chunk_mesh_thread_output_queue = concurrent_linked_filo_queue()
+  end subroutine chunk_mesh_initialize
+
 
   recursive function chunk_mesh_generation_thread(c_arg_pointer) result(void_pointer) bind(c)
     use, intrinsic :: iso_c_binding
