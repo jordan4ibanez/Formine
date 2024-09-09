@@ -354,6 +354,8 @@ contains
     message_to_generator%texture_positions_array => texture_atlas_get_texture_positions_array_clone_pointer()
     message_to_generator%texture_count = texture_atlas_get_texture_count()
 
+    message_to_generator%mesh_stack = mesh_stack
+
     call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator))
   end subroutine chunk_mesh_generate
 
