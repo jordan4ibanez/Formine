@@ -148,6 +148,7 @@ contains
 
 
     do i = 1,queue_pop_limit
+
       if (.not. thread_output_queue%pop(generic_pointer)) then
         total = i - 1
         exit
@@ -159,11 +160,23 @@ contains
        class default
         error stop "[Chunk Mesh] Error: Wrong type in queue."
       end select
+
+
+      !! This shall go at the end of this loop to free all passed through memory.
+
+      deallocate(new_message%world_position)
+      deallocate(new_message%positions)
+      deallocate(new_message%texture_coordinates)
+      deallocate(new_message%colors)
+      deallocate(new_message%indices)
+      deallocate(new_message)
     end do
 
-    if (total > 0) then
-      print*,total
-    end if
+    ! if (total > 0) then
+    !   print*,total
+    ! end if
+
+
 
     !! fixme: this should be passing it back into a concurrent FILO queue.
 
@@ -186,15 +199,15 @@ contains
     type(chunk_mesh_generator_message), pointer :: generator_message
     !? Working variables.
     integer(c_int) :: status
-    type(texture_rectangle), pointer :: tr_pointer
+    ! type(texture_rectangle), pointer :: tr_pointer
     ! Written like this to denote the multiplicative each should have.
-    real(c_float), dimension(12), allocatable :: positions(:)
-    real(c_float), dimension(8), allocatable :: texture_coordinates(:)
-    real(c_float), dimension(12), allocatable :: colors(:)
-    integer(c_int), dimension(6), allocatable :: indices(:)
-    integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y, current_rect_index
-    type(vec3i) :: direction, pos, trajectory, offset
-    type(message_from_mesh_generator), pointer :: output_message
+    ! real(c_float), dimension(12), allocatable :: positions(:)
+    ! real(c_float), dimension(8), allocatable :: texture_coordinates(:)
+    ! real(c_float), dimension(12), allocatable :: colors(:)
+    ! integer(c_int), dimension(6), allocatable :: indices(:)
+    ! integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y, current_rect_index
+    ! type(vec3i) :: direction, pos, trajectory, offset
+    ! type(message_from_mesh_generator), pointer :: output_message
 
     !? Transfer main argument pointer to Fortran.
 
@@ -245,133 +258,147 @@ contains
 
     ! Limit it to 1 million faces per chunk.
     ! We will grab a slice of this later to shrink it.
-    limit = 200000
+    ! limit = 200000
 
-    allocate(positions(12 * limit))
-    allocate(texture_coordinates(8 * limit))
-    allocate(colors(12 * limit))
-    allocate(indices(6 * limit))
+    ! allocate(positions(12 * limit))
+    ! allocate(texture_coordinates(8 * limit))
+    ! allocate(colors(12 * limit))
+    ! allocate(indices(6 * limit))
 
-    current_offset = 0
+    ! current_offset = 0
 
-    p_index = -1
-    t_index = -1
-    c_index = -1
-    i_index = -1
+    ! p_index = -1
+    ! t_index = -1
+    ! c_index = -1
+    ! i_index = -1
 
-    base_y = (MESH_STACK_HEIGHT * (generator_message%mesh_stack - 1)) + 1
-    max_y = MESH_STACK_HEIGHT * (generator_message%mesh_stack)
+    ! base_y = (MESH_STACK_HEIGHT * (generator_message%mesh_stack - 1)) + 1
+    ! max_y = MESH_STACK_HEIGHT * (generator_message%mesh_stack)
 
-    do x = 1,CHUNK_WIDTH
-      do z = 1,CHUNK_WIDTH
-        do y = base_y,max_y
+    ! do x = 1,CHUNK_WIDTH
+    !   do z = 1,CHUNK_WIDTH
+    !     do y = base_y,max_y
 
-          current_id = generator_message%current%data(y, z, x)%id
+    !       current_id = generator_message%current%data(y, z, x)%id
 
-          ! Cycle on air.
-          if (current_id == 0) then
-            cycle
-          end if
+    !       ! Cycle on air.
+    !       if (current_id == 0) then
+    !         cycle
+    !       end if
 
-          ! Position in indices.
-          pos = [x, y, z]
+    !       ! Position in indices.
+    !       pos = [x, y, z]
 
-          ! Position in world offset.
-          offset = [ &
-            x - 1, &
-            y - base_y, &
-            z - 1 &
-            ]
+    !       ! Position in world offset.
+    !       offset = [ &
+    !         x - 1, &
+    !         y - base_y, &
+    !         z - 1 &
+    !         ]
 
-          do i = 1,6
+    !       do i = 1,6
 
-            ! Direction we're looking towards.
-            direction = DIRECTIONS(1:3, i)
+    !         ! Direction we're looking towards.
+    !         direction = DIRECTIONS(1:3, i)
 
-            ! Block we're looking at.
-            trajectory = pos + direction
+    !         ! Block we're looking at.
+    !         trajectory = pos + direction
 
-            ! If we're going to go out of bounds, cycle.
-            ! todo: check neighbor.
-            if (trajectory%x < 1 .or. trajectory%x > CHUNK_WIDTH .or. trajectory%z < 1 .or. trajectory%z > CHUNK_WIDTH .or. trajectory%y < 1 .or. trajectory%y > CHUNK_HEIGHT) then
-              cycle
-            end if
+    !         ! If we're going to go out of bounds, cycle.
+    !         ! todo: check neighbor.
+    !         if (trajectory%x < 1 .or. trajectory%x > CHUNK_WIDTH .or. trajectory%z < 1 .or. trajectory%z > CHUNK_WIDTH .or. trajectory%y < 1 .or. trajectory%y > CHUNK_HEIGHT) then
+    !           cycle
+    !         end if
 
-            ! todo: if y height == chunk_height then just render the face.
+    !         ! todo: if y height == chunk_height then just render the face.
 
-            ! If it's another fullsize block, cycle.
-            ! todo: check draw_type.
-            if (generator_message%current%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
-              cycle
-            end if
+    !         ! If it's another fullsize block, cycle.
+    !         ! todo: check draw_type.
+    !         if (generator_message%current%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
+    !           cycle
+    !         end if
 
 
-            p_index = (current_offset * 12) + 1
-            positions(p_index:p_index + 11) = (FACES(1:12, i) + (/offset%x, offset%y, offset%z, offset%x, offset%y, offset%z, offset%x, offset%y, offset%z, offset%x, offset%y, offset%z/))
+    !         p_index = (current_offset * 12) + 1
+    !         positions(p_index:p_index + 11) = (FACES(1:12, i) + (/offset%x, offset%y, offset%z, offset%x, offset%y, offset%z, offset%x, offset%y, offset%z, offset%x, offset%y, offset%z/))
 
-            ! tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
-            current_rect_index = generator_message%texture_indices(i, current_id)
-            tr_pointer => generator_message%texture_positions_array(current_rect_index)
+    !         ! tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
+    !         current_rect_index = generator_message%texture_indices(i, current_id)
+    !         tr_pointer => generator_message%texture_positions_array(current_rect_index)
 
-            t_index = (current_offset * 8) + 1
-            texture_coordinates(t_index:t_index + 7) = (/ &
-              tr_pointer%min_x,tr_pointer%min_y, &
-              tr_pointer%min_x,tr_pointer%max_y, &
-              tr_pointer%max_x,tr_pointer%max_y, &
-              tr_pointer%max_x,tr_pointer%min_y &
-              /)
+    !         t_index = (current_offset * 8) + 1
+    !         texture_coordinates(t_index:t_index + 7) = (/ &
+    !           tr_pointer%min_x,tr_pointer%min_y, &
+    !           tr_pointer%min_x,tr_pointer%max_y, &
+    !           tr_pointer%max_x,tr_pointer%max_y, &
+    !           tr_pointer%max_x,tr_pointer%min_y &
+    !           /)
 
-            c_index = (current_offset * 12) + 1
-            colors(c_index:c_index + 11) = (/&
-              1.0, 1.0, 1.0, &
-              1.0, 1.0, 1.0, &
-              1.0, 1.0, 1.0, &
-              1.0, 1.0, 1.0 &
-              /)
+    !         c_index = (current_offset * 12) + 1
+    !         colors(c_index:c_index + 11) = (/&
+    !           1.0, 1.0, 1.0, &
+    !           1.0, 1.0, 1.0, &
+    !           1.0, 1.0, 1.0, &
+    !           1.0, 1.0, 1.0 &
+    !           /)
 
-            ! ! I love Fortran's array intrinsics.
-            i_index = (current_offset * 6) + 1
-            indices(i_index:i_index + 5) = (BASE_INDICES + (4 * current_offset))
+    !         ! ! I love Fortran's array intrinsics.
+    !         i_index = (current_offset * 6) + 1
+    !         indices(i_index:i_index + 5) = (BASE_INDICES + (4 * current_offset))
 
-            current_offset = current_offset + 1
-          end do
-        end do
-      end do
-    end do
+    !         current_offset = current_offset + 1
+    !       end do
+    !     end do
+    !   end do
+    ! end do
 
     ! It's not a blank mesh.
-    if (p_index > -1) then
+    ! if (p_index > -1) then
 
-      p_index = p_index + 11
-      t_index = t_index + 7
-      c_index = c_index + 11
-      i_index = i_index + 5
+    !   p_index = p_index + 11
+    !   t_index = t_index + 7
+    !   c_index = c_index + 11
+    !   i_index = i_index + 5
 
-      positions = positions(1: p_index)
-      texture_coordinates = texture_coordinates(1: t_index)
-      colors = colors(1: c_index)
-      indices = indices(1:i_index)
+    !   positions = positions(1: p_index)
+    !   texture_coordinates = texture_coordinates(1: t_index)
+    !   colors = colors(1: c_index)
+    !   indices = indices(1:i_index)
 
-      !? Compose output.
+    !   !? Compose output.
 
-      allocate(output_message)
-      allocate(output_message%world_position)
-      allocate(output_message%positions(p_index))
-      allocate(output_message%texture_coordinates(t_index))
-      allocate(output_message%colors(c_index))
-      allocate(output_message%indices(i_index))
+    !   allocate(output_message)
+    !   allocate(output_message%world_position)
+    !   allocate(output_message%positions(p_index))
+    !   allocate(output_message%texture_coordinates(t_index))
+    !   allocate(output_message%colors(c_index))
+    !   allocate(output_message%indices(i_index))
 
-      output_message%world_position = generator_message%world_position
-      output_message%positions = positions
-      output_message%texture_coordinates = texture_coordinates
-      output_message%colors = colors
-      output_message%indices = indices
-      output_message%mesh_stack = generator_message%mesh_stack
+    !   output_message%world_position = generator_message%world_position
+    !   output_message%positions = positions
+    !   output_message%texture_coordinates = texture_coordinates
+    !   output_message%colors = colors
+    !   output_message%indices = indices
+    !   output_message%mesh_stack = generator_message%mesh_stack
 
-      !? Push it into the queue.
+    !   !? Push it into the queue.
 
-      call thread_output_queue%push(queue_data(output_message))
-    end if
+
+    !   deallocate(output_message%world_position)
+    !   deallocate(output_message%positions)
+    !   deallocate(output_message%texture_coordinates)
+    !   deallocate(output_message%colors)
+    !   deallocate(output_message%indices)
+    !   deallocate(output_message)
+
+    !   ! call thread_output_queue%push(queue_data(output_message))
+    ! end if
+
+    ! deallocate(positions)
+    ! deallocate(texture_coordinates)
+    ! deallocate(colors)
+    ! deallocate(indices)
+
 
     !? Deallocate all the memory regions in the message.
 
@@ -420,9 +447,11 @@ contains
     integer(c_int), intent(in), value :: x, z, mesh_stack
     type(chunk_mesh_generator_message), pointer :: message_to_generator
 
+
     allocate(message_to_generator)
 
     allocate(message_to_generator%world_position)
+
     message_to_generator%world_position = [x, z]
 
     message_to_generator%current => chunk_handler_get_clone_chunk_pointer(x,z)
@@ -439,7 +468,30 @@ contains
 
     message_to_generator%mesh_stack = mesh_stack
 
-    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator))
+    deallocate(message_to_generator%world_position)
+
+    deallocate(message_to_generator%current)
+
+    if (associated(message_to_generator%left)) then
+      deallocate(message_to_generator%left)
+    end if
+    if (associated(message_to_generator%right)) then
+      deallocate(message_to_generator%right)
+    end if
+
+    if (associated(message_to_generator%back)) then
+      deallocate(message_to_generator%back)
+    end if
+    if (associated(message_to_generator%front)) then
+      deallocate(message_to_generator%front)
+    end if
+
+    deallocate(message_to_generator%texture_indices)
+    deallocate(message_to_generator%texture_positions_array)
+
+    deallocate(message_to_generator)
+
+    ! call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator))
   end subroutine chunk_mesh_generate
 
 
