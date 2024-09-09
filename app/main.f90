@@ -148,7 +148,7 @@ program main
       ! do x = -5,5
       ! do y = -5,5
       do i = 1,3
-        call chunk_generator_new_chunk(x,1)
+        call chunk_generator_new_chunk(x, 1)
         call chunk_handler_delete_chunk(x, 1)
         x = x + 1
       end do
