@@ -344,6 +344,9 @@ contains
 
     allocate(message_to_generator)
 
+    allocate(message_to_generator%world_position)
+    message_to_generator%world_position = [x, z]
+
     message_to_generator%current => chunk_handler_get_clone_chunk_pointer(x,z)
 
     message_to_generator%left => chunk_handler_get_clone_chunk_pointer(x - 1,z)
