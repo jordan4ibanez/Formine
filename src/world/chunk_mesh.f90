@@ -106,8 +106,10 @@ module chunk_mesh
     0,  1, 0 &
     /), [3,6])
 
+
   public :: chunk_mesh_generate
 
+  type(concurrent_linked_filo_queue) :: chunk_mesh_thread_output_queue
 
 contains
 
