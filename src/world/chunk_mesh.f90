@@ -133,7 +133,16 @@ contains
     chunk_mesh_thread_output_queue = concurrent_linked_filo_queue()
   end subroutine chunk_mesh_initialize
 
+  subroutine chunk_mesh_handle_output_queue()
+    implicit none
 
+    !! fixme: this should be passing it back into a concurrent FILO queue.
+
+    ! mesh_id = "mesh_stack_"//int_to_string(chunk_pointer%world_position%x)//"_"//int_to_string(chunk_pointer%world_position%y)//"_"//int_to_string(mesh_stack)
+
+    ! call mesh_create_3d(mesh_id, positions, texture_coordinates, colors, indices)
+
+  end subroutine chunk_mesh_handle_output_queue
   recursive function chunk_mesh_generation_thread(c_arg_pointer) result(void_pointer) bind(c)
     use, intrinsic :: iso_c_binding
     implicit none
