@@ -55,9 +55,12 @@ contains
 
     call chunk_handler_store_chunk_pointer(chunk_pointer)
 
+
     do i = 1,MESH_STACK_ARRAY_SIZE
       chunk_pointer%mesh(i) = ""
-      call chunk_mesh_generate(chunk_pointer%world_position%x, chunk_pointer%world_position%y, i)
+      !! BEGIN MEMORY LEAK
+      call chunk_mesh_generate(chunk_x, chunk_z, i)
+      !! END MEMORY LEAK
     end do
   end subroutine chunk_generator_new_chunk
 
