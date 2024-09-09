@@ -485,6 +485,7 @@ contains
 
     deallocate(message_to_generator)
 
+    !! NOTE: Something is going wrong with the pointer free here.
     ! call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator))
   end subroutine chunk_mesh_generate
 
