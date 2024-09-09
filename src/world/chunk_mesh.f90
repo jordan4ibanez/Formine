@@ -132,6 +132,7 @@ contains
     real(c_float), dimension(12), allocatable :: colors(:)
     integer(c_int), dimension(6), allocatable :: indices(:)
     integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y
+    integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y, current_rect_index
     type(vec3i) :: direction, pos, trajectory, offset
 
     !? Transfer main argument pointer to Fortran.
@@ -244,7 +245,9 @@ contains
             p_index = (current_offset * 12) + 1
             positions(p_index:p_index + 11) = (FACES(1:12, i) + (/offset%x, offset%y, offset%z, offset%x, offset%y, offset%z, offset%x, offset%y, offset%z, offset%x, offset%y, offset%z/))
 
-            tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
+            ! tr_pointer => texture_atlas_get_texture_rectangle_pointer(definition_pointer%textures(1)%get_pointer())
+            current_rect_index = generator_message%texture_indices(i, current_id)
+            tr_pointer => generator_message%texture_positions_array(current_rect_index)
 
             t_index = (current_offset * 8) + 1
             texture_coordinates(t_index:t_index + 7) = (/ &
