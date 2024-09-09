@@ -145,6 +145,7 @@ contains
     integer(c_int), dimension(6), allocatable :: indices(:)
     integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y, current_rect_index
     type(vec3i) :: direction, pos, trajectory, offset
+    type(message_from_mesh_generator), pointer :: output_message
 
     !? Transfer main argument pointer to Fortran.
 
@@ -304,6 +305,28 @@ contains
     texture_coordinates = texture_coordinates(1: t_index)
     colors = colors(1: c_index)
     indices = indices(1:i_index)
+
+    !? Compose output.
+
+    allocate(output_message)
+    allocate(output_message%world_position)
+    allocate(output_message%positions(p_index))
+    allocate(output_message%texture_coordinates(t_index))
+    allocate(output_message%colors(c_index))
+    allocate(output_message%indices(i_index))
+
+    output_message%world_position = generator_message%world_position
+    output_message%positions = positions
+    output_message%texture_coordinates = texture_coordinates
+    output_message%colors = colors
+    output_message%indices = indices
+    output_message%mesh_stack = generator_message%mesh_stack
+
+
+    call chunk_mesh_thread_output_queue%push(queue_data(output_message))
+
+
+
 
 
     !! fixme: this should be passing it back into a concurrent FILO queue.
