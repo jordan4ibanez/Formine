@@ -2,8 +2,7 @@ module chunk_mesh
   use :: mesh
   use :: chunk_data
   use :: chunk_handler
-  use :: block_repo
-  use :: texture_atlas
+  use :: block_repo, only: block_definition
   use :: vector_3i
   use :: thread
   use, intrinsic :: iso_c_binding
