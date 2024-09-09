@@ -375,6 +375,8 @@ contains
 
     !? Deallocate all the memory regions in the message.
 
+    deallocate(generator_message%world_position)
+
     if (associated(generator_message%current)) then
       deallocate(generator_message%current)
     end if
