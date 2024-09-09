@@ -49,6 +49,7 @@ contains
     integer(c_int), intent(in), value :: x, y
     type(fhash_key_char_t) :: chunk_key
     class(*), pointer :: generic_pointer
+    type(memory_chunk), pointer :: chunk_pointer
     integer(c_int) :: status
 
     chunk_key = grab_chunk_key(x, y)
@@ -60,7 +61,17 @@ contains
       return
     end if
 
-    deallocate(generic_pointer)
+    select type (generic_pointer)
+     type is (memory_chunk)
+      chunk_pointer => generic_pointer
+     class default
+      error stop "[Chunk Handler] Error: Wrong type in the chunk database."
+    end select
+
+    deallocate(chunk_pointer%world_position)
+    deallocate(chunk_pointer%data)
+    deallocate(chunk_pointer%mesh)
+    deallocate(chunk_pointer)
 
     call chunk_database%unset(chunk_key)
   end subroutine chunk_handler_delete_chunk
