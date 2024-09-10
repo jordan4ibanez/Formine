@@ -197,6 +197,14 @@ module thread
     end function thread_function_c_interface
 
 
+    subroutine thread_garbage_collector_c_interface(old_data) bind(c)
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: old_data
+    end subroutine thread_garbage_collector_c_interface
+
+
   end interface
 
 
