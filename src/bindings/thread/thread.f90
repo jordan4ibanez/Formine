@@ -56,8 +56,6 @@ module thread
   integer(c_int), parameter :: THREAD_OK = 0
   integer(c_int), parameter :: THREAD_DOES_NOT_EXIST = 3
 
-  integer(c_int) :: THREAD_DETACH
-
   integer(c_int) :: CPU_THREADS = 0
 
   type(mutex_rwlock), pointer :: module_mutex
@@ -128,7 +126,6 @@ contains
 
     integer(c_int) :: i
 
-    THREAD_DETACH = for_p_thread_get_pthread_create_detached_id()
     CPU_THREADS = for_p_thread_get_cpu_threads()
 
     allocate(module_mutex)

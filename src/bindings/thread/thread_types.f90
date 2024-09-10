@@ -13,12 +13,6 @@ module thread_types
   end type pthread_t
 
 
-  ! Raw thread configuration.
-  type :: pthread_attr_t
-    integer(1), dimension(:), pointer :: raw_data_pointer => null()
-  end type pthread_attr_t
-
-
   ! A raw thread queue element.
   type :: thread_queue_element
     type(c_funptr) :: subroutine_pointer = c_null_funptr
@@ -45,22 +39,6 @@ module thread_types
   interface
 
 
-    function for_p_thread_get_pthread_attr_t_width() result(data_width) bind(c, name = "for_p_thread_get_pthread_attr_t_width")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(c_int) :: data_width
-    end function
-
-
-    function for_p_thread_get_pthread_create_detached_id() result(id) bind(c, name = "for_p_thread_get_pthread_create_detached_id")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(c_int) :: id
-    end function
-
-
     function for_p_thread_get_cpu_threads() result(thread_count) bind(c, name = "for_p_thread_get_cpu_threads")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -75,14 +53,6 @@ module thread_types
 
       integer(c_int) :: data_width
     end function for_p_thread_get_pthread_mutex_t_width
-
-
-    function for_p_thread_get_pthread_mutexattr_t_width() result(data_width) bind(c, name = "for_p_thread_get_pthread_mutexattr_t_width")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(c_int) :: data_width
-    end function for_p_thread_get_pthread_mutexattr_t_width
 
 
   end interface
