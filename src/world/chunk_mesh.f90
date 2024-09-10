@@ -502,8 +502,7 @@ contains
 
     ! deallocate(message_to_generator)
 
-    !! NOTE: Something is going wrong with the pointer free here.
-    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_null_ptr, c_null_funptr)!c_loc(message_to_generator), c_funloc(chunk_mesh_generation_garbage_collector))
+    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_null_ptr)
   end subroutine chunk_mesh_generate
 
 
