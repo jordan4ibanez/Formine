@@ -225,17 +225,15 @@ contains
 
     call c_f_pointer(arguments%sent_data, generator_message)
 
-    deallocate(generator_message)
-
     !? Ensure required components are present.
 
-    ! if (.not. associated(generator_message%world_position)) then
-    !   error stop "[Chunk Mesh] {thread} error: World position is a null pointer."
-    ! end if
+    if (.not. associated(generator_message%world_position)) then
+      error stop "[Chunk Mesh] {thread} error: World position is a null pointer."
+    end if
 
-    ! if (.not. associated(generator_message%current)) then
-    !   error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
-    ! end if
+    if (.not. associated(generator_message%current)) then
+      error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
+    end if
 
     ! if (.not. associated(generator_message%texture_indices)) then
     !   error stop "[Chunk Mesh] {thread} error: Texture indices is a null pointer."
@@ -245,14 +243,13 @@ contains
     !   error stop "[Chunk Mesh] {thread} error: Texture positions array is a null pointer."
     ! end if
 
-    ! if (generator_message%texture_count <= 0) then
-    !   error stop "[Chunk Mesh] {thread} error: Texture count is 0 or less."
-    ! end if
+    if (generator_message%texture_count <= 0) then
+      error stop "[Chunk Mesh] {thread} error: Texture count is 0 or less."
+    end if
 
-    ! if (generator_message%mesh_stack <= 0) then
-    !   error stop "[Chunk Mesh] {thread} error: Mesh stack is 0 or less."
-    ! end if
-
+    if (generator_message%mesh_stack <= 0) then
+      error stop "[Chunk Mesh] {thread} error: Mesh stack is 0 or less."
+    end if
 
     !? Begin implementation.
 
@@ -404,33 +401,34 @@ contains
 
     !? Deallocate all the memory regions in the message.
 
+    deallocate(generator_message%world_position)
 
+    deallocate(generator_message%current)
 
-    ! deallocate(generator_message%world_position)
+    if (associated(generator_message%left)) then
+      deallocate(generator_message%left)
+    end if
+    if (associated(generator_message%right)) then
+      deallocate(generator_message%right)
+    end if
 
-    ! deallocate(generator_message%current)
-
-    ! if (associated(generator_message%left)) then
-    !   deallocate(generator_message%left)
-    ! end if
-    ! if (associated(generator_message%right)) then
-    !   deallocate(generator_message%right)
-    ! end if
-
-    ! if (associated(generator_message%back)) then
-    !   deallocate(generator_message%back)
-    ! end if
-    ! if (associated(generator_message%front)) then
-    !   deallocate(generator_message%front)
-    ! end if
+    if (associated(generator_message%back)) then
+      deallocate(generator_message%back)
+    end if
+    if (associated(generator_message%front)) then
+      deallocate(generator_message%front)
+    end if
 
     ! deallocate(generator_message%texture_indices)
     ! deallocate(generator_message%texture_positions_array)
+
+    deallocate(generator_message)
 
     status = thread_write_lock(arguments%mutex_pointer)
 
     void_pointer = c_null_ptr
     arguments%active_flag = .false.
+
     status = thread_unlock_lock(arguments%mutex_pointer)
   end function chunk_mesh_generation_thread
 
@@ -462,23 +460,24 @@ contains
 
     allocate(message_to_generator)
 
-    ! allocate(message_to_generator%world_position)
+    allocate(message_to_generator%world_position)
 
-    ! message_to_generator%world_position = [x, z]
+    message_to_generator%world_position = [x, z]
 
-    ! message_to_generator%current => chunk_handler_get_clone_chunk_pointer(x,z)
+    message_to_generator%current => chunk_handler_get_clone_chunk_pointer(x,z)
 
-    ! message_to_generator%left => chunk_handler_get_clone_chunk_pointer(x - 1,z)
-    ! message_to_generator%right => chunk_handler_get_clone_chunk_pointer(x + 1,z)
+    message_to_generator%left => chunk_handler_get_clone_chunk_pointer(x - 1,z)
+    message_to_generator%right => chunk_handler_get_clone_chunk_pointer(x + 1,z)
 
-    ! message_to_generator%back => chunk_handler_get_clone_chunk_pointer(x,z - 1)
-    ! message_to_generator%front => chunk_handler_get_clone_chunk_pointer(x,z + 1)
+    message_to_generator%back => chunk_handler_get_clone_chunk_pointer(x,z - 1)
+    message_to_generator%front => chunk_handler_get_clone_chunk_pointer(x,z + 1)
 
     ! message_to_generator%texture_indices => texture_atlas_get_texture_indices_clone_pointer()
     ! message_to_generator%texture_positions_array => texture_atlas_get_texture_positions_array_clone_pointer()
-    ! message_to_generator%texture_count = texture_atlas_get_texture_count()
 
-    ! message_to_generator%mesh_stack = mesh_stack
+    message_to_generator%texture_count = texture_atlas_get_texture_count()
+
+    message_to_generator%mesh_stack = mesh_stack
 
     !! Sample deallocation
     ! deallocate(message_to_generator%world_position)

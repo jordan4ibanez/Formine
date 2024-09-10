@@ -41,46 +41,46 @@ program main
   old_fps = -1
   y = 0
 
-  call thread_handler_intialization()
+  ! call thread_handler_intialization()
 
 
 
-  do
+  ! do
 
-    y = y + 1
+  !   y = y + 1
 
-    if (mod(y, 1000) == 0) then
-      ! print*,y
-    end if
+  !   if (mod(y, 1000) == 0) then
+  !     ! print*,y
+  !   end if
 
-    if (new_fps == 0) then
-      call chunk_generator_new_chunk(x, 1)
-      call chunk_handler_delete_chunk(x, 1)
-      ! else
-      ! position_text_debug = "hi"//int_to_string(y)
-    end if
+  !   if (new_fps == 0) then
+  !     call chunk_generator_new_chunk(x, 1)
+  !     call chunk_handler_delete_chunk(x, 1)
+  !     ! else
+  !     ! position_text_debug = "hi"//int_to_string(y)
+  !   end if
 
 
 
-    call thread_handler_run()
+  !   call thread_handler_run()
 
-    call malloc_trim(0)
+  !   call malloc_trim(0)
 
-    if (y > 10000) then
-      if (new_fps == 0) then
-        print*,"FINISH DISPATCH"
+  !   if (y > 100000) then
+  !     if (new_fps == 0) then
+  !       print*,"FINISH DISPATCH"
 
-      end if
-      new_fps = 1
-    end if
+  !     end if
+  !     new_fps = 1
+  !   end if
 
-  end do
+  ! end do
 
 
   ! !! BEGIN WARNING: This is only to be used for when developing libraries.
-  if (.true.) then
-    return
-  end if
+  ! if (.true.) then
+  !   return
+  ! end if
   ! !! END WARNING.
 
 
@@ -181,17 +181,14 @@ program main
   if (.true.) then
     do while(.not. glfw_window_should_close())
 
-      ! do x = -5,5
-      ! do y = -5,5
-      ! do i = 1,3
-      ! if (mod(x, 10) == 0) then
+
+
+      ! This launches 8 threads.
       call chunk_generator_new_chunk(x, 1)
       call chunk_handler_delete_chunk(x, 1)
-      ! end if
+
       x = x + 1
-      ! end do
-      !   end do
-      ! end do
+
 
       call delta_tick()
 
