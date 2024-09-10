@@ -404,31 +404,27 @@ contains
         ! call process_garbage_collector(thread_to_use)
 
         ! Set the completion flag.
+        status = thread_write_lock(c_loc(module_mutex))
 
-
-        ! status = thread_write_lock(c_loc(module_mutex))
-
-        !! LEAK IS HERE!
         translator_bool = .true.
         thread_active(thread_to_use) = translator_bool
-        !! END LEAK IS HERE!
 
-        ! thread_arguments(thread_to_use)%mutex_pointer = c_loc(module_mutex)
+        thread_arguments(thread_to_use)%mutex_pointer = c_loc(module_mutex)
 
-        ! status = thread_unlock_lock(c_loc(module_mutex))
+        status = thread_unlock_lock(c_loc(module_mutex))
 
         ! Set the raw data to send.
-        ! thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
-        ! thread_arguments(thread_to_use)%sent_data = optional_thread_queue_element_pointer%data_to_send
+        thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
+        thread_arguments(thread_to_use)%sent_data = optional_thread_queue_element_pointer%data_to_send
 
         !! THIS DOES NOTHING
-        ! call c_free(optional_thread_queue_element_pointer%data_to_send)
+        call c_free(optional_thread_queue_element_pointer%data_to_send)
 
         ! Set the garbage collector subroutine to use.
-        ! garbage_collectors(thread_to_use) = optional_thread_queue_element_pointer%garbage_collector
+        garbage_collectors(thread_to_use) = optional_thread_queue_element_pointer%garbage_collector
 
         ! Fire off the thread.
-        ! call thread_process_detached_thread(optional_thread_queue_element_pointer%subroutine_pointer, c_null_ptr, thread_to_use)!c_loc(thread_arguments(thread_to_use)), thread_to_use)
+        call thread_process_detached_thread(optional_thread_queue_element_pointer%subroutine_pointer, c_null_ptr, thread_to_use)!c_loc(thread_arguments(thread_to_use)), thread_to_use)
 
         ! Now clean up the shell.
         deallocate(optional_thread_queue_element_pointer)
