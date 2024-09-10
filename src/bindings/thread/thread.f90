@@ -366,8 +366,9 @@ contains
 
     integer(c_int) :: queue_size, i, thread_to_use, status
     class(*), pointer :: generic_pointer
-    type(thread_queue_element), pointer :: optional_thread_queue_element_pointer
+    type(thread_queue_element), pointer :: new_element
     logical(c_bool) :: translator_bool
+    type(c_funptr) :: function_pointer
 
     if (master_thread_queue%is_empty()) then
       return
@@ -386,6 +387,7 @@ contains
 
       ! If there's no available threads, stop.
       if (thread_to_use == 0) then
+        ! print*,"FAILURE! iter", i
         exit
       end if
 
@@ -393,7 +395,7 @@ contains
 
         select type (generic_pointer)
          type is (thread_queue_element)
-          optional_thread_queue_element_pointer => generic_pointer
+          new_element => generic_pointer
          class default
           error stop "[Thread] Error: Wrong data type in the queue."
         end select
