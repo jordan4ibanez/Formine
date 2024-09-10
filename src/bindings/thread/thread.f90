@@ -394,6 +394,8 @@ contains
 
         ! Clean up old data using old garbage collector subroutine.
         call process_garbage_collector(thread_to_use)
+
+        ! Set the completion flag.
         status = thread_write_lock(c_loc(module_mutex))
 
         thread_active(thread_to_use) = .true.
@@ -401,11 +403,17 @@ contains
 
         status = thread_unlock_lock(c_loc(module_mutex))
 
+        ! Set the raw data to send.
         thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
         thread_arguments(thread_to_use)%sent_data = optional_thread_queue_element_pointer%data_to_send
 
+        ! Set the garbage collector subroutine to use.
+        garbage_collectors(thread_to_use) = optional_thread_queue_element_pointer%garbage_collector
+
+        ! Fire off the thread.
         call thread_process_detached_thread(optional_thread_queue_element_pointer%subroutine_pointer, c_loc(thread_arguments(thread_to_use)), thread_to_use)
 
+        ! Now clean up the shell.
         deallocate(optional_thread_queue_element_pointer)
       else
         ! Nothing left to get.
