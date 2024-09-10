@@ -349,11 +349,7 @@ contains
     allocate(new_element)
     new_element%subroutine_pointer = subroutine_procedure_pointer
 
-    ! call c_free(argument_pointer)
-
     ! new_element%data_to_send = argument_pointer
-
-    ! call c_free(new_element%data_to_send)
 
     call master_thread_queue%push(queue_data(new_element))
   end subroutine thread_create_detached
