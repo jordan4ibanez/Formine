@@ -57,7 +57,7 @@ contains
 
 
     do i = 1,MESH_STACK_ARRAY_SIZE
-      chunk_pointer%mesh(i) = ""
+      ! chunk_pointer%mesh(i) = ""
       !! BEGIN MEMORY LEAK
       call chunk_mesh_generate(chunk_x, chunk_z, i)
       !! END MEMORY LEAK
