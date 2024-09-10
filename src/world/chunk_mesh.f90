@@ -419,8 +419,8 @@ contains
       deallocate(generator_message%front)
     end if
 
-    ! deallocate(generator_message%texture_indices)
-    ! deallocate(generator_message%texture_positions_array)
+    deallocate(generator_message%texture_indices)
+    deallocate(generator_message%texture_positions_array)
 
     deallocate(generator_message)
 
@@ -472,8 +472,8 @@ contains
     message_to_generator%back => chunk_handler_get_clone_chunk_pointer(x,z - 1)
     message_to_generator%front => chunk_handler_get_clone_chunk_pointer(x,z + 1)
 
-    ! message_to_generator%texture_indices => texture_atlas_get_texture_indices_clone_pointer()
-    ! message_to_generator%texture_positions_array => texture_atlas_get_texture_positions_array_clone_pointer()
+    message_to_generator%texture_indices => texture_atlas_get_texture_indices_clone_pointer()
+    message_to_generator%texture_positions_array => texture_atlas_get_texture_positions_array_clone_pointer()
 
     message_to_generator%texture_count = texture_atlas_get_texture_count()
 
