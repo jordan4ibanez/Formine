@@ -427,12 +427,20 @@ contains
 
     status = thread_write_lock(arguments%mutex_pointer)
 
-    ! call c_free(arguments%sent_data)
-
     void_pointer = c_null_ptr
     arguments%active_flag = .false.
     status = thread_unlock_lock(arguments%mutex_pointer)
   end function chunk_mesh_generation_thread
+
+
+  !* The GC to free the memory sent to the thread.
+  subroutine chunk_mesh_generation_garbage_collector(sent_data)
+    implicit none
+
+    type(c_ptr), intent(in), value :: sent_data
+
+    print*,"GC RUNNING"
+  end subroutine chunk_mesh_generation_garbage_collector
 
 
 
@@ -490,8 +498,10 @@ contains
     ! deallocate(message_to_generator)
 
     !! NOTE: Something is going wrong with the pointer free here.
-    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator))
+    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator), c_funloc(chunk_mesh_generation_garbage_collector))
   end subroutine chunk_mesh_generate
+
+
 
 
 end module chunk_mesh
