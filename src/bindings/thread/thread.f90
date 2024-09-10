@@ -438,6 +438,7 @@ contains
     do i = 1,CPU_THREADS
       if (.not. thread_active(i)) then
         thread_index = i
+        ! print*,"thread ", i, "free"
         ! status = thread_unlock_lock(c_loc(thread_mutex))
         exit
       end if
