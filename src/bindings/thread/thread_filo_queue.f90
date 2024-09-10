@@ -9,7 +9,6 @@ module thread_filo_queue
 
 
   public :: concurrent_linked_filo_queue
-  public :: queue_data
 
 
   integer(c_int), parameter :: QUEUE_NONE = 0
@@ -21,31 +20,9 @@ module thread_filo_queue
   integer(c_int), parameter :: QUEUE_STRING = 6
   integer(c_int), parameter :: QUEUE_GENERIC = 7
 
-
-  type :: queue_data
-    !* Basic types.
-    integer(c_int), pointer :: i32 => null()
-    integer(c_int64_t), pointer :: i64 => null()
-    real(c_float), pointer :: f32 => null()
-    real(c_double), pointer :: f64 => null()
-    logical(c_bool), pointer :: bool => null()
-    !* String.
-    character(len = :, kind = c_char), pointer :: string => null()
-    !* Completely polymorphic.
-    class(*), pointer :: generic => null()
-    !* Designate the type of the element.
-    integer(c_int) :: type = QUEUE_NONE
-  end type queue_data
-
-  interface queue_data
-    module procedure :: queue_data_constructor
-  end interface queue_data
-
-
-
   type :: queue_node
-    type(queue_node), pointer :: next => null()
-    type(queue_data), pointer :: data => null()
+    class(queue_node), pointer :: next => null()
+    class(*), pointer :: data => null()
   end type queue_node
 
 
@@ -88,16 +65,12 @@ contains
     implicit none
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
-    type(queue_data), intent(in), pointer :: generic_pointer
+    class(*), intent(in), target :: generic_pointer
     integer(c_int) :: status
     type(queue_node), pointer :: new_node
 
     status = thread_write_lock(this%c_mutex_pointer)
     !! BEGIN SAFE OPERATION.
-
-    if (.not. associated(generic_pointer)) then
-      error stop "[Thread FILO Queue] Error: Received a null pointer."
-    end if
 
     allocate(new_node)
     new_node%data => generic_pointer
@@ -126,7 +99,6 @@ contains
 
   !* Pop the first element off the queue.
   function concurrent_linked_filo_queue_pop(this, generic_pointer_option) result(some)
-    use :: raw_c, only: malloc_trim
     implicit none
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
@@ -151,27 +123,9 @@ contains
       next_pointer => this%head%next
 
       ! First we unshell the data.
-      select case(this%head%data%type)
-       case (QUEUE_NONE)
-        error stop "QUEUE FAILURE!"
-       case (QUEUE_I32)
-        generic_pointer_option => this%head%data%i32
-       case (QUEUE_I64)
-        generic_pointer_option => this%head%data%i64
-       case (QUEUE_F32)
-        generic_pointer_option => this%head%data%f32
-       case (QUEUE_F64)
-        generic_pointer_option => this%head%data%f64
-       case (QUEUE_BOOL)
-        generic_pointer_option => this%head%data%bool
-       case (QUEUE_STRING)
-        generic_pointer_option => this%head%data%string
-       case (QUEUE_GENERIC)
-        generic_pointer_option => this%head%data%generic
-      end select
+      generic_pointer_option => this%head%data
 
       ! Then we deallocate.
-      deallocate(this%head%data)
       deallocate(this%head)
 
       this%head => next_pointer
@@ -208,26 +162,6 @@ contains
       do
         next => current%next
 
-        select case(current%data%type)
-         case (QUEUE_NONE)
-          error stop "QUEUE FAILURE!"
-         case (QUEUE_I32)
-          deallocate(current%data%i32)
-         case (QUEUE_I64)
-          deallocate(current%data%i64)
-         case (QUEUE_F32)
-          deallocate(current%data%f32)
-         case (QUEUE_F64)
-          deallocate(current%data%f64)
-         case (QUEUE_BOOL)
-          deallocate(current%data%bool)
-         case (QUEUE_STRING)
-          deallocate(current%data%string)
-         case (QUEUE_GENERIC)
-          deallocate(current%data%generic)
-        end select
-
-        deallocate(current%data)
         deallocate(current)
 
         ! Pointing at nothing.
@@ -248,57 +182,6 @@ contains
     !! END SAFE OPERATION.
     status = thread_unlock_lock(this%c_mutex_pointer)
   end subroutine concurrent_linked_filo_queue_destroy
-
-
-  function queue_data_constructor(generic) result(new_queue_element_pointer)
-    implicit none
-
-    type(queue_data), pointer :: new_queue_element_pointer
-    class(*), intent(in), target :: generic
-
-    allocate(new_queue_element_pointer)
-
-    select type(generic)
-     type is (integer(c_int))
-      new_queue_element_pointer%type = QUEUE_I32
-      allocate(new_queue_element_pointer%i32)
-      new_queue_element_pointer%i32 = generic
-
-     type is (integer(c_int64_t))
-      new_queue_element_pointer%type = QUEUE_I64
-      allocate(new_queue_element_pointer%i64)
-      new_queue_element_pointer%i64 = generic
-
-     type is (real(c_float))
-      new_queue_element_pointer%type = QUEUE_F32
-      allocate(new_queue_element_pointer%f32)
-      new_queue_element_pointer%f32 = generic
-
-     type is (real(c_double))
-      new_queue_element_pointer%type = QUEUE_F64
-      allocate(new_queue_element_pointer%f64)
-      new_queue_element_pointer%f64 = generic
-
-     type is (logical)
-      new_queue_element_pointer%type = QUEUE_BOOL
-      allocate(new_queue_element_pointer%bool)
-      new_queue_element_pointer%bool = generic
-
-     type is (character(len = *, kind = c_char))
-      !? You can thank klausler for helping me debug an issue here.
-      new_queue_element_pointer%type = QUEUE_STRING
-      associate (string_len => len(generic))
-        allocate(character(len = string_len, kind = c_char) :: new_queue_element_pointer%string)
-        new_queue_element_pointer%string = generic
-      end associate
-
-     class default
-      !? We will check if this thing is a pointer.
-      !! If it's not, it's going to blow up.
-      new_queue_element_pointer%type = QUEUE_GENERIC
-      new_queue_element_pointer%generic => generic
-    end select
-  end function queue_data_constructor
 
 
   !* Check if the queue is empty.

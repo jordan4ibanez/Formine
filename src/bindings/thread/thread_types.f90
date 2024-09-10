@@ -23,7 +23,7 @@ module thread_types
   ! What gets passed into the thread.
   type :: thread_argument
     logical(c_bool), pointer :: active_flag => null()
-    type(c_ptr) :: sent_data = c_null_ptr
+    type(c_ptr) :: data = c_null_ptr
     type(c_ptr) :: mutex_pointer = c_null_ptr
   end type thread_argument
 

@@ -2,7 +2,6 @@ module thread
   use :: thread_types
   use :: thread_mutex
   use :: thread_filo_queue
-  use :: vector_3i
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -38,7 +37,6 @@ module thread
   public :: thread_queue_element
   public :: mutex_rwlock
   public :: concurrent_linked_filo_queue
-  public :: queue_data
 
   public :: thread_write_lock
   public :: thread_read_lock
@@ -51,7 +49,6 @@ module thread
   public :: thread_process_thread_queue
   public :: thread_queue_is_empty
   public :: thread_await_all_thread_completion
-  public :: test_threading_example
 
   integer(c_int), parameter :: THREAD_OK = 0
   integer(c_int), parameter :: THREAD_DOES_NOT_EXIST = 3
@@ -189,14 +186,13 @@ contains
     status = internal_pthread_join(joinable_thread%tid, return_val_pointer)
 
     if (status /= THREAD_OK) then
-      error stop "[joinable_thread] Error: Tried to join non-existent joinable_thread! Error status: ["//int_to_string(status)//"]"
+      error stop "[Forthread] Error: Tried to join non-existent joinable_thread! Error status: ["//int_to_string(status)//"]"
     end if
   end subroutine thread_join
 
 
   !* Queue up a thread to be run.
   subroutine thread_create(subroutine_procedure_pointer, argument_pointer)
-    use :: raw_c
     implicit none
 
     type(c_funptr), intent(in), value :: subroutine_procedure_pointer
@@ -207,13 +203,12 @@ contains
     new_element%subroutine_pointer = subroutine_procedure_pointer
     new_element%data_to_send = argument_pointer
 
-    call master_thread_queue%push(queue_data(new_element))
+    call master_thread_queue%push(new_element)
   end subroutine thread_create
 
 
   !* Process all the queued threads limited by cpu threads available.
   subroutine thread_process_thread_queue()
-    use :: raw_c
     implicit none
 
     integer(c_int) :: queue_size, i, thread_to_use, status
@@ -264,18 +259,19 @@ contains
 
         ! Set the raw data to send.
         thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
-        thread_arguments(thread_to_use)%sent_data = new_element%data_to_send
+        thread_arguments(thread_to_use)%data = new_element%data_to_send
 
         function_pointer = new_element%subroutine_pointer
 
         ! Now clean up the shell.
         deallocate(new_element)
 
-        ! Fire off the thread.
+        ! Clean up old thread data.
         if (available_threads(thread_to_use)%tid /= 0) then
           call thread_join(available_threads(thread_to_use), c_null_ptr)
         end if
 
+        ! Fire off the thread.
         available_threads(thread_to_use) = create_joinable(function_pointer, c_loc(thread_arguments(thread_to_use)))
       else
         ! Nothing left to get.
@@ -283,9 +279,6 @@ contains
       end if
     end do
   end subroutine thread_process_thread_queue
-
-
-
 
 
   !* Simply searches for a free thread to dispatch.
@@ -310,9 +303,6 @@ contains
   end function find_free_thread
 
 
-
-
-
   !* Check if the thread queue is empty.
   !* This is primarily used for debugging.
   function thread_queue_is_empty() result(is_empty)
@@ -324,17 +314,17 @@ contains
   end function thread_queue_is_empty
 
 
-
   !* And the end of the program, wait for all threads to complete until continuing.
-  function thread_await_all_thread_completion() result(still_processing)
+  function thread_await_all_thread_completion() result(keep_going)
     implicit none
 
-    logical(c_bool) :: still_processing
+    logical(c_bool) :: keep_going
     integer(c_int) :: i, status
 
-    still_processing = .true.
+    keep_going = .true.
 
     status = thread_read_lock(c_loc(module_mutex))
+
     do i = 1,CPU_THREADS
       if (thread_active(i)) then
         status = thread_unlock_lock(c_loc(module_mutex))
@@ -343,91 +333,67 @@ contains
     end do
     status = thread_unlock_lock(c_loc(module_mutex))
 
-    still_processing = .false.
+    keep_going = .false.
   end function thread_await_all_thread_completion
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   !! EXAMPLE ONLY !!
-  recursive function test_threading_example(c_arg_pointer) result(void_pointer) bind(c)
-    use :: string
-    use :: raw_c
-    implicit none
+  ! recursive function test_threading_example(c_arg_pointer) result(void_pointer) bind(c)
+  !   implicit none
 
-    type(c_ptr), intent(in), value :: c_arg_pointer
-    type(thread_argument), pointer :: arguments
-    type(c_ptr) :: void_pointer
-    !? Implementation note:
-    !? When working with strings in threads, they must be a defined size.
-    character(len = 128, kind = c_char), pointer :: input_string
-    ! integer(c_int), pointer :: input_data
-    integer(c_int) :: status
+  !   type(c_ptr), intent(in), value :: c_arg_pointer
+  !   type(thread_argument), pointer :: arguments
+  !   type(c_ptr) :: void_pointer
+  !   !? Implementation note:
+  !   !? When working with strings in threads, they must be a defined size.
+  !   character(len = 128, kind = c_char), pointer :: input_string
+  !   ! integer(c_int), pointer :: input_data
+  !   integer(c_int) :: status
 
-    ! We will basically always return a null void pointer.
-    void_pointer = c_null_ptr
+  !   ! We will basically always return a null void pointer.
+  !   void_pointer = c_null_ptr
 
-    ! Thread passes in a thread_argument pointer.
-    ! Check it.
-    if (.not. c_associated(c_arg_pointer)) then
-      error stop "[Thread] Fatal error: sent argument is null."
-      return
-    end if
+  !   ! Thread passes in a thread_argument pointer.
+  !   ! Check it.
+  !   if (.not. c_associated(c_arg_pointer)) then
+  !     error stop "[Thread] Fatal error: sent argument is null."
+  !     return
+  !   end if
 
-    ! We shift it into Fortran.
-    call c_f_pointer(c_arg_pointer, arguments)
+  !   ! We shift it into Fortran.
+  !   call c_f_pointer(c_arg_pointer, arguments)
 
-    ! Check our string void pointer.
-    !? Remember: This is a void pointer, it can be any type.
-    !? If you're not sure what type is getting sent where, there is an
-    !? implementation issue and it MUST be fixed.
-    !?
-    !? But you can also send in null pointers, you must expect them though.
-    if (.not. c_associated(arguments%sent_data)) then
-      error stop "[Thread] Fatal error: Sent data is null."
-      return
-    end if
+  !   ! Check our string void pointer.
+  !   !? Remember: This is a void pointer, it can be any type.
+  !   !? If you're not sure what type is getting sent where, there is an
+  !   !? implementation issue and it MUST be fixed.
+  !   !?
+  !   !? But you can also send in null pointers, you must expect them though.
+  !   if (.not. c_associated(arguments%sent_data)) then
+  !     error stop "[Thread] Fatal error: Sent data is null."
+  !     return
+  !   end if
 
-    ! Shift the string pointer into Fortran.
-    call c_f_pointer(arguments%sent_data, input_string)
+  !   ! Shift the string pointer into Fortran.
+  !   call c_f_pointer(arguments%sent_data, input_string)
 
-    ! Print it.
-    print*,input_string
+  !   ! Print it.
+  !   print*,input_string
 
-    ! It's a pointer, deallocate it.
-    deallocate(input_string)
+  !   ! It's a pointer, deallocate it.
+  !   deallocate(input_string)
 
-    ! We lock the mutex to write that the thread has completed.
-    !? Implementation note:
-    !! THIS MUST BE DONE.
-    !? If this is not done, no threads will be
-    !? freed in the state machine!
-    status = thread_write_lock(arguments%mutex_pointer)
-    arguments%active_flag = .false.
-    status = thread_unlock_lock(arguments%mutex_pointer)
+  !   ! We lock the mutex to write that the thread has completed.
+  !   !? Implementation note:
+  !   !! THIS MUST BE DONE.
+  !   !? If this is not done, no threads will be
+  !   !? freed in the state machine!
+  !   status = thread_write_lock(arguments%mutex_pointer)
+  !   arguments%active_flag = .false.
+  !   status = thread_unlock_lock(arguments%mutex_pointer)
 
-    ! The null void pointer is returned.
-  end function test_threading_example
+  !   ! The null void pointer is returned.
+  ! end function test_threading_example
 
 
 end module thread

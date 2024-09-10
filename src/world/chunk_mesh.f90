@@ -219,11 +219,11 @@ contains
 
     !? Transfer sent data pointer to Fortran.
 
-    if (.not. c_associated(arguments%sent_data)) then
+    if (.not. c_associated(arguments%data)) then
       error stop "[Chunk Mesh] Fatal error: Was passed a null sent_data pointer."
     end if
 
-    call c_f_pointer(arguments%sent_data, generator_message)
+    call c_f_pointer(arguments%data, generator_message)
 
     !? Ensure required components are present.
 
