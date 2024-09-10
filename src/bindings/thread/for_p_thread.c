@@ -9,8 +9,6 @@
 
 const static int pthread_mutex_t_size = sizeof(pthread_mutex_t);
 
-// const static int pthread_create_joinable_id = PTHREAD_CREATE_JOINABLE;
-
 const static int pthread_create_detached_id = PTHREAD_CREATE_DETACHED;
 
 //* Make this portable.
