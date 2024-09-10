@@ -225,7 +225,13 @@ contains
 
     allocate(available_threads(CPU_THREADS))
     allocate(thread_arguments(CPU_THREADS))
+
     allocate(thread_active(CPU_THREADS))
+
+    do i = 1,CPU_THREADS
+      thread_active(i) = .false.
+    end do
+
     master_thread_queue = concurrent_linked_filo_queue()
 
     allocate(garbage_collectors(CPU_THREADS))
