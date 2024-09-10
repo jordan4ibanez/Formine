@@ -338,7 +338,6 @@ contains
     do i = 1,CPU_THREADS
       if (thread_active(i)) then
         status = thread_unlock_lock(c_loc(module_mutex))
-        call sleep(0)
         return
       end if
     end do
