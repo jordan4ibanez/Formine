@@ -38,11 +38,17 @@ program main
 
   new_fps = 0
   old_fps = -1
-  y = 1
+  y = 0
 
   call thread_handler_intialization()
 
   do
+
+    y = y + 1
+
+    if (mod(y, 1000) == 0) then
+      print*,y
+    end if
 
     call chunk_generator_new_chunk(x, 1)
     call chunk_handler_delete_chunk(x, 1)
