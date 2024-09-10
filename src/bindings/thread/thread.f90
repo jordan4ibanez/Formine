@@ -69,7 +69,6 @@ module thread
   type(pthread_t), dimension(:), pointer :: available_threads
   type(thread_argument), dimension(:), pointer :: thread_arguments
   logical(c_bool), dimension(:), pointer :: thread_active
-  type(c_funptr), dimension(:), pointer :: garbage_collectors
 
   type(concurrent_linked_filo_queue) :: master_thread_queue
 
@@ -233,12 +232,6 @@ contains
     end do
 
     master_thread_queue = concurrent_linked_filo_queue()
-
-    allocate(garbage_collectors(CPU_THREADS))
-
-    do i = 1,CPU_THREADS
-      garbage_collectors(i) = c_null_funptr
-    end do
   end subroutine thread_initialize
 
 
@@ -345,17 +338,16 @@ contains
 
 
   !* Queue up a thread to be run.
-  subroutine thread_create_detached(subroutine_procedure_pointer, argument_pointer, thread_garbage_collector)
+  subroutine thread_create_detached(subroutine_procedure_pointer, argument_pointer)
     use :: raw_c
     implicit none
 
-    type(c_funptr), intent(in), value :: subroutine_procedure_pointer, thread_garbage_collector
+    type(c_funptr), intent(in), value :: subroutine_procedure_pointer
     type(c_ptr), intent(in), value :: argument_pointer
     type(thread_queue_element), pointer :: new_element
 
     allocate(new_element)
     new_element%subroutine_pointer = subroutine_procedure_pointer
-    new_element%garbage_collector = thread_garbage_collector
 
     ! call c_free(argument_pointer)
 
@@ -426,8 +418,6 @@ contains
         !! THIS DOES NOTHING
         call c_free(optional_thread_queue_element_pointer%data_to_send)
 
-        ! Set the garbage collector subroutine to use.
-        garbage_collectors(thread_to_use) = optional_thread_queue_element_pointer%garbage_collector
 
         ! Fire off the thread.
         call thread_process_detached_thread(optional_thread_queue_element_pointer%subroutine_pointer, c_null_ptr, thread_to_use)!c_loc(thread_arguments(thread_to_use)), thread_to_use)
@@ -440,32 +430,6 @@ contains
       end if
     end do
   end subroutine thread_process_detached_thread_queue
-
-
-  subroutine process_garbage_collector(index)
-    implicit none
-
-    integer(c_int), intent(in), value :: index
-    integer(c_int) :: status
-    procedure(thread_garbage_collector_c_interface), pointer :: subroutine_to_run
-    type(c_funptr) :: raw_c_pointer
-
-    status = thread_write_lock(c_loc(module_mutex))
-
-    raw_c_pointer = garbage_collectors(index)
-
-    ! Has already been processed or not assigned.
-    if (.not. c_associated(raw_c_pointer)) then
-      status = thread_unlock_lock(c_loc(module_mutex))
-      return
-    end if
-
-    call c_f_procpointer(raw_c_pointer, subroutine_to_run)
-
-    call subroutine_to_run(thread_arguments(index)%sent_data)
-
-    status = thread_unlock_lock(c_loc(module_mutex))
-  end subroutine process_garbage_collector
 
 
   !* Simply searches for a free thread to dispatch.
