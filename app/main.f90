@@ -21,6 +21,7 @@ program main
   use :: chunk_handler
   use :: thread_handler
   use :: version_info
+  use :: raw_c
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -63,9 +64,12 @@ program main
 
     call thread_handler_run()
 
-    if (y > 100000) then
+    call malloc_trim(0)
+
+    if (y > 10000) then
       if (new_fps == 0) then
         print*,"FINISH DISPATCH"
+
       end if
       new_fps = 1
     end if
