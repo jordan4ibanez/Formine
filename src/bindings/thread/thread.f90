@@ -392,6 +392,8 @@ contains
           error stop "[Thread] Error: Wrong data type in the queue."
         end select
 
+        ! Clean up old data using old garbage collector subroutine.
+        call process_garbage_collector(thread_to_use)
         status = thread_write_lock(c_loc(module_mutex))
 
         thread_active(thread_to_use) = .true.
