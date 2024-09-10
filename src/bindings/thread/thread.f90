@@ -322,15 +322,16 @@ contains
 
 
   !* Queue up a thread to be run.
-  subroutine thread_create_detached(subroutine_procedure_pointer, argument_pointer)
+  subroutine thread_create_detached(subroutine_procedure_pointer, argument_pointer, thread_garbage_collector)
     implicit none
 
-    type(c_funptr), intent(in), value :: subroutine_procedure_pointer
+    type(c_funptr), intent(in), value :: subroutine_procedure_pointer, thread_garbage_collector
     type(c_ptr), intent(in), value :: argument_pointer
     type(thread_queue_element), pointer :: new_element
 
     allocate(new_element)
     new_element%subroutine_pointer = subroutine_procedure_pointer
+    new_element%garbage_collector = thread_garbage_collector
     new_element%data_to_send = argument_pointer
 
     call master_thread_queue%push(queue_data(new_element))
