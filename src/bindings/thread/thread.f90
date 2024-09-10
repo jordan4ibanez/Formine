@@ -147,8 +147,6 @@ contains
   end subroutine thread_initialize
 
 
-
-
   !* Destroy a mutex pointer.
   subroutine thread_destroy_mutex_pointer(input_mutex_pointer)
     implicit none
@@ -165,7 +163,7 @@ contains
 
   !* Create a new joinable thread.
   !* Returns you the thread struct.
-  function thread_create_joinable(subroutine_procedure_pointer, argument_pointer) result(new_joinable_thread) bind(c)
+  function create_joinable(subroutine_procedure_pointer, argument_pointer) result(new_joinable_thread) bind(c)
     use :: string, only: int_to_string
     implicit none
 
@@ -179,51 +177,9 @@ contains
     if (status /= THREAD_OK) then
       error stop "[Thread] Error: Failed to create a joinable thread. Error status: ["//int_to_string(status)//"]"
     end if
-  end function thread_create_joinable
+  end function create_joinable
 
 
-  !* Set a thread's name.
-  subroutine thread_set_name(thread, name) bind(c)
-    use :: string, only: int_to_string, string_from_c
-    implicit none
-
-    type(pthread_t), intent(inout) :: thread
-    character(len = *, kind = c_char), intent(in) :: name
-    character(len = :, kind = c_char), allocatable, target :: c_name
-    integer(c_int) :: status
-
-    !* Implementation note:
-    !* We ignore the status because this thread could have already finished by the time we get here.
-
-    c_name = name//achar(0)
-    status = internal_pthread_setname_np(thread%tid, c_name)
-  end subroutine thread_set_name
-
-
-  !* Set a thread's name.
-  !* If the thread does not exist, this will return "".
-  function thread_get_name(thread) result(thread_name)
-    use :: string, only: int_to_string, string_from_c
-    implicit none
-
-    type(pthread_t), intent(in), value :: thread
-    character(len = :, kind = c_char), allocatable :: thread_name
-    type(c_ptr) :: c_string_pointer
-    integer(c_int) :: status
-
-    status = internal_pthread_getname_np(thread%tid, c_string_pointer, 128_8)
-
-    if (status /= THREAD_OK) then
-      thread_name = ""
-      return
-    end if
-
-    thread_name = string_from_c(c_string_pointer, 128)
-  end function thread_get_Name
-
-
-  !* Wait for a thread to be finished then reclaim it's data and get it's return.
-  subroutine thread_wait_for_joinable(joinable_thread, return_val_pointer) bind(c)
     use :: string, only: int_to_string
     implicit none
 
