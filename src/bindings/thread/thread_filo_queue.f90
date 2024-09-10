@@ -126,6 +126,7 @@ contains
 
   !* Pop the first element off the queue.
   function concurrent_linked_filo_queue_pop(this, generic_pointer_option) result(some)
+    use :: raw_c, only: malloc_trim
     implicit none
 
     class(concurrent_linked_filo_queue), intent(inout) :: this
@@ -182,6 +183,8 @@ contains
     if (.not. associated(this%head)) then
       this%tail => null()
     end if
+
+    call malloc_trim(0)
 
     !! END SAFE OPERATION.
     status = thread_unlock_lock(this%c_mutex_pointer)
