@@ -18,6 +18,7 @@ Also this is hand coded while looking at the glfw, opengl, stb, and luajit sourc
 
 This is written in Fortran 2003 up to 2018. Basically whatever my compiler (gfortran) allows.
 
+If you like what I do, and would like to support me: [My Patreon](https://www.patreon.com/jordan4ibanez)
 
 Come join the Fortran Discord: https://discord.gg/tfn3M28ppP
 
