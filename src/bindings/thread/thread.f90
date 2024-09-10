@@ -47,13 +47,9 @@ module thread
   public :: thread_initialize
   public :: thread_create_mutex_pointer
   public :: thread_destroy_mutex_pointer
-  public :: thread_create_joinable
-  public :: thread_set_name
-  public :: thread_get_name
-  public :: thread_wait_for_joinable
-  public :: thread_create_detached
-  public :: thread_process_detached_thread_queue
-  public :: thread_detached_queue_is_empty
+  public :: thread_create
+  public :: thread_process_thread_queue
+  public :: thread_queue_is_empty
   public :: thread_await_all_thread_completion
   public :: test_threading_example
 
@@ -89,38 +85,6 @@ module thread
     end function internal_pthread_create
 
 
-    function pthread_cancel(thread) result(status) bind(c, name = "pthread_cancel")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(c_int64_t), intent(in), value :: thread
-      integer(c_int) :: status
-    end function pthread_cancel
-
-
-    function internal_pthread_setname_np(thread, name) result(status) bind(c, name = "pthread_setname_np")
-      use :: thread_types
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(c_int64_t), intent(in), value :: thread
-      character(len = 1, kind = c_char), intent(in) :: name
-      integer(c_int) :: status
-    end function internal_pthread_setname_np
-
-
-    function internal_pthread_getname_np(thread, name, len) result(status) bind(c, name = "pthread_getname_np")
-      use :: thread_types
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(c_int64_t), intent(in), value :: thread
-      type(c_ptr), intent(in), value :: name
-      integer(c_size_t), intent(in), value :: len
-      integer(c_int) :: status
-    end function internal_pthread_getname_np
-
-
     function internal_pthread_join(thread, retval) result(status) bind(c, name = "pthread_join")
       use :: thread_types
       use, intrinsic :: iso_c_binding
@@ -130,58 +94,6 @@ module thread
       type(c_ptr), intent(in), value :: retval
       integer(c_int) :: status
     end function internal_pthread_join
-
-
-!* THIS PART IS EXTREMELY COMPLEX.
-
-
-    function pthread_detach(thread) result(status) bind(c, name = "pthread_detach")
-      use :: thread_types
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(c_int64_t), intent(in), value :: thread
-      integer(c_int) :: status
-    end function pthread_detach
-
-
-    function internal_pthread_attr_init(attr) result(status) bind(c, name = "pthread_attr_init")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: attr
-      integer(c_int) :: status
-    end function internal_pthread_attr_init
-
-
-    function internal_pthread_attr_destroy(attr) result(status) bind(c, name = "pthread_attr_destroy")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: attr
-      integer(c_int) :: status
-    end function internal_pthread_attr_destroy
-
-
-    function internal_pthread_attr_setdetachstate(attr, detachstate) result(status) bind(c, name = "pthread_attr_setdetachstate")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: attr
-      integer(c_int), intent(in), value :: detachstate
-      integer(c_int) :: status
-    end function
-
-
-    function internal_pthread_attr_getdetachstate(attr, detachstate) result(status) bind(c, name = "pthread_attr_getdetachstate")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      type(c_ptr), intent(in), value :: attr
-      integer(c_int), intent(inout) :: detachstate
-      integer(c_int) :: status
-    end function internal_pthread_attr_getdetachstate
-
 
 
 !* BEGIN FUNCTION BLUEPRINTS.
