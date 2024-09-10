@@ -350,7 +350,12 @@ contains
     allocate(new_element)
     new_element%subroutine_pointer = subroutine_procedure_pointer
     new_element%garbage_collector = thread_garbage_collector
-    new_element%data_to_send = argument_pointer
+
+    ! call c_free(argument_pointer)
+
+    ! new_element%data_to_send = argument_pointer
+
+    ! call c_free(new_element%data_to_send)
 
     call master_thread_queue%push(queue_data(new_element))
   end subroutine thread_create_detached
@@ -364,6 +369,7 @@ contains
     integer(c_int) :: queue_size, i, thread_to_use, status
     class(*), pointer :: generic_pointer
     type(thread_queue_element), pointer :: optional_thread_queue_element_pointer
+    logical(c_bool) :: translator_bool
 
     if (master_thread_queue%is_empty()) then
       return
@@ -398,19 +404,25 @@ contains
         ! call process_garbage_collector(thread_to_use)
 
         ! Set the completion flag.
-        status = thread_write_lock(c_loc(module_mutex))
 
-        thread_active(thread_to_use) = .true.
-        thread_arguments(thread_to_use)%mutex_pointer = c_loc(module_mutex)
 
-        status = thread_unlock_lock(c_loc(module_mutex))
+        ! status = thread_write_lock(c_loc(module_mutex))
+
+        !! LEAK IS HERE!
+        translator_bool = .true.
+        thread_active(thread_to_use) = translator_bool
+        !! END LEAK IS HERE!
+
+        ! thread_arguments(thread_to_use)%mutex_pointer = c_loc(module_mutex)
+
+        ! status = thread_unlock_lock(c_loc(module_mutex))
 
         ! Set the raw data to send.
-        thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
+        ! thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
         ! thread_arguments(thread_to_use)%sent_data = optional_thread_queue_element_pointer%data_to_send
 
         !! THIS DOES NOTHING
-        call c_free(optional_thread_queue_element_pointer%data_to_send)
+        ! call c_free(optional_thread_queue_element_pointer%data_to_send)
 
         ! Set the garbage collector subroutine to use.
         ! garbage_collectors(thread_to_use) = optional_thread_queue_element_pointer%garbage_collector
