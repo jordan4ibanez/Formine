@@ -180,6 +180,8 @@ contains
   end function create_joinable
 
 
+  !* Join a thread back into the main thread.
+  subroutine thread_join(joinable_thread, return_val_pointer) bind(c)
     use :: string, only: int_to_string
     implicit none
 
@@ -192,17 +194,7 @@ contains
     if (status /= THREAD_OK) then
       error stop "[joinable_thread] Error: Tried to join non-existent joinable_thread! Error status: ["//int_to_string(status)//"]"
     end if
-  end subroutine thread_wait_for_joinable
-
-
-  !* Custom hack job to allocate a pthread union into memory.
-  function allocate_raw_pthread_attr_t() result(new_thread_attr)
-    implicit none
-
-    type(pthread_attr_t) :: new_thread_attr
-
-    allocate(new_thread_attr%raw_data_pointer(for_p_thread_get_pthread_attr_t_width()))
-  end function allocate_raw_pthread_attr_t
+  end subroutine thread_join
 
 
   !* Queue up a thread to be run.
