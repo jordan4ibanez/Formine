@@ -409,6 +409,7 @@ contains
         thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
         ! thread_arguments(thread_to_use)%sent_data = optional_thread_queue_element_pointer%data_to_send
 
+        !! THIS DOES NOTHING
         call c_free(optional_thread_queue_element_pointer%data_to_send)
 
         ! Set the garbage collector subroutine to use.
