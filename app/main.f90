@@ -40,11 +40,22 @@ program main
   old_fps = -1
   y = 1
 
+  call thread_handler_intialization()
+
+  do
+
+    call chunk_generator_new_chunk(x, 1)
+    call chunk_handler_delete_chunk(x, 1)
+
+    call thread_handler_run()
+
+  end do
+
 
   ! !! BEGIN WARNING: This is only to be used for when developing libraries.
-  ! if (.true.) then
-  !   return
-  ! end if
+  if (.true.) then
+    return
+  end if
   ! !! END WARNING.
 
 
