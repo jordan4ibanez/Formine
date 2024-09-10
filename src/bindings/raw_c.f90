@@ -4,6 +4,7 @@ module raw_c
 
 
   public :: c_free
+  public :: malloc_trim
   public :: c_strlen
   public :: print_f
 
@@ -36,6 +37,14 @@ module raw_c
       ! Value because it is const char *
       character(len = 1, kind = c_char), intent(in) :: input_string
     end subroutine internal_print_f
+
+
+    subroutine malloc_trim(i) bind(c, name = "malloc_trim")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: i
+    end subroutine malloc_trim
 
 
   end interface
