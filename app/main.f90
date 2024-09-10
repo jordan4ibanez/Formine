@@ -42,18 +42,33 @@ program main
 
   call thread_handler_intialization()
 
+
+
   do
 
     y = y + 1
 
     if (mod(y, 1000) == 0) then
-      print*,y
+      ! print*,y
     end if
 
-    call chunk_generator_new_chunk(x, 1)
-    call chunk_handler_delete_chunk(x, 1)
+    if (new_fps == 0) then
+      call chunk_generator_new_chunk(x, 1)
+      call chunk_handler_delete_chunk(x, 1)
+      ! else
+      ! position_text_debug = "hi"//int_to_string(y)
+    end if
+
+
 
     call thread_handler_run()
+
+    if (y > 100000) then
+      if (new_fps == 0) then
+        print*,"FINISH DISPATCH"
+      end if
+      new_fps = 1
+    end if
 
   end do
 
