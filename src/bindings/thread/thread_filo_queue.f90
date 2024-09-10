@@ -134,7 +134,7 @@ contains
     integer(c_int) :: status
     type(queue_node), pointer :: next_pointer
 
-    status =  thread_write_lock(this%c_mutex_pointer)
+    status = thread_write_lock(this%c_mutex_pointer)
     !! BEGIN SAFE OPERATION.
 
     some = .false.
@@ -197,7 +197,7 @@ contains
     type(queue_node), pointer :: current, next
     integer(c_int) :: status
 
-    status =  thread_write_lock(this%c_mutex_pointer)
+    status = thread_write_lock(this%c_mutex_pointer)
     !! BEGIN SAFE OPERATION.
 
     if (associated(this%head)) then
@@ -308,7 +308,7 @@ contains
     logical(c_bool) :: empty
     integer(c_int) :: status
 
-    status =  thread_write_lock(this%c_mutex_pointer)
+    status = thread_write_lock(this%c_mutex_pointer)
     !! BEGIN SAFE OPERATION.
 
     empty = this%items == 0
@@ -326,7 +326,7 @@ contains
     integer(c_int) :: item_count
     integer(c_int) :: status
 
-    status =  thread_write_lock(this%c_mutex_pointer)
+    status = thread_write_lock(this%c_mutex_pointer)
     !! BEGIN SAFE OPERATION.
 
     item_count = this%items
