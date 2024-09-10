@@ -211,11 +211,11 @@ contains
 
     !? Transfer main argument pointer to Fortran.
 
-    if (.not. c_associated(c_arg_pointer)) then
-      error stop "[Chunk Mesh] Fatal error: Was passed a null thread_argument pointer."
-    end if
+    ! if (.not. c_associated(c_arg_pointer)) then
+    !   error stop "[Chunk Mesh] Fatal error: Was passed a null thread_argument pointer."
+    ! end if
 
-    call c_f_pointer(c_arg_pointer, arguments)
+    ! call c_f_pointer(c_arg_pointer, arguments)
 
     !? Transfer sent data pointer to Fortran.
 
