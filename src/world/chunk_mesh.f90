@@ -455,10 +455,10 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: x, z, mesh_stack
-    type(chunk_mesh_generator_message), pointer :: message_to_generator
+    ! type(chunk_mesh_generator_message), pointer :: message_to_generator
 
 
-    allocate(message_to_generator)
+    ! allocate(message_to_generator)
 
     ! allocate(message_to_generator%world_position)
 
@@ -503,7 +503,7 @@ contains
     ! deallocate(message_to_generator)
 
     !! NOTE: Something is going wrong with the pointer free here.
-    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator), c_funloc(chunk_mesh_generation_garbage_collector))
+    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_null_ptr, c_null_funptr)!c_loc(message_to_generator), c_funloc(chunk_mesh_generation_garbage_collector))
   end subroutine chunk_mesh_generate
 
 
