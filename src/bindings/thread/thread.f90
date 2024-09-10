@@ -414,9 +414,10 @@ contains
         thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
         thread_arguments(thread_to_use)%sent_data = optional_thread_queue_element_pointer%data_to_send
 
-        !! THIS DOES NOTHING
-        call c_free(optional_thread_queue_element_pointer%data_to_send)
+        function_pointer = new_element%subroutine_pointer
 
+        ! Now clean up the shell.
+        deallocate(new_element)
 
         ! Fire off the thread.
         call thread_process_detached_thread(optional_thread_queue_element_pointer%subroutine_pointer, c_null_ptr, thread_to_use)!c_loc(thread_arguments(thread_to_use)), thread_to_use)
