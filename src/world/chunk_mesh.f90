@@ -435,11 +435,16 @@ contains
 
   !* The GC to free the memory sent to the thread.
   subroutine chunk_mesh_generation_garbage_collector(sent_data)
+    use :: raw_c
     implicit none
 
     type(c_ptr), intent(in), value :: sent_data
+    type(chunk_mesh_generator_message), pointer :: message_to_generator
 
-    print*,"GC RUNNING"
+    call c_f_pointer(sent_data, message_to_generator)
+
+    ! deallocate(message_to_generator)
+    call c_free(sent_data)
   end subroutine chunk_mesh_generation_garbage_collector
 
 
