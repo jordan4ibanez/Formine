@@ -69,6 +69,7 @@ module thread
   type(pthread_t), dimension(:), pointer :: available_threads
   type(thread_argument), dimension(:), pointer :: thread_arguments
   logical(c_bool), dimension(:), pointer :: thread_active
+  type(c_funptr), dimension(:), pointer :: garbage_collectors
 
   type(concurrent_linked_filo_queue) :: master_thread_queue
 
@@ -206,6 +207,8 @@ contains
   subroutine thread_initialize()
     implicit none
 
+    integer(c_int) :: i
+
     THREAD_DETACH = for_p_thread_get_pthread_create_detached_id()
     CPU_THREADS = for_p_thread_get_cpu_threads()
 
@@ -216,6 +219,12 @@ contains
     allocate(thread_arguments(CPU_THREADS))
     allocate(thread_active(CPU_THREADS))
     master_thread_queue = concurrent_linked_filo_queue()
+
+    allocate(garbage_collectors(CPU_THREADS))
+
+    do i = 1,CPU_THREADS
+      garbage_collectors(i) = c_null_funptr
+    end do
   end subroutine thread_initialize
 
 
