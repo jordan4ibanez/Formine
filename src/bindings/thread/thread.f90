@@ -198,7 +198,7 @@ contains
 
 
   !* Queue up a thread to be run.
-  subroutine thread_create_detached(subroutine_procedure_pointer, argument_pointer)
+  subroutine thread_create(subroutine_procedure_pointer, argument_pointer)
     use :: raw_c
     implicit none
 
@@ -208,15 +208,14 @@ contains
 
     allocate(new_element)
     new_element%subroutine_pointer = subroutine_procedure_pointer
-
-    ! new_element%data_to_send = argument_pointer
+    new_element%data_to_send = argument_pointer
 
     call master_thread_queue%push(queue_data(new_element))
-  end subroutine thread_create_detached
+  end subroutine thread_create
 
 
   !* Process all the queued threads limited by cpu threads available.
-  subroutine thread_process_detached_thread_queue()
+  subroutine thread_process_thread_queue()
     use :: raw_c
     implicit none
 
@@ -268,7 +267,7 @@ contains
 
         ! Set the raw data to send.
         thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
-        ! thread_arguments(thread_to_use)%sent_data = new_element%data_to_send
+        thread_arguments(thread_to_use)%sent_data = new_element%data_to_send
 
         function_pointer = new_element%subroutine_pointer
 
@@ -276,13 +275,20 @@ contains
         deallocate(new_element)
 
         ! Fire off the thread.
-        call thread_process_detached_thread(function_pointer, c_loc(thread_arguments(thread_to_use)), thread_to_use)
+        if (available_threads(thread_to_use)%tid /= 0) then
+          call thread_join(available_threads(thread_to_use), c_null_ptr)
+        end if
+
+        available_threads(thread_to_use) = create_joinable(function_pointer, c_loc(thread_arguments(thread_to_use)))
       else
         ! Nothing left to get.
         exit
       end if
     end do
-  end subroutine thread_process_detached_thread_queue
+  end subroutine thread_process_thread_queue
+
+
+
 
 
   !* Simply searches for a free thread to dispatch.
@@ -307,60 +313,19 @@ contains
   end function find_free_thread
 
 
+
+
+
   !* Check if the thread queue is empty.
   !* This is primarily used for debugging.
-  function thread_detached_queue_is_empty() result(is_empty)
+  function thread_queue_is_empty() result(is_empty)
     implicit none
 
     logical(c_bool) :: is_empty
 
     is_empty = master_thread_queue%is_empty()
-  end function thread_detached_queue_is_empty
+  end function thread_queue_is_empty
 
-
-  !* Process a thread and send it into action.
-  subroutine thread_process_detached_thread(subroutine_procedure_pointer, argument_pointer, thread_index) bind(c)
-    use :: string, only: int_to_string
-    implicit none
-
-    type(c_funptr), intent(in), value :: subroutine_procedure_pointer
-    type(c_ptr), intent(in), value :: argument_pointer
-    integer(c_int), intent(in), value :: thread_index
-    type(pthread_t) :: new_detached_thread
-    type(pthread_attr_t) :: thread_attributes
-    integer(c_int) :: status
-
-    thread_attributes = allocate_raw_pthread_attr_t()
-    status = internal_pthread_attr_init(c_loc(thread_attributes%raw_data_pointer))
-
-    if (status /= THREAD_OK) then
-      error stop "[Thread] Error: Failed to create a thread attribute. Error status: ["//int_to_string(status)//"]"
-    end if
-
-    status = internal_pthread_attr_setdetachstate(c_loc(thread_attributes%raw_data_pointer), THREAD_DETACH)
-
-    if (status /= THREAD_OK) then
-      error stop "[Thread] Error: Failed to set thread attribute [detachstate]. Error status: ["//int_to_string(status)//"]"
-    end if
-
-    available_threads(thread_index) = new_detached_thread
-
-    status = internal_pthread_create(available_threads(thread_index), c_loc(thread_attributes%raw_data_pointer), subroutine_procedure_pointer, argument_pointer)
-
-    if (status /= THREAD_OK) then
-      error stop "[Thread] Error: Failed to create a detached thread. Error status: ["//int_to_string(status)//"]"
-    end if
-
-    ! Clean up attribute data.
-    status = internal_pthread_attr_destroy(c_loc(thread_attributes%raw_data_pointer))
-
-    if (status /= THREAD_OK) then
-      error stop "[Thread] Error: Failed to destroy a detached thread. Error status: ["//int_to_string(status)//"]"
-    end if
-
-    deallocate(thread_attributes%raw_data_pointer)
-
-  end subroutine thread_process_detached_thread
 
 
   !* And the end of the program, wait for all threads to complete until continuing.
@@ -384,6 +349,28 @@ contains
 
     still_processing = .false.
   end function thread_await_all_thread_completion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   !! EXAMPLE ONLY !!
