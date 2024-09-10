@@ -413,6 +413,32 @@ contains
   end subroutine thread_process_detached_thread_queue
 
 
+  subroutine process_garbage_collector(index)
+    implicit none
+
+    integer(c_int), intent(in), value :: index
+    integer(c_int) :: status
+    procedure(thread_garbage_collector_c_interface), pointer :: subroutine_to_run
+    type(c_funptr) :: raw_c_pointer
+
+    status = thread_write_lock(c_loc(module_mutex))
+
+    raw_c_pointer = garbage_collectors(index)
+
+    ! Has already been processed or not assigned.
+    if (.not. c_associated(raw_c_pointer)) then
+      status = thread_unlock_lock(c_loc(module_mutex))
+      return
+    end if
+
+    call c_f_procpointer(raw_c_pointer, subroutine_to_run)
+
+    call subroutine_to_run(thread_arguments(index)%sent_data)
+
+    status = thread_unlock_lock(c_loc(module_mutex))
+  end subroutine process_garbage_collector
+
+
   !* Simply searches for a free thread to dispatch.
   !* This is a very naive implementation.
   function find_free_thread() result(thread_index)
