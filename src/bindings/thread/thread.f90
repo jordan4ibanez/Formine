@@ -340,6 +340,7 @@ contains
 
   !* Queue up a thread to be run.
   subroutine thread_create_detached(subroutine_procedure_pointer, argument_pointer, thread_garbage_collector)
+    use :: raw_c
     implicit none
 
     type(c_funptr), intent(in), value :: subroutine_procedure_pointer, thread_garbage_collector
@@ -357,6 +358,7 @@ contains
 
   !* Process all the queued threads limited by cpu threads available.
   subroutine thread_process_detached_thread_queue()
+    use :: raw_c
     implicit none
 
     integer(c_int) :: queue_size, i, thread_to_use, status
@@ -393,7 +395,7 @@ contains
         end select
 
         ! Clean up old data using old garbage collector subroutine.
-        call process_garbage_collector(thread_to_use)
+        ! call process_garbage_collector(thread_to_use)
 
         ! Set the completion flag.
         status = thread_write_lock(c_loc(module_mutex))
@@ -405,13 +407,15 @@ contains
 
         ! Set the raw data to send.
         thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
-        thread_arguments(thread_to_use)%sent_data = optional_thread_queue_element_pointer%data_to_send
+        ! thread_arguments(thread_to_use)%sent_data = optional_thread_queue_element_pointer%data_to_send
+
+        call c_free(optional_thread_queue_element_pointer%data_to_send)
 
         ! Set the garbage collector subroutine to use.
-        garbage_collectors(thread_to_use) = optional_thread_queue_element_pointer%garbage_collector
+        ! garbage_collectors(thread_to_use) = optional_thread_queue_element_pointer%garbage_collector
 
         ! Fire off the thread.
-        call thread_process_detached_thread(optional_thread_queue_element_pointer%subroutine_pointer, c_loc(thread_arguments(thread_to_use)), thread_to_use)
+        ! call thread_process_detached_thread(optional_thread_queue_element_pointer%subroutine_pointer, c_null_ptr, thread_to_use)!c_loc(thread_arguments(thread_to_use)), thread_to_use)
 
         ! Now clean up the shell.
         deallocate(optional_thread_queue_element_pointer)
