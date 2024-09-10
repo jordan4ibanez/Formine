@@ -408,7 +408,7 @@ contains
 
         ! Set the raw data to send.
         thread_arguments(thread_to_use)%active_flag => thread_active(thread_to_use)
-        thread_arguments(thread_to_use)%sent_data = optional_thread_queue_element_pointer%data_to_send
+        ! thread_arguments(thread_to_use)%sent_data = new_element%data_to_send
 
         function_pointer = new_element%subroutine_pointer
 
@@ -416,10 +416,7 @@ contains
         deallocate(new_element)
 
         ! Fire off the thread.
-        call thread_process_detached_thread(optional_thread_queue_element_pointer%subroutine_pointer, c_null_ptr, thread_to_use)!c_loc(thread_arguments(thread_to_use)), thread_to_use)
-
-        ! Now clean up the shell.
-        deallocate(optional_thread_queue_element_pointer)
+        call thread_process_detached_thread(function_pointer, c_loc(thread_arguments(thread_to_use)), thread_to_use)
       else
         ! Nothing left to get.
         exit
