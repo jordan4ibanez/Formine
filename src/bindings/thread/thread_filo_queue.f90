@@ -184,8 +184,6 @@ contains
       this%tail => null()
     end if
 
-    call malloc_trim(0)
-
     !! END SAFE OPERATION.
     status = thread_unlock_lock(this%c_mutex_pointer)
   end function concurrent_linked_filo_queue_pop
