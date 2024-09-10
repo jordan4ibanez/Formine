@@ -200,7 +200,7 @@ contains
     !? Working variables.
     integer(c_int) :: status
     ! type(texture_rectangle), pointer :: tr_pointer
-    ! Written like this to denote the multiplicative each should have.
+    ! ! Written like this to denote the multiplicative each should have.
     ! real(c_float), dimension(12), allocatable :: positions(:)
     ! real(c_float), dimension(8), allocatable :: texture_coordinates(:)
     ! real(c_float), dimension(12), allocatable :: colors(:)
@@ -211,19 +211,21 @@ contains
 
     !? Transfer main argument pointer to Fortran.
 
-    ! if (.not. c_associated(c_arg_pointer)) then
-    !   error stop "[Chunk Mesh] Fatal error: Was passed a null thread_argument pointer."
-    ! end if
+    if (.not. c_associated(c_arg_pointer)) then
+      error stop "[Chunk Mesh] Fatal error: Was passed a null thread_argument pointer."
+    end if
 
-    ! call c_f_pointer(c_arg_pointer, arguments)
+    call c_f_pointer(c_arg_pointer, arguments)
 
     !? Transfer sent data pointer to Fortran.
 
-    ! if (.not. c_associated(arguments%sent_data)) then
-    !   error stop "[Chunk Mesh] Fatal error: Was passed a null sent_data pointer."
-    ! end if
+    if (.not. c_associated(arguments%sent_data)) then
+      error stop "[Chunk Mesh] Fatal error: Was passed a null sent_data pointer."
+    end if
 
-    ! call c_f_pointer(arguments%sent_data, generator_message)
+    call c_f_pointer(arguments%sent_data, generator_message)
+
+    deallocate(generator_message)
 
     !? Ensure required components are present.
 
@@ -455,10 +457,10 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: x, z, mesh_stack
-    ! type(chunk_mesh_generator_message), pointer :: message_to_generator
+    type(chunk_mesh_generator_message), pointer :: message_to_generator
 
 
-    ! allocate(message_to_generator)
+    allocate(message_to_generator)
 
     ! allocate(message_to_generator%world_position)
 
@@ -502,7 +504,7 @@ contains
 
     ! deallocate(message_to_generator)
 
-    call thread_create_detached(c_funloc(chunk_mesh_generation_thread), c_null_ptr)
+    call thread_create(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator))
   end subroutine chunk_mesh_generate
 
 
