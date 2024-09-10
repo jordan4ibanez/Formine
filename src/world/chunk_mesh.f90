@@ -235,13 +235,13 @@ contains
       error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
     end if
 
-    ! if (.not. associated(generator_message%texture_indices)) then
-    !   error stop "[Chunk Mesh] {thread} error: Texture indices is a null pointer."
-    ! end if
+    if (.not. associated(generator_message%texture_indices)) then
+      error stop "[Chunk Mesh] {thread} error: Texture indices is a null pointer."
+    end if
 
-    ! if (.not. associated(generator_message%texture_positions_array)) then
-    !   error stop "[Chunk Mesh] {thread} error: Texture positions array is a null pointer."
-    ! end if
+    if (.not. associated(generator_message%texture_positions_array)) then
+      error stop "[Chunk Mesh] {thread} error: Texture positions array is a null pointer."
+    end if
 
     if (generator_message%texture_count <= 0) then
       error stop "[Chunk Mesh] {thread} error: Texture count is 0 or less."
