@@ -22,7 +22,7 @@ contains
   subroutine thread_handler_run()
     implicit none
 
-    call thread_process_detached_thread_queue()
+    call thread_process_thread_queue()
     call chunk_mesh_handle_output_queue()
   end subroutine thread_handler_run
 
