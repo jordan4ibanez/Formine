@@ -382,7 +382,7 @@ contains
 
       !? Push it into the queue.
 
-
+      !? Deallocation example.
       deallocate(output_message%world_position)
       deallocate(output_message%positions)
       deallocate(output_message%texture_coordinates)
