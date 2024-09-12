@@ -1,4 +1,4 @@
-module thread_filo_queue
+module thread_filo_queue_linked
   use :: thread_types
   use :: thread_mutex
   use, intrinsic :: iso_c_binding
@@ -9,16 +9,6 @@ module thread_filo_queue
 
 
   public :: concurrent_linked_filo_queue
-
-
-  integer(c_int), parameter :: QUEUE_NONE = 0
-  integer(c_int), parameter :: QUEUE_I32 = 1
-  integer(c_int), parameter :: QUEUE_I64 = 2
-  integer(c_int), parameter :: QUEUE_F32 = 3
-  integer(c_int), parameter :: QUEUE_F64 = 4
-  integer(c_int), parameter :: QUEUE_BOOL = 5
-  integer(c_int), parameter :: QUEUE_STRING = 6
-  integer(c_int), parameter :: QUEUE_GENERIC = 7
 
   type :: queue_node
     class(queue_node), pointer :: next => null()
@@ -220,4 +210,4 @@ contains
   end function concurrent_linked_filo_queue_get_size
 
 
-end module thread_filo_queue
+end module thread_filo_queue_linked
