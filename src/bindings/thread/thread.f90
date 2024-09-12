@@ -1,7 +1,7 @@
 module thread
   use :: thread_types
   use :: thread_mutex
-  use :: thread_filo_queue
+  use :: thread_filo_queue_linked
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -139,20 +139,6 @@ contains
 
     master_thread_queue = concurrent_linked_filo_queue()
   end subroutine thread_initialize
-
-
-  !* Destroy a mutex pointer.
-  subroutine thread_destroy_mutex_pointer(input_mutex_pointer)
-    implicit none
-
-    type(mutex_rwlock), intent(inout), pointer :: input_mutex_pointer
-    integer(c_int) :: status
-
-    status = internal_pthread_rwlock_destroy(c_loc(input_mutex_pointer), c_null_ptr)
-
-    deallocate(input_mutex_pointer%raw_data_pointer)
-    deallocate(input_mutex_pointer)
-  end subroutine thread_destroy_mutex_pointer
 
 
   !* Create a new joinable thread.
