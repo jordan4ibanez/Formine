@@ -381,16 +381,7 @@ contains
       output_message%mesh_stack = generator_message%mesh_stack
 
       !? Push it into the queue.
-
-      !? Deallocation example.
-      deallocate(output_message%world_position)
-      deallocate(output_message%positions)
-      deallocate(output_message%texture_coordinates)
-      deallocate(output_message%colors)
-      deallocate(output_message%indices)
-      deallocate(output_message)
-
-      !   ! call thread_output_queue%push(queue_data(output_message))
+      call thread_output_queue%push(output_message)
     end if
 
     deallocate(positions)
