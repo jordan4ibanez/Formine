@@ -29,7 +29,7 @@ contains
 
     call chunk_generator_process_output_queue()
 
-    call chunk_mesh_handle_output_queue()
+    call chunk_mesh_process_output_queue()
   end subroutine thread_handler_run
 
 

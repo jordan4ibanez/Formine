@@ -108,7 +108,7 @@ module chunk_mesh
 
 
   public :: chunk_mesh_initialize
-  public :: chunk_mesh_handle_output_queue
+  public :: chunk_mesh_process_output_queue
   public :: chunk_mesh_generate
 
 
@@ -164,8 +164,8 @@ contains
   end subroutine chunk_mesh_initialize
 
 
-  !* Handle output from the thread output queue.
-  subroutine chunk_mesh_handle_output_queue()
+  !* Process output from the thread output queue.
+  subroutine chunk_mesh_process_output_queue()
     implicit none
 
     integer(c_int) :: i, total
@@ -204,7 +204,7 @@ contains
       deallocate(new_message)
 
     end do
-  end subroutine chunk_mesh_handle_output_queue
+  end subroutine chunk_mesh_process_output_queue
 
 
   !* This is the function which runs in the thread to actually generate chunk meshes.
