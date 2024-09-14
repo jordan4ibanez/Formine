@@ -111,6 +111,29 @@ module chunk_mesh
   public :: chunk_mesh_handle_output_queue
   public :: chunk_mesh_generate
 
+  !* The data that will get sent to the chunk mesh generator.
+  type :: chunk_mesh_generator_message
+    !* The position in the world in which the chunk resides.
+    type(vec2i), pointer :: world_position => null()
+    !* Current chunk.
+    type(memory_chunk), pointer :: current => null()
+    !* Neighbor: -X
+    type(memory_chunk), pointer :: left => null()
+    !* Neighbor: +X
+    type(memory_chunk), pointer :: right => null()
+    !* Neighbor: -Z
+    type(memory_chunk), pointer :: back => null()
+    !* Neighbor: +Z
+    type(memory_chunk), pointer :: front => null()
+    !* Pointer of texture indices into the positions array.
+    integer(c_int), dimension(6,0), pointer :: texture_indices(:, :)
+    !* Texture positions array.
+    type(texture_rectangle), dimension(:), pointer :: texture_positions_array
+    !* Total number of textures.
+    integer(c_int) :: texture_count = 0
+    !* Which stack portion to generate.
+    integer(c_int) :: mesh_stack = -1
+  end type chunk_mesh_generator_message
 
   type :: message_from_mesh_generator
     type(vec2i), pointer :: world_position
