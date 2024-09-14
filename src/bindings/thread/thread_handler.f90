@@ -1,5 +1,6 @@
 module thread_handler
   use :: thread
+  use :: chunk_generator
   use :: chunk_mesh
   implicit none
 
@@ -13,6 +14,8 @@ contains
     implicit none
 
     call thread_initialize()
+
+    call chunk_generator_initialize()
 
     call chunk_mesh_initialize()
   end subroutine thread_handler_intialization

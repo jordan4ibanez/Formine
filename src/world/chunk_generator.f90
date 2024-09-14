@@ -10,7 +10,7 @@ module chunk_generator
 
   private
 
-
+  public :: chunk_generator_initialize
   public :: chunk_generator_new_chunk
 
 
@@ -24,7 +24,17 @@ module chunk_generator
   end type message_from_thread
 
 
+  type(concurrent_linked_filo_queue) :: thread_output_queue
+
+
 contains
+
+
+  subroutine chunk_generator_initialize()
+    implicit none
+
+    thread_output_queue = concurrent_linked_filo_queue()
+  end subroutine chunk_generator_initialize
 
 
   recursive function chunk_generator_thread(c_arg_pointer) result(void_pointer) bind(c)
@@ -62,8 +72,6 @@ contains
 
     !? Since this is quite a simple message, we will deallocate it right away.
     deallocate(generator_message)
-
-    print*,chunk_x, chunk_z
 
     chunk_pointer => memory_chunk(chunk_x, chunk_z)
 
