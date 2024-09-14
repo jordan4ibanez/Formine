@@ -7,6 +7,7 @@ module chunk_handler
   private
 
 
+  public :: chunk_handler_set_chunk_mesh
   public :: chunk_handler_store_chunk_pointer
   public :: chunk_handler_delete_chunk
   public :: chunk_handler_get_chunk_pointer
@@ -19,6 +20,20 @@ module chunk_handler
 
 
 contains
+
+
+  !* Sets the chunk mesh in the chunk's stack array.
+  subroutine chunk_handler_set_chunk_mesh(x, z, stack, mesh_id)
+    implicit none
+
+    integer(c_int), intent(in), value :: x, z, stack
+    character(len = *, kind = c_char), intent(in) :: mesh_id
+    type(memory_chunk), pointer :: current_chunk
+
+    current_chunk => chunk_handler_get_chunk_pointer(x,z)
+
+    current_chunk%mesh(stack) = mesh_id
+  end subroutine chunk_handler_set_chunk_mesh
 
 
   !* Store a chunk pointer into the database.
