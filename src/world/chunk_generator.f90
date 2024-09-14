@@ -12,6 +12,12 @@ module chunk_generator
   public :: chunk_generator_new_chunk
 
 
+  type :: message_to_thread
+    integer(c_int) :: x
+    integer(c_int) :: z
+  end type message_to_thread
+
+
 contains
 
 
