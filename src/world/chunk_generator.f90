@@ -2,6 +2,7 @@ module chunk_generator
   use :: string
   use :: chunk_mesh
   use :: chunk_data
+  use :: chunk_handler
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -25,7 +26,7 @@ module chunk_generator
 contains
 
 
-  recursive function chunk_generator_new_chunk(chunk_x, chunk_z) result(void_pointer) bind(c)
+  recursive function chunk_generator_thread(chunk_x, chunk_z) result(void_pointer) bind(c)
     use :: fast_noise_lite
     use :: chunk_handler
     implicit none
@@ -63,14 +64,26 @@ contains
       end do
     end do
 
-    call chunk_handler_store_chunk_pointer(chunk_pointer)
+    !todo: make this work in the queue processor.
+
+    ! call chunk_handler_store_chunk_pointer(chunk_pointer)
 
 
-    do i = 1,MESH_STACK_ARRAY_SIZE
-      chunk_pointer%mesh(i) = ""
-      call chunk_mesh_generate(chunk_x, chunk_z, i)
-    end do
-  end function chunk_generator_new_chunk
+    ! do i = 1,MESH_STACK_ARRAY_SIZE
+    !   chunk_pointer%mesh(i) = ""
+    !   call chunk_mesh_generate(chunk_x, chunk_z, i)
+    ! end do
+  end function chunk_generator_thread
 
+
+  !* Queue up a chunk to be generated.
+  subroutine chunk_generator_new_chunk(x, z)
+    implicit none
+
+    integer(c_int), intent(in), value :: x, z
+
+
+
+  end subroutine chunk_generator_new_chunk
 
 end module chunk_generator
