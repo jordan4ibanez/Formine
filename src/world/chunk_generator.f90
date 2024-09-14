@@ -40,6 +40,22 @@ contains
   end subroutine chunk_generator_initialize
 
 
+  subroutine chunk_generator_process_output_queue()
+    implicit none
+
+    !todo: make this work in the queue processor.
+
+    ! call chunk_handler_store_chunk_pointer(chunk_pointer)
+
+
+    ! do i = 1,MESH_STACK_ARRAY_SIZE
+    !   chunk_pointer%mesh(i) = ""
+    !   call chunk_mesh_generate(chunk_x, chunk_z, i)
+    ! end do
+
+  end subroutine chunk_generator_process_output_queue
+
+
   recursive function chunk_generator_thread(c_arg_pointer) result(void_pointer) bind(c)
     use :: fast_noise_lite
     use :: chunk_handler
@@ -53,6 +69,7 @@ contains
     integer(c_int) :: chunk_x, chunk_z, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, i, status
     type(memory_chunk), pointer :: chunk_pointer
     type(block_data) :: current_block
+    type(message_from_thread), pointer :: output_message
 
     !? Transfer main argument pointer to Fortran.
 
@@ -102,17 +119,13 @@ contains
       end do
     end do
 
-    !todo: make this work in the queue processor.
+    !? Finally, push the message to the queue.
+    allocate(output_message)
+    output_message%data => chunk_pointer
 
-    ! call chunk_handler_store_chunk_pointer(chunk_pointer)
+    call thread_output_queue%push(output_message)
 
-
-    ! do i = 1,MESH_STACK_ARRAY_SIZE
-    !   chunk_pointer%mesh(i) = ""
-    !   call chunk_mesh_generate(chunk_x, chunk_z, i)
-    ! end do
-
-    !? Flag that this thread is complete.
+    !? Flag thread as complete.
     status = thread_write_lock(arguments%mutex_pointer)
 
     void_pointer = c_null_ptr
