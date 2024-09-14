@@ -13,22 +13,26 @@ module chunk_generator
 
 
   type :: message_to_thread
-    integer(c_int) :: x
-    integer(c_int) :: z
+    integer(c_int) :: x = 0
+    integer(c_int) :: z = 0
   end type message_to_thread
+
+  type :: message_from_thread
+    type(memory_chunk), pointer :: data => null()
+  end type message_from_thread
 
 
 contains
 
 
-  subroutine chunk_generator_new_chunk(chunk_x, chunk_z)
+  recursive function chunk_generator_new_chunk(chunk_x, chunk_z) result(void_pointer) bind(c)
     use :: fast_noise_lite
     use :: chunk_handler
     implicit none
 
     integer(c_int), intent(in), value :: chunk_x, chunk_z
+    type(c_ptr) :: void_pointer
     type(fnl_state) :: noise_state
-
     integer(c_int) :: x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, i
     type(memory_chunk), pointer :: chunk_pointer
     type(block_data) :: current_block
@@ -66,7 +70,7 @@ contains
       chunk_pointer%mesh(i) = ""
       call chunk_mesh_generate(chunk_x, chunk_z, i)
     end do
-  end subroutine chunk_generator_new_chunk
+  end function chunk_generator_new_chunk
 
 
 end module chunk_generator
