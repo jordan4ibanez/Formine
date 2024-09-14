@@ -31,51 +31,14 @@ program main
   real(c_float) :: floating_font_size
 
   character(len = :, kind = c_char), allocatable :: position_text_debug
-  integer(c_int) :: y, new_fps, old_fps, x, i
+  integer(c_int) :: y, new_fps, old_fps, x
   ! logical(c_bool) :: testing_bool
   ! character(len = :, kind = c_char), pointer :: test_data
   ! integer(c_int), pointer :: test_data
 
-
   new_fps = 0
   old_fps = -1
   y = 0
-
-  ! call thread_handler_intialization()
-
-
-
-  ! do
-
-  !   y = y + 1
-
-  !   if (mod(y, 1000) == 0) then
-  !     ! print*,y
-  !   end if
-
-  !   if (new_fps == 0) then
-  !     call chunk_generator_new_chunk(x, 1)
-  !     call chunk_handler_delete_chunk(x, 1)
-  !     ! else
-  !     ! position_text_debug = "hi"//int_to_string(y)
-  !   end if
-
-
-
-  !   call thread_handler_run()
-
-  !   call malloc_trim(0)
-
-  !   if (y > 100000) then
-  !     if (new_fps == 0) then
-  !       print*,"FINISH DISPATCH"
-
-  !     end if
-  !     new_fps = 1
-  !   end if
-
-  ! end do
-
 
   ! !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
@@ -164,31 +127,22 @@ program main
 
 
   ! print*,"START"
-  ! do x = -5,5
-  !   do y = -5,5
-  !     call chunk_generator_new_chunk(x,y)
-  !   end do
-  ! end do
+  do x = -5,5
+    do y = -5,5
+      ! This launches 8 threads.
+      call chunk_generator_new_chunk(x,y)
+    end do
+  end do
   ! print*,"END"
 
   rotation = 0.0
 
   ! Move the camera back.
   ! call camera_set_position_f32(0.0, 0.0, -3.0)
-  x = 0
 
   !! This is debugging for functions!
   if (.true.) then
     do while(.not. glfw_window_should_close())
-
-
-
-      ! This launches 8 threads.
-      call chunk_generator_new_chunk(x, 1)
-      call chunk_handler_delete_chunk(x, 1)
-
-      x = x + 1
-
 
       call delta_tick()
 
