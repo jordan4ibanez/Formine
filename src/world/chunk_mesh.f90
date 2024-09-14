@@ -111,8 +111,8 @@ module chunk_mesh
   public :: chunk_mesh_handle_output_queue
   public :: chunk_mesh_generate
 
-  !* The data that will get sent to the chunk mesh generator.
-  type :: chunk_mesh_generator_message
+  !* The data that will get sent to the chunk mesh generator threads.
+  type :: message_to_thread
     !* The position in the world in which the chunk resides.
     type(vec2i), pointer :: world_position => null()
     !* Current chunk.
@@ -133,16 +133,18 @@ module chunk_mesh
     integer(c_int) :: texture_count = 0
     !* Which stack portion to generate.
     integer(c_int) :: mesh_stack = -1
-  end type chunk_mesh_generator_message
+  end type message_to_thread
 
-  type :: message_from_mesh_generator
+
+  !* The data sent from the chunk mesh generator threads.
+  type :: message_from_thread
     type(vec2i), pointer :: world_position
     real(c_float), dimension(12), pointer :: positions(:)
     real(c_float), dimension(8), pointer :: texture_coordinates(:)
     real(c_float), dimension(12), pointer :: colors(:)
     integer(c_int), dimension(6), pointer :: indices(:)
     integer(c_int) :: mesh_stack
-  end type message_from_mesh_generator
+  end type message_from_thread
 
 
   type(concurrent_linked_filo_queue) :: thread_output_queue
@@ -167,7 +169,7 @@ contains
 
     integer(c_int) :: i, total
     class(*), pointer :: generic_pointer
-    type(message_from_mesh_generator), pointer :: new_message
+    type(message_from_thread), pointer :: new_message
     character(len = :, kind = c_char), allocatable :: mesh_id
 
 
@@ -179,7 +181,7 @@ contains
       end if
 
       select type(generic_pointer)
-       type is (message_from_mesh_generator)
+       type is (message_from_thread)
         new_message => generic_pointer
        class default
         error stop "[Chunk Mesh] Error: Wrong type in queue."
@@ -213,7 +215,7 @@ contains
     type(c_ptr), intent(in), value :: c_arg_pointer
     type(c_ptr) :: void_pointer
     type(thread_argument), pointer :: arguments
-    type(chunk_mesh_generator_message), pointer :: generator_message
+    type(message_to_thread), pointer :: generator_message
     !? Working variables.
     integer(c_int) :: status
     type(texture_rectangle), pointer :: tr_pointer
@@ -224,7 +226,7 @@ contains
     integer(c_int), dimension(6), allocatable :: indices(:)
     integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y, current_rect_index
     type(vec3i) :: direction, pos, trajectory, offset
-    type(message_from_mesh_generator), pointer :: output_message
+    type(message_from_thread), pointer :: output_message
 
     !? Transfer main argument pointer to Fortran.
 
@@ -447,7 +449,7 @@ contains
     implicit none
 
     type(c_ptr), intent(in), value :: sent_data
-    type(chunk_mesh_generator_message), pointer :: message_to_generator
+    type(message_to_thread), pointer :: message_to_generator
 
     call c_f_pointer(sent_data, message_to_generator)
 
@@ -463,7 +465,7 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: x, z, mesh_stack
-    type(chunk_mesh_generator_message), pointer :: message_to_generator
+    type(message_to_thread), pointer :: message_to_generator
 
 
     allocate(message_to_generator)
