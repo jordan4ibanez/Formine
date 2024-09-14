@@ -435,6 +435,7 @@ contains
 
     deallocate(generator_message)
 
+    !? Flag that this thread is complete.
     status = thread_write_lock(arguments%mutex_pointer)
 
     void_pointer = c_null_ptr
