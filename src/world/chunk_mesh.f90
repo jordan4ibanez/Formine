@@ -166,6 +166,8 @@ contains
 
       call mesh_create_3d(mesh_id, new_message%positions, new_message%texture_coordinates, new_message%colors, new_message%indices)
 
+      call chunk_handler_set_chunk_mesh(new_message%world_position%x, new_message%world_position%y, new_message%mesh_stack, mesh_id)
+
       !? This is running through the main thread so we can free it now.
 
       deallocate(new_message%world_position)
