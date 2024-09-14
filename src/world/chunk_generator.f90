@@ -27,17 +27,43 @@ module chunk_generator
 contains
 
 
-  recursive function chunk_generator_thread(chunk_x, chunk_z) result(void_pointer) bind(c)
+  recursive function chunk_generator_thread(c_arg_pointer) result(void_pointer) bind(c)
     use :: fast_noise_lite
     use :: chunk_handler
     implicit none
 
-    integer(c_int), intent(in), value :: chunk_x, chunk_z
+    type(c_ptr), intent(in), value :: c_arg_pointer
     type(c_ptr) :: void_pointer
+    type(thread_argument), pointer :: arguments
+    type(message_to_thread), pointer :: generator_message
     type(fnl_state) :: noise_state
-    integer(c_int) :: x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, i
+    integer(c_int) :: chunk_x, chunk_z, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, i, status
     type(memory_chunk), pointer :: chunk_pointer
     type(block_data) :: current_block
+
+    !? Transfer main argument pointer to Fortran.
+
+    if (.not. c_associated(c_arg_pointer)) then
+      error stop "[Chunk Mesh] Fatal error: Was passed a null thread_argument pointer."
+    end if
+
+    call c_f_pointer(c_arg_pointer, arguments)
+
+    !? Transfer sent data pointer to Fortran.
+
+    if (.not. c_associated(arguments%data)) then
+      error stop "[Chunk Mesh] Fatal error: Was passed a null sent_data pointer."
+    end if
+
+    call c_f_pointer(arguments%data, generator_message)
+
+    chunk_x = generator_message%x
+    chunk_z = generator_message%z
+
+    !? Since this is quite a simple message, we will deallocate it right away.
+    deallocate(generator_message)
+
+    print*,chunk_x, chunk_z
 
     chunk_pointer => memory_chunk(chunk_x, chunk_z)
 
@@ -74,6 +100,14 @@ contains
     !   chunk_pointer%mesh(i) = ""
     !   call chunk_mesh_generate(chunk_x, chunk_z, i)
     ! end do
+
+    !? Flag that this thread is complete.
+    status = thread_write_lock(arguments%mutex_pointer)
+
+    void_pointer = c_null_ptr
+    arguments%active_flag = .false.
+
+    status = thread_unlock_lock(arguments%mutex_pointer)
   end function chunk_generator_thread
 
 
@@ -90,7 +124,6 @@ contains
     message%z = z
 
     call thread_create(c_funloc(chunk_generator_thread), c_loc(message))
-
   end subroutine chunk_generator_new_chunk
 
 end module chunk_generator
