@@ -459,7 +459,6 @@ contains
   end subroutine chunk_mesh_generation_garbage_collector
 
 
-
   !* Queue up a chunk mesh generation call.
   subroutine chunk_mesh_generate(x,z, mesh_stack)
     use :: string

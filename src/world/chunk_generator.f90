@@ -3,6 +3,7 @@ module chunk_generator
   use :: chunk_mesh
   use :: chunk_data
   use :: chunk_handler
+  use :: thread
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -81,8 +82,14 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: x, z
+    type(message_to_thread), pointer :: message
 
+    allocate(message)
 
+    message%x = x
+    message%z = z
+
+    call thread_create(c_funloc(chunk_generator_thread), c_loc(message))
 
   end subroutine chunk_generator_new_chunk
 
