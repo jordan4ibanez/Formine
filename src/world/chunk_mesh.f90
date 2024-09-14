@@ -145,6 +145,7 @@ contains
     integer(c_int) :: i, total
     class(*), pointer :: generic_pointer
     type(message_from_mesh_generator), pointer :: new_message
+    character(len = :, kind = c_char), allocatable :: mesh_id
 
 
     do i = 1,queue_pop_limit
@@ -161,8 +162,11 @@ contains
         error stop "[Chunk Mesh] Error: Wrong type in queue."
       end select
 
+      mesh_id = "mesh_stack_"//int_to_string(new_message%world_position%x)//"_"//int_to_string(new_message%world_position%y)//"_"//int_to_string(new_message%mesh_stack)
 
-      !! This shall go at the end of this loop to free all passed through memory.
+      call mesh_create_3d(mesh_id, new_message%positions, new_message%texture_coordinates, new_message%colors, new_message%indices)
+
+      !? This is running through the main thread so we can free it now.
 
       deallocate(new_message%world_position)
       deallocate(new_message%positions)
@@ -170,20 +174,8 @@ contains
       deallocate(new_message%colors)
       deallocate(new_message%indices)
       deallocate(new_message)
+
     end do
-
-    ! if (total > 0) then
-    !   print*,total
-    ! end if
-
-
-
-    !! fixme: this should be passing it back into a concurrent FILO queue.
-
-    ! mesh_id = "mesh_stack_"//int_to_string(chunk_pointer%world_position%x)//"_"//int_to_string(chunk_pointer%world_position%y)//"_"//int_to_string(mesh_stack)
-
-    ! call mesh_create_3d(mesh_id, positions, texture_coordinates, colors, indices)
-
   end subroutine chunk_mesh_handle_output_queue
 
 
