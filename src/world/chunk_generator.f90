@@ -11,6 +11,7 @@ module chunk_generator
   private
 
   public :: chunk_generator_initialize
+  public :: chunk_generator_process_output_queue
   public :: chunk_generator_new_chunk
 
 

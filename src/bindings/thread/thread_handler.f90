@@ -26,6 +26,9 @@ contains
     implicit none
 
     call thread_process_thread_queue()
+
+    call chunk_generator_process_output_queue()
+
     call chunk_mesh_handle_output_queue()
   end subroutine thread_handler_run
 
