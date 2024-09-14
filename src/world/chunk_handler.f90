@@ -1,5 +1,6 @@
 module chunk_handler
   use :: chunk_data
+  use :: mesh
   use :: fhash, only: fhash_tbl_t, key => fhash_key, fhash_key_char_t
   implicit none
 
@@ -32,9 +33,12 @@ contains
 
     current_chunk => chunk_handler_get_chunk_pointer(x,z)
 
-    current_chunk%mesh(stack) = mesh_id
+    ! Clean up the old chunk mesh.
+    if (current_chunk%mesh(stack)%get_pointer() /= "") then
+      call mesh_delete(current_chunk%mesh(stack)%get_pointer())
+    end if
 
-    print*,"set",x,z,stack,mesh_id
+    current_chunk%mesh(stack) = mesh_id
   end subroutine chunk_handler_set_chunk_mesh
 
 
