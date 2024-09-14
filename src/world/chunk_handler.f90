@@ -191,7 +191,7 @@ contains
       do i = 1,MESH_STACK_ARRAY_SIZE
         current_mesh_id => chunk%mesh(i)%get_pointer()
 
-        if (current_mesh_id == "") then
+        if (.not. associated(current_mesh_id) .or. current_mesh_id == "") then
           cycle
         end if
 
