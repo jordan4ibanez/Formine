@@ -335,7 +335,7 @@ contains
               1.0, 1.0, 1.0 &
               /)
 
-            ! ! I love Fortran's array intrinsics.
+            ! I love Fortran's array intrinsics.
             i_index = (current_offset * 6) + 1
             indices(i_index:i_index + 5) = (BASE_INDICES + (4 * current_offset))
 
