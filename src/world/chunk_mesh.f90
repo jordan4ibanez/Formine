@@ -111,6 +111,7 @@ module chunk_mesh
   public :: chunk_mesh_handle_output_queue
   public :: chunk_mesh_generate
 
+
   !* The data that will get sent to the chunk mesh generator threads.
   type :: message_to_thread
     !* The position in the world in which the chunk resides.
