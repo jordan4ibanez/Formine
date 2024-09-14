@@ -33,6 +33,8 @@ contains
     current_chunk => chunk_handler_get_chunk_pointer(x,z)
 
     current_chunk%mesh(stack) = mesh_id
+
+    print*,"set",x,z,stack,mesh_id
   end subroutine chunk_handler_set_chunk_mesh
 
 
