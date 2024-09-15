@@ -188,7 +188,6 @@ contains
     !    type is (memory_chunk)
     !     chunk => generic_data
     !    class default
-    !     error stop
     !     error stop "[Chunk Handler] Error: The wrong type was inserted into the database."
     !   end select
 
