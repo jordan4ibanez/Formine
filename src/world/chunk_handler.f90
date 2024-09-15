@@ -184,30 +184,30 @@ contains
     iterator = fhash_iter_t(chunk_database)
 
     do while(iterator%next(generic_key, generic_data))
-      select type(generic_data)
-       type is (memory_chunk)
-        chunk => generic_data
-       class default
-        error stop
-        error stop "[Chunk Handler] Error: The wrong type was inserted into the database."
-      end select
+    !   select type(generic_data)
+    !    type is (memory_chunk)
+    !     chunk => generic_data
+    !    class default
+    !     error stop
+    !     error stop "[Chunk Handler] Error: The wrong type was inserted into the database."
+    !   end select
 
-      do i = 1,MESH_STACK_ARRAY_SIZE
-        current_mesh_id => chunk%mesh(i)%get_pointer()
+    !   do i = 1,MESH_STACK_ARRAY_SIZE
+    !     current_mesh_id => chunk%mesh(i)%get_pointer()
 
-        if (current_mesh_id == "") then
-          cycle
-        end if
+    !     if (current_mesh_id == "") then
+    !       cycle
+    !     end if
 
-        call camera_set_object_matrix_f32(&
-          real(chunk%world_position%x * CHUNK_WIDTH, c_float), &
-          real((i - 1) * MESH_STACK_HEIGHT, c_float), &
-          real(chunk%world_position%y * CHUNK_WIDTH, c_float), &
-          0.0, 0.0, 0.0, &
-          1.0, 1.0, 1.0)
+    !     ! call camera_set_object_matrix_f32(&
+    !     !   real(chunk%world_position%x * CHUNK_WIDTH, c_float), &
+    !     !   real((i - 1) * MESH_STACK_HEIGHT, c_float), &
+    !     !   real(chunk%world_position%y * CHUNK_WIDTH, c_float), &
+    !     !   0.0, 0.0, 0.0, &
+    !     !   1.0, 1.0, 1.0)
 
-        call mesh_draw(current_mesh_id)
-      end do
+    !     ! call mesh_draw(current_mesh_id)
+    !   end do
     end do
   end subroutine chunk_handler_draw_chunks
 
