@@ -44,15 +44,35 @@ contains
   subroutine chunk_generator_process_output_queue()
     implicit none
 
-    !todo: make this work in the queue processor.
+    integer(c_int) :: i, chunk_x, chunk_z, w
+    class(*), pointer :: generic_pointer
+    type(memory_chunk), pointer :: chunk_pointer
 
-    ! call chunk_handler_store_chunk_pointer(chunk_pointer)
+    do i = 1,queue_pop_limit
 
+      if (.not. thread_output_queue%pop(generic_pointer)) then
+        exit
+      end if
 
-    ! do i = 1,MESH_STACK_ARRAY_SIZE
-    !   chunk_pointer%mesh(i) = ""
-    !   call chunk_mesh_generate(chunk_x, chunk_z, i)
-    ! end do
+      select type (generic_pointer)
+       type is (message_from_thread)
+        chunk_pointer => generic_pointer%data
+        deallocate(generic_pointer)
+       class default
+        error stop "[Chunk Generator] Error: Wrong type in queue."
+      end select
+
+      chunk_x = chunk_pointer%world_position%x
+      chunk_z = chunk_pointer%world_position%y
+
+      call chunk_handler_store_chunk_pointer(chunk_pointer)
+
+      do w = 1,MESH_STACK_ARRAY_SIZE
+        chunk_pointer%mesh(w) = ""
+        call chunk_mesh_generate(chunk_x, chunk_z, w)
+      end do
+
+    end do
 
   end subroutine chunk_generator_process_output_queue
 
