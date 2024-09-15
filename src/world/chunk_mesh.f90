@@ -168,7 +168,7 @@ contains
   subroutine chunk_mesh_process_output_queue()
     implicit none
 
-    integer(c_int) :: i, total
+    integer(c_int) :: i
     class(*), pointer :: generic_pointer
     type(message_from_thread), pointer :: new_message
     character(len = :, kind = c_char), allocatable :: mesh_id
@@ -177,7 +177,6 @@ contains
     do i = 1,queue_pop_limit
 
       if (.not. thread_output_queue%pop(generic_pointer)) then
-        total = i - 1
         exit
       end if
 
