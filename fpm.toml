@@ -24,8 +24,9 @@ module-naming = false
 link = ["glfw", "stb", "luajit-5.1"]
 
 [dependencies]
-# stdlib = "*"
-fhash = { git = "https://github.com/LKedward/fhash.git" }
+forthread = { git = "https://github.com/jordan4ibanez/forthread" }
+uuid_now = { git = "https://github.com/jordan4ibanez/uuid_now" }
+hashmap_f90 = { git = "https://github.com/jordan4ibanez/hashmap_f90" }
 
 [install]
 library = true
