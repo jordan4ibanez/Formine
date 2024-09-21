@@ -294,7 +294,6 @@ contains
     implicit none
 
     type(string_array) :: key_array
-    class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     integer(c_int) :: i, remaining_size
     type(heap_string), dimension(:), allocatable :: temp_string_array
@@ -324,7 +323,7 @@ contains
     end do
 
     !* We will always check that the remaining size is 0. This will protect us from random issues.
-    call texture_database%stats(num_items = remaining_size)
+    remaining_size = texture_database%count()
 
     if (remaining_size /= 0) then
       print"(A)", colorize_rgb("[Texture] Error: Did not delete all textures! Expected size: [0] | Actual: ["//int_to_string(remaining_size)//"]", 255, 0, 0)
