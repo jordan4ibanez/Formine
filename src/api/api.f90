@@ -1,7 +1,7 @@
 module api
   use :: luajit
   use :: string
-  use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use :: hashmap_str
   use, intrinsic :: iso_c_binding
   !* LuaJIT API compatiblemodules.
   use :: block_repo
@@ -35,7 +35,8 @@ module api
   end type mod_config
 
 
-  type(fhash_tbl_t) :: mod_database
+  !! FIXME: this maybe might need a GC?
+  type(hashmap_string_key) :: mod_database
   type(c_ptr) :: lua_state
 
 contains
