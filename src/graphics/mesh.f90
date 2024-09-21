@@ -2,7 +2,7 @@
 module mesh
   use :: string
   use :: vector_3f
-  use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use :: hashmap_str
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -19,7 +19,9 @@ module mesh
 
 
   logical, parameter :: debug_mode = .false.
-  type(fhash_tbl_t) :: mesh_database
+
+  !! FIXME: GIVE THIS A GC!
+  type(hashmap_string_key) :: mesh_database
 
 
   type :: mesh_data
@@ -432,7 +434,6 @@ contains
 
   !* Completely wipe out all existing meshes. This might be slow.
   subroutine mesh_clear_database()
-    use :: fhash, only: fhash_iter_t, fhash_key_t
     use :: array, only: array_string_insert
     use :: string
     use :: array, only: string_array
@@ -440,26 +441,24 @@ contains
     implicit none
 
     type(string_array) :: key_array
-    type(fhash_iter_t) :: iterator
-    class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     integer(c_int) :: i, remaining_size
     type(heap_string), dimension(:), allocatable :: temp_string_array
 
     !* We must check that there is anything in the database before we iterate.
-    call mesh_database%stats(num_items = remaining_size)
+    remaining_size = mesh_database%count()
+
     if (remaining_size == 0) then
       print"(A)", "[Mesh]: Database was empty. Nothing to do. Success!"
       return
     end if
 
     ! Start with a size of 0.
+    !! FIXME: THIS IS GOOD USE FOR A VECTOR!
     allocate(key_array%data(0))
 
-    ! Create the iterator.
-    iterator = fhash_iter_t(mesh_database)
-
     ! Now we will collect the keys from the iterator.
+    !!FIXME: USE THE NEW ITERATOR STYLE!
     do while(iterator%next(generic_key, generic_data))
       ! Appending.
       temp_string_array = array_string_insert(key_array%data, heap_string(generic_key%to_string()))
@@ -472,7 +471,7 @@ contains
     end do
 
     !* We will always check that the remaining size is 0. This will protect us from random issues.
-    call mesh_database%stats(num_items = remaining_size)
+    remaining_size = mesh_database%count()
 
     if (remaining_size /= 0) then
       print"(A)", colorize_rgb("[Mesh] Error: Did not delete all meshes! Expected size: [0] | Actual: ["//int_to_string(remaining_size)//"]", 255, 0, 0)
