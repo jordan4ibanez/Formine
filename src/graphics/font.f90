@@ -50,7 +50,7 @@ module font
 
   !! fixme:? this maybe could use a gc, not sure why though.
   !! todo: look into this
-  type(fhash_tbl_t) :: character_database
+  type(hashmap_string_key) :: character_database
 
 contains
 
@@ -264,7 +264,7 @@ contains
     character(len = :), allocatable :: font_data_file_name
     character(len = :), allocatable :: font_config_file_path
     integer(1), dimension(:), allocatable :: raw_image_data
-    type(fhash_tbl_t) :: character_database_integral
+    type(hashmap_string_key) :: character_database_integral
 
     ! print*,"    REMEMBER TO USE A SPARE SLOT FOR UNDEFINED CHARACTERS"
 
@@ -306,7 +306,7 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: font_config_file_path
-    type(fhash_tbl_t), intent(inout) :: character_database_integral
+    type(hashmap_string_key), intent(inout) :: character_database_integral
     type(file_reader) :: reader
     integer(c_int) :: i, temp_buffer_length, x_index, y_index
     character(len = :), allocatable :: current_character, temp_buffer
@@ -452,7 +452,6 @@ contains
   subroutine calculate_opengl_texture_coordinates(raw_image_data, image_width, image_height, character_database_integral)
     use :: math_helpers
     use, intrinsic :: iso_c_binding
-    use :: fhash, only: fhash_iter_t, fhash_key_t
     use :: vector_2i
     implicit none
 
@@ -460,8 +459,6 @@ contains
     integer(c_int), intent(in), value :: image_width, image_height
     type(fhash_tbl_t), intent(in) :: character_database_integral
     type(memory_texture) :: rgba8_texture_data
-    type(fhash_iter_t) :: iterator
-    class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     type(vec2i) :: position
     integer(c_int) :: pixel_x, pixel_y
@@ -573,15 +570,12 @@ contains
 
   !* Completely wipe out all existing font characters. This might be slow.
   subroutine font_clear_database()
-    use :: fhash, only: fhash_iter_t, fhash_key_t
     use :: string
     use :: array, only: string_array, array_string_insert
     use :: terminal
     implicit none
 
     type(string_array) :: key_array
-    type(fhash_iter_t) :: iterator
-    class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     class(*), pointer :: generic_pointer
     integer(c_int) :: i, remaining_size
@@ -589,19 +583,20 @@ contains
 
 
     !* We must check that there is anything in the database before we iterate.
-    call character_database%stats(num_items = remaining_size)
+    remaining_size =  character_database%count()
+
     if (remaining_size == 0) then
       print"(A)", "[Font]: Database was empty. Nothing to do. Success!"
       return
     end if
 
     ! Start with a size of 0.
+    !! fixme: this is a great use for vectors!
     allocate(key_array%data(0))
 
-    ! Create the iterator.
-    iterator = fhash_iter_t(character_database)
 
     ! Now we will collect the keys from the iterator.
+    !! fixme: use the new iterator style!
     do while(iterator%next(generic_key, generic_data))
       ! Appending.
       temp_string_array = array_string_insert(key_array%data, heap_string(generic_key%to_string()))
@@ -618,7 +613,7 @@ contains
     end do
 
     !* We will always check that the remaining size is 0. This will protect us from random issues.
-    call character_database%stats(num_items = remaining_size)
+    remaining_size = character_database%count()
 
     if (remaining_size /= 0) then
       print"(A)", colorize_rgb("[Font] Error: Did not delete all characters! Expected size: [0] | Actual: ["//int_to_string(remaining_size)//"]", 255, 0, 0)
