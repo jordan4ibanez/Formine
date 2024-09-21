@@ -171,5 +171,6 @@ Note: this uses fortran 14+, if you use this in 13.2 expect it to blow up trying
 -----
 
 ### The Formine Logo:
+(I am not an artist)
 
 ![Truly beautiful](https://raw.githubusercontent.com/jordan4ibanez/Formine/refs/heads/master/textures/formine_logo.png)
