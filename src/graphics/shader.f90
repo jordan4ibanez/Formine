@@ -250,6 +250,7 @@ contains
     call gl_use_program(0)
 
     ! Now we will collect the keys from the iterator.
+    !!FIXME: USE THE NEW ITERATOR STYLE!
     do while(iterator%next(generic_key, generic_data))
       ! We will delete the programs as we go.
       select type(generic_data)
