@@ -93,6 +93,8 @@ contains
     type(fast_packer_config) :: config
     type(fast_packer) :: new_fast_packer
 
+    error stop "USE THE VECTOR MODULE!"
+
     ! Config gets generated with it's defaults, hooray!
 
     ! Now chain to the constructor with a config.
