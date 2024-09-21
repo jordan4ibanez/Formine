@@ -1,6 +1,6 @@
 module keyboard
   use :: glfw
-  use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use :: hashmap_int
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -13,7 +13,7 @@ module keyboard
   public :: keyboard_key_up
 
 
-  type(fhash_tbl_t) :: key_database
+  type(hashmap_integer_key) :: key_database
 
 
 contains
