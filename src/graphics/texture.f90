@@ -1,5 +1,5 @@
 module texture
-  use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use :: hashmap_str
   use :: vector_2i
   use, intrinsic :: iso_c_binding
   implicit none
@@ -17,8 +17,10 @@ module texture
   public :: texture_clear_database
 
 
-  type(fhash_tbl_t) :: texture_database
-  type(fhash_tbl_t) :: texture_size_database
+  !! fixme: these two can use GC.
+  type(hashmap_string_key) :: texture_database
+  type(hashmap_string_key) :: texture_size_database
+
   logical :: debug_mode = .false.
 
 
@@ -286,33 +288,31 @@ contains
 
   !* Completely wipe out all existing textures. This might be slow.
   subroutine texture_clear_database()
-    use :: fhash, only: fhash_iter_t, fhash_key_t
     use :: string
     use :: array, only: string_array, array_string_insert
     use :: terminal
     implicit none
 
     type(string_array) :: key_array
-    type(fhash_iter_t) :: iterator
     class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     integer(c_int) :: i, remaining_size
     type(heap_string), dimension(:), allocatable :: temp_string_array
 
     !* We must check that there is anything in the database before we iterate.
-    call texture_database%stats(num_items = remaining_size)
+    remaining_size = texture_database%count()
+
     if (remaining_size == 0) then
       print"(A)", "[Texture]: Database was empty. Nothing to do. Success!"
       return
     end if
 
     ! Start with a size of 0.
+    !! fixme: this is a great use for vectors!
     allocate(key_array%data(0))
 
-    ! Create the iterator.
-    iterator = fhash_iter_t(texture_database)
-
     ! Now we will collect the keys from the iterator.
+    !! fixme: use the new iterator style!
     do while(iterator%next(generic_key, generic_data))
       ! Appending.
       temp_string_array = array_string_insert(key_array%data, heap_string(generic_key%to_string()))
