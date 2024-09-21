@@ -245,9 +245,6 @@ contains
     !! FIXME: THIS IS GOOD USE FOR A VECTOR!
     allocate(key_array%data(0))
 
-    ! Create the iterator.
-    iterator = fhash_iter_t(shader_database)
-
     ! Unbind from the currently used shader.
     call gl_use_program(0)
 
@@ -263,6 +260,7 @@ contains
        class default
         error stop "[Shader] Error: The wrong type was inserted for shader ["//generic_key%to_string()//"]"
       end select
+
       ! Appending.
       temp_string_array = array_string_insert(key_array%data, heap_string(generic_key%to_string()))
       call move_alloc(temp_string_array, key_array%data)
@@ -274,7 +272,7 @@ contains
     end do
 
     !* We will always check that the remaining size is 0. This will protect us from random issues.
-    call shader_database%stats(num_items = remaining_size)
+    remaining_size = shader_database%count()
 
     if (remaining_size /= 0) then
       print"(A)", colorize_rgb("[Shader] Error: Did not delete all shaders! Expected size: [0] | Actual: ["//int_to_string(remaining_size)//"]", 255, 0, 0)
