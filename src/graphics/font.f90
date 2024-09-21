@@ -1,7 +1,7 @@
 module font
   use :: vector_2d
   use :: memory_texture_module
-  use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use :: hashmap_str
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -48,6 +48,8 @@ module font
   integer(c_int) :: font_texture_width = 0
   integer(c_int) :: font_texture_height = 0
 
+  !! fixme:? this maybe could use a gc, not sure why though.
+  !! todo: look into this
   type(fhash_tbl_t) :: character_database
 
 contains
