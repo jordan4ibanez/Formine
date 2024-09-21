@@ -27,6 +27,7 @@ link = ["glfw", "stb", "luajit-5.1"]
 forthread = { git = "https://github.com/jordan4ibanez/forthread" }
 uuid_now = { git = "https://github.com/jordan4ibanez/uuid_now" }
 hashmap_f90 = { git = "https://github.com/jordan4ibanez/hashmap_f90" }
+fortran_vector = { git = "https://github.com/jordan4ibanez/fortran_vector" }
 
 [install]
 library = true
