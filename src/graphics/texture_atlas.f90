@@ -4,7 +4,7 @@ module texture_atlas
   use :: fast_pack
   use :: memory_texture_module
   use :: texture
-  use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use :: hashmap_str
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -34,7 +34,10 @@ module texture_atlas
 
 
   type(texture_pack_element), dimension(:), allocatable :: textures_to_pack
-  type(fhash_tbl_t), pointer :: texture_coordinates_pointer
+
+  !! fixme: use a GC on this thing!
+  type(hashmap_string_key), pointer :: texture_coordinates_pointer
+
   type(heap_string), dimension(:), allocatable :: texture_key_array
 
   !? Each index is the Block ID. [arr, id]
@@ -215,7 +218,7 @@ contains
     implicit none
 
     character(len = :, kind = c_char), allocatable :: temp
-    type(fhash_tbl_t) :: string_to_index_array
+    type(hashmap_string_key) :: string_to_index_array
     integer(c_int) :: i, status, y, current_index
     class(*), pointer :: generic_pointer
     type(texture_rectangle), pointer :: rect_pointer
