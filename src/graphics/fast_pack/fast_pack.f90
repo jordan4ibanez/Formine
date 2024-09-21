@@ -3,7 +3,7 @@ module fast_pack
   use :: stb_image
   use :: string
   use :: fast_pack_types
-  use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use :: hashmap_str
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -52,7 +52,7 @@ module fast_pack
     integer(c_int) :: max_y = 0
     logical(c_bool) :: locked_out = .false.
     ! Everything below this is allocated in the constructor.
-    type(fhash_tbl_t), pointer :: texture_coordinates
+    type(hashmap_string_key), pointer :: texture_coordinates
     type(heap_string), dimension(:), allocatable :: keys_array
     integer(c_int), dimension(:), allocatable :: position_x
     integer(c_int), dimension(:), allocatable :: position_y
@@ -324,7 +324,7 @@ contains
     implicit none
 
     class(fast_packer), intent(inout) :: this
-    type(fhash_tbl_t), pointer :: database_pointer
+    type(hashmap_string_key), pointer :: database_pointer
 
     database_pointer => this%texture_coordinates
   end function fast_packer_get_texture_coordinates_database
