@@ -1,11 +1,15 @@
 module shader
-  use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use :: hashmap_str
   use, intrinsic :: iso_c_binding
   implicit none
 
 
   private
 
+
+  public :: shader_create
+  public :: shader_start
+  public :: shader_clear_database
 
   public :: ATTRIBUTE_POSITION
   public :: ATTRIBUTE_TEXTURE_COORDINATE
@@ -22,13 +26,7 @@ module shader
   integer(c_int) :: UNIFORM_CAMERA_MATRIX
   integer(c_int) :: UNIFORM_OBJECT_MATRIX
 
-
-  public :: shader_create
-  public :: shader_start
-  public :: shader_clear_database
-
-
-  type(fhash_tbl_t) :: shader_database
+  type(hashmap_string_key) :: shader_database = new_hashmap_string_key()
 
 
 contains
@@ -151,7 +149,7 @@ contains
 
     ! Finally validate this whole thing.
     ! call gl_validate_program(program_id)
-    
+
     ! if (gl_get_program_iv(program_id, GL_VALIDATE_STATUS) == GL_FALSE) then
     !   error stop "[Shader] Error: Failed to validate shader ["//shader_name//"]."
     ! else
@@ -224,7 +222,6 @@ contains
 
   !* Completely wipe out all existing shaders. This might be slow.
   subroutine shader_clear_database()
-    use :: fhash, only: fhash_iter_t, fhash_key_t
     use :: opengl
     use :: string
     use :: array, only: string_array, array_string_insert
@@ -232,20 +229,20 @@ contains
     implicit none
 
     type(string_array) :: key_array
-    type(fhash_iter_t) :: iterator
-    class(fhash_key_t), allocatable :: generic_key
     class(*), allocatable :: generic_data
     integer(c_int) :: i, remaining_size
     type(heap_string), dimension(:), allocatable :: temp_string_array
 
     !* We must check that there is anything in the database before we iterate.
-    call shader_database%stats(num_items = remaining_size)
+    num_items = shader_database%count()
+
     if (remaining_size == 0) then
       print"(A)", "[Shader]: Database was empty. Nothing to do. Success!"
       return
     end if
 
     ! Start with a size of 0.
+    !! FIXME: THIS IS GOOD USE FOR A VECTOR!
     allocate(key_array%data(0))
 
     ! Create the iterator.
