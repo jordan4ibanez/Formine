@@ -1,7 +1,7 @@
 module block_repo
   use :: luajit
   use :: string
-  use :: fhash, only: fhash_tbl_t, key => fhash_key
+  use :: hashmap_str
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -77,9 +77,11 @@ module block_repo
   integer(c_int) :: definition_array_length = 0
 
   ! Random access oriented.
-  type(fhash_tbl_t) :: definition_database_string
+  !! fixme:? this could use a gc, maybe?
+  type(hashmap_string_key) :: definition_database_string
 
   ! Object oriented.
+  !! FIXME: THIS COULD USE A VECTOR!
   type(block_definition), dimension(:), allocatable, target :: definition_array
 
   ! Data oriented.
