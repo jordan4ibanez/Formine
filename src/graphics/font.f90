@@ -262,13 +262,13 @@ contains
     character(len = :), allocatable :: font_data_file_name
     character(len = :), allocatable :: font_config_file_path
     integer(1), dimension(:), allocatable :: raw_image_data
-    type(hashmap_string_key) :: character_position_database
+    type(hashmap_string_key) :: character_vec2i_position_database
 
     !! FIXME: PUT A GC IN HERE.
     character_database = new_hashmap_string_key()
 
     !! FIXME: PUT A GC IN HERE.
-    character_position_database = new_hashmap_string_key()
+    character_vec2i_position_database = new_hashmap_string_key()
 
     ! print*,"    REMEMBER TO USE A SPARE SLOT FOR UNDEFINED CHARACTERS"
 
@@ -278,7 +278,7 @@ contains
     font_config_file_path = string_remove_file_extension(font_texture_file_path)//".cfg"
 
     ! This is quite a large and complex subroutine. It's getting all the data from the .cfg file.
-    call process_font_configuration(font_config_file_path, character_position_database)
+    call process_font_configuration(font_config_file_path, character_vec2i_position_database)
 
     ! Now load up the font.
 
@@ -295,7 +295,7 @@ contains
     end if
 
     ! Now, we will bake in the OpenGL texture coordinates into the double floating point database.
-    call calculate_opengl_texture_coordinates(raw_image_data, image_width, image_height, character_position_database)
+    call calculate_opengl_texture_coordinates(raw_image_data, image_width, image_height, character_vec2i_position_database)
 
     ! Then we can finally upload it into the texture database.
     call texture_create_from_memory("font", raw_image_data, image_width, image_height)
