@@ -8,6 +8,7 @@ module texture
 
   private
 
+
   public :: texture_module_initialize
   public :: texture_create
   public :: texture_create_from_memory
