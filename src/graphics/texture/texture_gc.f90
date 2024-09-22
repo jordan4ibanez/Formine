@@ -24,6 +24,8 @@ contains
       error stop "[Texture GC]: Wrong type given."
     end select
 
+    ! print*,"deleting id",texture_id
+
     ! Make sure we don't accidentally cause a segmentation fault in the C code.
     call gl_bind_texture(GL_TEXTURE_2D, 0)
 
