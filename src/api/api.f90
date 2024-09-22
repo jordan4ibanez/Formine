@@ -49,6 +49,8 @@ contains
 
     integer(c_int) :: status
 
+    mod_database = new_hashmap_string_key()
+
     call luajit_initialize(lua_state)
 
     status = luajit_run_file(lua_state, "./api/init.lua")
