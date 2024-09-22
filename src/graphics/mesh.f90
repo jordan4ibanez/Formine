@@ -289,7 +289,7 @@ contains
     exists = .false.
 
     if (.not. mesh_database%get(mesh_name, generic_pointer)) then
-      print"(A)",color_term("[Mesh] Error: ["//mesh_name//"] does not exist.", 255, 0, 0)
+      print"(A)",color_term("[Mesh] Warning: ["//mesh_name//"] does not exist.", WARNING)
       return
     end if
 
@@ -313,7 +313,7 @@ contains
     type(mesh_data), pointer :: gotten_mesh
 
     if (.not. get_mesh(mesh_name, gotten_mesh)) then
-      print"(A)", color_term("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot draw.", 255, 0, 0)
+      print"(A)", color_term("[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot draw.", WARNING)
       return
     end if
 
@@ -341,7 +341,7 @@ contains
     !! FIXME: USE THE GC HERE!
 
     if (.not. get_mesh(mesh_name, gotten_mesh)) then
-      print"(A)",color_term("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot delete.", 255, 0, 0)
+      print"(A)",color_term("[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot delete.", WARNING)
       return
     end if
 
@@ -465,7 +465,7 @@ contains
     remaining_size = mesh_database%count()
 
     if (remaining_size /= 0) then
-      print"(A)", color_term("[Mesh] Error: Did not delete all meshes! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", 255, 0, 0)
+      print"(A)", color_term("[Mesh] WArning: Did not delete all meshes! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", WARNING)
     else
       print"(A)", "[Mesh]: Successfully cleared the mesh database."
     end if
