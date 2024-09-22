@@ -1089,10 +1089,10 @@ contains
         call lua_pop(state, lua_gettop(state))
         success = .true.
       else
-        print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
+        print"(A)", color_term(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
       end if
     else
-      print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
+      print"(A)", color_term(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
     end if
   end function luajit_run_string
 
@@ -1114,11 +1114,11 @@ contains
         call lua_pop(state, lua_gettop(state))
         status = LUAJIT_RUN_FILE_OK
       else
-        print"(A)", colorize_rgb("[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
+        print"(A)", color_term("[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
         status = LUAJIT_RUN_FILE_FAILURE
       end if
     else
-      print"(A)", colorize_rgb("[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
+      print"(A)", color_term("[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
       status = LUAJIT_RUN_FILE_FAILURE
     end if
   end function luajit_run_file
@@ -1234,7 +1234,7 @@ contains
     if (lua_pcall(state, 4, return_value_count, 0) == LUA_OK) then
       call lua_pop(state, lua_gettop(state))
     else
-      print"(A)", colorize_rgb(achar(10)//"[LuaJIT] Error: Error running LuaJIT function ["//function_name//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
+      print"(A)", color_term(achar(10)//"[LuaJIT] Error: Error running LuaJIT function ["//function_name//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
     end if
   end subroutine luajit_call_function
 

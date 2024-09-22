@@ -327,12 +327,12 @@ contains
     !   deallocate(texture_coordinates_pointer)
     !   ! Double check.
     !   if (associated(texture_coordinates_pointer)) then
-    !     print"(A)",colorize_rgb("[Texture Atlas] Error: Failed to free the texture coordinates pointer.", 255, 0, 0)
+    !     print"(A)",color_term("[Texture Atlas] Error: Failed to free the texture coordinates pointer.", 255, 0, 0)
     !     return
     !   end if
     ! else
     !   ! If this happens, something went very wrong.
-    !   print"(A)",colorize_rgb("[Texture Atlas] Error: Texture coordinates pointer is not associated.", 255, 0, 0)
+    !   print"(A)",color_term("[Texture Atlas] Error: Texture coordinates pointer is not associated.", 255, 0, 0)
     !   return
     ! end if
     ! Everything is freed, hooray.

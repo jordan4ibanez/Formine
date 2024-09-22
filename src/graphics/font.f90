@@ -242,7 +242,7 @@ contains
       exists = .true.
       gl_char_information_pointer => generic_pointer
      class default
-      error stop colorize_rgb("[Font] Error: Character ["//char//"] has the wrong type.", 255, 0, 0)
+      error stop color_term("[Font] Error: Character ["//char//"] has the wrong type.", 255, 0, 0)
     end select
   end function get_character
 
@@ -632,7 +632,7 @@ contains
     remaining_size = character_database%count()
 
     if (remaining_size /= 0) then
-      print"(A)", colorize_rgb("[Font] Error: Did not delete all characters! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", 255, 0, 0)
+      print"(A)", color_term("[Font] Error: Did not delete all characters! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", 255, 0, 0)
     else
       print"(A)", "[Font]: Successfully cleared the character database."
     end if

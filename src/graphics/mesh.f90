@@ -289,7 +289,7 @@ contains
     exists = .false.
 
     if (.not. mesh_database%get(mesh_name, generic_pointer)) then
-      print"(A)",colorize_rgb("[Mesh] Error: ["//mesh_name//"] does not exist.", 255, 0, 0)
+      print"(A)",color_term("[Mesh] Error: ["//mesh_name//"] does not exist.", 255, 0, 0)
       return
     end if
 
@@ -298,7 +298,7 @@ contains
       exists = .true.
       gotten_mesh => generic_pointer
      class default
-      error stop colorize_rgb("[Mesh] Error: ["//mesh_name//"] has the wrong type.", 255, 0, 0)
+      error stop color_term("[Mesh] Error: ["//mesh_name//"] has the wrong type.", 255, 0, 0)
     end select
   end function get_mesh
 
@@ -313,7 +313,7 @@ contains
     type(mesh_data), pointer :: gotten_mesh
 
     if (.not. get_mesh(mesh_name, gotten_mesh)) then
-      print"(A)", colorize_rgb("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot draw.", 255, 0, 0)
+      print"(A)", color_term("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot draw.", 255, 0, 0)
       return
     end if
 
@@ -341,7 +341,7 @@ contains
     !! FIXME: USE THE GC HERE!
 
     if (.not. get_mesh(mesh_name, gotten_mesh)) then
-      print"(A)",colorize_rgb("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot delete.", 255, 0, 0)
+      print"(A)",color_term("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot delete.", 255, 0, 0)
       return
     end if
 
@@ -465,7 +465,7 @@ contains
     remaining_size = mesh_database%count()
 
     if (remaining_size /= 0) then
-      print"(A)", colorize_rgb("[Mesh] Error: Did not delete all meshes! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", 255, 0, 0)
+      print"(A)", color_term("[Mesh] Error: Did not delete all meshes! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", 255, 0, 0)
     else
       print"(A)", "[Mesh]: Successfully cleared the mesh database."
     end if
