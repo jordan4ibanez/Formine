@@ -203,17 +203,21 @@ contains
   end subroutine set_texture
 
 
-  !* Internal only. Get a texture from the database.
-  function get_texture(texture_name) result(texture_id)
+  !* Internal only. Get a texture from the database. Returns if it exists.
+  function get_texture(texture_name, texture_id) result(exists)
     use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
+    logical(c_bool) :: exists
     class(*), pointer :: generic_pointer
     integer(c_int) :: texture_id, status
 
+    exists = .false.
+
     if (.not. texture_database%get(texture_name, generic_pointer)) then
       print"(A)",colorize_rgb_string("[Texture] Error: ["//texture_name//"] does not exist.", PUMPKIN_ORANGE)
+      return
     end if
 
     select type (generic_pointer)
@@ -222,6 +226,8 @@ contains
      class default
       error stop colorize_rgb("[Texture] Error: ["//texture_name//"] is the wrong type.", 255, 0, 0)
     end select
+
+    exists = .true.
   end function get_texture
 
 
