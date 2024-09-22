@@ -32,7 +32,7 @@ contains
     implicit none
 
     texture_database = new_hashmap_string_key(texture_database_gc)
-    
+
     texture_size_database = new_hashmap_string_key()
   end subroutine texture_module_initialize
 
@@ -219,27 +219,7 @@ contains
     use :: terminal
     implicit none
 
-    !! FIXME: REPLACE WITH A GC!!
-
     character(len = *, kind = c_char), intent(in) :: texture_name
-    integer(c_int) :: texture_id
-
-    if (.not. get_texture(texture_name, texture_id)) then
-      print"(A)",colorize_rgb("[Texture] Error: Texture ["//texture_name//"] does not exist. Cannot delete.", 255, 0, 0)
-      return
-    end if
-
-    ! Make sure we don't accidentally cause a segmentation fault in the C code.
-    call gl_bind_texture(GL_TEXTURE_2D, 0)
-
-    ! Now delete it.
-    call gl_delete_textures(texture_id)
-
-    ! And if we have made a severe mistake, stop everything.
-    ! This is a massive memory leak waiting to happen.
-    if (gl_is_texture(texture_id)) then
-      error stop "[Texture] Error: Attempt to delete texture ["//texture_name//"] has failed. Halting."
-    end if
 
     ! Finally, remove it from the database.
     call texture_database%delete(texture_name)
