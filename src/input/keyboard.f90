@@ -53,7 +53,7 @@ contains
 
     integer(c_int), intent(in), value :: keyboard_key, action
 
-    call key_database%set(key(keyboard_key), action)
+    call key_database%set(int(keyboard_key, c_int64_t), action)
   end subroutine process_key
 
 
@@ -63,14 +63,20 @@ contains
 
     integer(c_int), intent(in), value :: keyboard_key
     integer(c_int) :: state, status
+    class(*), pointer :: generic_pointer
 
     is_down = .false.
 
-    call key_database%get(key(keyboard_key), state, stat = status)
-
-    if (status /= 0) then
+    if (.not. key_database%get(int(keyboard_key, c_int64_t), generic_pointer)) then
       return
     end if
+
+    select type (generic_pointer)
+     type is (integer(c_int))
+      state = generic_pointer
+     class default
+      error stop "[Keyboard] Error: Wrong type inserted into the database."
+    end select
 
     if (state == GLFW_PRESS .or. state == GLFW_REPEAT) then
       is_down = .true.
