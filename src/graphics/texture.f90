@@ -73,10 +73,10 @@ contains
     character(len = *, kind = c_char), intent(in) :: texture_name
     integer(1), dimension(:), intent(in) :: raw_data
     integer(c_int), intent(in), value :: width, height
-    integer(c_int) :: texture_id
-    integer(c_int) :: debug
+    integer(c_int), pointer :: texture_id
 
     ! First we must generate the texture ID.
+    allocate(texture_id)
     texture_id = gl_gen_textures()
 
     if (texture_id == 0) then
@@ -118,12 +118,6 @@ contains
 
     ! Now we can assign it into the database by the custom name and the dimensions.
     call set_texture(texture_name, texture_id, width, height)
-
-    if (get_texture(texture_name, debug)) then
-      print*,"at:",debug
-    else
-      error stop "WAT"
-    end if
   end subroutine texture_create_from_memory
 
 
