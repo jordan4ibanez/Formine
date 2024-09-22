@@ -268,7 +268,6 @@ contains
 
     call texture_size_database%free()
     print"(A)", "[Texture]: Successfully freed the texture size database C memory."
-
   end subroutine texture_clear_database
 
 
