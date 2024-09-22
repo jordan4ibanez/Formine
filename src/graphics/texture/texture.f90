@@ -165,6 +165,7 @@ contains
     allocate(size)
     size%x = x
     size%y = y
+
     call texture_size_database%set(texture_name, size)
   end subroutine set_texture
 
