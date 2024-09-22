@@ -50,17 +50,14 @@ contains
 
     type(memory_chunk), intent(in), pointer :: chunk_to_store
     character(len = :, kind = c_char), allocatable :: chunk_key
-    integer(c_int) :: status
 
     chunk_key = grab_chunk_key(chunk_to_store%world_position%x, chunk_to_store%world_position%y)
 
-    call chunk_database%check_key(chunk_key, stat = status)
-
-    if (status == 0) then
+    if (chunk_database%has_key(chunk_key)) then
       error stop "[Chunk Handler] Error: Attempted to overwrite a memory chunk pointer."
     end if
 
-    call chunk_database%set_ptr(chunk_key, chunk_to_store)
+    call chunk_database%set(chunk_key, chunk_to_store)
   end subroutine chunk_handler_store_chunk_pointer
 
 
@@ -70,14 +67,12 @@ contains
 
     integer(c_int), intent(in), value :: x, y
     class(*), pointer :: generic_pointer
+    character(len = :, kind = c_char), allocatable :: chunk_key
     type(memory_chunk), pointer :: chunk_pointer
-    integer(c_int) :: status
 
     chunk_key = grab_chunk_key(x, y)
 
-    call chunk_database%get_raw_ptr(chunk_key, generic_pointer, stat = status)
-
-    if (status /= 0) then
+    if (.not. chunk_database%get(chunk_key, generic_pointer)) then
       print"(A)", "[Chunk Handler] Warning: Attempted to delete chunk that doesn't exist."
       return
     end if
@@ -94,7 +89,7 @@ contains
     deallocate(chunk_pointer%mesh)
     deallocate(chunk_pointer)
 
-    call chunk_database%unset(chunk_key)
+    call chunk_database%delete(chunk_key)
   end subroutine chunk_handler_delete_chunk
 
 
@@ -107,9 +102,7 @@ contains
     class(*), pointer :: generic_pointer
     integer(c_int) :: status
 
-    call chunk_database%get_raw_ptr(grab_chunk_key(x,y), generic_pointer, stat = status)
-
-    if (status /= 0) then
+    if (.not. chunk_database%get(grab_chunk_key(x,y), generic_pointer)) then
       error stop "[Chunk Handler] Error: Attempted to retrieve null chunk."
     end if
 
@@ -134,10 +127,8 @@ contains
 
     clone_chunk_pointer => null()
 
-    call chunk_database%get_raw_ptr(grab_chunk_key(x,y), generic_pointer, stat = status)
-
     ! If not existent, return a null pointer.
-    if (status /= 0) then
+    if (.not. chunk_database%get(grab_chunk_key(x,y), generic_pointer)) then
       return
     end if
 
@@ -165,20 +156,23 @@ contains
     use :: camera
     implicit none
 
-    class(*), allocatable, target :: generic_data
+    character(len = :, kind = c_char), pointer :: string_key
+    class(*), pointer :: generic_pointer
     type(memory_chunk), pointer :: chunk
     integer(c_int64_t) :: i
     character(len = :, kind = c_char), pointer :: current_mesh_id
 
     ! If there's nothing to do, don't do anything.
+    !!FIXME: REPLACE WITH IS_EMPTY()
     if (chunk_database%count() == 0) then
       return
     end if
 
     call texture_use("TEXTURE_ATLAS")
 
+    i = 0
     !! fixme: use the new iterator style!
-    do while(iterator%next(generic_key, generic_data))
+    do while(chunk_database%iterate_kv(i, string_key, generic_pointer))
       !   select type(generic_data)
       !    type is (memory_chunk)
       !     chunk => generic_data
