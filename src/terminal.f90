@@ -11,6 +11,7 @@ module terminal
   public :: ERROR
   public :: WARNING
 
+
   ! The 4 seasons, because I think that's neat.
 
   ! Winter red. Christmas ornament.
@@ -24,7 +25,6 @@ module terminal
 
   ! Spring blue. Easter egg.
   character(11), parameter :: NOTIFICATION = "118;236;251"
-
 
 
 contains
