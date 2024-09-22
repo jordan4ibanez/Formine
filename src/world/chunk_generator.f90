@@ -168,7 +168,7 @@ contains
     message%x = x
     message%z = z
 
-    call thread_create(c_funloc(chunk_generator_thread), c_loc(message))
+    call thread_create(chunk_generator_thread, c_loc(message))
   end subroutine chunk_generator_new_chunk
 
 end module chunk_generator
