@@ -303,14 +303,14 @@ contains
 
 
   !* Very simple configuration file processing.
-  subroutine process_font_configuration(font_config_file_path, character_database_integral)
+  subroutine process_font_configuration(font_config_file_path, character_vec2i_position_database)
     use :: string
     use :: files
     use :: vector_2i
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: font_config_file_path
-    type(hashmap_string_key), intent(inout) :: character_database_integral
+    type(hashmap_string_key), intent(inout) :: character_vec2i_position_database
     type(file_reader) :: reader
     integer(c_int) :: i, temp_buffer_length, x_index, y_index
     character(len = :), allocatable :: current_character, temp_buffer
@@ -417,11 +417,11 @@ contains
           error stop "[Font] Error: Impossible Y value on line ["//int_to_string(i)//"] of font config ["//font_config_file_path//"]"
         end if
 
-        ! Now finally, dump the integral position into the database.
+        ! Now finally, dump the vec2i position into the database.
         allocate(position_data)
         position_data%x = x_index
         position_data%y = y_index
-        call character_database_integral%set(current_character, position_data)
+        call character_vec2i_position_database%set(current_character, position_data)
       end if
     end do
 
@@ -456,7 +456,7 @@ contains
 
 
   !* Automates converting the pixel positions into OpenGL texture mapping positions.
-  subroutine calculate_opengl_texture_coordinates(raw_image_data, image_width, image_height, character_database_integral)
+  subroutine calculate_opengl_texture_coordinates(raw_image_data, image_width, image_height, character_vec2i_position_database)
     use :: math_helpers
     use, intrinsic :: iso_c_binding
     use :: vector_2i
@@ -464,7 +464,7 @@ contains
 
     integer(1), dimension(:), intent(in) :: raw_image_data
     integer(c_int), intent(in), value :: image_width, image_height
-    type(hashmap_string_key), intent(in) :: character_database_integral
+    type(hashmap_string_key), intent(in) :: character_vec2i_position_database
     type(memory_texture) :: rgba8_texture_data
     character(len = :, kind = c_char), pointer :: string_key
     class(*), pointer :: generic_pointer
@@ -480,7 +480,7 @@ contains
     i = 0
 
     !!FIXME: SOMETHING IS WRONG HERE!
-    do while(character_database_integral%iterate_kv(i, string_key, generic_pointer))
+    do while(character_vec2i_position_database%iterate_kv(i, string_key, generic_pointer))
 
       ! Enforce that we are running with a vec2i.
       select type(generic_pointer)
@@ -519,7 +519,7 @@ contains
     !* We need to do such complex work we need this subroutine to have functions.
 
 
-    !* Convert the integral pixel width into double floating precision with range 0.0 - 1.0.
+    !* Convert the integer vec2i pixel width into double floating precision with range 0.0 - 1.0.
     function convert_pixel_width_to_real_width(input_width) result(real_width)
       implicit none
 
