@@ -289,7 +289,8 @@ program main
 
   call font_clear_database()
 
-  call api_destroy()
+  print*,"REMEMBER TO DESTROY THE API!"
+  ! call api_destroy()
 
   call texture_clear_database()
 
