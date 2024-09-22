@@ -469,11 +469,13 @@ contains
     type(opengl_character), pointer :: gpu_character
     integer(c_int64_t) :: i
 
+
     ! Shift this into a format we can use.
     rgba8_texture_data = memory_texture(raw_image_data, image_width, image_height)
 
     i = 0
 
+    !!FIXME: SOMETHING IS WRONG HERE!
     do while(character_database_integral%iterate_kv(i, string_key, generic_pointer))
 
       ! Enforce that we are running with a vec2i.
