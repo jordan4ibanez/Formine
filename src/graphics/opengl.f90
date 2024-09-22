@@ -178,7 +178,8 @@ contains
 
     integer, intent(in), value :: source, type, id, severity, length
     type(c_ptr), intent(in), value :: message_pointer, user_param_pointer
-    character(len = :, kind = c_char), allocatable :: fortran_message, text_color, severity_text
+    character(len = :, kind = c_char), allocatable :: fortran_message, severity_text
+    integer(c_int) :: severity_level
 
     ! Shut the compiler up.
     if (.false.) then
@@ -192,21 +193,21 @@ contains
         select case (severity)
          case (GL_DEBUG_SEVERITY_NOTIFICATION)
           severity_text = "NOTIFICATION"
-          text_color = to_rgb_string(137,207,240)
+          severity_level = NOTIFICATION
          case (GL_DEBUG_SEVERITY_LOW)
           severity_text = "LOW SEVERITY ERROR"
-          text_color = to_rgb_string(255,255,0)
+          severity_level = NOTIFICATION
          case (GL_DEBUG_SEVERITY_MEDIUM)
           severity_text = "MEDIUM SEVERITY ERROR"
-          text_color = to_rgb_string(255,165,0)
+          severity_level = WARNING
          case (GL_DEBUG_SEVERITY_HIGH)
           severity_text = "HIGH SEVERITY ERROR"
-          text_color = to_rgb_string(255,0,0)
+          severity_level = ERROR
          case default
         end select
 
         !? Make this print nicely.
-        print"(A)",colorize_term("[OpenGL] ("//severity_text//"): ("//int_to_string(source)//") "//fortran_message//".", text_color)
+        print"(A)",colorize_term("[OpenGL] ("//severity_text//"): ("//int_to_string(source)//") "//fortran_message//".", severity_level)
       end if
     end if
   end subroutine debug_message_callback
