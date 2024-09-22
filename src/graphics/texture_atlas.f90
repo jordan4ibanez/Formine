@@ -130,7 +130,6 @@ contains
     character(len = *, kind = c_char), intent(in) :: texture_name
     type(texture_rectangle), pointer :: texture_rectangle_pointer
     class(*), pointer :: generic_pointer
-    integer(c_int) :: status
 
     if (.not. texture_coordinates_pointer%get(texture_name, generic_pointer)) then
       error stop "[Texture Atlas] Error: Null pointer."
@@ -217,12 +216,14 @@ contains
 
     character(len = :, kind = c_char), allocatable :: temp
     type(hashmap_string_key) :: string_to_index_array
-    integer(c_int) :: i, status, y, current_index
+    integer(c_int) :: i, y, current_index
     class(*), pointer :: generic_pointer
     type(texture_rectangle), pointer :: rect_pointer
     type(block_definition), pointer :: definition_pointer
 
     print"(A)","[Texture Atlas]: Begin cachiness optimization."
+
+    string_to_index_array = new_hashmap_string_key()
 
     key_array_size = size(texture_key_array)
 
