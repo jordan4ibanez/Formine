@@ -297,7 +297,7 @@ contains
     remaining_size = shader_database%count()
 
     if (remaining_size /= 0) then
-      print"(A)", colorize_rgb("[Shader] Error: Did not delete all shaders! Expected size: [0] | Actual: ["//int_to_string(remaining_size)//"]", 255, 0, 0)
+      print"(A)", colorize_rgb("[Shader] Error: Did not delete all shaders! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", 255, 0, 0)
     else
       print"(A)", "[Shader]: Successfully cleared the shader database."
     end if
