@@ -222,13 +222,11 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
-    class(*), allocatable :: generic_data
+    class(*), pointer :: generic_data
     type(vec2i) :: texture_size
     integer(c_int) :: status
 
-    call texture_size_database%get_raw(key(texture_name), generic_data, stat = status)
-
-    if (status /= 0) then
+    if (.not. texture_size_database%get(texture_name, generic_data)) then
       error stop colorize_rgb("[Texture] Error: ["//texture_name//"] does not exist.", 255, 0, 0)
     end if
 
