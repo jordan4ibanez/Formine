@@ -249,7 +249,7 @@ contains
     class(*), pointer :: generic_pointer
     integer(c_int) :: texture_id, status
 
-    if (.not.  texture_database%get(texture_name, generic_pointer)) then
+    if (.not. texture_database%get(texture_name, generic_pointer)) then
       print"(A)",colorize_rgb("[Texture] Error: Texture ["//texture_name//"] does not exist. Cannot delete.", 255, 0, 0)
       return
     end if
