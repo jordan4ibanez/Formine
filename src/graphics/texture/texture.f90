@@ -18,7 +18,6 @@ module texture
   public :: texture_clear_database
 
 
-  !! fixme: these two can use GC.
   type(hashmap_string_key) :: texture_database
   type(hashmap_string_key) :: texture_size_database
 
