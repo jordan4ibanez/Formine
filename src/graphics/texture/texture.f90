@@ -251,14 +251,24 @@ contains
       !* Delete the entire thing in one call. 8)
       call texture_database%clear()
       if (.not. texture_database%is_empty()) then
-        print"(A)", color_term("[Texture] Warning: Did not clear all textures! Expected size: [0] | Actual: ["//int64_to_string(texture_database%count())//"]", WARNING)
-      else
-        print"(A)", "[Texture]: Successfully cleared the texture database."
+        print"(A)", color_term("[Texture] Warning: Did not clear textures texture database! Expected size: [0] | Actual: ["//int64_to_string(texture_database%count())//"]", WARNING)
       end if
     end if
 
     call texture_database%free()
     print"(A)", "[Texture]: Successfully freed the texture database C memory."
+
+    if (.not. texture_size_database%is_empty()) then
+      !* Delete the entire thing in one call. 8)
+      call texture_size_database%clear()
+      if (.not. texture_size_database%is_empty()) then
+        print"(A)", color_term("[Texture] Warning: Did not clear texture size database! Expected size: [0] | Actual: ["//int64_to_string(texture_size_database%count())//"]", WARNING)
+      end if
+    end if
+
+    call texture_size_database%free()
+    print"(A)", "[Texture]: Successfully freed the texture size database C memory."
+
   end subroutine texture_clear_database
 
 
