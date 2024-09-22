@@ -8,11 +8,24 @@ module terminal
   ! public :: colorize_rgb
   public :: colorize_term
 
-  public :: RED
-  public :: PUMPKIN_ORANGE
+  public :: ERROR
+  public :: WARNING
 
-  character(7), parameter :: RED = "255;0;0"
-  character(10), parameter :: PUMPKIN_ORANGE = "255;117;24"
+  ! The 4 seasons, because I think that's neat.
+
+  ! Winter red. Christmas ornament.
+  character(9), parameter :: ERROR = "176;27;46"
+
+  ! Autumn orange. Pumpkin.
+  character(10), parameter :: WARNING = "255;117;24"
+
+  ! Summer yellow. Sunflower.
+  character(10), parameter :: ADVISORY = "232;222;42"
+
+  ! Spring blue. Easter egg.
+  character(11), parameter :: NOTIFICATION = "118;236;251"
+
+
 
 contains
 
