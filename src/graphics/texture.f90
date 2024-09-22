@@ -169,7 +169,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: texture_name
     logical(c_bool) :: exists
     class(*), pointer :: generic_pointer
-    integer(c_int) :: texture_id, status
+    integer(c_int) :: texture_id
 
     exists = .false.
 
@@ -197,7 +197,6 @@ contains
     character(len = *, kind = c_char), intent(in) :: texture_name
     class(*), pointer :: generic_data
     type(vec2i) :: texture_size
-    integer(c_int) :: status
 
     if (.not. texture_size_database%get(texture_name, generic_data)) then
       error stop colorize_rgb("[Texture] Error: ["//texture_name//"] does not exist.", 255, 0, 0)
@@ -218,9 +217,10 @@ contains
     use :: terminal
     implicit none
 
+    !! FIXME: REPLACE WITH A GC!!
+
     character(len = *, kind = c_char), intent(in) :: texture_name
-    class(*), pointer :: generic_pointer
-    integer(c_int) :: texture_id, status
+    integer(c_int) :: texture_id
 
     if (.not. get_texture(texture_name, texture_id)) then
       print"(A)",colorize_rgb("[Texture] Error: Texture ["//texture_name//"] does not exist. Cannot delete.", 255, 0, 0)
@@ -244,11 +244,11 @@ contains
   end subroutine texture_delete
 
 
+  !* Check if a texture exists.
   logical function texture_exists(texture_name) result(existence)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
-    integer(c_int) :: status
 
     existence = texture_database%has_key(texture_name)
   end function texture_exists
