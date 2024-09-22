@@ -8,23 +8,19 @@ module terminal
   public :: colorize_term
 
 
-  public :: ERROR
-  public :: WARNING
-
-
   ! The 4 seasons, because I think that's neat.
 
   ! Winter red. Christmas ornament.
-  character(9), parameter :: ERROR = "176;27;46"
+  character(9), parameter :: ERROR_TEXT = "176;27;46"
 
   ! Autumn orange. Pumpkin.
-  character(10), parameter :: WARNING = "255;117;24"
+  character(10), parameter :: WARNING_TEXT = "255;117;24"
 
   ! Summer yellow. Sunflower.
-  character(10), parameter :: ADVISORY = "232;222;42"
+  character(10), parameter :: ADVISORY_TEXT = "232;222;42"
 
   ! Spring blue. Easter egg.
-  character(11), parameter :: NOTIFICATION = "118;236;251"
+  character(11), parameter :: NOTIFICATION_TEXT = "118;236;251"
 
 
 contains
