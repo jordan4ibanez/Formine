@@ -9,7 +9,7 @@ module mesh
 
   private
 
-
+  public :: mesh_module_initialize
   public :: mesh_create_2d
   public :: mesh_create_3d
   public :: mesh_draw
@@ -35,6 +35,13 @@ module mesh
 
 
 contains
+
+  !* Initialize the module.
+  subroutine mesh_module_initialize()
+    implicit none
+
+    mesh_database = new_hashmap_string_key()
+  end subroutine mesh_module_initialize
 
 
   !* Create a mesh for 2 dimensional space.

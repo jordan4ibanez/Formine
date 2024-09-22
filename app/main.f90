@@ -90,6 +90,8 @@ program main
 
   call glfw_swap_interval(0)
 
+  call mesh_module_initialize()
+
   call chunk_handler_module_initalize()
 
   !! This allows OpenGL debugging. (But not on Mac OS)
