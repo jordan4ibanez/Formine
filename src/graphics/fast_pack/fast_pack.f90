@@ -120,6 +120,7 @@ contains
     new_fast_packer%canvas_height = config%height
 
     ! Allocate
+    new_fast_packer%texture_coordinates = new_hashmap_string_key()
     allocate(new_fast_packer%keys_array(0))
     allocate(new_fast_packer%position_x(0))
     allocate(new_fast_packer%position_y(0))
@@ -321,12 +322,12 @@ contains
 
   !* Pull the texture coordinates database out of the fast packer for use without the fast packer.
   !* This allows the fast packer to go out of scope and be cleaned up.
-  !* This is returning a pointer.
+  !* This is returning a c_ptr under the hood on the stack.
   function fast_packer_get_texture_coordinates_database(this) result(database_pointer)
     implicit none
 
     class(fast_packer), intent(inout) :: this
-    type(hashmap_string_key), pointer :: database_pointer
+    type(hashmap_string_key) :: database_pointer
 
     database_pointer = this%texture_coordinates
   end function fast_packer_get_texture_coordinates_database
