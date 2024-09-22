@@ -248,7 +248,10 @@ contains
     character(len = :, kind = c_char), pointer :: string_key_pointer
     class(*), pointer :: generic_pointer
     integer(c_int64_t) :: i, remaining_size
+    !! USE A VECTOR!
     type(heap_string), dimension(:), allocatable :: temp_string_array
+
+    !! FIXME: wipe this entire nonsense out and use the GC.
 
     !* We must check that there is anything in the database before we iterate.
     remaining_size = shader_database%count()
@@ -282,13 +285,14 @@ contains
       end select
 
       ! Appending.
-      temp_string_array = array_string_insert(key_array%data, heap_string(generic_key%to_string()))
+      temp_string_array = array_string_insert(key_array%data, heap_string(string_key_pointer))
       call move_alloc(temp_string_array, key_array%data)
     end do
 
     ! Now clear the database out.
     do i = 1,size(key_array%data)
-      call shader_database%unset(key(key_array%data(i)%get()))
+      !! fixme: this will need a vector.
+      call shader_database%delete(key_array%data(i)%get())
     end do
 
     !* We will always check that the remaining size is 0. This will protect us from random issues.
