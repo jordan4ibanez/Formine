@@ -343,7 +343,7 @@ contains
 
     !! FIXME: USE THE GC HERE!
 
-    if (get_mesh(mesh_name, gotten_mesh)) then
+    if (.not. get_mesh(mesh_name, gotten_mesh)) then
       print"(A)",colorize_rgb("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot delete.", 255, 0, 0)
       return
     end if
