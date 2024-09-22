@@ -147,6 +147,7 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: texture_name
     integer(c_int), intent(in) :: new_texture, x, y
+    type(vec2i), pointer :: size
 
     ! This creates an enforcement where the texture must be deleted before it can be re-assigned.
     ! This prevents a severe memory leak.
@@ -159,7 +160,11 @@ contains
     end if
 
     call texture_database%set(texture_name, new_texture)
-    call texture_size_database%set(texture_name, vec2i(x, y))
+
+    allocate(size)
+    size%x = x
+    size%y = y
+    call texture_size_database%set(texture_name, size)
   end subroutine set_texture
 
 
