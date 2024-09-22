@@ -144,6 +144,9 @@ contains
   end function into_c_string
 
 
+!* CASTING TO/FROM STRING. =================================================================================
+
+
   ! Convert an integer into an allocated string.
   !* Allocatable will deallocate once the memory goes out of scope.
   function int_to_string(i) result(output)
@@ -165,9 +168,6 @@ contains
     ! print"(A)","len: ", len(output)
     ! print"(A)","-----"
   end function int_to_string
-
-
-!* CASTING TO/FROM STRING. =================================================================================
 
 
   ! Convert an int64 into an allocated string.
