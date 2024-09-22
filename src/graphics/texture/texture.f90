@@ -146,7 +146,8 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
-    integer(c_int), intent(in) :: new_texture, x, y
+    integer(c_int), intent(in), pointer :: new_texture
+    integer(c_int), intent(in), value :: x, y
     type(vec2i), pointer :: size
 
     ! This creates an enforcement where the texture must be deleted before it can be re-assigned.
