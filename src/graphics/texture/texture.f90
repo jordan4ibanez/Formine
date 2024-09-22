@@ -243,7 +243,6 @@ contains
   !* Completely wipe out all existing textures. This might be slow.
   subroutine texture_clear_database()
     use :: string
-    use :: array, only: string_array, array_string_insert
     use :: terminal
     implicit none
 
