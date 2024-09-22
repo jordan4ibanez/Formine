@@ -1,6 +1,7 @@
 module texture
   use :: hashmap_str
   use :: vector_2i
+  use :: texture_gc
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -30,7 +31,7 @@ contains
   subroutine texture_module_initialize()
     implicit none
 
-    texture_database = new_hashmap_string_key()
+    texture_database = new_hashmap_string_key(texture_database_gc)
     
     texture_size_database = new_hashmap_string_key()
   end subroutine texture_module_initialize
