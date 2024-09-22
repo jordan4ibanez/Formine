@@ -44,16 +44,14 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_file_path
-    integer(c_int) :: width, height, channels, desired_channels
+    integer(c_int) :: width, height, channels
     integer(1), dimension(:), allocatable :: image_data
     character(len = :, kind = c_char), allocatable :: file_name
 
     ! We always want 4 channels.
-    desired_channels = 4
+    image_data = stbi_load(texture_file_path, width, height, channels, 4)
 
-    image_data = stbi_load(texture_file_path, width, height, channels, desired_channels)
-
-    if (width + height + channels == 0) then
+    if (width + height == 0) then
       error stop "[Texture] Error: Could not load texture. File specified from file path ["//texture_file_path//"] does not exist."
     end if
 
