@@ -21,7 +21,8 @@ module texture
   type(hashmap_string_key) :: texture_database
   type(hashmap_string_key) :: texture_size_database
 
-  logical :: debug_mode = .false.
+
+  logical, parameter :: debug_mode = .false.
 
 
 contains
