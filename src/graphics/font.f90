@@ -577,9 +577,12 @@ contains
 
     type(string_array) :: key_array
     class(*), allocatable :: generic_data
+    character(len = :, kind = c_char), pointer :: string_key
     class(*), pointer :: generic_pointer
-    integer(c_int) :: i, remaining_size
+    integer(c_int64_t) :: i, remaining_size
     type(heap_string), dimension(:), allocatable :: temp_string_array
+
+    !! FIXME: I don't think anything is actually on the stack so this can just do a CLEAR with the GC
 
 
     !* We must check that there is anything in the database before we iterate.
@@ -596,27 +599,29 @@ contains
 
 
     ! Now we will collect the keys from the iterator.
-    !! fixme: use the new iterator style!
-    do while(iterator%next(generic_key, generic_data))
+    i = 0
+
+    do while(character_database%iterate_kv(i, string_key, generic_pointer))
       ! Appending.
-      temp_string_array = array_string_insert(key_array%data, heap_string(generic_key%to_string()))
+      temp_string_array = array_string_insert(key_array%data, heap_string(string_key))
       call move_alloc(temp_string_array, key_array%data)
     end do
 
     ! Now clear the database out.
     do i = 1,size(key_array%data)
       !* We are manually managing memory, we must free as we go.
-      call character_database%get_raw_ptr(key(key_array%data(i)%get()), generic_pointer)
-      deallocate(generic_pointer)
+      if (character_database%get(key_array%data(i)%get(), generic_pointer)) then
+        deallocate(generic_pointer)
+      end if
 
-      call character_database%unset(key(key_array%data(i)%get()))
+      call character_database%delete(key_array%data(i)%get())
     end do
 
     !* We will always check that the remaining size is 0. This will protect us from random issues.
     remaining_size = character_database%count()
 
     if (remaining_size /= 0) then
-      print"(A)", colorize_rgb("[Font] Error: Did not delete all characters! Expected size: [0] | Actual: ["//int_to_string(remaining_size)//"]", 255, 0, 0)
+      print"(A)", colorize_rgb("[Font] Error: Did not delete all characters! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", 255, 0, 0)
     else
       print"(A)", "[Font]: Successfully cleared the character database."
     end if
