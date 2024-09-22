@@ -11,8 +11,8 @@ module terminal
   public :: RED
   public :: PUMPKIN_ORANGE
 
-  integer(c_int), dimension(3), parameter :: RED = [255, 0, 0]
-  integer(c_int), dimension(3), parameter :: PUMPKIN_ORANGE = [255, 117, 24]
+  character(7), parameter :: RED = "255;0;0"
+  character(10), parameter :: PUMPKIN_ORANGE = "255;117;24"
 
 contains
 
