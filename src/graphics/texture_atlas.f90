@@ -36,7 +36,7 @@ module texture_atlas
   type(texture_pack_element), dimension(:), allocatable :: textures_to_pack
 
   !! fixme: use a GC on this thing!
-  type(hashmap_string_key), pointer :: texture_coordinates_pointer
+  type(hashmap_string_key) :: texture_coordinates_pointer
 
   type(heap_string), dimension(:), allocatable :: texture_key_array
 
@@ -112,7 +112,7 @@ contains
     call texture_create_from_memory("TEXTURE_ATLAS", raw_texture_atlas_data, canvas_size%x, canvas_size%y)
 
     ! Now we attach the coordinates pointer to be used for the lifetime of the game.
-    texture_coordinates_pointer => packer%get_texture_coordinates_database()
+    texture_coordinates_pointer = packer%get_texture_coordinates_database()
 
     texture_key_array = packer%get_keys()
 
@@ -320,18 +320,19 @@ contains
     implicit none
 
     ! Free the pointer.
-    if (associated(texture_coordinates_pointer)) then
-      deallocate(texture_coordinates_pointer)
-      ! Double check.
-      if (associated(texture_coordinates_pointer)) then
-        print"(A)",colorize_rgb("[Texture Atlas] Error: Failed to free the texture coordinates pointer.", 255, 0, 0)
-        return
-      end if
-    else
-      ! If this happens, something went very wrong.
-      print"(A)",colorize_rgb("[Texture Atlas] Error: Texture coordinates pointer is not associated.", 255, 0, 0)
-      return
-    end if
+    !! FIXME: MAKE THIS THING CLEAR THE DATABASE.
+    ! if (associated(texture_coordinates_pointer)) then
+    !   deallocate(texture_coordinates_pointer)
+    !   ! Double check.
+    !   if (associated(texture_coordinates_pointer)) then
+    !     print"(A)",colorize_rgb("[Texture Atlas] Error: Failed to free the texture coordinates pointer.", 255, 0, 0)
+    !     return
+    !   end if
+    ! else
+    !   ! If this happens, something went very wrong.
+    !   print"(A)",colorize_rgb("[Texture Atlas] Error: Texture coordinates pointer is not associated.", 255, 0, 0)
+    !   return
+    ! end if
     ! Everything is freed, hooray.
     print"(A)", "[Texture Atlas]: Successfully destroyed texture atlas."
   end subroutine
