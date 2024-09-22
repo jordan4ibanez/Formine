@@ -96,8 +96,8 @@ program main
 
   !! This allows OpenGL debugging. (But not on Mac OS)
   if (forglad_gpu_supports_gl_debugging()) then
-    call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
-    call gl_set_debug_message_callback()
+    ! call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
+    ! call gl_set_debug_message_callback()
   end if
 
   !! This enabled depth testing.
@@ -215,12 +215,12 @@ program main
 
       ! call mesh_delete("debug")
 
-      call chunk_handler_draw_chunks()
+      ! call chunk_handler_draw_chunks()
 
 
-      !* Move into "2D mode"
+      ! !* Move into "2D mode"
 
-      call gl_clear_depth_buffer()
+      ! call gl_clear_depth_buffer()
 
       ! call gl_clear_color_buffer()
 
