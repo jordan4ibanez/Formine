@@ -128,7 +128,7 @@ program main
 
   call font_create("./fonts/font_forgotten.png")
 
-  call texture_create("./textures/fortran_logo_512x512.png")
+  ! call texture_create("./textures/fortran_logo_512x512.png")
 
   !* If we cannot initalize the API properly, we give up.
   ! call api_initialize()
