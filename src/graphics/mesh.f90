@@ -284,9 +284,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: mesh_name
     type(mesh_data), intent(inout), pointer :: gotten_mesh
     logical(c_bool) :: exists
-
     class(*), pointer :: generic_pointer
-    integer(c_int) :: status
 
     exists = .false.
 
@@ -313,7 +311,6 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
     type(mesh_data), pointer :: gotten_mesh
-    logical :: exists
 
     if (.not. get_mesh(mesh_name, gotten_mesh)) then
       print"(A)", colorize_rgb("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot draw.", 255, 0, 0)
@@ -418,7 +415,6 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
-    integer(c_int) :: status
 
     existence = mesh_database%has_key(mesh_name)
   end function mesh_exists
