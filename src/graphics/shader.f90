@@ -245,12 +245,13 @@ contains
     implicit none
 
     type(string_array) :: key_array
-    class(*), allocatable :: generic_data
-    integer(c_int) :: i, remaining_size
+    character(len = :, kind = c_char), pointer :: string_key_pointer
+    class(*), pointer :: generic_pointer
+    integer(c_int64_t) :: i, remaining_size
     type(heap_string), dimension(:), allocatable :: temp_string_array
 
     !* We must check that there is anything in the database before we iterate.
-    num_items = shader_database%count()
+    remaining_size = shader_database%count()
 
     if (remaining_size == 0) then
       print"(A)", "[Shader]: Database was empty. Nothing to do. Success!"
@@ -265,17 +266,19 @@ contains
     call gl_use_program(0)
 
     ! Now we will collect the keys from the iterator.
-    !!FIXME: USE THE NEW ITERATOR STYLE!
-    do while(iterator%next(generic_key, generic_data))
+
+    i = 0
+
+    do while(shader_database%iterate_kv(i, string_key_pointer, generic_pointer))
       ! We will delete the programs as we go.
-      select type(generic_data)
+      select type(generic_pointer)
        type is (integer)
-        call gl_delete_program(generic_data)
-        if (gl_is_program(generic_data)) then
-          error stop "[Shader] Error: Failed to delete program for shader ["//generic_key%to_string()//"]"
+        call gl_delete_program(generic_pointer)
+        if (gl_is_program(generic_pointer)) then
+          error stop "[Shader] Error: Failed to delete program for shader ["//string_key_pointer//"]"
         end if
        class default
-        error stop "[Shader] Error: The wrong type was inserted for shader ["//generic_key%to_string()//"]"
+        error stop "[Shader] Error: The wrong type was inserted for shader ["//string_key_pointer//"]"
       end select
 
       ! Appending.
