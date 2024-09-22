@@ -220,7 +220,7 @@ contains
      type is (integer(c_int))
       texture_id = generic_pointer
      class default
-      error stop "[Texture] Error: Wrong type in database."
+      error stop colorize_rgb("[Texture] Error: ["//texture_name//"] is the wrong type.", 255, 0, 0)
     end select
   end function get_texture
 
