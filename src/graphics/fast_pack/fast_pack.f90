@@ -52,7 +52,7 @@ module fast_pack
     integer(c_int) :: max_y = 0
     logical(c_bool) :: locked_out = .false.
     ! Everything below this is allocated in the constructor.
-    type(hashmap_string_key), pointer :: texture_coordinates
+    type(hashmap_string_key) :: texture_coordinates
     type(heap_string), dimension(:), allocatable :: keys_array
     integer(c_int), dimension(:), allocatable :: position_x
     integer(c_int), dimension(:), allocatable :: position_y
@@ -328,7 +328,7 @@ contains
     class(fast_packer), intent(inout) :: this
     type(hashmap_string_key), pointer :: database_pointer
 
-    database_pointer => this%texture_coordinates
+    database_pointer = this%texture_coordinates
   end function fast_packer_get_texture_coordinates_database
 
 
@@ -436,8 +436,9 @@ contains
     d_canvas_width = real(this%canvas_width, kind = c_double)
     d_canvas_height = real(this%canvas_height, kind = c_double)
 
-    allocate(this%texture_coordinates)
-    call this%texture_coordinates%allocate(size = size(this%keys_array))
+
+    !! FIXME: THIS MIGHT NEED A GC.
+    this%texture_coordinates = new_hashmap_string_key()
 
     do i = 1,keys_array_size
 
@@ -469,7 +470,7 @@ contains
       new_texture_rectangle%max_y = real(d_max_y / d_canvas_height, kind = c_float)
 
       ! Now put it into the database.
-      call this%texture_coordinates%set_ptr(key(this%keys_array(i)%get()), new_texture_rectangle)
+      call this%texture_coordinates%set(this%keys_array(i)%get(), new_texture_rectangle)
     end do
   end subroutine fast_packer_create_texture_rectangles
 
