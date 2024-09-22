@@ -31,7 +31,7 @@ program main
   real(c_float) :: floating_font_size
 
   character(len = :, kind = c_char), allocatable :: position_text_debug
-  integer(c_int) :: y, new_fps, old_fps, x
+  integer(c_int) :: y, new_fps, old_fps
   ! logical(c_bool) :: testing_bool
   ! character(len = :, kind = c_char), pointer :: test_data
   ! integer(c_int), pointer :: test_data
@@ -135,12 +135,12 @@ program main
 
 
   ! print*,"START"
-  do x = -20,20
-    do y = -20,20
-      ! This launches 8 threads.
-      call chunk_generator_new_chunk(x,y)
-    end do
-  end do
+  ! do x = -20,20
+  !   do y = -20,20
+  !     ! This launches 8 threads.
+  !     call chunk_generator_new_chunk(x,y)
+  !   end do
+  ! end do
   ! print*,"END"
 
   rotation = 0.0
