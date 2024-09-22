@@ -8,6 +8,7 @@ module chunk_handler
   private
 
 
+  public :: chunk_handler_module_initalize
   public :: chunk_handler_set_chunk_mesh
   public :: chunk_handler_store_chunk_pointer
   public :: chunk_handler_delete_chunk
@@ -20,8 +21,15 @@ module chunk_handler
   type(hashmap_string_key) :: chunk_database
 
 
-
 contains
+
+
+  !* Initialize the module.
+  subroutine chunk_handler_module_initalize()
+    implicit none
+
+    chunk_database = new_hashmap_string_key()
+  end subroutine chunk_handler_module_initalize
 
 
   !* Sets the chunk mesh in the chunk's stack array.

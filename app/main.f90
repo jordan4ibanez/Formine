@@ -90,6 +90,8 @@ program main
 
   call glfw_swap_interval(0)
 
+  call chunk_handler_module_initalize()
+
   !! This allows OpenGL debugging. (But not on Mac OS)
   if (forglad_gpu_supports_gl_debugging()) then
     call gl_enable(GL_DEBUG_OUTPUT_SYNCHRONOUS)
