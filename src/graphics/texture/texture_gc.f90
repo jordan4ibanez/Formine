@@ -11,11 +11,11 @@ contains
     use :: hashmap_bindings
     implicit none
 
-    type(element_string_key) :: element
+    class(*), pointer :: element
 
-    !? Element pointer is of type integer(c_int)
-
-    deallocate(element%data)
+    !? Element pointer is of type integer(c_int).
+    ! All we do is free it.
+    deallocate(element)
 
   end subroutine texture_database_gc
 
