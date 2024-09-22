@@ -207,7 +207,7 @@ contains
         end select
 
         !? Make this print nicely.
-        print"(A)",colorize_term("[OpenGL] ("//severity_text//"): ("//int_to_string(source)//") "//fortran_message//".", severity_level)
+        print"(A)",color_term("[OpenGL] ("//severity_text//"): ("//int_to_string(source)//") "//fortran_message//".", severity_level)
       end if
     end if
   end subroutine debug_message_callback
