@@ -210,7 +210,7 @@ contains
     integer(c_int) :: status
 
     ! All we must do is check the shader result and return the existence in the result.
-    call shader_database%check_key(key(shader_name), stat = status)
+    call shader_database%has_key(shader_name)
 
     exists = status == 0
   end function shader_exists
