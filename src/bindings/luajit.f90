@@ -1089,10 +1089,10 @@ contains
         call lua_pop(state, lua_gettop(state))
         success = .true.
       else
-        print"(A)", color_term(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
+        print"(A)", color_term(achar(10)//"[LuaJIT] Warning:"//achar(10)//lua_tostring(state, lua_gettop(state)), WARNING)
       end if
     else
-      print"(A)", color_term(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)), 255, 0, 0)
+      print"(A)", color_term(achar(10)//"[LuaJIT] Warning:"//achar(10)//lua_tostring(state, lua_gettop(state)), WARNING)
     end if
   end function luajit_run_string
 

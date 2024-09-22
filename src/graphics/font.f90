@@ -632,7 +632,7 @@ contains
     remaining_size = character_database%count()
 
     if (remaining_size /= 0) then
-      print"(A)", color_term("[Font] Error: Did not delete all characters! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", 255, 0, 0)
+      print"(A)", color_term("[Font] Warning: Did not delete all characters! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", WARNING)
     else
       print"(A)", "[Font]: Successfully cleared the character database."
     end if
