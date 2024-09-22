@@ -133,7 +133,7 @@ contains
     integer(c_int) :: texture_id
 
     if (.not. get_texture(texture_name, texture_id)) then
-      print"(A)", colorize_rgb("[Texture] Warning: Texture ["//texture_name//"] does not exist. Cannot use.", 255, 0, 0)
+      print"(A)", colorize_term("[Texture] Warning: Texture ["//texture_name//"] does not exist. Cannot use.", PUMPKIN_ORANGE)
       return
     end if
 
@@ -176,7 +176,7 @@ contains
     exists = .false.
 
     if (.not. texture_database%get(texture_name, generic_pointer)) then
-      print"(A)",colorize_rgb_string("[Texture] Error: ["//texture_name//"] does not exist.", PUMPKIN_ORANGE)
+      print"(A)",colorize_term("[Texture] Warning: ["//texture_name//"] does not exist.", PUMPKIN_ORANGE)
       return
     end if
 
@@ -184,7 +184,7 @@ contains
      type is (integer(c_int))
       texture_id = generic_pointer
      class default
-      error stop colorize_rgb("[Texture] Error: ["//texture_name//"] is the wrong type.", 255, 0, 0)
+      error stop colorize_term("[Texture] Error: ["//texture_name//"] is the wrong type.", RED)
     end select
 
     exists = .true.
@@ -201,14 +201,14 @@ contains
     type(vec2i) :: texture_size
 
     if (.not. texture_size_database%get(texture_name, generic_data)) then
-      error stop colorize_rgb("[Texture] Error: ["//texture_name//"] does not exist.", 255, 0, 0)
+      error stop colorize_term("[Texture] Error: ["//texture_name//"] does not exist.", RED)
     end if
 
     select type (generic_data)
      type is (vec2i)
       texture_size = generic_data
      class default
-      error stop colorize_rgb("[Texture] Error: ["//texture_name//"] is the wrong type.", 255, 0, 0)
+      error stop colorize_term("[Texture] Error: ["//texture_name//"] is the wrong type.", RED)
     end select
   end function texture_get_size
 
@@ -260,7 +260,7 @@ contains
     remaining_size = texture_database%count()
 
     if (remaining_size /= 0) then
-      print"(A)", colorize_rgb_string("[Texture] Error: Did not clear all textures! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", PUMPKIN_ORANGE)
+      print"(A)", colorize_term("[Texture] Error: Did not clear all textures! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", PUMPKIN_ORANGE)
     else
       print"(A)", "[Texture]: Successfully cleared the texture database."
     end if
