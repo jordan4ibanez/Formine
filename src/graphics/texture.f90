@@ -7,7 +7,7 @@ module texture
 
   private
 
-
+  public :: texture_module_initialize
   public :: texture_create
   public :: texture_create_from_memory
   public :: texture_use
@@ -28,6 +28,14 @@ module texture
 
 
 contains
+
+  !* Initialize the module.
+  subroutine texture_module_initialize()
+    implicit none
+
+    texture_database = new_hashmap_string_key()
+    texture_size_database = new_hashmap_string_key()
+  end subroutine texture_module_initialize
 
 
   !* Create a texture from a file path.
