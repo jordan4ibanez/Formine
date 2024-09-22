@@ -5,7 +5,7 @@ module terminal
   private
 
 
-  public :: colorize_term
+  public :: color_term
 
 
   integer(c_int), parameter, public :: ERROR = 4
@@ -37,7 +37,7 @@ contains
   !* Severity levels: ERROR, WARNING, ADVISORY, NOTIFICATION
   !*
   !* If you put in anything else for severity, it will not colorize it.
-  function colorize_term(input_string, severity_level) result(colorized_text)
+  function color_term(input_string, severity_level) result(colorized_text)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: input_string
@@ -61,7 +61,7 @@ contains
       !? Nothing happens if you try to mess with it.
       colorized_text = input_string
     end select
-  end function colorize_term
+  end function color_term
 
 
   ! Internal subroutine to stop me from doing something stupid.
