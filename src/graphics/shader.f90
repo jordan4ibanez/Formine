@@ -207,7 +207,6 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: shader_name
-    integer(c_int) :: status
 
     ! All we must do is check the shader result and return the existence in the result.
     exists = shader_database%has_key(shader_name)
@@ -297,7 +296,7 @@ contains
     remaining_size = shader_database%count()
 
     if (remaining_size /= 0) then
-      print"(A)", color_term("[Shader] Error: Did not delete all shaders! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", 255, 0, 0)
+      print"(A)", color_term("[Shader] Error: Did not delete all shaders! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", WARNING)
     else
       print"(A)", "[Shader]: Successfully cleared the shader database."
     end if
