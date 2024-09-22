@@ -249,7 +249,8 @@ contains
     remaining_size = texture_database%count()
 
     if (remaining_size == 0) then
-      print"(A)", "[Texture]: Database was empty. Nothing to do. Success!"
+      print"(A)", "[Texture]: Database was empty. Freeing C memory."
+      call texture_database%free()
       return
     end if
 
@@ -262,7 +263,7 @@ contains
     if (remaining_size /= 0) then
       print"(A)", colorize_rgb_string("[Texture] Error: Did not delete all textures! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", PUMPKIN_ORANGE)
     else
-      print"(A)", "[Texture]: Successfully cleared the texture database."
+      print"(A)", "[Texture]: Successfully freed the texture database."
     end if
   end subroutine texture_clear_database
 
