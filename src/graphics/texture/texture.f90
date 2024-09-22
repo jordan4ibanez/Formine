@@ -243,11 +243,7 @@ contains
     use :: terminal
     implicit none
 
-    type(string_array) :: key_array
-    character(len = :, kind = c_char), pointer :: string_key
-    class(*), pointer :: generic_pointer
-    integer(c_int64_t) :: i, remaining_size
-    type(heap_string), dimension(:), allocatable :: temp_string_array
+    integer(c_int64_t) :: remaining_size
 
     !* We must check that there is anything in the database before we iterate.
     remaining_size = texture_database%count()
@@ -257,26 +253,8 @@ contains
       return
     end if
 
-    !! FIXME: JUST USE THE GARBAGE COLLECTOR ON THIS!
-
-    ! Start with a size of 0.
-    !! fixme: this is a great use for vectors!
-    allocate(key_array%data(0))
-
-    ! Now we will collect the keys from the iterator.
-    !! fixme: use the new iterator style!
-
-    i = 0
-
-    do while(texture_database%iterate_kv(i, string_key, generic_pointer))
-      ! Appending.
-      temp_string_array = array_string_insert(key_array%data, heap_string(string_key))
-      call move_alloc(temp_string_array, key_array%data)
-    end do
-
-    do i = 1,size(key_array%data)
-      call texture_delete(key_array%data(i)%get())
-    end do
+    !* Delete the entire thing in one call. 8)
+    call texture_database%free()
 
     !* We will always check that the remaining size is 0. This will protect us from random issues.
     remaining_size = texture_database%count()
