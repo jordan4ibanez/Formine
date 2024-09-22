@@ -247,27 +247,14 @@ contains
     use :: terminal
     implicit none
 
-    integer(c_int64_t) :: remaining_size
-
-    !* We must check that there is anything in the database before we iterate.
-    remaining_size = texture_database%count()
-
-    if (remaining_size == 0) then
-      print"(A)", "[Texture]: Database was empty. Freeing C memory."
-      call texture_database%free()
-      return
-    end if
-
-    !* Delete the entire thing in one call. 8)
-    call texture_database%clear()
-
-    !* We will always check that the remaining size is 0. This will protect us from random issues.
-    remaining_size = texture_database%count()
-
-    if (remaining_size /= 0) then
-      print"(A)", color_term("[Texture] Warning: Did not clear all textures! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", WARNING)
-    else
-      print"(A)", "[Texture]: Successfully cleared the texture database."
+    if (.not. texture_database%is_empty()) then
+      !* Delete the entire thing in one call. 8)
+      call texture_database%clear()
+      if (.not. texture_database%is_empty()) then
+        print"(A)", color_term("[Texture] Warning: Did not clear all textures! Expected size: [0] | Actual: ["//int64_to_string(texture_database%count())//"]", WARNING)
+      else
+        print"(A)", "[Texture]: Successfully cleared the texture database."
+      end if
     end if
 
     call texture_database%free()
