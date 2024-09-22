@@ -336,8 +336,6 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
-    class(*), pointer :: generic
-    integer(c_int) :: status
     type(mesh_data), pointer :: gotten_mesh
 
     ! This wipes out the OpenGL memory as well or else there's going to be a massive memory leak.
