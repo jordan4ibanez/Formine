@@ -24,6 +24,9 @@ module texture
   logical :: debug_mode = .false.
 
 
+  !! FIXME: THIS CAN USE A GETTER TO SIMPLIFY GETTING THE INTEGER FROM THE DATABASE!
+
+
 contains
 
 
