@@ -234,7 +234,7 @@ contains
     ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
 
     ! Copy the definition into the string based database.
-    call definition_database_string%set(key(new_definition%name), new_definition)
+    call definition_database_string%set(new_definition%name, new_definition)
 
     definition_array = [definition_array, new_definition]
 
