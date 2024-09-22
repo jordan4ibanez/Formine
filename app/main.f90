@@ -73,6 +73,8 @@ program main
 
   call texture_module_initialize()
 
+  call mesh_module_initialize()
+
   ! Only initialize thread components when we're sure the game starts up.
   call thread_handler_intialization()
 
@@ -89,8 +91,6 @@ program main
   call gl_get_version()
 
   call glfw_swap_interval(0)
-
-  call mesh_module_initialize()
 
   call chunk_handler_module_initalize()
 
