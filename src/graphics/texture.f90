@@ -44,23 +44,23 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_file_path
-    integer(c_int) :: x, y, channels, desired_channels
+    integer(c_int) :: width, height, channels, desired_channels
     integer(1), dimension(:), allocatable :: image_data
     character(len = :, kind = c_char), allocatable :: file_name
 
     ! We always want 4 channels.
     desired_channels = 4
 
-    image_data = stbi_load(texture_file_path, x, y, channels, desired_channels)
+    image_data = stbi_load(texture_file_path, width, height, channels, desired_channels)
 
-    if (x + y + channels == 0) then
+    if (width + height + channels == 0) then
       error stop "[Texture] Error: Could not load texture. File specified from file path ["//texture_file_path//"] does not exist."
     end if
 
     ! This is done by the file name, we don't care about the path.
     file_name = string_get_file_name(texture_file_path)
 
-    call texture_create_from_memory(file_name, image_data, x, y)
+    call texture_create_from_memory(file_name, image_data, width, height)
   end subroutine texture_create
 
 
@@ -129,7 +129,7 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
-    integer(c_int) :: texture_id, status
+    integer(c_int) :: texture_id
 
     if (.not. get_texture(texture_name, texture_id)) then
       print"(A)", colorize_rgb("[Texture] Warning: Texture ["//texture_name//"] does not exist. Cannot use.", 255, 0, 0)
