@@ -44,4 +44,15 @@ contains
   end subroutine texture_database_gc
 
 
+  subroutine texture_size_database_gc(element)
+    implicit none
+
+    !? Element is a vec2i.
+    class(*), pointer :: element
+
+    ! Can just free it.
+    deallocate(element)
+  end subroutine texture_size_database_gc
+
+
 end module texture_gc

@@ -33,7 +33,7 @@ contains
 
     texture_database = new_hashmap_string_key(texture_database_gc)
 
-    texture_size_database = new_hashmap_string_key()
+    texture_size_database = new_hashmap_string_key(texture_size_database_gc)
   end subroutine texture_module_initialize
 
 
