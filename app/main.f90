@@ -131,7 +131,7 @@ program main
   call texture_create("./textures/fortran_logo_512x512.png")
 
   !* If we cannot initalize the API properly, we give up.
-  call api_initialize()
+  ! call api_initialize()
 
 
   ! print*,"START"
