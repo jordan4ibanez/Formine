@@ -4,9 +4,9 @@ module terminal
 
   private
 
-  ! public :: to_rgb_string
-  ! public :: colorize_rgb
+
   public :: colorize_term
+
 
   public :: ERROR
   public :: WARNING
