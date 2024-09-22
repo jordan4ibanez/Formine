@@ -8,15 +8,27 @@ module keyboard
   private
 
 
-  public :: keyboard_initialize
+  public :: keyboard_module_initialize
   public :: keyboard_key_down
   public :: keyboard_key_up
 
 
+  !! FIXME: NEEDS A GC (maybe)
   type(hashmap_integer_key) :: key_database
 
 
 contains
+
+  !* This initializes the keyboard callback function.
+  !* This must be called after GLFW is initialized.
+  subroutine keyboard_module_initialize()
+    implicit none
+
+    !! FIXME: NEEDS A GC (maybe)
+    key_database = new_hashmap_integer_key()
+
+    call glfw_set_key_callback(c_funloc(keyboard_input_callback))
+  end subroutine keyboard_module_initialize
 
 
   !* Key press events.
@@ -109,15 +121,6 @@ contains
       is_up = .false.
     end if
   end function keyboard_key_up
-
-
-  !* This initializes the keyboard callback function.
-  !* This must be called after GLFW is initialized.
-  subroutine keyboard_initialize()
-    implicit none
-
-    call glfw_set_key_callback(c_funloc(keyboard_input_callback))
-  end subroutine keyboard_initialize
 
 
 end module keyboard

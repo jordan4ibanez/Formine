@@ -80,7 +80,7 @@ program main
 
   call mouse_lock()
 
-  call keyboard_initialize()
+  call keyboard_module_initialize()
 
   call delta_initialize()
 
