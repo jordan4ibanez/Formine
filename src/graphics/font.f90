@@ -457,22 +457,26 @@ contains
     integer(c_int), intent(in), value :: image_width, image_height
     type(hashmap_string_key), intent(in) :: character_database_integral
     type(memory_texture) :: rgba8_texture_data
-    class(*), allocatable :: generic_data
+    character(len = :, kind = c_char), pointer :: string_key
+    class(*), pointer :: generic_pointer
     type(vec2i) :: position
     integer(c_int) :: pixel_x, pixel_y
     type(opengl_character), pointer :: gpu_character
+    integer(c_int64_t) :: i
 
     ! Shift this into a format we can use.
     rgba8_texture_data = memory_texture(raw_image_data, image_width, image_height)
 
-    do while(character_database_integral%iterate_kv(generic_key, generic_data))
+    i = 0
+
+    do while(character_database_integral%iterate_kv(i, string_key, generic_pointer))
 
       ! Enforce that we are running with a vec2i.
-      select type(generic_data)
+      select type(generic_pointer)
        type is (vec2i)
-        position = generic_data
+        position = generic_pointer
        class default
-        error stop "[Font] Error: The wrong type got inserted for character ["//generic_key%to_string()//"]"
+        error stop "[Font] Error: The wrong type got inserted for character ["//string_key//"]"
       end select
 
       ! So now that we have the position of the character in the texture, let's calculate some basic elements.
@@ -494,7 +498,7 @@ contains
       gpu_character%top_right = pixel_position_to_opengl_position(pixel_x + gpu_character%width_pixels, pixel_y)
 
       ! Finally, we can assign this character into the database.
-      call character_database%set_ptr(key(generic_key%to_string()), gpu_character)
+      call character_database%set(string_key, gpu_character)
     end do
 
 
