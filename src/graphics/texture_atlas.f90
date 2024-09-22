@@ -223,6 +223,7 @@ contains
 
     print"(A)","[Texture Atlas]: Begin cachiness optimization."
 
+    !! FIXME: THIS IS A MEMORY LEAK!
     string_to_index_array = new_hashmap_string_key()
 
     key_array_size = size(texture_key_array)
