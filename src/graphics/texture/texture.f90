@@ -220,6 +220,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: texture_name
 
     ! Finally, remove it from the database.
+    !? GC will take care of the OpenGL memory.
     call texture_database%delete(texture_name)
   end subroutine texture_delete
 
