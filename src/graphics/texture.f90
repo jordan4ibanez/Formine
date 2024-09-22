@@ -284,9 +284,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: texture_name
     integer(c_int) :: status
 
-    call texture_database%check_key(key(texture_name), stat = status)
-
-    existence = status == 0
+    existence = texture_database%has_key(texture_name)
   end function texture_exists
 
 
