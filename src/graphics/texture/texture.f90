@@ -255,16 +255,19 @@ contains
     end if
 
     !* Delete the entire thing in one call. 8)
-    call texture_database%free()
+    call texture_database%clear()
 
     !* We will always check that the remaining size is 0. This will protect us from random issues.
     remaining_size = texture_database%count()
 
     if (remaining_size /= 0) then
-      print"(A)", colorize_rgb_string("[Texture] Error: Did not delete all textures! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", PUMPKIN_ORANGE)
+      print"(A)", colorize_rgb_string("[Texture] Error: Did not clear all textures! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", PUMPKIN_ORANGE)
     else
-      print"(A)", "[Texture]: Successfully freed the texture database."
+      print"(A)", "[Texture]: Successfully cleared the texture database."
     end if
+
+    call texture_database%free()
+    print"(A)", "[Texture]: Successfully freed the texture database C memory."
   end subroutine texture_clear_database
 
 
