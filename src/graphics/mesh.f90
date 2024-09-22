@@ -428,7 +428,8 @@ contains
     implicit none
 
     type(string_array) :: key_array
-    class(*), allocatable :: generic_data
+    character(len = :, kind = c_char), pointer :: string_key
+    class(*), pointer :: generic_data
     integer(c_int64_t) :: i, remaining_size
     type(heap_string), dimension(:), allocatable :: temp_string_array
 
@@ -446,9 +447,11 @@ contains
 
     ! Now we will collect the keys from the iterator.
     !!FIXME: USE THE NEW ITERATOR STYLE!
-    do while(iterator%next(generic_key, generic_data))
+    i = 0
+
+    do while(mesh_database%iterate_kv(i, string_key, generic_data))
       ! Appending.
-      temp_string_array = array_string_insert(key_array%data, heap_string(generic_key%to_string()))
+      temp_string_array = array_string_insert(key_array%data, heap_string(string_key))
       call move_alloc(temp_string_array, key_array%data)
     end do
 
@@ -461,7 +464,7 @@ contains
     remaining_size = mesh_database%count()
 
     if (remaining_size /= 0) then
-      print"(A)", colorize_rgb("[Mesh] Error: Did not delete all meshes! Expected size: [0] | Actual: ["//int_to_string(remaining_size)//"]", 255, 0, 0)
+      print"(A)", colorize_rgb("[Mesh] Error: Did not delete all meshes! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", 255, 0, 0)
     else
       print"(A)", "[Mesh]: Successfully cleared the mesh database."
     end if
