@@ -315,6 +315,7 @@ contains
     integer(c_int) :: i, temp_buffer_length, x_index, y_index
     character(len = :), allocatable :: current_character, temp_buffer
     character(len = :), allocatable :: x_str, y_str
+    type(vec2i), pointer :: position_data
 
     call reader%read_lines(font_config_file_path)
 
@@ -417,7 +418,10 @@ contains
         end if
 
         ! Now finally, dump the integral position into the database.
-        call character_database_integral%set(current_character, vec2i(x_index, y_index))
+        allocate(position_data)
+        position_data%x = x_index
+        position_data%y = y_index
+        call character_database_integral%set(current_character, position_data)
       end if
     end do
 
