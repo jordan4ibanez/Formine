@@ -274,7 +274,7 @@ contains
     end if
 
     ! Finally, remove it from the database.
-    call texture_database%unset(key(texture_name))
+    call texture_database%delete(texture_name)
   end subroutine texture_delete
 
 
