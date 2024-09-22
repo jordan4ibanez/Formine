@@ -170,28 +170,34 @@ contains
     print"(A)","[Shader]: Shader ["//shader_name//"] created successfully."
 
     ! Store it in the hash table for later use.
-    call shader_database%set(key(shader_name), program_id)
+    call shader_database%set(shader_name, program_id)
   end subroutine shader_create
 
 
   !* Get a shader from the hash table.
   !* The shader is a clone. To update, set_shader().
+  !! FIXME: swap exists and gotten_program
   function get_shader(shader_name, exists) result(gotten_program)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: shader_name
     logical, intent(inout) :: exists
-    integer(c_int) :: status
+    class(*), pointer :: generic_pointer
     integer(c_int) :: gotten_program
 
-    call shader_database%get(key(shader_name), gotten_program, stat = status)
+    exists = shader_database%get(shader_name, generic_pointer)
 
-    exists = status == 0
-
-    if (status /= 0) then
-      ! print"(A)","[Shader] Error: ["//shader_name//"] does not exist."
+    if (.not. exists) then
+      print"(A)","[Shader] Warning: ["//shader_name//"] does not exist."
       return
     end if
+
+    select type (generic_pointer)
+     type is (integer(c_int))
+      gotten_program = generic_pointer
+     class default
+      error stop "wrong type in shader."
+    end select
   end function get_shader
 
 
