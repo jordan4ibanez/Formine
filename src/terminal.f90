@@ -8,6 +8,12 @@ module terminal
   public :: colorize_rgb
   public :: colorize_rgb_string
 
+  public :: RED
+  public :: PUMPKIN_ORANGE
+
+  integer(c_int), dimension(3), parameter :: RED = [255, 0, 0]
+  integer(c_int), dimension(3), parameter :: PUMPKIN_ORANGE = [255, 117, 24]
+
 contains
 
   ! Internal subroutine to stop me from doing something stupid.
