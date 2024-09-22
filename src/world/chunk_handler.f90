@@ -167,13 +167,11 @@ contains
 
     class(*), allocatable, target :: generic_data
     type(memory_chunk), pointer :: chunk
-    integer(c_int) :: i
+    integer(c_int64_t) :: i
     character(len = :, kind = c_char), pointer :: current_mesh_id
 
-    call chunk_database%stats(num_items = i)
-
     ! If there's nothing to do, don't do anything.
-    if (i == 0) then
+    if (chunk_database%count() == 0) then
       return
     end if
 
@@ -215,7 +213,7 @@ contains
     integer(c_int), intent(in), value :: x, y
     character(len = :, kind = c_char), allocatable :: new_key
 
-    new_key = key("chunk_"//int_to_string(x)//"_"//int_to_string(y))
+    new_key = "chunk_"//int_to_string(x)//"_"//int_to_string(y)
   end function grab_chunk_key
 
 
