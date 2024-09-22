@@ -232,10 +232,8 @@ contains
 
     exists = .false.
 
-    call character_database%get_raw_ptr(key(char), generic_pointer, stat = status)
-
     ! We will have a special handler to use a generic character for characters that aren't registered.
-    if (status /= 0) then
+    if (.not. character_database%get(char, generic_pointer)) then
       return
     end if
 
@@ -414,7 +412,7 @@ contains
         end if
 
         ! Now finally, dump the integral position into the database.
-        call character_database_integral%set(key(current_character), vec2i(x_index, y_index))
+        call character_database_integral%set(current_character, vec2i(x_index, y_index))
       end if
     end do
 
@@ -457,7 +455,7 @@ contains
 
     integer(1), dimension(:), intent(in) :: raw_image_data
     integer(c_int), intent(in), value :: image_width, image_height
-    type(fhash_tbl_t), intent(in) :: character_database_integral
+    type(hashmap_string_key), intent(in) :: character_database_integral
     type(memory_texture) :: rgba8_texture_data
     class(*), allocatable :: generic_data
     type(vec2i) :: position
@@ -467,9 +465,7 @@ contains
     ! Shift this into a format we can use.
     rgba8_texture_data = memory_texture(raw_image_data, image_width, image_height)
 
-    ! Iterate integral character position.
-    iterator = fhash_iter_t(character_database_integral)
-    do while(iterator%next(generic_key, generic_data))
+    do while(character_database_integral%iterate_kv(generic_key, generic_data))
 
       ! Enforce that we are running with a vec2i.
       select type(generic_data)
