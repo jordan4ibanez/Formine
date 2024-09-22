@@ -264,6 +264,12 @@ contains
     integer(1), dimension(:), allocatable :: raw_image_data
     type(hashmap_string_key) :: character_database_integral
 
+    !! FIXME: PUT A GC IN HERE.
+    character_database = new_hashmap_string_key()
+
+    !! FIXME: PUT A GC IN HERE.
+    character_database_integral = new_hashmap_string_key()
+
     ! print*,"    REMEMBER TO USE A SPARE SLOT FOR UNDEFINED CHARACTERS"
 
     !* We will assume that the only difference in png and the cfg is the file extension.
@@ -309,7 +315,6 @@ contains
     integer(c_int) :: i, temp_buffer_length, x_index, y_index
     character(len = :), allocatable :: current_character, temp_buffer
     character(len = :), allocatable :: x_str, y_str
-
 
     call reader%read_lines(font_config_file_path)
 
