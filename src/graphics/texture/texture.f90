@@ -31,6 +31,7 @@ contains
     implicit none
 
     texture_database = new_hashmap_string_key()
+    
     texture_size_database = new_hashmap_string_key()
   end subroutine texture_module_initialize
 
