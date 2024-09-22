@@ -133,7 +133,7 @@ contains
     integer(c_int) :: texture_id
 
     if (.not. get_texture(texture_name, texture_id)) then
-      print"(A)", color_term("[Texture] Warning: Texture ["//texture_name//"] does not exist. Cannot use.", PUMPKIN_ORANGE)
+      print"(A)", color_term("[Texture] Warning: Texture ["//texture_name//"] does not exist. Cannot use.", WARNING)
       return
     end if
 
@@ -176,7 +176,7 @@ contains
     exists = .false.
 
     if (.not. texture_database%get(texture_name, generic_pointer)) then
-      print"(A)",color_term("[Texture] Warning: ["//texture_name//"] does not exist.", PUMPKIN_ORANGE)
+      print"(A)",color_term("[Texture] Warning: ["//texture_name//"] does not exist.", WARNING)
       return
     end if
 
@@ -184,7 +184,7 @@ contains
      type is (integer(c_int))
       texture_id = generic_pointer
      class default
-      error stop color_term("[Texture] Error: ["//texture_name//"] is the wrong type.", RED)
+      error stop color_term("[Texture] Error: ["//texture_name//"] is the wrong type.", ERROR)
     end select
 
     exists = .true.
@@ -201,14 +201,14 @@ contains
     type(vec2i) :: texture_size
 
     if (.not. texture_size_database%get(texture_name, generic_data)) then
-      error stop color_term("[Texture] Error: ["//texture_name//"] does not exist.", RED)
+      error stop color_term("[Texture] Error: ["//texture_name//"] does not exist.", ERROR)
     end if
 
     select type (generic_data)
      type is (vec2i)
       texture_size = generic_data
      class default
-      error stop color_term("[Texture] Error: ["//texture_name//"] is the wrong type.", RED)
+      error stop color_term("[Texture] Error: ["//texture_name//"] is the wrong type.", ERROR)
     end select
   end function texture_get_size
 
