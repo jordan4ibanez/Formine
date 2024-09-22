@@ -13,7 +13,7 @@ contains
   subroutine thread_handler_intialization()
     implicit none
 
-    call thread_initialize()
+    call thread_initialize(.true.)
 
     call chunk_generator_initialize()
 
