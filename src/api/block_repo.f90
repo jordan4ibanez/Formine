@@ -9,6 +9,7 @@ module block_repo
   private
 
 
+  public :: initialize_block_repo_module
   public :: block_definition
   public :: block_repo_get_number_of_definitions
   public :: block_repo_get_definition_pointer_by_id
@@ -90,6 +91,12 @@ module block_repo
 
 
 contains
+
+  subroutine initialize_block_repo_module()
+    implicit none
+
+    definition_database_string = new_hashmap_string_key()
+  end subroutine initialize_block_repo_module
 
 
   !* Check how many blocks are registered.

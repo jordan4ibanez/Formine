@@ -49,6 +49,8 @@ contains
 
     integer(c_int) :: status
 
+    call initialize_block_repo_module()
+
     mod_database = new_hashmap_string_key()
 
     call luajit_initialize(lua_state)
