@@ -12,7 +12,7 @@ module string
 
   !* Casting to/from string.
   public :: int_to_string
-  public :: long_to_string
+  public :: int64_to_string
   public :: f32_to_string
   public :: f64_to_string
   public :: bool_to_string
@@ -170,9 +170,9 @@ contains
 !* CASTING TO/FROM STRING. =================================================================================
 
 
-  ! Convert an integer into an allocated string.
+  ! Convert an int64 into an allocated string.
   !* Allocatable will deallocate once the memory goes out of scope.
-  function long_to_string(i) result(output)
+  function int64_to_string(i) result(output)
     implicit none
 
     integer(c_int64_t) :: i
@@ -191,7 +191,7 @@ contains
     ! print"(A)","["//output//"]"
     ! print"(A)","len: "//int_to_string(len(output))
     ! print"(A)","-----"
-  end function long_to_string
+  end function int64_to_string
 
 
   !* Convert an f32 to a string.
