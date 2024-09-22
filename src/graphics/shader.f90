@@ -6,7 +6,7 @@ module shader
 
   private
 
-
+  public :: shader_module_initialize
   public :: shader_create
   public :: shader_start
   public :: shader_clear_database
@@ -31,6 +31,15 @@ module shader
 
 
 contains
+
+
+  !* Initialize the shader database.
+  subroutine shader_module_initialize()
+    implicit none
+
+    !! FIXME: USE A GC FUNCTION HERE!
+    shader_database = new_hashmap_string_key()
+  end subroutine shader_module_initialize
 
 
   !* This is a simple way to check if a shader is null. (0)

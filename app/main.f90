@@ -116,6 +116,8 @@ program main
   call gl_clear_error_data()
 
   ! Set up all shader components.
+  call shader_module_initialize()
+
   call shader_create("main", "./shaders/vertex.vert", "./shaders/fragment.frag")
 
   call font_create("./fonts/font_forgotten.png")
