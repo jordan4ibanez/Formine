@@ -213,7 +213,7 @@ contains
     integer(c_int) :: texture_id, status
 
     if (.not. texture_database%get(texture_name, generic_pointer)) then
-      error stop colorize_rgb("[Texture] Error: ["//texture_name//"] does not exist.", 255, 0, 0)
+      print"(A)",colorize_rgb_string("[Texture] Error: ["//texture_name//"] does not exist.", PUMPKIN_ORANGE)
     end if
 
     select type (generic_pointer)
