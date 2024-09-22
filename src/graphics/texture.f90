@@ -246,14 +246,20 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
+    class(*), pointer :: generic_pointer
     integer(c_int) :: texture_id, status
 
-    call texture_database%get(key(texture_name), texture_id, stat = status)
-
-    if (status /= 0) then
+    if (.not.  texture_database%get(texture_name, generic_pointer)) then
       print"(A)",colorize_rgb("[Texture] Error: Texture ["//texture_name//"] does not exist. Cannot delete.", 255, 0, 0)
       return
     end if
+
+    select type (generic_pointer)
+     type is (integer(c_int))
+      texture_id = generic_pointer
+     class default
+      error stop "[Texture] Error: Wrong type in database."
+    end select
 
     ! Make sure we don't accidentally cause a segmentation fault in the C code.
     call gl_bind_texture(GL_TEXTURE_2D, 0)
