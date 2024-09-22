@@ -215,8 +215,6 @@ contains
 
   !* Delete a texture. From OpenGL and the database.
   subroutine texture_delete(texture_name)
-    use :: opengl
-    use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
