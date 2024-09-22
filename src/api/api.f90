@@ -149,9 +149,7 @@ contains
       mod_config_struct = construct_mod_config_from_file(conf_path_string, mod_path_string)
 
       ! Check if there's already a mod with this name in the database.
-      call mod_database%check_key(key(mod_config_struct%name%get()), stat = status)
-
-      if (status == 0) then
+      if (mod_database%has_key(mod_config_struct%name%get())) then
         error stop "[API] error: There is already a mod named ["//mod_config_struct%name%get()//"]. Culprit: ["//mod_path_string//"]"
       end if
 
@@ -168,7 +166,7 @@ contains
       end if
 
       ! If the mod loaded up properly, we can store the configuration.
-      call mod_database%set(key(mod_config_struct%name%get()), mod_config_struct)
+      call mod_database%set(mod_config_struct%name%get(), mod_config_struct)
 
       ! Finally, we want to get all the textures stored in the [./mod/mod_name/textures/] folder.
       call load_up_all_textures(mod_path_string)
