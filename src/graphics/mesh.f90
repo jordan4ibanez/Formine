@@ -264,27 +264,26 @@ contains
       print"(A)", "[Mesh]: set mesh ["//mesh_name//"]"
     end if
 
-    call mesh_database%set_ptr(key(mesh_name), new_mesh)
+    call mesh_database%set(mesh_name, new_mesh)
   end subroutine set_mesh
 
 
   !* Get a mesh from the hash table.
   !* The mesh is a clone. To update, set_mesh().
-  function get_mesh(mesh_name, exists) result(gotten_mesh)
+  function get_mesh(mesh_name, gotten_mesh) result(exists)
     use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
-    logical, intent(inout) :: exists
+    type(mesh_data), intent(inout), pointer :: gotten_mesh
+    logical(c_bool) :: exists
+
     class(*), pointer :: generic_pointer
     integer(c_int) :: status
-    type(mesh_data), pointer :: gotten_mesh
 
     exists = .false.
 
-    call mesh_database%get_raw_ptr(key(mesh_name), generic_pointer, stat = status)
-
-    if (status /= 0) then
+    if (.not. mesh_database%get(mesh_name, generic_pointer)) then
       print"(A)",colorize_rgb("[Mesh] Error: ["//mesh_name//"] does not exist.", 255, 0, 0)
       return
     end if
@@ -309,9 +308,7 @@ contains
     type(mesh_data), pointer :: gotten_mesh
     logical :: exists
 
-    gotten_mesh => get_mesh(mesh_name, exists)
-
-    if (.not. exists) then
+    if (.not. get_mesh(mesh_name, gotten_mesh)) then
       print"(A)", colorize_rgb("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot draw.", 255, 0, 0)
       return
     end if
@@ -339,20 +336,12 @@ contains
     ! This wipes out the OpenGL memory as well or else there's going to be a massive memory leak.
     ! This is written so it can be used for set_mesh to auto delete the old mesh.
 
-    call mesh_database%get_raw_ptr(key(mesh_name), generic, stat = status)
+    !! FIXME: USE THE GC HERE!
 
-    if (status /= 0) then
+    if (get_mesh(mesh_name, gotten_mesh)) then
       print"(A)",colorize_rgb("[Mesh] Error: Mesh ["//mesh_name//"] does not exist. Cannot delete.", 255, 0, 0)
       return
     end if
-
-    select type(generic)
-     type is (mesh_data)
-      gotten_mesh => generic
-     class default
-      print"(A)",colorize_rgb("[Mesh] Error: ["//mesh_name//"] has the wrong type.", 255, 0, 0)
-      return
-    end select
 
     call gl_bind_vertex_array(gotten_mesh%vao)
 
@@ -412,7 +401,7 @@ contains
     deallocate(gotten_mesh)
 
     ! Finally remove it from the database.
-    call mesh_database%unset(key(mesh_name))
+    call mesh_database%delete(mesh_name)
     if (debug_mode) then
       print"(A)", "[Mesh]: Deleted mesh ["//mesh_name//"]"
     end if
@@ -426,9 +415,7 @@ contains
     character(len = *, kind = c_char), intent(in) :: mesh_name
     integer(c_int) :: status
 
-    call mesh_database%check_key(key(mesh_name), stat = status)
-
-    existence = status == 0
+    existence = mesh_database%has_key(mesh_name)
   end function mesh_exists
 
 
@@ -442,7 +429,7 @@ contains
 
     type(string_array) :: key_array
     class(*), allocatable :: generic_data
-    integer(c_int) :: i, remaining_size
+    integer(c_int64_t) :: i, remaining_size
     type(heap_string), dimension(:), allocatable :: temp_string_array
 
     !* We must check that there is anything in the database before we iterate.
