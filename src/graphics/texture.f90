@@ -196,8 +196,8 @@ contains
       print"(A)", "[Texture]: set texture ["//texture_name//"]"
     end if
 
-    call texture_database%set(key(texture_name), new_texture)
-    call texture_size_database%set(key(texture_name), vec2i(x, y))
+    call texture_database%set(texture_name, new_texture)
+    call texture_size_database%set(texture_name, vec2i(x, y))
   end subroutine set_texture
 
 
