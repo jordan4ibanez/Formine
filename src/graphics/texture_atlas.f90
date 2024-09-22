@@ -132,9 +132,7 @@ contains
     class(*), pointer :: generic_pointer
     integer(c_int) :: status
 
-    call texture_coordinates_pointer%get_raw_ptr(key(texture_name), generic_pointer, stat = status)
-
-    if (status /= 0) then
+    if (.not. texture_coordinates_pointer%get(texture_name, generic_pointer)) then
       error stop "[Texture Atlas] Error: Null pointer."
     end if
 
@@ -238,9 +236,11 @@ contains
 
       temp = texture_key_array(i)%get()
 
-      call string_to_index_array%set(key(temp), i)
+      call string_to_index_array%set(temp, i)
 
-      call texture_coordinates_pointer%get_raw_ptr(key(temp), generic_pointer, stat = status)
+      if (.not. texture_coordinates_pointer%get(temp, generic_pointer)) then
+        error stop "[Texture Atlas] Error: wat"
+      end if
 
       select type(generic_pointer)
        type is (texture_rectangle)
@@ -260,11 +260,17 @@ contains
       definition_pointer => block_repo_get_definition_pointer_by_id(i)
 
       do y = 1,6
-        call string_to_index_array%get(key(definition_pointer%textures(y)%get()), current_index, stat = status)
 
-        if (status /= 0) then
+        if  (.not. string_to_index_array%get(definition_pointer%textures(y)%get(), generic_pointer)) then
           error stop "[Texture Atlas] Error: Received an invalid texture. ["//definition_pointer%textures(y)%get()//"]"
         end if
+
+        select type (generic_pointer)
+         type is (integer(c_int))
+          current_index = generic_pointer
+         class default
+          error stop "[Texture Atlas] Error: Wrong type in the string_to_index_array."
+        end select
 
         texture_indices(y, i) = current_index
       end do
