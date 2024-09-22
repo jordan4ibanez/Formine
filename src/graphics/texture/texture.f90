@@ -260,7 +260,7 @@ contains
     remaining_size = texture_database%count()
 
     if (remaining_size /= 0) then
-      print"(A)", color_term("[Texture] Error: Did not clear all textures! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", PUMPKIN_ORANGE)
+      print"(A)", color_term("[Texture] Warning: Did not clear all textures! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", WARNING)
     else
       print"(A)", "[Texture]: Successfully cleared the texture database."
     end if
