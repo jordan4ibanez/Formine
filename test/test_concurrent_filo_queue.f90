@@ -1,5 +1,6 @@
 module test_suite_concurrent_filo_queue
-  use :: thread_filo_queue
+  use :: thread_filo_queue_linked
+  use :: thread_types
   use :: string
   use, intrinsic :: iso_c_binding
   implicit none
@@ -30,7 +31,7 @@ contains
       ! This pushes ~4.5 GB into the queue.
       do i = 1,200
         stringy = "hi there!"
-        call queue%push(queue_data(stringy))
+        call queue%push(stringy)
       end do
 
       if (pop_it) then
