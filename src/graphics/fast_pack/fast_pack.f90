@@ -120,7 +120,7 @@ contains
     new_fast_packer%canvas_height = config%height
 
     ! Allocate
-    new_fast_packer%texture_coordinates = new_hashmap_string_key()
+    new_fast_packer%texture_coordinates = new_hashmap_string_key(sizeof(texture_rectangle()))
     allocate(new_fast_packer%keys_array(0))
     allocate(new_fast_packer%position_x(0))
     allocate(new_fast_packer%position_y(0))
