@@ -241,22 +241,11 @@ contains
     character(len = :, kind = c_char), pointer :: string_key_pointer
     class(*), pointer :: generic_pointer
     integer(c_int64_t) :: i, remaining_size
-    !! USE A VECTOR!
-    type(heap_string), dimension(:), allocatable :: temp_string_array
 
-    !! FIXME: wipe this entire nonsense out and use the GC.
-
-    !* We must check that there is anything in the database before we iterate.
-    remaining_size = shader_database%count()
-
-    if (remaining_size == 0) then
+    if (shader_database%is_empty()) then
       print"(A)", "[Shader]: Database was empty. Nothing to do. Success!"
       return
     end if
-
-    ! Start with a size of 0.
-    !! FIXME: THIS IS GOOD USE FOR A VECTOR!
-    allocate(key_array%data(0))
 
     ! Unbind from the currently used shader.
     call gl_use_program(0)
