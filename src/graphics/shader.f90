@@ -299,4 +299,22 @@ contains
 
   end subroutine shader_clear_database
 
+
+  subroutine gc_shader_database(raw_c_ptr)
+    implicit none
+
+    type(c_ptr), intent(in), value :: raw_c_ptr
+    integer(c_int), pointer :: shader_id
+
+    call c_f_pointer(raw_c_ptr, shader_id)
+    call gl_delete_program(shader_id)
+
+    call gl_delete_program(shader_id)
+
+    if (gl_is_program(shader_id)) then
+      error stop "[Shader] Error: Failed to delete program for shader ["//string_key_pointer//"]"
+    end if
+  end subroutine gc_shader_database
+
+
 end module shader
