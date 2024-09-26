@@ -274,8 +274,6 @@ contains
     call c_f_pointer(raw_c_ptr, shader_id)
     call gl_delete_program(shader_id)
 
-    call gl_delete_program(shader_id)
-
     if (gl_is_program(shader_id)) then
       error stop "[Shader] Error: Failed to delete program for shader ["//string_key_pointer//"]"
     end if
