@@ -26,7 +26,7 @@ module shader
   integer(c_int) :: UNIFORM_CAMERA_MATRIX
   integer(c_int) :: UNIFORM_OBJECT_MATRIX
 
-  !! FIXME: THIS CAN USE A GARBAGE COLLECTOR!
+  !* Type: Integer(c_int)
   type(hashmap_string_key) :: shader_database
 
 
@@ -38,7 +38,7 @@ contains
     implicit none
 
     !! FIXME: USE A GC FUNCTION HERE!
-    shader_database = new_hashmap_string_key()
+    shader_database = new_hashmap_string_key(sizeof(10))
   end subroutine shader_module_initialize
 
 
