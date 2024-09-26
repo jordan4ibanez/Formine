@@ -89,7 +89,6 @@ module block_repo
   ! integer(c_int) :: draw_type = DRAW_TYPE_AIR
 
 
-
 contains
 
   subroutine initialize_block_repo_module()
