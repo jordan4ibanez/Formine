@@ -163,6 +163,22 @@ contains
   end function int_to_string
 
 
+  ! Convert an integer pointer into an allocated string.
+  function int_pointer_to_string(i) result(output)
+    implicit none
+
+    integer(c_int), pointer :: i
+    character(len = :, kind = c_char), allocatable :: output
+
+    ! If the number is any bigger than this, wat.
+    allocate(character(11) :: output)
+    write(output, "(i11)") i
+
+    ! Now we shift the whole thing left and trim it to fit.
+    output = trim(adjustl(output))
+  end function int_pointer_to_string
+
+
   ! Convert an int64 into an allocated string.
   function int64_to_string(i) result(output)
     implicit none
@@ -177,6 +193,22 @@ contains
     ! Now we shift the whole thing left and trim it to fit.
     output = trim(adjustl(output))
   end function int64_to_string
+
+
+  ! Convert an int64 pointer into an allocated string.
+  function int64_pointer_to_string(i) result(output)
+    implicit none
+
+    integer(c_int64_t), pointer :: i
+    character(len = :, kind = c_char), allocatable :: output
+
+    ! If the number is any bigger than this, wat.
+    allocate(character(20) :: output)
+    write(output, "(i20)") i
+
+    ! Now we shift the whole thing left and trim it to fit.
+    output = trim(adjustl(output))
+  end function int64_pointer_to_string
 
 
   !* Convert an f32 to a string.
