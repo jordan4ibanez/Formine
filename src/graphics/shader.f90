@@ -262,7 +262,7 @@ contains
     call gl_delete_program(shader_id)
 
     if (gl_is_program(shader_id)) then
-      error stop "[Shader] Error: Failed to delete program for shader ["//int_pointer_to_string(string_key)//"]"
+      error stop "[Shader] Error: Failed to delete program for shader ["//int_pointer_to_string(shader_id)//"]"
     end if
   end subroutine gc_shader_database
 
