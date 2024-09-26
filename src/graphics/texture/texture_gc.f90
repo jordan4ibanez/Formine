@@ -1,6 +1,5 @@
 module texture_gc
   use, intrinsic :: iso_c_binding
-  use :: hashmap_types
   use :: opengl
   implicit none
 
