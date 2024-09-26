@@ -52,6 +52,7 @@ module fast_pack
     integer(c_int) :: max_y = 0
     logical(c_bool) :: locked_out = .false.
     ! Everything below this is allocated in the constructor.
+    !* Type: texture_rectangle
     type(hashmap_string_key) :: texture_coordinates
     type(heap_string), dimension(:), allocatable :: keys_array
     integer(c_int), dimension(:), allocatable :: position_x
@@ -417,14 +418,12 @@ contains
     class(fast_packer), intent(inout) :: this
     integer(c_int) :: keys_array_size, i
     real(c_double) :: d_min_x, d_min_y, d_max_x, d_max_y, d_canvas_width, d_canvas_height
-    type(texture_rectangle), pointer :: new_texture_rectangle
+    type(texture_rectangle) :: new_texture_rectangle
 
     ! We use a hash table to store the texture_rectangles.
     ! Ideally, access time will be n(1). Hopefully.
 
-
     keys_array_size = size(this%keys_array)
-
 
     !? There is nothing to do, which can be very bad.
     if (keys_array_size <= 0) then
@@ -436,10 +435,6 @@ contains
 
     d_canvas_width = real(this%canvas_width, kind = c_double)
     d_canvas_height = real(this%canvas_height, kind = c_double)
-
-
-    !! FIXME: THIS MIGHT NEED A GC.
-    this%texture_coordinates = new_hashmap_string_key()
 
     do i = 1,keys_array_size
 
@@ -462,7 +457,6 @@ contains
 
       ! Next, create the floating point position in OpenGL/Vulkan memory.
       ! We are chopping the precision to single floating point.
-      allocate(new_texture_rectangle)
       new_texture_rectangle = texture_rectangle()
 
       new_texture_rectangle%min_x = real(d_min_x / d_canvas_width, kind = c_float)
