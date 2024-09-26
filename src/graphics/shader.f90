@@ -1,6 +1,7 @@
 module shader
   use :: hashmap_str
   use, intrinsic :: iso_c_binding
+  use :: opengl
   implicit none
 
 
@@ -46,7 +47,6 @@ contains
   !? Makes the code easier to read.
   !? This also is making it so the program that uses it can return the success and work logic on it at the same time.
   logical function creation_succeeded(input) result(success)
-    use :: opengl
     implicit none
 
     integer, intent(in), value :: input
@@ -59,7 +59,6 @@ contains
   !* This is a simple variation of shader_creation_succeeded with gl_check_error as our helper.
   !? Same docs as in shader_creation_success minus the input.
   logical function shader_compilation_succeeded(shader_id) result(success)
-    use :: opengl
     implicit none
 
     integer, intent(in), value :: shader_id
@@ -72,7 +71,6 @@ contains
   !* Create a named shader program from vertex and fragment code file paths.
   !? Will return false if it fails, true if it succeeds.
   subroutine shader_create(shader_name, vertex_code_file_path, fragment_code_file_path)
-    use :: opengl
     use :: string
     use, intrinsic :: iso_c_binding
     implicit none
@@ -213,7 +211,6 @@ contains
 
   !* Start up a shader program.
   subroutine shader_start(shader_name)
-    use :: opengl
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: shader_name
@@ -231,7 +228,6 @@ contains
 
   !* Completely wipe out all existing shaders. This might be slow.
   subroutine shader_destroy_database()
-    use :: opengl
     use :: string
     use :: array, only: string_array, array_string_insert
     use :: terminal
