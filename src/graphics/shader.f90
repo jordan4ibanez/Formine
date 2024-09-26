@@ -38,7 +38,7 @@ contains
   subroutine shader_module_initialize()
     implicit none
 
-    shader_database = new_hashmap_string_key(sizeof(10))
+    shader_database = new_hashmap_string_key(sizeof(10), gc_shader_database)
   end subroutine shader_module_initialize
 
 
