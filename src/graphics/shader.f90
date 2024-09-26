@@ -9,7 +9,7 @@ module shader
   public :: shader_module_initialize
   public :: shader_create
   public :: shader_start
-  public :: shader_clear_database
+  public :: shader_destroy_database
 
   public :: ATTRIBUTE_POSITION
   public :: ATTRIBUTE_TEXTURE_COORDINATE
@@ -230,7 +230,7 @@ contains
 
 
   !* Completely wipe out all existing shaders. This might be slow.
-  subroutine shader_clear_database()
+  subroutine shader_destroy_database()
     use :: opengl
     use :: string
     use :: array, only: string_array, array_string_insert
@@ -261,43 +261,8 @@ contains
     ! Unbind from the currently used shader.
     call gl_use_program(0)
 
-    ! Now we will collect the keys from the iterator.
-
-    i = 0
-
-    do while(shader_database%iterate_kv(i, string_key_pointer, generic_pointer))
-      ! We will delete the programs as we go.
-      select type(generic_pointer)
-       type is (integer)
-        call gl_delete_program(generic_pointer)
-        if (gl_is_program(generic_pointer)) then
-          error stop "[Shader] Error: Failed to delete program for shader ["//string_key_pointer//"]"
-        end if
-       class default
-        error stop "[Shader] Error: The wrong type was inserted for shader ["//string_key_pointer//"]"
-      end select
-
-      ! Appending.
-      temp_string_array = array_string_insert(key_array%data, heap_string(string_key_pointer))
-      call move_alloc(temp_string_array, key_array%data)
-    end do
-
-    ! Now clear the database out.
-    do i = 1,size(key_array%data)
-      !! fixme: this will need a vector.
-      call shader_database%delete(key_array%data(i)%get())
-    end do
-
-    !* We will always check that the remaining size is 0. This will protect us from random issues.
-    remaining_size = shader_database%count()
-
-    if (remaining_size /= 0) then
-      print"(A)", color_term("[Shader] Error: Did not delete all shaders! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", WARNING)
-    else
-      print"(A)", "[Shader]: Successfully cleared the shader database."
-    end if
-
-  end subroutine shader_clear_database
+    call shader_database%destroy()
+  end subroutine shader_destroy_database
 
 
   subroutine gc_shader_database(raw_c_ptr)
