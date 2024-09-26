@@ -182,12 +182,10 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: shader_name
     logical, intent(inout) :: exists
-    class(*), pointer :: generic_pointer
+    type(c_ptr) :: raw_c_ptr
     integer(c_int) :: gotten_program
 
-    exists = shader_database%get(shader_name, generic_pointer)
-
-    if (.not. exists) then
+    if (.not. shader_database%get(shader_name, raw_c_ptr)) then
       print"(A)","[Shader] Warning: ["//shader_name//"] does not exist."
       return
     end if
