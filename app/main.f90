@@ -296,7 +296,7 @@ program main
 
   call mesh_clear_database()
 
-  call shader_clear_database()
+  call shader_destroy_database()
 
   call glfw_destroy_window()
 
