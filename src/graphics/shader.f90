@@ -233,11 +233,6 @@ contains
     use :: terminal
     implicit none
 
-    type(string_array) :: key_array
-    character(len = :, kind = c_char), pointer :: string_key_pointer
-    class(*), pointer :: generic_pointer
-    integer(c_int64_t) :: i, remaining_size
-
     if (shader_database%is_empty()) then
       print"(A)", "[Shader]: Database was empty. Nothing to do. Success!"
       return
