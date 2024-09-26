@@ -215,7 +215,6 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: shader_name
     integer(c_int) :: current_program_id
-    logical :: exists
 
     ! If the shader does not exist, bail out.
     if (.not. get_shader(shader_name, current_program_id)) then
