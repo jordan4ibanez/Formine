@@ -177,25 +177,25 @@ contains
   !* Get a shader from the hash table.
   !* The shader is a clone. To update, set_shader().
   !! FIXME: swap exists and gotten_program
-  function get_shader(shader_name, exists) result(gotten_program)
+  function get_shader(shader_name, gotten_program) result(exists)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: shader_name
-    logical, intent(inout) :: exists
+    integer(c_int), intent(inout) :: gotten_program
+    logical(c_bool) :: exists
     type(c_ptr) :: raw_c_ptr
-    integer(c_int) :: gotten_program
+    integer(c_int), pointer :: program_id
+
+    exists = .false.
 
     if (.not. shader_database%get(shader_name, raw_c_ptr)) then
       print"(A)","[Shader] Warning: ["//shader_name//"] does not exist."
       return
     end if
 
-    select type (generic_pointer)
-     type is (integer(c_int))
-      gotten_program = generic_pointer
-     class default
-      error stop "wrong type in shader."
-    end select
+    call c_f_pointer(raw_c_ptr, program_id)
+    gotten_program = program_id
+    exists = .true.
   end function get_shader
 
 
