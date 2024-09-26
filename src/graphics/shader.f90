@@ -27,6 +27,7 @@ module shader
   integer(c_int) :: UNIFORM_OBJECT_MATRIX
 
   !* Type: Integer(c_int)
+  !* No GC needed.
   type(hashmap_string_key) :: shader_database
 
 
@@ -37,7 +38,6 @@ contains
   subroutine shader_module_initialize()
     implicit none
 
-    !! FIXME: USE A GC FUNCTION HERE!
     shader_database = new_hashmap_string_key(sizeof(10))
   end subroutine shader_module_initialize
 
