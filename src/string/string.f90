@@ -148,7 +148,6 @@ contains
 
 
   ! Convert an integer into an allocated string.
-  !* Allocatable will deallocate once the memory goes out of scope.
   function int_to_string(i) result(output)
     implicit none
 
@@ -161,17 +160,10 @@ contains
 
     ! Now we shift the whole thing left and trim it to fit.
     output = trim(adjustl(output))
-
-    !? This is simply debug.
-    ! print"(A)","-----"
-    ! print"(A)","["//output//"]"
-    ! print"(A)","len: ", len(output)
-    ! print"(A)","-----"
   end function int_to_string
 
 
   ! Convert an int64 into an allocated string.
-  !* Allocatable will deallocate once the memory goes out of scope.
   function int64_to_string(i) result(output)
     implicit none
 
@@ -184,13 +176,6 @@ contains
 
     ! Now we shift the whole thing left and trim it to fit.
     output = trim(adjustl(output))
-
-    !? This is simply debug.
-    ! print"(A)","-----"
-    ! print*,i
-    ! print"(A)","["//output//"]"
-    ! print"(A)","len: "//int_to_string(len(output))
-    ! print"(A)","-----"
   end function int64_to_string
 
 
