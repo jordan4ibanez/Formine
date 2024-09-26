@@ -220,10 +220,8 @@ contains
     integer(c_int) :: current_program_id
     logical :: exists
 
-    current_program_id = get_shader(shader_name, exists)
-
     ! If the shader does not exist, bail out.
-    if (.not. exists) then
+    if (.not. get_shader(shader_name, current_program_id)) then
       error stop "[Shader] Error: Cannot start shader ["//shader_name//"], it does not exist."
     end if
 
