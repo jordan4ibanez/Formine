@@ -154,16 +154,6 @@ contains
     UNIFORM_CAMERA_MATRIX = gl_get_uniform_location(program_id, "camera_matrix"//achar(0))
     UNIFORM_OBJECT_MATRIX = gl_get_uniform_location(program_id, "object_matrix"//achar(0))
 
-    ! Finally validate this whole thing.
-    ! call gl_validate_program(program_id)
-
-    ! if (gl_get_program_iv(program_id, GL_VALIDATE_STATUS) == GL_FALSE) then
-    !   error stop "[Shader] Error: Failed to validate shader ["//shader_name//"]."
-    ! else
-    !   print"(A)","[Shader]: Successfully validated shader ["//shader_name//"]."
-    ! end if
-
-    ! Woooo!
     print"(A)","[Shader]: Shader ["//shader_name//"] created successfully."
 
     ! Store it in the hash table for later use.
