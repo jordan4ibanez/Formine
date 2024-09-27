@@ -28,7 +28,6 @@ module shader
   integer(c_int) :: UNIFORM_OBJECT_MATRIX
 
   !* Type: Integer(c_int)
-  !* No GC needed.
   type(hashmap_string_key) :: shader_database
 
 
@@ -227,18 +226,7 @@ contains
 
   !* Completely wipe out all existing shaders. This might be slow.
   subroutine shader_destroy_database()
-    use :: string
-    use :: array, only: string_array, array_string_insert
-    use :: terminal
     implicit none
-
-    if (shader_database%is_empty()) then
-      print"(A)", "[Shader]: Database was empty. Nothing to do. Success!"
-      return
-    end if
-
-    ! Unbind from the currently used shader.
-    call gl_use_program(0)
 
     call shader_database%destroy()
   end subroutine shader_destroy_database
@@ -252,6 +240,9 @@ contains
     integer(c_int), pointer :: shader_id
 
     call c_f_pointer(raw_c_ptr, shader_id)
+
+    ! Unbind from the currently used shader.
+    call gl_use_program(0)
 
     call gl_delete_program(shader_id)
 
