@@ -2,7 +2,7 @@
 module mesh
   use :: string
   use :: vector_3f
-  use :: hashmap_str
+  use :: hashmap_int
   use :: opengl
   use :: shader
   use, intrinsic :: iso_c_binding
@@ -32,7 +32,7 @@ module mesh
   end type mesh_data
 
   !* Type: mesh_data
-  type(hashmap_string_key) :: mesh_database
+  type(hashmap_integer_key) :: mesh_database
 
 
 contains
@@ -41,7 +41,7 @@ contains
   subroutine mesh_module_initialize()
     implicit none
 
-    mesh_database = new_hashmap_string_key(sizeof(mesh_data()))
+    mesh_database = new_hashmap_integer_key(sizeof(mesh_data()))
   end subroutine mesh_module_initialize
 
 
