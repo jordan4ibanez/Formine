@@ -13,7 +13,7 @@ module keyboard
   public :: keyboard_key_up
 
 
-  !! FIXME: NEEDS A GC (maybe)
+  !* Type: integer(c_int)
   type(hashmap_integer_key) :: key_database
 
 
@@ -24,8 +24,7 @@ contains
   subroutine keyboard_module_initialize()
     implicit none
 
-    !! FIXME: NEEDS A GC (maybe)
-    key_database = new_hashmap_integer_key()
+    key_database = new_hashmap_integer_key(sizeof(10))
 
     call glfw_set_key_callback(c_funloc(keyboard_input_callback))
   end subroutine keyboard_module_initialize
@@ -74,21 +73,13 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: keyboard_key
-    integer(c_int) :: state, status
-    class(*), pointer :: generic_pointer
+    integer(c_int) :: state
 
     is_down = .false.
 
-    if (.not. key_database%get(int(keyboard_key, c_int64_t), generic_pointer)) then
+    if (.not. get_state(keyboard_key, state)) then
       return
     end if
-
-    select type (generic_pointer)
-     type is (integer(c_int))
-      state = generic_pointer
-     class default
-      error stop "[Keyboard] Error: Wrong type inserted into the database."
-    end select
 
     if (state == GLFW_PRESS .or. state == GLFW_REPEAT) then
       is_down = .true.
@@ -101,26 +92,40 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: keyboard_key
-    integer(c_int) :: state, status
-    class(*), pointer :: generic_pointer
+    integer(c_int) :: state
 
     is_up = .true.
 
-    if (.not. key_database%get(int(keyboard_key, c_int64_t), generic_pointer)) then
+    if (.not. get_state(keyboard_key, state)) then
       return
     end if
-
-    select type (generic_pointer)
-     type is (integer(c_int))
-      state = generic_pointer
-     class default
-      error stop "[Keyboard] Error: Wrong type inserted into the database."
-    end select
 
     if (state /= GLFW_RELEASE) then
       is_up = .false.
     end if
   end function keyboard_key_up
+
+
+  function get_state(keyboard_key, state) result(exists)
+    implicit none
+
+    integer(c_int), intent(in), value :: keyboard_key
+    integer(c_int), intent(inout) :: state
+    logical(c_bool) :: exists
+    type(c_ptr) :: raw_c_ptr
+    integer(c_int), pointer :: state_pointer
+
+    exists = .false.
+
+    if (.not. key_database%get(int(keyboard_key, c_int64_t), raw_c_ptr)) then
+      return
+    end if
+
+    call c_f_pointer(raw_c_ptr, state_pointer)
+    state = state_pointer
+
+    exists = .true.
+  end function get_state
 
 
 end module keyboard
