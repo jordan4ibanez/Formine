@@ -137,4 +137,48 @@ contains
     ! call gl_bind_buffer(GL_ELEMENT_ARRAY_BUFFER, 0)
   end function upload_indices
 
+
+  !* Internal component for creating a mesh.
+  subroutine mesh_create_internal(mesh_name, dimensions, positions, texture_coordinates, colors, indices)
+    use :: terminal
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: mesh_name
+    integer(c_int), intent(in), value :: dimensions
+    real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
+    integer(c_int), dimension(:), intent(in), target :: indices
+    type(mesh_data), pointer :: new_mesh
+
+    ! Set up our memory here. We are working with manual memory management.
+    allocate(new_mesh)
+
+    ! Into vertex array object.
+
+    new_mesh%vao = gl_gen_vertex_arrays()
+
+    if (debug_mode) then
+      print"(A)","vao: ["//int_to_string(new_mesh%vao)//"]"
+    end if
+
+    call gl_bind_vertex_array(new_mesh%vao)
+
+    ! Into position vertex buffer object.
+
+    new_mesh%vbo_position = upload_positions(positions, dimensions)
+
+    new_mesh%vbo_texture_coordinate = upload_texture_coordinate(texture_coordinates)
+
+    new_mesh%vbo_color = upload_colors(colors)
+
+    new_mesh%vbo_indices = upload_indices(indices)
+
+    new_mesh%indices_length = size(indices)
+
+    ! Now unbind vertex array object.
+    call gl_bind_vertex_array(0)
+
+    ! Finally, upload into the database.
+    call set_mesh_by_name(mesh_name, new_mesh)
+  end subroutine mesh_create_internal
+
 end module mod_mesh_intrinsics
