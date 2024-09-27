@@ -203,13 +203,12 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: vao_id
-    type(c_ptr) :: raw_c_ptr
 
     ! This wipes out the OpenGL memory as well or else there's going to be a massive memory leak.
     ! This is written so it can be used for set_mesh to auto delete the old mesh.
 
     !? This must error stop because there is an implementation error.
-    if (.not. mesh_database%has_key(int(vao_id, c_int64_t))) then
+    if (.not. mesh_exists(vao_id)) then
       print"(A)", color_term("[Mesh] Warning: Mesh ["//int_to_string(vao_id)//"] does not exist. Cannot delete.", WARNING)
       return
     end if
@@ -239,7 +238,7 @@ contains
     call c_f_pointer(raw_c_ptr, vao_id)
 
     !? This must error stop because there is an implementation error.
-    if (.not. mesh_database%has_key(int(vao_id, c_int64_t))) then
+    if (.not. mesh_exists(vao_id)) then
       print"(A)", color_term("[Mesh] Error: Mesh ["//mesh_name//"] is pointing to an invalid ID ["//int_to_string(vao_id)//"].", ERROR)
       return
     end if
