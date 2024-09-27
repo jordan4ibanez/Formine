@@ -14,7 +14,9 @@ module mesh
 
   public :: mesh_module_initialize
   public :: mesh_create_2d
+  public :: mesh_create_2d_named
   public :: mesh_create_3d
+  public :: mesh_create_3d_named
   public :: mesh_draw_by_name
   public :: mesh_delete_by_name
   public :: mesh_exists
@@ -41,27 +43,54 @@ contains
 
 
   !* Create a mesh for 2 dimensional space.
-  subroutine mesh_create_2d(mesh_name, positions, texture_coordinates, colors, indices)
+  function mesh_create_2d(positions, texture_coordinates, colors, indices) result(vao_id)
+    implicit none
+
+    real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
+    integer(c_int), dimension(:), intent(in), target :: indices
+    integer(c_int) :: vao_id
+
+    vao_id =  mesh_create_internal(mesh_database, mesh_name_to_id_database, 2, positions, texture_coordinates, colors, indices, .false.)
+  end function mesh_create_2d
+
+
+  !* Create a mesh with a name for 2 dimensional space.
+  subroutine mesh_create_2d_named(mesh_name, positions, texture_coordinates, colors, indices)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
     real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), intent(in), target :: indices
+    integer(c_int) :: discard
 
-    call mesh_create_internal(mesh_name, 2, positions, texture_coordinates, colors, indices)
-  end subroutine mesh_create_2d
+    discard = mesh_create_internal(mesh_database, mesh_name_to_id_database, 2, positions, texture_coordinates, colors, indices, .true., mesh_name)
+  end subroutine mesh_create_2d_named
 
 
   !* Create a mesh for 3 dimensional space.
-  subroutine mesh_create_3d(mesh_name, positions, texture_coordinates, colors, indices)
+  function mesh_create_3d(positions, texture_coordinates, colors, indices) result(vao_id)
+    implicit none
+
+    real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
+    integer(c_int), dimension(:), intent(in), target :: indices
+    integer(c_int) :: vao_id
+
+    vao_id = mesh_create_internal(mesh_database, mesh_name_to_id_database, 3, positions, texture_coordinates, colors, indices, .false.)
+  end function mesh_create_3d
+
+
+  !* Create a mesh with a name for 3 dimensional space.
+  subroutine mesh_create_3d_named(mesh_name, positions, texture_coordinates, colors, indices)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
     real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), intent(in), target :: indices
+    integer(c_int) :: discard
 
-    call mesh_create_internal(mesh_name, 3, positions, texture_coordinates, colors, indices)
-  end subroutine mesh_create_3d
+    discard = mesh_create_internal(mesh_database, mesh_name_to_id_database, 3, positions, texture_coordinates, colors, indices, .true., mesh_name)
+  end subroutine mesh_create_3d_named
+
 
   !* Set or update a shader in the database.
   subroutine set_mesh_by_name(mesh_name, new_mesh)
