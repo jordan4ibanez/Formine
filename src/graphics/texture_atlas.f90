@@ -144,47 +144,6 @@ contains
   end function texture_atlas_get_texture_rectangle_pointer
 
 
-  !* This is debug for selecting an atlas element.
-  ! function texture_atlas_debug() result(texture_location)
-  !   implicit none
-
-  !   class(*), allocatable :: generic_data
-  !   integer(c_int) :: status
-  !   type(texture_rectangle) :: texture_location
-
-  !   call texture_coordinates_pointer%get_raw(key(texture_key_array(current_index)%get()), generic_data, stat = status)
-
-  !   if (status /= 0) then
-  !     error stop "Debug failed, it doesn't exist"
-  !   end if
-
-  !   select type (generic_data)
-  !    type is (texture_rectangle)
-  !     texture_location = generic_data
-  !    class default
-  !     error stop "How, did this even get in here?!"
-  !   end select
-
-  !   current_index = current_index + 1
-  !   if (current_index > showcase_length) then
-  !     current_index = 1
-  !   end if
-
-  ! print*,output
-
-  ! Make this actually readable
-  ! print*,"BEGIN OUTPUT"
-
-  ! write(*,"(A f0.10)") "min_x = 0", output%min_x
-
-  ! write(*,"(A f0.10)") "min_y = 0", output%min_y
-
-  ! write(*,"(A f0.10)") "max_x = 0", output%max_x
-
-  ! write(*,"(A f0.10)") "max_y = 0", output%max_y
-
-  ! end function texture_atlas_debug
-
 
   !* Insert a value at the end of a memory texture array.
   function array_texture_pack_element_insert(input, new_value) result(output)
