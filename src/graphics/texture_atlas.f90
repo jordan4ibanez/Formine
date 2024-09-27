@@ -20,7 +20,7 @@ module texture_atlas
   public :: texture_atlas_initialize
   public :: texture_atlas_add_texture_to_pack
   public :: texture_atlas_pack
-  public :: texture_atlas_get_texture_rectangle_pointer
+  public :: texture_atlas_get_texture_rectangle
   public :: texture_atlas_get_texture_indices_clone_pointer
   public :: texture_atlas_get_texture_positions_array_clone_pointer
   public :: texture_atlas_get_texture_count
@@ -36,7 +36,7 @@ module texture_atlas
   type(texture_pack_element), dimension(:), allocatable :: textures_to_pack
 
   !! fixme: use a GC on this thing!
-  type(hashmap_string_key) :: texture_coordinates_pointer
+  type(hashmap_string_key) :: texture_coordinates
 
   type(heap_string), dimension(:), allocatable :: texture_key_array
 
@@ -112,7 +112,7 @@ contains
     call texture_create_from_memory("TEXTURE_ATLAS", raw_texture_atlas_data, canvas_size%x, canvas_size%y)
 
     ! Now we attach the coordinates pointer to be used for the lifetime of the game.
-    texture_coordinates_pointer = packer%get_texture_coordinates_database()
+    texture_coordinates = packer%get_texture_coordinates_database()
 
     texture_key_array = packer%get_keys()
 
@@ -124,14 +124,14 @@ contains
 
 
   !* Get a texture rectangle for OpenGL/Vulkan.
-  function texture_atlas_get_texture_rectangle_pointer(texture_name) result(texture_rectangle_pointer)
+  function texture_atlas_get_texture_rectangle(texture_name) result(texture_rectangle_pointer)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
     type(texture_rectangle), pointer :: texture_rectangle_pointer
     class(*), pointer :: generic_pointer
 
-    if (.not. texture_coordinates_pointer%get(texture_name, generic_pointer)) then
+    if (.not. texture_coordinates%get(texture_name, generic_pointer)) then
       error stop "[Texture Atlas] Error: Null pointer."
     end if
 
@@ -141,8 +141,7 @@ contains
      class default
       error stop "[Texture Atlas] Error: Wrong pointer type."
     end select
-  end function texture_atlas_get_texture_rectangle_pointer
-
+  end function texture_atlas_get_texture_rectangle
 
 
   !* Insert a value at the end of a memory texture array.
@@ -199,7 +198,7 @@ contains
 
       call string_to_index_array%set(temp, i)
 
-      if (.not. texture_coordinates_pointer%get(temp, generic_pointer)) then
+      if (.not. texture_coordinates%get(temp, generic_pointer)) then
         error stop "[Texture Atlas] Error: wat"
       end if
 
