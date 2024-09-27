@@ -219,15 +219,15 @@ contains
 
 
   !* Get a character's OpenGL data.
-  function get_character(char, exists) result(gl_char_information_pointer)
+  function get_character(char, gl_char_information) result(exists)
     use :: terminal
     implicit none
 
     character, intent(in) :: char
-    logical, intent(inout) :: exists
+    type(opengl_character), intent(inout) :: gl_char_information
+    logical(c_bool) :: exists
     type(c_ptr) :: raw_c_ptr
     type(opengl_character), pointer :: gl_char_information_pointer
-    integer(c_int) :: status
 
     exists = .false.
 
@@ -237,6 +237,7 @@ contains
     end if
 
     call c_f_pointer(raw_c_ptr, gl_char_information_pointer)
+    gl_char_information = gl_char_information_pointer
 
     exists = .true.
   end function get_character
