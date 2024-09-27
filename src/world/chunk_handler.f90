@@ -28,7 +28,7 @@ contains
   subroutine chunk_handler_module_initalize()
     implicit none
 
-    type(memory_chunk) :: blank
+    type(memory_chunk), allocatable :: blank
 
     chunk_database = new_hashmap_string_key(sizeof(blank))
   end subroutine chunk_handler_module_initalize
@@ -80,9 +80,6 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: x, y
-    type(c_ptr) :: raw_c_ptr
-    character(len = :, kind = c_char), allocatable :: chunk_key
-    type(memory_chunk), pointer :: chunk_pointer
 
     call chunk_database%remove(grab_chunk_key(x, y))
   end subroutine chunk_handler_delete_chunk
@@ -95,7 +92,6 @@ contains
     integer(c_int), intent(in), value :: x, y
     type(memory_chunk), pointer :: chunk_pointer
     type(c_ptr) :: raw_c_ptr
-    integer(c_int) :: status
 
     if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
       error stop "[Chunk Handler] Error: Attempted to retrieve null chunk."
