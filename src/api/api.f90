@@ -362,4 +362,18 @@ contains
   end subroutine attempt_texture_upload
 
 
+  subroutine gc_mod_database(raw_c_ptr)
+    implicit none
+
+    type(c_ptr), intent(in), value :: raw_c_ptr
+    type(mod_config), pointer :: mod_config_pointer
+
+    call c_f_pointer(raw_c_ptr, mod_config_pointer)
+
+    deallocate(mod_config_pointer%name)
+    deallocate(mod_config_pointer%description)
+    deallocate(mod_config_pointer%path)
+  end subroutine gc_mod_database
+
+
 end module api
