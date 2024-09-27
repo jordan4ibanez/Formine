@@ -17,6 +17,7 @@ module mesh
   public :: mesh_create_2d_named
   public :: mesh_create_3d
   public :: mesh_create_3d_named
+
   public :: mesh_draw_by_name
   public :: mesh_delete_by_name
   public :: mesh_exists
@@ -119,9 +120,9 @@ contains
   end function get_mesh
 
 
-  !* Get a mesh from the hash table.
+  !* Get a mesh from the hash table by name.
   !* The mesh is a clone. To update, set_mesh().
-  !! This is slower than get_mesh
+  !! This is slower than get_mesh.
   function get_mesh_by_name(mesh_name, gotten_mesh) result(exists)
     use :: terminal
     implicit none
@@ -154,12 +155,34 @@ contains
 
 
   !* Draw a mesh.
+  subroutine mesh_draw(vao_id)
+    use :: terminal
+    implicit none
+
+    integer(c_int), intent(in), value :: vao_id
+    type(mesh_data) :: gotten_mesh
+
+    if (.not. get_mesh(vao_id, gotten_mesh)) then
+      print"(A)", color_term("[Mesh] Warning: Mesh ID ["//int_to_string(vao_id)//"] does not exist. Cannot draw.", WARNING)
+      return
+    end if
+
+    call gl_bind_vertex_array(gotten_mesh%vao)
+
+    call gl_draw_elements(GL_TRIANGLES, gotten_mesh%indices_length, GL_UNSIGNED_INT)
+
+    call gl_bind_vertex_array(0)
+  end subroutine mesh_draw
+
+
+  !* Draw a mesh by name.
+  !! This is slower than mesh_draw.
   subroutine mesh_draw_by_name(mesh_name)
     use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
-    type(mesh_data), pointer :: gotten_mesh
+    type(mesh_data) :: gotten_mesh
 
     if (.not. get_mesh_by_name(mesh_name, gotten_mesh)) then
       print"(A)", color_term("[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot draw.", WARNING)
@@ -174,22 +197,34 @@ contains
   end subroutine mesh_draw_by_name
 
 
-  !* Delete a mesh.
+  !* Delete a mesh by name.
+  !! This is slower than mesh_delete.
   subroutine mesh_delete_by_name(mesh_name)
     use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
+    type(c_ptr) :: raw_c_ptr
+    integer(c_int), pointer :: vao_id
 
     ! This wipes out the OpenGL memory as well or else there's going to be a massive memory leak.
     ! This is written so it can be used for set_mesh to auto delete the old mesh.
 
-    if (.not. mesh_database%has_key(mesh_name)) then
-      print"(A)",color_term("[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot delete.", WARNING)
+    if (.not. mesh_name_to_id_database%get(mesh_name, raw_c_ptr)) then
+      print"(A)", color_term("[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot delete.", WARNING)
       return
     end if
 
-    call mesh_database%remove(mesh_name)
+    call c_f_pointer(raw_c_ptr, vao_id)
+
+    !? This must error stop because there is an implementation error.
+    if (.not. mesh_database%has_key(int(vao_id, c_int64_t))) then
+      print"(A)", color_term("[Mesh] Error: Mesh ["//mesh_name//"] is pointing to an invalid ID ["//int_to_string(vao_id)//"].", ERROR)
+      return
+    end if
+
+    call mesh_database%remove(int(vao_id, c_int64_t))
+    call mesh_name_to_id_database%remove(mesh_name)
   end subroutine mesh_delete_by_name
 
 
