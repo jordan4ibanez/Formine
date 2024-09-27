@@ -53,7 +53,7 @@ contains
 
     call initialize_block_repo_module()
 
-    mod_database = new_hashmap_string_key(sizeof(mod_config()))
+    mod_database = new_hashmap_string_key(sizeof(mod_config()), gc_mod_database)
 
     call luajit_initialize(lua_state)
 
