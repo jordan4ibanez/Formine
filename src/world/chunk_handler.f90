@@ -56,7 +56,7 @@ contains
     use :: string
     implicit none
 
-    type(memory_chunk), intent(in), pointer :: chunk_to_store
+    type(memory_chunk), intent(inout), pointer :: chunk_to_store
     character(len = :, kind = c_char), allocatable :: chunk_key
 
     chunk_key = grab_chunk_key(chunk_to_store%world_position%x, chunk_to_store%world_position%y)
@@ -66,6 +66,10 @@ contains
     end if
 
     call chunk_database%set(chunk_key, chunk_to_store)
+
+    ! This is memcpy'd into the hashmap.
+    ! Free the memory.
+    deallocate(chunk_to_store)
   end subroutine chunk_handler_store_chunk_pointer
 
 
