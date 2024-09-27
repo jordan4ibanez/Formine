@@ -343,47 +343,7 @@ contains
     use :: terminal
     implicit none
 
-    type(string_array) :: key_array
-    character(len = :, kind = c_char), pointer :: string_key
-    class(*), pointer :: generic_data
-    integer(c_int64_t) :: i, remaining_size
-    type(heap_string), dimension(:), allocatable :: temp_string_array
-
-    !* We must check that there is anything in the database before we iterate.
-    remaining_size = mesh_database%count()
-
-    if (remaining_size == 0) then
-      print"(A)", "[Mesh]: Database was empty. Nothing to do. Success!"
-      return
-    end if
-
-    ! Start with a size of 0.
-    !! FIXME: THIS IS GOOD USE FOR A VECTOR!
-    allocate(key_array%data(0))
-
-    ! Now we will collect the keys from the iterator.
-    !!FIXME: USE THE NEW ITERATOR STYLE!
-    i = 0
-
-    do while(mesh_database%iterate_kv(i, string_key, generic_data))
-      ! Appending.
-      temp_string_array = array_string_insert(key_array%data, heap_string(string_key))
-      call move_alloc(temp_string_array, key_array%data)
-    end do
-
-    ! Now clear the database out.
-    do i = 1,size(key_array%data)
-      call mesh_delete(key_array%data(i)%get())
-    end do
-
-    !* We will always check that the remaining size is 0. This will protect us from random issues.
-    remaining_size = mesh_database%count()
-
-    if (remaining_size /= 0) then
-      print"(A)", color_term("[Mesh] WArning: Did not delete all meshes! Expected size: [0] | Actual: ["//int64_to_string(remaining_size)//"]", WARNING)
-    else
-      print"(A)", "[Mesh]: Successfully cleared the mesh database."
-    end if
+    call mesh_database%destroy()
   end subroutine mesh_clear_database
 
 
