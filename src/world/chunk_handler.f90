@@ -110,27 +110,21 @@ contains
     integer(c_int), intent(in), value :: x, y
     type(memory_chunk), pointer :: clone_chunk_pointer
     type(memory_chunk), pointer :: original_chunk_pointer
-    class(*), pointer :: generic_pointer
+    type(c_ptr) :: raw_c_ptr
     integer(c_int) :: status
 
     clone_chunk_pointer => null()
 
     ! If not existent, return a null pointer.
-    if (.not. chunk_database%get(grab_chunk_key(x,y), generic_pointer)) then
+    if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
       return
     end if
 
-    select type(generic_pointer)
-     type is (memory_chunk)
-      original_chunk_pointer => generic_pointer
-     class default
-      error stop "[Chunk Handler] Error: The wrong type was inserted into the database."
-    end select
+    call c_f_pointer(raw_c_ptr, original_chunk_pointer)
 
     ! Allocate pointer.
     clone_chunk_pointer => memory_chunk(x,y)
 
-    ! Allocation upon assignment.
     clone_chunk_pointer%data = original_chunk_pointer%data
     clone_chunk_pointer%world_position = original_chunk_pointer%world_position
   end function chunk_handler_get_clone_chunk_pointer
