@@ -20,9 +20,6 @@ module mesh
 
   logical, parameter :: debug_mode = .false.
 
-  !! FIXME: GIVE THIS A GC!
-  type(hashmap_string_key) :: mesh_database
-
 
   type :: mesh_data
     integer(c_int) :: vao = 0
@@ -33,6 +30,9 @@ module mesh
     integer(c_int) :: indices_length = 0
   end type mesh_data
 
+  !* Type: mesh_data
+  type(hashmap_string_key) :: mesh_database
+
 
 contains
 
@@ -40,7 +40,7 @@ contains
   subroutine mesh_module_initialize()
     implicit none
 
-    mesh_database = new_hashmap_string_key()
+    mesh_database = new_hashmap_string_key(sizeof(mesh_data()))
   end subroutine mesh_module_initialize
 
 
@@ -282,24 +282,22 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
-    type(mesh_data), intent(inout), pointer :: gotten_mesh
+    type(mesh_data), intent(inout) :: gotten_mesh
     logical(c_bool) :: exists
-    class(*), pointer :: generic_pointer
+    type(c_ptr) :: raw_c_ptr
+    type(mesh_data), pointer :: mesh_pointer
 
     exists = .false.
 
-    if (.not. mesh_database%get(mesh_name, generic_pointer)) then
+    if (.not. mesh_database%get(mesh_name, raw_c_ptr)) then
       print"(A)",color_term("[Mesh] Warning: ["//mesh_name//"] does not exist.", WARNING)
       return
     end if
 
-    select type(generic_pointer)
-     type is (mesh_data)
-      exists = .true.
-      gotten_mesh => generic_pointer
-     class default
-      error stop color_term("[Mesh] Error: ["//mesh_name//"] has the wrong type.", 255, 0, 0)
-    end select
+    call c_f_pointer(raw_c_ptr, mesh_pointer)
+    gotten_mesh = mesh_pointer
+
+    exists = .true.
   end function get_mesh
 
 
@@ -470,6 +468,14 @@ contains
       print"(A)", "[Mesh]: Successfully cleared the mesh database."
     end if
   end subroutine mesh_clear_database
+
+
+  subroutine gc_mesh_database(raw_c_ptr)
+    implicit none
+
+    type(c_ptr), intent(in), value :: raw_c_ptr
+
+  end subroutine gc_mesh_database
 
 
 end module mesh
