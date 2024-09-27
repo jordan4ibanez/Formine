@@ -275,6 +275,7 @@ contains
     implicit none
 
     call mesh_database%destroy()
+    call mesh_name_to_id_database%destroy()
   end subroutine mesh_destroy_database
 
 
