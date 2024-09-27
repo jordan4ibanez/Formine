@@ -56,7 +56,7 @@ contains
     integer(c_int), dimension(:), intent(in), target :: indices
     integer(c_int) :: vao_id
 
-    vao_id =  mesh_create_internal(mesh_database, mesh_name_to_id_database, 2, positions, texture_coordinates, colors, indices, .false.)
+    vao_id = mesh_create_internal(mesh_database, mesh_name_to_id_database, 2, positions, texture_coordinates, colors, indices, .false.)
   end function mesh_create_2d
 
 
