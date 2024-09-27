@@ -195,10 +195,16 @@ contains
 
     !? Only named meshes get put into the translation database.
     if (named) then
+
+      if (mesh_name_to_id_database%has_key(mesh_name)) then
+        error stop "[Mesh] Error: Tried to overwrite mesh ["//mesh_name//"]. Please delete it before setting it."
+      end if
+
       call mesh_name_to_id_database%set(mesh_name, new_mesh%vao)
     end if
 
     vao_id = new_mesh%vao
   end function mesh_create_internal
+
 
 end module mod_mesh_intrinsics

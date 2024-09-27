@@ -92,25 +92,6 @@ contains
   end subroutine mesh_create_3d_named
 
 
-  !* Set or update a shader in the database.
-  subroutine set_mesh_by_name(mesh_name, new_mesh)
-    implicit none
-
-    character(len = *, kind = c_char), intent(in) :: mesh_name
-    type(mesh_data), intent(in), pointer :: new_mesh
-
-    ! This creates an enforcement where the mesh must be deleted before it can be re-assigned.
-    ! This prevents a severe memory leak.
-    if (mesh_exists(mesh_name)) then
-      error stop "[Mesh] Error: Tried to overwrite mesh ["//mesh_name//"]. Please delete it before setting it."
-    end if
-
-    if (debug_mode) then
-      print"(A)", "[Mesh]: set mesh ["//mesh_name//"]"
-    end if
-
-    call mesh_database%set(mesh_name, new_mesh)
-  end subroutine set_mesh_by_name
 
 
   !* Get a mesh from the hash table.
