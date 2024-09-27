@@ -9,6 +9,36 @@ module block_repo
   private
 
 
+  !* Block database.
+  !*
+  !* Since this is attempted to utilize the CPU cache to the extreme,
+  !* we will have some ground rules laid out.
+  !*
+  !* The idea is: We want the memory to be contiguous.
+  !*
+  !* It will be extremely unsafe if we do not follow these rules.
+  !*
+  !! Ground rules:
+  !*
+  !* The array will live in the heap as an allocated smart pointer.
+  !*
+  !* Block definitions will be created as the game starts up.
+  !*
+  !* Blocks will not be deleted during the game runtime.
+  !*
+  !* The string database will simply point to an index in the array via a raw pointer.
+  !* This is here for when we need to access into the array.
+  !*
+  !* LuaJIT will never have access to the direct block_definition pointer.
+  !*
+  !* LuaJIT shall have it's own copy of the database which will be immutable with metatables.
+  !*
+  !* No block shall share an ID. The history of the block IDs will be held in the world database. (when that is created)
+  !*
+  !* As new blocks are added in, they will incremement the available ID.
+  !*
+
+
   public :: initialize_block_repo_module
   public :: block_definition
   public :: block_repo_get_number_of_definitions
@@ -44,41 +74,11 @@ module block_repo
     integer(c_int) :: draw_type = DRAW_TYPE_AIR
   end type block_definition
 
-
-  !* Block database.
-  !*
-  !* Since this is attempted to utilize the CPU cache to the extreme,
-  !* we will have some ground rules laid out.
-  !*
-  !* The idea is: We want the memory to be contiguous.
-  !*
-  !* It will be extremely unsafe if we do not follow these rules.
-  !*
-  !! Ground rules:
-  !*
-  !* The array will live in the heap as an allocated smart pointer.
-  !*
-  !* Block definitions will be created as the game starts up.
-  !*
-  !* Blocks will not be deleted during the game runtime.
-  !*
-  !* The string database will simply point to an index in the array via a raw pointer.
-  !* This is here for when we need to access into the array.
-  !*
-  !* LuaJIT will never have access to the direct block_definition pointer.
-  !*
-  !* LuaJIT shall have it's own copy of the database which will be immutable with metatables.
-  !*
-  !* No block shall share an ID. The history of the block IDs will be held in the world database. (when that is created)
-  !*
-  !* As new blocks are added in, they will incremement the available ID.
-  !*
-
   integer(c_int) :: current_id = 1
   integer(c_int) :: definition_array_length = 0
 
   ! Random access oriented.
-  !! fixme:? this could use a gc, maybe?
+  !* Type: block_definition
   type(hashmap_string_key) :: definition_database_string
 
   ! Object oriented.
