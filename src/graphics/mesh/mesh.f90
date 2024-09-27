@@ -18,9 +18,12 @@ module mesh
   public :: mesh_create_3d
   public :: mesh_create_3d_named
 
+  public :: mesh_draw
   public :: mesh_draw_by_name
+  public :: mesh_delete
   public :: mesh_delete_by_name
   public :: mesh_exists
+  public :: mesh_exists_by_name
   public :: mesh_destroy_database
 
 
