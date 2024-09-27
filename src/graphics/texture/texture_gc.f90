@@ -7,23 +7,15 @@ module texture_gc
 contains
 
 
-  subroutine texture_database_gc(element)
+  subroutine texture_database_gc(raw_c_ptr)
     use :: hashmap_bindings
     use :: string, only: int_to_string
     implicit none
 
-    !? Element is an OpenGL ID. [integer(c_int)]
-    class(*), pointer :: element
-    integer(c_int) :: texture_id
+    type(c_ptr), intent(in), value :: raw_c_ptr
+    integer(c_int), pointer :: texture_id
 
-    select type (element)
-     type is (integer(c_int))
-      texture_id = element
-     class default
-      error stop "[Texture GC]: Wrong type given."
-    end select
-
-    ! print*,"deleting id",texture_id
+    call c_f_pointer(raw_c_ptr, texture_id)
 
     ! Make sure we don't accidentally cause a segmentation fault in the C code.
     call gl_bind_texture(GL_TEXTURE_2D, 0)
@@ -36,22 +28,7 @@ contains
     if (gl_is_texture(texture_id)) then
       error stop "[Texture] Error: Attempt to delete texture ID ["//int_to_string(texture_id)//"] has failed. Halting."
     end if
-
-    !? Element pointer is of type integer(c_int).
-    ! All we do is free it.
-    deallocate(element)
   end subroutine texture_database_gc
-
-
-  subroutine texture_size_database_gc(element)
-    implicit none
-
-    !? Element is a vec2i.
-    class(*), pointer :: element
-
-    ! Can just free it.
-    deallocate(element)
-  end subroutine texture_size_database_gc
 
 
 end module texture_gc
