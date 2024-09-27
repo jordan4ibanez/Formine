@@ -56,10 +56,7 @@ contains
     type(memory_chunk), pointer :: new_memory_chunk
 
     allocate(new_memory_chunk)
-    allocate(new_memory_chunk%world_position)
     new_memory_chunk%world_position = [x,y]
-    allocate(new_memory_chunk%data(CHUNK_HEIGHT, CHUNK_WIDTH, CHUNK_WIDTH))
-    allocate(new_memory_chunk%mesh(MESH_STACK_ARRAY_SIZE))
   end function memory_chunk_constructor
 
 
