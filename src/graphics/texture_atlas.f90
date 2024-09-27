@@ -206,14 +206,7 @@ contains
         error stop "[Texture Atlas] Error: wat"
       end if
 
-
-
-      select type(generic_pointer)
-       type is (texture_rectangle)
-        rect_pointer => generic_pointer
-       class default
-        error stop "[Texture Atlas] Error: Wrong type in texture_coordinates_pointer."
-      end select
+      call c_f_pointer(raw_c_ptr, rect_pointer)
 
       texture_positions_array(i)%min_x = rect_pointer%min_x
       texture_positions_array(i)%min_y = rect_pointer%min_y
