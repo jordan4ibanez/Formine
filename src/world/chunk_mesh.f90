@@ -171,7 +171,7 @@ contains
     integer(c_int) :: i
     class(*), pointer :: generic_pointer
     type(message_from_thread), pointer :: new_message
-    character(len = :, kind = c_char), allocatable :: mesh_id
+    integer(c_int) :: mesh_id
 
 
     do i = 1,queue_pop_limit
@@ -187,9 +187,7 @@ contains
         error stop "[Chunk Mesh] Error: Wrong type in queue."
       end select
 
-      mesh_id = "mesh_stack_"//int_to_string(new_message%world_position%x)//"_"//int_to_string(new_message%world_position%y)//"_"//int_to_string(new_message%mesh_stack)
-
-      call mesh_create_3d(mesh_id, new_message%positions, new_message%texture_coordinates, new_message%colors, new_message%indices)
+      mesh_id = mesh_create_3d(new_message%positions, new_message%texture_coordinates, new_message%colors, new_message%indices)
 
       call chunk_handler_set_chunk_mesh(new_message%world_position%x, new_message%world_position%y, new_message%mesh_stack, mesh_id)
 

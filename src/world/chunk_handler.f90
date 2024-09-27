@@ -35,21 +35,21 @@ contains
 
 
   !* Sets the chunk mesh in the chunk's stack array.
-  subroutine chunk_handler_set_chunk_mesh(x, z, stack, mesh_index)
+  subroutine chunk_handler_set_chunk_mesh(x, z, stack, vao_id)
     implicit none
 
     integer(c_int), intent(in), value :: x, z, stack
-    integer(c_int), intent(in), value :: mesh_index
+    integer(c_int), intent(in), value :: vao_id
     type(memory_chunk), pointer :: current_chunk
 
     current_chunk => chunk_handler_get_chunk_pointer(x,z)
 
     ! Clean up the old chunk mesh.
     if (current_chunk%mesh(stack) /= 0) then
-      call mesh_delete_by_name(current_chunk%mesh(stack))
+      call mesh_delete(current_chunk%mesh(stack))
     end if
 
-    current_chunk%mesh(stack) = mesh_index
+    current_chunk%mesh(stack) = vao_id
   end subroutine chunk_handler_set_chunk_mesh
 
 
