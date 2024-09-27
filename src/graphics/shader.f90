@@ -173,7 +173,6 @@ contains
 
   !* Get a shader from the hash table.
   !* The shader is a clone. To update, set_shader().
-  !! FIXME: swap exists and gotten_program
   function get_shader(shader_name, gotten_program) result(exists)
     implicit none
 
