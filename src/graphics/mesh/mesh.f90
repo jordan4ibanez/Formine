@@ -104,13 +104,20 @@ contains
     type(mesh_data), intent(inout) :: gotten_mesh
     logical(c_bool) :: exists
     type(c_ptr) :: raw_c_ptr
+    integer(c_int), pointer :: id_pointer
     type(mesh_data), pointer :: mesh_pointer
 
     exists = .false.
 
-    if (.not. mesh_database%get(mesh_name, raw_c_ptr)) then
+    if (.not. mesh_name_to_id_database%get(mesh_name, raw_c_ptr)) then
       print"(A)",color_term("[Mesh] Warning: ["//mesh_name//"] does not exist.", WARNING)
       return
+    end if
+
+    call c_f_pointer(raw_c_ptr, id_pointer)
+
+    if (.not. mesh_database%get(int(id_pointer, c_int64_t), raw_c_ptr)) then
+      error stop "[Mesh] Error: Mesh ["//mesh_name//"] is pointing at an invalid id ["//int_to_string(id_pointer)//"]"
     end if
 
     call c_f_pointer(raw_c_ptr, mesh_pointer)
