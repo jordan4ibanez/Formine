@@ -36,9 +36,9 @@ module chunk_data
 
   type :: memory_chunk
     ! Layout: [ Y, Z, X ]
-    type(vec2i), allocatable :: world_position
-    type(block_data), dimension(CHUNK_HEIGHT, CHUNK_WIDTH, CHUNK_WIDTH), allocatable :: data(:, :, :)
-    type(heap_string), dimension(MESH_STACK_ARRAY_SIZE), allocatable :: mesh(:)
+    type(vec2i) :: world_position
+    type(block_data), dimension(CHUNK_HEIGHT, CHUNK_WIDTH, CHUNK_WIDTH) :: data
+    type(heap_string), dimension(MESH_STACK_ARRAY_SIZE) :: mesh
   end type memory_chunk
 
   interface memory_chunk
