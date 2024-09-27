@@ -173,8 +173,6 @@ program main
 
       call gl_clear_depth_buffer()
 
-
-
       ! call camera_set_object_matrix_f32(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
 
       ! tex_rect = texture_atlas_debug()
@@ -239,13 +237,13 @@ program main
 
       floating_font_size = FONT_SIZE * glfw_get_window_gui_scale_f32()
 
-      ! call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - floating_font_size) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
-      ! if (new_fps /= old_fps) then
-      !   call mesh_delete_by_name("fps_counter")
-      !   call font_generate_text("fps_counter", floating_font_size, "FPS: "//int_to_string(get_fps()), center = .false., size = text_size)
-      ! end if
+      call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - floating_font_size) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+      if (new_fps /= old_fps) then
+        call mesh_delete_by_name("fps_counter")
+        call font_generate_text("fps_counter", floating_font_size, "FPS: "//int_to_string(get_fps()), center = .false., size = text_size)
+      end if
 
-      ! call mesh_draw_by_name("fps_counter")
+      call mesh_draw_by_name("fps_counter")
 
       ! ! XYZ TEXT.
 
@@ -272,7 +270,7 @@ program main
 
       ! call camera_set_object_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - (text_size%y * 2.1)) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
 
-      ! call mesh_draw("hello_fortran")
+      ! call mesh_draw_by_name("hello_fortran")
 
 
       !? END DRAW TEST ?!
