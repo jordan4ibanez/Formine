@@ -287,7 +287,7 @@ program main
 
   call texture_atlas_destroy()
 
-  call font_clear_database()
+  call font_destroy_database()
 
   print*,"REMEMBER TO DESTROY THE API!"
   ! call api_destroy()
