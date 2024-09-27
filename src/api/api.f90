@@ -29,9 +29,9 @@ module api
 
 
   type :: mod_config
-    character(len = :, kind = c_char), pointer :: name
-    character(len = :, kind = c_char), pointer :: description
-    character(len = :, kind = c_char), pointer :: path
+    character(len = :, kind = c_char), pointer :: name => null()
+    character(len = :, kind = c_char), pointer :: description => null()
+    character(len = :, kind = c_char), pointer :: path => null()
   end type mod_config
 
 
