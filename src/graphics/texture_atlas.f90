@@ -178,7 +178,8 @@ contains
 
     character(len = :, kind = c_char), allocatable :: temp
     type(hashmap_string_key) :: string_to_index_array
-    integer(c_int) :: i, y, current_index
+    integer(c_int) :: i, y
+    integer(c_int), pointer :: current_index
     type(c_ptr) :: raw_c_ptr
     type(texture_rectangle), pointer :: rect_pointer
     type(block_definition), pointer :: definition_pointer
@@ -220,16 +221,11 @@ contains
 
       do y = 1,6
 
-        if  (.not. string_to_index_array%get(definition_pointer%textures(y)%get(), generic_pointer)) then
+        if  (.not. string_to_index_array%get(definition_pointer%textures(y)%get(), raw_c_ptr)) then
           error stop "[Texture Atlas] Error: Received an invalid texture. ["//definition_pointer%textures(y)%get()//"]"
         end if
 
-        select type (generic_pointer)
-         type is (integer(c_int))
-          current_index = generic_pointer
-         class default
-          error stop "[Texture Atlas] Error: Wrong type in the string_to_index_array."
-        end select
+        call c_f_pointer(raw_c_ptr, current_index)
 
         texture_indices(y, i) = current_index
       end do
@@ -275,24 +271,10 @@ contains
 
   !* This frees any pointers used by the texture atlas module.
   subroutine texture_atlas_destroy()
-    use :: terminal
     implicit none
 
-    ! Free the pointer.
-    !! FIXME: MAKE THIS THING CLEAR THE DATABASE.
-    ! if (associated(texture_coordinates_pointer)) then
-    !   deallocate(texture_coordinates_pointer)
-    !   ! Double check.
-    !   if (associated(texture_coordinates_pointer)) then
-    !     print"(A)",color_term("[Texture Atlas] Error: Failed to free the texture coordinates pointer.", 255, 0, 0)
-    !     return
-    !   end if
-    ! else
-    !   ! If this happens, something went very wrong.
-    !   print"(A)",color_term("[Texture Atlas] Error: Texture coordinates pointer is not associated.", 255, 0, 0)
-    !   return
-    ! end if
-    ! Everything is freed, hooray.
+    call texture_coordinates%destroy()
+
     print"(A)", "[Texture Atlas]: Successfully destroyed texture atlas."
   end subroutine
 
