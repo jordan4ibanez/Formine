@@ -17,7 +17,7 @@ module chunk_handler
   public :: chunk_handler_draw_chunks
 
 
-  !! fixme: use a GC function!
+  !* Type: memory_chunk
   type(hashmap_string_key) :: chunk_database
 
 
@@ -28,7 +28,7 @@ contains
   subroutine chunk_handler_module_initalize()
     implicit none
 
-    chunk_database = new_hashmap_string_key()
+    chunk_database = new_hashmap_string_key(sizeof(memory_chunk()))
   end subroutine chunk_handler_module_initalize
 
 
