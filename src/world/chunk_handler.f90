@@ -92,19 +92,14 @@ contains
 
     integer(c_int), intent(in), value :: x, y
     type(memory_chunk), pointer :: chunk_pointer
-    class(*), pointer :: generic_pointer
+    type(c_ptr) :: raw_c_ptr
     integer(c_int) :: status
 
-    if (.not. chunk_database%get(grab_chunk_key(x,y), generic_pointer)) then
+    if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
       error stop "[Chunk Handler] Error: Attempted to retrieve null chunk."
     end if
 
-    select type(generic_pointer)
-     type is (memory_chunk)
-      chunk_pointer => generic_pointer
-     class default
-      error stop "[Chunk Handler] Error: The wrong type was inserted into the database."
-    end select
+    call c_f_pointer(raw_c_ptr, chunk_pointer)
   end function chunk_handler_get_chunk_pointer
 
 
