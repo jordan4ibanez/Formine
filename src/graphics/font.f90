@@ -48,8 +48,7 @@ module font
   integer(c_int) :: font_texture_width = 0
   integer(c_int) :: font_texture_height = 0
 
-  !! fixme:? this maybe could use a gc, not sure why though.
-  !! todo: look into this
+  !* Type: opengl_character
   type(hashmap_string_key) :: character_database
 
 contains
@@ -226,24 +225,20 @@ contains
 
     character, intent(in) :: char
     logical, intent(inout) :: exists
+    type(c_ptr) :: raw_c_ptr
     type(opengl_character), pointer :: gl_char_information_pointer
-    class(*), pointer :: generic_pointer
     integer(c_int) :: status
 
     exists = .false.
 
     ! We will have a special handler to use a generic character for characters that aren't registered.
-    if (.not. character_database%get(char, generic_pointer)) then
+    if (.not. character_database%get(char, raw_c_ptr)) then
       return
     end if
 
-    select type(generic_pointer)
-     type is (opengl_character)
-      exists = .true.
-      gl_char_information_pointer => generic_pointer
-     class default
-      error stop color_term("[Font] Error: Character ["//char//"] has the wrong type.", 255, 0, 0)
-    end select
+    call c_f_pointer(raw_c_ptr, gl_char_information_pointer)
+
+    exists = .true.
   end function get_character
 
 
