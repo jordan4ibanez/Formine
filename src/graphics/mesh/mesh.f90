@@ -249,14 +249,25 @@ contains
   end subroutine mesh_delete_by_name
 
 
-  !* Check if a mesh exists.
-  logical function mesh_exists(mesh_name) result(existence)
+
+  !* Check if a mesh exists by name.
+  logical function mesh_exists(vao_id) result(existence)
+    implicit none
+
+    integer(c_int), intent(in), value :: vao_id
+
+    existence = mesh_database%has_key(int(vao_id, c_int64_t))
+  end function mesh_exists
+
+
+  !* Check if a mesh exists by name.
+  logical function mesh_exists_by_name(mesh_name) result(existence)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
 
-    existence = mesh_database%has_key(mesh_name)
-  end function mesh_exists
+    existence = mesh_name_to_id_database%has_key(mesh_name)
+  end function mesh_exists_by_name
 
 
   !* Completely wipe out all existing meshes.
