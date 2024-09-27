@@ -73,7 +73,7 @@ contains
     integer(c_int), dimension(:), allocatable :: indices
     integer(c_int) :: text_length, allocation_length, i, buffer_index, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
     character :: current_character
-    type(opengl_character), pointer :: gl_char_information
+    type(opengl_character) :: gl_char_information
     real(c_float) :: current_scroll_right, actual_character_width, centering_offset
     integer, parameter :: points = 4
     real(c_float), parameter :: space_width = 0.4
