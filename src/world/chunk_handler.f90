@@ -35,11 +35,11 @@ contains
 
 
   !* Sets the chunk mesh in the chunk's stack array.
-  subroutine chunk_handler_set_chunk_mesh(x, z, stack, mesh_id)
+  subroutine chunk_handler_set_chunk_mesh(x, z, stack, mesh_index)
     implicit none
 
     integer(c_int), intent(in), value :: x, z, stack
-    character(len = *, kind = c_char), intent(in) :: mesh_id
+    integer(c_int), intent(in), value :: mesh_index
     type(memory_chunk), pointer :: current_chunk
 
     current_chunk => chunk_handler_get_chunk_pointer(x,z)
@@ -49,7 +49,7 @@ contains
       call mesh_delete(current_chunk%mesh(stack))
     end if
 
-    current_chunk%mesh(stack) = mesh_id
+    current_chunk%mesh(stack) = mesh_index
   end subroutine chunk_handler_set_chunk_mesh
 
 
@@ -146,8 +146,7 @@ contains
     ! character(len = :, kind = c_char), pointer :: current_mesh_id
 
     ! If there's nothing to do, don't do anything.
-    !!FIXME: REPLACE WITH IS_EMPTY()
-    if (chunk_database%count() == 0) then
+    if (chunk_database%is_empty()) then
       return
     end if
 
