@@ -197,6 +197,27 @@ contains
   end subroutine mesh_draw_by_name
 
 
+  !* Delete a mesh.
+  subroutine mesh_delete(vao_id)
+    use :: terminal
+    implicit none
+
+    integer(c_int), intent(in), value :: vao_id
+    type(c_ptr) :: raw_c_ptr
+
+    ! This wipes out the OpenGL memory as well or else there's going to be a massive memory leak.
+    ! This is written so it can be used for set_mesh to auto delete the old mesh.
+
+    !? This must error stop because there is an implementation error.
+    if (.not. mesh_database%has_key(int(vao_id, c_int64_t))) then
+      print"(A)", color_term("[Mesh] Warning: Mesh ["//int_to_string(vao_id)//"] does not exist. Cannot delete.", WARNING)
+      return
+    end if
+
+    call mesh_database%remove(int(vao_id, c_int64_t))
+  end subroutine mesh_delete
+
+
   !* Delete a mesh by name.
   !! This is slower than mesh_delete.
   subroutine mesh_delete_by_name(mesh_name)
