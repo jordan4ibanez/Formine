@@ -172,7 +172,7 @@ contains
       end if
 
       ! If the mod loaded up properly, we can store the configuration.
-      call mod_database%set(mod_config_struct%name%get(), mod_config_struct)
+      call mod_database%set(mod_config_struct%name, mod_config_struct)
 
       ! Finally, we want to get all the textures stored in the [./mod/mod_name/textures/] folder.
       call load_up_all_textures(mod_path_string)
