@@ -291,6 +291,9 @@ contains
 
     ! Then we can finally upload it into the texture database.
     call texture_create_from_memory("font", raw_image_data, image_width, image_height)
+
+    ! Finally, destroy this database.
+    call character_vec2i_position_database%destroy()
   end subroutine font_create
 
 
