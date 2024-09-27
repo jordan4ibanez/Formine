@@ -82,7 +82,7 @@ module block_repo
   ! Random access oriented.
   !* Type: block_definition
   !! todo: GC the pointers in block_definition
-  type(hashmap_string_key) :: definition_database_string
+  type(hashmap_string_key) :: definition_database
 
   ! Object oriented.
   !! FIXME: THIS COULD USE A VECTOR!
@@ -98,7 +98,7 @@ contains
   subroutine initialize_block_repo_module()
     implicit none
 
-    definition_database_string = new_hashmap_string_key()
+    definition_database = new_hashmap_string_key()
   end subroutine initialize_block_repo_module
 
 
@@ -244,7 +244,7 @@ contains
     ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
 
     ! Copy the definition into the string based database.
-    call definition_database_string%set(new_definition%name, new_definition)
+    call definition_database%set(new_definition%name, new_definition)
 
     definition_array = [definition_array, new_definition]
 
