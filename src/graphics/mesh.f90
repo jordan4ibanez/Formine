@@ -35,7 +35,8 @@ module mesh
   !* Type: mesh_data
   type(hashmap_integer_key) :: mesh_database
 
-  type(hashmap_integer_key) :: mesh_name_to_id_database
+  !* Type: integer(c_int)
+  type(hashmap_string_key) :: mesh_name_to_id_database
 
 
 contains
@@ -45,6 +46,8 @@ contains
     implicit none
 
     mesh_database = new_hashmap_integer_key(sizeof(mesh_data()))
+
+    mesh_name_to_id_database = new_hashmap_string_key(sizeof(10))
   end subroutine mesh_module_initialize
 
 
