@@ -92,10 +92,36 @@ contains
   end subroutine mesh_create_3d_named
 
 
+  !* Get a mesh from the hash table.
+  !* The mesh is a clone. To update, set_mesh().
+  function get_mesh(vao_id, gotten_mesh) result(exists)
+    use :: terminal
+    implicit none
+
+    integer(c_int), intent(in), value :: vao_id
+    type(mesh_data), intent(inout) :: gotten_mesh
+    logical(c_bool) :: exists
+    type(c_ptr) :: raw_c_ptr
+    integer(c_int), pointer :: id_pointer
+    type(mesh_data), pointer :: mesh_pointer
+
+    exists = .false.
+
+    if (.not. mesh_database%get(int(id_pointer, c_int64_t), raw_c_ptr)) then
+      print"(A)",color_term("[Mesh] Warning: ID ["//int_to_string(vao_id)//"] does not exist.", WARNING)
+      return
+    end if
+
+    call c_f_pointer(raw_c_ptr, mesh_pointer)
+    gotten_mesh = mesh_pointer
+
+    exists = .true.
+  end function get_mesh
 
 
   !* Get a mesh from the hash table.
   !* The mesh is a clone. To update, set_mesh().
+  !! This is slower than get_mesh
   function get_mesh_by_name(mesh_name, gotten_mesh) result(exists)
     use :: terminal
     implicit none
