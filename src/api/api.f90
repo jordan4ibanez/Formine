@@ -155,8 +155,8 @@ contains
       mod_config_struct = construct_mod_config_from_file(conf_path_string, mod_path_string)
 
       ! Check if there's already a mod with this name in the database.
-      if (mod_database%has_key(mod_config_struct%name%get())) then
-        error stop "[API] error: There is already a mod named ["//mod_config_struct%name%get()//"]. Culprit: ["//mod_path_string//"]"
+      if (mod_database%has_key(mod_config_struct%name)) then
+        error stop "[API] error: There is already a mod named ["//mod_config_struct%name//"]. Culprit: ["//mod_path_string//"]"
       end if
 
       status = api_run_file(init_path_string)
