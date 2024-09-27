@@ -22,10 +22,10 @@ module mod_mesh_intrinsics
 contains
 
 
-  integer function upload_positions(position_array_pointer, vec_components) result(vbo_position)
+  integer function upload_positions(position_array, vec_components) result(vbo_position)
     implicit none
 
-    real(c_float), dimension(:), intent(in), target :: position_array_pointer
+    real(c_float), dimension(:), intent(in), target :: position_array
     integer(c_int), intent(in), value :: vec_components
     integer(c_int) :: position_vbo_position
 
@@ -42,7 +42,7 @@ contains
     call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_position)
 
     ! Pass this data into the OpenGL state machine.
-    call gl_buffer_float_array(position_array_pointer)
+    call gl_buffer_float_array(position_array)
 
     ! Width = vec_components because this is vecX
     ! false because this is not normalized
@@ -57,10 +57,10 @@ contains
   end function upload_positions
 
 
-  integer function upload_texture_coordinate(texture_coordinates_pointer) result(vbo_position)
+  integer function upload_texture_coordinate(texture_coordinates) result(vbo_position)
     implicit none
 
-    real(c_float), dimension(:), intent(in), target :: texture_coordinates_pointer
+    real(c_float), dimension(:), intent(in), target :: texture_coordinates
     integer(c_int) :: texture_coordinate_vbo_position
 
     texture_coordinate_vbo_position = ATTRIBUTE_TEXTURE_COORDINATE
@@ -76,7 +76,7 @@ contains
     call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_position)
 
     ! Pass this data into the OpenGL state machine.
-    call gl_buffer_float_array(texture_coordinates_pointer)
+    call gl_buffer_float_array(texture_coordinates)
 
     ! Width = 2 because this is a vec2
     ! false because this is not normalized
@@ -91,10 +91,10 @@ contains
   end function upload_texture_coordinate
 
 
-  integer function upload_colors(colors_pointer) result(vbo_position)
+  integer function upload_colors(colors) result(vbo_position)
     implicit none
 
-    real(c_float), dimension(:), intent(in), target :: colors_pointer
+    real(c_float), dimension(:), intent(in), target :: colors
     integer(c_int) :: color_vbo_position
 
     color_vbo_position = ATTRIBUTE_COLOR
@@ -110,7 +110,7 @@ contains
     call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_position)
 
     ! Pass this data into the OpenGL state machine.
-    call gl_buffer_float_array(colors_pointer)
+    call gl_buffer_float_array(colors)
 
     ! Width = 3 because this is a vec3
     ! false because this is not normalized
@@ -125,10 +125,10 @@ contains
   end function upload_colors
 
 
-  integer function upload_indices(indices_pointer) result(vbo_position)
+  integer function upload_indices(indices) result(vbo_position)
     implicit none
 
-    integer(c_int), dimension(:), intent(in), target :: indices_pointer
+    integer(c_int), dimension(:), intent(in), target :: indices
 
     ! Create the VBO context.
     vbo_position = gl_gen_buffers()
@@ -141,7 +141,7 @@ contains
     call gl_bind_buffer(GL_ELEMENT_ARRAY_BUFFER, vbo_position)
 
     ! Upload into state machine.
-    call gl_buffer_indices_array(indices_pointer)
+    call gl_buffer_indices_array(indices)
 
     !! Never call this, instant segfault.
     ! call gl_bind_buffer(GL_ELEMENT_ARRAY_BUFFER, 0)
