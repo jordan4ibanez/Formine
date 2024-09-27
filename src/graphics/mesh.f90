@@ -3,6 +3,7 @@ module mesh
   use :: string
   use :: vector_3f
   use :: hashmap_int
+  use :: hashmap_str
   use :: opengl
   use :: shader
   use, intrinsic :: iso_c_binding
@@ -33,6 +34,8 @@ module mesh
 
   !* Type: mesh_data
   type(hashmap_integer_key) :: mesh_database
+
+  type(hashmap_integer_key) :: mesh_name_to_id_database
 
 
 contains
