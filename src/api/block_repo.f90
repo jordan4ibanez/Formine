@@ -98,7 +98,7 @@ contains
   subroutine initialize_block_repo_module()
     implicit none
 
-    definition_database = new_hashmap_string_key()
+    definition_database = new_hashmap_string_key(sizeof(block_definition()))
   end subroutine initialize_block_repo_module
 
 
