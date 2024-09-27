@@ -72,7 +72,7 @@ contains
     integer(c_int), dimension(:), allocatable :: indices
     integer(c_int) :: text_length, allocation_length, i, buffer_index, current_positions_offset, current_texture_coordinates_offset, current_colors_offset, current_indices_offset, current_indices_index
     character :: current_character
-    type(opengl_character), pointer :: character_data_pointer
+    type(opengl_character), pointer :: gl_char_information
     logical :: exists
     real(c_float) :: current_scroll_right, actual_character_width, centering_offset
     integer, parameter :: points = 4
@@ -129,15 +129,13 @@ contains
 
       buffer_index = buffer_index + 1
 
-      character_data_pointer => get_character(current_character, exists)
-
       ! For now, we're just going to skip characters that don't exist.
       ! todo: use a special character that is a square box or something as a replacement.
-      if (exists) then
+      if (get_character(current_character, gl_char_information)) then
 
         ! Positions.
         current_positions_offset = ((buffer_index - 1) * stride) + 1
-        actual_character_width = real(character_data_pointer%width_real, kind = c_float) * font_size
+        actual_character_width = real(gl_char_information%width_real, kind = c_float) * font_size
 
         positions(current_positions_offset    ) = current_scroll_right
         positions(current_positions_offset + 1) = font_size
@@ -156,14 +154,14 @@ contains
         ! Texture coordinates.
 
         current_texture_coordinates_offset = ((buffer_index - 1) * 8) + 1
-        texture_coordinates(current_texture_coordinates_offset    ) = character_data_pointer%top_left%x_f32()
-        texture_coordinates(current_texture_coordinates_offset + 1) = character_data_pointer%top_left%y_f32()
-        texture_coordinates(current_texture_coordinates_offset + 2) = character_data_pointer%bottom_left%x_f32()
-        texture_coordinates(current_texture_coordinates_offset + 3) = character_data_pointer%bottom_left%y_f32()
-        texture_coordinates(current_texture_coordinates_offset + 4) = character_data_pointer%bottom_right%x_f32()
-        texture_coordinates(current_texture_coordinates_offset + 5) = character_data_pointer%bottom_right%y_f32()
-        texture_coordinates(current_texture_coordinates_offset + 6) = character_data_pointer%top_right%x_f32()
-        texture_coordinates(current_texture_coordinates_offset + 7) = character_data_pointer%top_right%y_f32()
+        texture_coordinates(current_texture_coordinates_offset    ) = gl_char_information%top_left%x_f32()
+        texture_coordinates(current_texture_coordinates_offset + 1) = gl_char_information%top_left%y_f32()
+        texture_coordinates(current_texture_coordinates_offset + 2) = gl_char_information%bottom_left%x_f32()
+        texture_coordinates(current_texture_coordinates_offset + 3) = gl_char_information%bottom_left%y_f32()
+        texture_coordinates(current_texture_coordinates_offset + 4) = gl_char_information%bottom_right%x_f32()
+        texture_coordinates(current_texture_coordinates_offset + 5) = gl_char_information%bottom_right%y_f32()
+        texture_coordinates(current_texture_coordinates_offset + 6) = gl_char_information%top_right%x_f32()
+        texture_coordinates(current_texture_coordinates_offset + 7) = gl_char_information%top_right%y_f32()
 
         ! Colors.
         current_colors_offset = ((buffer_index - 1) * 12) + 1
