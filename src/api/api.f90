@@ -35,8 +35,10 @@ module api
   end type mod_config
 
 
-  !! FIXME: this maybe might need a GC?
+  !! FIXME: this does, in fact, need a GC.
+  !* Type: mod_config
   type(hashmap_string_key) :: mod_database
+
   type(c_ptr) :: lua_state
 
 contains
