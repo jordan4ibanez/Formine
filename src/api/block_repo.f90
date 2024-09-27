@@ -68,6 +68,7 @@ module block_repo
   !* 1_000_000 definitions would take up 200 mb.
 
   !! FIXME: make the heapstring array a pointer.
+  !! FIXME: make the allocatables a pointer.
   type :: block_definition
     character(len = :, kind = c_char), allocatable :: name
     character(len = :, kind = c_char), allocatable :: description
@@ -80,10 +81,12 @@ module block_repo
 
   ! Random access oriented.
   !* Type: block_definition
+  !! todo: GC the pointers in block_definition
   type(hashmap_string_key) :: definition_database_string
 
   ! Object oriented.
   !! FIXME: THIS COULD USE A VECTOR!
+  !! todo: this can probably use the same GC as the definition_database
   type(block_definition), dimension(:), allocatable, target :: definition_array
 
   ! Data oriented.
