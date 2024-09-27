@@ -141,9 +141,6 @@ contains
 
     character(len = :, kind = c_char), pointer :: string_key
     type(c_ptr) :: raw_c_ptr
-    ! type(memory_chunk), pointer :: chunk
-    ! integer(c_int64_t) :: i
-    ! character(len = :, kind = c_char), pointer :: current_mesh_id
 
     ! If there's nothing to do, don't do anything.
     if (chunk_database%is_empty()) then
