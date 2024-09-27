@@ -71,7 +71,6 @@ contains
   !? Will return false if it fails, true if it succeeds.
   subroutine shader_create(shader_name, vertex_code_file_path, fragment_code_file_path)
     use :: string
-    use, intrinsic :: iso_c_binding
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: shader_name
