@@ -191,11 +191,18 @@ contains
     call gl_bind_vertex_array(0)
 
     ! Now set it.
+
+    ! Do not allow overwriting. This will cause a severe memory leak.
+    if (mesh_database%has_key(int(new_mesh%vao, c_int64_t))) then
+      error stop "[Mesh] Error: Tried to overwrite mesh ID ["//int_to_string(new_mesh%vao)//"]. Please delete it before setting it."
+    end if
+
     call mesh_database%set(int(new_mesh%vao, c_int64_t), new_mesh)
 
     !? Only named meshes get put into the translation database.
     if (named) then
 
+      ! Do not allow overwriting. This will cause a severe memory leak.
       if (mesh_name_to_id_database%has_key(mesh_name)) then
         error stop "[Mesh] Error: Tried to overwrite mesh ["//mesh_name//"]. Please delete it before setting it."
       end if
