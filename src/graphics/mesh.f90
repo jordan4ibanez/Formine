@@ -13,8 +13,8 @@ module mesh
   public :: mesh_module_initialize
   public :: mesh_create_2d
   public :: mesh_create_3d
-  public :: mesh_draw
-  public :: mesh_delete
+  public :: mesh_draw_by_name
+  public :: mesh_delete_by_name
   public :: mesh_exists
   public :: mesh_destroy_database
 
@@ -109,7 +109,7 @@ contains
     call gl_bind_vertex_array(0)
 
     ! Finally, upload into the database.
-    call set_mesh(mesh_name, new_mesh)
+    call set_mesh_by_name(mesh_name, new_mesh)
   end subroutine mesh_create_internal
 
 
@@ -240,7 +240,7 @@ contains
 
 
   !* Set or update a shader in the database.
-  subroutine set_mesh(mesh_name, new_mesh)
+  subroutine set_mesh_by_name(mesh_name, new_mesh)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
@@ -257,12 +257,12 @@ contains
     end if
 
     call mesh_database%set(mesh_name, new_mesh)
-  end subroutine set_mesh
+  end subroutine set_mesh_by_name
 
 
   !* Get a mesh from the hash table.
   !* The mesh is a clone. To update, set_mesh().
-  function get_mesh(mesh_name, gotten_mesh) result(exists)
+  function get_mesh_by_name(mesh_name, gotten_mesh) result(exists)
     use :: terminal
     implicit none
 
@@ -283,18 +283,18 @@ contains
     gotten_mesh = mesh_pointer
 
     exists = .true.
-  end function get_mesh
+  end function get_mesh_by_name
 
 
   !* Draw a mesh.
-  subroutine mesh_draw(mesh_name)
+  subroutine mesh_draw_by_name(mesh_name)
     use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
     type(mesh_data), pointer :: gotten_mesh
 
-    if (.not. get_mesh(mesh_name, gotten_mesh)) then
+    if (.not. get_mesh_by_name(mesh_name, gotten_mesh)) then
       print"(A)", color_term("[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot draw.", WARNING)
       return
     end if
@@ -304,11 +304,11 @@ contains
     call gl_draw_elements(GL_TRIANGLES, gotten_mesh%indices_length, GL_UNSIGNED_INT)
 
     call gl_bind_vertex_array(0)
-  end subroutine mesh_draw
+  end subroutine mesh_draw_by_name
 
 
   !* Delete a mesh.
-  subroutine mesh_delete(mesh_name)
+  subroutine mesh_delete_by_name(mesh_name)
     use :: terminal
     implicit none
 
@@ -323,7 +323,7 @@ contains
     end if
 
     call mesh_database%remove(mesh_name)
-  end subroutine mesh_delete
+  end subroutine mesh_delete_by_name
 
 
   !* Check if a mesh exists.

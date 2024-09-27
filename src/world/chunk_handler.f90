@@ -46,7 +46,7 @@ contains
 
     ! Clean up the old chunk mesh.
     if (current_chunk%mesh(stack) /= 0) then
-      call mesh_delete(current_chunk%mesh(stack))
+      call mesh_delete_by_name(current_chunk%mesh(stack))
     end if
 
     current_chunk%mesh(stack) = mesh_index
