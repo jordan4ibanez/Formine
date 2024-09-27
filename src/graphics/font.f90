@@ -458,33 +458,24 @@ contains
     type(memory_texture) :: rgba8_texture_data
     character(len = :, kind = c_char), pointer :: string_key
     type(c_ptr) :: raw_c_ptr
-    type(vec2i) :: position
+    type(vec2i), pointer :: position_pointer
     integer(c_int) :: pixel_x, pixel_y
-    type(opengl_character), pointer :: gpu_character
-
+    type(opengl_character) :: gpu_character
 
     ! Shift this into a format we can use.
     rgba8_texture_data = memory_texture(raw_image_data, image_width, image_height)
 
-
     call character_vec2i_position_database%initialize_iterator()
     do while(character_vec2i_position_database%iterate_kv(string_key, raw_c_ptr))
 
-      ! Enforce that we are running with a vec2i.
-      select type(generic_pointer)
-       type is (vec2i)
-        position = generic_pointer
-       class default
-        error stop "[Font] Error: The wrong type got inserted for character ["//string_key//"]"
-      end select
+      call c_f_pointer(raw_c_ptr, position_pointer)
 
       ! So now that we have the position of the character in the texture, let's calculate some basic elements.
       ! I could have made this an array for super speed, but I want to be able to understand it in the future.
-      allocate(gpu_character)
 
       ! We put our initial brush position at the top left of the character.
-      pixel_x = ((position%x - 1) * slot_width) + 1
-      pixel_y = ((position%y - 1) * slot_height) + 1
+      pixel_x = ((position_pointer%x - 1) * slot_width) + 1
+      pixel_y = ((position_pointer%y - 1) * slot_height) + 1
 
       ! Assign the widths.
       gpu_character%width_pixels = find_pixel_width(pixel_x, pixel_y)
