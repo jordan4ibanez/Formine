@@ -224,6 +224,9 @@ program main
 
       ! call gl_clear_color_buffer()
 
+
+      !! THE DEBUG STARTS HERE ============================================
+
       call camera_update_2d()
 
       ! Select font.
@@ -236,33 +239,33 @@ program main
 
       floating_font_size = FONT_SIZE * glfw_get_window_gui_scale_f32()
 
-      call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - floating_font_size) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
-      if (new_fps /= old_fps) then
-        call mesh_delete_by_name("fps_counter")
-        call font_generate_text("fps_counter", floating_font_size, "FPS: "//int_to_string(get_fps()), center = .false., size = text_size)
-      end if
+      ! call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - floating_font_size) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+      ! if (new_fps /= old_fps) then
+      !   call mesh_delete_by_name("fps_counter")
+      !   call font_generate_text("fps_counter", floating_font_size, "FPS: "//int_to_string(get_fps()), center = .false., size = text_size)
+      ! end if
 
-      call mesh_draw_by_name("fps_counter")
+      ! call mesh_draw_by_name("fps_counter")
 
-      ! XYZ TEXT.
+      ! ! XYZ TEXT.
 
-      call mesh_delete_by_name("x_pos")
-      position_text_debug = f32_to_string(camera_get_pos_x())
-      call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - (floating_font_size * 2.5)) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
-      call font_generate_text("x_pos", floating_font_size, "X: "//position_text_debug, size = text_size)
-      call mesh_draw_by_name("x_pos")
+      ! call mesh_delete_by_name("x_pos")
+      ! position_text_debug = f32_to_string(camera_get_pos_x())
+      ! call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - (floating_font_size * 2.5)) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+      ! call font_generate_text("x_pos", floating_font_size, "X: "//position_text_debug, size = text_size)
+      ! call mesh_draw_by_name("x_pos")
 
-      call mesh_delete_by_name("y_pos")
-      position_text_debug = f32_to_string(camera_get_pos_y())
-      call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - (floating_font_size * 4.0)) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
-      call font_generate_text("y_pos", floating_font_size, "Y: "//position_text_debug, size = text_size)
-      call mesh_draw_by_name("y_pos")
+      ! call mesh_delete_by_name("y_pos")
+      ! position_text_debug = f32_to_string(camera_get_pos_y())
+      ! call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - (floating_font_size * 4.0)) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+      ! call font_generate_text("y_pos", floating_font_size, "Y: "//position_text_debug, size = text_size)
+      ! call mesh_draw_by_name("y_pos")
 
-      call mesh_delete_by_name("z_pos")
-      position_text_debug = f32_to_string(camera_get_pos_z())
-      call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - (floating_font_size * 5.5)) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
-      call font_generate_text("z_pos", floating_font_size, "Z: "//position_text_debug, size = text_size)
-      call mesh_draw_by_name("z_pos")
+      ! call mesh_delete_by_name("z_pos")
+      ! position_text_debug = f32_to_string(camera_get_pos_z())
+      ! call camera_set_gui_matrix_f32((-glfw_get_window_width_f32() / 2.0) + 4, ((glfw_get_window_height_f32() / 2.0) - (floating_font_size * 5.5)) - 4, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+      ! call font_generate_text("z_pos", floating_font_size, "Z: "//position_text_debug, size = text_size)
+      ! call mesh_draw_by_name("z_pos")
 
 
       ! Process second text.
