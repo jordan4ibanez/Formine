@@ -67,6 +67,7 @@ module block_repo
   !* 200 bytes in size. (at time of writing)
   !* 1_000_000 definitions would take up 200 mb.
 
+  !! FIXME: make the heapstring array a pointer.
   type :: block_definition
     character(len = :, kind = c_char), allocatable :: name
     character(len = :, kind = c_char), allocatable :: description
