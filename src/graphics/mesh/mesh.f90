@@ -42,7 +42,7 @@ contains
   subroutine mesh_module_initialize()
     implicit none
 
-    mesh_database = new_hashmap_integer_key(sizeof(mesh_data()))
+    mesh_database = new_hashmap_integer_key(sizeof(mesh_data()), gc_mesh_database)
 
     mesh_name_to_id_database = new_hashmap_string_key(sizeof(10))
   end subroutine mesh_module_initialize
