@@ -119,6 +119,7 @@ contains
     call texture_create_from_memory("TEXTURE_ATLAS", raw_texture_atlas_data, canvas_size%x, canvas_size%y)
 
     ! Now we attach the coordinates pointer to be used for the lifetime of the game.
+    !* Implementation note: this is getting passed a hashmap which simply contains a c_str.
     texture_coordinates = packer%get_texture_coordinates_database()
 
     texture_key_array = packer%get_keys()
