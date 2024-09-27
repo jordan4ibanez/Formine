@@ -28,7 +28,9 @@ contains
   subroutine chunk_handler_module_initalize()
     implicit none
 
-    chunk_database = new_hashmap_string_key(sizeof(memory_chunk()))
+    type(memory_chunk) :: blank
+
+    chunk_database = new_hashmap_string_key(sizeof(blank))
   end subroutine chunk_handler_module_initalize
 
 
@@ -43,8 +45,8 @@ contains
     current_chunk => chunk_handler_get_chunk_pointer(x,z)
 
     ! Clean up the old chunk mesh.
-    if (current_chunk%mesh(stack)%get_pointer() /= "") then
-      call mesh_delete(current_chunk%mesh(stack)%get_pointer())
+    if (current_chunk%mesh(stack) /= 0) then
+      call mesh_delete(current_chunk%mesh(stack))
     end if
 
     current_chunk%mesh(stack) = mesh_id
@@ -111,7 +113,6 @@ contains
     type(memory_chunk), pointer :: clone_chunk_pointer
     type(memory_chunk), pointer :: original_chunk_pointer
     type(c_ptr) :: raw_c_ptr
-    integer(c_int) :: status
 
     clone_chunk_pointer => null()
 
@@ -139,10 +140,10 @@ contains
     implicit none
 
     character(len = :, kind = c_char), pointer :: string_key
-    class(*), pointer :: generic_pointer
-    type(memory_chunk), pointer :: chunk
-    integer(c_int64_t) :: i
-    character(len = :, kind = c_char), pointer :: current_mesh_id
+    type(c_ptr) :: raw_c_ptr
+    ! type(memory_chunk), pointer :: chunk
+    ! integer(c_int64_t) :: i
+    ! character(len = :, kind = c_char), pointer :: current_mesh_id
 
     ! If there's nothing to do, don't do anything.
     !!FIXME: REPLACE WITH IS_EMPTY()
@@ -152,9 +153,8 @@ contains
 
     call texture_use("TEXTURE_ATLAS")
 
-    i = 0
-    !! fixme: use the new iterator style!
-    do while(chunk_database%iterate_kv(i, string_key, generic_pointer))
+    call chunk_database%initialize_iterator()
+    do while(chunk_database%iterate_kv(string_key, raw_c_ptr))
       !   select type(generic_data)
       !    type is (memory_chunk)
       !     chunk => generic_data
