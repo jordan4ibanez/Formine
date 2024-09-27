@@ -54,6 +54,7 @@ module fast_pack
     ! Everything below this is allocated in the constructor.
     !* Type: texture_rectangle
     type(hashmap_string_key) :: texture_coordinates
+    !! THIS ALL NEEDS TO BE A VECTOR OMG.
     type(heap_string), dimension(:), allocatable :: keys_array
     integer(c_int), dimension(:), allocatable :: position_x
     integer(c_int), dimension(:), allocatable :: position_y
