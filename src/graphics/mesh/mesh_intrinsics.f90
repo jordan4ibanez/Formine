@@ -21,28 +21,28 @@ contains
 
     position_vbo_position = ATTRIBUTE_POSITION
 
-! Create the VBO context.
+    ! Create the VBO context.
     vbo_position = gl_gen_buffers()
 
     if (debug_mode) then
       print"(A)","vbo position: ["//int_to_string(vbo_position)//"]"
     end if
 
-! Walk into the VBO context.
+    ! Walk into the VBO context.
     call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_position)
 
-! Pass this data into the OpenGL state machine.
+    ! Pass this data into the OpenGL state machine.
     call gl_buffer_float_array(position_array_pointer)
 
-! Width = vec_components because this is vecX
-! false because this is not normalized
-! 0 stride
+    ! Width = vec_components because this is vecX
+    ! false because this is not normalized
+    ! 0 stride
     call gl_vertex_attrib_pointer(position_vbo_position, vec_components, GL_FLOAT, .false., 0)
 
-! Enable this new data.
+    ! Enable this new data.
     call gl_enable_vertex_attrib_array(position_vbo_position)
 
-! Now unbind.
+    ! Now unbind.
     call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
   end function upload_positions
 
@@ -55,28 +55,28 @@ contains
 
     texture_coordinate_vbo_position = ATTRIBUTE_TEXTURE_COORDINATE
 
-! Create the VBO context.
+    ! Create the VBO context.
     vbo_position = gl_gen_buffers()
 
     if (debug_mode) then
       print"(A)","vbo texture coordinates: ["//int_to_string(vbo_position)//"]"
     end if
 
-! Walk into the VBO context.
+    ! Walk into the VBO context.
     call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_position)
 
-! Pass this data into the OpenGL state machine.
+    ! Pass this data into the OpenGL state machine.
     call gl_buffer_float_array(texture_coordinates_pointer)
 
-! Width = 2 because this is a vec2
-! false because this is not normalized
-! 0 stride
+    ! Width = 2 because this is a vec2
+    ! false because this is not normalized
+    ! 0 stride
     call gl_vertex_attrib_pointer(texture_coordinate_vbo_position, 2, GL_FLOAT, .false., 0)
 
-! Enable this new data.
+    ! Enable this new data.
     call gl_enable_vertex_attrib_array(texture_coordinate_vbo_position)
 
-! Now unbind.
+    ! Now unbind.
     call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
   end function upload_texture_coordinate
 
@@ -89,28 +89,28 @@ contains
 
     color_vbo_position = ATTRIBUTE_COLOR
 
-! Create the VBO context.
+    ! Create the VBO context.
     vbo_position = gl_gen_buffers()
 
     if (debug_mode) then
       print"(A)","vbo color: ["//int_to_string(vbo_position)//"]"
     end if
 
-! Walk into the VBO context.
+    ! Walk into the VBO context.
     call gl_bind_buffer(GL_ARRAY_BUFFER, vbo_position)
 
-! Pass this data into the OpenGL state machine.
+    ! Pass this data into the OpenGL state machine.
     call gl_buffer_float_array(colors_pointer)
 
-! Width = 3 because this is a vec3
-! false because this is not normalized
-! 0 stride
+    ! Width = 3 because this is a vec3
+    ! false because this is not normalized
+    ! 0 stride
     call gl_vertex_attrib_pointer(color_vbo_position, 3, GL_FLOAT, .false., 0)
 
-! Enable this new data.
+    ! Enable this new data.
     call gl_enable_vertex_attrib_array(color_vbo_position)
 
-! Now unbind.
+    ! Now unbind.
     call gl_bind_buffer(GL_ARRAY_BUFFER, 0)
   end function upload_colors
 
@@ -120,21 +120,21 @@ contains
 
     integer(c_int), dimension(:), intent(in), target :: indices_pointer
 
-! Create the VBO context.
+    ! Create the VBO context.
     vbo_position = gl_gen_buffers()
 
     if (debug_mode) then
       print"(A)","vbo indices: ["//int_to_string(vbo_position)//"]"
     end if
 
-! Walk into the VBO context.
+    ! Walk into the VBO context.
     call gl_bind_buffer(GL_ELEMENT_ARRAY_BUFFER, vbo_position)
 
-! Upload into state machine.
+    ! Upload into state machine.
     call gl_buffer_indices_array(indices_pointer)
 
-!! Never call this, instant segfault.
-! call gl_bind_buffer(GL_ELEMENT_ARRAY_BUFFER, 0)
+    !! Never call this, instant segfault.
+    ! call gl_bind_buffer(GL_ELEMENT_ARRAY_BUFFER, 0)
   end function upload_indices
 
 end module mod_mesh_intrinsics
