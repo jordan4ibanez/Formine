@@ -108,12 +108,11 @@ contains
     type(mesh_data), intent(inout) :: gotten_mesh
     logical(c_bool) :: exists
     type(c_ptr) :: raw_c_ptr
-    integer(c_int), pointer :: id_pointer
     type(mesh_data), pointer :: mesh_pointer
 
     exists = .false.
 
-    if (.not. mesh_database%get(int(id_pointer, c_int64_t), raw_c_ptr)) then
+    if (.not. mesh_database%get(int(vao_id, c_int64_t), raw_c_ptr)) then
       print"(A)",color_term("[Mesh] Warning: ID ["//int_to_string(vao_id)//"] does not exist.", WARNING)
       return
     end if
