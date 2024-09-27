@@ -149,7 +149,7 @@ contains
 
 
   !* Internal component for creating a mesh.
-  subroutine mesh_create_internal(mesh_database, mesh_name_to_id_database, mesh_name, dimensions, positions, texture_coordinates, colors, indices)
+  function mesh_create_internal(mesh_database, mesh_name_to_id_database, dimensions, positions, texture_coordinates, colors, indices, named, mesh_name) result(vao_id)
     use :: hashmap_int
     use :: hashmap_str
     use :: terminal
@@ -157,10 +157,12 @@ contains
 
     type(hashmap_integer_key), intent(inout) :: mesh_database
     type(hashmap_string_key), intent(inout) :: mesh_name_to_id_database
-    character(len = *, kind = c_char), intent(in) :: mesh_name
     integer(c_int), intent(in), value :: dimensions
     real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), intent(in), target :: indices
+    logical, intent(in), value :: named
+    character(len = *, kind = c_char), intent(in), optional :: mesh_name
+    integer(c_int) :: vao_id
     type(mesh_data) :: new_mesh
 
     ! Into vertex array object.
@@ -190,7 +192,12 @@ contains
 
     ! Now set it.
     call mesh_database%set(int(new_mesh%vao, c_int64_t), new_mesh)
-    call mesh_name_to_id_database%set(mesh_name, new_mesh%vao)
-  end subroutine mesh_create_internal
+
+    if (named) then
+      call mesh_name_to_id_database%set(mesh_name, new_mesh%vao)
+    end if
+
+    vao_id = new_mesh%vao
+  end function mesh_create_internal
 
 end module mod_mesh_intrinsics
