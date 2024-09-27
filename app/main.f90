@@ -294,7 +294,7 @@ program main
 
   call texture_clear_database()
 
-  call mesh_clear_database()
+  call mesh_destroy_database()
 
   call shader_destroy_database()
 

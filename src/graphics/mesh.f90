@@ -16,7 +16,7 @@ module mesh
   public :: mesh_draw
   public :: mesh_delete
   public :: mesh_exists
-  public :: mesh_clear_database
+  public :: mesh_destroy_database
 
 
   logical, parameter :: debug_mode = .false.
@@ -338,13 +338,13 @@ contains
   end function mesh_exists
 
 
-  !* Completely wipe out all existing meshes. This might be slow.
-  subroutine mesh_clear_database()
+  !* Completely wipe out all existing meshes.
+  subroutine mesh_destroy_database()
     use :: terminal
     implicit none
 
     call mesh_database%destroy()
-  end subroutine mesh_clear_database
+  end subroutine mesh_destroy_database
 
 
   subroutine gc_mesh_database(raw_c_ptr)
