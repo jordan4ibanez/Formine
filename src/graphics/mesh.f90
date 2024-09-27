@@ -313,18 +313,16 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
-    type(mesh_data), pointer :: gotten_mesh
 
     ! This wipes out the OpenGL memory as well or else there's going to be a massive memory leak.
     ! This is written so it can be used for set_mesh to auto delete the old mesh.
 
-    !! FIXME: USE THE GC HERE!
-
-    if (.not. get_mesh(mesh_name, gotten_mesh)) then
+    if (.not. mesh_database%has_key(mesh_name)) then
       print"(A)",color_term("[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot delete.", WARNING)
       return
     end if
 
+    call mesh_database%remove(mesh_name)
   end subroutine mesh_delete
 
 
