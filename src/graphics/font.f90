@@ -15,6 +15,7 @@ module font
 
   public :: font_create
   public :: font_generate_text
+  public :: font_generate_named_text
   public :: font_destroy_database
 
 
@@ -54,19 +55,49 @@ module font
 
 contains
 
-
-  !* Generate a text mesh.
-  subroutine font_generate_text(mesh_name, font_size, text, r,g,b, center, size)
-    use :: mesh
-    use :: string, only: string_get_non_space_characters
+  function font_generate_text(font_size, text, r,g,b, center, size) result(vao_id)
     use :: vector_2f
     implicit none
+    character(len = *, kind = c_char), intent(in) :: text
+    real(c_float), intent(in), value :: font_size
+    real(c_float), intent(in), optional :: r,g,b
+    logical, intent(in), optional :: center
+    type(vec2f), intent(inout), optional :: size
+    integer(c_int) :: vao_id
 
+    vao_id = internal_font_generate_text(font_size, text, r,g,b, center, size, .false.)
+  end function font_generate_text
+
+
+  subroutine font_generate_named_text(mesh_name, font_size, text, r,g,b, center, size)
+    use :: vector_2f
+    implicit none
     character(len = *, kind = c_char), intent(in) :: mesh_name, text
     real(c_float), intent(in), value :: font_size
     real(c_float), intent(in), optional :: r,g,b
     logical, intent(in), optional :: center
     type(vec2f), intent(inout), optional :: size
+    integer(c_int) :: discard
+
+    discard = internal_font_generate_text(font_size, text, r,g,b, center, size, .true., mesh_name)
+  end subroutine font_generate_named_text
+
+
+  !* Generate a text mesh.
+  function internal_font_generate_text(font_size, text, r,g,b, center, size, named, mesh_name) result(vao_id)
+    use :: mesh
+    use :: string, only: string_get_non_space_characters
+    use :: vector_2f
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: text
+    real(c_float), intent(in), value :: font_size
+    real(c_float), intent(in), optional :: r,g,b
+    logical, intent(in), optional :: center
+    logical, intent(in), value :: named
+    character(len = *, kind = c_char), intent(in), optional :: mesh_name
+    type(vec2f), intent(inout), optional :: size
+    integer(c_int) :: vao_id
     logical :: should_center
     real(c_float) :: red, green, blue
     real(c_float), dimension(:), allocatable :: positions, texture_coordinates, colors
@@ -212,8 +243,13 @@ contains
       end do
     end if
 
-    call mesh_create_2d_named(mesh_name, positions, texture_coordinates, colors, indices)
-  end subroutine font_generate_text
+    if (named) then
+      vao_id = 0
+      call mesh_create_2d_named(mesh_name, positions, texture_coordinates, colors, indices)
+    else
+      vao_id = mesh_create_2d(positions, texture_coordinates, colors, indices)
+    end if
+  end function internal_font_generate_text
 
 
   !* Get a character's OpenGL data.
