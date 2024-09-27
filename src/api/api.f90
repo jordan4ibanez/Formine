@@ -163,11 +163,11 @@ contains
       if (status /= LUAJIT_RUN_FILE_OK) then
         select case (status)
          case (LUAJIT_RUN_FILE_FAILURE)
-          error stop "[API] error: Failed to run the mod ["//mod_config_struct%name%get()//"]. Execution error."
+          error stop "[API] error: Failed to run the mod ["//mod_config_struct%name//"]. Execution error."
          case (LUAJIT_RUN_FILE_MISSING)
-          error stop "[API] error: Failed to run the mod ["//mod_config_struct%name%get()//"]. Missing init.lua"
+          error stop "[API] error: Failed to run the mod ["//mod_config_struct%name//"]. Missing init.lua"
          case default
-          error stop "[API] error: Failed to run the mod ["//mod_config_struct%name%get()//"]. UNIMPLEMENTED ERROR!"
+          error stop "[API] error: Failed to run the mod ["//mod_config_struct%name//"]. UNIMPLEMENTED ERROR!"
         end select
       end if
 
