@@ -35,9 +35,9 @@ contains
   subroutine texture_module_initialize()
     implicit none
 
-    texture_database = new_hashmap_string_key(texture_database_gc)
+    texture_database = new_hashmap_string_key(sizeof(1), texture_database_gc)
 
-    texture_size_database = new_hashmap_string_key(texture_size_database_gc)
+    texture_size_database = new_hashmap_string_key(sizeof(vec2i(0,0)))
   end subroutine texture_module_initialize
 
 
@@ -150,9 +150,9 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
-    integer(c_int), intent(in), pointer :: new_texture
+    integer(c_int), intent(in), value :: new_texture
     integer(c_int), intent(in), value :: x, y
-    type(vec2i), pointer :: size
+    type(vec2i) :: size
 
     ! This creates an enforcement where the texture must be deleted before it can be re-assigned.
     ! This prevents a severe memory leak.
@@ -166,7 +166,6 @@ contains
 
     call texture_database%set(texture_name, new_texture)
 
-    allocate(size)
     size%x = x
     size%y = y
 
@@ -180,47 +179,46 @@ contains
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
+    integer(c_int), intent(inout) :: texture_id
     logical(c_bool) :: exists
-    class(*), pointer :: generic_pointer
-    integer(c_int) :: texture_id
+    type(c_ptr) :: raw_c_ptr
+    integer(c_int), pointer :: texture_id_pointer
 
     exists = .false.
 
-    if (.not. texture_database%get(texture_name, generic_pointer)) then
+    if (.not. texture_database%get(texture_name, raw_c_ptr)) then
       print"(A)",color_term("[Texture] Warning: ["//texture_name//"] does not exist.", WARNING)
       return
     end if
 
-    select type (generic_pointer)
-     type is (integer(c_int))
-      texture_id = generic_pointer
-     class default
-      error stop color_term("[Texture] Error: ["//texture_name//"] is the wrong type.", ERROR)
-    end select
+    call c_f_pointer(raw_c_ptr, texture_id_pointer)
+    texture_id = texture_id_pointer
 
     exists = .true.
   end function get_texture
 
 
   !* This is mainly used by the texture packer to get the dimensions of the texture.
-  function texture_get_size(texture_name) result(texture_size)
+  function texture_get_size(texture_name, texture_size) result(exists)
     use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
-    class(*), pointer :: generic_data
-    type(vec2i) :: texture_size
+    type(vec2i), intent(inout) :: texture_size
+    logical(c_bool) :: exists
+    type(c_ptr) :: raw_c_ptr
+    type(vec2i), pointer :: texture_size_pointer
 
-    if (.not. texture_size_database%get(texture_name, generic_data)) then
-      error stop color_term("[Texture] Error: ["//texture_name//"] does not exist.", ERROR)
+    exists = .false.
+
+    if (.not. texture_size_database%get(texture_name, raw_c_ptr)) then
+      error stop color_term("[Texture] Error: ["//texture_name//"] size does not exist.", ERROR)
     end if
 
-    select type (generic_data)
-     type is (vec2i)
-      texture_size = generic_data
-     class default
-      error stop color_term("[Texture] Error: ["//texture_name//"] is the wrong type.", ERROR)
-    end select
+    call c_f_pointer(raw_c_ptr, texture_size_pointer)
+    texture_size = texture_size_pointer
+
+    exists = .true.
   end function texture_get_size
 
 
@@ -230,8 +228,7 @@ contains
 
     character(len = *, kind = c_char), intent(in) :: texture_name
 
-    !? GC will take care of the OpenGL memory.
-    call texture_database%delete(texture_name)
+    call texture_database%remove(texture_name)
   end subroutine texture_delete
 
 
@@ -251,26 +248,10 @@ contains
     use :: terminal
     implicit none
 
-    if (.not. texture_database%is_empty()) then
-      !* Delete the entire thing in one call. 8)
-      call texture_database%clear()
-      if (.not. texture_database%is_empty()) then
-        print"(A)", color_term("[Texture] Warning: Did not clear textures texture database! Expected size: [0] | Actual: ["//int64_to_string(texture_database%count())//"]", WARNING)
-      end if
-    end if
-
-    call texture_database%free()
+    call texture_database%destroy()
     print"(A)", "[Texture]: Successfully freed the texture database C memory."
 
-    if (.not. texture_size_database%is_empty()) then
-      !* Delete the entire thing in one call. 8)
-      call texture_size_database%clear()
-      if (.not. texture_size_database%is_empty()) then
-        print"(A)", color_term("[Texture] Warning: Did not clear texture size database! Expected size: [0] | Actual: ["//int64_to_string(texture_size_database%count())//"]", WARNING)
-      end if
-    end if
-
-    call texture_size_database%free()
+    call texture_size_database%destroy()
     print"(A)", "[Texture]: Successfully freed the texture size database C memory."
   end subroutine texture_clear_database
 
