@@ -1,5 +1,6 @@
 module font
   use :: vector_2d
+  use :: vector_2i
   use :: memory_texture_module
   use :: hashmap_str
   use, intrinsic :: iso_c_binding
@@ -258,13 +259,11 @@ contains
     integer(1), dimension(:), allocatable :: raw_image_data
     type(hashmap_string_key) :: character_vec2i_position_database
 
-    !! FIXME: PUT A GC IN HERE.
-    character_database = new_hashmap_string_key()
+    !* Type: opengl_character
+    character_database = new_hashmap_string_key(sizeof(opengl_character()))
 
-    !! FIXME: PUT A GC IN HERE.
-    character_vec2i_position_database = new_hashmap_string_key()
-
-    ! print*,"    REMEMBER TO USE A SPARE SLOT FOR UNDEFINED CHARACTERS"
+    !* Type: vec2i
+    character_vec2i_position_database = new_hashmap_string_key(sizeof(vec2i(0,0)))
 
     !* We will assume that the only difference in png and the cfg is the file extension.
 
@@ -300,7 +299,6 @@ contains
   subroutine process_font_configuration(font_config_file_path, character_vec2i_position_database)
     use :: string
     use :: files
-    use :: vector_2i
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: font_config_file_path
@@ -309,7 +307,7 @@ contains
     integer(c_int) :: i, temp_buffer_length, x_index, y_index
     character(len = :), allocatable :: current_character, temp_buffer
     character(len = :), allocatable :: x_str, y_str
-    type(vec2i), pointer :: position_data
+    type(vec2i) :: position_data
 
     call reader%read_lines(font_config_file_path)
 
@@ -412,7 +410,6 @@ contains
         end if
 
         ! Now finally, dump the vec2i position into the database.
-        allocate(position_data)
         position_data%x = x_index
         position_data%y = y_index
         call character_vec2i_position_database%set(current_character, position_data)
@@ -453,28 +450,25 @@ contains
   subroutine calculate_opengl_texture_coordinates(raw_image_data, image_width, image_height, character_vec2i_position_database)
     use :: math_helpers
     use, intrinsic :: iso_c_binding
-    use :: vector_2i
     implicit none
 
     integer(1), dimension(:), intent(in) :: raw_image_data
     integer(c_int), intent(in), value :: image_width, image_height
-    type(hashmap_string_key), intent(in) :: character_vec2i_position_database
+    type(hashmap_string_key), intent(inout) :: character_vec2i_position_database
     type(memory_texture) :: rgba8_texture_data
     character(len = :, kind = c_char), pointer :: string_key
-    class(*), pointer :: generic_pointer
+    type(c_ptr) :: raw_c_ptr
     type(vec2i) :: position
     integer(c_int) :: pixel_x, pixel_y
     type(opengl_character), pointer :: gpu_character
-    integer(c_int64_t) :: i
 
 
     ! Shift this into a format we can use.
     rgba8_texture_data = memory_texture(raw_image_data, image_width, image_height)
 
-    i = 0
 
-    !!FIXME: SOMETHING IS WRONG HERE!
-    do while(character_vec2i_position_database%iterate_kv(i, string_key, generic_pointer))
+    call character_vec2i_position_database%initialize_iterator()
+    do while(character_vec2i_position_database%iterate_kv(string_key, raw_c_ptr))
 
       ! Enforce that we are running with a vec2i.
       select type(generic_pointer)
