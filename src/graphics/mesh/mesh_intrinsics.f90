@@ -9,6 +9,16 @@ module mod_mesh_intrinsics
   logical(c_bool), parameter :: debug_mode = .false.
 
 
+  type :: mesh_data
+    integer(c_int) :: vao = 0
+    integer(c_int) :: vbo_position = 0
+    integer(c_int) :: vbo_texture_coordinate = 0
+    integer(c_int) :: vbo_color = 0
+    integer(c_int) :: vbo_indices = 0
+    integer(c_int) :: indices_length = 0
+  end type mesh_data
+
+
 contains
 
 
@@ -139,18 +149,19 @@ contains
 
 
   !* Internal component for creating a mesh.
-  subroutine mesh_create_internal(mesh_name, dimensions, positions, texture_coordinates, colors, indices)
+  subroutine mesh_create_internal(mesh_database, mesh_name_to_id_database, mesh_name, dimensions, positions, texture_coordinates, colors, indices)
+    use :: hashmap_int
+    use :: hashmap_str
     use :: terminal
     implicit none
 
+    type(hashmap_integer_key), intent(inout) :: mesh_database
+    type(hashmap_string_key), intent(inout) :: mesh_name_to_id_database
     character(len = *, kind = c_char), intent(in) :: mesh_name
     integer(c_int), intent(in), value :: dimensions
     real(c_float), dimension(:), intent(in), target :: positions, texture_coordinates, colors
     integer(c_int), dimension(:), intent(in), target :: indices
-    type(mesh_data), pointer :: new_mesh
-
-    ! Set up our memory here. We are working with manual memory management.
-    allocate(new_mesh)
+    type(mesh_data) :: new_mesh
 
     ! Into vertex array object.
 
@@ -177,8 +188,9 @@ contains
     ! Now unbind vertex array object.
     call gl_bind_vertex_array(0)
 
-    ! Finally, upload into the database.
-    call set_mesh_by_name(mesh_name, new_mesh)
+    ! Now set it.
+    call mesh_database%set(int(new_mesh%vao, c_int64_t), new_mesh)
+    call mesh_name_to_id_database%set(mesh_name, new_mesh%vao)
   end subroutine mesh_create_internal
 
 end module mod_mesh_intrinsics

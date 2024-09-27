@@ -21,16 +21,6 @@ module mesh
   public :: mesh_destroy_database
 
 
-
-  type :: mesh_data
-    integer(c_int) :: vao = 0
-    integer(c_int) :: vbo_position = 0
-    integer(c_int) :: vbo_texture_coordinate = 0
-    integer(c_int) :: vbo_color = 0
-    integer(c_int) :: vbo_indices = 0
-    integer(c_int) :: indices_length = 0
-  end type mesh_data
-
   !* Type: mesh_data
   type(hashmap_integer_key) :: mesh_database
 
@@ -72,11 +62,6 @@ contains
 
     call mesh_create_internal(mesh_name, 3, positions, texture_coordinates, colors, indices)
   end subroutine mesh_create_3d
-
-
-
-
-
 
   !* Set or update a shader in the database.
   subroutine set_mesh_by_name(mesh_name, new_mesh)
