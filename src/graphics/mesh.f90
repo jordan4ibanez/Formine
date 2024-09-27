@@ -3,9 +3,10 @@ module mesh
   use :: string
   use :: vector_3f
   use :: hashmap_str
+  use :: opengl
+  use :: shader
   use, intrinsic :: iso_c_binding
   implicit none
-
 
   private
 
@@ -70,10 +71,6 @@ contains
 
   !* Internal component for creating a mesh.
   subroutine mesh_create_internal(mesh_name, dimensions, positions, texture_coordinates, colors, indices)
-    use :: shader
-    use :: opengl
-    use :: string
-    use :: terminal
     use :: terminal
     implicit none
 
@@ -117,9 +114,6 @@ contains
 
 
   integer function upload_positions(position_array_pointer, vec_components) result(vbo_position)
-    use, intrinsic :: iso_c_binding
-    use :: opengl
-    use :: shader
     implicit none
 
     real(c_float), dimension(:), intent(in), target :: position_array_pointer
@@ -155,9 +149,6 @@ contains
 
 
   integer function upload_texture_coordinate(texture_coordinates_pointer) result(vbo_position)
-    use, intrinsic :: iso_c_binding
-    use :: opengl
-    use :: shader
     implicit none
 
     real(c_float), dimension(:), intent(in), target :: texture_coordinates_pointer
@@ -192,9 +183,6 @@ contains
 
 
   integer function upload_colors(colors_pointer) result(vbo_position)
-    use, intrinsic :: iso_c_binding
-    use :: opengl
-    use :: shader
     implicit none
 
     real(c_float), dimension(:), intent(in), target :: colors_pointer
@@ -229,9 +217,6 @@ contains
 
 
   integer function upload_indices(indices_pointer) result(vbo_position)
-    use, intrinsic :: iso_c_binding
-    use :: opengl
-    use :: shader
     implicit none
 
     integer(c_int), dimension(:), intent(in), target :: indices_pointer
@@ -304,7 +289,6 @@ contains
   !* Draw a mesh.
   subroutine mesh_draw(mesh_name)
     use :: terminal
-    use :: opengl
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
@@ -325,8 +309,6 @@ contains
 
   !* Delete a mesh.
   subroutine mesh_delete(mesh_name)
-    use :: opengl
-    use :: shader
     use :: terminal
     implicit none
 
@@ -358,9 +340,6 @@ contains
 
   !* Completely wipe out all existing meshes. This might be slow.
   subroutine mesh_clear_database()
-    use :: array, only: array_string_insert
-    use :: string
-    use :: array, only: string_array
     use :: terminal
     implicit none
 
