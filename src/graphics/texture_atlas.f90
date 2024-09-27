@@ -33,16 +33,23 @@ module texture_atlas
   end type texture_pack_element
 
 
+  !* Type: texture_pack_element
+  !! This needs to be a vector.
+  !! this needs a GC.
   type(texture_pack_element), dimension(:), allocatable :: textures_to_pack
 
-  !! fixme: use a GC on this thing!
+
+  !* Type: Texture rectangle
   type(hashmap_string_key) :: texture_coordinates
 
+  !* Type: An array of heap strings
   type(heap_string), dimension(:), allocatable :: texture_key_array
 
   !? Each index is the Block ID. [arr, id]
   !? Each array at the ID points to a gpu position in the texture atlas.
   integer(c_int), dimension(6,0), allocatable :: texture_indices(:, :)
+
+  !! This can be a vector.
   type(texture_rectangle), dimension(:), allocatable :: texture_positions_array
   integer(c_int) :: key_array_size = 0
 
@@ -124,23 +131,20 @@ contains
 
 
   !* Get a texture rectangle for OpenGL/Vulkan.
-  function texture_atlas_get_texture_rectangle(texture_name) result(texture_rectangle_pointer)
+  function texture_atlas_get_texture_rectangle(texture_name) result(tr)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
+    type(texture_rectangle) :: tr
     type(texture_rectangle), pointer :: texture_rectangle_pointer
-    class(*), pointer :: generic_pointer
+    type(c_ptr) :: raw_c_ptr
 
-    if (.not. texture_coordinates%get(texture_name, generic_pointer)) then
+    if (.not. texture_coordinates%get(texture_name, raw_c_ptr)) then
       error stop "[Texture Atlas] Error: Null pointer."
     end if
 
-    select type(generic_pointer)
-     type is (texture_rectangle)
-      texture_rectangle_pointer => generic_pointer
-     class default
-      error stop "[Texture Atlas] Error: Wrong pointer type."
-    end select
+    call c_f_pointer(raw_c_ptr, texture_rectangle_pointer)
+    tr = texture_rectangle_pointer
   end function texture_atlas_get_texture_rectangle
 
 
@@ -175,14 +179,14 @@ contains
     character(len = :, kind = c_char), allocatable :: temp
     type(hashmap_string_key) :: string_to_index_array
     integer(c_int) :: i, y, current_index
-    class(*), pointer :: generic_pointer
+    type(c_ptr) :: raw_c_ptr
     type(texture_rectangle), pointer :: rect_pointer
     type(block_definition), pointer :: definition_pointer
 
     print"(A)","[Texture Atlas]: Begin cachiness optimization."
 
-    !! FIXME: THIS IS A MEMORY LEAK!
-    string_to_index_array = new_hashmap_string_key()
+    !* Type: integer(c_int)
+    string_to_index_array = new_hashmap_string_key(sizeof(10))
 
     key_array_size = size(texture_key_array)
 
@@ -198,9 +202,11 @@ contains
 
       call string_to_index_array%set(temp, i)
 
-      if (.not. texture_coordinates%get(temp, generic_pointer)) then
+      if (.not. texture_coordinates%get(temp, raw_c_ptr)) then
         error stop "[Texture Atlas] Error: wat"
       end if
+
+
 
       select type(generic_pointer)
        type is (texture_rectangle)
