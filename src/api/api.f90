@@ -177,7 +177,7 @@ contains
       ! Finally, we want to get all the textures stored in the [./mod/mod_name/textures/] folder.
       call load_up_all_textures(mod_path_string)
 
-      print"(A)","[API]: Loaded mod ["//mod_config_struct%name%get()//"]"
+      print"(A)","[API]: Loaded mod ["//mod_config_struct%name//"]"
     end do
   end subroutine load_all_mods
 
