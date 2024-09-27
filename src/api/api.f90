@@ -29,9 +29,9 @@ module api
 
 
   type :: mod_config
-    type(heap_string) :: name
-    type(heap_string) :: description
-    type(heap_string) :: path
+    character(len = :, kind = c_char), pointer :: name
+    character(len = :, kind = c_char), pointer :: description
+    character(len = :, kind = c_char), pointer :: path
   end type mod_config
 
 
