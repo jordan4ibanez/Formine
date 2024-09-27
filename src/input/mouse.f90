@@ -30,6 +30,10 @@ contains
     type(c_ptr), intent(in), value :: window_pointer
     real(c_double), intent(in), value :: x_pos, y_pos
 
+    if (.false.) then
+      print*,window_pointer
+    end if
+
     if (mouse_is_locked) then
       call calculate_mouse_delta(x_pos, y_pos)
 
