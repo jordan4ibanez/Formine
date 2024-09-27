@@ -391,17 +391,20 @@ contains
     implicit none
 
     type(c_ptr), intent(in), value :: raw_c_ptr
-    type(mesh_data), pointer :: gotten_mesh
+    type(mesh_data), pointer :: mesh_pointer
 
+    call c_f_pointer(raw_c_ptr, mesh_pointer)
 
-    call gl_bind_vertex_array(gotten_mesh%vao)
+    ! Now start.
+
+    call gl_bind_vertex_array(mesh_pointer%vao)
 
     ! Positions.
     call gl_disable_vertex_attrib_array(ATTRIBUTE_POSITION)
-    call gl_delete_buffers(gotten_mesh%vbo_position)
+    call gl_delete_buffers(mesh_pointer%vbo_position)
 
-    if (gl_is_buffer(gotten_mesh%vbo_position)) then
-      error stop "[Mesh]: Failed to delete VBO [position] for mesh ["//mesh_name//"]"
+    if (gl_is_buffer(mesh_pointer%vbo_position)) then
+      error stop "[Mesh]: Failed to delete VBO [position] for mesh ID ["//int_to_string(mesh_pointer%vao)//"]"
     end if
     ! if (debug_mode) then
     !   print"(A)", "[Mesh]: Deleted VBO [position] at location["//int_to_string(gotten_mesh%vbo_position)//"]"
@@ -409,10 +412,10 @@ contains
 
     ! Texture coordinates.
     call gl_disable_vertex_attrib_array(ATTRIBUTE_TEXTURE_COORDINATE)
-    call gl_delete_buffers(gotten_mesh%vbo_texture_coordinate)
+    call gl_delete_buffers(mesh_pointer%vbo_texture_coordinate)
 
-    if (gl_is_buffer(gotten_mesh%vbo_texture_coordinate)) then
-      error stop "[Mesh]: Failed to delete VBO [texture_coordinate] for mesh ["//mesh_name//"]"
+    if (gl_is_buffer(mesh_pointer%vbo_texture_coordinate)) then
+      error stop "[Mesh]: Failed to delete VBO [texture_coordinate] for mesh ID ["//int_to_string(mesh_pointer%vao)//"]"
     end if
     ! if (debug_mode) then
     !   print"(A)", "[Mesh]: Deleted VBO [texture_coordinate] at location["//int_to_string(gotten_mesh%vbo_texture_coordinate)//"]"
@@ -420,20 +423,20 @@ contains
 
     ! Colors
     call gl_disable_vertex_attrib_array(ATTRIBUTE_COLOR)
-    call gl_delete_buffers(gotten_mesh%vbo_color)
+    call gl_delete_buffers(mesh_pointer%vbo_color)
 
-    if (gl_is_buffer(gotten_mesh%vbo_color)) then
-      error stop "[Mesh]: Failed to delete VBO [color] for mesh ["//mesh_name//"]"
+    if (gl_is_buffer(mesh_pointer%vbo_color)) then
+      error stop "[Mesh]: Failed to delete VBO [color] for mesh ID ["//int_to_string(mesh_pointer%vao)//"]"
     end if
     ! if (debug_mode) then
     !   print"(A)", "[Mesh]: Deleted VBO [color] at location["//int_to_string(gotten_mesh%vbo_color)//"]"
     ! end if
 
     ! Indices.
-    call gl_delete_buffers(gotten_mesh%vbo_indices)
+    call gl_delete_buffers(mesh_pointer%vbo_indices)
 
-    if (gl_is_buffer(gotten_mesh%vbo_indices)) then
-      error stop "[Mesh]: Failed to delete VBO [indices] for mesh ["//mesh_name//"]"
+    if (gl_is_buffer(mesh_pointer%vbo_indices)) then
+      error stop "[Mesh]: Failed to delete VBO [indices] for mesh ID ["//int_to_string(mesh_pointer%vao)//"]"
     end if
     ! if (debug_mode) then
     !   print"(A)", "[Mesh]: Deleted VBO [indices] at location["//int_to_string(gotten_mesh%vbo_indices)//"]"
@@ -443,20 +446,15 @@ contains
     call gl_bind_vertex_array(0)
 
     ! Then delete the VAO.
-    call gl_delete_vertex_arrays(gotten_mesh%vao)
-    if (gl_is_vertex_array(gotten_mesh%vao)) then
-      error stop "[Mesh]: Failed to delete VAO for mesh ["//mesh_name//"]"
+    call gl_delete_vertex_arrays(mesh_pointer%vao)
+    if (gl_is_vertex_array(mesh_pointer%vao)) then
+      error stop "[Mesh]: Failed to delete VAO for mesh ID ["//int_to_string(mesh_pointer%vao)//"]"
     end if
-
-    ! We are working with manual memory management, we must manually deallocate it.
-    deallocate(gotten_mesh)
 
     ! Finally remove it from the database.
-    call mesh_database%delete(mesh_name)
     if (debug_mode) then
-      print"(A)", "[Mesh]: Deleted mesh ["//mesh_name//"]"
+      print"(A)", "[Mesh]: Deleted mesh ID ["//int_to_string(mesh_pointer%vao)//"]"
     end if
-
   end subroutine gc_mesh_database
 
 
