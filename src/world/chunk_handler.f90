@@ -78,30 +78,11 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: x, y
-    class(*), pointer :: generic_pointer
+    type(c_ptr) :: raw_c_ptr
     character(len = :, kind = c_char), allocatable :: chunk_key
     type(memory_chunk), pointer :: chunk_pointer
 
-    chunk_key = grab_chunk_key(x, y)
-
-    if (.not. chunk_database%get(chunk_key, generic_pointer)) then
-      print"(A)", "[Chunk Handler] Warning: Attempted to delete chunk that doesn't exist."
-      return
-    end if
-
-    select type (generic_pointer)
-     type is (memory_chunk)
-      chunk_pointer => generic_pointer
-     class default
-      error stop "[Chunk Handler] Error: Wrong type in the chunk database."
-    end select
-
-    deallocate(chunk_pointer%world_position)
-    deallocate(chunk_pointer%data)
-    deallocate(chunk_pointer%mesh)
-    deallocate(chunk_pointer)
-
-    call chunk_database%delete(chunk_key)
+    call chunk_database%remove(grab_chunk_key(x, y))
   end subroutine chunk_handler_delete_chunk
 
 
