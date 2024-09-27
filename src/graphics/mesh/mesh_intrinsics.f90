@@ -193,6 +193,7 @@ contains
     ! Now set it.
     call mesh_database%set(int(new_mesh%vao, c_int64_t), new_mesh)
 
+    !? Only named meshes get put into the translation database.
     if (named) then
       call mesh_name_to_id_database%set(mesh_name, new_mesh%vao)
     end if
