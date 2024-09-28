@@ -25,7 +25,7 @@ module chunk_generator
   end type message_from_thread
 
 
-  type(concurrent_linked_filo_queue) :: thread_output_queue
+  type(concurrent_fifo_queue) :: thread_output_queue
 
   ! todo: make this a setting in the game's menu.
   integer(c_int) :: queue_pop_limit = 16
@@ -37,7 +37,7 @@ contains
   subroutine chunk_generator_initialize()
     implicit none
 
-    thread_output_queue = concurrent_linked_filo_queue()
+    thread_output_queue = concurrent_fifo_queue()
   end subroutine chunk_generator_initialize
 
 
