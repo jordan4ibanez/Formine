@@ -139,7 +139,7 @@ module chunk_mesh
 
   !* The data sent from the chunk mesh generator threads.
   type :: message_from_thread
-    type(vec2i), pointer :: world_position
+    type(vec2i) :: world_position
     real(c_float), dimension(12), pointer :: positions(:)
     real(c_float), dimension(8), pointer :: texture_coordinates(:)
     real(c_float), dimension(12), pointer :: colors(:)
@@ -148,7 +148,9 @@ module chunk_mesh
   end type message_from_thread
 
 
-  type(concurrent_linked_filo_queue) :: thread_output_queue
+  !* Type: message_from_thread
+  type(concurrent_fifo_queue) :: thread_output_queue
+
   ! todo: make this a setting in the game's menu.
   integer(c_int) :: queue_pop_limit = 16
 
@@ -160,7 +162,7 @@ contains
   subroutine chunk_mesh_initialize()
     implicit none
 
-    thread_output_queue = concurrent_linked_filo_queue()
+    thread_output_queue = new_concurrent_fifo_queue(sizeof(message_from_thread(vec2i(0,0), null(), null(), null(), null(), 0)))
   end subroutine chunk_mesh_initialize
 
 
@@ -169,23 +171,18 @@ contains
     implicit none
 
     integer(c_int) :: i
-    class(*), pointer :: generic_pointer
+    type(c_ptr) :: raw_c_ptr
     type(message_from_thread), pointer :: new_message
     integer(c_int) :: mesh_id
 
 
     do i = 1,queue_pop_limit
 
-      if (.not. thread_output_queue%pop(generic_pointer)) then
+      if (.not. thread_output_queue%pop(raw_c_ptr)) then
         exit
       end if
 
-      select type(generic_pointer)
-       type is (message_from_thread)
-        new_message => generic_pointer
-       class default
-        error stop "[Chunk Mesh] Error: Wrong type in queue."
-      end select
+      call c_f_pointer(raw_c_ptr, new_message)
 
       mesh_id = mesh_create_3d(new_message%positions, new_message%texture_coordinates, new_message%colors, new_message%indices)
 
@@ -193,7 +190,6 @@ contains
 
       !? This is running through the main thread so we can free it now.
 
-      deallocate(new_message%world_position)
       deallocate(new_message%positions)
       deallocate(new_message%texture_coordinates)
       deallocate(new_message%colors)
