@@ -87,7 +87,7 @@ contains
     type(thread_argument), pointer :: arguments
     type(message_to_thread), pointer :: generator_message
     type(fnl_state) :: noise_state
-    integer(c_int) :: chunk_x, chunk_z, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, i, status
+    integer(c_int) :: chunk_x, chunk_z, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, status
     type(memory_chunk), pointer :: chunk_pointer
     type(block_data) :: current_block
     type(message_from_thread), pointer :: output_message
