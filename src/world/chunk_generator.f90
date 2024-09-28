@@ -27,7 +27,7 @@ module chunk_generator
 
   type(concurrent_linked_filo_queue) :: thread_output_queue
 
-  ! todo: make this a settign in the game's menu.
+  ! todo: make this a setting in the game's menu.
   integer(c_int) :: queue_pop_limit = 16
 
 
