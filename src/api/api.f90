@@ -78,7 +78,7 @@ contains
     call load_all_mods()
 
     ! Pack the loaded texture data.
-    ! call texture_atlas_pack()
+    call texture_atlas_pack()
   end subroutine api_initialize
 
 
