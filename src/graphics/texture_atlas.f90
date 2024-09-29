@@ -21,8 +21,8 @@ module texture_atlas
   public :: texture_atlas_add_texture_to_pack
   public :: texture_atlas_pack
   public :: texture_atlas_get_texture_rectangle
-  public :: texture_atlas_get_texture_indices_clone_pointer
-  public :: texture_atlas_get_texture_positions_array_clone_pointer
+  public :: texture_atlas_get_texture_indices_clone
+  public :: texture_atlas_get_texture_positions_array_clone
   public :: texture_atlas_get_texture_count
   public :: texture_atlas_destroy
 
@@ -237,27 +237,27 @@ contains
 
 
   !* Clone the texture indices and return a pointer to the data.
-  function texture_atlas_get_texture_indices_clone_pointer() result(indices_clone_pointer)
+  function texture_atlas_get_texture_indices_clone() result(indices_clone)
     implicit none
 
-    integer(c_int), dimension(6,0), pointer :: indices_clone_pointer(:, :)
+    integer(c_int), dimension(6,0), allocatable :: indices_clone(:, :)
 
-    allocate(indices_clone_pointer(6, key_array_size))
+    allocate(indices_clone(6, key_array_size))
 
-    indices_clone_pointer = texture_indices
-  end function texture_atlas_get_texture_indices_clone_pointer
+    indices_clone = texture_indices
+  end function texture_atlas_get_texture_indices_clone
 
 
   !* Clone the texture positions array and return a pointer to the data.
-  function texture_atlas_get_texture_positions_array_clone_pointer() result(positions_array_clone_pointer)
+  function texture_atlas_get_texture_positions_array_clone() result(positions_array_clone)
     implicit none
 
-    type(texture_rectangle), dimension(:), pointer :: positions_array_clone_pointer(:)
+    type(texture_rectangle), dimension(:), allocatable :: positions_array_clone(:)
 
-    allocate(positions_array_clone_pointer(key_array_size))
+    allocate(positions_array_clone(key_array_size))
 
-    positions_array_clone_pointer = texture_positions_array
-  end function texture_atlas_get_texture_positions_array_clone_pointer
+    positions_array_clone = texture_positions_array
+  end function texture_atlas_get_texture_positions_array_clone
 
 
   !* Get the number of textures in the atlas.

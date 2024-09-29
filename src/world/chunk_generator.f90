@@ -10,6 +10,7 @@ module chunk_generator
 
   private
 
+
   public :: chunk_generator_initialize
   public :: chunk_generator_process_output_queue
   public :: chunk_generator_new_chunk
@@ -21,10 +22,11 @@ module chunk_generator
   end type message_to_thread
 
   type :: message_from_thread
-    type(memory_chunk), pointer :: data => null()
+    type(memory_chunk),allocatable :: data
   end type message_from_thread
 
 
+  !* Type: memory_chunk
   type(concurrent_fifo_queue) :: thread_output_queue
 
   ! todo: make this a setting in the game's menu.
@@ -37,7 +39,9 @@ contains
   subroutine chunk_generator_initialize()
     implicit none
 
-    thread_output_queue = concurrent_fifo_queue()
+    type(memory_chunk), allocatable :: blank
+
+    thread_output_queue = new_concurrent_fifo_queue(sizeof(blank))
   end subroutine chunk_generator_initialize
 
 
@@ -45,22 +49,16 @@ contains
     implicit none
 
     integer(c_int) :: i, chunk_x, chunk_z, w
-    class(*), pointer :: generic_pointer
+    type(c_ptr) :: raw_c_ptr
     type(memory_chunk), pointer :: chunk_pointer
 
     do i = 1,queue_pop_limit
 
-      if (.not. thread_output_queue%pop(generic_pointer)) then
+      if (.not. thread_output_queue%pop(raw_c_ptr)) then
         exit
       end if
 
-      select type (generic_pointer)
-       type is (message_from_thread)
-        chunk_pointer => generic_pointer%data
-        deallocate(generic_pointer)
-       class default
-        error stop "[Chunk Generator] Error: Wrong type in queue."
-      end select
+      call c_f_pointer(raw_c_ptr, chunk_pointer)
 
       chunk_x = chunk_pointer%world_position%x
       chunk_z = chunk_pointer%world_position%y
@@ -71,9 +69,7 @@ contains
         chunk_pointer%mesh(w) = 0
         call chunk_mesh_generate(chunk_x, chunk_z, w)
       end do
-
     end do
-
   end subroutine chunk_generator_process_output_queue
 
 
@@ -88,7 +84,7 @@ contains
     type(message_to_thread), pointer :: generator_message
     type(fnl_state) :: noise_state
     integer(c_int) :: chunk_x, chunk_z, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, status
-    type(memory_chunk), pointer :: chunk_pointer
+    type(memory_chunk), allocatable :: new_chunk
     type(block_data) :: current_block
     type(message_from_thread), pointer :: output_message
 
@@ -114,7 +110,7 @@ contains
     !? Since this is quite a simple message, we will deallocate it right away.
     deallocate(generator_message)
 
-    chunk_pointer => memory_chunk(chunk_x, chunk_z)
+    new_chunk = new_memory_chunk(chunk_x, chunk_z)
 
     base_x = chunk_x * CHUNK_WIDTH
     base_y = 0
@@ -134,7 +130,7 @@ contains
           if (y <= current_height) then
             current_block = block_data()
             current_block%id = 1
-            chunk_pointer%data(y, z, x) = current_block
+            new_chunk%data(y, z, x) = current_block
           end if
         end do
       end do
@@ -142,17 +138,18 @@ contains
 
     !? Finally, push the message to the queue.
     allocate(output_message)
-    output_message%data => chunk_pointer
+
+    output_message%data = new_chunk
 
     call thread_output_queue%push(output_message)
 
     !? Flag thread as complete.
-    status = thread_write_lock(arguments%mutex_pointer)
+    status = thread_write_lock(arguments%mutex_ptr)
 
     void_pointer = c_null_ptr
     arguments%active_flag = .false.
 
-    status = thread_unlock_lock(arguments%mutex_pointer)
+    status = thread_unlock_lock(arguments%mutex_ptr)
   end function chunk_generator_thread
 
 
