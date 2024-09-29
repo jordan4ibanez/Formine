@@ -244,6 +244,7 @@ contains
 
     allocate(indices_clone_pointer(6, key_array_size))
 
+    !! FIXME: segfault here
     indices_clone_pointer = texture_indices
   end function texture_atlas_get_texture_indices_clone_pointer
 
