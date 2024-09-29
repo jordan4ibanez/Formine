@@ -71,7 +71,6 @@ contains
       call chunk_handler_store_chunk_pointer(chunk_pointer)
 
       do w = 1,MESH_STACK_ARRAY_SIZE
-        chunk_pointer%mesh(w) = 0
         call chunk_mesh_generate(chunk_x, chunk_z, w)
       end do
 

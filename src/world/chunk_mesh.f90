@@ -460,6 +460,8 @@ contains
     integer(c_int), intent(in), value :: x, z, mesh_stack
     type(message_to_thread), pointer :: message_to_generator
 
+    !! FIXME: SEGFAULT HERE.
+
 
     allocate(message_to_generator)
 
