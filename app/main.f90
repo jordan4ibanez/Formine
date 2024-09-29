@@ -2,6 +2,7 @@ program main
   use :: glfw
   use :: opengl
   use :: string
+  use :: terminal
   use :: shader
   use :: files
   use :: mesh
@@ -312,5 +313,7 @@ program main
   call glfw_destroy_window()
 
   call glfw_terminate()
+
+  print"(A)", color_term("jordan4ibanez: Thank you so much for helping with my project by testing!", NOTIFICATION)
 
 end program main
