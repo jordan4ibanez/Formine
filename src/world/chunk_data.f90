@@ -5,7 +5,7 @@ module chunk_data
   use, intrinsic :: iso_c_binding
   implicit none
 
-  public :: new_memory_chunk
+  ! public :: new_memory_chunk
   public :: new_memory_chunk_pointer
 
   !* Width stands for X and Z. There is no sense in defining depth as they're equal sized.
@@ -48,15 +48,15 @@ module chunk_data
 contains
 
 
-  function new_memory_chunk(x, y) result(nmc)
-    implicit none
+  ! function new_memory_chunk(x, y) result(nmc)
+  !   implicit none
 
-    integer(c_int) :: x, y
-    type(memory_chunk), allocatable :: nmc
+  !   integer(c_int) :: x, y
+  !   type(memory_chunk), allocatable :: nmc
 
-    allocate(nmc)
-    nmc%world_position = [x,y]
-  end function new_memory_chunk
+  !   allocate(nmc)
+  !   nmc%world_position = [x,y]
+  ! end function new_memory_chunk
 
 
   function new_memory_chunk_pointer(x, y) result(nmcp)
