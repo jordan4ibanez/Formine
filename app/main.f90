@@ -141,14 +141,14 @@ program main
   call api_initialize()
 
 
-  ! print*,"START"
-  ! do x = -20,20
-  !   do y = -20,20
-  !     ! This launches 8 threads.
-  !     call chunk_generator_new_chunk(x,y)
-  !   end do
-  ! end do
-  ! print*,"END"
+  print*,"START"
+  do x = -20,20
+    do y = -20,20
+      ! This launches 8 threads.
+      call chunk_generator_new_chunk(x,y)
+    end do
+  end do
+  print*,"END"
 
   rotation = 0.0
 
