@@ -460,55 +460,22 @@ contains
     integer(c_int), intent(in), value :: x, z, mesh_stack
     type(message_to_thread), pointer :: message_to_generator
 
-    !! FIXME: SEGFAULT HERE.
-
 
     allocate(message_to_generator)
-
     allocate(message_to_generator%world_position)
 
     message_to_generator%world_position = [x, z]
-
     message_to_generator%current => chunk_handler_get_clone_chunk_pointer(x,z)
-
     message_to_generator%left => chunk_handler_get_clone_chunk_pointer(x - 1,z)
     message_to_generator%right => chunk_handler_get_clone_chunk_pointer(x + 1,z)
-
     message_to_generator%back => chunk_handler_get_clone_chunk_pointer(x,z - 1)
     message_to_generator%front => chunk_handler_get_clone_chunk_pointer(x,z + 1)
-
     message_to_generator%texture_indices => texture_atlas_get_texture_indices_clone_pointer()
     message_to_generator%texture_positions_array => texture_atlas_get_texture_positions_array_clone_pointer()
-
     message_to_generator%texture_count = texture_atlas_get_texture_count()
-
     message_to_generator%mesh_stack = mesh_stack
 
-    !! Sample deallocation
-    ! deallocate(message_to_generator%world_position)
-
-    ! deallocate(message_to_generator%current)
-
-    ! if (associated(message_to_generator%left)) then
-    !   deallocate(message_to_generator%left)
-    ! end if
-    ! if (associated(message_to_generator%right)) then
-    !   deallocate(message_to_generator%right)
-    ! end if
-
-    ! if (associated(message_to_generator%back)) then
-    !   deallocate(message_to_generator%back)
-    ! end if
-    ! if (associated(message_to_generator%front)) then
-    !   deallocate(message_to_generator%front)
-    ! end if
-
-    ! deallocate(message_to_generator%texture_indices)
-    ! deallocate(message_to_generator%texture_positions_array)
-
-    ! deallocate(message_to_generator)
-
-    call thread_create(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator))
+    call thread_create(chunk_mesh_generation_thread, c_loc(message_to_generator))
   end subroutine chunk_mesh_generate
 
 
