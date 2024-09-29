@@ -25,6 +25,7 @@ module chunk_generator
   end type message_from_thread
 
 
+  !* Type is: message_from_thread
   type(concurrent_fifo_queue) :: thread_output_queue
 
   ! todo: make this a setting in the game's menu.
@@ -37,7 +38,9 @@ contains
   subroutine chunk_generator_initialize()
     implicit none
 
-    thread_output_queue = concurrent_fifo_queue()
+    type(message_from_thread) :: blank
+
+    thread_output_queue = new_concurrent_fifo_queue(sizeof(blank))
   end subroutine chunk_generator_initialize
 
 
