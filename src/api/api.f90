@@ -354,11 +354,9 @@ contains
     implicit none
 
     character(len = *, kind = c_char) :: file_name, file_path
-    character(len = :, kind = c_char), allocatable :: full_file_path, file_extension
+    character(len = :, kind = c_char), allocatable :: full_file_path
 
-    file_extension = string_get_file_extension(file_name)
-
-    if (file_extension == "png") then
+    if (string_get_file_extension(file_name) == "png") then
       full_file_path = file_path//file_name
       call texture_create(full_file_path)
       call texture_atlas_add_texture_to_pack(full_file_path, file_name)
