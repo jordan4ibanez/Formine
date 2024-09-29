@@ -35,7 +35,6 @@ module api
   end type mod_config
 
 
-  !! FIXME: this does, in fact, need a GC.
   !* Type: mod_config
   type(hashmap_string_key) :: mod_database
 
