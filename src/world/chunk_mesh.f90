@@ -380,7 +380,6 @@ contains
       !? Compose output.
 
       allocate(output_message)
-      allocate(output_message%world_position)
       allocate(output_message%positions(p_index))
       allocate(output_message%texture_coordinates(t_index))
       allocate(output_message%colors(c_index))
@@ -429,12 +428,12 @@ contains
     deallocate(generator_message)
 
     !? Flag thread as complete.
-    status = thread_write_lock(arguments%mutex_pointer)
+    status = thread_write_lock(arguments%mutex_ptr)
 
     void_pointer = c_null_ptr
     arguments%active_flag = .false.
 
-    status = thread_unlock_lock(arguments%mutex_pointer)
+    status = thread_unlock_lock(arguments%mutex_ptr)
   end function chunk_mesh_generation_thread
 
 
