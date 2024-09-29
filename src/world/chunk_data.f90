@@ -5,6 +5,8 @@ module chunk_data
   use, intrinsic :: iso_c_binding
   implicit none
 
+  public :: new_memory_chunk
+
   !* Width stands for X and Z. There is no sense in defining depth as they're equal sized.
 
   integer(c_int), parameter :: CHUNK_WIDTH = 16
@@ -41,23 +43,19 @@ module chunk_data
     integer(c_int), dimension(MESH_STACK_ARRAY_SIZE) :: mesh
   end type memory_chunk
 
-  interface memory_chunk
-    module procedure :: memory_chunk_constructor
-  end interface memory_chunk
-
 
 contains
 
 
-  function memory_chunk_constructor(x, y) result(new_memory_chunk)
+  function new_memory_chunk(x, y) result(nmc)
     implicit none
 
     integer(c_int) :: x, y
-    type(memory_chunk), pointer :: new_memory_chunk
+    type(memory_chunk), allocatable :: nmc
 
-    allocate(new_memory_chunk)
-    new_memory_chunk%world_position = [x,y]
-  end function memory_chunk_constructor
+    allocate(nmc)
+    nmc%world_position = [x,y]
+  end function new_memory_chunk
 
 
 end module chunk_data
