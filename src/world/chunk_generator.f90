@@ -149,12 +149,12 @@ contains
     call thread_output_queue%push(output_message)
 
     !? Flag thread as complete.
-    status = thread_write_lock(arguments%mutex_pointer)
+    status = thread_write_lock(arguments%mutex_ptr)
 
     void_pointer = c_null_ptr
     arguments%active_flag = .false.
 
-    status = thread_unlock_lock(arguments%mutex_pointer)
+    status = thread_unlock_lock(arguments%mutex_ptr)
   end function chunk_generator_thread
 
 
