@@ -49,7 +49,7 @@ contains
 
     integer(c_int) :: i, chunk_x, chunk_z, w
     type(c_ptr) :: raw_c_ptr
-    type(message_from_thread), pointer :: message
+    type(message_from_thread), pointer :: message_pointer
     type(memory_chunk), pointer :: chunk_pointer
 
     do i = 1,queue_pop_limit
@@ -58,11 +58,11 @@ contains
         exit
       end if
 
-      call c_f_pointer(raw_c_ptr, message)
+      call c_f_pointer(raw_c_ptr, message_pointer)
 
-      print*,associated(message%data)
+      print*,associated(message_pointer%data)
 
-      chunk_pointer => message%data
+      chunk_pointer => message_pointer%data
 
       chunk_x = chunk_pointer%world_position%x
       chunk_z = chunk_pointer%world_position%y
@@ -70,7 +70,7 @@ contains
       !? This will free() the chunk pointer when it stores it.
       call chunk_handler_store_chunk_pointer(chunk_pointer)
 
-      deallocate(message)
+      deallocate(message_pointer)
 
       do w = 1,MESH_STACK_ARRAY_SIZE
         call chunk_mesh_generate(chunk_x, chunk_z, w)
