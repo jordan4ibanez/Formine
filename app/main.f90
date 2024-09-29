@@ -132,7 +132,7 @@ program main
   ! call texture_create("./textures/fortran_logo_512x512.png")
 
   !* If we cannot initalize the API properly, we give up.
-  ! call api_initialize()
+  call api_initialize()
 
 
   ! print*,"START"
@@ -295,8 +295,7 @@ program main
 
   call font_destroy_database()
 
-  print*,"REMEMBER TO DESTROY THE API!"
-  ! call api_destroy()
+  call api_destroy()
 
   call texture_clear_database()
 
