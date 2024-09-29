@@ -30,7 +30,7 @@ My Discord: https://discord.gg/D95q7BHUE4
 
 Here is what this thing currently looks like.
 
-![Current progress.](https://raw.githubusercontent.com/jordan4ibanez/fortran_thing/master/screenshots/example_6.png)
+![Current progress.](https://raw.githubusercontent.com/jordan4ibanez/fortran_thing/master/screenshots/example_7.png)
 
 
 ## Credits:
