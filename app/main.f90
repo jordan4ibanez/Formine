@@ -142,12 +142,12 @@ program main
 
 
   print*,"START"
-  do x = -20,20
-    do y = -20,20
-      ! This launches 8 threads.
-      call chunk_generator_new_chunk(x,y)
-    end do
-  end do
+  ! do x = -20,20
+  !   do y = -20,20
+  ! This launches 8 threads.
+  call chunk_generator_new_chunk(0,0)
+  !   end do
+  ! end do
   print*,"END"
 
   rotation = 0.0
