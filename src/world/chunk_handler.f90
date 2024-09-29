@@ -120,7 +120,7 @@ contains
     call c_f_pointer(raw_c_ptr, original_chunk_pointer)
 
     ! Allocate pointer.
-    clone_chunk_pointer => memory_chunk(x,y)
+    clone_chunk_pointer => new_memory_chunk_pointer(x,y)
 
     clone_chunk_pointer%data = original_chunk_pointer%data
     clone_chunk_pointer%world_position = original_chunk_pointer%world_position

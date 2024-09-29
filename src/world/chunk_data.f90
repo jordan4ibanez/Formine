@@ -6,6 +6,7 @@ module chunk_data
   implicit none
 
   public :: new_memory_chunk
+  public :: new_memory_chunk_pointer
 
   !* Width stands for X and Z. There is no sense in defining depth as they're equal sized.
 
@@ -56,6 +57,17 @@ contains
     allocate(nmc)
     nmc%world_position = [x,y]
   end function new_memory_chunk
+
+
+  function new_memory_chunk_pointer(x, y) result(nmcp)
+    implicit none
+
+    integer(c_int) :: x, y
+    type(memory_chunk), pointer :: nmcp
+
+    allocate(nmcp)
+    nmcp%world_position = [x,y]
+  end function new_memory_chunk_pointer
 
 
 end module chunk_data

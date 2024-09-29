@@ -116,7 +116,7 @@ contains
     !? Since this is quite a simple message, we will deallocate it right away.
     deallocate(generator_message)
 
-    chunk_pointer => memory_chunk(chunk_x, chunk_z)
+    chunk_pointer => new_memory_chunk_pointer(chunk_x, chunk_z)
 
     base_x = chunk_x * CHUNK_WIDTH
     base_y = 0
