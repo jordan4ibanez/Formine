@@ -212,7 +212,8 @@ contains
         if (value_string == "") then
           error stop "[API] error: Missing value for [mod.conf] key [name]."
         end if
-        !! Why must you segfault?
+
+        allocate(character(len = len(value_string), kind = c_char) :: new_mod_config%name)
         new_mod_config%name = value_string
       else if (string_starts_with(temp_string, "description = ")) then
         value_string = string_get_right_of_character(temp_string, "=")
