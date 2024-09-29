@@ -41,7 +41,7 @@ module chunk_data
     ! Layout: [ Y, Z, X ]
     type(vec2i) :: world_position
     type(block_data), dimension(CHUNK_HEIGHT, CHUNK_WIDTH, CHUNK_WIDTH) :: data
-    integer(c_int), dimension(MESH_STACK_ARRAY_SIZE) :: mesh
+    integer(c_int), dimension(MESH_STACK_ARRAY_SIZE) :: mesh = (/ 0, 0, 0, 0, 0, 0, 0, 0 /)
   end type memory_chunk
 
 
