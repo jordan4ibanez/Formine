@@ -222,7 +222,7 @@ program main
 
       ! call mesh_delete("debug")
 
-      ! call texture_use("TEXTURE_ATLAS")
+
 
       call chunk_handler_draw_chunks()
 
