@@ -186,6 +186,8 @@ contains
 
       mesh_id = mesh_create_3d(new_message%positions, new_message%texture_coordinates, new_message%colors, new_message%indices)
 
+      print*,"setting new mesh!"
+
       call chunk_handler_set_chunk_mesh(new_message%world_position%x, new_message%world_position%y, new_message%mesh_stack, mesh_id)
 
       !? This is running through the main thread so we can free it now.
