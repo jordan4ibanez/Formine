@@ -137,6 +137,8 @@ contains
 
     character(len = :, kind = c_char), pointer :: string_key
     type(c_ptr) :: raw_c_ptr
+    type(memory_chunk), pointer :: chunk_pointer
+    integer(c_int) :: i, current_mesh_id
 
     ! If there's nothing to do, don't do anything.
     if (chunk_database%is_empty()) then
@@ -147,30 +149,25 @@ contains
 
     call chunk_database%initialize_iterator()
     do while(chunk_database%iterate_kv(string_key, raw_c_ptr))
-      print*,"hi"
-      !   select type(generic_data)
-      !    type is (memory_chunk)
-      !     chunk => generic_data
-      !    class default
-      !     error stop "[Chunk Handler] Error: The wrong type was inserted into the database."
-      !   end select
 
-      !   do i = 1,MESH_STACK_ARRAY_SIZE
-      !     current_mesh_id => chunk%mesh(i)%get_pointer()
+      call c_f_pointer(raw_c_ptr, chunk_pointer)
 
-      !     if (current_mesh_id == "") then
-      !       cycle
-      !     end if
+      do i = 1,MESH_STACK_ARRAY_SIZE
+        current_mesh_id = chunk_pointer%mesh(i)
 
-      !     ! call camera_set_object_matrix_f32(&
-      !     !   real(chunk%world_position%x * CHUNK_WIDTH, c_float), &
-      !     !   real((i - 1) * MESH_STACK_HEIGHT, c_float), &
-      !     !   real(chunk%world_position%y * CHUNK_WIDTH, c_float), &
-      !     !   0.0, 0.0, 0.0, &
-      !     !   1.0, 1.0, 1.0)
+        if (current_mesh_id == 0) then
+          cycle
+        end if
 
-      !     ! call mesh_draw(current_mesh_id)
-      !   end do
+        call camera_set_object_matrix_f32(&
+          real(chunk_pointer%world_position%x * CHUNK_WIDTH, c_float), &
+          real((i - 1) * MESH_STACK_HEIGHT, c_float), &
+          real(chunk_pointer%world_position%y * CHUNK_WIDTH, c_float), &
+          0.0, 0.0, 0.0, &
+          1.0, 1.0, 1.0)
+
+        call mesh_draw(current_mesh_id)
+      end do
     end do
   end subroutine chunk_handler_draw_chunks
 
