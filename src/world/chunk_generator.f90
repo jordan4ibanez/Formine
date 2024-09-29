@@ -48,22 +48,21 @@ contains
     implicit none
 
     integer(c_int) :: i, chunk_x, chunk_z, w
-    class(*), pointer :: generic_pointer
+    type(c_ptr) :: raw_c_ptr
+    type(message_from_thread), pointer :: message
     type(memory_chunk), pointer :: chunk_pointer
 
     do i = 1,queue_pop_limit
 
-      if (.not. thread_output_queue%pop(generic_pointer)) then
+      if (.not. thread_output_queue%pop(raw_c_ptr)) then
         exit
       end if
 
-      select type (generic_pointer)
-       type is (message_from_thread)
-        chunk_pointer => generic_pointer%data
-        deallocate(generic_pointer)
-       class default
-        error stop "[Chunk Generator] Error: Wrong type in queue."
-      end select
+      call c_f_pointer(raw_c_ptr, message)
+
+      chunk_pointer => message%data
+
+      deallocate(message)
 
       chunk_x = chunk_pointer%world_position%x
       chunk_z = chunk_pointer%world_position%y
