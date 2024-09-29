@@ -112,7 +112,9 @@ contains
     ! We ensure that this thing exists.
     if (.not. gl_is_texture(texture_id)) then
       error stop "[Texture] Error: Failed to create texture ["//texture_name//"]. Does not exist."
-    else
+    end if
+
+    if (debug_mode) then
       print"(A)", "[Texture]: Created ["//texture_name//"] at ID ["//int_to_string(texture_id)//"]"
     end if
 
