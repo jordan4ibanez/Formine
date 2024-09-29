@@ -15,12 +15,11 @@ program main
   use :: texture_atlas
   use :: texture_atlas
   use :: fast_noise_lite
-  !! FIXME: RE-ENABLE CHUNK
-  ! use :: chunk_generator
+  use :: chunk_generator
+  use :: chunk_handler
   use :: mouse
   use :: keyboard
   use :: camera
-  ! use :: chunk_handler
   use :: thread_handler
   use :: version_info
   use :: raw_c
@@ -100,7 +99,7 @@ program main
 
   call glfw_swap_interval(0)
 
-  ! call chunk_handler_module_initalize()
+  call chunk_handler_module_initalize()
 
   !! This allows OpenGL debugging. (But not on Mac OS)
   if (forglad_gpu_supports_gl_debugging()) then

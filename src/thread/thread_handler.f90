@@ -1,8 +1,7 @@
 module thread_handler
   use :: thread
-  !! FIXME: RE-ENABLE CHUNK
-  ! use :: chunk_generator
-  ! use :: chunk_mesh
+  use :: chunk_generator
+  use :: chunk_mesh
   implicit none
 
   !* This is simply an easy way to put all the threading handling in one spot.
@@ -16,9 +15,9 @@ contains
 
     call thread_initialize(.true.)
 
-    ! call chunk_generator_initialize()
+    call chunk_generator_initialize()
 
-    ! call chunk_mesh_initialize()
+    call chunk_mesh_initialize()
   end subroutine thread_handler_intialization
 
 
@@ -28,9 +27,9 @@ contains
 
     call thread_process_thread_queue()
 
-    ! call chunk_generator_process_output_queue()
+    call chunk_generator_process_output_queue()
 
-    ! call chunk_mesh_process_output_queue()
+    call chunk_mesh_process_output_queue()
   end subroutine thread_handler_run
 
 

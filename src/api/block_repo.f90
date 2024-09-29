@@ -248,7 +248,7 @@ contains
 
     definition_array = [definition_array, new_definition]
 
-    print"(A)","[Block Repo]: Registered ID ["//int_to_string(current_id)//"] to block ["//new_definition%name//"]"
+    ! print"(A)","[Block Repo]: Registered ID ["//int_to_string(current_id)//"] to block ["//new_definition%name//"]"
 
     definition_array_length = definition_array_length + 1
     current_id = current_id + 1
