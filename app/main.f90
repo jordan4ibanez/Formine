@@ -216,13 +216,13 @@ program main
       !   [0,1,2, 2,3,0] &
       !   )
 
-      
+
 
       ! call mesh_draw("debug_block")
 
       ! call mesh_delete("debug")
 
-      call texture_use("TEXTURE_ATLAS")
+      ! call texture_use("TEXTURE_ATLAS")
 
       call chunk_handler_draw_chunks()
 
