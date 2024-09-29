@@ -87,6 +87,8 @@ contains
     implicit none
 
     call luajit_destroy(lua_state)
+    call mod_database%destroy()
+    print"(A)","[API]: Destroyed API."
   end subroutine api_destroy
 
 
