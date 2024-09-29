@@ -76,7 +76,7 @@ contains
     call block_repo_deploy_lua_api(lua_state)
 
     ! Load up all mods.
-    ! call load_all_mods()
+    call load_all_mods()
 
     ! Pack the loaded texture data.
     ! call texture_atlas_pack()
