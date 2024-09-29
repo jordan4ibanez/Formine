@@ -37,9 +37,15 @@ program main
   ! character(len = :, kind = c_char), pointer :: test_data
   ! integer(c_int), pointer :: test_data
 
+  x = 0
+  y = 0
+  x_vao = 0
+  y_vao = 0
+  z_vao = 0
+  fps_vao = 0
   new_fps = 0
   old_fps = -1
-  y = 0
+
 
   ! !! BEGIN WARNING: This is only to be used for when developing libraries.
   ! if (.true.) then
