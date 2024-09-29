@@ -60,8 +60,6 @@ contains
 
       call c_f_pointer(raw_c_ptr, message_pointer)
 
-      print*,associated(message_pointer%data)
-
       chunk_pointer => message_pointer%data
 
       chunk_x = chunk_pointer%world_position%x
