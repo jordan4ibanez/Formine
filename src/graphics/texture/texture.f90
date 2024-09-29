@@ -16,7 +16,7 @@ module texture
   public :: texture_get_size
   public :: texture_delete
   public :: texture_exists
-  public :: texture_clear_database
+  public :: texture_destroy_database
 
 
   !* Type: integer(c_int)
@@ -243,7 +243,7 @@ contains
 
 
   !* Completely wipe out all existing textures. This might be slow.
-  subroutine texture_clear_database()
+  subroutine texture_destroy_database()
     use :: string
     use :: terminal
     implicit none
@@ -253,7 +253,7 @@ contains
 
     call texture_size_database%destroy()
     print"(A)", "[Texture]: Successfully freed the texture size database C memory."
-  end subroutine texture_clear_database
+  end subroutine texture_destroy_database
 
 
 end module texture

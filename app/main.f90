@@ -297,7 +297,7 @@ program main
 
   call api_destroy()
 
-  call texture_clear_database()
+  call texture_destroy_database()
 
   call mesh_destroy_database()
 
