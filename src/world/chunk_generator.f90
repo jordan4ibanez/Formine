@@ -60,13 +60,14 @@ contains
 
       call c_f_pointer(raw_c_ptr, message)
 
-      chunk_pointer => message%data
+      print*,associated(message%data)
 
-      deallocate(message)
+      chunk_pointer => message%data
 
       chunk_x = chunk_pointer%world_position%x
       chunk_z = chunk_pointer%world_position%y
 
+      !? This will free() the chunk pointer when it stores it.
       call chunk_handler_store_chunk_pointer(chunk_pointer)
 
       do w = 1,MESH_STACK_ARRAY_SIZE
