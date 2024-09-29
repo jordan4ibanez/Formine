@@ -113,7 +113,7 @@ program main
   call gl_depth_func(GL_LESS)
 
   !! This enables backface culling.
-  ! call gl_enable(GL_CULL_FACE)
+  call gl_enable(GL_CULL_FACE)
 
   !! This enables alpha blending.
   call gl_enable(GL_BLEND)
@@ -142,8 +142,8 @@ program main
 
 
   print*,"START"
-  do x = -20,20
-    do y = -20,20
+  do x = -16,16
+    do y = -16,16
       ! This launches 8 threads.
       call chunk_generator_new_chunk(x,y)
     end do
