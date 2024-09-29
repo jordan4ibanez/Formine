@@ -13,7 +13,7 @@ module chunk_handler
   public :: chunk_handler_store_chunk_pointer
   public :: chunk_handler_delete_chunk
   public :: chunk_handler_get_chunk_pointer
-  public :: chunk_handler_get_clone_chunk
+  public :: chunk_handler_get_clone_chunk_pointer
   public :: chunk_handler_draw_chunks
 
 
@@ -102,13 +102,15 @@ contains
 
 
   !* This will clone a chunk's raw data (not the meshes) and return the pointer to it.
-  function chunk_handler_get_clone_chunk(x, y) result(clone_chunk)
+  function chunk_handler_get_clone_chunk_pointer(x, y) result(clone_chunk_pointer)
     implicit none
 
     integer(c_int), intent(in), value :: x, y
-    type(memory_chunk), allocatable :: clone_chunk
+    type(memory_chunk), pointer :: clone_chunk_pointer
     type(memory_chunk), pointer :: original_chunk_pointer
     type(c_ptr) :: raw_c_ptr
+
+    clone_chunk_pointer => null()
 
     ! If not existent, return a null pointer.
     if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
@@ -118,11 +120,11 @@ contains
     call c_f_pointer(raw_c_ptr, original_chunk_pointer)
 
     ! Allocate pointer.
-    clone_chunk = new_memory_chunk(x,y)
+    clone_chunk_pointer => memory_chunk(x,y)
 
-    clone_chunk%data = original_chunk_pointer%data
-    clone_chunk%world_position = original_chunk_pointer%world_position
-  end function chunk_handler_get_clone_chunk
+    clone_chunk_pointer%data = original_chunk_pointer%data
+    clone_chunk_pointer%world_position = original_chunk_pointer%world_position
+  end function chunk_handler_get_clone_chunk_pointer
 
 
   !* Draw all chunk meshes.

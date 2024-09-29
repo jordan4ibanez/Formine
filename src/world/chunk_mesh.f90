@@ -115,21 +115,21 @@ module chunk_mesh
   !* The data that will get sent to the chunk mesh generator threads.
   type :: message_to_thread
     !* The position in the world in which the chunk resides.
-    type(vec2i) :: world_position
+    type(vec2i), pointer :: world_position => null()
     !* Current chunk.
-    type(memory_chunk), allocatable :: current
+    type(memory_chunk), pointer :: current => null()
     !* Neighbor: -X
-    type(memory_chunk), allocatable :: left
+    type(memory_chunk), pointer :: left => null()
     !* Neighbor: +X
-    type(memory_chunk), allocatable :: right
+    type(memory_chunk), pointer :: right => null()
     !* Neighbor: -Z
-    type(memory_chunk), allocatable :: back
+    type(memory_chunk), pointer :: back => null()
     !* Neighbor: +Z
-    type(memory_chunk), allocatable :: front
-    !* allocatable of texture indices into the positions array.
-    integer(c_int), dimension(6,0), allocatable :: texture_indices(:, :)
+    type(memory_chunk), pointer :: front => null()
+    !* Pointer of texture indices into the positions array.
+    integer(c_int), dimension(6,0), pointer :: texture_indices(:, :)
     !* Texture positions array.
-    type(texture_rectangle), dimension(:), allocatable :: texture_positions_array
+    type(texture_rectangle), dimension(:), pointer :: texture_positions_array
     !* Total number of textures.
     integer(c_int) :: texture_count = 0
     !* Which stack portion to generate.
@@ -140,10 +140,10 @@ module chunk_mesh
   !* The data sent from the chunk mesh generator threads.
   type :: message_from_thread
     type(vec2i) :: world_position
-    real(c_float), dimension(12), allocatable :: positions(:)
-    real(c_float), dimension(8), allocatable :: texture_coordinates(:)
-    real(c_float), dimension(12), allocatable :: colors(:)
-    integer(c_int), dimension(6), allocatable :: indices(:)
+    real(c_float), dimension(12), pointer :: positions(:)
+    real(c_float), dimension(8), pointer :: texture_coordinates(:)
+    real(c_float), dimension(12), pointer :: colors(:)
+    integer(c_int), dimension(6), pointer :: indices(:)
     integer(c_int) :: mesh_stack
   end type message_from_thread
 
@@ -240,15 +240,19 @@ contains
 
     !? Ensure required components are present.
 
-    if (.not. allocated(generator_message%current)) then
+    if (.not. associated(generator_message%world_position)) then
+      error stop "[Chunk Mesh] {thread} error: World position is a null pointer."
+    end if
+
+    if (.not. associated(generator_message%current)) then
       error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
     end if
 
-    if (.not. allocated(generator_message%texture_indices)) then
+    if (.not. associated(generator_message%texture_indices)) then
       error stop "[Chunk Mesh] {thread} error: Texture indices is a null pointer."
     end if
 
-    if (.not. allocated(generator_message%texture_positions_array)) then
+    if (.not. associated(generator_message%texture_positions_array)) then
       error stop "[Chunk Mesh] {thread} error: Texture positions array is a null pointer."
     end if
 
@@ -400,19 +404,21 @@ contains
 
     !? Deallocate all the memory regions in the message.
 
+    deallocate(generator_message%world_position)
+
     deallocate(generator_message%current)
 
-    if (allocated(generator_message%left)) then
+    if (associated(generator_message%left)) then
       deallocate(generator_message%left)
     end if
-    if (allocated(generator_message%right)) then
+    if (associated(generator_message%right)) then
       deallocate(generator_message%right)
     end if
 
-    if (allocated(generator_message%back)) then
+    if (associated(generator_message%back)) then
       deallocate(generator_message%back)
     end if
-    if (allocated(generator_message%front)) then
+    if (associated(generator_message%front)) then
       deallocate(generator_message%front)
     end if
 
@@ -457,22 +463,48 @@ contains
 
     allocate(message_to_generator)
 
+    allocate(message_to_generator%world_position)
+
     message_to_generator%world_position = [x, z]
 
-    message_to_generator%current = chunk_handler_get_clone_chunk(x,z)
+    message_to_generator%current => chunk_handler_get_clone_chunk_pointer(x,z)
 
-    message_to_generator%left = chunk_handler_get_clone_chunk(x - 1,z)
-    message_to_generator%right = chunk_handler_get_clone_chunk(x + 1,z)
+    message_to_generator%left => chunk_handler_get_clone_chunk_pointer(x - 1,z)
+    message_to_generator%right => chunk_handler_get_clone_chunk_pointer(x + 1,z)
 
-    message_to_generator%back = chunk_handler_get_clone_chunk(x,z - 1)
-    message_to_generator%front = chunk_handler_get_clone_chunk(x,z + 1)
+    message_to_generator%back => chunk_handler_get_clone_chunk_pointer(x,z - 1)
+    message_to_generator%front => chunk_handler_get_clone_chunk_pointer(x,z + 1)
 
-    message_to_generator%texture_indices = texture_atlas_get_texture_indices_clone()
-    message_to_generator%texture_positions_array = texture_atlas_get_texture_positions_array_clone()
+    message_to_generator%texture_indices => texture_atlas_get_texture_indices_clone_pointer()
+    message_to_generator%texture_positions_array => texture_atlas_get_texture_positions_array_clone_pointer()
 
     message_to_generator%texture_count = texture_atlas_get_texture_count()
 
     message_to_generator%mesh_stack = mesh_stack
+
+    !! Sample deallocation
+    ! deallocate(message_to_generator%world_position)
+
+    ! deallocate(message_to_generator%current)
+
+    ! if (associated(message_to_generator%left)) then
+    !   deallocate(message_to_generator%left)
+    ! end if
+    ! if (associated(message_to_generator%right)) then
+    !   deallocate(message_to_generator%right)
+    ! end if
+
+    ! if (associated(message_to_generator%back)) then
+    !   deallocate(message_to_generator%back)
+    ! end if
+    ! if (associated(message_to_generator%front)) then
+    !   deallocate(message_to_generator%front)
+    ! end if
+
+    ! deallocate(message_to_generator%texture_indices)
+    ! deallocate(message_to_generator%texture_positions_array)
+
+    ! deallocate(message_to_generator)
 
     call thread_create(c_funloc(chunk_mesh_generation_thread), c_loc(message_to_generator))
   end subroutine chunk_mesh_generate
