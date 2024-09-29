@@ -220,10 +220,12 @@ contains
         if (value_string == "") then
           error stop "[API] error: Missing value for [mod.conf] key [description]."
         end if
+        allocate(character(len = len(value_string), kind = c_char) :: new_mod_config%description)
         new_mod_config%description = value_string
       end if
     end do
 
+    allocate(character(len = len(mod_path), kind = c_char) :: new_mod_config%path)
     new_mod_config%path = mod_path
   end function construct_mod_config_from_file
 
