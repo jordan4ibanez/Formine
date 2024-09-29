@@ -348,7 +348,6 @@ contains
 
   !* We will not only upload the texture into the texture module,
   !* We will also put it into the texture atlas so we can stitch it together.
-  !! Do not optimize this, we need this for when windows compatibility is implemented.
   subroutine attempt_texture_upload(file_name, file_path)
     use :: texture
     use :: texture_atlas
