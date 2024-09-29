@@ -216,20 +216,20 @@ program main
       !   [0,1,2, 2,3,0] &
       !   )
 
-      ! call texture_use("TEXTURE_ATLAS")
+      
 
       ! call mesh_draw("debug_block")
 
       ! call mesh_delete("debug")
 
-      ! call chunk_handler_draw_chunks()
+      call texture_use("TEXTURE_ATLAS")
+
+      call chunk_handler_draw_chunks()
 
 
       ! !* Move into "2D mode"
 
-      ! call gl_clear_depth_buffer()
-
-      ! call gl_clear_color_buffer()
+      call gl_clear_depth_buffer()
 
 
       !! THE DEBUG STARTS HERE ============================================

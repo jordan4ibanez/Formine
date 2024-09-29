@@ -147,6 +147,7 @@ contains
 
     call chunk_database%initialize_iterator()
     do while(chunk_database%iterate_kv(string_key, raw_c_ptr))
+      print*,"hi"
       !   select type(generic_data)
       !    type is (memory_chunk)
       !     chunk => generic_data
