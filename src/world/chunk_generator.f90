@@ -52,7 +52,7 @@ contains
     type(message_from_thread), pointer :: message_pointer
     type(memory_chunk), pointer :: chunk_pointer
 
-    do i = 1,queue_pop_limit
+    do !i = 1,queue_pop_limit
 
       if (.not. thread_output_queue%pop(raw_c_ptr)) then
         exit
