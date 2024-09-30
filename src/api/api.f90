@@ -88,6 +88,7 @@ contains
 
     call luajit_destroy(lua_state)
     call mod_database%destroy()
+    call block_repo_destroy()
     print"(A)","[API]: Destroyed API."
   end subroutine api_destroy
 

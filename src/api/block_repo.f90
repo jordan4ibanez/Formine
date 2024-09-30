@@ -45,6 +45,7 @@ module block_repo
   public :: block_repo_get_definition_pointer_by_id
   public :: block_repo_deploy_lua_api
   public :: register_block
+  public :: block_repo_destroy
 
 
   !* Bake the module name into the executable.
@@ -67,12 +68,11 @@ module block_repo
   !* 200 bytes in size. (at time of writing)
   !* 1_000_000 definitions would take up 200 mb.
 
-  !! FIXME: make the heapstring array a pointer.
-  !! FIXME: make the allocatables a pointer.
+
   type :: block_definition
-    character(len = :, kind = c_char), allocatable :: name
-    character(len = :, kind = c_char), allocatable :: description
-    type(heap_string), dimension(:), allocatable :: textures
+    character(len = :, kind = c_char), pointer :: name
+    character(len = :, kind = c_char), pointer :: description
+    type(heap_string), dimension(:), pointer :: textures
     integer(c_int) :: draw_type = DRAW_TYPE_AIR
   end type block_definition
 
@@ -81,7 +81,6 @@ module block_repo
 
   ! Random access oriented.
   !* Type: block_definition
-  !! todo: GC the pointers in block_definition
   type(hashmap_string_key) :: definition_database
 
   ! Object oriented.
@@ -98,7 +97,10 @@ contains
   subroutine initialize_block_repo_module()
     implicit none
 
-    definition_database = new_hashmap_string_key(sizeof(block_definition()))
+    type(block_definition) :: blank
+
+    !* Type: block_definition
+    definition_database = new_hashmap_string_key(sizeof(blank), gc_definition_repo)
   end subroutine initialize_block_repo_module
 
 
@@ -232,9 +234,15 @@ contains
     ! We have completed a successful query of the definition table from LuaJIT.
     ! Put all the data into the fortran database.
 
+    allocate(character(len = len(name%get()), kind = c_char) :: new_definition%name)
     new_definition%name = name%get()
+
+    allocate(character(len = len(description%get()), kind = c_char) :: new_definition%description)
     new_definition%description = description%get()
+
+    allocate(new_definition%textures(6))
     new_definition%textures = textures%data
+
     new_definition%draw_type = draw_type
 
     ! print"(A)", module_name//": Current Block definition:"
@@ -253,6 +261,27 @@ contains
     definition_array_length = definition_array_length + 1
     current_id = current_id + 1
   end function register_block
+
+
+  subroutine block_repo_destroy()
+    implicit none
+
+    call definition_database%destroy()
+  end subroutine block_repo_destroy
+
+
+  subroutine gc_definition_repo(raw_c_ptr)
+    implicit none
+
+    type(c_ptr), intent(in), value :: raw_c_ptr
+    type(block_definition), pointer :: definition_pointer
+
+    call c_f_pointer(raw_c_ptr, definition_pointer)
+
+    deallocate(definition_pointer%description)
+    deallocate(definition_pointer%name)
+    deallocate(definition_pointer%textures)
+  end subroutine gc_definition_repo
 
 
 end module block_repo
