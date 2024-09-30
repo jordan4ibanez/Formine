@@ -8,7 +8,6 @@ module api
   implicit none
 
 
-  !*
   !* This LuaJIT API has been written with love and care. :)
   !*
   !* Everything you see get loaded in, you can follow.
@@ -17,7 +16,6 @@ module api
   !* I am using the tables as a "LuaJIT preprocessor".
   !* Therefore, they will use replace instead of insert
   !* in the api functions.
-  !*
 
 
   private
