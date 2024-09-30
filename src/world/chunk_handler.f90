@@ -10,6 +10,7 @@ module chunk_handler
 
   public :: chunk_handler_module_initalize
   public :: chunk_handler_set_chunk_mesh
+  public :: chunk_handler_chunk_exists
   public :: chunk_handler_store_chunk_pointer
   public :: chunk_handler_delete_chunk
   public :: chunk_handler_get_chunk_pointer
@@ -51,6 +52,16 @@ contains
 
     current_chunk%mesh(stack) = vao_id
   end subroutine chunk_handler_set_chunk_mesh
+
+
+  function chunk_handler_chunk_exists(x,z) result(exist)
+    implicit none
+
+    integer(c_int), intent(in), value :: x, z
+    logical(c_bool) :: exist
+
+    exist = chunk_database%has_key(grab_chunk_key(x,z))
+  end function chunk_handler_chunk_exists
 
 
   !* Store a chunk pointer into the database.
