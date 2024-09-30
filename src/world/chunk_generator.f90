@@ -115,9 +115,6 @@ contains
     chunk_x = generator_message%x
     chunk_z = generator_message%z
 
-    !? Since this is quite a simple message, we will deallocate it right away.
-    deallocate(generator_message)
-
     chunk_pointer => new_memory_chunk_pointer(chunk_x, chunk_z)
 
     base_x = chunk_x * CHUNK_WIDTH
