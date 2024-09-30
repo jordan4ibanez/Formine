@@ -52,7 +52,7 @@ contains
     type(message_from_thread), pointer :: message_pointer
     type(memory_chunk), pointer :: chunk_pointer
 
-    do !i = 1,queue_pop_limit
+    do i = 1,queue_pop_limit
 
       if (.not. thread_output_queue%pop(raw_c_ptr)) then
         exit
@@ -70,9 +70,9 @@ contains
 
       deallocate(message_pointer)
 
-      ! do w = 1,MESH_STACK_ARRAY_SIZE
-      ! call chunk_mesh_generate(chunk_x, chunk_z, w)
-      ! end do
+      do w = 1,MESH_STACK_ARRAY_SIZE
+        call chunk_mesh_generate(chunk_x, chunk_z, w)
+      end do
 
     end do
 
