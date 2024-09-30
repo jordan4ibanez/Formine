@@ -70,10 +70,11 @@ contains
 
       deallocate(message_pointer)
 
-      do w = 1,MESH_STACK_ARRAY_SIZE
-        ! call chunk_mesh_generate(chunk_x, chunk_z, w)
-      end do
       deallocate(chunk_pointer)
+
+      ! do w = 1,MESH_STACK_ARRAY_SIZE
+      ! call chunk_mesh_generate(chunk_x, chunk_z, w)
+      ! end do
 
     end do
 
