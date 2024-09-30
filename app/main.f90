@@ -167,6 +167,8 @@ program main
 
       call camera_freecam_hackjob()
 
+      call chunk_generator_new_chunk(0,0)
+
 
       !? DRAW TEST ?!
 
