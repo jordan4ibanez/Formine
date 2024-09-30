@@ -94,7 +94,7 @@ contains
     integer(c_int) :: chunk_x, chunk_z, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, status
     type(memory_chunk), pointer :: chunk_pointer
     type(block_data) :: current_block
-    type(message_from_thread), pointer :: output_message
+    type(message_from_thread) :: output_message
 
     !? Transfer main argument pointer to Fortran.
 
@@ -142,7 +142,6 @@ contains
     end do
 
     !? Finally, push the message to the queue.
-    allocate(output_message)
     output_message%data => chunk_pointer
 
     call thread_output_queue%push(output_message)
