@@ -68,9 +68,9 @@ contains
       !? This will free() the chunk pointer when it stores it.
       ! call chunk_handler_store_chunk_pointer(chunk_pointer)
 
-      deallocate(message_pointer)
-
       deallocate(chunk_pointer)
+
+      deallocate(message_pointer)
 
       ! do w = 1,MESH_STACK_ARRAY_SIZE
       ! call chunk_mesh_generate(chunk_x, chunk_z, w)
