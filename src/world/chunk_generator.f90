@@ -98,57 +98,57 @@ contains
 
     !? Transfer main argument pointer to Fortran.
 
-    if (.not. c_associated(c_arg_pointer)) then
-      error stop "[Chunk Mesh] Fatal error: Was passed a null thread_argument pointer."
-    end if
+    ! if (.not. c_associated(c_arg_pointer)) then
+    !   error stop "[Chunk Mesh] Fatal error: Was passed a null thread_argument pointer."
+    ! end if
 
-    call c_f_pointer(c_arg_pointer, arguments)
+    ! call c_f_pointer(c_arg_pointer, arguments)
 
-    !? Transfer sent data pointer to Fortran.
+    ! !? Transfer sent data pointer to Fortran.
 
-    if (.not. c_associated(arguments%data)) then
-      error stop "[Chunk Mesh] Fatal error: Was passed a null sent_data pointer."
-    end if
+    ! if (.not. c_associated(arguments%data)) then
+    !   error stop "[Chunk Mesh] Fatal error: Was passed a null sent_data pointer."
+    ! end if
 
-    call c_f_pointer(arguments%data, generator_message)
+    ! call c_f_pointer(arguments%data, generator_message)
 
-    chunk_x = generator_message%x
-    chunk_z = generator_message%z
+    ! chunk_x = generator_message%x
+    ! chunk_z = generator_message%z
 
-    !? Since this is quite a simple message, we will deallocate it right away.
-    deallocate(generator_message)
+    ! !? Since this is quite a simple message, we will deallocate it right away.
+    ! deallocate(generator_message)
 
-    chunk_pointer => new_memory_chunk_pointer(chunk_x, chunk_z)
+    ! chunk_pointer => new_memory_chunk_pointer(chunk_x, chunk_z)
 
-    base_x = chunk_x * CHUNK_WIDTH
-    base_y = 0
-    base_z = chunk_z * CHUNK_WIDTH
+    ! base_x = chunk_x * CHUNK_WIDTH
+    ! base_y = 0
+    ! base_z = chunk_z * CHUNK_WIDTH
 
-    noise_state = fnl_state()
+    ! noise_state = fnl_state()
 
-    base_height = 70
-    noise_multiplier = 20
+    ! base_height = 70
+    ! noise_multiplier = 20
 
-    do x = 1, CHUNK_WIDTH
-      do z = 1, CHUNK_WIDTH
-        current_height = base_height + floor(fnl_get_noise_2d(noise_state, real(x + base_x), real(z + base_z)) * noise_multiplier)
-        do y = 1, CHUNK_HEIGHT
-          ! todo: make this more complex with lua registered biomes.
+    ! do x = 1, CHUNK_WIDTH
+    !   do z = 1, CHUNK_WIDTH
+    !     current_height = base_height + floor(fnl_get_noise_2d(noise_state, real(x + base_x), real(z + base_z)) * noise_multiplier)
+    !     do y = 1, CHUNK_HEIGHT
+    !       ! todo: make this more complex with lua registered biomes.
 
-          if (y <= current_height) then
-            current_block = block_data()
-            current_block%id = 1
-            chunk_pointer%data(y, z, x) = current_block
-          end if
-        end do
-      end do
-    end do
+    !       if (y <= current_height) then
+    !         current_block = block_data()
+    !         current_block%id = 1
+    !         chunk_pointer%data(y, z, x) = current_block
+    !       end if
+    !     end do
+    !   end do
+    ! end do
 
-    !? Finally, push the message to the queue.
-    allocate(output_message)
-    output_message%data => chunk_pointer
+    ! !? Finally, push the message to the queue.
+    ! allocate(output_message)
+    ! output_message%data => chunk_pointer
 
-    call thread_output_queue%push(output_message)
+    ! call thread_output_queue%push(output_message)
 
     !? Flag thread as complete.
     status = thread_write_lock(arguments%mutex_ptr)
