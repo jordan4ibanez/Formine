@@ -165,9 +165,7 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: x, z
-    type(message_to_thread), pointer :: message
-
-    allocate(message)
+    type(message_to_thread), target :: message
 
     message%x = x
     message%z = z
