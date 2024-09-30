@@ -66,9 +66,7 @@ contains
       chunk_z = chunk_pointer%world_position%y
 
       !? This will free() the chunk pointer when it stores it.
-      ! call chunk_handler_store_chunk_pointer(chunk_pointer)
-
-      deallocate(chunk_pointer)
+      call chunk_handler_store_chunk_pointer(chunk_pointer)
 
       deallocate(message_pointer)
 
