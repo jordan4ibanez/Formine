@@ -214,6 +214,21 @@ contains
     implicit none
 
     type(c_ptr), intent(in), value :: raw_c_ptr
+    type(memory_chunk), pointer :: chunk_pointer
+    integer(c_int) :: i, vao_id
+
+    call c_f_pointer(raw_c_ptr, chunk_pointer)
+
+    print*,"deleting ["//int_to_string(chunk_pointer%world_position%x)//","//int_to_string(chunk_pointer%world_position%y)//"]"
+
+    do i = 1,MESH_STACK_ARRAY_SIZE
+      vao_id = chunk_pointer%mesh(i)
+
+      if (vao_id /= 0) then
+        call mesh_delete(vao_id)
+        print*,"DELETED MESH: "//int_to_string(vao_id)
+      end if
+    end do
 
   end subroutine gc_chunk_database
 
