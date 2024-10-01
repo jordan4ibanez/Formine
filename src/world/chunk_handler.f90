@@ -72,14 +72,14 @@ contains
 
 
   !* Store a chunk pointer into the database.
-  subroutine chunk_handler_store_chunk_pointer(chunk_to_store)
+  subroutine chunk_handler_store_chunk_pointer(chunk_pointer)
     use :: string
     implicit none
 
-    type(memory_chunk), intent(inout), pointer :: chunk_to_store
+    type(memory_chunk), intent(inout), pointer :: chunk_pointer
     character(len = :, kind = c_char), allocatable :: chunk_key
 
-    chunk_key = grab_chunk_key(chunk_to_store%world_position%x, chunk_to_store%world_position%y)
+    chunk_key = grab_chunk_key(chunk_pointer%world_position%x, chunk_pointer%world_position%y)
 
 
     !! FIXME: RE-ENABLE THIS !!
@@ -87,15 +87,16 @@ contains
       print"(A)", "[Chunk Handler] Warning: Attempted to overwrite a memory chunk pointer."
 
       !! DEBUGGING !!
-      deallocate(chunk_to_store)
+      deallocate(chunk_pointer)
       return
     end if
 
-    call chunk_database%set(chunk_key, chunk_to_store)
+
+    call chunk_database%set(chunk_key, chunk_pointer)
 
     ! This is memcpy'd into the hashmap.
     ! Free the memory.
-    deallocate(chunk_to_store)
+    deallocate(chunk_pointer)
   end subroutine chunk_handler_store_chunk_pointer
 
 
