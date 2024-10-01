@@ -33,7 +33,7 @@ program main
 
   character(len = :, kind = c_char), allocatable :: position_text_debug
   integer(c_int) :: x, y, new_fps, old_fps, x_vao, y_vao, z_vao, fps_vao
-  ! logical(c_bool) :: testing_bool
+  logical(c_bool) :: launched_thread
   ! character(len = :, kind = c_char), pointer :: test_data
   ! integer(c_int), pointer :: test_data
 
@@ -45,6 +45,7 @@ program main
   fps_vao = 0
   new_fps = 0
   old_fps = -1
+  launched_thread = .false.
 
 
   ! !! BEGIN WARNING: This is only to be used for when developing libraries.
@@ -168,10 +169,16 @@ program main
       call camera_freecam_hackjob()
 
       !! FIXME: DISABLE THIS HACKJOB !!
-      if (.not. chunk_handler_chunk_exists(0,0)) then
+      if (.not. chunk_handler_chunk_exists(0,0) .and. .not. launched_thread) then
         call chunk_generator_new_chunk(0,0)
-      else
+        launched_thread = .true.
+        print*,"launched"
+      end if
+
+      if (chunk_handler_chunk_exists(0,0)) then
+        print*,"deleted"
         call chunk_handler_delete_chunk(0,0)
+        launched_thread = .false.
       end if
 
 
