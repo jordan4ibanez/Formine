@@ -31,7 +31,7 @@ contains
 
     type(memory_chunk), allocatable :: blank
 
-    chunk_database = new_hashmap_string_key(sizeof(blank))
+    chunk_database = new_hashmap_string_key(sizeof(blank), gc_chunk_database)
   end subroutine chunk_handler_module_initalize
 
 
@@ -208,6 +208,14 @@ contains
 
     new_key = "chunk_"//int_to_string(x)//"_"//int_to_string(y)
   end function grab_chunk_key
+
+
+  subroutine gc_chunk_database(raw_c_ptr)
+    implicit none
+
+    type(c_ptr), intent(in), value :: raw_c_ptr
+
+  end subroutine gc_chunk_database
 
 
 end module chunk_handler
