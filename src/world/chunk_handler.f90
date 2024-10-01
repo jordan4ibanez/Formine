@@ -102,18 +102,24 @@ contains
 
 
   !* Get a raw chunk pointer from the database.
-  function chunk_handler_get_chunk_pointer(x, y) result(chunk_pointer)
+  function chunk_handler_get_chunk_pointer(x, y, chunk_pointer) result(exists)
     implicit none
 
     integer(c_int), intent(in), value :: x, y
-    type(memory_chunk), pointer :: chunk_pointer
+    type(memory_chunk), intent(inout), pointer :: chunk_pointer
+    logical(c_bool) :: exists
     type(c_ptr) :: raw_c_ptr
 
+    exists = .false.
+
     if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
-      error stop "[Chunk Handler] Error: Attempted to retrieve null chunk."
+      print"(A)","[Chunk Handler] Error: Attempted to retrieve null chunk."
+      return
     end if
 
     call c_f_pointer(raw_c_ptr, chunk_pointer)
+
+    exists = .true.
   end function chunk_handler_get_chunk_pointer
 
 
