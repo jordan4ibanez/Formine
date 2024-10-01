@@ -81,17 +81,14 @@ contains
 
     chunk_key = grab_chunk_key(chunk_pointer%world_position%x, chunk_pointer%world_position%y)
 
-
-    !! FIXME: RE-ENABLE THIS !!
     if (chunk_database%has_key(chunk_key)) then
       print"(A)", "[Chunk Handler] Warning: Attempted to overwrite a memory chunk pointer."
 
-      !! DEBUGGING !!
       deallocate(chunk_pointer)
       return
     end if
 
-    print*,"storing chunk: ["//int_to_string(chunk_pointer%world_position%x)//","//int_to_string(chunk_pointer%world_position%y)//"]"
+    ! print*,"storing chunk: ["//int_to_string(chunk_pointer%world_position%x)//","//int_to_string(chunk_pointer%world_position%y)//"]"
 
     call chunk_database%set(chunk_key, chunk_pointer)
 
