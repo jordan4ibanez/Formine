@@ -232,7 +232,6 @@ contains
         print*,"DELETED MESH: "//int_to_string(vao_id)
       end if
     end do
-
   end subroutine gc_chunk_database
 
 
