@@ -118,7 +118,7 @@ contains
     exists = .false.
 
     if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
-      print"(A)","[Chunk Handler] Error: Attempted to retrieve null chunk."
+      print"(A)","[Chunk Handler] Warning: Attempted to retrieve null chunk."
       return
     end if
 
