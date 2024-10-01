@@ -55,6 +55,8 @@ contains
       call mesh_delete(current_chunk%mesh(stack))
     end if
 
+    ! print"(A)", "[Chunk Handler] Debug: Set mesh ["//int_to_string(current_chunk%world_position%x)//","//int_to_string(current_chunk%world_position%y)//"] stack: ["//int_to_string(stack)//"]"
+
     current_chunk%mesh(stack) = vao_id
   end subroutine chunk_handler_set_chunk_mesh
 
