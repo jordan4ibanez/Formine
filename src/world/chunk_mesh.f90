@@ -115,7 +115,7 @@ module chunk_mesh
   !* The data that will get sent to the chunk mesh generator threads.
   type :: message_to_thread
     !* The position in the world in which the chunk resides.
-    type(vec2i), pointer :: world_position => null()
+    type(vec2i) :: world_position
     !* Current chunk.
     type(memory_chunk), pointer :: current => null()
     !* Neighbor: -X
@@ -239,10 +239,6 @@ contains
     call c_f_pointer(arguments%data, generator_message)
 
     !? Ensure required components are present.
-
-    if (.not. associated(generator_message%world_position)) then
-      error stop "[Chunk Mesh] {thread} error: World position is a null pointer."
-    end if
 
     if (.not. associated(generator_message%current)) then
       error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
@@ -403,8 +399,6 @@ contains
 
     !? Deallocate all the memory regions in the message.
 
-    deallocate(generator_message%world_position)
-
     deallocate(generator_message%current)
 
     if (associated(generator_message%left)) then
@@ -461,7 +455,6 @@ contains
 
 
     allocate(message_to_generator)
-    allocate(message_to_generator%world_position)
 
     message_to_generator%world_position = [x, z]
     message_to_generator%current => chunk_handler_get_clone_chunk_pointer(x,z)
