@@ -65,6 +65,11 @@ contains
       chunk_x = chunk_pointer%world_position%x
       chunk_z = chunk_pointer%world_position%y
 
+      print*,"-----"
+      print*,chunk_x
+      print*,chunk_z
+      print*,"-----"
+
       !? This will free() the chunk pointer when it stores it.
       call chunk_handler_store_chunk_pointer(chunk_pointer)
 
@@ -112,6 +117,11 @@ contains
 
     chunk_x = generator_message%x
     chunk_z = generator_message%z
+
+    print*,"-----"
+    print*,chunk_x
+    print*,chunk_z
+    print*,"-----"
 
     chunk_pointer => new_memory_chunk_pointer(chunk_x, chunk_z)
 
