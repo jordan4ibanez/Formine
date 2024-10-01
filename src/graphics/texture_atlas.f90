@@ -232,6 +232,8 @@ contains
       end do
     end do
 
+    call string_to_index_array%destroy()
+
     print"(A)","[Texture Atlas]: Cachiness optimization complete. Optimized: ["//int_to_string(key_array_size)//"] textures."
   end subroutine optimize_data_array
 
