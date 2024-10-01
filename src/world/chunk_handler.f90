@@ -43,7 +43,12 @@ contains
     integer(c_int), intent(in), value :: vao_id
     type(memory_chunk), pointer :: current_chunk
 
-    current_chunk => chunk_handler_get_chunk_pointer(x,z)
+    if (.not. chunk_handler_get_chunk_pointer(x,z, current_chunk)) then
+      print"(A)", "[Chunk Handler] Warning: Cannot set mesh for null chunk. Abort."
+      !? Auto GC the VAO.
+      call mesh_delete(vao_id)
+      return
+    end if
 
     ! Clean up the old chunk mesh.
     if (current_chunk%mesh(stack) /= 0) then
