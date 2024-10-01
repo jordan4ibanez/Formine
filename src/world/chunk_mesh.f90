@@ -220,7 +220,7 @@ contains
     integer(c_int), dimension(6), allocatable :: indices(:)
     integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y, current_rect_index
     type(vec3i) :: direction, pos, trajectory, offset
-    type(message_from_thread), pointer :: output_message
+    type(message_from_thread) :: output_message
 
     !? Transfer main argument pointer to Fortran.
 
@@ -379,7 +379,6 @@ contains
 
       !? Compose output.
 
-      allocate(output_message)
       allocate(output_message%positions(p_index))
       allocate(output_message%texture_coordinates(t_index))
       allocate(output_message%colors(c_index))
