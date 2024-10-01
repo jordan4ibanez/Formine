@@ -147,11 +147,11 @@ contains
 
 
   !* Internal only. Set a texture in the database.
-  subroutine set_texture(texture_name, new_texture, x, y)
+  subroutine set_texture(texture_name, vao_id, x, y)
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
-    integer(c_int), intent(in), value :: new_texture
+    integer(c_int), intent(in), value :: vao_id
     integer(c_int), intent(in), value :: x, y
     type(vec2i) :: size
 
@@ -165,7 +165,7 @@ contains
       print"(A)", "[Texture]: set texture ["//texture_name//"]"
     end if
 
-    call texture_database%set(texture_name, new_texture)
+    call texture_database%set(texture_name, vao_id)
 
     size%x = x
     size%y = y
