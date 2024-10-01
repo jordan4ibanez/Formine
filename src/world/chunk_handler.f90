@@ -91,6 +91,7 @@ contains
       return
     end if
 
+    print*,"storing chunk: ["//int_to_string(chunk_pointer%world_position%x)//","//int_to_string(chunk_pointer%world_position%y)//"]"
 
     call chunk_database%set(chunk_key, chunk_pointer)
 
