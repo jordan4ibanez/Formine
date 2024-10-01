@@ -74,8 +74,13 @@ contains
 
     chunk_key = grab_chunk_key(chunk_to_store%world_position%x, chunk_to_store%world_position%y)
 
+    !! FIXME: RE-ENABLE THIS !!
     if (chunk_database%has_key(chunk_key)) then
-      error stop "[Chunk Handler] Error: Attempted to overwrite a memory chunk pointer."
+      ! error stop "[Chunk Handler] Error: Attempted to overwrite a memory chunk pointer."
+
+      !! DEBUGGING !!
+      deallocate(chunk_to_store)
+      return
     end if
 
     call chunk_database%set(chunk_key, chunk_to_store)

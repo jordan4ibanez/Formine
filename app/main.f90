@@ -167,7 +167,12 @@ program main
 
       call camera_freecam_hackjob()
 
-      call chunk_generator_new_chunk(0,0)
+      !! FIXME: DISABLE THIS HACKJOB !!
+      if (.not. chunk_handler_chunk_exists(0,0)) then
+        call chunk_generator_new_chunk(0,0)
+      else
+        call chunk_handler_delete_chunk(0,0)
+      end if
 
 
       !? DRAW TEST ?!
