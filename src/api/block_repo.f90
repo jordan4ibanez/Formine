@@ -231,6 +231,7 @@ contains
 
 
 
+    !! FIXME: this causes a smol memory leak for some reason.
 
     ! We have completed a successful query of the definition table from LuaJIT.
     ! Put all the data into the fortran database.
