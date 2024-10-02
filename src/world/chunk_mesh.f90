@@ -421,12 +421,12 @@ contains
     deallocate(generator_message)
 
     !? Flag thread as complete.
-    status = thread_write_lock(arguments%mutex_ptr)
+    status = thread_lock_mutex(arguments%mutex_ptr)
 
     void_pointer = c_null_ptr
     arguments%active_flag = .false.
 
-    status = thread_unlock_lock(arguments%mutex_ptr)
+    status = thread_unlock_mutex(arguments%mutex_ptr)
   end function chunk_mesh_generation_thread
 
 
