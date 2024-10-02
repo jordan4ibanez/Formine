@@ -23,7 +23,6 @@ module api
 
   public :: api_initialize
   public :: api_destroy
-  public :: api_run_file
 
 
   type :: mod_config
