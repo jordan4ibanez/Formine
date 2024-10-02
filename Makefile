@@ -41,7 +41,7 @@ test_gdb:
 .PHONY: test_valgrind
 test_valgrind:
 	@./scripts/create_version_info.sh
-	@valgrind --trace-children=yes --leak-check=full fpm test --flag   -g \
+	@valgrind --trace-children=yes --fair-sched=yes --leak-check=full fpm test --flag   -g \
 	                                                          --c-flag -g
 
 #! BUILD COMMANDS.
