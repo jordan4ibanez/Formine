@@ -39,12 +39,13 @@ module raw_c
     end subroutine internal_print_f
 
 
-    subroutine malloc_trim(i) bind(c, name = "malloc_trim")
+    function malloc_trim(i) result(success) bind(c, name = "malloc_trim")
       use, intrinsic :: iso_c_binding
       implicit none
 
       integer(c_int), intent(in), value :: i
-    end subroutine malloc_trim
+      integer(c_int) :: success
+    end function malloc_trim
 
 
   end interface
