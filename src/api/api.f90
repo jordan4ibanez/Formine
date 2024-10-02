@@ -166,6 +166,8 @@ contains
 
       print"(A)","[API]: Loaded mod ["//mod_config_struct%name//"]"
     end do
+
+    call dir_reader%deallocate_memory()
   end subroutine load_all_mods
 
 
