@@ -147,7 +147,7 @@ contains
         error stop "[API] error: There is already a mod named ["//mod_config_struct%name//"]. Culprit: ["//mod_path_string//"]"
       end if
 
-      status = api_run_file(init_path_string)
+      status = luajit_run_file(lua_state, init_path_string)
       if (status /= LUAJIT_RUN_FILE_OK) then
         select case (status)
          case (LUAJIT_RUN_FILE_FAILURE)
