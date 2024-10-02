@@ -212,54 +212,55 @@ contains
     end if
 
 
-    ! ! Now we get rid of the string table.
-    ! call lua_pop(state, 1)
+    ! Now we get rid of the string table.
+    call lua_pop(state, 1)
 
-    ! ! We're back into the block_definition table.
+    ! We're back into the block_definition table.
 
-    ! ! draw_type is required. This will auto push and pop the target table so
-    ! ! we're still at the definition table being at -1.
-    ! call luajit_table_get_key_required(state, module_name, "definition", "draw_type", draw_type, "draw_type")
-
-
-    ! !* todo: can add in more definition components here. :)
+    ! draw_type is required. This will auto push and pop the target table so
+    ! we're still at the definition table being at -1.
+    call luajit_table_get_key_required(state, module_name, "definition", "draw_type", draw_type, "draw_type")
 
 
-    ! ! Clean up the stack. We are done with the LuaJIT stack.
-    ! !? The definition table has now disappeared.
-    ! call lua_pop(state, lua_gettop(state))
+    !* todo: can add in more definition components here. :)
+
+
+    ! Clean up the stack. We are done with the LuaJIT stack.
+    !? The definition table has now disappeared.
+    call lua_pop(state, lua_gettop(state))
 
 
 
-    ! ! We have completed a successful query of the definition table from LuaJIT.
-    ! ! Put all the data into the fortran database.
 
-    ! allocate(character(len = len(name%get()), kind = c_char) :: new_definition%name)
-    ! new_definition%name = name%get()
+    ! We have completed a successful query of the definition table from LuaJIT.
+    ! Put all the data into the fortran database.
 
-    ! allocate(character(len = len(description%get()), kind = c_char) :: new_definition%description)
-    ! new_definition%description = description%get()
+    allocate(character(len = len(name%get()), kind = c_char) :: new_definition%name)
+    new_definition%name = name%get()
 
-    ! allocate(new_definition%textures(6))
-    ! new_definition%textures = textures%data
+    allocate(character(len = len(description%get()), kind = c_char) :: new_definition%description)
+    new_definition%description = description%get()
 
-    ! new_definition%draw_type = draw_type
+    allocate(new_definition%textures(6))
+    new_definition%textures = textures%data
 
-    ! ! print"(A)", module_name//": Current Block definition:"
-    ! ! print"(A)", "Name: "//definition_pointer%name
-    ! ! print"(A)", "Description: "//definition_pointer%description
-    ! ! print*, "Textures: [",definition_pointer%textures,"]"
-    ! ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
+    new_definition%draw_type = draw_type
 
-    ! ! Copy the definition into the string based database.
-    ! call definition_database%set(new_definition%name, new_definition)
+    ! print"(A)", module_name//": Current Block definition:"
+    ! print"(A)", "Name: "//definition_pointer%name
+    ! print"(A)", "Description: "//definition_pointer%description
+    ! print*, "Textures: [",definition_pointer%textures,"]"
+    ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
+
+    ! Copy the definition into the string based database.
+    call definition_database%set(name%get(), new_definition)
 
     ! definition_array = [definition_array, new_definition]
 
-    ! ! print"(A)","[Block Repo]: Registered ID ["//int_to_string(current_id)//"] to block ["//new_definition%name//"]"
+    ! print"(A)","[Block Repo]: Registered ID ["//int_to_string(current_id)//"] to block ["//new_definition%name//"]"
 
-    ! definition_array_length = definition_array_length + 1
-    ! current_id = current_id + 1
+    definition_array_length = definition_array_length + 1
+    current_id = current_id + 1
   end function register_block
 
 
