@@ -181,12 +181,12 @@ contains
     status = LUAJIT_GET_OK
 
     ! ! Enforce the first and only argument to be a table.
-    ! if (.not. lua_istable(state, -1)) then
-    !   call luajit_error_stop(state, module_name//" Error: Cannot register block. Not a table.")
-    ! end if
+    if (.not. lua_istable(state, -1)) then
+      call luajit_error_stop(state, module_name//" Error: Cannot register block. Not a table.")
+    end if
 
     ! ! Name is required.
-    ! call luajit_table_get_key_required(state, module_name, "definition", "name", name, "string")
+    call luajit_table_get_key_required(state, module_name, "definition", "name", name, "string")
 
     ! !! If it is "air" silent abord.
     ! if (name%get() == "air") then
