@@ -56,7 +56,6 @@ contains
 
     status = luajit_run_file(lua_state, "./api/init.lua")
 
-    status = luajit_run_file(lua_state, "./api/init.lua")
     if (status /= LUAJIT_RUN_FILE_OK) then
       select case(status)
        case (LUAJIT_RUN_FILE_FAILURE)
