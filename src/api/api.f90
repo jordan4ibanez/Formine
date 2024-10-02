@@ -91,17 +91,6 @@ contains
   end subroutine api_destroy
 
 
-  !* Run a LuaJIT file.
-  function api_run_file(file_path) result(status)
-    implicit none
-
-    character(len = *, kind = c_char), intent(in) :: file_path
-    integer(c_int) :: status
-
-    status = luajit_run_file(lua_state, file_path)
-  end function api_run_file
-
-
   !* This will attempt to load up all init.lua files in the mod folders.
   subroutine load_all_mods()
     use :: directory
