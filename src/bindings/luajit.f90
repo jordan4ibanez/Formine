@@ -150,6 +150,7 @@ module luajit
   integer(c_int), parameter :: LUA_ERRSYNTAX = 3
   integer(c_int), parameter :: LUA_ERRMEM = 4
   integer(c_int), parameter :: LUA_ERRERR = 5
+  integer(c_int), parameter :: LUA_MULTIRETURN = -1
 
   integer(c_int), parameter :: LUA_REGISTRYINDEX = (-10000)
   integer(c_int), parameter :: LUA_ENVIRONINDEX = (-10001)
