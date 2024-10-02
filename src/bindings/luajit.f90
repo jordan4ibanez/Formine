@@ -598,7 +598,7 @@ module luajit
       implicit none
 
       type(c_ptr), intent(in), value :: state
-      character(len = 1, kind = c_char), intent(in) :: string
+      character(len = 1, kind = c_char), intent(in), target :: string
       integer(c_int) :: status
     end function lual_loadstring
 
@@ -608,7 +608,7 @@ module luajit
       implicit none
 
       type(c_ptr), intent(in), value :: state
-      character(len = 1, kind = c_char), intent(in) :: file_path
+      character(len = 1, kind = c_char), intent(in), target :: file_path
       integer(c_int) :: status
     end function luaL_loadfile
 
