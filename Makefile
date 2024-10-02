@@ -15,7 +15,7 @@ gdb:
 
 valgrind:
 	@./scripts/create_version_info.sh
-	@valgrind --trace-children=yes --leak-check=full fpm run --flag   -g \
+	@valgrind --trace-children=yes --fair-sched=yes --leak-check=full fpm run --flag   -g \
 	                                                         --c-flag -g
 
 release:
