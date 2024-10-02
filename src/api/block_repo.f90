@@ -180,86 +180,86 @@ contains
 
     status = LUAJIT_GET_OK
 
-    ! Enforce the first and only argument to be a table.
-    if (.not. lua_istable(state, -1)) then
-      call luajit_error_stop(state, module_name//" Error: Cannot register block. Not a table.")
-    end if
+    ! ! Enforce the first and only argument to be a table.
+    ! if (.not. lua_istable(state, -1)) then
+    !   call luajit_error_stop(state, module_name//" Error: Cannot register block. Not a table.")
+    ! end if
 
-    ! Name is required.
-    call luajit_table_get_key_required(state, module_name, "definition", "name", name, "string")
+    ! ! Name is required.
+    ! call luajit_table_get_key_required(state, module_name, "definition", "name", name, "string")
 
-    !! If it is "air" silent abord.
-    if (name%get() == "air") then
-      print"(A)", module_name//" warning: Please do not try to register air."
-      call lua_pop(state, lua_gettop(state))
-      return
-    end if
+    ! !! If it is "air" silent abord.
+    ! if (name%get() == "air") then
+    !   print"(A)", module_name//" warning: Please do not try to register air."
+    !   call lua_pop(state, lua_gettop(state))
+    !   return
+    ! end if
 
-    ! Description is required.
-    call luajit_table_get_key_required(state, module_name, "definition", "description", description, "string")
+    ! ! Description is required.
+    ! call luajit_table_get_key_required(state, module_name, "definition", "description", description, "string")
 
-    ! Now we need to get the table which contains the textures.
-    call luajit_put_table_in_table_on_stack_required(state, module_name, "definition", "textures", "Array<string>")
+    ! ! Now we need to get the table which contains the textures.
+    ! call luajit_put_table_in_table_on_stack_required(state, module_name, "definition", "textures", "Array<string>")
 
-    status = luajit_copy_string_array_from_table(state, textures)
+    ! status = luajit_copy_string_array_from_table(state, textures)
 
-    if (status /= LUAJIT_GET_OK) then
-      if (status == LUAJIT_GET_MISSING) then
-        call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] is missing.")
-      else
-        call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] has a non-string element.")
-      end if
-    end if
-
-
-    ! Now we get rid of the string table.
-    call lua_pop(state, 1)
-
-    ! We're back into the block_definition table.
-
-    ! draw_type is required. This will auto push and pop the target table so
-    ! we're still at the definition table being at -1.
-    call luajit_table_get_key_required(state, module_name, "definition", "draw_type", draw_type, "draw_type")
+    ! if (status /= LUAJIT_GET_OK) then
+    !   if (status == LUAJIT_GET_MISSING) then
+    !     call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] is missing.")
+    !   else
+    !     call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] has a non-string element.")
+    !   end if
+    ! end if
 
 
-    !* todo: can add in more definition components here. :)
+    ! ! Now we get rid of the string table.
+    ! call lua_pop(state, 1)
+
+    ! ! We're back into the block_definition table.
+
+    ! ! draw_type is required. This will auto push and pop the target table so
+    ! ! we're still at the definition table being at -1.
+    ! call luajit_table_get_key_required(state, module_name, "definition", "draw_type", draw_type, "draw_type")
 
 
-    ! Clean up the stack. We are done with the LuaJIT stack.
-    !? The definition table has now disappeared.
-    call lua_pop(state, lua_gettop(state))
+    ! !* todo: can add in more definition components here. :)
+
+
+    ! ! Clean up the stack. We are done with the LuaJIT stack.
+    ! !? The definition table has now disappeared.
+    ! call lua_pop(state, lua_gettop(state))
 
 
 
-    ! We have completed a successful query of the definition table from LuaJIT.
-    ! Put all the data into the fortran database.
+    ! ! We have completed a successful query of the definition table from LuaJIT.
+    ! ! Put all the data into the fortran database.
 
-    allocate(character(len = len(name%get()), kind = c_char) :: new_definition%name)
-    new_definition%name = name%get()
+    ! allocate(character(len = len(name%get()), kind = c_char) :: new_definition%name)
+    ! new_definition%name = name%get()
 
-    allocate(character(len = len(description%get()), kind = c_char) :: new_definition%description)
-    new_definition%description = description%get()
+    ! allocate(character(len = len(description%get()), kind = c_char) :: new_definition%description)
+    ! new_definition%description = description%get()
 
-    allocate(new_definition%textures(6))
-    new_definition%textures = textures%data
+    ! allocate(new_definition%textures(6))
+    ! new_definition%textures = textures%data
 
-    new_definition%draw_type = draw_type
+    ! new_definition%draw_type = draw_type
 
-    ! print"(A)", module_name//": Current Block definition:"
-    ! print"(A)", "Name: "//definition_pointer%name
-    ! print"(A)", "Description: "//definition_pointer%description
-    ! print*, "Textures: [",definition_pointer%textures,"]"
-    ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
+    ! ! print"(A)", module_name//": Current Block definition:"
+    ! ! print"(A)", "Name: "//definition_pointer%name
+    ! ! print"(A)", "Description: "//definition_pointer%description
+    ! ! print*, "Textures: [",definition_pointer%textures,"]"
+    ! ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
 
-    ! Copy the definition into the string based database.
-    call definition_database%set(new_definition%name, new_definition)
+    ! ! Copy the definition into the string based database.
+    ! call definition_database%set(new_definition%name, new_definition)
 
-    definition_array = [definition_array, new_definition]
+    ! definition_array = [definition_array, new_definition]
 
-    ! print"(A)","[Block Repo]: Registered ID ["//int_to_string(current_id)//"] to block ["//new_definition%name//"]"
+    ! ! print"(A)","[Block Repo]: Registered ID ["//int_to_string(current_id)//"] to block ["//new_definition%name//"]"
 
-    definition_array_length = definition_array_length + 1
-    current_id = current_id + 1
+    ! definition_array_length = definition_array_length + 1
+    ! current_id = current_id + 1
   end function register_block
 
 
