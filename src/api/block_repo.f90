@@ -195,21 +195,21 @@ contains
       return
     end if
 
-    ! ! Description is required.
-    ! call luajit_table_get_key_required(state, module_name, "definition", "description", description, "string")
+    ! Description is required.
+    call luajit_table_get_key_required(state, module_name, "definition", "description", description, "string")
 
-    ! ! Now we need to get the table which contains the textures.
-    ! call luajit_put_table_in_table_on_stack_required(state, module_name, "definition", "textures", "Array<string>")
+    ! Now we need to get the table which contains the textures.
+    call luajit_put_table_in_table_on_stack_required(state, module_name, "definition", "textures", "Array<string>")
 
-    ! status = luajit_copy_string_array_from_table(state, textures)
+    status = luajit_copy_string_array_from_table(state, textures)
 
-    ! if (status /= LUAJIT_GET_OK) then
-    !   if (status == LUAJIT_GET_MISSING) then
-    !     call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] is missing.")
-    !   else
-    !     call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] has a non-string element.")
-    !   end if
-    ! end if
+    if (status /= LUAJIT_GET_OK) then
+      if (status == LUAJIT_GET_MISSING) then
+        call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] is missing.")
+      else
+        call luajit_error_stop(state, module_name//" error: Table [definition] key table [textures] has a non-string element.")
+      end if
+    end if
 
 
     ! ! Now we get rid of the string table.
