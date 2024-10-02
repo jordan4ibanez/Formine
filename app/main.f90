@@ -159,7 +159,7 @@ program main
   call camera_set_position_f32(0.0, 0.0, -3.0)
 
   !! This is debugging for functions!
-  if (.true.) then
+  if (.false.) then
     do while(.not. glfw_window_should_close())
 
       call delta_tick()
@@ -172,11 +172,11 @@ program main
       if (.not. chunk_handler_chunk_exists(0,0) .and. .not. launched_thread) then
         call chunk_generator_new_chunk(0,0)
         launched_thread = .true.
-        print*,"launched"
+        ! print*,"launched"
       end if
 
       if (chunk_handler_chunk_exists(0,0)) then
-        print*,"deleted"
+        ! print*,"deleted"
         call chunk_handler_delete_chunk(0,0)
         launched_thread = .false.
       end if

@@ -44,7 +44,7 @@ contains
     type(memory_chunk), pointer :: current_chunk
 
     if (.not. chunk_handler_get_chunk_pointer(x,z, current_chunk)) then
-      print"(A)", "[Chunk Handler] Warning: Cannot set mesh for null chunk. Abort."
+      ! print"(A)", "[Chunk Handler] Warning: Cannot set mesh for null chunk. Abort."
       !? Auto GC the VAO.
       call mesh_delete(vao_id)
       return
@@ -120,7 +120,7 @@ contains
     exists = .false.
 
     if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
-      print"(A)","[Chunk Handler] Warning: Attempted to retrieve null chunk."
+      ! print"(A)","[Chunk Handler] Warning: Attempted to retrieve null chunk."
       return
     end if
 
@@ -221,14 +221,14 @@ contains
 
     call c_f_pointer(raw_c_ptr, chunk_pointer)
 
-    print*,"deleting ["//int_to_string(chunk_pointer%world_position%x)//","//int_to_string(chunk_pointer%world_position%y)//"]"
+    ! print*,"deleting ["//int_to_string(chunk_pointer%world_position%x)//","//int_to_string(chunk_pointer%world_position%y)//"]"
 
     do i = 1,MESH_STACK_ARRAY_SIZE
       vao_id = chunk_pointer%mesh(i)
 
       if (vao_id /= 0) then
         call mesh_delete(vao_id)
-        print*,"DELETED MESH: "//int_to_string(vao_id)
+        ! print*,"DELETED MESH: "//int_to_string(vao_id)
       end if
     end do
   end subroutine gc_chunk_database
