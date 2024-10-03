@@ -10,7 +10,6 @@ module h_string
 
 
   !* A heap string is a container to allow strings to be put into arrays dynamically.
-  !* The internal data must be gotten with %get() to prevent UB.
   type :: heap_string
     character(len = :, kind = c_char), allocatable :: data
   contains
