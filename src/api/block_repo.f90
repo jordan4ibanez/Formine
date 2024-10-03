@@ -237,7 +237,7 @@ contains
     call string_copy_pointer_to_pointer(description%get_pointer(), new_definition%description)
 
     do i = 1,6
-      textures%data(i)%string = new_definition%textures(i)%string
+      call string_copy_pointer_to_pointer(textures%data(i)%get_pointer(), new_definition%textures(i)%string)
     end do
 
     ! new_definition%draw_type = draw_type
