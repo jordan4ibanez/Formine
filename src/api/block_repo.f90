@@ -241,12 +241,8 @@ contains
 
     call string_copy_pointer_to_pointer(description%get_pointer(), new_definition%description)
 
-
-    ! allocate(character(len = len(description%get_pointer()), kind = c_char) :: new_definition%description)
-    ! new_definition%description = description%get()
-
     ! !! FIXME: might need pointer fun.
-    ! allocate(new_definition%textures(6))
+    allocate(new_definition%textures(6))
     ! new_definition%textures = textures%data
 
     ! new_definition%draw_type = draw_type
