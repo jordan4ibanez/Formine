@@ -168,18 +168,18 @@ program main
 
       call camera_freecam_hackjob()
 
-      !! FIXME: DISABLE THIS HACKJOB !!
-      if (.not. chunk_handler_chunk_exists(0,0) .and. .not. launched_thread) then
-        call chunk_generator_new_chunk(0,0)
-        launched_thread = .true.
-        ! print*,"launched"
-      end if
+      ! !! FIXME: DISABLE THIS HACKJOB !!
+      ! if (.not. chunk_handler_chunk_exists(0,0) .and. .not. launched_thread) then
+      !   call chunk_generator_new_chunk(0,0)
+      !   launched_thread = .true.
+      !   ! print*,"launched"
+      ! end if
 
-      if (chunk_handler_chunk_exists(0,0)) then
-        ! print*,"deleted"
-        call chunk_handler_delete_chunk(0,0)
-        launched_thread = .false.
-      end if
+      ! if (chunk_handler_chunk_exists(0,0)) then
+      !   ! print*,"deleted"
+      !   call chunk_handler_delete_chunk(0,0)
+      !   launched_thread = .false.
+      ! end if
 
 
       !? DRAW TEST ?!
