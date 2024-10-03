@@ -65,6 +65,7 @@ module block_repo
 
 
   !* Block definition container.
+
   type :: block_definition
     character(len = :, kind = c_char), pointer :: name => null()
     character(len = :, kind = c_char), pointer :: description => null()
