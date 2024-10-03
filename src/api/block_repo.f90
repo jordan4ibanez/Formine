@@ -152,7 +152,7 @@ contains
     end if
 
     ! Swap the declaration with the actual fortran function.
-    call luajit_swap_table_function(state, "register", c_funloc(register_block))
+    call luajit_swap_table_function(state, "register", register_block)
 
 
     ! Now clear the stack. We're done with the block LuaJIT table.
