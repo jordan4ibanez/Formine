@@ -189,7 +189,7 @@ contains
     call luajit_table_get_key_required(state, module_name, "definition", "name", name, "string")
 
     !! If it is "air" silent abord.
-    if (name%get() == "air") then
+    if (name%data == "air") then
       print"(A)", module_name//" warning: Please do not try to register air."
       call lua_pop(state, lua_gettop(state))
       return
@@ -254,7 +254,7 @@ contains
     ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
 
     ! Copy the definition into the string based database.
-    call definition_database%set(name%get(), new_definition)
+    call definition_database%set(name%data, new_definition)
 
     ! definition_array = [definition_array, new_definition]
 

@@ -105,7 +105,7 @@ contains
     do i = 1,size(textures_to_pack)
       element = textures_to_pack(i)
 
-      call packer%pack(element%file_name%get(), element%full_path%get())
+      call packer%pack(element%file_name%data, element%full_path%data)
     end do
 
     deallocate(textures_to_pack)
@@ -200,7 +200,7 @@ contains
     ! As long as it never changes, this will work perfectly.
     do i = 1,size(texture_key_array)
 
-      temp = texture_key_array(i)%get()
+      temp = texture_key_array(i)%data
 
       call string_to_index_array%set(temp, i)
 

@@ -134,7 +134,7 @@ contains
     end if
 
     do i = 1,dir_reader%folder_count
-      folder_name = dir_reader%folders(i)%get()
+      folder_name = dir_reader%folders(i)%data
       mod_path_string = "./mods/"//folder_name//"/"
       init_path_string = mod_path_string//"init.lua"
       conf_path_string = mod_path_string//"mod.conf"
@@ -194,7 +194,7 @@ contains
 
     ! Parse each line to try to accumulate the required elements.
     do i = 1,reader%line_count
-      temp_string = reader%lines(i)%get()
+      temp_string = reader%lines(i)%data
 
       if (string_starts_with(temp_string, "name = ")) then
         value_string = string_get_right_of_character(temp_string, "=")
@@ -244,7 +244,7 @@ contains
     end if
 
     do i = 1,dir_readers(1)%folder_count
-      if (dir_readers(1)%folders(i)%get() == "textures") then
+      if (dir_readers(1)%folders(i)%data == "textures") then
         found_textures_folder = .true.
       end if
     end do
@@ -268,64 +268,64 @@ contains
 
     ! Root level.
     do a = 1,dir_readers(1)%file_count
-      call attempt_texture_upload(dir_readers(1)%files(a)%get(), textures_path)
+      call attempt_texture_upload(dir_readers(1)%files(a)%data, textures_path)
     end do
 
     do a = 1,dir_readers(1)%folder_count
 
       !* + 1 depth.
-      textures_path = mod_path//"textures/"//dir_readers(1)%folders(a)%get()//"/"
+      textures_path = mod_path//"textures/"//dir_readers(1)%folders(a)%data//"/"
 
       call dir_readers(2)%deallocate_memory()
       call dir_readers(2)%read_directory(textures_path)
 
       do b = 1,dir_readers(2)%file_count
-        call attempt_texture_upload(dir_readers(2)%files(b)%get(), textures_path)
+        call attempt_texture_upload(dir_readers(2)%files(b)%data, textures_path)
       end do
 
       do b = 1,dir_readers(2)%folder_count
 
         !* + 2 depth.
         textures_path = mod_path//"textures/"// &
-          dir_readers(1)%folders(a)%get()//"/"// &
-          dir_readers(2)%folders(b)%get()//"/"
+          dir_readers(1)%folders(a)%data//"/"// &
+          dir_readers(2)%folders(b)%data//"/"
 
         call dir_readers(3)%deallocate_memory()
         call dir_readers(3)%read_directory(textures_path)
 
         do c = 1,dir_readers(3)%file_count
-          call attempt_texture_upload(dir_readers(3)%files(c)%get(), textures_path)
+          call attempt_texture_upload(dir_readers(3)%files(c)%data, textures_path)
         end do
 
         do c = 1,dir_readers(3)%folder_count
 
           !* + 3 depth.
           textures_path = mod_path//"textures/"// &
-            dir_readers(1)%folders(a)%get()//"/"// &
-            dir_readers(2)%folders(b)%get()//"/"// &
-            dir_readers(3)%folders(c)%get()//"/"
+            dir_readers(1)%folders(a)%data//"/"// &
+            dir_readers(2)%folders(b)%data//"/"// &
+            dir_readers(3)%folders(c)%data//"/"
 
           call dir_readers(4)%deallocate_memory()
           call dir_readers(4)%read_directory(textures_path)
 
           do d = 1,dir_readers(4)%file_count
-            call attempt_texture_upload(dir_readers(4)%files(d)%get(), textures_path)
+            call attempt_texture_upload(dir_readers(4)%files(d)%data, textures_path)
           end do
 
           do d = 1,dir_readers(4)%folder_count
 
             !* + 4 depth.
             textures_path = mod_path//"textures/"// &
-              dir_readers(1)%folders(a)%get()//"/"// &
-              dir_readers(2)%folders(b)%get()//"/"// &
-              dir_readers(3)%folders(c)%get()//"/"// &
-              dir_readers(4)%folders(d)%get()//"/"
+              dir_readers(1)%folders(a)%data//"/"// &
+              dir_readers(2)%folders(b)%data//"/"// &
+              dir_readers(3)%folders(c)%data//"/"// &
+              dir_readers(4)%folders(d)%data//"/"
 
             call dir_readers(5)%deallocate_memory()
             call dir_readers(5)%read_directory(textures_path)
 
             do e = 1,dir_readers(5)%file_count
-              call attempt_texture_upload(dir_readers(5)%files(e)%get(), textures_path)
+              call attempt_texture_upload(dir_readers(5)%files(e)%data, textures_path)
             end do
           end do
         end do
