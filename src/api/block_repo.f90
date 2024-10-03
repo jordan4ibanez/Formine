@@ -277,12 +277,17 @@ contains
 
     type(c_ptr), intent(in), value :: raw_c_ptr
     type(block_definition), pointer :: definition_pointer
+    integer(c_int) :: i
 
     call c_f_pointer(raw_c_ptr, definition_pointer)
 
     deallocate(definition_pointer%description)
     deallocate(definition_pointer%name)
-    ! deallocate(definition_pointer%textures)
+    do i = 1,6
+      if (allocated(definition_pointer%textures(i)%data)) then
+        deallocate(definition_pointer%textures(i)%data)
+      end if
+    end do
   end subroutine gc_definition_repo
 
 
