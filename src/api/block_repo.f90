@@ -70,9 +70,9 @@ module block_repo
 
 
   type :: block_definition
-    character(len = :, kind = c_char), pointer :: name
-    character(len = :, kind = c_char), pointer :: description
-    type(heap_string), dimension(:), pointer :: textures
+    character(len = :, kind = c_char), pointer :: name => null()
+    character(len = :, kind = c_char), pointer :: description => null()
+    type(heap_string), dimension(:), pointer :: textures => null()
     integer(c_int) :: draw_type = DRAW_TYPE_AIR
   end type block_definition
 
@@ -236,17 +236,20 @@ contains
     ! We have completed a successful query of the definition table from LuaJIT.
     ! Put all the data into the fortran database.
 
-    allocate(character(len = len(name%get_pointer()), kind = c_char) :: new_definition%name)
-    new_definition%name = name%get()
 
-    allocate(character(len = len(description%get_pointer()), kind = c_char) :: new_definition%description)
-    new_definition%description = description%get()
+    call string_copy_pointer_to_pointer(name%get_pointer(), new_definition%name)
 
-    !! FIXME: might need pointer fun.
-    allocate(new_definition%textures(6))
-    new_definition%textures = textures%data
+    call string_copy_pointer_to_pointer(description%get_pointer(), new_definition%description)
 
-    new_definition%draw_type = draw_type
+
+    ! allocate(character(len = len(description%get_pointer()), kind = c_char) :: new_definition%description)
+    ! new_definition%description = description%get()
+
+    ! !! FIXME: might need pointer fun.
+    ! allocate(new_definition%textures(6))
+    ! new_definition%textures = textures%data
+
+    ! new_definition%draw_type = draw_type
 
     ! print"(A)", module_name//": Current Block definition:"
     ! print"(A)", "Name: "//definition_pointer%name
@@ -283,7 +286,7 @@ contains
 
     deallocate(definition_pointer%description)
     deallocate(definition_pointer%name)
-    deallocate(definition_pointer%textures)
+    ! deallocate(definition_pointer%textures)
   end subroutine gc_definition_repo
 
 
