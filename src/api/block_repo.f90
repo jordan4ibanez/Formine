@@ -169,7 +169,7 @@ contains
 
     type(c_ptr), intent(in), value :: state
     ! We're going to be using the status quite a lot.
-    integer(c_int) :: status
+    integer(c_int) :: status, i
     ! block_definition fields.
     type(heap_string) :: name, description
     type(string_array) :: textures
@@ -241,9 +241,9 @@ contains
 
     call string_copy_pointer_to_pointer(description%get_pointer(), new_definition%description)
 
-    ! !! FIXME: might need pointer fun.
-    allocate(new_definition%textures(6))
-    ! new_definition%textures = textures%data
+    do i = 1,6
+      textures%data(i)%data = new_definition%textures(i)%data
+    end do
 
     ! new_definition%draw_type = draw_type
 
