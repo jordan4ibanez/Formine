@@ -33,27 +33,8 @@ module h_string
   end type heap_string
 
 
-  !* heap_string constructor.
-  interface heap_string
-    module procedure :: constructor
-  end interface heap_string
-
 
 contains
-
-
-  !* heap_string constructor.
-  function constructor(optional_string) result(new_string)
-    implicit none
-
-    character(len = *, kind = c_char), intent(in), optional :: optional_string
-    type(heap_string) :: new_string
-
-    if (present(optional_string)) then
-      new_string%data = optional_string
-    end if
-  end function constructor
-
 
   !* Very simple assignment operator.
   subroutine assign(this, new_data)
