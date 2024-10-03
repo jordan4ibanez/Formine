@@ -293,6 +293,8 @@ program main
       z_vao = font_generate_text(floating_font_size, "Z: "//position_text_debug, size = text_size)
       call mesh_draw(z_vao)
 
+      deallocate(position_text_debug)
+
 
       ! Process second text.
 
