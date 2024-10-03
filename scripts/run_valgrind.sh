@@ -9,7 +9,13 @@ if [ "$location" == "" ]; then
   exit 1
 fi
 	
-valgrind --fair-sched=yes --leak-check=full $location
+
+valgrind --leak-check=full \
+        --show-leak-kinds=all \
+        --track-origins=yes \
+        --verbose \
+        --fair-sched=yes \
+        $location
 
 
 exit 0
