@@ -1,4 +1,4 @@
-module h_string
+module t_heap_string_mod
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -120,4 +120,4 @@ contains
   end function get_pointer
 
 
-end module h_string
+end module t_heap_string_mod
