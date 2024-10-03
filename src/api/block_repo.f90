@@ -72,7 +72,7 @@ module block_repo
   type :: block_definition
     character(len = :, kind = c_char), pointer :: name => null()
     character(len = :, kind = c_char), pointer :: description => null()
-    type(heap_string), dimension(:), pointer :: textures => null()
+    type(heap_string), dimension(6) :: textures
     integer(c_int) :: draw_type = DRAW_TYPE_AIR
   end type block_definition
 
