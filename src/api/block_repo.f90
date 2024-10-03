@@ -64,11 +64,7 @@ module block_repo
   integer(c_int), parameter :: DRAW_TYPE_NORMAL = 1
 
 
-  !* Block definition.
-  !* 200 bytes in size. (at time of writing)
-  !* 1_000_000 definitions would take up 200 mb.
-
-
+  !* Block definition container.
   type :: block_definition
     character(len = :, kind = c_char), pointer :: name => null()
     character(len = :, kind = c_char), pointer :: description => null()
