@@ -9,7 +9,7 @@ module t_string_pointer_mod
   public :: string_pointer
 
 
-  !* A heap string is a container to allow strings to be put into arrays dynamically.
+  !* A string pointer is a container to allow string pointers to be put into arrays dynamically.
   type :: string_pointer
     character(len = :, kind = c_char), pointer :: data => null()
   contains
