@@ -18,7 +18,6 @@
 
     !! This needs a windows check and a windows implementation. You can make named pipes on windows.
 
-    ! todo: turn this into a module.
     ! Make sure we deleted this pipe last time.
     inquire(file = FIFO_PIPE, exist = pipe_exists)
     if (pipe_exists) then
