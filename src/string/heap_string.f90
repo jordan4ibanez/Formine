@@ -25,8 +25,6 @@ module t_heap_string_mod
     procedure :: write_formatted
     !? Allocated check.
     procedure :: is_allocated
-    !? Get internal data.
-    procedure :: get
     !? Get pointer to internal data.
     procedure :: get_pointer
   end type heap_string
@@ -95,18 +93,6 @@ contains
 
     res = allocated(this%data)
   end function is_allocated
-
-
-  !* Get the internal data of the heap string.
-  !? Aka, what it is pointing to on the heap basically.
-  function get(this) result(data)
-    implicit none
-
-    class(heap_string), intent(in) :: this
-    character(len = :), allocatable :: data
-
-    data = this%data
-  end function get
 
 
   !* Get the pointer to the internal data of the heap string.
