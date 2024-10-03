@@ -284,7 +284,7 @@ contains
     deallocate(definition_pointer%description)
     deallocate(definition_pointer%name)
     do i = 1,6
-      if (allocated(definition_pointer%textures(i)%string)) then
+      if (associated(definition_pointer%textures(i)%string)) then
         deallocate(definition_pointer%textures(i)%string)
       end if
     end do
