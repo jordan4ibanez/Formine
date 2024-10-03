@@ -2,6 +2,7 @@ module block_repo
   use :: luajit
   use :: string
   use :: hashmap_str
+  use :: vector
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -81,9 +82,9 @@ module block_repo
   type(hashmap_string_key) :: definition_database
 
   ! Object oriented.
-  !! FIXME: THIS COULD USE A VECTOR!
-  !! todo: this can probably use the same GC as the definition_database
-  type(block_definition), dimension(:), allocatable, target :: definition_array
+  !* Type: block_definition
+  !? NOTE: the definition_database is the one responsible for cleaning up the pointers.
+  type(vec) :: definition_array
 
   ! Data oriented.
   ! integer(c_int) :: draw_type = DRAW_TYPE_AIR
