@@ -238,7 +238,7 @@ program main
 
 
 
-      ! call chunk_handler_draw_chunks()
+      call chunk_handler_draw_chunks()
 
 
       ! !* Move into "2D mode"
