@@ -105,7 +105,7 @@ contains
     do i = 1,size(textures_to_pack)
       element = textures_to_pack(i)
 
-      call packer%pack(element%file_name%data, element%full_path%data)
+      call packer%pack(element%file_name%string, element%full_path%string)
     end do
 
     deallocate(textures_to_pack)
@@ -200,7 +200,7 @@ contains
     ! As long as it never changes, this will work perfectly.
     do i = 1,size(texture_key_array)
 
-      temp = texture_key_array(i)%data
+      temp = texture_key_array(i)%string
 
       call string_to_index_array%set(temp, i)
 
@@ -222,8 +222,8 @@ contains
 
       do y = 1,6
 
-        if  (.not. string_to_index_array%get(definition_pointer%textures(y)%data, raw_c_ptr)) then
-          error stop "[Texture Atlas] Error: Received an invalid texture. ["//definition_pointer%textures(y)%data//"]"
+        if  (.not. string_to_index_array%get(definition_pointer%textures(y)%string, raw_c_ptr)) then
+          error stop "[Texture Atlas] Error: Received an invalid texture. ["//definition_pointer%textures(y)%string//"]"
         end if
 
         call c_f_pointer(raw_c_ptr, current_index)

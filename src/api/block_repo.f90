@@ -189,7 +189,7 @@ contains
     call luajit_table_get_key_required(state, module_name, "definition", "name", name, "string")
 
     !! If it is "air" silent abord.
-    if (name%data == "air") then
+    if (name%string == "air") then
       print"(A)", module_name//" warning: Please do not try to register air."
       call lua_pop(state, lua_gettop(state))
       return
@@ -242,7 +242,7 @@ contains
     call string_copy_pointer_to_pointer(description%get_pointer(), new_definition%description)
 
     do i = 1,6
-      textures%data(i)%data = new_definition%textures(i)%data
+      textures%data(i)%string = new_definition%textures(i)%string
     end do
 
     ! new_definition%draw_type = draw_type
@@ -254,7 +254,7 @@ contains
     ! print"(A)", "draw_type: "//int_to_string(definition_pointer%draw_type)
 
     ! Copy the definition into the string based database.
-    call definition_database%set(name%data, new_definition)
+    call definition_database%set(name%string, new_definition)
 
     ! definition_array = [definition_array, new_definition]
 
@@ -284,8 +284,8 @@ contains
     deallocate(definition_pointer%description)
     deallocate(definition_pointer%name)
     do i = 1,6
-      if (allocated(definition_pointer%textures(i)%data)) then
-        deallocate(definition_pointer%textures(i)%data)
+      if (allocated(definition_pointer%textures(i)%string)) then
+        deallocate(definition_pointer%textures(i)%string)
       end if
     end do
   end subroutine gc_definition_repo

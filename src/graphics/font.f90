@@ -355,7 +355,7 @@ contains
     end if
 
     do i = 1,reader%line_count
-      temp_buffer = reader%lines(i)%data
+      temp_buffer = reader%lines(i)%string
 
       ! This is a real sloppy way to do this but who cares?
       temp_buffer_length = len(temp_buffer)

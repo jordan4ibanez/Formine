@@ -466,7 +466,7 @@ contains
       new_texture_rectangle%max_y = real(d_max_y / d_canvas_height, kind = c_float)
 
       ! Now put it into the database.
-      call this%texture_coordinates%set(this%keys_array(i)%data, new_texture_rectangle)
+      call this%texture_coordinates%set(this%keys_array(i)%string, new_texture_rectangle)
     end do
   end subroutine fast_packer_create_texture_rectangles
 
