@@ -11,7 +11,7 @@ module t_string_pointer_mod
 
   !* A heap string is a container to allow strings to be put into arrays dynamically.
   type :: string_pointer
-    character(len = :, kind = c_char), allocatable :: data
+    character(len = :, kind = c_char), pointer :: data
   contains
     !? Assignment.
     generic :: assignment(=) => assign
@@ -91,7 +91,7 @@ contains
 
     class(string_pointer), intent(inout) :: this
 
-    res = allocated(this%data)
+    res = associated(this%data)
   end function is_associated
 
 
