@@ -1,6 +1,7 @@
 module string
   use, intrinsic :: iso_c_binding
-  use :: h_string
+  use :: t_heap_string_mod
+  use :: t_string_pointer_mod
   implicit none
 
 
@@ -42,8 +43,9 @@ module string
   public :: string_contains_substring
 
 
-  !? Pass through the type.
+  !? Pass through types.
   public :: heap_string
+  public :: string_pointer
 
 
 contains
