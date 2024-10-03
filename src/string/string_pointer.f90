@@ -11,7 +11,7 @@ module t_string_pointer_mod
 
   !* A string pointer is a container to allow string pointers to be put into arrays dynamically.
   type :: string_pointer
-    character(len = :, kind = c_char), pointer :: data => null()
+    character(len = :, kind = c_char), pointer :: string => null()
   contains
     !? Assignment.
     generic :: assignment(=) => assign
@@ -40,7 +40,7 @@ contains
     class(string_pointer), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: new_data
 
-    this%data = new_data
+    this%string = new_data
   end subroutine assign
 
 
@@ -51,7 +51,7 @@ contains
     class(string_pointer), intent(in) :: this
     type(string_pointer), intent(in) :: other
 
-    res = this%data == other%data .and. len(this%data) == len(other%data)
+    res = this%string == other%string .and. len(this%string) == len(other%string)
   end function equal_string_pointer
 
 
@@ -62,7 +62,7 @@ contains
     class(string_pointer), intent(in) :: this
     character(len = *, kind = c_char), intent(in) :: other
 
-    res = this%data == other .and. len(this%data) == len(other)
+    res = this%string == other .and. len(this%string) == len(other)
   end function equal_raw_string
 
 
@@ -81,7 +81,7 @@ contains
       print*,iotype, v_list
     end if
 
-    write (unit,"(A)", iostat = iostat, iomsg = iomsg) this%data
+    write (unit,"(A)", iostat = iostat, iomsg = iomsg) this%string
   end subroutine write_formatted
 
 
@@ -91,7 +91,7 @@ contains
 
     class(string_pointer), intent(inout) :: this
 
-    res = associated(this%data)
+    res = associated(this%string)
   end function is_associated
 
 
@@ -102,7 +102,7 @@ contains
     class(string_pointer), intent(in), target :: this
     character(len = :), pointer :: data_pointer
 
-    data_pointer => this%data
+    data_pointer => this%string
   end function get_pointer
 
 
