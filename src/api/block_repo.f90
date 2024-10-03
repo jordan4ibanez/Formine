@@ -236,12 +236,13 @@ contains
     ! We have completed a successful query of the definition table from LuaJIT.
     ! Put all the data into the fortran database.
 
-    allocate(character(len = len(name%get()), kind = c_char) :: new_definition%name)
+    allocate(character(len = len(name%get_pointer()), kind = c_char) :: new_definition%name)
     new_definition%name = name%get()
 
-    allocate(character(len = len(description%get()), kind = c_char) :: new_definition%description)
+    allocate(character(len = len(description%get_pointer()), kind = c_char) :: new_definition%description)
     new_definition%description = description%get()
 
+    !! FIXME: might need pointer fun.
     allocate(new_definition%textures(6))
     new_definition%textures = textures%data
 
