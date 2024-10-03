@@ -1303,16 +1303,16 @@ contains
   !* function pointer.
   !* This is a very delicate function as well, must be handled with care.
   !* The table must be at stack level -1.
-  subroutine luajit_swap_table_function(state, table_key, function_pointer)
+  subroutine luajit_swap_table_function(state, table_key, fortran_function)
     implicit none
 
     type(c_ptr), intent(in), value :: state
     character(len = *, kind = c_char), intent(in) :: table_key
-    type(c_funptr), intent(in), value :: function_pointer
+    procedure(fortran_in_luajit_blueprint) :: fortran_function
 
     ! Push our stack values. Everything will shift back.
     call lua_pushstring(state, table_key)
-    call lua_pushcfunction(state, function_pointer)
+    call lua_pushcfunction(state, c_funloc(fortran_function))
 
     ! The table now resides in -3. Set it.
     call lua_settable(state, -3)
