@@ -1,10 +1,6 @@
 # Formine
  A voxel game written in Fortran.
 
-## Attention:
-
-As I am transitioning to my own container libraries, I am working on the memory strategies for each module. As of writing this, there is a pretty large memory leak. As each module behaves as it's own "program", with it's own mini ecosystem and implementation, this might take a few days to finish up. So if you start the game now, expect it to use ~7-8GB of system memory. Thank you for reading.
-
 ## Why is this called Formine?
 
 I had a hard time naming this project. After much thought and research, I had an inspiration from the language creator himself, [John Backus](https://en.wikipedia.org/wiki/John_Backus). You can see this [here](https://youtu.be/KohboWwrsXg&t=471).
