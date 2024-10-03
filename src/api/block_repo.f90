@@ -108,7 +108,7 @@ contains
 
     integer(c_int) :: total
 
-    total = size(definition_array)
+    total = int(definition_array%size())
   end function block_repo_get_number_of_definitions
 
 
@@ -117,9 +117,12 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: id
+    type(c_ptr) :: raw_c_ptr
     type(block_definition), pointer :: definition_pointer
 
-    definition_pointer => definition_array(id)
+    raw_c_ptr = definition_array%get(int(id, c_int64_t))
+
+    call c_f_pointer(raw_c_ptr, definition_pointer)
   end function block_repo_get_definition_pointer_by_id
 
 
@@ -128,11 +131,11 @@ contains
     implicit none
 
     type(c_ptr), intent(in), value :: state
+    type(block_definition) :: blank
 
 
     !* Create the base smart pointer of the block array.
-    allocate(definition_array(0))
-
+    definition_array = new_vec(sizeof(blank), 0_8)
 
     ! Memory layout: (Stack grows down.)
     ! -1 - blocks = {}
@@ -240,7 +243,7 @@ contains
       call string_copy_pointer_to_pointer(textures%data(i)%get_pointer(), new_definition%textures(i)%string)
     end do
 
-    ! new_definition%draw_type = draw_type
+    new_definition%draw_type = draw_type
 
     ! print"(A)", module_name//": Current Block definition:"
     ! print"(A)", "Name: "//definition_pointer%name
@@ -251,7 +254,7 @@ contains
     ! Copy the definition into the string based database.
     call definition_database%set(name%string, new_definition)
 
-    ! definition_array = [definition_array, new_definition]
+    call definition_array%push_back(new_definition)
 
     ! print"(A)","[Block Repo]: Registered ID ["//int_to_string(current_id)//"] to block ["//new_definition%name//"]"
 
