@@ -21,6 +21,7 @@ module string
 
   !* String manipulation.
   !* Will always generate a new string treating the original as immutable.
+  public :: string_copy_pointer_to_pointer
   public :: string_get_file_name
   public :: string_remove_file_name_from_path
   public :: string_remove_file_extension
@@ -282,6 +283,31 @@ contains
 
 
 !* STRING MANIPULATION. =================================================================================
+
+
+  !* Copy a string pointer into an UNALLOCATED string pointer.
+  !* This ALLOCATES [to].
+  subroutine string_copy_pointer_to_pointer(from, to)
+    implicit none
+
+    character(len = :, kind = c_char), intent(in), pointer :: from
+    character(len = :, kind = c_char), intent(inout), pointer :: to
+    integer(c_int) :: str_length
+
+    str_length = len(from)
+
+    if (.not. associated(from)) then
+      error stop "[String] Error: from is not allocated."
+    end if
+
+    if (associated(to)) then
+      error stop "[String] Error: to is already allocated."
+    end if
+
+    allocate(character(len = str_length, kind = c_char) :: to)
+
+    to(1:str_length) = from(1:str_length)
+  end subroutine string_copy_pointer_to_pointer
 
 
   !* Get a file name string from a string that is a path.
