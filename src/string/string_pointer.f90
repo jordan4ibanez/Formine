@@ -6,30 +6,28 @@ module t_string_pointer_mod
   private
 
 
-  public :: heap_string
+  public :: string_pointer
 
 
   !* A heap string is a container to allow strings to be put into arrays dynamically.
-  type :: heap_string
+  type :: string_pointer
     character(len = :, kind = c_char), allocatable :: data
   contains
     !? Assignment.
     generic :: assignment(=) => assign
     procedure :: assign
     !? Equality check.
-    generic :: operator(==) => equal_heap_string, equal_raw_string
-    procedure :: equal_heap_string
+    generic :: operator(==) => equal_string_pointer, equal_raw_string
+    procedure :: equal_string_pointer
     procedure :: equal_raw_string
     !? Print formatting.
     generic :: write(formatted) => write_formatted
     procedure :: write_formatted
     !? Allocated check.
-    procedure :: is_allocated
-    !? Get internal data.
-    procedure :: get
+    procedure :: is_associated
     !? Get pointer to internal data.
     procedure :: get_pointer
-  end type heap_string
+  end type string_pointer
 
 
 
@@ -39,7 +37,7 @@ contains
   subroutine assign(this, new_data)
     implicit none
 
-    class(heap_string), intent(inout) :: this
+    class(string_pointer), intent(inout) :: this
     character(len = *, kind = c_char), intent(in) :: new_data
 
     this%data = new_data
@@ -47,21 +45,21 @@ contains
 
 
   !* Equality check with another heap string.
-  logical function equal_heap_string(this, other) result(res)
+  logical function equal_string_pointer(this, other) result(res)
     implicit none
 
-    class(heap_string), intent(in) :: this
-    type(heap_string), intent(in) :: other
+    class(string_pointer), intent(in) :: this
+    type(string_pointer), intent(in) :: other
 
     res = this%data == other%data .and. len(this%data) == len(other%data)
-  end function equal_heap_string
+  end function equal_string_pointer
 
 
   !* Equality check with a raw string.
   logical function equal_raw_string(this, other) result(res)
     implicit none
 
-    class(heap_string), intent(in) :: this
+    class(string_pointer), intent(in) :: this
     character(len = *, kind = c_char), intent(in) :: other
 
     res = this%data == other .and. len(this%data) == len(other)
@@ -72,7 +70,7 @@ contains
   subroutine write_formatted(this, unit, iotype, v_list, iostat, iomsg)
     implicit none
 
-    class(heap_string), intent(in) :: this
+    class(string_pointer), intent(in) :: this
     integer, intent(in) :: unit         ! Internal unit to write to.
     character(len = *, kind = c_char), intent(in) :: iotype  ! LISTDIRECTED or DTxxx
     integer, intent(in) :: v_list(:)    ! parameters from fmt spec.
@@ -88,32 +86,20 @@ contains
 
 
   !* Very simple check to see if the internal data is allocated.
-  logical function is_allocated(this) result(res)
+  logical function is_associated(this) result(res)
     implicit none
 
-    class(heap_string), intent(inout) :: this
+    class(string_pointer), intent(inout) :: this
 
     res = allocated(this%data)
-  end function is_allocated
-
-
-  !* Get the internal data of the heap string.
-  !? Aka, what it is pointing to on the heap basically.
-  function get(this) result(data)
-    implicit none
-
-    class(heap_string), intent(in) :: this
-    character(len = :), allocatable :: data
-
-    data = this%data
-  end function get
+  end function is_associated
 
 
   !* Get the pointer to the internal data of the heap string.
   function get_pointer(this) result(data_pointer)
     implicit none
 
-    class(heap_string), intent(in), target :: this
+    class(string_pointer), intent(in), target :: this
     character(len = :), pointer :: data_pointer
 
     data_pointer => this%data
