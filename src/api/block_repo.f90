@@ -267,6 +267,8 @@ contains
     implicit none
 
     call definition_database%destroy()
+
+    call definition_array%destroy()
   end subroutine block_repo_destroy
 
 
