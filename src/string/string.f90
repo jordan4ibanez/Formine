@@ -75,7 +75,21 @@ contains
   end function convert_c_string_pointer_to_string
 
 
-  !* Use this to convert C strings stored in a (character, pointer) into Fortran strings.
+  !* Convert a C str into a Fortran string pointer.
+  function string_from_c(c_str_ptr) result(fortran_string_pointer)
+    use :: raw_c, only: c_strlen
+    implicit none
+
+    type(c_ptr), intent(in), value :: c_str_ptr
+    character(len = :, kind = c_char), pointer :: fortran_string_pointer
+    integer(c_size_t) :: str_length
+
+    str_length = c_strlen(c_str_ptr)
+
+    call raw_c_str_to_fortran_string_cast(c_str_ptr, fortran_string_pointer, str_length)
+  end function string_from_c
+
+
   !? This is using Fortran intrinsics to force a cast from C str to Fortran string.
   !! This should NEVER be exposed outside of this module.
   subroutine raw_c_str_to_fortran_string_cast(c_str_ptr, fortran_string_pointer, str_length)
