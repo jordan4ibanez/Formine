@@ -170,15 +170,16 @@ contains
 
   !* NOTE: C is passing Fortran data here!
   !* NOTE: This function passed into C as a pointer!
-  subroutine debug_message_callback(source, type, id, severity, length, message_pointer, user_param_pointer)
+  subroutine debug_message_callback(source, type, id, severity, message_pointer, user_param_pointer)
     use, intrinsic :: iso_c_binding
     use :: string
     use :: terminal
     implicit none
 
-    integer, intent(in), value :: source, type, id, severity, length
+    integer, intent(in), value :: source, type, id, severity
     type(c_ptr), intent(in), value :: message_pointer, user_param_pointer
-    character(len = :, kind = c_char), allocatable :: fortran_message, severity_text
+    character(len = :, kind = c_char), pointer :: fortran_message
+    character(len = :, kind = c_char), allocatable :: severity_text
     integer(c_int) :: severity_level
 
     ! Shut the compiler up.
@@ -187,7 +188,7 @@ contains
     end if
 
     if (c_associated(message_pointer)) then
-      fortran_message = string_from_c(message_pointer, length + 1)
+      fortran_message => string_from_c(message_pointer)
       if (len(fortran_message) > 0) then
 
         select case (severity)

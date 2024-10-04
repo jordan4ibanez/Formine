@@ -8,7 +8,8 @@ module string
   private
 
   !* Specialty C operators.
-  public :: string_from_c_with_length_goal
+  public :: string_from_c
+  ! public :: string_from_c_with_length_goal
   public :: into_c_string
 
   !* Casting to/from string.

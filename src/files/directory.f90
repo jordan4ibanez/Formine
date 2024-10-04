@@ -97,7 +97,7 @@ contains
     type(c_ptr) :: c_for_dir_pointer
     type(for_dir), pointer :: for_dir_pointer
     integer(c_int) :: i, file_index, folder_index
-    character(len = :, kind = c_char), allocatable :: temp_string
+    character(len = :, kind = c_char), pointer :: temp_string
     ! We have our arrays of integers and pointers which we can extract.
     logical(kind = c_bool), dimension(:), pointer :: is_folder
     integer(c_int), dimension(:), pointer :: string_lengths
@@ -161,7 +161,7 @@ contains
     ! Now we're going to loop through and grab all the data from these pointers.
     ! If you look at the memory addresses, they appear to be tightly packed.
     do i = 1,for_dir_pointer%array_length
-      temp_string = string_from_c(c_strings(i), string_lengths(i))
+      temp_string => string_from_c(c_strings(i))
 
       if (is_folder(i)) then
         this%folders(folder_index) = temp_string

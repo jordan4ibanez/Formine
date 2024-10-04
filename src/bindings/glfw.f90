@@ -483,11 +483,11 @@ contains
     type(c_ptr) :: c_string
     ! Fortran side.
     integer(c_int) :: error_result
-    character(len = :, kind = c_char), allocatable :: error_result_text
+    character(len = :, kind = c_char), pointer :: error_result_text
 
     error_result = internal_glfw_get_error(c_string)
 
-    error_result_text = string_from_c(c_string, 512)
+    error_result_text => string_from_c(c_string)
 
     if (len(error_result_text) > 0) then
       print"(A)","[GLFW] Gotten Error: "//error_result_text//"."
@@ -574,9 +574,10 @@ contains
 
     integer(c_int), intent(in), value :: i
     type(c_ptr), intent(in), value :: char_pointer
-    character(len = :), allocatable :: error_text, error_value_string
+    character(len = :), pointer :: error_text
+    character(len = :), allocatable :: error_value_string
 
-    error_text = string_from_c(char_pointer, 512)
+    error_text => string_from_c(char_pointer)
     error_value_string = int_to_string(i)
 
     if (len(error_text) > 0) then

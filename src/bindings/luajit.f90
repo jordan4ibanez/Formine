@@ -889,14 +889,15 @@ contains
 
     type(c_ptr), intent(in), value :: state
     integer(c_int), intent(in), value :: index
-    character(len = :, kind = c_char), allocatable :: new_string
+    character(len = :, kind = c_char), pointer :: new_string
     integer(c_size_t) :: lua_string_length
     integer(c_int) :: casted_size
     type(c_ptr) :: c_string_pointer
 
     c_string_pointer = lua_tolstring(state, index, lua_string_length)
     casted_size = int(lua_string_length, kind = c_int)
-    new_string = string_from_c(c_string_pointer, casted_size + 1)
+
+    new_string => string_from_c(c_string_pointer)
     !? c_string_pointer is not done with malloc. No need to free. (tested)
   end function lua_tostring
 
@@ -956,13 +957,13 @@ contains
 
     type(c_ptr), intent(in), value :: state
     integer(c_int), intent(in), value :: index
-    character(len = :, kind = c_char), allocatable :: type_name
+    character(len = :, kind = c_char), pointer :: type_name
     integer(c_int) :: type_index
     type(c_ptr) :: c_string_pointer
 
     type_index = lua_type(state, index)
     c_string_pointer = internal_lua_typename(state, type_index)
-    type_name = string_from_c(c_string_pointer, 36)
+    type_name => string_from_c(c_string_pointer)
   end function lua_typename
 
 
