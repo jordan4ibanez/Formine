@@ -8,7 +8,7 @@ module string
   private
 
   !* Specialty C operators.
-  public :: string_from_c
+  public :: string_from_c_with_length_goal
   public :: into_c_string
 
   !* Casting to/from string.
@@ -76,29 +76,22 @@ contains
 
 
   !* Use this to convert C strings stored in a (character, pointer) into Fortran strings.
-  function string_from_c(c_string_pointer, string_length) result(fortran_string)
+  !! This is a major hackjob.
+  function string_from_c_with_length_goal(c_string_pointer, string_length) result(fortran_string)
     use, intrinsic :: iso_c_binding
     implicit none
 
-    ! On the C side. The view is great.
     type(c_ptr), intent(in), value :: c_string_pointer
-    ! On the Fortran side.
     character(len = 1, kind = c_char), dimension(:), pointer :: fortran_string_pointer
     character(len = :, kind = c_char), allocatable :: fortran_string
     integer(c_int) :: string_length, found_string_length
-    ! 4 BYTES, aka, 32 bit.
-    ! If there is a string bigger than this, we have a problem.
     integer(c_int) :: i
 
     ! Starts off as 0
     found_string_length = 0
 
-    ! We must ensure that we are not converting a null pointer
-    ! as this can lead to SERIOUS UB.
+    ! We must ensure that we are not converting a null pointer.
     if (.not. c_associated(c_string_pointer)) then
-      !? So we will choose to return a blank string instead of halting.
-      !? This comment is left here as a backup and retroactive development documentation.
-      ! error stop "string_from_c: NULL POINTER IN C STRING"
       fortran_string = ""
     else
       !? It seems that everything is okay, we will proceed.
@@ -106,12 +99,6 @@ contains
 
       fortran_string = convert_c_string_pointer_to_string(string_length, fortran_string_pointer)
 
-      !? This will crash, it automatically gets deallocated.
-      !? I have this here in case I audit my code in the future.
-      ! deallocate(fortran_string_pointer)
-
-      ! Force a null terminator to be applied.
-      !? This prevents strange behavior when C misbehaves.
       fortran_string(string_length:string_length) = achar(0)
 
       ! Let's find the null terminator.
@@ -131,7 +118,7 @@ contains
         fortran_string = ""
       end if
     end if
-  end function string_from_c
+  end function string_from_c_with_length_goal
 
 
   ! Convert a regular Fortran string into a null terminated C string.
