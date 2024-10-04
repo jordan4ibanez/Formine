@@ -312,19 +312,23 @@ contains
             ! Block we're looking at.
             trajectory = pos + direction
 
-            ! If we're going to go out of bounds, cycle.
-            ! todo: check neighbor.
-            if (trajectory%x < 1 .or. trajectory%x > CHUNK_WIDTH .or. trajectory%z < 1 .or. trajectory%z > CHUNK_WIDTH .or. trajectory%y < 1 .or. trajectory%y > CHUNK_HEIGHT) then
-              cycle
-            end if
-
             ! todo: if y height == chunk_height then just render the face.
 
-            ! If it's another fullsize block, cycle.
-            ! todo: check draw_type.
-            if (generator_message%current%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
-              cycle
+            ! If we go out of bounds, check the neighbor chunk, if it exists.
+            if (trajectory%x < 1 .or. trajectory%x > CHUNK_WIDTH .or. trajectory%z < 1 .or. trajectory%z > CHUNK_WIDTH .or. trajectory%y < 1 .or. trajectory%y > CHUNK_HEIGHT) then
+              
+
+            else
+              ! We're still inside this chunk. Check the block we're looking at.
+
+              ! If it's another fullsize block, cycle.
+              ! todo: check draw_type.
+              if (generator_message%current%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
+                cycle
+              end if
             end if
+
+
 
 
             p_index = (current_offset * 12) + 1
