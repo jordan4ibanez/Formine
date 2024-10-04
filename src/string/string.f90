@@ -76,6 +76,8 @@ contains
 
 
   !* Use this to convert C strings stored in a (character, pointer) into Fortran strings.
+  !* Use this to convert C str ptr into Fortran strings.
+  !! DO NOT USE THIS
   !! This is a major hackjob.
   function string_from_c_with_length_goal(c_string_pointer, string_length) result(fortran_string)
     use, intrinsic :: iso_c_binding
