@@ -923,33 +923,6 @@ contains
   end function luajit_loadfile
 
 
-  !! BEGIN DEBUGGING LUAJIT CLOSURE !!
-  ! typedef int (*lua_CFunction) (lua_State *L);
-  subroutine test_luajit_closure(state)
-    implicit none
-
-    type(c_ptr), intent(in), value :: state
-    character(len = :, kind = c_char), allocatable :: testing
-
-    !! NOTE: IF THE FUNCTION DOESN'T DO ANYTHING, IT IS OPTIMIZED OUT !!
-    !! IT WILL SEGFAULT IF IT DOES NOT DO ANYTHING !!
-    print*,"hello from fortran, passed into lua, called from lua, back into fortran"
-
-
-    testing = lua_typename(state, 1)
-
-    print*,testing
-    print*,lua_isnumber(state, 1)
-
-    testing = lua_typename(state, 2)
-
-    print*,testing
-
-
-  end subroutine test_luajit_closure
-  !! END DEBUGGING LUAJIT CLOSURE !!
-
-
   function lual_error(state, error_string) result(status)
     use :: string, only: into_c_string
     implicit none
