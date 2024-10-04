@@ -318,8 +318,15 @@ contains
 
             ! If we go out of bounds, check the neighbor chunk, if it exists.
             if (trajectory%x < 1 .or. trajectory%x > CHUNK_WIDTH .or. trajectory%z < 1 .or. trajectory%z > CHUNK_WIDTH) then
+              if (trajectory%x < 1) then
 
+              else if (trajectory%x > CHUNK_WIDTH) then
 
+              else if (trajectory%z < 1) then
+
+              else if (trajectory%z > CHUNK_WIDTH) then
+
+              end if
             else
               ! We're still inside this chunk. Check the block we're looking at.
 
