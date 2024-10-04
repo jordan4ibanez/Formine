@@ -20,12 +20,12 @@ module raw_c
     end subroutine c_free
 
 
-    !! NOTE: This will corrupt the string, COPY FIRST !!
-    integer(c_int) function c_strlen(ptr) result(length) bind(c, name = "strlen")
+    function c_strlen(c_str_ptr) result(length) bind(c, name = "strlen")
       use, intrinsic :: iso_c_binding
       implicit none
 
-      type(c_ptr), intent(in), value :: ptr
+      type(c_ptr), intent(in), value :: c_str_ptr
+      integer(c_size_t) :: length
     end function c_strlen
 
 
