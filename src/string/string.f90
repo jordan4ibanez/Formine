@@ -76,6 +76,23 @@ contains
 
 
   !* Use this to convert C strings stored in a (character, pointer) into Fortran strings.
+  !? This is using Fortran intrinsics to force a cast from C str to Fortran string.
+  !! This should NEVER be exposed outside of this module.
+  subroutine raw_c_str_to_fortran_string_cast(c_str_ptr, fortran_string_pointer, str_length)
+    implicit none
+
+    type(c_ptr), intent(in), value :: c_str_ptr
+    integer(c_size_t), intent(in), value :: str_length
+    character(len = :, kind = c_char), intent(inout), pointer :: fortran_string_pointer
+    character(len = str_length, kind = c_char), pointer :: black_magic
+
+    call c_f_pointer(c_str_ptr, black_magic)
+
+    fortran_string_pointer => black_magic
+  end subroutine raw_c_str_to_fortran_string_cast
+
+
+
   !* Use this to convert C str ptr into Fortran strings.
   !! DO NOT USE THIS
   !! This is a major hackjob.
