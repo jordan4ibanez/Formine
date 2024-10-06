@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <string.h>
 
 #ifdef __APPLE__
 #include <string.h>
@@ -116,7 +117,7 @@ for_dir *parse_directory_folders(const char *input_path)
       char *allocated_string = malloc(sizeof(char[string_length]));
 
       // Use the safe version of strcpy.
-      strncpy(allocated_string, &dir->d_name, string_length);
+      strncpy(allocated_string, dir->d_name, string_length);
 
       //* Manually put the null terminator at the end of the string.
       allocated_string[string_length - 1] = '\0';
