@@ -21,7 +21,7 @@ module-naming = false
 # link = ["glfw", "luajit-5.1"]
 
 # Everything else (for now)
-link = ["glfw", "stb", "luajit-5.1"]
+link = ["glfw", "luajit-5.1"]
 
 [dependencies]
 forthread = { git = "https://github.com/jordan4ibanez/forthread" }
