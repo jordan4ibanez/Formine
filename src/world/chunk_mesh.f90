@@ -317,31 +317,32 @@ contains
             !? Implementation note: Trajectory cannot go diagonal.
 
             ! If we go out of bounds, check the neighbor chunk, if it exists.
-            if (trajectory%x < 1 .or. trajectory%x > CHUNK_WIDTH .or. trajectory%z < 1 .or. trajectory%z > CHUNK_WIDTH) then
-              if (trajectory%x < 1) then
+            if (trajectory%x < 1) then
 
-              else if (trajectory%x > CHUNK_WIDTH) then
+            else if (trajectory%x > CHUNK_WIDTH) then
 
-              else if (trajectory%z < 1) then
+            else if (trajectory%z < 1) then
 
-              else if (trajectory%z > CHUNK_WIDTH) then
+            else if (trajectory%z > CHUNK_WIDTH) then
 
-              end if
-            else
+
+
               ! We're still inside this chunk. Check the block we're looking at.
+            else if (trajectory%y >= 1 .and. trajectory%y <= CHUNK_HEIGHT) then
+
+
+              ! If it's another fullsize block, cycle.
+              ! todo: check draw_type.
+              if (generator_message%current%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
+                cycle
+              end if
 
               ! If we're looking out of bounds at the sky, or below the world, draw it.
               ! We are at the top or bottom of the chunk
-              if (trajectory%y >= 1 .and. trajectory%y <= CHUNK_HEIGHT) then
-                ! Otherwise, we're inside the chunk.
+            else
 
-                ! If it's another fullsize block, cycle.
-                ! todo: check draw_type.
-                if (generator_message%current%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
-                  cycle
-                end if
-              end if
             end if
+
 
 
 
