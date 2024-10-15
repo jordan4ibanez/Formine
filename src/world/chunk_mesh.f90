@@ -220,6 +220,7 @@ contains
     integer(c_int), dimension(6), allocatable :: indices(:)
     integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y, current_rect_index
     logical(c_bool) :: left_exists, right_exists, back_exists, front_exists
+    type(memory_chunk), pointer :: left, right, front, back
     type(vec3i) :: direction, pos, trajectory, offset
     type(message_from_thread) :: output_message
 
@@ -285,6 +286,11 @@ contains
     right_exists = associated(generator_message%right)
     back_exists = associated(generator_message%back)
     front_exists = associated(generator_message%front)
+
+    left => generator_message%left
+    right => generator_message%right
+    back => generator_message%back
+    front => generator_message%front
 
     base_y = (MESH_STACK_HEIGHT * (generator_message%mesh_stack - 1)) + 1
     max_y = MESH_STACK_HEIGHT * (generator_message%mesh_stack)
