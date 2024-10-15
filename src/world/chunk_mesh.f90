@@ -324,16 +324,29 @@ contains
 
             ! If we go out of bounds, check the neighbor chunk, if it exists.
             if (trajectory%x < 1) then
-              
+
+              if (left_exists) then
+                ! 64 x
+
+              end if
 
             else if (trajectory%x > CHUNK_WIDTH) then
-              ! print*,"right"
+
+              if (right_exists) then
+                ! 1 x
+              end if
 
             else if (trajectory%z < 1) then
 
+              if (back_exists) then
+                ! 64 z
+              end if
+
             else if (trajectory%z > CHUNK_WIDTH) then
 
-
+              if (front_exists) then
+                ! 1 z
+              end if
 
               ! We're still inside this chunk. Check the block we're looking at.
             else if (trajectory%y >= 1 .and. trajectory%y <= CHUNK_HEIGHT) then
