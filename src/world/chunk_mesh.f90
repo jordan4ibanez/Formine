@@ -333,6 +333,7 @@ contains
 
               if (left_exists) then
                 ! 64 x
+                print*,left%data(1,2,3)%id
 
               end if
 
