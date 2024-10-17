@@ -115,7 +115,7 @@ program main
   call gl_depth_func(GL_LESS)
 
   !! This enables backface culling.
-  call gl_enable(GL_CULL_FACE)
+  ! call gl_enable(GL_CULL_FACE)
 
   !! This enables alpha blending.
   call gl_enable(GL_BLEND)
@@ -137,7 +137,58 @@ program main
 
   call font_create("./fonts/font_forgotten.png")
 
-  ! call texture_create("./textures/fortran_logo_512x512.png")
+  !! Draw the loading screen.
+
+  call shader_start("main")
+
+  call texture_create("./textures/fortran_logo_512x512.png")
+
+
+  call gl_clear_color_scalar(0.5)
+
+  call gl_clear_color_buffer()
+
+  call mesh_create_3d_named( &
+    "loading_mesh", &
+    [ &
+    -0.5,  0.5, 0.0, &
+    -0.5, -0.5, 0.0, &
+    0.5,  -0.5, 0.0, &
+    0.5,   0.5, 0.0 &
+    ], &
+    [ &
+    0.0, 0.0, &
+    0.0, 1.0, &
+    1.0, 1.0, &
+    1.0, 0.0 &
+    ], &
+    [ &
+    1.0, 1.0, 1.0, &
+    1.0, 1.0, 1.0, &
+    1.0, 1.0, 1.0, &
+    1.0, 1.0, 1.0 &
+    ], &
+    [0,1,2, 2,3,0] &
+    )
+
+  call glfw_poll_events()
+
+  call gl_clear_depth_buffer()
+
+  call texture_use("fortran_logo_512x512.png")
+
+  call camera_update_3d()
+
+  call camera_set_object_matrix_f32(0.0, 0.0, 8.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
+
+  call mesh_draw_by_name("loading_mesh")
+
+  call glfw_swap_buffers()
+
+  !! END LOADING SCREEN.
+
+  ! call mesh_delete("debug")
+
 
   !* If we cannot initalize the API properly, we give up.
   call api_initialize()
