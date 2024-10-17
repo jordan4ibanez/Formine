@@ -196,7 +196,7 @@ program main
   do x = 0,1
     do y = 0,1
       ! This launches 8 threads.
-      call chunk_update_controller_new_chunk(x,y)
+      call chunk_generator_new_chunk(x,y)
     end do
   end do
   print*,"END"
