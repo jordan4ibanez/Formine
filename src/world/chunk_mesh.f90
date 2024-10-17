@@ -333,27 +333,39 @@ contains
 
               !? If the chunk does not exist, we will render (for now) to provide visual debug feedback.
               if (left_exists) then
-                ! 16 x
+                ! 16 x.
                 if (left%data(y, z, CHUNK_WIDTH)%id /= 0) then
                   cycle
                 end if
               end if
             else if (trajectory%x > CHUNK_WIDTH) then
 
+              !? If the chunk does not exist, we will render (for now) to provide visual debug feedback.
               if (right_exists) then
-                ! 1 x
+                ! 1 x.
+                if (right%data(y, z, 1)%id /= 0) then
+                  cycle
+                end if
               end if
 
             else if (trajectory%z < 1) then
 
+              !? If the chunk does not exist, we will render (for now) to provide visual debug feedback.
               if (back_exists) then
-                ! 16 z
+                ! 16 z.
+                if (back%data(y, CHUNK_WIDTH, x)%id /= 0) then
+                  cycle
+                end if
               end if
 
             else if (trajectory%z > CHUNK_WIDTH) then
 
+              !? If the chunk does not exist, we will render (for now) to provide visual debug feedback.
               if (front_exists) then
-                ! 1 z
+                ! 1 z.
+                if (front%data(y, 1, x)%id /= 0) then
+                  cycle
+                end if
               end if
 
               ! We're still inside this chunk. Check the block we're looking at.
