@@ -331,12 +331,15 @@ contains
             ! If we go out of bounds, check the neighbor chunk, if it exists.
             if (trajectory%x < 1) then
 
+              !? If the chunk does not exist, we will render (for now) to provide visual debug feedback.
               if (left_exists) then
-                ! 64 x
+                ! 16 x
                 print*,left%data(1,2,3)%id
 
+                if (left%data(CHUNK_WIDTH, y, z)%id /= 0) then
+                  cycle
+                end if
               end if
-
             else if (trajectory%x > CHUNK_WIDTH) then
 
               if (right_exists) then
@@ -346,7 +349,7 @@ contains
             else if (trajectory%z < 1) then
 
               if (back_exists) then
-                ! 64 z
+                ! 16 z
               end if
 
             else if (trajectory%z > CHUNK_WIDTH) then
