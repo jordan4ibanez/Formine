@@ -71,7 +71,7 @@ program main
 
 
   ! Try to initialize the Window.
-  if (.not. glfw_create_window(640,480, "Formine - "//FORMINE_VERSION_STRING)) then
+  if (.not. glfw_create_window(1920, 1080, "Formine - "//FORMINE_VERSION_STRING)) then
     return
   end if
 
@@ -193,8 +193,8 @@ program main
 
 
   print*,"START"
-  do x = 0,3
-    do y = 0,3
+  do x = 0,2
+    do y = 0,2
       ! This launches 8 threads.
       call chunk_generator_new_chunk(x,y)
     end do
@@ -206,6 +206,8 @@ program main
   call mesh_delete_by_name("loading_mesh")
 
   call texture_delete("formine_loading_icon.png")
+
+  !! END DELETE LOADING SCREEN
 
   rotation = 0.0
 
