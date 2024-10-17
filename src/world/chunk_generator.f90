@@ -81,6 +81,8 @@ contains
             cycle check
           end if
 
+          ! print*,x,z
+
           if (chunk_handler_chunk_exists(chunk_x + x, chunk_z + z)) then
             do w = 1,MESH_STACK_ARRAY_SIZE
               call chunk_mesh_generate(chunk_x + x, chunk_z + z, w)
@@ -107,6 +109,7 @@ contains
     type(memory_chunk), pointer :: chunk_pointer
     type(block_data) :: current_block
     type(message_from_thread) :: output_message
+    real(c_float) :: randy
 
     !? Transfer main argument pointer to Fortran.
 
@@ -149,7 +152,8 @@ contains
 
           if (y <= current_height) then
             current_block = block_data()
-            current_block%id = 1
+            call random_number(randy)
+            current_block%id = floor((randy * 5) + 1)
             chunk_pointer%data(y, z, x) = current_block
           end if
         end do
