@@ -338,6 +338,7 @@ contains
                   cycle
                 end if
               end if
+
             else if (trajectory%x > CHUNK_WIDTH) then
 
               !? If the chunk does not exist, we will render (for now) to provide visual debug feedback.
