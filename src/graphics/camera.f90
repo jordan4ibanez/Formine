@@ -330,7 +330,7 @@ contains
 
     mouse_delta = mouse_get_delta()
 
-    movement_speed = 140.0d0 * delta
+    movement_speed = 30.0d0 * delta
 
     call camera_rotate(mouse_delta%y, mouse_delta%x, 0.0d0)
 
