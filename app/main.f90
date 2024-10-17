@@ -115,7 +115,7 @@ program main
   call gl_depth_func(GL_LESS)
 
   !! This enables backface culling.
-  ! call gl_enable(GL_CULL_FACE)
+  call gl_enable(GL_CULL_FACE)
 
   !! This enables alpha blending.
   call gl_enable(GL_BLEND)
@@ -187,10 +187,6 @@ program main
 
   !! END LOADING SCREEN.
 
-  call mesh_delete_by_name("loading_mesh")
-
-  call texture_delete("formine_logo_512.png")
-
 
   !* If we cannot initalize the API properly, we give up.
   call api_initialize()
@@ -204,6 +200,12 @@ program main
     end do
   end do
   print*,"END"
+
+  !! DELETE LOADING SCREEN
+
+  call mesh_delete_by_name("loading_mesh")
+
+  call texture_delete("formine_logo_512.png")
 
   rotation = 0.0
 
