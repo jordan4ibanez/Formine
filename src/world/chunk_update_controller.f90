@@ -1,9 +1,13 @@
 module chunk_update_controller
   use, intrinsic :: iso_c_binding
+  use :: chunk_generator
   implicit none
 
 
   private
+
+
+  public :: chunk_update_controller_new_chunk
 
 
 contains
@@ -14,7 +18,7 @@ contains
 
     integer(c_int), intent(in), value :: x,z
 
-    ! todo: talk to the chunk generator.
+    call chunk_generator_new_chunk(x,z)
 
   end subroutine chunk_update_controller_new_chunk
 

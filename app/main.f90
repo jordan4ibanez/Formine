@@ -17,6 +17,7 @@ program main
   use :: fast_noise_lite
   use :: chunk_generator
   use :: chunk_handler
+  use :: chunk_update_controller
   use :: mouse
   use :: keyboard
   use :: camera
@@ -146,7 +147,7 @@ program main
   do x = 0,1
     do y = 0,1
       ! This launches 8 threads.
-      call chunk_generator_new_chunk(x,y)
+      call chunk_update_controller_new_chunk(x,y)
     end do
   end do
   print*,"END"
