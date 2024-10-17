@@ -334,9 +334,7 @@ contains
               !? If the chunk does not exist, we will render (for now) to provide visual debug feedback.
               if (left_exists) then
                 ! 16 x
-                print*,left%data(1,2,3)%id
-
-                if (left%data(CHUNK_WIDTH, y, z)%id /= 0) then
+                if (left%data(y, z, CHUNK_WIDTH)%id /= 0) then
                   cycle
                 end if
               end if
