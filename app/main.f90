@@ -141,7 +141,7 @@ program main
 
   call shader_start("main")
 
-  call texture_create("./textures/formine_logo_512.png")
+  call texture_create("./textures/formine_loading_icon.png")
 
 
   call gl_clear_color_scalar(0.5)
@@ -175,11 +175,11 @@ program main
 
   call gl_clear_depth_buffer()
 
-  call texture_use("formine_logo_512.png")
+  call texture_use("formine_loading_icon.png")
 
   call camera_update_3d()
 
-  call camera_set_object_matrix_f32(0.0, 0.0, 8.0, 0.0, 0.0, 0.0, 7.0, 7.0, 7.0)
+  call camera_set_object_matrix_f32(0.0, 0.0, 8.0, 0.0, 0.0, 0.0, 7.0, 9.0, 7.0)
 
   call mesh_draw_by_name("loading_mesh")
 
@@ -205,7 +205,7 @@ program main
 
   call mesh_delete_by_name("loading_mesh")
 
-  call texture_delete("formine_logo_512.png")
+  call texture_delete("formine_loading_icon.png")
 
   rotation = 0.0
 
