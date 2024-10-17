@@ -47,7 +47,7 @@ contains
   subroutine chunk_generator_process_output_queue()
     implicit none
 
-    integer(c_int) :: i, chunk_x, chunk_z, w
+    integer(c_int) :: i, chunk_x, chunk_z, w, x, z
     type(c_ptr) :: raw_c_ptr
     type(message_from_thread), pointer :: message_pointer
     type(memory_chunk), pointer :: chunk_pointer
@@ -74,6 +74,20 @@ contains
         call chunk_mesh_generate(chunk_x, chunk_z, w)
       end do
 
+      ! Update any neighbors. (only adjacent not diagonal)
+      do x = -1,1
+        check: do z = -1,1
+          if (abs(x) + abs(z) /= 1) then
+            cycle check
+          end if
+
+          if (chunk_handler_chunk_exists(chunk_x + x, chunk_z + z)) then
+            do w = 1,MESH_STACK_ARRAY_SIZE
+              call chunk_mesh_generate(chunk_x + x, chunk_z + z, w)
+            end do
+          end if
+        end do check
+      end do
     end do
 
   end subroutine chunk_generator_process_output_queue
