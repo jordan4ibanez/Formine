@@ -81,8 +81,6 @@ contains
             cycle check
           end if
 
-          ! print*,x,z
-
           if (chunk_handler_chunk_exists(chunk_x + x, chunk_z + z)) then
             do w = 1,MESH_STACK_ARRAY_SIZE
               call chunk_mesh_generate(chunk_x + x, chunk_z + z, w)
