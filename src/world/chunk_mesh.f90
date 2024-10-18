@@ -272,6 +272,8 @@ contains
     ! end do
 
     ! Gets 50 tries in 100 cycle intervals to find the chunk.
+    !? medium case scenario: 5000 cycles .
+    !? Worst case: crash, (needs to be fixed).
     do i = 1,50
       current => chunk_handler_get_clone_chunk_pointer(x, z)
       if (.not. associated(current)) then
@@ -326,15 +328,47 @@ contains
     c_index = -1
     i_index = -1
 
-    left => chunk_handler_get_clone_chunk_pointer(x - 1, z)
-    right => chunk_handler_get_clone_chunk_pointer(x + 1, z)
-    back => chunk_handler_get_clone_chunk_pointer(x, z - 1)
-    front => chunk_handler_get_clone_chunk_pointer(x, z + 1)
+    !? Try to get the neighbors.
+    !? These flags will work as a one way lock in the cycle check.
+    left_exists = .false.
+    right_exists = .false.
+    back_exists = .false.
+    front_exists = .false.
 
-    left_exists = associated(left)
-    right_exists = associated(right)
-    back_exists = associated(back)
-    front_exists = associated(front)
+    ! Gets 50 tries in 100 cycle intervals to find the neighbor chunk.
+    !? Worst case scenario: 5000 cycle latency if on edge of world.
+    do i = 1,50
+
+      if (.not. left_exists) then
+        left => chunk_handler_get_clone_chunk_pointer(x - 1, z)
+        left_exists = associated(left)
+      end if
+
+      if (.not. right_exists) then
+        right => chunk_handler_get_clone_chunk_pointer(x + 1, z)
+        right_exists = associated(right)
+      end if
+
+      if (.not. back_exists) then
+        back => chunk_handler_get_clone_chunk_pointer(x, z - 1)
+        back_exists = associated(back)
+      end if
+
+      if (.not. front_exists) then
+        front => chunk_handler_get_clone_chunk_pointer(x, z + 1)
+        front_exists = associated(front)
+      end if
+
+      ! If we found everything, keep moving.
+      ! Else: pause.
+      if (left_exists .and. right_exists .and. back_exists .and. front_exists) then
+        exit
+      else
+        do j = 1,100
+          call sleep(0)
+        end do
+      end if
+    end do
 
     base_y = (MESH_STACK_HEIGHT * (generator_message%mesh_stack - 1)) + 1
     max_y = MESH_STACK_HEIGHT * (generator_message%mesh_stack)
