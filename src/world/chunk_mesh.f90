@@ -266,6 +266,7 @@ contains
     !? An note on this:
     !? I just kept testing it until it no longer yielded chunk errors.
     !? This is a completely arbitrary value.
+    !* CPU tested on: Ryzen 9700x.
     do i = 1,5000
       call sleep(0)
     end do
