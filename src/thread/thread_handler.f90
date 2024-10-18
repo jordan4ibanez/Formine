@@ -13,7 +13,8 @@ contains
   subroutine thread_handler_intialization()
     implicit none
 
-    call thread_initialize(.true.)
+    !? 8 additional threads.
+    call thread_initialize(8)
 
     call chunk_generator_initialize()
 
