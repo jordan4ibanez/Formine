@@ -260,9 +260,11 @@ contains
 
     !? Ensure required components are present.
 
-    
 
-    if (.not. associated(generator_message%current)) then
+    current => chunk_handler_get_clone_chunk_pointer(generator_message%world_position%x, generator_message%world_position%y)
+
+    if (.not. associated(current)) then
+      !! THIS NEEDS SOME MORE RESILIANCY !!
       error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
     end if
 
