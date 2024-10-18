@@ -284,6 +284,8 @@ contains
         if (i == 50) then
           print"(A)", "[Chunk Mesh] {thread} error: Current chunk is a null pointer. This is a chunk error."
 
+          !! TODO: SEND BACK A MESSAGE TO TRY AGAIN! can use a count maybe 3 for retries.
+
           deallocate(generator_message%texture_indices)
           deallocate(generator_message%texture_positions_array)
 
