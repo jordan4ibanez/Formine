@@ -260,8 +260,10 @@ contains
 
     !? Ensure required components are present.
 
+    x = generator_message%world_position%x
+    z = generator_message%world_position%y
 
-    current => chunk_handler_get_clone_chunk_pointer(generator_message%world_position%x, generator_message%world_position%y)
+    current => chunk_handler_get_clone_chunk_pointer(x, z)
 
     if (.not. associated(current)) then
       !! THIS NEEDS SOME MORE RESILIANCY !!
@@ -304,19 +306,19 @@ contains
     c_index = -1
     i_index = -1
 
-    left_exists = associated(generator_message%left)
-    right_exists = associated(generator_message%right)
-    back_exists = associated(generator_message%back)
-    front_exists = associated(generator_message%front)
+    left => chunk_handler_get_clone_chunk_pointer(x - 1, z)
+    right => chunk_handler_get_clone_chunk_pointer(x + 1, z)
+    back => chunk_handler_get_clone_chunk_pointer(x, z - 1)
+    front => chunk_handler_get_clone_chunk_pointer(x, z + 1)
+
+    left_exists = associated(left)
+    right_exists = associated(right)
+    back_exists = associated(back)
+    front_exists = associated(front)
 
     if (generator_message%world_position%x == 1 .and. generator_message%world_position%y == 1) then
       print*,left_exists, right_exists, back_exists, front_exists
     end if
-
-    left => generator_message%left
-    right => generator_message%right
-    back => generator_message%back
-    front => generator_message%front
 
     base_y = (MESH_STACK_HEIGHT * (generator_message%mesh_stack - 1)) + 1
     max_y = MESH_STACK_HEIGHT * (generator_message%mesh_stack)
@@ -325,7 +327,7 @@ contains
       do z = 1,CHUNK_WIDTH
         do y = base_y,max_y
 
-          current_id = generator_message%current%data(y, z, x)%id
+          current_id = current%data(y, z, x)%id
 
           ! Cycle on air.
           if (current_id == 0) then
@@ -401,7 +403,7 @@ contains
 
               ! If it's another fullsize block, cycle.
               ! todo: check draw_type.
-              if (generator_message%current%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
+              if (current%data(trajectory%y, trajectory%z, trajectory%x)%id /= 0) then
                 cycle
               end if
 
@@ -489,20 +491,20 @@ contains
 
     !? Deallocate all the memory regions in the message.
 
-    deallocate(generator_message%current)
+    deallocate(current)
 
-    if (associated(generator_message%left)) then
-      deallocate(generator_message%left)
+    if (associated(left)) then
+      deallocate(left)
     end if
-    if (associated(generator_message%right)) then
-      deallocate(generator_message%right)
+    if (associated(right)) then
+      deallocate(right)
     end if
 
-    if (associated(generator_message%back)) then
-      deallocate(generator_message%back)
+    if (associated(back)) then
+      deallocate(back)
     end if
-    if (associated(generator_message%front)) then
-      deallocate(generator_message%front)
+    if (associated(front)) then
+      deallocate(front)
     end if
 
     deallocate(generator_message%texture_indices)
@@ -547,11 +549,6 @@ contains
     allocate(message_to_generator)
 
     message_to_generator%world_position = [x, z]
-    message_to_generator%current => chunk_handler_get_clone_chunk_pointer(x,z)
-    message_to_generator%left => chunk_handler_get_clone_chunk_pointer(x - 1,z)
-    message_to_generator%right => chunk_handler_get_clone_chunk_pointer(x + 1,z)
-    message_to_generator%back => chunk_handler_get_clone_chunk_pointer(x,z - 1)
-    message_to_generator%front => chunk_handler_get_clone_chunk_pointer(x,z + 1)
     message_to_generator%texture_indices => texture_atlas_get_texture_indices_clone_pointer()
     message_to_generator%texture_positions_array => texture_atlas_get_texture_positions_array_clone_pointer()
     message_to_generator%texture_count = texture_atlas_get_texture_count()
