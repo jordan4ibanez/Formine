@@ -263,9 +263,9 @@ contains
     x = generator_message%world_position%x
     z = generator_message%world_position%y
 
-    ! do i = 1,1000
-    !   call sleep(0)
-    ! end do
+    do i = 1,5000
+      call sleep(0)
+    end do
 
     ! Gets 3 tries to find the chunk.
     do i = 1,3
@@ -274,7 +274,7 @@ contains
       if (.not. associated(current)) then
         !! THIS NEEDS SOME MORE RESILIANCY !!
         !! todo: this should simply exit and warn about failure.
-        
+
         if (i == 3) then
           error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
         end if
