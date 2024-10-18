@@ -46,15 +46,14 @@ contains
     integer(c_int), intent(in), value :: x, z, stack
     integer(c_int), intent(in), value :: vao_id
     type(memory_chunk), pointer :: current_chunk
-    integer(c_int) :: status
 
-    status = thread_lock_mutex(mutex)
+
 
     if (.not. chunk_handler_get_chunk_pointer(x,z, current_chunk)) then
       ! print"(A)", "[Chunk Handler] Warning: Cannot set mesh for null chunk. Abort."
       !? Auto GC the VAO.
       call mesh_delete(vao_id)
-      status = thread_unlock_mutex(mutex)
+
       return
     end if
 
@@ -67,7 +66,7 @@ contains
 
     current_chunk%mesh(stack) = vao_id
 
-    status = thread_unlock_mutex(mutex)
+
   end subroutine chunk_handler_set_chunk_mesh
 
 
@@ -77,13 +76,10 @@ contains
 
     integer(c_int), intent(in), value :: x, z
     logical(c_bool) :: exist
-    integer(c_int) :: status
-
-    status = thread_lock_mutex(mutex)
 
     exist = chunk_database%has_key(grab_chunk_key(x,z))
 
-    status = thread_unlock_mutex(mutex)
+
   end function chunk_handler_chunk_exists
 
 
@@ -94,9 +90,8 @@ contains
 
     type(memory_chunk), intent(inout), pointer :: chunk_pointer
     character(len = :, kind = c_char), allocatable :: chunk_key
-    integer(c_int) :: status
 
-    status = thread_lock_mutex(mutex)
+
 
     chunk_key = grab_chunk_key(chunk_pointer%world_position%x, chunk_pointer%world_position%y)
 
@@ -104,7 +99,7 @@ contains
       print"(A)", "[Chunk Handler] Warning: Attempted to overwrite a memory chunk pointer."
 
       deallocate(chunk_pointer)
-      status = thread_unlock_mutex(mutex)
+
       return
     end if
 
@@ -116,7 +111,7 @@ contains
     ! Free the memory.
     deallocate(chunk_pointer)
 
-    status = thread_unlock_mutex(mutex)
+
   end subroutine chunk_handler_store_chunk_pointer
 
 
@@ -125,13 +120,12 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: x, y
-    integer(c_int) :: status
 
-    status = thread_lock_mutex(mutex)
+
 
     call chunk_database%remove(grab_chunk_key(x, y))
 
-    status = thread_unlock_mutex(mutex)
+
   end subroutine chunk_handler_delete_chunk
 
 
@@ -143,15 +137,11 @@ contains
     type(memory_chunk), intent(inout), pointer :: chunk_pointer
     logical(c_bool) :: exists
     type(c_ptr) :: raw_c_ptr
-    integer(c_int) :: status
-
-    status = thread_lock_mutex(mutex)
 
     exists = .false.
 
     if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
       ! print"(A)","[Chunk Handler] Warning: Attempted to retrieve null chunk."
-      status = thread_unlock_mutex(mutex)
       return
     end if
 
@@ -159,7 +149,7 @@ contains
 
     exists = .true.
 
-    status = thread_unlock_mutex(mutex)
+
   end function chunk_handler_get_chunk_pointer
 
 
@@ -171,15 +161,14 @@ contains
     type(memory_chunk), pointer :: clone_chunk_pointer
     type(memory_chunk), pointer :: original_chunk_pointer
     type(c_ptr) :: raw_c_ptr
-    integer(c_int) :: status
 
-    status = thread_lock_mutex(mutex)
+
 
     clone_chunk_pointer => null()
 
     ! If not existent, return a null pointer.
     if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
-      status = thread_unlock_mutex(mutex)
+
       return
     end if
 
@@ -191,7 +180,7 @@ contains
     clone_chunk_pointer%data = original_chunk_pointer%data
     clone_chunk_pointer%world_position = original_chunk_pointer%world_position
 
-    status = thread_unlock_mutex(mutex)
+
   end function chunk_handler_get_clone_chunk_pointer
 
 
@@ -206,13 +195,13 @@ contains
     character(len = :, kind = c_char), pointer :: string_key
     type(c_ptr) :: raw_c_ptr
     type(memory_chunk), pointer :: chunk_pointer
-    integer(c_int) :: i, current_mesh_id, status
+    integer(c_int) :: i, current_mesh_id
 
-    status = thread_lock_mutex(mutex)
+
 
     ! If there's nothing to do, don't do anything.
     if (chunk_database%is_empty()) then
-      status = thread_unlock_mutex(mutex)
+
       return
     end if
 
@@ -241,7 +230,7 @@ contains
       end do
     end do
 
-    status = thread_unlock_mutex(mutex)
+
   end subroutine chunk_handler_draw_chunks
 
 
