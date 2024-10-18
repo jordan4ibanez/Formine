@@ -2,6 +2,7 @@ module chunk_handler
   use :: chunk_data
   use :: mesh
   use :: hashmap_str
+  use :: thread
   implicit none
 
 
@@ -20,6 +21,7 @@ module chunk_handler
 
   !* Type: memory_chunk
   type(hashmap_string_key) :: chunk_database
+  type(c_ptr) :: mutex
 
 
 contains
@@ -32,6 +34,8 @@ contains
     type(memory_chunk), allocatable :: blank
 
     chunk_database = new_hashmap_string_key(sizeof(blank), gc_chunk_database)
+
+    mutex = thread_create_mutex()
   end subroutine chunk_handler_module_initalize
 
 
@@ -42,6 +46,8 @@ contains
     integer(c_int), intent(in), value :: x, z, stack
     integer(c_int), intent(in), value :: vao_id
     type(memory_chunk), pointer :: current_chunk
+
+    call thread_mutex_lock(mutex)
 
     if (.not. chunk_handler_get_chunk_pointer(x,z, current_chunk)) then
       ! print"(A)", "[Chunk Handler] Warning: Cannot set mesh for null chunk. Abort."
@@ -58,16 +64,23 @@ contains
     ! print"(A)", "[Chunk Handler] Debug: Set mesh ["//int_to_string(current_chunk%world_position%x)//","//int_to_string(current_chunk%world_position%y)//"] stack: ["//int_to_string(stack)//"]"
 
     current_chunk%mesh(stack) = vao_id
+
+    call thread_mutex_unlock(mutex)
   end subroutine chunk_handler_set_chunk_mesh
 
 
+  !* Check if a chunk exists.
   function chunk_handler_chunk_exists(x,z) result(exist)
     implicit none
 
     integer(c_int), intent(in), value :: x, z
     logical(c_bool) :: exist
 
+    call thread_mutex_lock(mutex)
+
     exist = chunk_database%has_key(grab_chunk_key(x,z))
+
+    call thread_mutex_unlock(mutex)
   end function chunk_handler_chunk_exists
 
 
@@ -78,6 +91,8 @@ contains
 
     type(memory_chunk), intent(inout), pointer :: chunk_pointer
     character(len = :, kind = c_char), allocatable :: chunk_key
+
+    call thread_mutex_lock(mutex)
 
     chunk_key = grab_chunk_key(chunk_pointer%world_position%x, chunk_pointer%world_position%y)
 
@@ -95,6 +110,8 @@ contains
     ! This is memcpy'd into the hashmap.
     ! Free the memory.
     deallocate(chunk_pointer)
+
+    call thread_mutex_unlock(mutex)
   end subroutine chunk_handler_store_chunk_pointer
 
 
@@ -104,7 +121,11 @@ contains
 
     integer(c_int), intent(in), value :: x, y
 
+    call thread_mutex_lock(mutex)
+
     call chunk_database%remove(grab_chunk_key(x, y))
+
+    call thread_mutex_unlock(mutex)
   end subroutine chunk_handler_delete_chunk
 
 
@@ -117,6 +138,8 @@ contains
     logical(c_bool) :: exists
     type(c_ptr) :: raw_c_ptr
 
+    call thread_mutex_lock(mutex)
+
     exists = .false.
 
     if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
@@ -127,6 +150,8 @@ contains
     call c_f_pointer(raw_c_ptr, chunk_pointer)
 
     exists = .true.
+
+    call thread_mutex_unlock(mutex)
   end function chunk_handler_get_chunk_pointer
 
 
@@ -138,6 +163,8 @@ contains
     type(memory_chunk), pointer :: clone_chunk_pointer
     type(memory_chunk), pointer :: original_chunk_pointer
     type(c_ptr) :: raw_c_ptr
+
+    call thread_mutex_lock(mutex)
 
     clone_chunk_pointer => null()
 
@@ -153,6 +180,8 @@ contains
 
     clone_chunk_pointer%data = original_chunk_pointer%data
     clone_chunk_pointer%world_position = original_chunk_pointer%world_position
+
+    call thread_mutex_unlock(mutex)
   end function chunk_handler_get_clone_chunk_pointer
 
 
@@ -168,6 +197,8 @@ contains
     type(c_ptr) :: raw_c_ptr
     type(memory_chunk), pointer :: chunk_pointer
     integer(c_int) :: i, current_mesh_id
+
+    call thread_mutex_lock(mutex)
 
     ! If there's nothing to do, don't do anything.
     if (chunk_database%is_empty()) then
@@ -198,6 +229,8 @@ contains
         call mesh_draw(current_mesh_id)
       end do
     end do
+
+    call thread_mutex_unlock(mutex)
   end subroutine chunk_handler_draw_chunks
 
 
