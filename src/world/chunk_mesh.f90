@@ -276,7 +276,9 @@ contains
     !? Worst case: crash, (needs to be fixed).
     do i = 1,50
       current => chunk_handler_get_clone_chunk_pointer(x, z)
-      if (.not. associated(current)) then
+      if (associated(current)) then
+        exit
+      else
         !! THIS NEEDS SOME MORE RESILIANCY !!
         !! todo: this should simply exit and warn about failure.
         if (i == 50) then
@@ -286,8 +288,6 @@ contains
         do j = 1,100
           call sleep(0)
         end do
-      else
-        exit
       end if
     end do
 
