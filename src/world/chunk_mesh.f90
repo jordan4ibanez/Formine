@@ -236,7 +236,7 @@ contains
     real(c_float), dimension(8), allocatable :: texture_coordinates(:)
     real(c_float), dimension(12), allocatable :: colors(:)
     integer(c_int), dimension(6), allocatable :: indices(:)
-    integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y, current_rect_index
+    integer(c_int) :: limit, i, j, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y, current_rect_index
     logical(c_bool) :: left_exists, right_exists, back_exists, front_exists
     type(memory_chunk), pointer :: current, left, right, front, back
     type(vec3i) :: direction, pos, trajectory, offset
@@ -267,23 +267,25 @@ contains
     !? I just kept testing it until it no longer yielded chunk errors.
     !? This is a completely arbitrary value.
     !* CPU tested on: Ryzen 9700x.
-    do i = 1,5000
-      call sleep(0)
-    end do
+    ! do i = 1,5000
+    !   call sleep(0)
+    ! end do
 
     ! Gets 3 tries to find the chunk.
-    do i = 1,3
+    do i = 1,50
       current => chunk_handler_get_clone_chunk_pointer(x, z)
 
       if (.not. associated(current)) then
         !! THIS NEEDS SOME MORE RESILIANCY !!
         !! todo: this should simply exit and warn about failure.
 
-        if (i == 3) then
+        if (i == 50) then
           error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
         end if
 
-        call sleep(1)
+        do j = 1,100
+          call sleep(0)
+        end do
       else
         exit
       end if
