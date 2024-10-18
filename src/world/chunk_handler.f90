@@ -54,6 +54,7 @@ contains
       ! print"(A)", "[Chunk Handler] Warning: Cannot set mesh for null chunk. Abort."
       !? Auto GC the VAO.
       call mesh_delete(vao_id)
+      status = thread_unlock_mutex(mutex)
       return
     end if
 
@@ -103,6 +104,7 @@ contains
       print"(A)", "[Chunk Handler] Warning: Attempted to overwrite a memory chunk pointer."
 
       deallocate(chunk_pointer)
+      status = thread_unlock_mutex(mutex)
       return
     end if
 
@@ -149,6 +151,7 @@ contains
 
     if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
       ! print"(A)","[Chunk Handler] Warning: Attempted to retrieve null chunk."
+      status = thread_unlock_mutex(mutex)
       return
     end if
 
@@ -176,6 +179,7 @@ contains
 
     ! If not existent, return a null pointer.
     if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
+      status = thread_unlock_mutex(mutex)
       return
     end if
 
@@ -208,6 +212,7 @@ contains
 
     ! If there's nothing to do, don't do anything.
     if (chunk_database%is_empty()) then
+      status = thread_unlock_mutex(mutex)
       return
     end if
 
