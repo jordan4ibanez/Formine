@@ -236,7 +236,7 @@ contains
     integer(c_int), dimension(6), allocatable :: indices(:)
     integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y, current_rect_index
     logical(c_bool) :: left_exists, right_exists, back_exists, front_exists
-    type(memory_chunk), pointer :: left, right, front, back
+    type(memory_chunk), pointer :: current, left, right, front, back
     type(vec3i) :: direction, pos, trajectory, offset
     type(message_from_thread) :: output_message
 
@@ -259,6 +259,8 @@ contains
     call c_f_pointer(arguments%data, generator_message)
 
     !? Ensure required components are present.
+
+    
 
     if (.not. associated(generator_message%current)) then
       error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
