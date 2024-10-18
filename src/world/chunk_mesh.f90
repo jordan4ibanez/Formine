@@ -118,14 +118,6 @@ module chunk_mesh
     type(vec2i) :: world_position
     !* Current chunk.
     type(memory_chunk), pointer :: current => null()
-    !* Neighbor: -X
-    type(memory_chunk), pointer :: left => null()
-    !* Neighbor: +X
-    type(memory_chunk), pointer :: right => null()
-    !* Neighbor: -Z
-    type(memory_chunk), pointer :: back => null()
-    !* Neighbor: +Z
-    type(memory_chunk), pointer :: front => null()
     !* Pointer of texture indices into the positions array.
     integer(c_int), dimension(6,0), pointer :: texture_indices(:, :)
     !* Texture positions array.
