@@ -518,7 +518,6 @@ contains
     type(message_to_thread), pointer :: message_to_generator
     logical, intent(in), value :: update_neighbors
 
-
     allocate(message_to_generator)
 
     message_to_generator%world_position = [x, z]
