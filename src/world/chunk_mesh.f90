@@ -244,8 +244,6 @@ contains
 
     !? Transfer main argument pointer to Fortran.
 
-    call sleep(1)
-
     if (.not. c_associated(c_arg_pointer)) then
       error stop "[Chunk Mesh] Fatal error: Was passed a null thread_argument pointer."
     end if
