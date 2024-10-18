@@ -70,9 +70,12 @@ contains
 
       deallocate(message_pointer)
 
-      do w = 1,MESH_STACK_ARRAY_SIZE
-        call chunk_mesh_generate(chunk_x, chunk_z, w, .true.)
-      end do
+      if (chunk_x == 1 .and. chunk_z == 1) then
+
+        do w = 1,MESH_STACK_ARRAY_SIZE
+          call chunk_mesh_generate(chunk_x, chunk_z, w, .true.)
+        end do
+      end if
 
       ! Update any neighbors. (only adjacent not diagonal)
       ! do x = -1,1
