@@ -272,9 +272,9 @@ contains
     ! end do
 
     ! Gets 50 tries in 100 cycle intervals to find the chunk.
-    !? medium case scenario: 5000 cycles .
+    !? medium case scenario: 50000 cycles .
     !? Worst case: crash, (needs to be fixed).
-    do i = 1,50
+    do i = 1,500
       current => chunk_handler_get_clone_chunk_pointer(x, z)
       if (associated(current)) then
         exit
