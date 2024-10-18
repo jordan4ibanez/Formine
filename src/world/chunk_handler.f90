@@ -1,7 +1,7 @@
 module chunk_handler
   use :: chunk_data
   use :: mesh
-  use :: hashmap_str
+  use :: concurrent_hashmap_str
   use :: thread
   implicit none
 
@@ -20,7 +20,7 @@ module chunk_handler
 
 
   !* Type: memory_chunk
-  type(hashmap_string_key) :: chunk_database
+  type(concurrent_hashmap_string_key) :: chunk_database
   type(c_ptr) :: mutex
 
 
@@ -48,7 +48,6 @@ contains
     type(memory_chunk), pointer :: current_chunk
 
 
-
     if (.not. chunk_handler_get_chunk_pointer(x,z, current_chunk)) then
       ! print"(A)", "[Chunk Handler] Warning: Cannot set mesh for null chunk. Abort."
       !? Auto GC the VAO.
@@ -65,8 +64,6 @@ contains
     ! print"(A)", "[Chunk Handler] Debug: Set mesh ["//int_to_string(current_chunk%world_position%x)//","//int_to_string(current_chunk%world_position%y)//"] stack: ["//int_to_string(stack)//"]"
 
     current_chunk%mesh(stack) = vao_id
-
-
   end subroutine chunk_handler_set_chunk_mesh
 
 
@@ -91,15 +88,15 @@ contains
     type(memory_chunk), intent(inout), pointer :: chunk_pointer
     character(len = :, kind = c_char), allocatable :: chunk_key
 
-
-
     chunk_key = grab_chunk_key(chunk_pointer%world_position%x, chunk_pointer%world_position%y)
+
+    call chunk_database%lock()
 
     if (chunk_database%has_key(chunk_key)) then
       print"(A)", "[Chunk Handler] Warning: Attempted to overwrite a memory chunk pointer."
 
       deallocate(chunk_pointer)
-
+      call chunk_database%unlock()
       return
     end if
 
@@ -111,7 +108,7 @@ contains
     ! Free the memory.
     deallocate(chunk_pointer)
 
-
+    call chunk_database%unlock()
   end subroutine chunk_handler_store_chunk_pointer
 
 
@@ -121,11 +118,11 @@ contains
 
     integer(c_int), intent(in), value :: x, y
 
-
+    call chunk_database%lock()
 
     call chunk_database%remove(grab_chunk_key(x, y))
 
-
+    call chunk_database%unlock()
   end subroutine chunk_handler_delete_chunk
 
 
@@ -140,16 +137,17 @@ contains
 
     exists = .false.
 
+    call chunk_database%lock()
     if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
       ! print"(A)","[Chunk Handler] Warning: Attempted to retrieve null chunk."
+      call chunk_database%unlock()
       return
     end if
 
     call c_f_pointer(raw_c_ptr, chunk_pointer)
 
     exists = .true.
-
-
+    call chunk_database%unlock()
   end function chunk_handler_get_chunk_pointer
 
 
@@ -162,13 +160,13 @@ contains
     type(memory_chunk), pointer :: original_chunk_pointer
     type(c_ptr) :: raw_c_ptr
 
-
+    call chunk_database%lock()
 
     clone_chunk_pointer => null()
 
     ! If not existent, return a null pointer.
     if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
-
+      call chunk_database%unlock()
       return
     end if
 
@@ -180,7 +178,7 @@ contains
     clone_chunk_pointer%data = original_chunk_pointer%data
     clone_chunk_pointer%world_position = original_chunk_pointer%world_position
 
-
+    call chunk_database%unlock()
   end function chunk_handler_get_clone_chunk_pointer
 
 
@@ -198,10 +196,11 @@ contains
     integer(c_int) :: i, current_mesh_id
 
 
+    call chunk_database%lock()
 
     ! If there's nothing to do, don't do anything.
     if (chunk_database%is_empty()) then
-
+      call chunk_database%unlock()
       return
     end if
 
@@ -230,7 +229,7 @@ contains
       end do
     end do
 
-
+    call chunk_database%unlock()
   end subroutine chunk_handler_draw_chunks
 
 
