@@ -476,8 +476,12 @@ contains
     else
       !? If it is blank, push that out into the queue.
       output_message%world_position = generator_message%world_position
+      output_message%mesh_stack = generator_message%mesh_stack
       output_message%update_neighbors = generator_message%update_neighbors
       output_message%blank = .true.
+
+      !? Push it into the queue.
+      call thread_output_queue%push(output_message)
     end if
 
     deallocate(positions)
