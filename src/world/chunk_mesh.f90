@@ -173,7 +173,7 @@ contains
   subroutine chunk_mesh_process_output_queue()
     implicit none
 
-    integer(c_int) :: i
+    integer(c_int) :: i, x, z, wx, wz
     type(c_ptr) :: raw_c_ptr
     type(message_from_thread), pointer :: new_message
     integer(c_int) :: mesh_id
@@ -192,8 +192,23 @@ contains
       call chunk_handler_set_chunk_mesh(new_message%world_position%x, new_message%world_position%y, new_message%mesh_stack, mesh_id)
 
       ! Now, we must update neighbors.
+      !? We're basically using a micro cellular automaton to make this thing work.
       if (new_message%update_neighbors) then
-        print*,"update neighbors plz"
+        do x = -1,1
+          check: do z = -1,1
+            if (abs(x) + abs(z) /= 1) then
+              cycle check
+            end if
+
+            wx = new_message%world_position%x + x
+            wz = new_message%world_position%y + z
+
+            if (chunk_handler_chunk_exists(wx, wz)) then
+              call chunk_mesh_generate(wx, wz, new_message%mesh_stack, .false.)
+            end if
+
+          end do check
+        end do
       end if
 
       !? This is running through the main thread so we can free it now.
