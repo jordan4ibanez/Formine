@@ -263,12 +263,25 @@ contains
     x = generator_message%world_position%x
     z = generator_message%world_position%y
 
-    current => chunk_handler_get_clone_chunk_pointer(x, z)
+    ! do i = 1,1000
+    !   call sleep(0)
+    ! end do
 
-    if (.not. associated(current)) then
-      !! THIS NEEDS SOME MORE RESILIANCY !!
-      error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
-    end if
+    ! Gets 3 tries to find the chunk.
+    do i = 1,3
+      current => chunk_handler_get_clone_chunk_pointer(x, z)
+
+      if (.not. associated(current)) then
+        !! THIS NEEDS SOME MORE RESILIANCY !!
+        !! todo: this should simply exit and warn about failure.
+        
+        if (i == 3) then
+          error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
+        end if
+
+        call sleep(1)
+      end if
+    end do
 
     if (.not. associated(generator_message%texture_indices)) then
       error stop "[Chunk Mesh] {thread} error: Texture indices is a null pointer."
