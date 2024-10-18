@@ -191,6 +191,11 @@ contains
 
       call chunk_handler_set_chunk_mesh(new_message%world_position%x, new_message%world_position%y, new_message%mesh_stack, mesh_id)
 
+      ! Now, we must update neighbors.
+      if (new_message%update_neighbors) then
+        print*,"update neighbors plz"
+      end if
+
       !? This is running through the main thread so we can free it now.
 
       deallocate(new_message%positions)
