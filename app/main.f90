@@ -211,10 +211,10 @@ program main
 
   rotation = 0.0
 
-  call mouse_debug_lock_toggle()
+  ! call mouse_debug_lock_toggle()
 
   ! Move the camera back.
-  call camera_set_position_f32(0.0, 70.0, -3.0)
+  call camera_set_position_f32(15.0, 70.0, 8.0)
 
   !! This is debugging for functions!
   if (.true.) then
