@@ -384,12 +384,9 @@ contains
 
               ! If we're looking out of bounds at the sky, or below the world, draw it.
               ! We are at the top or bottom of the chunk
-            else
+              ! else
 
             end if
-
-
-
 
 
             p_index = (current_offset * 12) + 1
