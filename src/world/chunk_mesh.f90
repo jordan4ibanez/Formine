@@ -148,6 +148,7 @@ module chunk_mesh
     integer(c_int), dimension(6), pointer :: indices(:)
     integer(c_int) :: mesh_stack = -1
     logical(c_bool) :: update_neighbors = .false.
+    logical(c_bool) :: blank = .false.
   end type message_from_thread
 
 
@@ -187,9 +188,11 @@ contains
 
       call c_f_pointer(raw_c_ptr, new_message)
 
-      mesh_id = mesh_create_3d(new_message%positions, new_message%texture_coordinates, new_message%colors, new_message%indices)
-
-      call chunk_handler_set_chunk_mesh(new_message%world_position%x, new_message%world_position%y, new_message%mesh_stack, mesh_id)
+      !? We still need to update neighbors even if it is blank.
+      if (.not. new_message%blank) then
+        mesh_id = mesh_create_3d(new_message%positions, new_message%texture_coordinates, new_message%colors, new_message%indices)
+        call chunk_handler_set_chunk_mesh(new_message%world_position%x, new_message%world_position%y, new_message%mesh_stack, mesh_id)
+      end if
 
       ! Now, we must update neighbors.
       !? We're basically using a micro cellular automaton to make this thing work.
@@ -248,6 +251,8 @@ contains
     type(message_from_thread) :: output_message
 
     !? Transfer main argument pointer to Fortran.
+
+    call sleep(1)
 
     if (.not. c_associated(c_arg_pointer)) then
       error stop "[Chunk Mesh] Fatal error: Was passed a null thread_argument pointer."
@@ -309,6 +314,10 @@ contains
     right_exists = associated(generator_message%right)
     back_exists = associated(generator_message%back)
     front_exists = associated(generator_message%front)
+
+    if (generator_message%world_position%x == 1 .and. generator_message%world_position%y == 1) then
+      print*,left_exists, right_exists, back_exists, front_exists
+    end if
 
     left => generator_message%left
     right => generator_message%right
@@ -472,13 +481,17 @@ contains
 
       !? Push it into the queue.
       call thread_output_queue%push(output_message)
+    else
+      !? If it is blank, push that out into the queue.
+      output_message%world_position = generator_message%world_position
+      output_message%update_neighbors = generator_message%update_neighbors
+      output_message%blank = .true.
     end if
 
     deallocate(positions)
     deallocate(texture_coordinates)
     deallocate(colors)
     deallocate(indices)
-
 
     !? Deallocate all the memory regions in the message.
 
