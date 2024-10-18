@@ -448,6 +448,7 @@ contains
       output_message%colors = colors
       output_message%indices = indices
       output_message%mesh_stack = generator_message%mesh_stack
+      output_message%update_neighbors = generator_message%update_neighbors
 
       !? Push it into the queue.
       call thread_output_queue%push(output_message)
