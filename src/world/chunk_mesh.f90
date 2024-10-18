@@ -271,14 +271,12 @@ contains
     !   call sleep(0)
     ! end do
 
-    ! Gets 3 tries to find the chunk.
+    ! Gets 50 tries in 100 cycle intervals to find the chunk.
     do i = 1,50
       current => chunk_handler_get_clone_chunk_pointer(x, z)
-
       if (.not. associated(current)) then
         !! THIS NEEDS SOME MORE RESILIANCY !!
         !! todo: this should simply exit and warn about failure.
-
         if (i == 50) then
           error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
         end if
@@ -290,6 +288,7 @@ contains
         exit
       end if
     end do
+
 
     if (.not. associated(generator_message%texture_indices)) then
       error stop "[Chunk Mesh] {thread} error: Texture indices is a null pointer."
