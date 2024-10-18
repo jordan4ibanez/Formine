@@ -47,7 +47,7 @@ contains
   subroutine chunk_generator_process_output_queue()
     implicit none
 
-    integer(c_int) :: i, chunk_x, chunk_z, w, x, z
+    integer(c_int) :: i, chunk_x, chunk_z, w
     type(c_ptr) :: raw_c_ptr
     type(message_from_thread), pointer :: message_pointer
     type(memory_chunk), pointer :: chunk_pointer

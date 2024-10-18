@@ -146,7 +146,8 @@ module chunk_mesh
     real(c_float), dimension(8), pointer :: texture_coordinates(:)
     real(c_float), dimension(12), pointer :: colors(:)
     integer(c_int), dimension(6), pointer :: indices(:)
-    integer(c_int) :: mesh_stack
+    integer(c_int) :: mesh_stack = -1
+    logical(c_bool) :: update_neighbors = .false.
   end type message_from_thread
 
 
