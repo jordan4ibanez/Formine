@@ -280,6 +280,8 @@ contains
         end if
 
         call sleep(1)
+      else
+        exit
       end if
     end do
 
