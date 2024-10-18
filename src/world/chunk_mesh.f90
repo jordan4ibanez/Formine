@@ -316,10 +316,6 @@ contains
     back_exists = associated(back)
     front_exists = associated(front)
 
-    if (generator_message%world_position%x == 1 .and. generator_message%world_position%y == 1) then
-      print*,left_exists, right_exists, back_exists, front_exists
-    end if
-
     base_y = (MESH_STACK_HEIGHT * (generator_message%mesh_stack - 1)) + 1
     max_y = MESH_STACK_HEIGHT * (generator_message%mesh_stack)
 
