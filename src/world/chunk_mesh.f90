@@ -206,10 +206,12 @@ contains
 
       !? This is running through the main thread so we can free it now.
 
-      deallocate(new_message%positions)
-      deallocate(new_message%texture_coordinates)
-      deallocate(new_message%colors)
-      deallocate(new_message%indices)
+      if (.not. new_message%blank) then
+        deallocate(new_message%positions)
+        deallocate(new_message%texture_coordinates)
+        deallocate(new_message%colors)
+        deallocate(new_message%indices)
+      end if
       deallocate(new_message)
 
     end do
