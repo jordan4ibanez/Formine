@@ -263,6 +263,9 @@ contains
     x = generator_message%world_position%x
     z = generator_message%world_position%y
 
+    !? An note on this:
+    !? I just kept testing it until it no longer yielded chunk errors.
+    !? This is a completely arbitrary value.
     do i = 1,5000
       call sleep(0)
     end do
