@@ -116,8 +116,6 @@ module chunk_mesh
   type :: message_to_thread
     !* The position in the world in which the chunk resides.
     type(vec2i) :: world_position
-    !* Current chunk.
-    type(memory_chunk), pointer :: current => null()
     !* Pointer of texture indices into the positions array.
     integer(c_int), dimension(6,0), pointer :: texture_indices(:, :)
     !* Texture positions array.
