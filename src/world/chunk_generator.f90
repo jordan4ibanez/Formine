@@ -71,7 +71,7 @@ contains
       deallocate(message_pointer)
 
       do w = 1,MESH_STACK_ARRAY_SIZE
-        call chunk_mesh_generate(chunk_x, chunk_z, w)
+        call chunk_mesh_generate(chunk_x, chunk_z, w, .true.)
       end do
 
       ! Update any neighbors. (only adjacent not diagonal)

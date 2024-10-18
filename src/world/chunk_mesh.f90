@@ -134,6 +134,8 @@ module chunk_mesh
     integer(c_int) :: texture_count = 0
     !* Which stack portion to generate.
     integer(c_int) :: mesh_stack = -1
+    !* If adjacent neighbors must be updated.
+    logical(c_bool) :: update_neighbors = .false.
   end type message_to_thread
 
 
@@ -508,12 +510,13 @@ contains
 
 
   !* Queue up a chunk mesh generation call.
-  subroutine chunk_mesh_generate(x,z, mesh_stack)
+  subroutine chunk_mesh_generate(x,z, mesh_stack, update_neighbors)
     use :: string
     implicit none
 
     integer(c_int), intent(in), value :: x, z, mesh_stack
     type(message_to_thread), pointer :: message_to_generator
+    logical, intent(in), value :: update_neighbors
 
 
     allocate(message_to_generator)
@@ -528,6 +531,7 @@ contains
     message_to_generator%texture_positions_array => texture_atlas_get_texture_positions_array_clone_pointer()
     message_to_generator%texture_count = texture_atlas_get_texture_count()
     message_to_generator%mesh_stack = mesh_stack
+    message_to_generator%update_neighbors = update_neighbors
 
     call thread_create(chunk_mesh_generation_thread, c_loc(message_to_generator))
   end subroutine chunk_mesh_generate
