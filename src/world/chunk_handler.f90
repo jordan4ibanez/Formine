@@ -216,7 +216,6 @@ contains
     type(memory_chunk), pointer :: chunk_pointer
     integer(c_int) :: i, current_mesh_id
 
-
     call chunk_database%lock()
 
     ! If there's nothing to do, don't do anything.
