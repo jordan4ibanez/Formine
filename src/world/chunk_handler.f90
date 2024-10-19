@@ -81,9 +81,13 @@ contains
     logical(c_bool) :: exist
     character(len = :, kind = c_char), allocatable :: key
 
+    call chunk_database%lock()
+
     key = grab_chunk_key(x, z)
 
     exist = chunk_database%has_key(key)
+
+    call chunk_database%unlock()
   end function chunk_handler_chunk_exists
 
 
