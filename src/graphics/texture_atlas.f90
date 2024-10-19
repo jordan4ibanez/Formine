@@ -1,5 +1,5 @@
 module texture_atlas
-  use :: string
+  use :: string_f90
   use :: vector_2i
   use :: fast_pack
   use :: memory_texture_module

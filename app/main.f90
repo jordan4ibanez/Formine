@@ -1,10 +1,10 @@
 program main
   use :: glfw
   use :: opengl
-  use :: string
-  use :: terminal
+  use :: string_f90
+  use :: forterm
   use :: shader
-  use :: files
+  use :: files_f90
   use :: mesh
   use :: camera
   use :: delta_time
@@ -384,6 +384,6 @@ program main
 
   call glfw_terminate()
 
-  print"(A)", color_term("[jordan4ibanez]: Thank you so much for helping with my project by testing!", NOTIFICATION)
+  call print_color(NOTIFICATION, "[jordan4ibanez]: Thank you so much for helping with my project by testing!")
 
 end program main

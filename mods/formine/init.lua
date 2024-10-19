@@ -43,3 +43,11 @@ block.register({
   textures = { "default_bedrock.png", "default_bedrock.png", "default_bedrock.png", "default_bedrock.png", "default_bedrock.png", "default_bedrock.png" },
   draw_type = block.draw_type.normal,
 })
+
+
+world.register_biome({
+  biome_name = "grasslands",
+  grass_layer = "grass",
+  dirt_layer = "dirt",
+  stone_layer = "stone"
+})

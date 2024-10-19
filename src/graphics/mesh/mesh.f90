@@ -1,6 +1,6 @@
 !* This module kind of works like a state machine.
 module mesh
-  use :: string
+  use :: string_f90
   use :: vector_3f
   use :: hashmap_int
   use :: hashmap_str
@@ -101,7 +101,7 @@ contains
   !* Get a mesh from the hash table.
   !* The mesh is a clone. To update, set_mesh().
   function get_mesh(vao_id, gotten_mesh) result(exists)
-    use :: terminal
+    use :: forterm
     implicit none
 
     integer(c_int), intent(in), value :: vao_id
@@ -113,7 +113,7 @@ contains
     exists = .false.
 
     if (.not. mesh_database%get(int(vao_id, c_int64_t), raw_c_ptr)) then
-      print"(A)",color_term("[Mesh] Warning: ID ["//int_to_string(vao_id)//"] does not exist.", WARNING)
+      call print_color(WARNING, "[Mesh] Warning: ID ["//int_to_string(vao_id)//"] does not exist.")
       return
     end if
 
@@ -128,7 +128,7 @@ contains
   !* The mesh is a clone. To update, set_mesh().
   !! This is slower than get_mesh.
   function get_mesh_by_name(mesh_name, gotten_mesh) result(exists)
-    use :: terminal
+    use :: forterm
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
@@ -141,7 +141,7 @@ contains
     exists = .false.
 
     if (.not. mesh_name_to_id_database%get(mesh_name, raw_c_ptr)) then
-      print"(A)",color_term("[Mesh] Warning: ["//mesh_name//"] does not exist.", WARNING)
+      call print_color(WARNING, "[Mesh] Warning: ["//mesh_name//"] does not exist.")
       return
     end if
 
@@ -160,14 +160,14 @@ contains
 
   !* Draw a mesh.
   subroutine mesh_draw(vao_id)
-    use :: terminal
+    use :: forterm
     implicit none
 
     integer(c_int), intent(in), value :: vao_id
     type(mesh_data) :: gotten_mesh
 
     if (.not. get_mesh(vao_id, gotten_mesh)) then
-      print"(A)", color_term("[Mesh] Warning: Mesh ID ["//int_to_string(vao_id)//"] does not exist. Cannot draw.", WARNING)
+      call print_color(WARNING, "[Mesh] Warning: Mesh ID ["//int_to_string(vao_id)//"] does not exist. Cannot draw.")
       return
     end if
 
@@ -182,14 +182,14 @@ contains
   !* Draw a mesh by name.
   !! This is slower than mesh_draw.
   subroutine mesh_draw_by_name(mesh_name)
-    use :: terminal
+    use :: forterm
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
     type(mesh_data) :: gotten_mesh
 
     if (.not. get_mesh_by_name(mesh_name, gotten_mesh)) then
-      print"(A)", color_term("[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot draw.", WARNING)
+      call print_color(WARNING, "[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot draw.")
       return
     end if
 
@@ -203,7 +203,7 @@ contains
 
   !* Delete a mesh.
   subroutine mesh_delete(vao_id)
-    use :: terminal
+    use :: forterm
     implicit none
 
     integer(c_int), intent(in), value :: vao_id
@@ -213,7 +213,7 @@ contains
 
     !? This must error stop because there is an implementation error.
     if (.not. mesh_exists(vao_id)) then
-      print"(A)", color_term("[Mesh] Warning: Mesh ["//int_to_string(vao_id)//"] does not exist. Cannot delete.", WARNING)
+      call print_color(WARNING, "[Mesh] Warning: Mesh ["//int_to_string(vao_id)//"] does not exist. Cannot delete.")
       return
     end if
 
@@ -224,7 +224,7 @@ contains
   !* Delete a mesh by name.
   !! This is slower than mesh_delete.
   subroutine mesh_delete_by_name(mesh_name)
-    use :: terminal
+    use :: forterm
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: mesh_name
@@ -235,7 +235,7 @@ contains
     ! This is written so it can be used for set_mesh to auto delete the old mesh.
 
     if (.not. mesh_name_to_id_database%get(mesh_name, raw_c_ptr)) then
-      print"(A)", color_term("[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot delete.", WARNING)
+      call print_color(WARNING, "[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot delete.")
       return
     end if
 
@@ -243,7 +243,7 @@ contains
 
     !? This must error stop because there is an implementation error.
     if (.not. mesh_exists(vao_id)) then
-      print"(A)", color_term("[Mesh] Error: Mesh ["//mesh_name//"] is pointing to an invalid ID ["//int_to_string(vao_id)//"].", ERROR)
+      call print_color(ERROR, "[Mesh] Error: Mesh ["//mesh_name//"] is pointing to an invalid ID ["//int_to_string(vao_id)//"].")
       return
     end if
 
@@ -275,7 +275,7 @@ contains
 
   !* Completely wipe out all existing meshes.
   subroutine mesh_destroy_database()
-    use :: terminal
+    use :: forterm
     implicit none
 
     call mesh_database%destroy()

@@ -71,7 +71,7 @@ contains
 
   function stbi_load(file_name, x, y, channels_in_file, desired_channels) result(raw_image_data)
     use :: math_helpers, only: c_uchar_to_int_array
-    use :: string
+    use :: string_f90
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: file_name
@@ -117,7 +117,7 @@ contains
 
 
   function stbi_write_png(file_name, w, h, data) result(status)
-    use :: string
+    use :: string_f90
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: file_name
