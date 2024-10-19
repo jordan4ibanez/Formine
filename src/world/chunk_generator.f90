@@ -66,31 +66,15 @@ contains
       chunk_z = chunk_pointer%world_position%y
 
       !? This will free() the chunk pointer when it stores it.
+      ! print*,"====="
+      ! print*,chunk_x,chunk_z
       call chunk_handler_store_chunk_pointer(chunk_pointer)
 
       deallocate(message_pointer)
 
-      ! if (chunk_x == 1 .and. chunk_z == 1) then
-
       do w = 1,MESH_STACK_ARRAY_SIZE
         call chunk_mesh_generate(chunk_x, chunk_z, w, .true.)
       end do
-      ! end if
-
-      ! Update any neighbors. (only adjacent not diagonal)
-      ! do x = -1,1
-      !   check: do z = -1,1
-      !     if (abs(x) + abs(z) /= 1) then
-      !       cycle check
-      !     end if
-
-      !     if (chunk_handler_chunk_exists(chunk_x + x, chunk_z + z)) then
-      !       do w = 1,MESH_STACK_ARRAY_SIZE
-      !         call chunk_mesh_generate(chunk_x + x, chunk_z + z, w)
-      !       end do
-      !     end if
-      !   end do check
-      ! end do
     end do
 
   end subroutine chunk_generator_process_output_queue
