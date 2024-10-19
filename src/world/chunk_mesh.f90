@@ -271,24 +271,13 @@ contains
     !   call sleep(0)
     ! end do
 
-    ! Gets 50 tries in 100 cycle intervals to find the chunk.
-    !? medium case scenario: 5000 cycles .
-    !? Worst case: crash, (needs to be fixed).
-    do i = 1,50
-      current => chunk_handler_get_clone_chunk_pointer(x, z)
 
-      if (associated(current)) then
-        exit
-      end if
-
-      print*,"miss"
-      do j = 1,100
-        call sleep(0)
-      end do
-    end do
+    current => chunk_handler_get_clone_chunk_pointer(x, z)
 
 
     if (.not. associated(current)) then
+      print*,"miss"
+
       !! THIS NEEDS SOME MORE RESILIANCY !!
       !! todo: this should simply exit and warn about failure.
 
