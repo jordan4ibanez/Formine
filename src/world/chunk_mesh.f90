@@ -236,7 +236,7 @@ contains
     real(c_float), dimension(8), allocatable :: texture_coordinates(:)
     real(c_float), dimension(12), allocatable :: colors(:)
     integer(c_int), dimension(6), allocatable :: indices(:)
-    integer(c_int) :: limit, i, j, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y, current_rect_index
+    integer(c_int) :: limit, i, x, z, y, current_id, current_offset, p_index, t_index, c_index, i_index, base_y, max_y, current_rect_index
     logical(c_bool) :: left_exists, right_exists, back_exists, front_exists
     type(memory_chunk), pointer :: current, left, right, front, back
     type(vec3i) :: direction, pos, trajectory, offset
@@ -344,40 +344,18 @@ contains
     back_exists = .false.
     front_exists = .false.
 
-    ! Gets 50 tries in 100 cycle intervals to find the neighbor chunk.
-    !? Worst case scenario: 5000 cycle latency if on edge of world.
-    do i = 1,50
+    left => chunk_handler_get_clone_chunk_pointer(x - 1, z)
+    left_exists = associated(left)
 
-      if (.not. left_exists) then
-        left => chunk_handler_get_clone_chunk_pointer(x - 1, z)
-        left_exists = associated(left)
-      end if
+    right => chunk_handler_get_clone_chunk_pointer(x + 1, z)
+    right_exists = associated(right)
 
-      if (.not. right_exists) then
-        right => chunk_handler_get_clone_chunk_pointer(x + 1, z)
-        right_exists = associated(right)
-      end if
+    back => chunk_handler_get_clone_chunk_pointer(x, z - 1)
+    back_exists = associated(back)
 
-      if (.not. back_exists) then
-        back => chunk_handler_get_clone_chunk_pointer(x, z - 1)
-        back_exists = associated(back)
-      end if
+    front => chunk_handler_get_clone_chunk_pointer(x, z + 1)
+    front_exists = associated(front)
 
-      if (.not. front_exists) then
-        front => chunk_handler_get_clone_chunk_pointer(x, z + 1)
-        front_exists = associated(front)
-      end if
-
-      ! If we found everything, keep moving.
-      ! Else: pause.
-      if (left_exists .and. right_exists .and. back_exists .and. front_exists) then
-        exit
-      else
-        do j = 1,100
-          call sleep(0)
-        end do
-      end if
-    end do
 
     base_y = (MESH_STACK_HEIGHT * (generator_message%mesh_stack - 1)) + 1
     max_y = MESH_STACK_HEIGHT * (generator_message%mesh_stack)
