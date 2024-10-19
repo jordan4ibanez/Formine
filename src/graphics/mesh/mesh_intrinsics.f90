@@ -1,7 +1,7 @@
 module mod_mesh_intrinsics
   use, intrinsic :: iso_c_binding
   use :: opengl
-  use :: string
+  use :: string_f90
   use :: shader
   implicit none
 
@@ -152,7 +152,7 @@ contains
   function mesh_create_internal(mesh_database, mesh_name_to_id_database, dimensions, positions, texture_coordinates, colors, indices, named, mesh_name) result(vao_id)
     use :: hashmap_int
     use :: hashmap_str
-    use :: terminal
+    use :: forterm
     implicit none
 
     type(hashmap_integer_key), intent(inout) :: mesh_database

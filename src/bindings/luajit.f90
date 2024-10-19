@@ -853,7 +853,7 @@ contains
 
   !* Set a global. This was a macro in LuaJIT.
   subroutine lua_setglobal(state, global_name)
-    use :: string, only: into_c_string
+    use :: string_f90, only: into_c_string
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -868,7 +868,7 @@ contains
 
   !* Get a global. This was a macro in LuaJIT.
   subroutine lua_getglobal(state, global_name)
-    use :: string, only: into_c_string
+    use :: string_f90, only: into_c_string
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -884,7 +884,7 @@ contains
   !* Get a string from lua. This was a macro in LuaJIT.
   !* This has been reconfigured to work with Fortran.
   function lua_tostring(state, index) result(new_string)
-    use :: string
+    use :: string_f90
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -910,7 +910,7 @@ contains
 
 
   function luajit_loadfile(state, file_path) result(status)
-    use :: string
+    use :: string_f90
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -925,7 +925,7 @@ contains
 
 
   function lual_error(state, error_string) result(status)
-    use :: string, only: into_c_string
+    use :: string_f90, only: into_c_string
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -937,7 +937,7 @@ contains
 
 
   subroutine lua_pushstring(state, input_string)
-    use :: string, only: into_c_string
+    use :: string_f90, only: into_c_string
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -952,7 +952,7 @@ contains
 
   !* Get the type of a variable as a string.
   function lua_typename(state, index) result(type_name)
-    use :: string, only: string_from_c
+    use :: string_f90, only: string_from_c
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -969,7 +969,7 @@ contains
 
   !* Set a field. (variable)
   subroutine lua_setfield(state, index, key_string)
-    use :: string, only: into_c_string
+    use :: string_f90, only: into_c_string
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -1045,8 +1045,8 @@ contains
 
   !* Run a LuaJIT string. Returns success.
   function luajit_run_string(state, string_to_run) result(success)
-    use :: string
-    use :: terminal
+    use :: string_f90
+    use :: forterm
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -1064,19 +1064,19 @@ contains
         call lua_pop(state, lua_gettop(state))
         success = .true.
       else
-        print"(A)", color_term(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)), ERROR)
+        call print_color(ERROR, achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)))
       end if
     else
-      print"(A)", color_term(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)), ERROR)
+      call print_color(ERROR, achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)))
     end if
   end function luajit_run_string
 
 
   !* Run a LuaJIT file. Returns status.
   function luajit_run_file(state, file_path) result(status)
-    use :: string
-    use :: files
-    use :: terminal
+    use :: string_f90
+    use :: files_f90
+    use :: forterm
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -1089,11 +1089,11 @@ contains
         call lua_pop(state, lua_gettop(state))
         status = LUAJIT_RUN_FILE_OK
       else
-        print"(A)", color_term("[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), ERROR)
+        call print_color(ERROR, "[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)))
         status = LUAJIT_RUN_FILE_FAILURE
       end if
     else
-      print"(A)", color_term("[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), ERROR)
+      call print_color(ERROR, "[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)))
       status = LUAJIT_RUN_FILE_FAILURE
     end if
   end function luajit_run_file
@@ -1156,7 +1156,7 @@ contains
   !* Limited to 1 output variables.
   !* This could be changed though.
   subroutine luajit_call_function(state, function_name, a, b, c, d, return_value)
-    use :: terminal
+    use :: forterm
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -1209,7 +1209,7 @@ contains
     if (lua_pcall(state, 4, return_value_count, 0) == LUA_OK) then
       call lua_pop(state, lua_gettop(state))
     else
-      print"(A)", color_term(achar(10)//"[LuaJIT] Error: Error running LuaJIT function ["//function_name//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), ERROR)
+      call print_color(ERROR, achar(10)//"[LuaJIT] Error: Error running LuaJIT function ["//function_name//"]"//achar(10)//lua_tostring(state, lua_gettop(state)))
     end if
   end subroutine luajit_call_function
 
@@ -1217,7 +1217,7 @@ contains
   !* Copy a string array (indices table) into a string_array.
   function luajit_copy_string_array_from_table(state, target_array) result(status)
     use :: array, only: string_array
-    use :: string, only: int_to_string
+    use :: string_f90, only: int_to_string
     implicit none
 
     type(c_ptr), intent(in), value :: state
@@ -1314,7 +1314,7 @@ contains
 
   !* This subroutine will attempt to grab data from whatever index you give it.
   function luajit_get_generic(state, index, generic_data) result(status)
-    use :: string
+    use :: string_f90
     use :: array
     implicit none
 

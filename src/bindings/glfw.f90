@@ -476,7 +476,7 @@ contains
 
   subroutine glfw_get_error()
     use, intrinsic :: iso_c_binding
-    use :: string
+    use :: string_f90
     implicit none
 
     ! C side.
@@ -502,7 +502,7 @@ contains
 
   logical function glfw_create_window(width, height, title) result(success)
     use, intrinsic :: iso_c_binding
-    use :: string
+    use :: string_f90
     implicit none
 
     integer(c_int) :: width, height
@@ -569,7 +569,7 @@ contains
   !* NOTE: This function passed into C as a pointer!
   subroutine error_callback(i, char_pointer)
     use, intrinsic :: iso_c_binding
-    use :: string
+    use :: string_f90
     implicit none
 
     integer(c_int), intent(in), value :: i
@@ -597,7 +597,7 @@ contains
 
   subroutine size_callback(window, width, height)
     use, intrinsic :: iso_c_binding
-    use :: string, only: int_to_string
+    use :: string_f90, only: int_to_string
     use :: opengl, only: gl_view_port
     implicit none
 

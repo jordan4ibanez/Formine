@@ -63,7 +63,7 @@ contains
 
 
   subroutine fps_calculation()
-    use :: string, only: int_to_string
+    use :: string_f90, only: int_to_string
     implicit none
 
     fps_delta_accumulator = fps_delta_accumulator + delta

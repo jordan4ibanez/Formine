@@ -290,7 +290,7 @@ contains
 
 
   subroutine wrap_camera_rotation()
-    use :: constants, only: PI_TIMES_2_F64, PI_OVER_2_F64
+    use :: constants_f90, only: PI_TIMES_2_F64, PI_OVER_2_F64
     implicit none
 
     if (camera_rotation%x < -PI_OVER_2_F64) then
@@ -318,7 +318,7 @@ contains
     use :: vector_2d
     use :: glfw
     use :: delta_time
-    use :: constants, only: PI_OVER_2_F64, PI_F64
+    use :: constants_f90, only: PI_OVER_2_F64, PI_F64
     implicit none
 
     type(vec2d) :: mouse_delta

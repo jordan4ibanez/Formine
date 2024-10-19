@@ -1,7 +1,7 @@
 module fast_pack
   use :: memory_texture_module
   use :: stb_image
-  use :: string
+  use :: string_f90
   use :: fast_pack_types
   use :: hashmap_str
   use, intrinsic :: iso_c_binding
@@ -230,7 +230,7 @@ contains
   !* Tetris packing algorithm.
   !* This algorithm is HORRIBLE.
   function fast_packer_tetris_pack(this, current_index) result(pack_success)
-    use :: constants, only: C_INT_MAX
+    use :: constants_f90, only: C_INT_MAX
     use :: array, only: array_i32_insert
     implicit none
 
@@ -338,7 +338,7 @@ contains
   !* Write the texture packer's data to a png file.
   subroutine fast_packer_save_to_png(this, file_path)
     use :: stb_image, only: stbi_write_png
-    use :: string, only: int_to_string
+    use :: string_f90, only: int_to_string
     implicit none
 
     class(fast_packer), intent(inout) :: this
@@ -413,7 +413,7 @@ contains
   !* The final step in the fast packer.
   !* Creates OpenGL/Vulkan space coordinates to be queried.
   subroutine fast_packer_create_texture_rectangles(this)
-    use :: terminal
+    use :: forterm
     implicit none
 
     class(fast_packer), intent(inout) :: this
@@ -428,7 +428,7 @@ contains
 
     !? There is nothing to do, which can be very bad.
     if (keys_array_size <= 0) then
-      print"(A)",color_term("[Fast Pack] Warning: Canvas is blank. This might cause serious issues.", WARNING)
+      call print_color(WARNING, "[Fast Pack] Warning: Canvas is blank. This might cause serious issues.")
       return
     end if
 
