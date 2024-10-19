@@ -45,15 +45,20 @@ contains
     integer(c_int), intent(in), value :: x, z, stack
     integer(c_int), intent(in), value :: vao_id
     type(memory_chunk), pointer :: current_chunk
+    character(len = :, kind = c_char), allocatable :: key
+    type(c_ptr) :: raw_c_ptr
 
+    call chunk_database%lock()
 
-    if (.not. chunk_handler_get_chunk_pointer(x,z, current_chunk)) then
+    key = grab_chunk_key(x,z)
+
+    if (.not. chunk_database%get(key, raw_c_ptr)) then
       ! print"(A)", "[Chunk Handler] Warning: Cannot set mesh for null chunk. Abort."
       !? Auto GC the VAO.
       call mesh_delete(vao_id)
-
-      return
     end if
+
+    call c_f_pointer(raw_c_ptr, current_chunk)
 
     ! Clean up the old chunk mesh.
     if (current_chunk%mesh(stack) /= 0) then
@@ -63,6 +68,8 @@ contains
     ! print"(A)", "[Chunk Handler] Debug: Set mesh ["//int_to_string(current_chunk%world_position%x)//","//int_to_string(current_chunk%world_position%y)//"] stack: ["//int_to_string(stack)//"]"
 
     current_chunk%mesh(stack) = vao_id
+
+    call chunk_database%unlock()
   end subroutine chunk_handler_set_chunk_mesh
 
 
