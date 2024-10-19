@@ -88,9 +88,11 @@ contains
     type(memory_chunk), intent(inout), pointer :: chunk_pointer
     character(len = :, kind = c_char), allocatable :: chunk_key
 
-    chunk_key = grab_chunk_key(chunk_pointer%world_position%x, chunk_pointer%world_position%y)
-
     call chunk_database%lock()
+
+    print*,chunk_pointer%world_position%x, chunk_pointer%world_position%y
+
+    chunk_key = grab_chunk_key(chunk_pointer%world_position%x, chunk_pointer%world_position%y)
 
     if (chunk_database%has_key(chunk_key)) then
       print"(A)", "[Chunk Handler] Warning: Attempted to overwrite a memory chunk pointer."
@@ -166,6 +168,7 @@ contains
 
     ! If not existent, return a null pointer.
     if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
+      print*,"failure to get chunk", x,y
       call chunk_database%unlock()
       return
     end if

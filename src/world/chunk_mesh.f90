@@ -275,7 +275,9 @@ contains
     !? medium case scenario: 5000 cycles .
     !? Worst case: crash, (needs to be fixed).
 
+    print*,"trying to get chunk", x,z
     current => chunk_handler_get_clone_chunk_pointer(x, z)
+
     if (.not. associated(current)) then
       !! THIS NEEDS SOME MORE RESILIANCY !!
       !! todo: this should simply exit and warn about failure.
