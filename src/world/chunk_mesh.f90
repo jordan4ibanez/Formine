@@ -280,6 +280,8 @@ contains
       if (associated(current)) then
         exit
       end if
+
+      print*,"miss"
       do j = 1,100
         call sleep(0)
       end do
