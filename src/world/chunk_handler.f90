@@ -21,7 +21,6 @@ module chunk_handler
 
   !* Type: memory_chunk
   type(concurrent_hashmap_string_key) :: chunk_database
-  type(c_ptr) :: mutex
 
 
 contains
@@ -34,8 +33,8 @@ contains
     type(memory_chunk), allocatable :: blank
 
     chunk_database = new_concurrent_hashmap_string_key(sizeof(blank), gc_chunk_database)
+    print*,"initialized"
 
-    mutex = thread_create_mutex()
   end subroutine chunk_handler_module_initalize
 
 
@@ -73,10 +72,11 @@ contains
 
     integer(c_int), intent(in), value :: x, z
     logical(c_bool) :: exist
+    character(len = :, kind = c_char), allocatable :: key
 
-    exist = chunk_database%has_key(grab_chunk_key(x,z))
+    key = grab_chunk_key(x, z)
 
-
+    exist = chunk_database%has_key(key)
   end function chunk_handler_chunk_exists
 
 
@@ -89,8 +89,6 @@ contains
     character(len = :, kind = c_char), allocatable :: chunk_key
 
     call chunk_database%lock()
-
-    print*,chunk_pointer%world_position%x, chunk_pointer%world_position%y
 
     chunk_key = grab_chunk_key(chunk_pointer%world_position%x, chunk_pointer%world_position%y)
 
@@ -119,10 +117,13 @@ contains
     implicit none
 
     integer(c_int), intent(in), value :: x, y
+    character(len = :, kind = c_char), allocatable :: key
 
     call chunk_database%lock()
 
-    call chunk_database%remove(grab_chunk_key(x, y))
+    key = grab_chunk_key(x, y)
+
+    call chunk_database%remove(key)
 
     call chunk_database%unlock()
   end subroutine chunk_handler_delete_chunk
@@ -136,11 +137,15 @@ contains
     type(memory_chunk), intent(inout), pointer :: chunk_pointer
     logical(c_bool) :: exists
     type(c_ptr) :: raw_c_ptr
+    character(len = :, kind = c_char), allocatable :: key
+
+    call chunk_database%lock()
 
     exists = .false.
 
-    call chunk_database%lock()
-    if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
+    key = grab_chunk_key(x,y)
+
+    if (.not. chunk_database%get(key, raw_c_ptr)) then
       ! print"(A)","[Chunk Handler] Warning: Attempted to retrieve null chunk."
       call chunk_database%unlock()
       return
@@ -161,14 +166,16 @@ contains
     type(memory_chunk), pointer :: clone_chunk_pointer
     type(memory_chunk), pointer :: original_chunk_pointer
     type(c_ptr) :: raw_c_ptr
+    character(len = :, kind = c_char), allocatable :: key
+
 
     call chunk_database%lock()
 
     clone_chunk_pointer => null()
 
     ! If not existent, return a null pointer.
-    if (.not. chunk_database%get(grab_chunk_key(x,y), raw_c_ptr)) then
-      print*,"failure to get chunk", x,y
+    key = grab_chunk_key(x,y)
+    if (.not. chunk_database%get(key, raw_c_ptr)) then
       call chunk_database%unlock()
       return
     end if
