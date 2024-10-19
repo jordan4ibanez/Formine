@@ -14,7 +14,7 @@ contains
     implicit none
 
     !? 8 additional threads.
-    call thread_initialize()
+    call thread_initialize(128)
 
     call chunk_generator_initialize()
 
