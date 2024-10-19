@@ -19,7 +19,7 @@ print("[LuaJIT API]: Initializing.")
 --- @class Array<T>: { [integer] : T }
 
 
---- A block definition.
+--- Block definition.
 ---
 --- The texture array must contains 6 elements.
 ---
@@ -31,6 +31,17 @@ print("[LuaJIT API]: Initializing.")
 --- @field description string
 --- @field textures Array<string>
 --- @field draw_type draw_type
+
+
+--- Biome definition.
+---
+--- @class biome_definition
+--- @field biome_name string
+--- @field grass_layer string
+--- @field dirt_layer string
+--- @field stone_layer string
+--- todo: ores.
+
 
 
 --* APIS. =================================================================================
@@ -60,14 +71,15 @@ block.register = function(definition) end
 --? WORLD. =================================================================================
 
 
-world = {
+world = {}
 
-}
+
+--- Register a biome into the engine.
+--- @param definition biome_definition A biome definition.
+world.register_biome = function(definition) end
 
 
 --? ENTITY. =================================================================================
 
 
-entity = {
-
-}
+entity = {}
