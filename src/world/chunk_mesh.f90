@@ -274,15 +274,23 @@ contains
     ! Gets 50 tries in 100 cycle intervals to find the chunk.
     !? medium case scenario: 5000 cycles .
     !? Worst case: crash, (needs to be fixed).
+    do i = 1,50
+      current => chunk_handler_get_clone_chunk_pointer(x, z)
 
-    print*,"trying to get chunk", x,z
-    current => chunk_handler_get_clone_chunk_pointer(x, z)
+      if (associated(current)) then
+        exit
+      end if
+      do j = 1,100
+        call sleep(0)
+      end do
+    end do
+
 
     if (.not. associated(current)) then
       !! THIS NEEDS SOME MORE RESILIANCY !!
       !! todo: this should simply exit and warn about failure.
 
-      error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
+      print"(A)", "[Chunk Mesh] {thread} error: Current chunk is a null pointer. This is a chunk error."
 
       deallocate(generator_message%texture_indices)
       deallocate(generator_message%texture_positions_array)
