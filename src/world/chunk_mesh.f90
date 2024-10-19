@@ -280,7 +280,7 @@ contains
       !! THIS NEEDS SOME MORE RESILIANCY !!
       !! todo: this should simply exit and warn about failure.
 
-      print"(A)", "[Chunk Mesh] {thread} error: Current chunk is a null pointer. This is a chunk error."
+      error stop "[Chunk Mesh] {thread} error: Current chunk is a null pointer."
 
       deallocate(generator_message%texture_indices)
       deallocate(generator_message%texture_positions_array)
