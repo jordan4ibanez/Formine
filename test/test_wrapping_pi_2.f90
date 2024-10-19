@@ -5,7 +5,7 @@ module test_wrapping_pi_suite
 contains
 
   subroutine begin_test
-    use :: constants_f90, only: PI_F64, PI_TIMES_2_F64
+    use :: constants, only: PI_F64, PI_TIMES_2_F64
     implicit none
 
     real(c_double) :: unit

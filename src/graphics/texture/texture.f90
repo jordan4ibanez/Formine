@@ -44,9 +44,9 @@ contains
   !* Create a texture from a file path.
   subroutine texture_create(texture_file_path)
     use :: stb_image
-    use :: string_f90
+    use :: string
     use :: opengl
-    use :: forterm
+    use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_file_path
@@ -71,9 +71,9 @@ contains
   !* Upload an array of unsigned bytes. 4 channels per element. RGBA.
   subroutine texture_create_from_memory(texture_name, raw_data, width, height)
     use :: stb_image
-    use :: string_f90
+    use :: string
     use :: opengl
-    use :: forterm
+    use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
@@ -131,14 +131,14 @@ contains
   !* Tell OpenGL to use a texture
   subroutine texture_use(texture_name)
     use :: opengl
-    use :: forterm
+    use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
     integer(c_int) :: texture_id
 
     if (.not. get_texture(texture_name, texture_id)) then
-      call print_color(WARNING, "[Texture] Warning: Texture ["//texture_name//"] does not exist. Cannot use.")
+      print"(A)", color_term("[Texture] Warning: Texture ["//texture_name//"] does not exist. Cannot use.", WARNING)
       return
     end if
 
@@ -176,7 +176,7 @@ contains
 
   !* Internal only. Get a texture from the database. Returns if it exists.
   function get_texture(texture_name, texture_id) result(exists)
-    use :: forterm
+    use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
@@ -188,7 +188,7 @@ contains
     exists = .false.
 
     if (.not. texture_database%get(texture_name, raw_c_ptr)) then
-      call print_color(WARNING, "[Texture] Warning: ["//texture_name//"] does not exist.")
+      print"(A)",color_term("[Texture] Warning: ["//texture_name//"] does not exist.", WARNING)
       return
     end if
 
@@ -201,7 +201,7 @@ contains
 
   !* This is mainly used by the texture packer to get the dimensions of the texture.
   function texture_get_size(texture_name, texture_size) result(exists)
-    use :: forterm
+    use :: terminal
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: texture_name
@@ -245,8 +245,8 @@ contains
 
   !* Completely wipe out all existing textures. This might be slow.
   subroutine texture_destroy_database()
-    use :: string_f90
-    use :: forterm
+    use :: string
+    use :: terminal
     implicit none
 
     call texture_database%destroy()

@@ -50,7 +50,7 @@ contains
 
   !* Constructor for a pixel.
   function pixel_constructor(r, g, b, a) result(new_pixel)
-    use :: string_f90
+    use :: string
     implicit none
 
     integer(c_int), intent(in), value :: r, g, b, a
@@ -79,7 +79,7 @@ contains
 
   !* Constructor for raw rgba8 data.
   function rgba8_texture_constructor(raw_texture_memory_u8, width, height) result(new_rgba_texture)
-    use :: string_f90
+    use :: string
     use :: math_helpers
     implicit none
 
@@ -145,7 +145,7 @@ contains
 
   !* This wraps a chain of functions to just get the data we need, which is RGBA of a pixel.
   function memory_texture_get_pixel(this, x, y) result(color)
-    use :: string_f90
+    use :: string
     implicit none
 
     class(memory_texture), intent(in) :: this

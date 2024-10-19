@@ -8,7 +8,7 @@ contains
 
 
   subroutine test_perlin()
-    use :: string_f90
+    use :: string
     implicit none
 
     type(fnl_state) :: noise_state

@@ -1,6 +1,6 @@
 module api
   use :: luajit
-  use :: string_f90
+  use :: string
   use :: hashmap_str
   use, intrinsic :: iso_c_binding
   !* LuaJIT API compatiblemodules.
@@ -173,7 +173,7 @@ contains
 
   !* This will take the mod folder's conf file (if it exists) and parse it.
   function construct_mod_config_from_file(path, mod_path) result(new_mod_config)
-    use :: files_f90
+    use :: files
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: path, mod_path
