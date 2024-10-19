@@ -193,8 +193,8 @@ program main
 
 
   print*,"START"
-  do x = -5,4
-    do y = -5,4
+  do x = -8,7
+    do y = -8,7
       ! This launches 8 threads.
       call chunk_generator_new_chunk(x,y)
     end do
