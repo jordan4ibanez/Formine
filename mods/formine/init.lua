@@ -1,9 +1,5 @@
--- block.register({
---   name = "air",
---   description = "Air",
---   textures = { "air.png", "air.png", "air.png", "air.png", "air.png", "air.png" },
---   draw_type = block.draw_type.air,
--- })
+-- ? BLOCKS.
+
 
 block.register({
   name = "stone",
@@ -43,6 +39,10 @@ block.register({
   textures = { "default_bedrock.png", "default_bedrock.png", "default_bedrock.png", "default_bedrock.png", "default_bedrock.png", "default_bedrock.png" },
   draw_type = block.draw_type.normal,
 })
+
+
+-- ? BIOMES.
+
 
 world.register_biome({
   biome_name = "grasslands",
