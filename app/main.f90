@@ -384,6 +384,6 @@ program main
 
   call glfw_terminate()
 
-  print"(A)", color_term("[jordan4ibanez]: Thank you so much for helping with my project by testing!", NOTIFICATION)
+  call print_color(NOTIFICATION, "[jordan4ibanez]: Thank you so much for helping with my project by testing!")
 
 end program main

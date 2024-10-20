@@ -428,7 +428,7 @@ contains
 
     !? There is nothing to do, which can be very bad.
     if (keys_array_size <= 0) then
-      print"(A)",color_term("[Fast Pack] Warning: Canvas is blank. This might cause serious issues.", WARNING)
+      call print_color(WARNING, "[Fast Pack] Warning: Canvas is blank. This might cause serious issues.")
       return
     end if
 

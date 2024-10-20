@@ -113,7 +113,7 @@ contains
     exists = .false.
 
     if (.not. mesh_database%get(int(vao_id, c_int64_t), raw_c_ptr)) then
-      print"(A)",color_term("[Mesh] Warning: ID ["//int_to_string(vao_id)//"] does not exist.", WARNING)
+      call print_color(WARNING, "[Mesh] Warning: ID ["//int_to_string(vao_id)//"] does not exist.")
       return
     end if
 
@@ -141,7 +141,7 @@ contains
     exists = .false.
 
     if (.not. mesh_name_to_id_database%get(mesh_name, raw_c_ptr)) then
-      print"(A)",color_term("[Mesh] Warning: ["//mesh_name//"] does not exist.", WARNING)
+      call print_color(WARNING, "[Mesh] Warning: ["//mesh_name//"] does not exist.")
       return
     end if
 
@@ -167,7 +167,7 @@ contains
     type(mesh_data) :: gotten_mesh
 
     if (.not. get_mesh(vao_id, gotten_mesh)) then
-      print"(A)", color_term("[Mesh] Warning: Mesh ID ["//int_to_string(vao_id)//"] does not exist. Cannot draw.", WARNING)
+      call print_color(WARNING, "[Mesh] Warning: Mesh ID ["//int_to_string(vao_id)//"] does not exist. Cannot draw.")
       return
     end if
 
@@ -189,7 +189,7 @@ contains
     type(mesh_data) :: gotten_mesh
 
     if (.not. get_mesh_by_name(mesh_name, gotten_mesh)) then
-      print"(A)", color_term("[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot draw.", WARNING)
+      call print_color(WARNING, "[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot draw.")
       return
     end if
 
@@ -213,7 +213,7 @@ contains
 
     !? This must error stop because there is an implementation error.
     if (.not. mesh_exists(vao_id)) then
-      print"(A)", color_term("[Mesh] Warning: Mesh ["//int_to_string(vao_id)//"] does not exist. Cannot delete.", WARNING)
+      call print_color(WARNING, "[Mesh] Warning: Mesh ["//int_to_string(vao_id)//"] does not exist. Cannot delete.")
       return
     end if
 
@@ -235,7 +235,7 @@ contains
     ! This is written so it can be used for set_mesh to auto delete the old mesh.
 
     if (.not. mesh_name_to_id_database%get(mesh_name, raw_c_ptr)) then
-      print"(A)", color_term("[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot delete.", WARNING)
+      call print_color(WARNING, "[Mesh] Warning: Mesh ["//mesh_name//"] does not exist. Cannot delete.")
       return
     end if
 
@@ -243,7 +243,7 @@ contains
 
     !? This must error stop because there is an implementation error.
     if (.not. mesh_exists(vao_id)) then
-      print"(A)", color_term("[Mesh] Error: Mesh ["//mesh_name//"] is pointing to an invalid ID ["//int_to_string(vao_id)//"].", ERROR)
+      call print_color(ERROR, "[Mesh] Error: Mesh ["//mesh_name//"] is pointing to an invalid ID ["//int_to_string(vao_id)//"].")
       return
     end if
 

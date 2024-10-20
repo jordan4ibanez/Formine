@@ -138,7 +138,7 @@ contains
     integer(c_int) :: texture_id
 
     if (.not. get_texture(texture_name, texture_id)) then
-      print"(A)", color_term("[Texture] Warning: Texture ["//texture_name//"] does not exist. Cannot use.", WARNING)
+      call print_color(WARNING, "[Texture] Warning: Texture ["//texture_name//"] does not exist. Cannot use.")
       return
     end if
 
@@ -188,7 +188,7 @@ contains
     exists = .false.
 
     if (.not. texture_database%get(texture_name, raw_c_ptr)) then
-      print"(A)",color_term("[Texture] Warning: ["//texture_name//"] does not exist.", WARNING)
+      call print_color(WARNING, "[Texture] Warning: ["//texture_name//"] does not exist.")
       return
     end if
 

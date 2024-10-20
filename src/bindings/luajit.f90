@@ -1064,10 +1064,10 @@ contains
         call lua_pop(state, lua_gettop(state))
         success = .true.
       else
-        print"(A)", color_term(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)), ERROR)
+        call print_color(ERROR, achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)))
       end if
     else
-      print"(A)", color_term(achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)), ERROR)
+      call print_color(ERROR, achar(10)//"[LuaJIT] Error:"//achar(10)//lua_tostring(state, lua_gettop(state)))
     end if
   end function luajit_run_string
 
@@ -1089,11 +1089,11 @@ contains
         call lua_pop(state, lua_gettop(state))
         status = LUAJIT_RUN_FILE_OK
       else
-        print"(A)", color_term("[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), ERROR)
+        call print_color(ERROR, "[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)))
         status = LUAJIT_RUN_FILE_FAILURE
       end if
     else
-      print"(A)", color_term("[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), ERROR)
+      call print_color(ERROR, "[LuaJIT] Error: Error in file ["//file_path//"]"//achar(10)//lua_tostring(state, lua_gettop(state)))
       status = LUAJIT_RUN_FILE_FAILURE
     end if
   end function luajit_run_file
@@ -1209,7 +1209,7 @@ contains
     if (lua_pcall(state, 4, return_value_count, 0) == LUA_OK) then
       call lua_pop(state, lua_gettop(state))
     else
-      print"(A)", color_term(achar(10)//"[LuaJIT] Error: Error running LuaJIT function ["//function_name//"]"//achar(10)//lua_tostring(state, lua_gettop(state)), ERROR)
+      call print_color(ERROR, achar(10)//"[LuaJIT] Error: Error running LuaJIT function ["//function_name//"]"//achar(10)//lua_tostring(state, lua_gettop(state)))
     end if
   end subroutine luajit_call_function
 
