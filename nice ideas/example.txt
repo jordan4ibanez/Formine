@@ -56,7 +56,7 @@ contains
 
   ! Convert an orientation to a string.
   function orientation_to_string(input) result(output)
-    use :: string_f90
+    use :: string
     implicit none
 
     integer, intent(in) :: input
@@ -81,7 +81,7 @@ contains
 
 ! Subroutine to ensure correctness.
   subroutine check_orient(input)
-    use :: string_f90
+    use :: string
     implicit none
 
     integer, intent(in) :: input
@@ -231,7 +231,7 @@ contains
   ! We can finally test this thing.
   subroutine test_this_thing
     use :: orient_class
-    use :: string_f90
+    use :: string
     implicit none
 
     type(orientation) :: blah

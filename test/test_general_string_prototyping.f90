@@ -1,5 +1,5 @@
 module test_suite_string_prototyping
-  use :: string_f90
+  use :: string
   use :: testament
   use, intrinsic :: iso_c_binding
   implicit none

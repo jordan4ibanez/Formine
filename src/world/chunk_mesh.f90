@@ -580,7 +580,7 @@ contains
 
   !* Queue up a chunk mesh generation call.
   subroutine chunk_mesh_generate(x,z, mesh_stack, update_neighbors)
-    use :: string_f90
+    use :: string
     implicit none
 
     integer(c_int), intent(in), value :: x, z, mesh_stack

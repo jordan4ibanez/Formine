@@ -70,7 +70,7 @@ contains
   !* Create a named shader program from vertex and fragment code file paths.
   !? Will return false if it fails, true if it succeeds.
   subroutine shader_create(shader_name, vertex_code_file_path, fragment_code_file_path)
-    use :: string_f90
+    use :: string
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: shader_name
@@ -186,7 +186,7 @@ contains
 
   !* Check if a shader exists in the database.
   logical function shader_exists(shader_name) result(exists)
-    use :: string_f90
+    use :: string
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: shader_name
@@ -221,7 +221,7 @@ contains
 
 
   subroutine gc_shader_database(raw_c_ptr)
-    use :: string_f90
+    use :: string
     implicit none
 
     type(c_ptr), intent(in), value :: raw_c_ptr

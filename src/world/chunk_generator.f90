@@ -1,5 +1,5 @@
 module chunk_generator
-  use :: string_f90
+  use :: string
   use :: chunk_mesh
   use :: chunk_data
   use :: chunk_handler

@@ -1,5 +1,5 @@
 module array
-  use :: string_f90
+  use :: string
   use, intrinsic :: iso_c_binding
   implicit none
 

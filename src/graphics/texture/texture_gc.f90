@@ -9,7 +9,7 @@ contains
 
   subroutine texture_database_gc(raw_c_ptr)
     use :: hashmap_bindings
-    use :: string_f90, only: int_to_string
+    use :: string, only: int_to_string
     implicit none
 
     type(c_ptr), intent(in), value :: raw_c_ptr

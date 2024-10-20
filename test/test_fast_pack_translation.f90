@@ -8,7 +8,7 @@ contains
 
   subroutine begin_test()
     use :: iso_c_binding
-    use :: string_f90
+    use :: string
     use :: stb_image
     use :: memory_texture_module
     implicit none
@@ -39,7 +39,7 @@ contains
 
   subroutine test_memory_leak()
     use :: iso_c_binding
-    use :: string_f90
+    use :: string
     use :: stb_image
     use :: memory_texture_module
     implicit none
