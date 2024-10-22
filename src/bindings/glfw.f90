@@ -457,6 +457,15 @@ module glfw
     end subroutine internal_glfw_set_cursor_pos
 
 
+    subroutine internal_glfw_set_window_icon(window, count, images) bind(c, name = "glfwSetWindowIcon")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: window, images
+      integer(c_int), intent(in), value :: count
+    end subroutine internal_glfw_set_window_icon
+
+
   end interface
 
 
