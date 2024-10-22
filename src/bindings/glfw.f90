@@ -277,6 +277,14 @@ module glfw
   integer(c_int), parameter, public :: GLFW_CONNECTED = int(z"00040001")
   integer(c_int), parameter, public ::  GLFW_DISCONNECTED = int(z"00040002")
 
+  ! This is so you can set the window icon. :)
+  type, bind(c) :: glfw_image
+    integer(c_int) :: width
+    integer(c_int) :: height
+    ! This is: unsigned char* pixels;
+    type(c_ptr) :: pixels = c_null_ptr
+  end type glfw_image
+
 
   ! Here I'm binding to the C glfw shared library.
 
