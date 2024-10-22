@@ -80,6 +80,10 @@ program main
   ! Get portable function pointers.
   call forglad_load_gl(c_funloc(glfw_get_proc_address))
 
+  !! SET WINDOW ICON.
+  call glfw_set_window_icon("./textures/formine_logo_512.png")
+  !! END SET WINDOW ICON.
+
   call texture_module_initialize()
 
   call mesh_module_initialize()
