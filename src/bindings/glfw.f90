@@ -56,6 +56,7 @@ module glfw
   public :: glfw_set_cursor_pos
   public :: glfw_get_window_gui_scale_f32
   public :: glfw_get_window_gui_scale_f64
+  public :: glfw_set_window_icon
 
 
   public :: glfw_image
@@ -780,6 +781,26 @@ contains
 
     gui_scale = window_gui_scale
   end function glfw_get_window_gui_scale_f64
+
+
+  !* Set the window icon.
+  subroutine glfw_set_window_icon(path)
+    use :: stb_image
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: path
+    type(glfw_image), dimension(:), pointer :: icon
+    integer(c_int) :: channels
+    integer(1), dimension(:), allocatable, target :: raw_data
+
+    allocate(icon(1))
+    raw_data = stbi_load(path, icon(1)%width, icon(1)%height, channels, 4)
+    icon(1)%pixels = c_loc(raw_data)
+
+    call internal_glfw_set_window_icon(window_pointer, 1, c_loc(icon))
+
+    deallocate(icon)
+  end subroutine glfw_set_window_icon
 
 
 end module glfw
