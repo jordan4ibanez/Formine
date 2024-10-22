@@ -58,6 +58,9 @@ module glfw
   public :: glfw_get_window_gui_scale_f64
 
 
+  public :: glfw_image
+
+
   ! Constants.
 
   public :: GLFW_CONTEXT_DEBUG
