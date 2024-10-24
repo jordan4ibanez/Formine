@@ -18,6 +18,7 @@ module chunk_generator
   type :: message_to_thread
     integer(c_int) :: x = 0
     integer(c_int) :: z = 0
+    integer(c_int) :: seed = 0
   end type message_to_thread
 
   type :: message_from_thread
@@ -170,6 +171,7 @@ contains
     allocate(message)
     message%x = x
     message%z = z
+    message%seed = 12345
 
     call thread_create(chunk_generator_thread, c_loc(message))
   end subroutine chunk_generator_new_chunk
