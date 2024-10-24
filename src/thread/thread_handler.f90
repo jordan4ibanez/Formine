@@ -14,7 +14,8 @@ contains
     implicit none
 
     !? 8 additional threads.
-    call thread_initialize(64)
+    !! TODO: THIS NEEDS TO BE A SETTINGS MENU OPTION!
+    call thread_initialize(8)
 
     call chunk_generator_initialize()
 
