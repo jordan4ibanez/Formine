@@ -50,3 +50,11 @@ world.register_biome({
   dirt_layer = "dirt",
   stone_layer = "stone"
 })
+
+
+world.register_biome({
+  biome_name = "desert",
+  grass_layer = "sand",
+  dirt_layer = "sand",
+  stone_layer = "stone"
+})
