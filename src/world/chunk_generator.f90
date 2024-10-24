@@ -90,8 +90,8 @@ contains
     type(c_ptr) :: void_pointer
     type(thread_argument), pointer :: arguments
     type(message_to_thread), pointer :: generator_message
-    type(fnl_state) :: noise_state
-    integer(c_int) :: chunk_x, chunk_z, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, status
+    type(fnl_state) :: height_noise, biome_noise
+    integer(c_int) :: chunk_x, chunk_z, seed, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, status
     type(memory_chunk), pointer :: chunk_pointer
     type(block_data) :: current_block
     type(message_from_thread) :: output_message
@@ -114,14 +114,14 @@ contains
 
     chunk_x = generator_message%x
     chunk_z = generator_message%z
-
-    noise_state = fnl_state()
-
-    noise_state%seed = generator_message%seed
-    noise_state%frequency = 0.009
+    seed = generator_message%seed
 
     !? We have our stack data, destroy it.
     deallocate(generator_message)
+
+    height_noise = fnl_state()
+    height_noise%seed = seed
+    height_noise%frequency = 0.009
 
     chunk_pointer => new_memory_chunk_pointer(chunk_x, chunk_z)
 
@@ -134,7 +134,7 @@ contains
 
     do x = 1, CHUNK_WIDTH
       do z = 1, CHUNK_WIDTH
-        current_height = base_height + floor(fnl_get_noise_2d(noise_state, real(x + base_x), real(z + base_z)) * noise_multiplier)
+        current_height = base_height + floor(fnl_get_noise_2d(height_noise, real(x + base_x), real(z + base_z)) * noise_multiplier)
         do y = 1, CHUNK_HEIGHT
           ! todo: make this more complex with lua registered biomes.
 
