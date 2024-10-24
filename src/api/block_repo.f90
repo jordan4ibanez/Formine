@@ -81,7 +81,7 @@ module block_repo
   !* Type: block_definition
   type(hashmap_string_key) :: definition_database
 
-  ! Object oriented.
+  ! Linear access oriented.
   !* Type: block_definition
   !? NOTE: the definition_database is the one responsible for cleaning up the pointers.
   type(vec) :: definition_array
