@@ -123,6 +123,10 @@ contains
     height_noise%seed = seed
     height_noise%frequency = 0.009
 
+    biome_noise = fnl_state()
+    biome_noise%seed = seed
+    biome_noise%frequency = 0.002
+
     chunk_pointer => new_memory_chunk_pointer(chunk_x, chunk_z)
 
     base_x = chunk_x * CHUNK_WIDTH
