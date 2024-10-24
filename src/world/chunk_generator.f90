@@ -116,6 +116,11 @@ contains
     chunk_x = generator_message%x
     chunk_z = generator_message%z
 
+    noise_state = fnl_state()
+
+    noise_state%seed = generator_message%seed
+    noise_state%frequency = 0.009
+
     !? We have our stack data, destroy it.
     deallocate(generator_message)
 
@@ -124,8 +129,6 @@ contains
     base_x = chunk_x * CHUNK_WIDTH
     base_y = 0
     base_z = chunk_z * CHUNK_WIDTH
-
-    noise_state = fnl_state()
 
     base_height = 70
     noise_multiplier = 20
