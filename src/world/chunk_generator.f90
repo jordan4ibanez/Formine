@@ -95,6 +95,7 @@ contains
     type(memory_chunk), pointer :: chunk_pointer
     type(block_data) :: current_block
     type(message_from_thread) :: output_message
+    real(c_float) :: biome_noise_output
 
     !? Transfer main argument pointer to Fortran.
 
@@ -125,7 +126,7 @@ contains
 
     biome_noise = fnl_state()
     biome_noise%seed = seed
-    biome_noise%frequency = 0.002
+    biome_noise%frequency = 0.006
 
     chunk_pointer => new_memory_chunk_pointer(chunk_x, chunk_z)
 
@@ -140,17 +141,26 @@ contains
       do z = 1, CHUNK_WIDTH
 
         !? Note: This floating point error creates the far lands.
-        print*,fnl_get_noise_2d(biome_noise, real(x + base_x), real(z + base_z))
+        biome_noise_output = fnl_get_noise_2d(biome_noise, real(x + base_x), real(z + base_z))
         current_height = base_height + floor(fnl_get_noise_2d(height_noise, real(x + base_x), real(z + base_z)) * noise_multiplier)
+
+        ! todo: select biome here.
+
+        current_block = block_data()
+        if (biome_noise_output > 0.55) then
+          current_block%id = 1
+        else
+          current_block%id = 2
+        end if
 
         do y = 1, CHUNK_HEIGHT
           ! todo: make this more complex with lua registered biomes.
 
           if (y <= current_height) then
 
-            current_block = block_data()
+            ! current_block = block_data()
 
-            current_block%id = 1
+            ! current_block%id = 1
 
             ! call random_number(randy)
             ! current_block%id = floor((randy * 5) + 1)
