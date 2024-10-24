@@ -138,7 +138,11 @@ contains
 
     do x = 1, CHUNK_WIDTH
       do z = 1, CHUNK_WIDTH
+
+        !? Note: This floating point error creates the far lands.
+        print*,fnl_get_noise_2d(biome_noise, real(x + base_x), real(z + base_z))
         current_height = base_height + floor(fnl_get_noise_2d(height_noise, real(x + base_x), real(z + base_z)) * noise_multiplier)
+
         do y = 1, CHUNK_HEIGHT
           ! todo: make this more complex with lua registered biomes.
 
