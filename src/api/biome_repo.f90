@@ -15,6 +15,17 @@ module biome_repo
   public :: biome_repo_destroy
 
 
+  !* This is what lua will send into a queue to be processed after
+  !* all block definition have been processed into the engine.
+
+  type :: biome_definition_from_lua
+    character(len = :, kind = c_char), pointer :: name => null()
+    character(len = :, kind = c_char), pointer :: grass_layer => null()
+    character(len = :, kind = c_char), pointer :: dirt_layer => null()
+    character(len = :, kind = c_char), pointer :: stone_layer => null()
+  end type biome_definition_from_lua
+
+
   !* Biome definition container.
 
   type :: biome_definition
