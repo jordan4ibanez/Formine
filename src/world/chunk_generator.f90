@@ -140,9 +140,13 @@ contains
           ! todo: make this more complex with lua registered biomes.
 
           if (y <= current_height) then
+
             current_block = block_data()
-            call random_number(randy)
-            current_block%id = floor((randy * 5) + 1)
+
+            current_block%id = 1
+
+            ! call random_number(randy)
+            ! current_block%id = floor((randy * 5) + 1)
             chunk_pointer%data(y, z, x) = current_block
           end if
         end do
