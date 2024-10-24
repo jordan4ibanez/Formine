@@ -95,7 +95,6 @@ contains
     type(memory_chunk), pointer :: chunk_pointer
     type(block_data) :: current_block
     type(message_from_thread) :: output_message
-    real(c_float) :: randy
 
     !? Transfer main argument pointer to Fortran.
 
