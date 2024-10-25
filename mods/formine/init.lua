@@ -43,12 +43,14 @@ block.register({
 
 -- ? BIOMES.
 
-
+-- Note: Default biome.
 biome.register({
   name = "grasslands",
   grass_layer = "grass",
   dirt_layer = "dirt",
-  stone_layer = "stone"
+  stone_layer = "stone",
+  heat_min = 0,
+  heat_max = 0
 })
 
 
@@ -56,5 +58,7 @@ biome.register({
   name = "desert",
   grass_layer = "sand",
   dirt_layer = "sand",
-  stone_layer = "stone"
+  stone_layer = "stone",
+  heat_min = 0.8,
+  heat_max = 1.0
 })
