@@ -30,6 +30,8 @@ module biome_repo
     character(len = :, kind = c_char), pointer :: grass_layer => null()
     character(len = :, kind = c_char), pointer :: dirt_layer => null()
     character(len = :, kind = c_char), pointer :: stone_layer => null()
+    real(c_float) :: heat_min = 0.0
+    real(c_float) :: heat_max = 0.0
   end type biome_definition_from_lua
 
 
@@ -40,6 +42,8 @@ module biome_repo
     integer(c_int) :: grass_layer = 0
     integer(c_int) :: dirt_layer = 0
     integer(c_int) :: stone_layer = 0
+    real(c_float) :: heat_min = 0.0
+    real(c_float) :: heat_max = 0.0
   end type biome_definition
 
 
