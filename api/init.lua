@@ -36,7 +36,7 @@ print("[LuaJIT API]: Initializing.")
 --- Biome definition.
 ---
 --- @class biome_definition
---- @field biome_name string
+--- @field name string
 --- @field grass_layer string
 --- @field dirt_layer string
 --- @field stone_layer string

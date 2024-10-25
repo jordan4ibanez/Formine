@@ -45,7 +45,7 @@ block.register({
 
 
 biome.register({
-  biome_name = "grasslands",
+  name = "grasslands",
   grass_layer = "grass",
   dirt_layer = "dirt",
   stone_layer = "stone"
@@ -53,7 +53,7 @@ biome.register({
 
 
 biome.register({
-  biome_name = "desert",
+  name = "desert",
   grass_layer = "sand",
   dirt_layer = "sand",
   stone_layer = "stone"
