@@ -12,11 +12,17 @@ module biome_repo
 
   public :: initialize_biome_repo_module
   public :: biome_definition
+  public :: register_biome
   public :: biome_repo_destroy
+
+  !* Bake the module name into the executable.
+
+  character(len = 12, kind = c_char), parameter :: module_name = "[Biome Repo]"
+
 
 
   !* This is what lua will send into a queue to be processed after
-  !* all block definition have been processed into the engine.
+  !* all biome definition have been processed into the engine.
 
   type :: biome_definition_from_lua
     character(len = :, kind = c_char), pointer :: name => null()
@@ -85,7 +91,7 @@ contains
     ! Then we pop -2 and -1 off the stack, shifting biome back to -1.
 
 
-    call lua_getglobal(state, "world")
+    call lua_getglobal(state, "biome")
 
     if (.not. lua_istable(state, -1)) then
       error stop "[Biome Repo] Error: Can't initialize function pointers. [biome] table is missing!"
@@ -99,6 +105,65 @@ contains
     call lua_pop(state, lua_gettop(state))
   end subroutine biome_repo_deploy_lua_api
 
+
+  !* This allows you to register a biome into the engine from LuaJIT.
+  !* See the LuaJIT API [./api/init.lua] for the layout of biome_definition.
+  recursive function register_biome(state) result(status) bind(c)
+    use :: string
+    use :: array, only: string_array
+    implicit none
+
+    type(c_ptr), intent(in), value :: state
+    ! We're going to be using the status quite a lot.
+    integer(c_int) :: status
+    ! biome_definition fields.
+    type(heap_string) :: name, grass_layer, dirt_layer, stone_layer
+    !* The smart pointer where we will store the biome definiton.
+    !* We will only allocate this after a successful data query from LuaJIT.
+    type(biome_definition_from_lua) :: new_definition
+
+    status = LUAJIT_GET_OK
+
+    ! Enforce the first and only argument to be a table.
+    if (.not. lua_istable(state, -1)) then
+      call luajit_error_stop(state, module_name//" Error: Cannot register biome. Not a table.")
+    end if
+
+    ! All components of the biome definition are required. (For now)
+    call luajit_table_get_key_required(state, module_name, "Biome Definition", "name", name, "string")
+
+    call luajit_table_get_key_required(state, module_name, "Biome Definition", "grass_layer", grass_layer, "string")
+
+    call luajit_table_get_key_required(state, module_name, "Biome Definition", "dirt_layer", dirt_layer, "string")
+
+    call luajit_table_get_key_required(state, module_name, "Biome Definition", "stone_layer", stone_layer, "string")
+
+
+
+    !* todo: can add in more definition components here. :)
+
+
+    ! Clean up the stack. We are done with the LuaJIT stack.
+    !? The definition table has now disappeared.
+    call lua_pop(state, lua_gettop(state))
+
+
+    ! We have completed a successful query of the definition table from LuaJIT.
+    ! Put all the data into the fortran database.
+
+    call string_copy_pointer_to_pointer(name%get_pointer(), new_definition%name)
+
+    call string_copy_pointer_to_pointer(grass_layer%get_pointer(), new_definition%grass_layer)
+
+    call string_copy_pointer_to_pointer(dirt_layer%get_pointer(), new_definition%dirt_layer)
+
+    call string_copy_pointer_to_pointer(stone_layer%get_pointer(), new_definition%stone_layer)
+
+    ! Copy the definition into the string based database.
+    call definition_database%set(name%string, new_definition)
+
+    call definition_array%push_back(new_definition)
+  end function register_biome
 
 
 
