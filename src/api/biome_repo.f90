@@ -134,6 +134,7 @@ contains
     integer(c_int) :: status
     ! biome_definition fields.
     type(heap_string) :: name, grass_layer, dirt_layer, stone_layer
+    real(c_float) :: heat_min, heat_max
     !* The smart pointer where we will store the biome definiton.
     !* We will only allocate this after a successful data query from LuaJIT.
     type(biome_definition_from_lua) :: new_definition
@@ -154,6 +155,9 @@ contains
 
     call luajit_table_get_key_required(state, module_name, "Biome Definition", "stone_layer", stone_layer, "string")
 
+    call luajit_table_get_key_required(state, module_name, "Biome Definition", "heat_min", heat_min, "number")
+
+    call luajit_table_get_key_required(state, module_name, "Biome Definition", "heat_max", heat_max, "number")
 
 
     !* todo: can add in more definition components here. :)
@@ -175,10 +179,16 @@ contains
 
     call string_copy_pointer_to_pointer(stone_layer%get_pointer(), new_definition%stone_layer)
 
+    new_definition%heat_min = heat_min
+
+    new_definition%heat_max = heat_max
+
     ! print*,new_definition%name
     ! print*,new_definition%grass_layer
     ! print*,new_definition%dirt_layer
     ! print*,new_definition%stone_layer
+    ! print*,new_definition%heat_min
+    ! print*,new_definition%heat_max
 
     ! Copy the definition into the string based database.
     call definition_database_from_lua%set(name%string, new_definition)
