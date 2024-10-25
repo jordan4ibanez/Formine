@@ -3,8 +3,9 @@ module api
   use :: string
   use :: hashmap_str
   use, intrinsic :: iso_c_binding
-  !* LuaJIT API compatiblemodules.
+  !* LuaJIT API compatible modules.
   use :: block_repo
+  use :: biome_repo
   implicit none
 
 
@@ -68,7 +69,10 @@ contains
     end if
 
     ! Initialize LuaJIT compatible modules.
+
     call block_repo_deploy_lua_api(lua_state)
+
+    call biome_repo_deploy_lua_api(lua_state)
 
     ! Load up all mods.
     call load_all_mods()
