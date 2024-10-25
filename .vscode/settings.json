@@ -30,6 +30,7 @@
   "Lua.diagnostics.globals": [
     "block",
     "world",
-    "entity"
+    "entity",
+    "biome"
   ]
 }
