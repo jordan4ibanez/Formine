@@ -33,8 +33,6 @@ contains
     type(memory_chunk), allocatable :: blank
 
     chunk_database = new_concurrent_hashmap_string_key(sizeof(blank), gc_chunk_database)
-    print*,"initialized"
-
   end subroutine chunk_handler_module_initalize
 
 
