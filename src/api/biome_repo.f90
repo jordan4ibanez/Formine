@@ -70,6 +70,9 @@ contains
     !* Type: biome_definition
     definition_database = new_hashmap_string_key(sizeof(blank), gc_definition_repo)
 
+    !* Create the base smart pointer of the block array.
+    definition_array = new_vec(sizeof(blank), 0_8)
+
     !* Type: biome_definition_from_lua
     definition_database_from_lua = new_hashmap_string_key(sizeof(blank_lua), gc_definition_repo_from_lua)
   end subroutine initialize_biome_repo_module
@@ -80,7 +83,6 @@ contains
     implicit none
 
     type(c_ptr), intent(in), value :: state
-    type(biome_definition) :: blank
 
     ! Memory layout: (Stack grows down.)
     ! -1 - biome = {}
