@@ -68,15 +68,15 @@ block.draw_type = {
 block.register = function(definition) end
 
 
---? WORLD. =================================================================================
+--? BIOME. =================================================================================
 
 
-world = {}
+biome = {}
 
 
 --- Register a biome into the engine.
 --- @param definition biome_definition A biome definition.
-world.register_biome = function(definition) end
+biome.register_biome = function(definition) end
 
 
 --? ENTITY. =================================================================================
