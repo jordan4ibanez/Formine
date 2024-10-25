@@ -34,12 +34,16 @@ print("[LuaJIT API]: Initializing.")
 
 
 --- Biome definition.
+--- 
+--- Generates within heat ranges.
 ---
 --- @class biome_definition
 --- @field name string
 --- @field grass_layer string
 --- @field dirt_layer string
 --- @field stone_layer string
+--- @field heat_min number
+--- @field heat_max number
 --- todo: ores.
 
 
