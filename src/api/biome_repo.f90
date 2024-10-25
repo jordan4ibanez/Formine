@@ -12,6 +12,7 @@ module biome_repo
 
   public :: initialize_biome_repo_module
   public :: biome_definition
+  public :: biome_repo_deploy_lua_api
   public :: register_biome
   public :: biome_repo_destroy
 
@@ -43,11 +44,6 @@ module biome_repo
 
 
   ! Random access oriented.
-  !* Type: biome_definition_from_lua
-  type(hashmap_string_key) :: definition_database_from_lua
-
-
-  ! Random access oriented.
   !* Type: biome_definition.
   type(hashmap_string_key) :: definition_database
 
@@ -56,6 +52,17 @@ module biome_repo
   !* Type: biome_definition
   !? NOTE: the definition_database is the one responsible for cleaning up the pointers.
   type(vec) :: definition_array
+
+
+  ! Random access oriented.
+  !* Type: biome_definition_from_lua
+  type(hashmap_string_key) :: definition_database_from_lua
+
+
+  ! Linear access oriented.
+  !* Type: biome_definition_from_lua
+  !? NOTE: the definition_database is the one responsible for cleaning up the pointers.
+  type(vec) :: definition_array_from_lua
 
 
 contains
@@ -70,11 +77,14 @@ contains
     !* Type: biome_definition
     definition_database = new_hashmap_string_key(sizeof(blank), gc_definition_repo)
 
-    !* Create the base smart pointer of the block array.
+    !* Create the base smart pointer of the biome array.
     definition_array = new_vec(sizeof(blank), 0_8)
 
     !* Type: biome_definition_from_lua
     definition_database_from_lua = new_hashmap_string_key(sizeof(blank_lua), gc_definition_repo_from_lua)
+
+    !* Create the base smart pointer of the biome array.
+    definition_array_from_lua = new_vec(sizeof(blank_lua), 0_8)
   end subroutine initialize_biome_repo_module
 
 
@@ -161,19 +171,22 @@ contains
 
     call string_copy_pointer_to_pointer(stone_layer%get_pointer(), new_definition%stone_layer)
 
+    ! print*,new_definition%name
+    ! print*,new_definition%grass_layer
+    ! print*,new_definition%dirt_layer
+    ! print*,new_definition%stone_layer
+
     ! Copy the definition into the string based database.
-    call definition_database%set(name%string, new_definition)
+    call definition_database_from_lua%set(name%string, new_definition)
 
-    call definition_array%push_back(new_definition)
+    call definition_array_from_lua%push_back(new_definition)
   end function register_biome
-
 
 
   subroutine biome_repo_destroy()
     implicit none
 
     call definition_database%destroy()
-
     call definition_array%destroy()
   end subroutine biome_repo_destroy
 
