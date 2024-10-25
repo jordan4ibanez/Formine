@@ -96,6 +96,7 @@ contains
   subroutine api_finalize_lua_modules()
     implicit none
 
+    call biome_repo_finalize()
 
   end subroutine api_finalize_lua_modules
 

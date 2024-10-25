@@ -14,6 +14,7 @@ module biome_repo
   public :: biome_definition
   public :: biome_repo_deploy_lua_api
   public :: register_biome
+  public :: biome_repo_finalize
   public :: biome_repo_destroy
 
   !* Bake the module name into the executable.
@@ -195,6 +196,7 @@ contains
 
     call definition_array_from_lua%push_back(new_definition)
   end function register_biome
+
 
   subroutine biome_repo_finalize()
     implicit none
