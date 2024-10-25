@@ -71,10 +71,8 @@ contains
     end if
 
     ! Initialize LuaJIT compatible modules.
+    call api_deploy_lua_modules()
 
-    call block_repo_deploy_lua_api(lua_state)
-
-    call biome_repo_deploy_lua_api(lua_state)
 
     ! Load up all mods.
     call load_all_mods()
@@ -82,6 +80,15 @@ contains
     ! Pack the loaded texture data.
     call texture_atlas_pack()
   end subroutine api_initialize
+
+
+  subroutine api_deploy_lua_modules()
+    implicit none
+
+    call block_repo_deploy_lua_api(lua_state)
+
+    call biome_repo_deploy_lua_api(lua_state)
+  end subroutine api_deploy_lua_modules
 
 
   !* Clean up the API data.
