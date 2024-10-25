@@ -25,7 +25,7 @@ module block_repo
   !*
   !* Block definitions will be created as the game starts up.
   !*
-  !* Blocks will not be deleted during the game runtime.
+  !* Block will not be deleted during the game runtime.
   !*
   !* The string database will simply point to an index in the array via a raw pointer.
   !* This is here for when we need to access into the array.
@@ -102,7 +102,7 @@ contains
   end subroutine initialize_block_repo_module
 
 
-  !* Check how many blocks are registered.
+  !* Check how many block are registered.
   function block_repo_get_number_of_definitions() result(total)
     implicit none
 
@@ -126,7 +126,7 @@ contains
   end function block_repo_get_definition_pointer_by_id
 
 
-  !* This hooks the required fortran functions into the LuaJIT "blocks" table.
+  !* This hooks the required fortran functions into the LuaJIT "block" table.
   subroutine block_repo_deploy_lua_api(state)
     implicit none
 
@@ -138,18 +138,18 @@ contains
     definition_array = new_vec(sizeof(blank), 0_8)
 
     ! Memory layout: (Stack grows down.)
-    ! -1 - blocks = {}
+    ! -1 - block = {}
     ! then moves to:
-    ! -3 - blocks = {}
+    ! -3 - block = {}
     ! -2 - table key string.
     ! -1 - function pointers.
-    ! Then we pop -2 and -1 off the stack, shifting blocks back to -1.
+    ! Then we pop -2 and -1 off the stack, shifting block back to -1.
 
 
     call lua_getglobal(state, "block")
 
     if (.not. lua_istable(state, -1)) then
-      error stop "[Block Repo] Error: Can't initialize function pointers. [blocks] table is missing!"
+      error stop "[Block Repo] Error: Can't initialize function pointers. [block] table is missing!"
     end if
 
     ! Swap the declaration with the actual fortran function.
