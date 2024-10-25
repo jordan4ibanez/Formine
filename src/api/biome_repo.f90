@@ -196,6 +196,16 @@ contains
     call definition_array_from_lua%push_back(new_definition)
   end function register_biome
 
+  subroutine biome_repo_finalize()
+    implicit none
+
+    print"(A)",module_name//": Finalizing biomes."
+
+    ! todo: check the block repo to make sure the blocks are valid
+    ! todo: as the biomes are processed into numeric values for performance.
+
+  end subroutine biome_repo_finalize
+
 
   subroutine biome_repo_destroy()
     implicit none
