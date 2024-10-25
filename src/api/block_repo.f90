@@ -99,6 +99,9 @@ contains
 
     !* Type: block_definition
     definition_database = new_hashmap_string_key(sizeof(blank), gc_definition_repo)
+
+    !* Create the base smart pointer of the block array.
+    definition_array = new_vec(sizeof(blank), 0_8)
   end subroutine initialize_block_repo_module
 
 
@@ -131,11 +134,6 @@ contains
     implicit none
 
     type(c_ptr), intent(in), value :: state
-    type(block_definition) :: blank
-
-
-    !* Create the base smart pointer of the block array.
-    definition_array = new_vec(sizeof(blank), 0_8)
 
     ! Memory layout: (Stack grows down.)
     ! -1 - block = {}
