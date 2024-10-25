@@ -44,7 +44,7 @@ block.register({
 -- ? BIOMES.
 
 
-world.register_biome({
+biome.register({
   biome_name = "grasslands",
   grass_layer = "grass",
   dirt_layer = "dirt",
@@ -52,7 +52,7 @@ world.register_biome({
 })
 
 
-world.register_biome({
+biome.register({
   biome_name = "desert",
   grass_layer = "sand",
   dirt_layer = "sand",

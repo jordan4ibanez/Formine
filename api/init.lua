@@ -76,7 +76,7 @@ biome = {}
 
 --- Register a biome into the engine.
 --- @param definition biome_definition A biome definition.
-biome.register_biome = function(definition) end
+biome.register = function(definition) end
 
 
 --? ENTITY. =================================================================================
