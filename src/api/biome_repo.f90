@@ -16,6 +16,7 @@ module biome_repo
   public :: biome_repo_deploy_lua_api
   public :: register_biome
   public :: biome_repo_finalize
+  public :: biome_repo_get_biome_pointer_by_id
   public :: biome_repo_destroy
 
   !* Bake the module name into the executable.
@@ -27,14 +28,14 @@ module biome_repo
   !* This is what lua will send into a queue to be processed after
   !* all biome definition have been processed into the engine.
 
-  type :: biome_definition_from_lua
+  type :: luajit_biome_definition
     character(len = :, kind = c_char), pointer :: name => null()
     character(len = :, kind = c_char), pointer :: grass_layer => null()
     character(len = :, kind = c_char), pointer :: dirt_layer => null()
     character(len = :, kind = c_char), pointer :: stone_layer => null()
     real(c_float) :: heat_min = 0.0
     real(c_float) :: heat_max = 0.0
-  end type biome_definition_from_lua
+  end type luajit_biome_definition
 
 
   !* Biome definition container.
@@ -66,13 +67,13 @@ module biome_repo
   !! These two will be destroyed as the game starts.
 
   ! Random access oriented.
-  !* Type: biome_definition_from_lua
-  type(hashmap_string_key) :: definition_database_from_lua
+  !* Type: luajit_biome_definition
+  type(hashmap_string_key) :: luajit_definition_database
 
   ! Linear access oriented.
-  !* Type: biome_definition_from_lua
+  !* Type: luajit_biome_definition
   !? NOTE: the definition_database is the one responsible for cleaning up the pointers.
-  type(vec) :: definition_array_from_lua
+  type(vec) :: luajit_definition_array
 
 
 contains
@@ -82,7 +83,7 @@ contains
     implicit none
 
     type(biome_definition) :: blank
-    type(biome_definition_from_lua) :: blank_lua
+    type(luajit_biome_definition) :: blank_lua
     character(len = :, kind = c_char), pointer :: blank_string_pointer
 
     !* Type: biome_definition
@@ -94,11 +95,11 @@ contains
     !* Create the reverse lookup pointers.
     biome_id_to_name_database = new_hashmap_integer_key(sizeof(blank_string_pointer), gc_biome_id_database)
 
-    !* Type: biome_definition_from_lua
-    definition_database_from_lua = new_hashmap_string_key(sizeof(blank_lua), gc_definition_repo_from_lua)
+    !* Type: luajit_biome_definition
+    luajit_definition_database = new_hashmap_string_key(sizeof(blank_lua), gc_definition_repo_from_lua)
 
     !* Create the base smart pointer of the biome array.
-    definition_array_from_lua = new_vec(sizeof(blank_lua), 0_8)
+    luajit_definition_array = new_vec(sizeof(blank_lua), 0_8)
   end subroutine initialize_biome_repo_module
 
 
@@ -147,7 +148,7 @@ contains
     real(c_float) :: heat_min, heat_max
     !* The smart pointer where we will store the biome definiton.
     !* We will only allocate this after a successful data query from LuaJIT.
-    type(biome_definition_from_lua) :: new_definition
+    type(luajit_biome_definition) :: new_definition
 
     status = LUAJIT_GET_OK
 
@@ -201,9 +202,9 @@ contains
     ! print*,new_definition%heat_max
 
     ! Copy the definition into the string based database.
-    call definition_database_from_lua%set(name%string, new_definition)
+    call luajit_definition_database%set(name%string, new_definition)
 
-    call definition_array_from_lua%push_back(new_definition)
+    call luajit_definition_array%push_back(new_definition)
   end function register_biome
 
 
@@ -211,7 +212,7 @@ contains
     use :: block_repo
     implicit none
 
-    type(biome_definition_from_lua), pointer :: lua_definition
+    type(luajit_biome_definition), pointer :: lua_definition
     type(biome_definition) :: definition
     type(c_ptr) :: raw_c_ptr
     integer(c_int) :: current_biome_id
@@ -223,9 +224,9 @@ contains
     current_biome_id = 0
 
 
-    call definition_database_from_lua%initialize_iterator()
+    call luajit_definition_database%initialize_iterator()
 
-    do while (definition_database_from_lua%iterate(raw_c_ptr))
+    do while (luajit_definition_database%iterate(raw_c_ptr))
 
       call c_f_pointer(raw_c_ptr, lua_definition)
 
@@ -271,9 +272,9 @@ contains
     end do
 
     ! Now destroy the LuaJIT components.
-    call definition_array_from_lua%destroy()
+    call luajit_definition_array%destroy()
 
-    call definition_array_from_lua%destroy()
+    call luajit_definition_array%destroy()
   end subroutine biome_repo_finalize
 
 
@@ -301,7 +302,7 @@ contains
     implicit none
 
     type(c_ptr), intent(in), value :: raw_c_ptr
-    type(biome_definition_from_lua), pointer :: definition_pointer
+    type(luajit_biome_definition), pointer :: definition_pointer
 
     call c_f_pointer(raw_c_ptr, definition_pointer)
 
