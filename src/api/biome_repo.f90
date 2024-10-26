@@ -3,6 +3,7 @@ module biome_repo
   use :: luajit
   use :: string
   use :: hashmap_str
+  use :: hashmap_int
   use :: vector
   implicit none
 
@@ -56,6 +57,10 @@ module biome_repo
   !* Type: biome_definition
   !? NOTE: the definition_database is the one responsible for cleaning up the pointers.
   type(vec) :: definition_array
+
+  ! Reverse lookup.
+  !* Type: string pointer.
+  type(hashmap_integer_key) :: biome_id_to_name_database
 
 
   ! Random access oriented.
