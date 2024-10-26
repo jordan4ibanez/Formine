@@ -195,6 +195,7 @@ contains
   !* Queue up a chunk to be generated.
   subroutine chunk_generator_new_chunk(x, z)
     use :: biome_repo
+    use :: world_data
     implicit none
 
     integer(c_int), intent(in), value :: x, z
@@ -203,7 +204,7 @@ contains
     allocate(message)
     message%x = x
     message%z = z
-    message%seed = 12345
+    message%seed = world_data_get_world_seed()
     message%biomes = biome_repo_copy_definition_array()
 
     call thread_create(chunk_generator_thread, c_loc(message))
