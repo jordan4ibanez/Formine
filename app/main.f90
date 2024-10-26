@@ -235,7 +235,7 @@ program main
 
       !? DRAW TEST ?!
 
-      call gl_clear_color_scalar(1.0)
+      call gl_clear_color(135.0 / 255.0, 206.0 / 255.0, 235.0 / 255.0)
 
       call gl_clear_color_buffer()
 
