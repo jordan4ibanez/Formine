@@ -24,6 +24,7 @@ program main
   use :: thread_handler
   use :: version_info
   use :: raw_c
+  use :: world_data
   use, intrinsic ::  iso_c_binding
   implicit none
 
@@ -195,6 +196,8 @@ program main
   !* If we cannot initalize the API properly, we give up.
   call api_initialize()
 
+
+  call world_data_set_world_seed(12345)
 
   print*,"START"
   do x = -8,7
