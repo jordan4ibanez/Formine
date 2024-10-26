@@ -243,7 +243,12 @@ contains
         error stop module_name//": Biome ["//lua_definition%name//"] contains invalid block for [stone_layer]. ["//lua_definition%stone_layer//"]"
       end if
 
+      definition%heat_min = lua_definition%heat_min
+      definition%heat_max = lua_definition%heat_max
 
+      call definition_database%set(lua_definition%name, definition)
+
+      call definition_array%push_back(definition)
 
     end do
   end subroutine biome_repo_finalize
