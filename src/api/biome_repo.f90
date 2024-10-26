@@ -311,10 +311,11 @@ contains
   function biome_repo_copy_definition_array_to_pointer() result(clone_of)
     implicit none
 
-    type(vec) :: clone_of
+    type(vec), pointer :: clone_of
 
-    
+    allocate(clone_of)
 
+    call definition_array%clone(clone_of)
   end function biome_repo_copy_definition_array_to_pointer
 
 
