@@ -16,7 +16,7 @@ I think this is quite fitting because Formine can not only be molded to how you 
 
 Also this is hand coded while looking at the glfw, opengl, stb, and luajit source code and docs so you'll have to excuse any mistakes.
 
-This is written in Fortran 2003 up to 2018. Basically whatever my compiler (gfortran) allows.
+This is written in Fortran 2003 up to 2023. Basically whatever my compiler (gfortran) allows.
 
 If you like what I do, and would like to support me: [My Patreon](https://www.patreon.com/jordan4ibanez)
 
