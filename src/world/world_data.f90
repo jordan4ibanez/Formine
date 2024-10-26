@@ -6,6 +6,10 @@ module world_data
   private
 
 
+  public :: world_data_set_world_seed
+  public :: world_data_get_world_seed
+
+
   integer(c_int) :: world_seed
 
 
