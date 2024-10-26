@@ -67,7 +67,6 @@ module biome_repo
   !* Type: biome_definition_from_lua
   type(hashmap_string_key) :: definition_database_from_lua
 
-
   ! Linear access oriented.
   !* Type: biome_definition_from_lua
   !? NOTE: the definition_database is the one responsible for cleaning up the pointers.
@@ -82,12 +81,16 @@ contains
 
     type(biome_definition) :: blank
     type(biome_definition_from_lua) :: blank_lua
+    character(len = :, kind = c_char), pointer :: blank_string_pointer
 
     !* Type: biome_definition
     definition_database = new_hashmap_string_key(sizeof(blank), gc_definition_repo)
 
     !* Create the base smart pointer of the biome array.
     definition_array = new_vec(sizeof(blank), 0_8)
+
+    !* Create the reverse lookup pointers.
+    biome_id_to_name_database = new_hashmap_integer_key(sizeof(blank_string_pointer), gc_biome_id_database)
 
     !* Type: biome_definition_from_lua
     definition_database_from_lua = new_hashmap_string_key(sizeof(blank_lua), gc_definition_repo_from_lua)
