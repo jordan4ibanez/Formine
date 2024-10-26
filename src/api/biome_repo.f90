@@ -297,4 +297,16 @@ contains
   end subroutine gc_definition_repo_from_lua
 
 
+  subroutine gc_biome_id_database(raw_c_ptr)
+    implicit none
+
+    type(c_ptr), intent(in), value :: raw_c_ptr
+    character(len = :, kind = c_char), pointer :: str_pointer
+
+    call c_f_pointer(raw_c_ptr, str_pointer)
+
+    deallocate(str_pointer)
+  end subroutine gc_biome_id_database
+
+
 end module biome_repo
