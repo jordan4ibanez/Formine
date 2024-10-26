@@ -278,6 +278,8 @@ contains
   end subroutine biome_repo_finalize
 
 
+  !* Used for when walking around the world.
+  !* You can get the biome definition from the X,Z you're in numeric value.
   function biome_repo_get_biome_pointer_by_id(id, biome_pointer) result(exists)
     implicit none
 
@@ -303,6 +305,17 @@ contains
 
     exists = .true.
   end function biome_repo_get_biome_pointer_by_id
+
+
+  !* This is named like this so it's never used out of place.
+  function biome_repo_copy_definition_array_to_pointer() result(clone_of)
+    implicit none
+
+    type(vec) :: clone_of
+
+    
+
+  end function biome_repo_copy_definition_array_to_pointer
 
 
   subroutine biome_repo_destroy()
