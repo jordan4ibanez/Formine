@@ -272,6 +272,10 @@ contains
       current_biome_id = current_biome_id + 1
     end do
 
+    if (.not. definition_database%has_key("grasslands")) then
+      error stop module_name//" Error: Biome [grasslands] (default) is missing."
+    end if
+
     ! Now destroy the LuaJIT components.
     call luajit_definition_array%destroy()
 
