@@ -278,6 +278,33 @@ contains
   end subroutine biome_repo_finalize
 
 
+  function biome_repo_get_biome_pointer_by_id(id, biome_pointer) result(exists)
+    implicit none
+
+    integer(c_int), intent(in), value :: id
+    type(biome_definition), intent(inout), pointer :: biome_pointer
+    logical(c_bool) :: exists
+    type(c_ptr) :: raw_c_ptr
+    character(len = :, kind = c_char), pointer :: name_pointer
+
+    exists = .false.
+
+    if (.not. biome_id_to_name_database%get(int(id, c_int64_t), raw_c_ptr)) then
+      return
+    end if
+
+    call c_f_pointer(raw_c_ptr, name_pointer)
+
+    if (.not. definition_database%get(name_pointer, raw_c_ptr)) then
+      error stop module_name//" Error: Biome exists in reverse lookup but not database. ["//name_pointer//"]"
+    end if
+
+    call c_f_pointer(raw_c_ptr, biome_pointer)
+
+    exists = .true.
+  end function biome_repo_get_biome_pointer_by_id
+
+
   subroutine biome_repo_destroy()
     implicit none
 
