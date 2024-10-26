@@ -63,6 +63,8 @@ module biome_repo
   type(hashmap_integer_key) :: biome_id_to_name_database
 
 
+  !! These two will be destroyed as the game starts.
+
   ! Random access oriented.
   !* Type: biome_definition_from_lua
   type(hashmap_string_key) :: definition_database_from_lua
@@ -267,6 +269,11 @@ contains
 
       current_biome_id = current_biome_id + 1
     end do
+
+    ! Now destroy the LuaJIT components.
+    call definition_array_from_lua%destroy()
+
+    call definition_array_from_lua%destroy()
   end subroutine biome_repo_finalize
 
 
