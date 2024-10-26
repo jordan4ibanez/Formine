@@ -16,6 +16,7 @@ module biome_repo
   public :: biome_repo_deploy_lua_api
   public :: register_biome
   public :: biome_repo_finalize
+  public :: biome_repo_get_bedrock_id
   public :: biome_repo_get_biome_pointer_by_id
   public :: biome_repo_copy_definition_array
   public :: biome_repo_destroy
@@ -75,6 +76,8 @@ module biome_repo
   !* Type: luajit_biome_definition
   !? NOTE: the definition_database is the one responsible for cleaning up the pointers.
   type(vec) :: luajit_definition_array
+
+  integer(c_int) :: bedrock_id
 
 
 contains
@@ -276,11 +279,27 @@ contains
       error stop module_name//" Error: Biome [grasslands] (default) is missing."
     end if
 
+    ! Get bedrock's ID.
+    if (.not. block_repo_get_id_from_name("bedrock", bedrock_id)) then
+      error stop module_name//" Error: Bedrock has not been defined."
+    end if
+
+
     ! Now destroy the LuaJIT components.
     call luajit_definition_array%destroy()
 
     call luajit_definition_array%destroy()
   end subroutine biome_repo_finalize
+
+
+  !* This is a simple function to get the ID of bedrock.
+  function biome_repo_get_bedrock_id() result(id)
+    implicit none
+
+    integer(c_int) :: id
+
+    id = bedrock_id
+  end function biome_repo_get_bedrock_id
 
 
   !* Used for when walking around the world.
