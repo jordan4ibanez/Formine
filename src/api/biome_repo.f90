@@ -219,6 +219,10 @@ contains
 
       call c_f_pointer(raw_c_ptr, lua_definition)
 
+      if (definition_database%has_key(lua_definition%name)) then
+        error stop module_name//" Error: Tried to overwrite biome: ["//lua_definition%name//"]"
+      end if
+
       print*,lua_definition%name
       print*,lua_definition%grass_layer
       print*,lua_definition%dirt_layer
