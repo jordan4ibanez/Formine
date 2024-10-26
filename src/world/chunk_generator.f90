@@ -95,7 +95,7 @@ contains
     type(thread_argument), pointer :: arguments
     type(message_to_thread), pointer :: generator_message
     type(fnl_state) :: height_noise, biome_noise
-    integer(c_int) :: chunk_x, chunk_z, seed, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, status, biome_amount, i
+    integer(c_int) :: chunk_x, chunk_z, seed, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, status, biome_amount, i, bedrock_id
     type(memory_chunk), pointer :: chunk_pointer
     type(message_from_thread) :: output_message
     real(c_float) :: biome_noise_output
@@ -123,6 +123,7 @@ contains
     chunk_z = generator_message%z
     seed = generator_message%seed
     biomes = generator_message%biomes
+    bedrock_id = generator_message%bedrock_id
 
     !? We have our stack data, destroy it.
     deallocate(generator_message)
@@ -187,16 +188,14 @@ contains
         do y = 1, CHUNK_HEIGHT
           ! todo: make this more complex with lua registered biomes.
 
-          if (y == current_height) then
+          if (y == 1) then
+            chunk_pointer%data(y, z, x)%id = bedrock_id
+          else if (y == current_height) then
             chunk_pointer%data(y, z, x)%id = selected_biome%grass_layer
-
           else if (y < current_height .and. y >= current_height - 4) then
-
             chunk_pointer%data(y, z, x)%id = selected_biome%dirt_layer
           else if (y < current_height) then
             chunk_pointer%data(y, z, x)%id = selected_biome%stone_layer
-
-            ! todo: bedrock == y 1
           end if
         end do
       end do
