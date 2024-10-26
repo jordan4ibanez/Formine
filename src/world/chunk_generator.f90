@@ -4,6 +4,7 @@ module chunk_generator
   use :: chunk_data
   use :: chunk_handler
   use :: thread
+  use :: vector
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -19,6 +20,7 @@ module chunk_generator
     integer(c_int) :: x = 0
     integer(c_int) :: z = 0
     integer(c_int) :: seed = 0
+    type(vec) :: biomes
   end type message_to_thread
 
   type :: message_from_thread
@@ -96,6 +98,7 @@ contains
     type(block_data) :: current_block
     type(message_from_thread) :: output_message
     real(c_float) :: biome_noise_output
+    type(vec) :: biomes
 
     !? Transfer main argument pointer to Fortran.
 
@@ -116,6 +119,7 @@ contains
     chunk_x = generator_message%x
     chunk_z = generator_message%z
     seed = generator_message%seed
+    biomes = generator_message%biomes
 
     !? We have our stack data, destroy it.
     deallocate(generator_message)
@@ -170,6 +174,9 @@ contains
       end do
     end do
 
+    ! Destroy the biomes vector.
+    call biomes%destroy()
+
     !? Finally, push the message to the queue.
     output_message%data => chunk_pointer
 
@@ -187,6 +194,7 @@ contains
 
   !* Queue up a chunk to be generated.
   subroutine chunk_generator_new_chunk(x, z)
+    use :: biome_repo
     implicit none
 
     integer(c_int), intent(in), value :: x, z
@@ -196,6 +204,7 @@ contains
     message%x = x
     message%z = z
     message%seed = 12345
+    message%biomes = biome_repo_copy_definition_array()
 
     call thread_create(chunk_generator_thread, c_loc(message))
   end subroutine chunk_generator_new_chunk
