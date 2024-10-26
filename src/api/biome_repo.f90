@@ -205,7 +205,6 @@ contains
     type(biome_definition_from_lua), pointer :: lua_definition
     type(biome_definition) :: definition
     type(c_ptr) :: raw_c_ptr
-    integer(c_int) :: grass_id, dirt_id, stone_id
 
     print"(A)",module_name//": Finalizing biomes."
 
