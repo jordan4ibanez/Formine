@@ -17,6 +17,7 @@ module biome_repo
   public :: register_biome
   public :: biome_repo_finalize
   public :: biome_repo_get_biome_pointer_by_id
+  public :: biome_repo_copy_definition_array
   public :: biome_repo_destroy
 
   !* Bake the module name into the executable.
@@ -308,15 +309,13 @@ contains
 
 
   !* This is named like this so it's never used out of place.
-  function biome_repo_copy_definition_array_to_pointer() result(clone_of)
+  function biome_repo_copy_definition_array() result(clone_of)
     implicit none
 
-    type(vec), pointer :: clone_of
-
-    allocate(clone_of)
+    type(vec) :: clone_of
 
     call definition_array%clone(clone_of)
-  end function biome_repo_copy_definition_array_to_pointer
+  end function biome_repo_copy_definition_array
 
 
   subroutine biome_repo_destroy()
