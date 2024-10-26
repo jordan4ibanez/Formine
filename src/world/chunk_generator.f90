@@ -94,7 +94,7 @@ contains
     type(c_ptr) :: void_pointer
     type(thread_argument), pointer :: arguments
     type(message_to_thread), pointer :: generator_message
-    type(fnl_state) :: height_noise, biome_noise
+    type(fnl_state) :: height_noise, biome_noise, bedrock_noise
     integer(c_int) :: chunk_x, chunk_z, seed, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, status, biome_amount, i, bedrock_id
     type(memory_chunk), pointer :: chunk_pointer
     type(message_from_thread) :: output_message
@@ -135,6 +135,12 @@ contains
     biome_noise = fnl_state()
     biome_noise%seed = seed
     biome_noise%frequency = 0.002
+
+    bedrock_noise = fnl_state()
+    biome_noise%seed = seed
+    ! I like typing random numbers. :D
+    biome_noise%frequency = 0.07827431 
+
 
     chunk_pointer => new_memory_chunk_pointer(chunk_x, chunk_z)
 
