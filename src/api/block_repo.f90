@@ -39,9 +39,9 @@ module block_repo
   !* As new blocks are added in, they will incremement the available ID.
   !*
 
-
-  public :: initialize_block_repo_module
   public :: block_definition
+  public :: initialize_block_repo_module
+  public :: block_repo_get_id_from_name
   public :: block_repo_get_number_of_definitions
   public :: block_repo_get_definition_pointer_by_id
   public :: block_repo_deploy_lua_api
@@ -104,6 +104,32 @@ contains
     !* Create the base smart pointer of the block array.
     definition_array = new_vec(sizeof(blank), 0_8)
   end subroutine initialize_block_repo_module
+
+
+  !* Get the ID from the name.
+  !* If it does not exist, it will return false.
+  function block_repo_get_id_from_name(name, id) result(exists)
+    implicit none
+
+    character(len = *, kind = c_char), intent(in) :: name
+    integer(c_int), intent(inout) :: id
+    logical(c_bool) :: exists
+    type(c_ptr) :: raw_c_ptr
+    type(block_definition), pointer :: definition
+
+    exists = .false.
+
+    ! If it does not exist, simply return false.
+    if (.not. definition_database%get(name, raw_c_ptr)) then
+      return
+    end if
+
+    call c_f_pointer(raw_c_ptr, definition)
+
+    id = definition%id
+
+    exists = .true.
+  end function block_repo_get_id_from_name
 
 
   !* Check how many block are registered.
