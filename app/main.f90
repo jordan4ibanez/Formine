@@ -199,14 +199,14 @@ program main
 
   call world_data_set_world_seed(12345)
 
-  print*,"START"
+  print*,"[BASE GENERATION]: START"
   do x = -8,7
     do y = -8,7
       ! This launches 8 threads.
       call chunk_generator_new_chunk(x,y)
     end do
   end do
-  print*,"END"
+  print*,"[BASE GENERATION]: END"
 
   !! DELETE LOADING SCREEN
 
