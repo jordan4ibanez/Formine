@@ -5,6 +5,7 @@ module chunk_generator
   use :: chunk_handler
   use :: thread
   use :: vector
+  use :: biome_repo
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -93,12 +94,14 @@ contains
     type(thread_argument), pointer :: arguments
     type(message_to_thread), pointer :: generator_message
     type(fnl_state) :: height_noise, biome_noise
-    integer(c_int) :: chunk_x, chunk_z, seed, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, status
+    integer(c_int) :: chunk_x, chunk_z, seed, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, status, biome_amount, i
     type(memory_chunk), pointer :: chunk_pointer
     type(block_data) :: current_block
     type(message_from_thread) :: output_message
     real(c_float) :: biome_noise_output
     type(vec) :: biomes
+    type(c_ptr) :: raw_c_ptr
+    type(biome_definition), pointer :: selected_biome
 
     !? Transfer main argument pointer to Fortran.
 
@@ -130,7 +133,7 @@ contains
 
     biome_noise = fnl_state()
     biome_noise%seed = seed
-    biome_noise%frequency = 0.006
+    biome_noise%frequency = 0.002
 
     chunk_pointer => new_memory_chunk_pointer(chunk_x, chunk_z)
 
@@ -141,34 +144,59 @@ contains
     base_height = 70
     noise_multiplier = 20
 
+    biome_amount = int(biomes%size())
+
+    !? If there are no other biomes besides grasslands, grasslands will always be selected.
+    if (biome_amount == 1) then
+      raw_c_ptr = biomes%get(1_8)
+      call c_f_pointer(raw_c_ptr, selected_biome)
+    end if
+
     do x = 1, CHUNK_WIDTH
       do z = 1, CHUNK_WIDTH
 
         !? Note: This floating point error creates the far lands.
+
+        !? Note: Biome output ranges from: -1.0 - 1.0
+
         biome_noise_output = fnl_get_noise_2d(biome_noise, real(x + base_x), real(z + base_z))
+
         current_height = base_height + floor(fnl_get_noise_2d(height_noise, real(x + base_x), real(z + base_z)) * noise_multiplier)
 
-        ! todo: select biome here.
 
-        current_block = block_data()
-        if (biome_noise_output > 0.55) then
-          current_block%id = 1
-        else
-          current_block%id = 2
+        ! Select a biome if there's more than grasslands.
+        if (biome_amount > 1) then
+
+          !? Note: Biome noise goes from -1.0 - 1.0
+          biome_noise_output = fnl_get_noise_2d(biome_noise, real(x + base_x), real(z + base_z))
+
+          ! Run back and count on 1 (grasslands) as the default.
+          selection: do i = biome_amount,1,-1
+
+            raw_c_ptr = biomes%get(int(i, c_int64_t))
+
+            call c_f_pointer(raw_c_ptr, selected_biome)
+
+            if (selected_biome%heat_min <= biome_noise_output .and. selected_biome%heat_max >= biome_noise_output) then
+              exit selection
+            end if
+
+          end do selection
         end if
 
         do y = 1, CHUNK_HEIGHT
           ! todo: make this more complex with lua registered biomes.
 
-          if (y <= current_height) then
+          if (y == current_height) then
+            chunk_pointer%data(y, z, x)%id = selected_biome%grass_layer
 
-            ! current_block = block_data()
+          else if (y < current_height .and. y >= current_height - 4) then
 
-            ! current_block%id = 1
+            chunk_pointer%data(y, z, x)%id = selected_biome%dirt_layer
+          else if (y < current_height) then
+            chunk_pointer%data(y, z, x)%id = selected_biome%stone_layer
 
-            ! call random_number(randy)
-            ! current_block%id = floor((randy * 5) + 1)
-            chunk_pointer%data(y, z, x) = current_block
+            ! todo: bedrock == y 1
           end if
         end do
       end do
@@ -194,7 +222,6 @@ contains
 
   !* Queue up a chunk to be generated.
   subroutine chunk_generator_new_chunk(x, z)
-    use :: biome_repo
     use :: world_data
     implicit none
 
