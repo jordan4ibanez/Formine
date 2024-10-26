@@ -72,6 +72,7 @@ module block_repo
     character(len = :, kind = c_char), pointer :: description => null()
     type(string_pointer), dimension(6) :: textures
     integer(c_int) :: draw_type = DRAW_TYPE_AIR
+    integer(c_int) :: id = 0
   end type block_definition
 
   integer(c_int) :: current_id = 1
@@ -242,6 +243,8 @@ contains
     end do
 
     new_definition%draw_type = draw_type
+
+    new_definition%id = current_id
 
     ! print"(A)", module_name//": Current Block definition:"
     ! print"(A)", "Name: "//definition_pointer%name
