@@ -230,15 +230,16 @@ contains
       print*,lua_definition%heat_min
       print*,lua_definition%heat_max
 
-      if (.not. block_repo_get_id_from_name(lua_definition%grass_layer, grass_id)) then
+
+      if (.not. block_repo_get_id_from_name(lua_definition%grass_layer, definition%grass_layer)) then
         error stop module_name//": Biome ["//lua_definition%name//"] contains invalid block for [grass_layer]. ["//lua_definition%grass_layer//"]"
       end if
 
-      if (.not. block_repo_get_id_from_name(lua_definition%dirt_layer, dirt_id)) then
+      if (.not. block_repo_get_id_from_name(lua_definition%dirt_layer, definition%dirt_layer)) then
         error stop module_name//": Biome ["//lua_definition%name//"] contains invalid block for [dirt_layer]. ["//lua_definition%dirt_layer//"]"
       end if
 
-      if (.not. block_repo_get_id_from_name(lua_definition%stone_layer, stone_id)) then
+      if (.not. block_repo_get_id_from_name(lua_definition%stone_layer, definition%stone_layer)) then
         error stop module_name//": Biome ["//lua_definition%name//"] contains invalid block for [stone_layer]. ["//lua_definition%stone_layer//"]"
       end if
 
