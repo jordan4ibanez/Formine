@@ -39,7 +39,6 @@ module biome_repo
   !* Biome definition container.
 
   type :: biome_definition
-    character(len = :, kind = c_char), pointer :: name => null()
     integer(c_int) :: grass_layer = 0
     integer(c_int) :: dirt_layer = 0
     integer(c_int) :: stone_layer = 0
@@ -262,7 +261,7 @@ contains
 
     call c_f_pointer(raw_c_ptr, definition_pointer)
 
-    deallocate(definition_pointer%name)
+    ! deallocate(definition_pointer%name)
   end subroutine gc_definition_repo
 
 
