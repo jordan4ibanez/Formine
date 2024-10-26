@@ -59,6 +59,6 @@ biome.register({
   grass_layer = "sand",
   dirt_layer = "sand",
   stone_layer = "stone",
-  heat_min = 0.8,
+  heat_min = 0.55,
   heat_max = 1.0
 })
