@@ -199,12 +199,14 @@ contains
 
 
   subroutine biome_repo_finalize()
+    use :: block_repo
     implicit none
 
     character(len = :, kind = c_char), pointer :: name
     type(biome_definition_from_lua), pointer :: lua_definition
     type(biome_definition) :: definition
     type(c_ptr) :: raw_c_ptr
+    integer(c_int) :: grass_id, dirt_id, stone_id
 
     print"(A)",module_name//": Finalizing biomes."
 
@@ -219,11 +221,26 @@ contains
 
       call c_f_pointer(raw_c_ptr, lua_definition)
 
+      print*,lua_definition%name
       print*,lua_definition%grass_layer
       print*,lua_definition%dirt_layer
       print*,lua_definition%stone_layer
       print*,lua_definition%heat_min
       print*,lua_definition%heat_max
+
+      if (.not. block_repo_get_id_from_name(lua_definition%grass_layer, grass_id)) then
+        error stop module_name//": Biome ["//lua_definition%name//"] contains invalid block for [grass_layer]. ["//lua_definition%grass_layer//"]"
+      end if
+
+      if (.not. block_repo_get_id_from_name(lua_definition%dirt_layer, dirt_id)) then
+        error stop module_name//": Biome ["//lua_definition%name//"] contains invalid block for [dirt_layer]. ["//lua_definition%dirt_layer//"]"
+      end if
+
+      if (.not. block_repo_get_id_from_name(lua_definition%stone_layer, stone_id)) then
+        error stop module_name//": Biome ["//lua_definition%name//"] contains invalid block for [stone_layer]. ["//lua_definition%stone_layer//"]"
+      end if
+
+
 
     end do
   end subroutine biome_repo_finalize
