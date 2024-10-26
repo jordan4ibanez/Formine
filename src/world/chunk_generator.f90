@@ -22,6 +22,7 @@ module chunk_generator
     integer(c_int) :: z = 0
     integer(c_int) :: seed = 0
     type(vec) :: biomes
+    integer(c_int) :: bedrock_id = 0
   end type message_to_thread
 
   type :: message_from_thread
@@ -96,7 +97,6 @@ contains
     type(fnl_state) :: height_noise, biome_noise
     integer(c_int) :: chunk_x, chunk_z, seed, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, status, biome_amount, i
     type(memory_chunk), pointer :: chunk_pointer
-    type(block_data) :: current_block
     type(message_from_thread) :: output_message
     real(c_float) :: biome_noise_output
     type(vec) :: biomes
@@ -233,6 +233,7 @@ contains
     message%z = z
     message%seed = world_data_get_world_seed()
     message%biomes = biome_repo_copy_definition_array()
+    message%bedrock_id = biome_repo_get_bedrock_id()
 
     call thread_create(chunk_generator_thread, c_loc(message))
   end subroutine chunk_generator_new_chunk
