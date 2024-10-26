@@ -95,7 +95,7 @@ contains
     type(thread_argument), pointer :: arguments
     type(message_to_thread), pointer :: generator_message
     type(fnl_state) :: height_noise, biome_noise, bedrock_noise
-    integer(c_int) :: chunk_x, chunk_z, seed, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, status, biome_amount, i, bedrock_id
+    integer(c_int) :: chunk_x, chunk_z, seed, x, y, z, base_x, base_y, base_z, base_height, noise_multiplier, current_height, status, biome_amount, i, bedrock_id, bedrock_height
     type(memory_chunk), pointer :: chunk_pointer
     type(message_from_thread) :: output_message
     real(c_float) :: biome_noise_output
@@ -137,9 +137,9 @@ contains
     biome_noise%frequency = 0.002
 
     bedrock_noise = fnl_state()
-    biome_noise%seed = seed
+    bedrock_noise%seed = seed
     ! I like typing random numbers. :D
-    biome_noise%frequency = 0.07827431 
+    bedrock_noise%frequency = 71.7827431
 
 
     chunk_pointer => new_memory_chunk_pointer(chunk_x, chunk_z)
@@ -170,6 +170,7 @@ contains
 
         current_height = base_height + floor(fnl_get_noise_2d(height_noise, real(x + base_x), real(z + base_z)) * noise_multiplier)
 
+        bedrock_height = 1 + floor(fnl_get_noise_2d(bedrock_noise, real(x + base_x), real(z + base_z)) + 1.0) 
 
         ! Select a biome if there's more than grasslands.
         if (biome_amount > 1) then
@@ -194,7 +195,7 @@ contains
         do y = 1, CHUNK_HEIGHT
           ! todo: make this more complex with lua registered biomes.
 
-          if (y == 1) then
+          if (y <= bedrock_height) then
             chunk_pointer%data(y, z, x)%id = bedrock_id
           else if (y == current_height) then
             chunk_pointer%data(y, z, x)%id = selected_biome%grass_layer
