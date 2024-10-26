@@ -201,11 +201,31 @@ contains
   subroutine biome_repo_finalize()
     implicit none
 
+    character(len = :, kind = c_char), pointer :: name
+    type(biome_definition_from_lua), pointer :: lua_definition
+    type(biome_definition) :: definition
+    type(c_ptr) :: raw_c_ptr
+
     print"(A)",module_name//": Finalizing biomes."
 
     ! todo: check the block repo to make sure the blocks are valid
     ! todo: as the biomes are processed into numeric values for performance.
 
+    call definition_database_from_lua%initialize_iterator()
+
+    do while (definition_database_from_lua%iterate_kv(name, raw_c_ptr))
+
+      print*,name
+
+      call c_f_pointer(raw_c_ptr, lua_definition)
+
+      print*,lua_definition%grass_layer
+      print*,lua_definition%dirt_layer
+      print*,lua_definition%stone_layer
+      print*,lua_definition%heat_min
+      print*,lua_definition%heat_max
+
+    end do
   end subroutine biome_repo_finalize
 
 
