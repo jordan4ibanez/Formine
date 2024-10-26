@@ -209,21 +209,21 @@ contains
     use :: block_repo
     implicit none
 
-    character(len = :, kind = c_char), pointer :: name
     type(biome_definition_from_lua), pointer :: lua_definition
     type(biome_definition) :: definition
     type(c_ptr) :: raw_c_ptr
+    integer(c_int) :: current_biome_id
+    character(len = :, kind = c_char), pointer :: name_pointer
 
     print"(A)",module_name//": Finalizing biomes."
 
-    ! todo: check the block repo to make sure the blocks are valid
-    ! todo: as the biomes are processed into numeric values for performance.
+
+    current_biome_id = 0
+
 
     call definition_database_from_lua%initialize_iterator()
 
-    do while (definition_database_from_lua%iterate_kv(name, raw_c_ptr))
-
-      print*,name
+    do while (definition_database_from_lua%iterate(raw_c_ptr))
 
       call c_f_pointer(raw_c_ptr, lua_definition)
 
@@ -231,12 +231,12 @@ contains
         error stop module_name//" Error: Tried to overwrite biome: ["//lua_definition%name//"]"
       end if
 
-      print*,lua_definition%name
-      print*,lua_definition%grass_layer
-      print*,lua_definition%dirt_layer
-      print*,lua_definition%stone_layer
-      print*,lua_definition%heat_min
-      print*,lua_definition%heat_max
+      ! print*,lua_definition%name
+      ! print*,lua_definition%grass_layer
+      ! print*,lua_definition%dirt_layer
+      ! print*,lua_definition%stone_layer
+      ! print*,lua_definition%heat_min
+      ! print*,lua_definition%heat_max
 
 
       if (.not. block_repo_get_id_from_name(lua_definition%grass_layer, definition%grass_layer)) then
@@ -255,9 +255,17 @@ contains
       definition%heat_max = lua_definition%heat_max
 
       call definition_database%set(lua_definition%name, definition)
-
       call definition_array%push_back(definition)
 
+      allocate(character(len = len(lua_definition%name), kind = c_char) :: name_pointer)
+
+      name_pointer = lua_definition%name
+
+      call biome_id_to_name_database%set(int(current_biome_id, c_int64_t), name_pointer)
+
+      print*,lua_definition%name, " is biome", current_biome_id
+
+      current_biome_id = current_biome_id + 1
     end do
   end subroutine biome_repo_finalize
 
