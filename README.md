@@ -109,9 +109,9 @@ _Or_ you can just change the Makefile to use gfortran-14, but that's annoying.
 
 ### Install dependencies on Mac OS
 
-**Note:** this was tested on a 2014 mac mini running Mac OS 12 Monterey. If this breaks, let me know.
+**Note:** this was tested on a 2014 mac mini running Mac OS 15 Sequoia. If this breaks, let me know.
 
-You're going to need MacPorts and Homebrew. This was tested in Mac OS Monterey.
+You're going to need MacPorts.
 
 Well first, you're going to need to edit your ``.zshrc`` to add a non-standard path.
 
@@ -121,14 +121,11 @@ Add this to ``.zshrc``:
 export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/lib
 ```
 
-Mac Ports:
-```
-sudo port install fpm stb
-```
-
 Homebrew
 ```
-brew install gfortran glfw
+brew tap fortran-lang/homebrew-fortran
+
+brew install gfortran fpm glfw luajit
 ```
 
 **You must switch** the ``link`` flags in the [fpm.toml](https://github.com/jordan4ibanez/Formine/blob/master/fpm.toml) to the mac one!
