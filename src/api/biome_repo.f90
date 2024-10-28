@@ -97,7 +97,9 @@ contains
     definition_array = new_vec(sizeof(blank), 0_8)
 
     !* Create the reverse lookup pointers.
+    allocate(character(len = 0, kind = c_char) :: blank_string_pointer)
     biome_id_to_name_database = new_hashmap_integer_key(sizeof(blank_string_pointer), gc_biome_id_database)
+    deallocate(blank_string_pointer)
 
     !* Type: luajit_biome_definition
     luajit_definition_database = new_hashmap_string_key(sizeof(blank_lua), gc_definition_repo_from_lua)
