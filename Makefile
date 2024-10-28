@@ -8,6 +8,7 @@ windows:
 	@fpm run --c-flag -Wno-discarded-qualifiers --c-flag -Wno-incompatible-pointer-types
 
 
+# This does not work on macOS :D
 gdb:
 	@./scripts/create_version_info.sh
 	@MALLOC_CHECK_=2 fpm run --flag   -g --flag   -lmcheck \
