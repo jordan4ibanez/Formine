@@ -89,6 +89,16 @@ module glfw
   integer(c_int), parameter, public :: GLFW_FALSE = 0
 
 
+  ! Platforms.
+
+  integer, parameter, public :: GLFW_ANY_PLATFORM   = int(z"00060000")
+  integer, parameter, public :: GLFW_PLATFORM_WIN32 = int(z"00060001")
+  integer, parameter, public :: GLFW_PLATFORM_COCOA = int(z"00060002")
+  integer, parameter, public :: GLFW_PLATFORM_WAYLAND = int(z"00060003")
+  integer, parameter, public :: GLFW_PLATFORM_X11 = int(z"00060004")
+  integer, parameter, public :: GLFW_PLATFORM_NULL = int(z"00060005")
+
+
   ! Key actions.
 
   integer(c_int), parameter, public :: GLFW_RELEASE = 0
