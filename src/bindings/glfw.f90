@@ -69,6 +69,7 @@ module glfw
   public :: GLFW_CONTEXT_VERSION_MAJOR
   public :: GLFW_CONTEXT_VERSION_MINOR
   public :: GLFW_OPENGL_FORWARD_COMPAT
+  public :: GLFW_SCALE_FRAMEBUFFER
 
   integer, parameter :: GLFW_CONTEXT_DEBUG = int(z"22007")
   integer, parameter :: GLFW_OPENGL_DEBUG_CONTEXT = int(z"22007")
