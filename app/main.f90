@@ -201,7 +201,7 @@ program main
 
   call glfw_swap_buffers()
 
-  call sleep(1)
+  ! call sleep(1)
 
   !! END LOADING SCREEN.
 
@@ -223,9 +223,9 @@ program main
 
   !! DELETE LOADING SCREEN
 
-  call mesh_delete_by_name("loading_mesh")
+  ! call mesh_delete_by_name("loading_mesh")
 
-  call texture_delete("formine_loading_icon.png")
+  ! call texture_delete("formine_loading_icon.png")
 
   !! END DELETE LOADING SCREEN
 
@@ -366,6 +366,12 @@ program main
       call mesh_draw(z_vao)
 
       deallocate(position_text_debug)
+
+
+
+      gui_scale = (glfw_get_window_gui_scale_f32() * 350.0)
+
+      call camera_set_gui_matrix_f32(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 * gui_scale, 1.25 * gui_scale, 1.0 * gui_scale)
 
 
       ! Process second text.
