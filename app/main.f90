@@ -48,6 +48,7 @@ program main
   new_fps = 0
   old_fps = -1
   launched_thread = .false.
+  rotation = 0.0
 
 
   ! !! BEGIN WARNING: This is only to be used for when developing libraries.
