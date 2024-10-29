@@ -677,7 +677,7 @@ contains
   integer(c_int) function glfw_get_window_width() result(width)
     implicit none
 
-    width = nint(real(window_width) * window_scale%x)
+    width = window_width
   end function glfw_get_window_width
 
 
@@ -685,7 +685,7 @@ contains
   integer(c_int) function glfw_get_window_height() result(height)
     implicit none
 
-    height = nint(real(window_height) * window_scale%y)
+    height = window_height
   end function glfw_get_window_height
 
 
