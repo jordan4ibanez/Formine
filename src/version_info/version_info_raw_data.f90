@@ -7,7 +7,7 @@ module raw_data_version_info
 
   integer(c_int), parameter :: FORMINE_VERSION_MAJOR = 0
   integer(c_int), parameter :: FORMINE_VERSION_MINOR = 6
-  integer(c_int), parameter :: FORMINE_VERSION_PATCH = 0
+  integer(c_int), parameter :: FORMINE_VERSION_PATCH = 1
   logical(c_bool), parameter :: FORMINE_IS_RELEASE = .false.
-  character(len = 13, kind = c_char), parameter :: FORMINE_VERSION_STRING = "0.6.0 - Debug"
+  character(len = 13, kind = c_char), parameter :: FORMINE_VERSION_STRING = "0.6.1 - Debug"
 end module raw_data_version_info
