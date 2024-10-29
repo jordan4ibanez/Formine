@@ -223,9 +223,9 @@ program main
 
   !! DELETE LOADING SCREEN
 
-  ! call mesh_delete_by_name("loading_mesh")
+  call mesh_delete_by_name("loading_mesh")
 
-  ! call texture_delete("formine_loading_icon.png")
+  call texture_delete("formine_loading_icon.png")
 
   !! END DELETE LOADING SCREEN
 
