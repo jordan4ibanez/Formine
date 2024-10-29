@@ -149,8 +149,6 @@ program main
 
   !! Draw the loading screen.
 
-  call shader_start("main")
-
   call texture_create("./textures/formine_loading_icon.png")
 
 
@@ -179,6 +177,9 @@ program main
 
   !? This is needed for KDE's glide animation.
   call glfw_swap_buffers()
+
+  call shader_start("main")
+
   call glfw_poll_events()
 
   call gl_clear_color_scalar(0.5)
