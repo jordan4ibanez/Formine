@@ -599,8 +599,13 @@ contains
 
     ! Finally, output information on this and automatically terminate this if it fails.
     if (success) then
-      window_size%x = nint(real(width) * window_scale%x)
-      window_size%y = nint(real(height) * window_scale%y)
+      if (framebuffer_scaling_enabled) then
+        window_size%x = nint(real(width) * window_scale%x)
+        window_size%y = nint(real(height) * window_scale%y)
+      else
+        window_size%x = width
+        window_size%y = height
+      end if
       print"(A)","[GLFW]: Window created successfully."
     else
       print"(A)","[GLFW] Error: Failed to create window."
