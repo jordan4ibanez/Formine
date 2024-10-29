@@ -75,6 +75,7 @@ module glfw
   integer, parameter :: GLFW_CONTEXT_VERSION_MAJOR = int(z"00022002")
   integer, parameter :: GLFW_CONTEXT_VERSION_MINOR = int(z"00022003")
   integer, parameter :: GLFW_OPENGL_FORWARD_COMPAT = int(z"00022006")
+  integer, parameter :: GLFW_SCALE_FRAMEBUFFER = int(z"0002200D")
 
   ! Booleans.
 
