@@ -704,8 +704,15 @@ contains
     end if
 
     print"(A)", "[Window] Resize: ["//int_to_string(width)//", "//int_to_string(height)//"]"
-    window_size%x = nint(real(width) * window_scale%x)
-    window_size%y = nint(real(height) * window_scale%y)
+
+    if (framebuffer_scaling_enabled) then
+      window_size%x = nint(real(width) * window_scale%x)
+      window_size%y = nint(real(height) * window_scale%y)
+    else
+      window_size%x = width
+      window_size%y = height
+    end if
+
     call gl_view_port(0,0, window_size%x, window_size%y)
 
     call glfw_update_window_gui_scale()
