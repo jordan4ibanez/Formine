@@ -479,7 +479,7 @@ module glfw
 
       type(c_ptr), intent(in), value :: window
       real(c_float), intent(inout) :: x_scale, y_scale
-    end subroutine 
+    end subroutine
 
 
   end interface
