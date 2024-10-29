@@ -554,8 +554,7 @@ contains
     ! Then we check if the window pointer is null.
     success = c_associated(window_pointer)
 
-    ! Start off with an assumption of 1.0 scaling.
-    window_scale = [1.0,1.0]
+    call internal_glfw_get_window_content_scale(window_pointer, window_scale%x, window_scale%y)
 
     ! Finally, output information on this and automatically terminate this if it fails.
     if (success) then
@@ -568,8 +567,6 @@ contains
     end if
 
     call glfw_update_window_gui_scale()
-
-    call internal_glfw_get_window_content_scale(window_pointer, window_scale%x, window_scale%y)
   end function glfw_create_window
 
 
