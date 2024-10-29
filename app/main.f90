@@ -28,7 +28,7 @@ program main
   use, intrinsic ::  iso_c_binding
   implicit none
 
-  real(c_float) :: rotation, gui_scale!, min_x, min_y, max_x, max_y
+  real(c_float) :: rotation, gui_scale, window_scale!, min_x, min_y, max_x, max_y
   type(vec2f) :: text_size
   real(c_float), parameter :: FONT_SIZE = 25.0
   real(c_float) :: floating_font_size, old_floating_font_size
@@ -190,7 +190,8 @@ program main
   call camera_update_2d()
 
   gui_scale = (glfw_get_window_gui_scale_f32() * 150.0)
-  call camera_set_gui_matrix_f32(-1920.0 / 2.0, -1080.0 / 2.0, 0.0, 0.0, 0.0, 0.0, 1.0 * gui_scale, 1.25 * gui_scale, 1.0 * gui_scale)
+  window_scale = glfw_get_window_gui_scale_f32()
+  call camera_set_gui_matrix_f32(-1920.0 / window_scale, -1080.0 / window_scale, 0.0, 0.0, 0.0, 0.0, 1.0 * gui_scale, 1.25 * gui_scale, 1.0 * gui_scale)
 
   call mesh_draw_by_name("loading_mesh")
 
