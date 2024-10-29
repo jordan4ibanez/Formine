@@ -151,7 +151,6 @@ program main
 
   call texture_create("./textures/formine_loading_icon.png")
 
-
   call mesh_create_3d_named( &
     "loading_mesh", &
     [ &
@@ -196,12 +195,9 @@ program main
 
   call camera_set_gui_matrix_f32(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 * gui_scale, 1.25 * gui_scale, 1.0 * gui_scale)
 
-
   call mesh_draw_by_name("loading_mesh")
 
   call glfw_swap_buffers()
-
-  call sleep(10)
 
   !! END LOADING SCREEN.
 
