@@ -593,6 +593,7 @@ contains
     select case(internal_glfw_get_platform())
      case (GLFW_PLATFORM_COCOA, GLFW_PLATFORM_WAYLAND)
       print"(A)","[GLFW]: Framebuffer scaling supported. Enabling."
+      framebuffer_scaling_enabled = .true.
      case default
       print"(A)","[GLFW]: Framebuffer scaling unsupported. Disabling."
     end select
