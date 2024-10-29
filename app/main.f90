@@ -192,9 +192,10 @@ program main
 
   call camera_update_2d()
 
-  gui_scale = (glfw_get_window_gui_scale_f32() * 150.0)
-  window_scale = glfw_get_window_gui_scale_f32()
-  call camera_set_gui_matrix_f32(-1920.0 / window_scale, -1080.0 / window_scale, 0.0, 0.0, 0.0, 0.0, 1.0 * gui_scale, 1.25 * gui_scale, 1.0 * gui_scale)
+  gui_scale = (glfw_get_window_gui_scale_f32() * 350.0)
+
+  call camera_set_gui_matrix_f32(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 * gui_scale, 1.25 * gui_scale, 1.0 * gui_scale)
+
 
   call mesh_draw_by_name("loading_mesh")
 
