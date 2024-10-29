@@ -102,6 +102,8 @@ program main
 
   call glfw_set_window_size_callback()
 
+  call glfw_set_content_scale_callback()
+
   call gl_get_version()
 
   call glfw_swap_interval(0)
