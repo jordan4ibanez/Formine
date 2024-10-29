@@ -1,6 +1,7 @@
 module glfw
   use, intrinsic :: iso_c_binding
   use :: vector_2f
+  use :: vector_2i
   implicit none
 
 
@@ -16,8 +17,7 @@ module glfw
   ! Fortran side.
 
   character(len = :), allocatable :: window_title
-  integer(c_int) :: window_width
-  integer(c_int) :: window_height
+  type(vec2i) :: window_size
 
 
   ! GUI components. (For the future)
