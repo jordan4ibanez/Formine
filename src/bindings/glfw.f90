@@ -502,6 +502,23 @@ module glfw
     end subroutine
 
 
+    function internal_glfw_platform_supported(plat) result(support) bind(c, name = "glfwPlatformSupported")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int), intent(in), value :: plat
+      logical(c_bool) :: support
+    end function internal_glfw_platform_supported
+
+
+    function internal_glfw_get_platform() result(plat) bind(c, name = "glfwGetPlatform")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(c_int) :: plat
+    end function internal_glfw_get_platform
+
+
   end interface
 
 
