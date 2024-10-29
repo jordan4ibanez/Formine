@@ -565,6 +565,8 @@ contains
     end if
 
     call glfw_update_window_gui_scale()
+
+    call internal_glfw_get_window_content_scale(window_pointer, window_scale%x, window_scale%y)
   end function glfw_create_window
 
 
