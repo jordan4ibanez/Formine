@@ -37,6 +37,7 @@ module glfw
   public :: glfw_create_window
   public :: glfw_make_context_current
   public :: glfw_get_error
+  public :: glfw_trigger_viewport_update
   public :: glfw_window_should_close
   public :: glfw_swap_buffers
   public :: glfw_poll_events
@@ -575,6 +576,14 @@ contains
 
     call internal_glfw_make_context_current(window_pointer)
   end subroutine glfw_make_context_current
+
+
+  subroutine glfw_trigger_viewport_update()
+    use :: opengl, only: gl_view_port
+    implicit none
+
+    call gl_view_port(0,0, window_size%x, window_size%y)
+  end subroutine glfw_trigger_viewport_update
 
 
   logical function glfw_window_should_close() result(should_close)
