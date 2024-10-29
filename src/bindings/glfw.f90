@@ -1,5 +1,6 @@
 module glfw
   use, intrinsic :: iso_c_binding
+  use :: vector_2f
   implicit none
 
 
@@ -9,6 +10,7 @@ module glfw
   ! C side.
 
   type(c_ptr) :: window_pointer
+  type(vec2f) :: window_scale
 
 
   ! Fortran side.
