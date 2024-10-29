@@ -81,6 +81,8 @@ program main
   ! Get portable function pointers.
   call forglad_load_gl(c_funloc(glfw_get_proc_address))
 
+  call glfw_trigger_viewport_update()
+
   !! SET WINDOW ICON.
   call glfw_set_window_icon("./textures/formine_logo_512.png")
   !! END SET WINDOW ICON.
