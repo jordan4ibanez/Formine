@@ -19,7 +19,7 @@ module glfw
   character(len = :), allocatable :: window_title
   type(vec2i) :: window_size
 
-  logical(c_bool) :: has_scale_buffer = .false.
+  logical(c_bool) :: framebuffer_scaling_enabled = .false.
 
 
   ! GUI components. (For the future)
