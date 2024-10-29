@@ -154,10 +154,6 @@ program main
   call texture_create("./textures/formine_loading_icon.png")
 
 
-  call gl_clear_color_scalar(0.5)
-
-  call gl_clear_color_buffer()
-
   call mesh_create_3d_named( &
     "loading_mesh", &
     [ &
@@ -182,6 +178,10 @@ program main
     )
 
   call glfw_poll_events()
+
+  call gl_clear_color_scalar(0.5)
+
+  call gl_clear_color_buffer()
 
   call gl_clear_depth_buffer()
 
