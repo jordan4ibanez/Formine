@@ -65,20 +65,13 @@ module glfw
 
   ! Constants.
 
-  public :: GLFW_CONTEXT_DEBUG
-  public :: GLFW_OPENGL_DEBUG_CONTEXT
-  public :: GLFW_CONTEXT_VERSION_MAJOR
-  public :: GLFW_CONTEXT_VERSION_MINOR
-  public :: GLFW_OPENGL_FORWARD_COMPAT
-  public :: GLFW_SCALE_FRAMEBUFFER
-
-  integer, parameter :: GLFW_CONTEXT_DEBUG = int(z"22007")
-  integer, parameter :: GLFW_OPENGL_DEBUG_CONTEXT = int(z"22007")
-  integer, parameter :: GLFW_CONTEXT_VERSION_MAJOR = int(z"00022002")
-  integer, parameter :: GLFW_CONTEXT_VERSION_MINOR = int(z"00022003")
-  integer, parameter :: GLFW_OPENGL_FORWARD_COMPAT = int(z"00022006")
+  integer, parameter, public :: GLFW_CONTEXT_DEBUG = int(z"22007")
+  integer, parameter, public :: GLFW_OPENGL_DEBUG_CONTEXT = int(z"22007")
+  integer, parameter, public :: GLFW_CONTEXT_VERSION_MAJOR = int(z"00022002")
+  integer, parameter, public :: GLFW_CONTEXT_VERSION_MINOR = int(z"00022003")
+  integer, parameter, public :: GLFW_OPENGL_FORWARD_COMPAT = int(z"00022006")
   ! This is needed for wayland.
-  integer, parameter :: GLFW_SCALE_FRAMEBUFFER = int(z"0002200D")
+  integer, parameter, public :: GLFW_SCALE_FRAMEBUFFER = int(z"0002200D")
 
   ! Booleans.
 
