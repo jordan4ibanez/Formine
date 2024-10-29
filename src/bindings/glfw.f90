@@ -590,6 +590,13 @@ contains
 
     call internal_glfw_get_window_content_scale(window_pointer, window_scale%x, window_scale%y)
 
+    select case(internal_glfw_get_platform())
+     case (GLFW_PLATFORM_COCOA, GLFW_PLATFORM_WAYLAND)
+      print"(A)","[GLFW]: Framebuffer scaling supported. Enabling."
+     case default
+      print"(A)","[GLFW]: Framebuffer scaling unsupported. Disabling."
+    end select
+
     ! Finally, output information on this and automatically terminate this if it fails.
     if (success) then
       window_size%x = nint(real(width) * window_scale%x)
