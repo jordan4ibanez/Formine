@@ -69,7 +69,7 @@ program main
   call glfw_window_hint(GLFW_CONTEXT_VERSION_MAJOR, 4)
   call glfw_window_hint(GLFW_CONTEXT_VERSION_MINOR, 1)
   call glfw_window_hint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE)
-
+  call glfw_window_hint(GLFW_SCALE_FRAMEBUFFER, GLFW_TRUE)
 
   ! Try to initialize the Window.
   if (.not. glfw_create_window(1920, 1080, "Formine - "//FORMINE_VERSION_STRING)) then
