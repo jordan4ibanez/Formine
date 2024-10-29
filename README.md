@@ -142,7 +142,7 @@ make
 You need to be sure you open MSYS2 UCRT64 or else it will not work.
 
 ```
-pacman -S base-devel mingw-w64-ucrt-x86_64-fpm mingw-w64-ucrt-x86_64-gcc-fortran git mingw-w64-ucrt-x86_64-glfw mingw-w64-ucrt-x86_64-luajit mingw-w64-ucrt-x86_64-stb
+pacman -S base-devel mingw-w64-ucrt-x86_64-fpm mingw-w64-ucrt-x86_64-gcc-fortran git mingw-w64-ucrt-x86_64-glfw mingw-w64-ucrt-x86_64-luajit
 ```
 
 **You must switch** the ``link`` flags in the [fpm.toml](https://github.com/jordan4ibanez/Formine/blob/master/fpm.toml) to the windows one!
