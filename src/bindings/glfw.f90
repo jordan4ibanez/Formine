@@ -779,8 +779,8 @@ contains
 
     real(c_double) :: x, y
 
-    x = window_width / STANDARD_WINDOW_WIDTH
-    y = window_height / STANDARD_WINDOW_HEIGHT
+    x = window_size%x / STANDARD_WINDOW_WIDTH
+    y = window_size%y / STANDARD_WINDOW_HEIGHT
 
     if (x < y) then
       window_gui_scale = x
