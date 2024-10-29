@@ -187,9 +187,10 @@ program main
 
   call texture_use("formine_loading_icon.png")
 
-  call camera_update_3d()
+  call camera_update_2d()
 
-  call camera_set_object_matrix_f32(0.0, 0.0, 8.0, 0.0, 0.0, 0.0, 7.0, 9.0, 7.0)
+  gui_scale = (glfw_get_window_gui_scale_f32() * 150.0)
+  call camera_set_gui_matrix_f32(-1920.0 / 2.0, -1080.0 / 2.0, 0.0, 0.0, 0.0, 0.0, 1.0 * gui_scale, 1.25 * gui_scale, 1.0 * gui_scale)
 
   call mesh_draw_by_name("loading_mesh")
 
