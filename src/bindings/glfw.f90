@@ -818,4 +818,28 @@ contains
   end subroutine glfw_set_window_icon
 
 
+  !* Set content scaling awareness for wayland and macos.
+  subroutine glfw_set_content_scale_callback()
+    implicit none
+
+    call internal_glfw_set_window_content_scale_callback(window_pointer, c_funloc(content_scale_callback))
+  end subroutine
+
+
+  !* And this is the actual callback.
+  subroutine content_scale_callback(window, x_scale, y_scale)
+    implicit none
+
+    type(c_ptr), intent(in), value :: window
+    real(c_float), intent(in), value :: x_scale, y_scale
+
+    if (.false.) then
+      print*,window
+    end if
+
+    window_scale%x = x_scale
+    window_scale%y = y_scale
+  end subroutine content_scale_callback
+
+
 end module glfw
