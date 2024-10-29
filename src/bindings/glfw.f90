@@ -58,6 +58,7 @@ module glfw
   public :: glfw_get_window_gui_scale_f32
   public :: glfw_get_window_gui_scale_f64
   public :: glfw_set_window_icon
+  public :: glfw_set_content_scale_callback
 
 
   public :: glfw_image
