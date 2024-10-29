@@ -554,10 +554,13 @@ contains
     ! Then we check if the window pointer is null.
     success = c_associated(window_pointer)
 
+    ! Start off with an assumption of 1.0 scaling.
+    window_scale = [1.0,1.0]
+
     ! Finally, output information on this and automatically terminate this if it fails.
     if (success) then
-      window_width = width
-      window_height = height
+      window_size%x = nint(real(width) * window_scale%x)
+      window_size%y = nint(real(height) * window_scale%y)
       print"(A)","[GLFW]: Window created successfully."
     else
       print"(A)","[GLFW] Error: Failed to create window."
