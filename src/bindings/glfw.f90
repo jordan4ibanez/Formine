@@ -19,6 +19,8 @@ module glfw
   character(len = :), allocatable :: window_title
   type(vec2i) :: window_size
 
+  logical(c_bool) :: has_scale_buffer = .false.
+
 
   ! GUI components. (For the future)
   ! Base on standard HD resolution.
