@@ -473,6 +473,15 @@ module glfw
     end subroutine internal_glfw_set_window_content_scale_callback
 
 
+    subroutine internal_glfw_get_window_content_scale(window, x_scale, y_scale) bind(c, name = "glfwGetWindowContentScale")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: window
+      real(c_float), intent(inout) :: x_scale, y_scale
+    end subroutine 
+
+
   end interface
 
 
