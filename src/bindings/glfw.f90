@@ -62,10 +62,10 @@ module glfw
   public :: glfw_set_cursor_pos
   public :: glfw_get_window_gui_scale_f32
   public :: glfw_get_window_gui_scale_f64
-  public :: glfw_get_window_scale_width_f32
-  public :: glfw_get_window_scale_width_f64
-  public :: glfw_get_window_scale_height_f32
-  public :: glfw_get_window_scale_height_f64
+  ! public :: glfw_get_window_scale_width_f32
+  ! public :: glfw_get_window_scale_width_f64
+  ! public :: glfw_get_window_scale_height_f32
+  ! public :: glfw_get_window_scale_height_f64
   public :: glfw_set_window_icon
   public :: glfw_set_content_scale_callback
 
