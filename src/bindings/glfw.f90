@@ -464,6 +464,15 @@ module glfw
     end subroutine internal_glfw_set_window_icon
 
 
+    subroutine internal_glfw_set_window_content_scale_callback(window, window_content_scale_callback) bind(c, name = "glfwSetWindowContentScaleCallback")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      type(c_ptr), intent(in), value :: window
+      type(c_funptr), intent(in), value :: window_content_scale_callback
+    end subroutine internal_glfw_set_window_content_scale_callback
+
+
   end interface
 
 
