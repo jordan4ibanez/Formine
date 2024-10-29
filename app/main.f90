@@ -28,7 +28,7 @@ program main
   use, intrinsic ::  iso_c_binding
   implicit none
 
-  real(c_float) :: rotation!, min_x, min_y, max_x, max_y
+  real(c_float) :: rotation, gui_scale!, min_x, min_y, max_x, max_y
   type(vec2f) :: text_size
   real(c_float), parameter :: FONT_SIZE = 25.0
   real(c_float) :: floating_font_size, old_floating_font_size
