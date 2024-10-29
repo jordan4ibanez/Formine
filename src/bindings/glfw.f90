@@ -672,7 +672,7 @@ contains
   real(c_float) function glfw_get_aspect_ratio() result(ratio)
     implicit none
 
-    ratio = real(window_width, kind = c_float) / real(window_height, kind = c_float)
+    ratio = real(window_size%x) / real(window_size%y)
   end function glfw_get_aspect_ratio
 
 
@@ -680,7 +680,7 @@ contains
   integer(c_int) function glfw_get_window_width() result(width)
     implicit none
 
-    width = window_width
+    width = window_size%x
   end function glfw_get_window_width
 
 
@@ -688,7 +688,7 @@ contains
   integer(c_int) function glfw_get_window_height() result(height)
     implicit none
 
-    height = window_height
+    height = window_size%y
   end function glfw_get_window_height
 
 
@@ -696,7 +696,7 @@ contains
   real(c_float) function glfw_get_window_width_f32() result(width)
     implicit none
 
-    width = real(window_width, kind = c_float)
+    width = real(window_size%x)
   end function glfw_get_window_width_f32
 
 
@@ -704,7 +704,7 @@ contains
   real(c_float) function glfw_get_window_height_f32() result(height)
     implicit none
 
-    height = real(window_height, kind = c_float)
+    height = real(window_size%y)
   end function glfw_get_window_height_f32
 
 
@@ -712,7 +712,7 @@ contains
   real(c_double) function glfw_get_window_width_f64() result(width)
     implicit none
 
-    width = real(window_width, kind = c_double)
+    width = real(window_size%x, kind = c_double)
   end function glfw_get_window_width_f64
 
 
@@ -720,7 +720,7 @@ contains
   real(c_double) function glfw_get_window_height_f64() result(height)
     implicit none
 
-    height = real(window_height, kind = c_double)
+    height = real(window_size%y, kind = c_double)
   end function glfw_get_window_height_f64
 
 
