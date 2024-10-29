@@ -60,6 +60,10 @@ module glfw
   public :: glfw_set_cursor_pos
   public :: glfw_get_window_gui_scale_f32
   public :: glfw_get_window_gui_scale_f64
+  public :: glfw_get_window_scale_width_f32
+  public :: glfw_get_window_scale_width_f64
+  public :: glfw_get_window_scale_height_f32
+  public :: glfw_get_window_scale_height_f64
   public :: glfw_set_window_icon
   public :: glfw_set_content_scale_callback
 
@@ -811,6 +815,37 @@ contains
     gui_scale = window_gui_scale
   end function glfw_get_window_gui_scale_f64
 
+
+  !* Get the window content scale width in floating point.
+  real(c_float) function glfw_get_window_scale_width_f32() result(w_scale)
+    implicit none
+
+    w_scale = window_scale%x
+  end function glfw_get_window_scale_width_f32
+
+
+  !* Get the window content scale width in double floating point.
+  real(c_double) function glfw_get_window_scale_width_f64() result(w_scale)
+    implicit none
+
+    w_scale = window_scale%x
+  end function glfw_get_window_scale_width_f64
+
+
+  !* Get the window content scale width in floating point.
+  real(c_float) function glfw_get_window_scale_height_f32() result(w_scale)
+    implicit none
+
+    w_scale = window_scale%y
+  end function glfw_get_window_scale_height_f32
+
+
+  !* Get the window content scale width in double floating point.
+  real(c_double) function glfw_get_window_scale_height_f64() result(w_scale)
+    implicit none
+
+    w_scale = window_scale%y
+  end function glfw_get_window_scale_height_f64
 
   !* Set the window icon.
   subroutine glfw_set_window_icon(path)
