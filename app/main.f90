@@ -201,7 +201,7 @@ program main
 
   call glfw_swap_buffers()
 
-  ! call sleep(1)
+  call sleep(10)
 
   !! END LOADING SCREEN.
 
