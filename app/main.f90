@@ -177,6 +177,8 @@ program main
     [0,1,2, 2,3,0] &
     )
 
+  !? This is needed for KDE's glide animation.
+  call glfw_swap_buffers()
   call glfw_poll_events()
 
   call gl_clear_color_scalar(0.5)
