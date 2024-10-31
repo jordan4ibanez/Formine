@@ -1,5 +1,5 @@
 # Formine
- A voxel game written in Fortran.
+ A voxel game, written in Fortran, LuaJIT, and C.
 
 ## Why is this called Formine?
 
