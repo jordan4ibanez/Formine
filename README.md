@@ -20,7 +20,7 @@ This is written in Fortran 2003 up to 2023. Basically whatever my compiler (gfor
 
 If you like what I do, and would like to support me: [My Patreon](https://www.patreon.com/jordan4ibanez)
 
-Come join the Fortran Discord: https://discord.gg/tfn3M28ppP
+Come join the Fortran Discord: https://discord.gg/D95q7BHUE4
 
 My Discord: https://discord.gg/D95q7BHUE4
 
