@@ -18,6 +18,12 @@ module api
   !* Therefore, they will use replace instead of insert
   !* in the api functions.
 
+  ! Ideas:
+  !
+  ! From: the4spaceconstants2181
+  ! Idea: Recipe mod origin.
+  ! Addition: This could be implemented for blocks and biomes as well.
+
 
   private
 
