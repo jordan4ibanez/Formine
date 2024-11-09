@@ -35,6 +35,7 @@ module string
   public :: string_trim_null_terminator
   public :: string_get_right_of_character
   public :: string_get_left_of_character
+  public :: character_array_to_string_pointer
 
   !* String querying.
   public :: string_get_non_space_characters
@@ -659,6 +660,30 @@ contains
     output_string = input_string(1:found_index)
     output_string = string_trim_white_space(output_string)
   end function string_get_left_of_character
+
+
+  !* Convert [character, dimension(:)] to [character(:)].
+  !! This function assumed null termination on the string.
+  function character_array_to_string_pointer(char_array) result(str)
+    implicit none
+
+    character(len = 1, kind = c_char), dimension(:), intent(in) :: char_array
+    character(len = :, kind = c_char), pointer :: str
+    integer(c_int32_t) :: i, string_length
+
+    do i = 1,size(char_array)
+      if (char_array(i) == achar(0)) then
+        string_length = i - 1
+        exit
+      end if
+    end do
+
+    allocate(character(len = string_length, kind = c_char) :: str)
+
+    do i = 1,string_length
+      str(i:i) = char_array(i)
+    end do
+  end function character_array_to_string_pointer
 
 
 !* STRING QUERYING. =================================================================================
