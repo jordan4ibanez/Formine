@@ -210,6 +210,7 @@ contains
 
   !* This basically clamps subtraction to the min limit set.
   !* This is a really dumb way to do this.
+  !* This is translated from rust.
   function saturating_sub(input, sub, limit) result(clamped)
     implicit none
 
@@ -223,6 +224,40 @@ contains
       clamped = limit
     end if
   end function saturating_sub
+
+
+  function clamp_i32(val, min, max) result(c)
+    implicit none
+
+    integer(c_int32_t), intent(in), value :: val, min, max
+    integer(c_int32_t) :: c
+
+    if (val < min) then
+      c = min
+      return
+    else if (val > max) then
+      c = max
+      return
+    end if
+    c = val
+  end function clamp_i32
+
+
+  function clamp_i64(val, min, max) result(c)
+    implicit none
+
+    integer(c_int64_t), intent(in), value :: val, min, max
+    integer(c_int64_t) :: c
+
+    if (val < min) then
+      c = min
+      return
+    else if (val > max) then
+      c = max
+      return
+    end if
+    c = val
+  end function clamp_i64
 
 
 end module math_helpers
