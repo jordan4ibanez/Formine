@@ -288,8 +288,6 @@ contains
 
     ! Now destroy the LuaJIT components.
     call luajit_definition_array%destroy()
-
-    call luajit_definition_array%destroy()
   end subroutine biome_repo_finalize
 
 
