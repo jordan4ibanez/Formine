@@ -25,8 +25,8 @@ module directory
     type(heap_string), dimension(:), allocatable :: files
     type(heap_string), dimension(:), allocatable :: folders
   contains
-    procedure :: read_directory
-    procedure :: deallocate_memory
+    procedure :: read_directory => directory_reader_read_directory
+    procedure :: destroy => directory_reader_destroy
   end type directory_reader
 
 
@@ -88,8 +88,7 @@ contains
 
 
   !* Get all the files and folders from a directory.
-  subroutine read_directory(this, path)
-    use :: raw_c
+  subroutine directory_reader_read_directory(this, path)
     implicit none
 
     class(directory_reader), intent(inout) :: this
@@ -176,11 +175,11 @@ contains
     if (.not. close_directory_folder_parse(c_for_dir_pointer)) then
       error stop "[Directory] error: Failed to free the c for_dir."
     end if
-  end subroutine read_directory
+  end subroutine directory_reader_read_directory
 
 
   !* Deallocate the string arrays within the directory_reader and reset the counts.
-  subroutine deallocate_memory(this)
+  subroutine directory_reader_destroy(this)
     implicit none
 
     class(directory_reader), intent(inout) :: this
@@ -195,7 +194,7 @@ contains
 
     this%file_count = 0
     this%folder_count = 0
-  end subroutine deallocate_memory
+  end subroutine directory_reader_destroy
 
 
 end module directory

@@ -1,6 +1,7 @@
 !* To keep file io synchronous, only use this library to work with files.
 module files
   use :: string
+  use :: directory
   use, intrinsic :: iso_c_binding
   implicit none
 
@@ -9,6 +10,7 @@ module files
 
 
   public :: file_reader
+  public :: directory_reader
 
 
   !* This is your basic (file -> allocated string) reader. I think it's pretty neat. :)
@@ -22,6 +24,7 @@ module files
   contains
     procedure :: read_file => file_reader_read_file
     procedure :: read_lines => file_reader_read_file_into_lines
+    procedure :: destroy => file_reader_destroy
   end type file_reader
 
 
@@ -121,5 +124,28 @@ contains
       end if
     end do
   end subroutine file_reader_read_file_into_lines
+
+
+  subroutine file_reader_destroy(this)
+    implicit none
+
+    class(file_reader), intent(inout) :: this
+    integer(c_int32_t) :: i
+
+    if (allocated(this%file_string)) then
+      deallocate(this%file_string)
+    end if
+
+    if (allocated(this%lines)) then
+      do i = 1,this%line_count
+        if (allocated(this%lines(i)%string)) then
+          deallocate(this%lines(i)%string)
+        end if
+      end do
+      deallocate(this%lines)
+      this%line_count = 0
+    end if
+  end subroutine file_reader_destroy
+
 
 end module files
