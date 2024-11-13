@@ -153,7 +153,7 @@ contains
 
     ! Now, we can attempt to load up all the mods.
 
-    call dir_reader%deallocate_memory()
+    call dir_reader%destroy()
 
     call dir_reader%read_directory("./mods/")
 
@@ -195,7 +195,7 @@ contains
       print"(A)","[API]: Loaded mod ["//mod_config_struct%name//"]"
     end do
 
-    call dir_reader%deallocate_memory()
+    call dir_reader%destroy()
   end subroutine load_all_mods
 
 
@@ -283,7 +283,7 @@ contains
     end if
 
     ! We're going to reallocate the base directory reader.
-    call dir_readers(1)%deallocate_memory()
+    call dir_readers(1)%destroy()
 
     textures_path = mod_path//"textures/"
 
@@ -304,7 +304,7 @@ contains
       !* + 1 depth.
       textures_path = mod_path//"textures/"//dir_readers(1)%folders(a)%string//"/"
 
-      call dir_readers(2)%deallocate_memory()
+      call dir_readers(2)%destroy()
       call dir_readers(2)%read_directory(textures_path)
 
       do b = 1,dir_readers(2)%file_count
@@ -318,7 +318,7 @@ contains
           dir_readers(1)%folders(a)%string//"/"// &
           dir_readers(2)%folders(b)%string//"/"
 
-        call dir_readers(3)%deallocate_memory()
+        call dir_readers(3)%destroy()
         call dir_readers(3)%read_directory(textures_path)
 
         do c = 1,dir_readers(3)%file_count
@@ -333,7 +333,7 @@ contains
             dir_readers(2)%folders(b)%string//"/"// &
             dir_readers(3)%folders(c)%string//"/"
 
-          call dir_readers(4)%deallocate_memory()
+          call dir_readers(4)%destroy()
           call dir_readers(4)%read_directory(textures_path)
 
           do d = 1,dir_readers(4)%file_count
@@ -349,7 +349,7 @@ contains
               dir_readers(3)%folders(c)%string//"/"// &
               dir_readers(4)%folders(d)%string//"/"
 
-            call dir_readers(5)%deallocate_memory()
+            call dir_readers(5)%destroy()
             call dir_readers(5)%read_directory(textures_path)
 
             do e = 1,dir_readers(5)%file_count
