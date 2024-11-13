@@ -16,7 +16,7 @@ contains
     do while (.true.)
       ! print*,"loop: ", i
 
-      call reader%deallocate_memory()
+      call reader%destroy()
 
       call reader%read_directory("./mods/formine/")
 
