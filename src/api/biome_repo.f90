@@ -1,7 +1,7 @@
 module biome_repo
   use, intrinsic :: iso_c_binding
   use :: luajit
-  use :: string
+  use :: string_f90
   use :: hashmap_str
   use :: hashmap_int
   use :: vector
@@ -141,7 +141,7 @@ contains
   !* This allows you to register a biome into the engine from LuaJIT.
   !* See the LuaJIT API [./api/init.lua] for the layout of biome_definition.
   recursive function register_biome(state) result(status) bind(c)
-    use :: string
+    use :: string_f90
     use :: array, only: string_array
     implicit none
 

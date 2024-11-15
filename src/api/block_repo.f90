@@ -1,6 +1,6 @@
 module block_repo
   use :: luajit
-  use :: string
+  use :: string_f90
   use :: hashmap_str
   use :: vector
   use, intrinsic :: iso_c_binding
@@ -190,7 +190,7 @@ contains
   !* This allows you to register a block into the engine from LuaJIT.
   !* See the LuaJIT API [./api/init.lua] for the layout of block_definition.
   recursive function register_block(state) result(status) bind(c)
-    use :: string
+    use :: string_f90
     use :: array, only: string_array
     implicit none
 

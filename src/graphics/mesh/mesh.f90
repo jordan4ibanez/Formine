@@ -1,6 +1,6 @@
 !* This module kind of works like a state machine.
 module mesh
-  use :: string
+  use :: string_f90
   use :: vector_3f
   use :: hashmap_int
   use :: hashmap_str

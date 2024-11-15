@@ -1,7 +1,7 @@
 module mod_mesh_intrinsics
   use, intrinsic :: iso_c_binding
   use :: opengl
-  use :: string
+  use :: string_f90
   use :: shader
   implicit none
 

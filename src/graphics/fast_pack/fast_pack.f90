@@ -1,7 +1,7 @@
 module fast_pack
   use :: memory_texture_module
   use :: stb_image
-  use :: string
+  use :: string_f90
   use :: fast_pack_types
   use :: hashmap_str
   use, intrinsic :: iso_c_binding
@@ -338,7 +338,7 @@ contains
   !* Write the texture packer's data to a png file.
   subroutine fast_packer_save_to_png(this, file_path)
     use :: stb_image, only: stbi_write_png
-    use :: string, only: int_to_string
+    use :: string_f90, only: int_to_string
     implicit none
 
     class(fast_packer), intent(inout) :: this

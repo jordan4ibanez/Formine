@@ -1,5 +1,5 @@
 module chunk_data
-  use :: string
+  use :: string_f90
   use :: vector_2i
   use :: texture_atlas
   use, intrinsic :: iso_c_binding

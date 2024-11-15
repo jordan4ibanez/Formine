@@ -44,7 +44,7 @@ contains
   !* Create a texture from a file path.
   subroutine texture_create(texture_file_path)
     use :: stb_image
-    use :: string
+    use :: string_f90
     use :: opengl
     use :: terminal
     implicit none
@@ -71,7 +71,7 @@ contains
   !* Upload an array of unsigned bytes. 4 channels per element. RGBA.
   subroutine texture_create_from_memory(texture_name, raw_data, width, height)
     use :: stb_image
-    use :: string
+    use :: string_f90
     use :: opengl
     use :: terminal
     implicit none
@@ -245,7 +245,7 @@ contains
 
   !* Completely wipe out all existing textures. This might be slow.
   subroutine texture_destroy_database()
-    use :: string
+    use :: string_f90
     use :: terminal
     implicit none
 

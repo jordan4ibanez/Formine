@@ -687,7 +687,7 @@ contains
   !* This finds the base version of OpenGL that your GPU supports.
   !* Will check if it is greater than or equal to OpenGL 4.1.
   function is_opengl_4_1_capable() result(success)
-    use :: string
+    use :: string_f90
     implicit none
 
     integer(c_int) :: major, minor
@@ -711,7 +711,7 @@ contains
 
   !* A GPU needs OpenGL 4.3 support to enable debugging.
   function forglad_gpu_supports_gl_debugging() result(ok_to_debug)
-    use :: string
+    use :: string_f90
     implicit none
 
     integer(c_int) :: major, minor
@@ -736,7 +736,7 @@ contains
   !* Loads up the function pointers for OpenGL.
   !* This gets a function pointer passed into it to prevent a circular dependency.
   subroutine forglad_load_gl(proc_address_finder_raw)
-    use :: string
+    use :: string_f90
     implicit none
 
     type(c_funptr), intent(in), value :: proc_address_finder_raw

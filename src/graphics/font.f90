@@ -86,7 +86,7 @@ contains
   !* Generate a text mesh.
   function internal_font_generate_text(font_size, text, r,g,b, center, size, named, mesh_name) result(vao_id)
     use :: mesh
-    use :: string, only: string_get_non_space_characters
+    use :: string_f90, only: string_get_non_space_characters
     use :: vector_2f
     implicit none
 
@@ -282,8 +282,8 @@ contains
   !* config file will be the file extension.
   subroutine font_create(font_texture_file_path)
     use :: stb_image
-    use :: string
-    use :: files
+    use :: string_f90
+    use :: files_f90
     use :: texture
     implicit none
 
@@ -335,8 +335,8 @@ contains
 
   !* Very simple configuration file processing.
   subroutine process_font_configuration(font_config_file_path, character_vec2i_position_database)
-    use :: string
-    use :: files
+    use :: string_f90
+    use :: files_f90
     implicit none
 
     character(len = *, kind = c_char), intent(in) :: font_config_file_path

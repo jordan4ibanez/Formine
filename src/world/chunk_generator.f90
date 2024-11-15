@@ -1,5 +1,5 @@
 module chunk_generator
-  use :: string
+  use :: string_f90
   use :: chunk_mesh
   use :: chunk_data
   use :: chunk_handler
@@ -170,7 +170,7 @@ contains
 
         current_height = base_height + floor(fnl_get_noise_2d(height_noise, real(x + base_x), real(z + base_z)) * noise_multiplier)
 
-        bedrock_height = 1 + floor(fnl_get_noise_2d(bedrock_noise, real(x + base_x), real(z + base_z)) + 1.0) 
+        bedrock_height = 1 + floor(fnl_get_noise_2d(bedrock_noise, real(x + base_x), real(z + base_z)) + 1.0)
 
         ! Select a biome if there's more than grasslands.
         if (biome_amount > 1) then

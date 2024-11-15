@@ -91,7 +91,7 @@ contains
 
   !* Store a chunk pointer into the database.
   subroutine chunk_handler_store_chunk_pointer(chunk_pointer)
-    use :: string
+    use :: string_f90
     implicit none
 
     type(memory_chunk), intent(inout), pointer :: chunk_pointer

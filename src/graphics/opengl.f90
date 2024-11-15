@@ -172,7 +172,7 @@ contains
   !* NOTE: This function passed into C as a pointer!
   subroutine debug_message_callback(source, type, id, severity, message_pointer, user_param_pointer)
     use, intrinsic :: iso_c_binding
-    use :: string
+    use :: string_f90
     use :: terminal
     implicit none
 
@@ -242,8 +242,8 @@ contains
 
 
   subroutine gl_shader_source(shader_id, source_code_file_path)
-    use :: string
-    use :: files
+    use :: string_f90
+    use :: files_f90
     implicit none
 
     integer(c_int) :: shader_id
@@ -268,7 +268,7 @@ contains
 
   subroutine gl_get_version()
     use, intrinsic :: iso_c_binding
-    use :: string
+    use :: string_f90
     implicit none
 
     integer(c_int) :: major, minor
@@ -295,7 +295,7 @@ contains
 
   subroutine gl_get_shader_info_log(shader)
     use,intrinsic :: iso_c_binding
-    use :: string
+    use :: string_f90
     implicit none
 
     integer(c_int), intent(in), value :: shader
@@ -317,7 +317,7 @@ contains
 
 
   function gl_get_program_iv(program_id, pname) result(status)
-    use :: string
+    use :: string_f90
     implicit none
 
     integer(c_int), intent(in), value :: program_id, pname
@@ -328,7 +328,7 @@ contains
 
 
   integer function gl_get_uniform_location(program_id, uniform_name) result(location)
-    use :: string
+    use :: string_f90
     implicit none
 
     integer, intent(in), value :: program_id
@@ -340,7 +340,7 @@ contains
 
 
   integer function gl_get_attrib_location(program_id, uniform_name) result(location)
-    use :: string
+    use :: string_f90
     implicit none
 
     integer, intent(in), value :: program_id
