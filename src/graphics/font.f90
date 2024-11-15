@@ -347,10 +347,8 @@ contains
     character(len = :), allocatable :: x_str, y_str
     type(vec2i) :: position_data
 
-    call reader%read_lines(font_config_file_path)
-
     ! If it doesn't exist, we need a font to render text so stop.
-    if (.not. reader%exists) then
+    if (.not. reader%read_lines(font_config_file_path)) then
       error stop "[Font] Error: Cannot read the font config in file path ["//font_config_file_path//"]"
     end if
 

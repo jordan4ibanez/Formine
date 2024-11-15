@@ -132,7 +132,9 @@ contains
     found_mods_folder = .false.
 
     ! We can reuse the directory reader.
-    call dir_reader%read_directory("./")
+    if (.not. dir_reader%read_directory("./")) then
+      error stop "[API] Error: Something has gone wrong with the current working directory."
+    end if
 
     ! So let's get the mods folder.
 
@@ -155,7 +157,10 @@ contains
 
     call dir_reader%destroy()
 
-    call dir_reader%read_directory("./mods/")
+
+    if (.not. dir_reader%read_directory("./mods/")) then
+      error stop "[API] error: The mods folder doesn't exist."
+    end if
 
     if (dir_reader%folder_count == 0) then
       error stop "[API] error: There are no mods installed."
@@ -210,9 +215,7 @@ contains
     character(len = :, kind = c_char), allocatable :: temp_string, value_string
     integer(c_int) :: i
 
-    call reader%read_lines(path)
-
-    if (.not. reader%exists) then
+    if (.not. reader%read_lines(path)) then
       error stop "[API] error: Mod folder ["//string_remove_file_name_from_path(path)//"] is missing a [mod.conf] file."
     end if
 
@@ -264,7 +267,9 @@ contains
 
     found_textures_folder = .false.
 
-    call dir_readers(1)%read_directory(mod_path)
+    if (.not. dir_readers(1)%read_directory(mod_path)) then
+      error stop "[API] Error: Failed to read directory ["//mod_path//"]"
+    end if
 
     ! No folders.
     if (dir_readers(1)%folder_count == 0) then
@@ -287,7 +292,9 @@ contains
 
     textures_path = mod_path//"textures/"
 
-    call dir_readers(1)%read_directory(textures_path)
+    if (.not. dir_readers(1)%read_directory(textures_path)) then
+      error stop "[API] Error: Failed to read ["//textures_path//"]"
+    end if
 
     ! This allows for 4 folders deep.
     ! This is a bit complicated, I could have made this a recursive function
@@ -305,7 +312,9 @@ contains
       textures_path = mod_path//"textures/"//dir_readers(1)%folders(a)%string//"/"
 
       call dir_readers(2)%destroy()
-      call dir_readers(2)%read_directory(textures_path)
+      if (.not. dir_readers(2)%read_directory(textures_path)) then
+        error stop "[API] Error: Failed to read ["//textures_path//"]"
+      end if
 
       do b = 1,dir_readers(2)%file_count
         call attempt_texture_upload(dir_readers(2)%files(b)%string, textures_path)
@@ -319,7 +328,9 @@ contains
           dir_readers(2)%folders(b)%string//"/"
 
         call dir_readers(3)%destroy()
-        call dir_readers(3)%read_directory(textures_path)
+        if (.not. dir_readers(3)%read_directory(textures_path)) then
+          error stop "[API] Error: Failed to read ["//textures_path//"]"
+        end if
 
         do c = 1,dir_readers(3)%file_count
           call attempt_texture_upload(dir_readers(3)%files(c)%string, textures_path)
@@ -334,7 +345,9 @@ contains
             dir_readers(3)%folders(c)%string//"/"
 
           call dir_readers(4)%destroy()
-          call dir_readers(4)%read_directory(textures_path)
+          if (.not. dir_readers(4)%read_directory(textures_path)) then
+            error stop "[API] Error: Failed to read ["//textures_path//"]"
+          end if
 
           do d = 1,dir_readers(4)%file_count
             call attempt_texture_upload(dir_readers(4)%files(d)%string, textures_path)
@@ -350,7 +363,9 @@ contains
               dir_readers(4)%folders(d)%string//"/"
 
             call dir_readers(5)%destroy()
-            call dir_readers(5)%read_directory(textures_path)
+            if (.not. dir_readers(5)%read_directory(textures_path)) then
+              error stop "[API] Error: Failed to read ["//textures_path//"]"
+            end if
 
             do e = 1,dir_readers(5)%file_count
               call attempt_texture_upload(dir_readers(5)%files(e)%string, textures_path)

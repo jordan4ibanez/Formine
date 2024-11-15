@@ -250,10 +250,8 @@ contains
     character(len = *, kind = c_char) :: source_code_file_path
     type(file_reader) :: reader
 
-    call reader%read_file(source_code_file_path)
-
     ! If this source code file doesn't exist, give up.
-    if (.not. reader%exists) then
+    if (.not. reader%read_file(source_code_file_path)) then
       error stop "[OpenGL] Error: Shader source code file path ["//source_code_file_path//"] does not exist."
     end if
 
