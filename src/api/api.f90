@@ -374,6 +374,10 @@ contains
         end do
       end do
     end do
+
+    do i = 1,size(dir_readers)
+      call dir_readers(i)%destroy()
+    end do
   end subroutine load_up_all_textures
 
 
