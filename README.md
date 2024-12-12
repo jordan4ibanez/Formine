@@ -11,6 +11,9 @@ Formine translates to **molds** in Italian. The type of molds you use to form th
 
 I think this is quite fitting because Formine can not only be molded to how you envision it through the mod api, but it can also be molded with help from others due to it's open source nature.
 
+## Discord
+
+Here is the discord for this thing: https://discord.gg/D95q7BHUE4
 
 ## General notes
 
@@ -21,8 +24,6 @@ This is written in Fortran 2003 up to 2023. Basically whatever my compiler (gfor
 If you like what I do, and would like to support me: [My Patreon](https://www.patreon.com/jordan4ibanez)
 
 Come join the Fortran Discord: https://discord.gg/D95q7BHUE4
-
-My Discord: https://discord.gg/D95q7BHUE4
 
 Here is what this thing currently looks like.
 
